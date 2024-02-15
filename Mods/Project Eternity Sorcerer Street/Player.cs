@@ -30,6 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override string SaveFileFolder => "Sorcerer Street/";
 
         public SorcererStreetInventory Inventory;
+        public SorcererStreetPlayerUnlockInventory UnlockInventory;
 
         public SorcererStreetUnit GamePiece;
         public int Rank;//Rank in the game between players
@@ -55,6 +56,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Player()
         {
             Inventory = new SorcererStreetInventory();
+            UnlockInventory = new SorcererStreetPlayerUnlockInventory();
+            UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
+
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
@@ -69,6 +73,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(ID, Name, IsOnline)
         {
             Inventory = new SorcererStreetInventory();
+            UnlockInventory = new SorcererStreetPlayerUnlockInventory();
+            UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
+
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
@@ -85,6 +92,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ListCardInDeck = ListCardInDeck;
 
             Inventory = new SorcererStreetInventory();
+            UnlockInventory = new SorcererStreetPlayerUnlockInventory();
+            UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
+
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
@@ -107,6 +117,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListCardInDeck = new List<Card>();
             Inventory = new SorcererStreetInventory();
+            UnlockInventory = new SorcererStreetPlayerUnlockInventory();
+            UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
+
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
@@ -125,6 +138,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Inventory = Clone.Inventory;
+            UnlockInventory = Clone.UnlockInventory;
+            UnlocksEvaluator = Clone.UnlocksEvaluator;
+
             ListCardInDeck = new List<Card>(Clone.Inventory.ActiveBook.ListCard.Count);
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicCreatureCountByElementType = new Dictionary<byte, byte>();
@@ -147,25 +163,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicOwnedSymbols.Add(ElementalAffinity.Neutral, 0);
         }
 
-        public void LoadGamePieceModel()
-        {
-            GamePiece.SpriteMap = GameScreen.ContentFallback.Load<Texture2D>("Units/Default");
-            GamePiece.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, GameScreen.ContentFallback.Load<Effect>("Shaders/Squad shader 3D"), GamePiece.SpriteMap, 1);
-            GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Unit Models/Bomberman/Default");
-            GamePiece.Unit3DModel.LoadContent(GameScreen.ContentFallback);
-            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Unit Models/Bomberman/Idle", "Idle", GameScreen.ContentFallback);
-            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Unit Models/Bomberman/Walking", "Walking", GameScreen.ContentFallback);
-            GamePiece.Unit3DModel.PlayAnimation("Walking");
-        }
-
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
-            if (Content != null && GamePiece != null)
-            {
-                LoadGamePieceModel();
-            }
-
             Inventory.Load(BR, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
         public override void InitFirstTimeInventory()
@@ -203,12 +204,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Inventory.ActiveBook = DefaultBook;
-            Inventory.ListBook.Add(DefaultBook);
+            Inventory.DicOwnedBook.Add(DefaultBook.BookName, DefaultBook);
+
+            IniFile IniDefaultCharacters = IniFile.ReadFromFile("Content/Sorcerer Street Lobby Default Characters.ini");
+
+            PlayerCharacter FirstCharacter = null;
+            foreach (string ActiveKey in IniDefaultCharacters.ReadAllKeys())
+            {
+                string CharacterPath = IniDefaultCharacters.ReadField(ActiveKey, "Path");
+                PlayerCharacter LoadedCharacter = new PlayerCharacter(CharacterPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                Inventory.DicOwnedCharacter.Add(LoadedCharacter.CharacterPath, LoadedCharacter);
+                Inventory.AddCharacter(LoadedCharacter);
+
+                if (FirstCharacter == null)
+                {
+                    FirstCharacter = LoadedCharacter;
+                }
+            }
+
+            Inventory.Character = FirstCharacter;
+
+            IniFile IniDefaultMissions = IniFile.ReadFromFile("Content/Sorcerer Street Lobby Default Missions.ini");
+
+            foreach (string ActiveKey in IniDefaultMissions.ReadAllKeys())
+            {
+                string MissionPath = IniDefaultMissions.ReadField(ActiveKey, "Path");
+                Inventory.DicOwnedMission.Add(MissionPath, new MissionInfo(MissionPath, 0));
+            }
+
+            UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
         protected override void DoSaveLocally(BinaryWriter BW)
         {
             Inventory.Save(BW);
+            UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
         public void FillDeck(SorcererStreetBattleParams Params)

@@ -31,9 +31,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             base.Update(gameTime);
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
             {
-                if (ActivePlayer.GamePiece.Unit3DModel != null)
+                if (ActivePlayer.GamePiece.Character.Unit3DModel != null)
                 {
-                    ActivePlayer.GamePiece.Unit3DModel.Update(gameTime);
+                    ActivePlayer.GamePiece.Character.Unit3DModel.Update(gameTime);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int P = 0; P < Room.ListRoomPlayer.Count; P++)
             {
                 Player ActivePlayer = (Player)Room.ListRoomPlayer[P];
-                if (ActivePlayer.GamePiece.Unit3DModel == null)
+                if (ActivePlayer.GamePiece.Character.Unit3DModel == null)
                 {
                     continue;
                 }
@@ -66,8 +66,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 float X = 5 + P * 125;
                 Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(1f) * Matrix.CreateTranslation(X + 65, 210, 0);
 
-                ActivePlayer.GamePiece.Unit3DModel.PlayAnimation("Walking");
-                ActivePlayer.GamePiece.Unit3DModel.Draw(View, Projection, World);
+                ActivePlayer.GamePiece.Character.Unit3DModel.PlayAnimation("Walking");
+                ActivePlayer.GamePiece.Character.Unit3DModel.Draw(View, Projection, World);
             }
         }
     }

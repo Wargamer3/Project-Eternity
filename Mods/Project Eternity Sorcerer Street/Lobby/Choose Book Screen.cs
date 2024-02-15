@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -20,6 +21,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
 
+        private BookInventoryContainer CurrentContainer;
+        private List<BookInventoryContainer> ListLastContainer;
+
         private int CursorIndex;
 
         public ChooseBookScreen(CardSymbols Symbols, Player ActivePlayer)
@@ -28,6 +32,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActivePlayer = ActivePlayer;
 
             ActiveBook = ActivePlayer.Inventory.ActiveBook;
+            CurrentContainer = ActivePlayer.Inventory.RootBookContainer;
+            ListLastContainer = new List<BookInventoryContainer>();
         }
 
         public override void Load()
@@ -39,11 +45,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
-                if (CursorIndex < ActivePlayer.Inventory.ListBook.Count)
+                if (CursorIndex < ActivePlayer.Inventory.DicOwnedBook.Count)
                 {
-                    PushScreen(new EditBookScreen(Symbols, ActivePlayer, ActivePlayer.Inventory.ListBook[CursorIndex]));
+                    PushScreen(new EditBookScreen(Symbols, ActivePlayer, CurrentContainer.ListBook[CursorIndex - CurrentContainer.DicFolder.Count]));
                 }
-                else if (CursorIndex == ActivePlayer.Inventory.ListBook.Count)
+                else if (CursorIndex == ActivePlayer.Inventory.DicOwnedBook.Count)
                 {
                     PushScreen(new EditBookNameScreen(ActivePlayer));
                 }
@@ -60,12 +66,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (--CursorIndex < 0)
                 {
-                    CursorIndex = ActivePlayer.Inventory.ListBook.Count + 1;
+                    CursorIndex = ActivePlayer.Inventory.DicOwnedBook.Count + 1;
                 }
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (++CursorIndex > ActivePlayer.Inventory.ListBook.Count + 1)
+                if (++CursorIndex > ActivePlayer.Inventory.DicOwnedBook.Count + 1)
                 {
                     CursorIndex = 0;
                 }
@@ -93,10 +99,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = Constants.Height / 7;
             int EntryHeight = Constants.Height / 20;
 
-            for (int B = 0; B < ActivePlayer.Inventory.ListBook.Count; ++B)
+            for (int B = 0; B < CurrentContainer.ListBook.Count; ++B)
             {
                 DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-                g.DrawString(fntArial12, ActivePlayer.Inventory.ListBook[B].BookName, new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
+                g.DrawString(fntArial12, CurrentContainer.ListBook[B].BookName, new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
                 Y += EntryHeight + 10;
             }
 

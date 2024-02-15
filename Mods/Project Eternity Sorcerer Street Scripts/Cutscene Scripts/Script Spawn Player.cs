@@ -50,8 +50,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(_SpawnPosition.X, _SpawnPosition.Y, 0);
                 NewPlayer.GamePiece.SetPosition(new Vector3(ActiveTerrain.InternalPosition.X, ActiveTerrain.InternalPosition.Y, ActiveTerrain.LayerIndex));
 
-                NewPlayer.LoadGamePieceModel();
-
                 if (_PlayerTeam == 0)
                 {
                     Map.ListPlayer.Clear();

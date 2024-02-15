@@ -42,9 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             {
                 if (ActivePlayer.ConnectionID == ID)
                 {
-                    ActivePlayer.Inventory.CharacterModelPath = CharacterModelPath;
-
-                    ActivePlayer.LoadGamePieceModel();
+                    ActivePlayer.Inventory.Character = new PlayerCharacter(CharacterModelPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 
                     CardBook NewActiveBook = new CardBook(BookName);
                     NewActiveBook.BookModel = BookModel;

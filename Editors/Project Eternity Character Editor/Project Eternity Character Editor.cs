@@ -20,8 +20,8 @@ namespace ProjectEternity.Editors.CharacterEditor
 
         private SolidBrush GridBrush;
 
-        private CharacterQuotesEditor QuoteEditor;
-        private CharacterStatsEditor StatsEditor;
+        private CharacterQuotesEditor frmQuoteEditor;
+        private CharacterStatsEditor frmStatsEditor;
         private DetailsEditor frmDetailsEditor;
         private SkillLevelsEditor[] ArraySkillLevelsEditor;
         private RelationshipEditor frmRelationshipEditor;
@@ -219,7 +219,7 @@ namespace ProjectEternity.Editors.CharacterEditor
             //If it's a pilot, link its stats, else they won't be needed.
             if (cbCanPilot.Checked)
             {
-                if (StatsEditor == null)
+                if (frmStatsEditor == null)
                 {
                     BW.Write(50);
 
@@ -236,17 +236,17 @@ namespace ProjectEternity.Editors.CharacterEditor
                 }
                 else
                 {
-                    BW.Write((int)StatsEditor.txtMaxLevel.Value);
+                    BW.Write((int)frmStatsEditor.txtMaxLevel.Value);
 
-                    for (int S = 0; S < (int)StatsEditor.txtMaxLevel.Value; ++S)
+                    for (int S = 0; S < (int)frmStatsEditor.txtMaxLevel.Value; ++S)
                     {
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[1].Value)); // MEL
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[2].Value)); // RNG
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[3].Value)); // DEF
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[4].Value)); // SKL
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[5].Value)); // EVA
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[6].Value)); // HIT
-                        BW.Write(Convert.ToInt32(StatsEditor.dgvStats.Rows[S].Cells[7].Value)); // SP
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[1].Value)); // MEL
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[2].Value)); // RNG
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[3].Value)); // DEF
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[4].Value)); // SKL
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[5].Value)); // EVA
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[6].Value)); // HIT
+                        BW.Write(Convert.ToInt32(frmStatsEditor.dgvStats.Rows[S].Cells[7].Value)); // SP
                     }
                 }
 
@@ -272,21 +272,21 @@ namespace ProjectEternity.Editors.CharacterEditor
                 BW.Write((byte)txtChargeCancelLevel.Value);
             }
 
-            if (QuoteEditor == null)
+            if (frmQuoteEditor == null)
             {
                 BW.Write(0);
             }
             else
             {
-                BW.Write(QuoteEditor.lsVersusQuotes.Items.Count - 1);
-                for (int Q = 1; Q < QuoteEditor.lsVersusQuotes.Items.Count; Q++)
-                    BW.Write((string)QuoteEditor.lsVersusQuotes.Items[Q]);
+                BW.Write(frmQuoteEditor.lsVersusQuotes.Items.Count - 1);
+                for (int Q = 1; Q < frmQuoteEditor.lsVersusQuotes.Items.Count; Q++)
+                    BW.Write((string)frmQuoteEditor.lsVersusQuotes.Items[Q]);
             }
             Character.QuoteSet Quotes;
             //Base quotes
             for (int I = 0; I < 6; I++)
             {
-                if (QuoteEditor == null)
+                if (frmQuoteEditor == null)
                 {
                     BW.Write(0);
                     BW.Write(0);
@@ -294,7 +294,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                 }
                 else
                 {
-                    Quotes = (Character.QuoteSet)QuoteEditor.lvBaseQuotes.Items[I].Tag;
+                    Quotes = (Character.QuoteSet)frmQuoteEditor.lvBaseQuotes.Items[I].Tag;
 
                     BW.Write(Quotes.ListQuote.Count);
                     for (int Q = 0; Q < Quotes.ListQuote.Count; Q++)
@@ -314,24 +314,24 @@ namespace ProjectEternity.Editors.CharacterEditor
             //Count the actual number of quotes listed.
             int QuoteCount = 0;
 
-            if (QuoteEditor != null)
+            if (frmQuoteEditor != null)
             {
-                for (int R = 0; R < QuoteEditor.dgvQuoteSets.Rows.Count; R++)
-                    if (!string.IsNullOrEmpty((string)QuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
+                for (int R = 0; R < frmQuoteEditor.dgvQuoteSets.Rows.Count; R++)
+                    if (!string.IsNullOrEmpty((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
                         QuoteCount++;
             }
 
             BW.Write(QuoteCount);
 
-            if (QuoteEditor != null)
+            if (frmQuoteEditor != null)
             {
-                for (int R = 0; R < QuoteEditor.dgvQuoteSets.Rows.Count; R++)
+                for (int R = 0; R < frmQuoteEditor.dgvQuoteSets.Rows.Count; R++)
                 {
-                    if (!string.IsNullOrEmpty((string)QuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
+                    if (!string.IsNullOrEmpty((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
                     {
-                        Quotes = (Character.QuoteSet)QuoteEditor.dgvQuoteSets.Rows[R].Tag;
+                        Quotes = (Character.QuoteSet)frmQuoteEditor.dgvQuoteSets.Rows[R].Tag;
 
-                        BW.Write((string)QuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue);
+                        BW.Write((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue);
 
                         BW.Write(Quotes.ListQuote.Count);
                         for (int Q = 0; Q < Quotes.ListQuote.Count; Q++)
@@ -354,34 +354,34 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void LoadCharacter(string CharacterPath)
         {
             Name = CharacterPath.Substring(0, CharacterPath.Length - 4).Substring(CharacterPath.LastIndexOf("Characters") + 11);
-            Character NewCharacter = new Character(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
-            QuoteEditor = new CharacterQuotesEditor();
-            StatsEditor = new CharacterStatsEditor(NewCharacter);
+            Character LoadedCharacter = new Character(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+            frmQuoteEditor = new CharacterQuotesEditor();
+            frmStatsEditor = new CharacterStatsEditor(LoadedCharacter);
             frmDetailsEditor = new DetailsEditor();
 
-            frmDetailsEditor.txtPortrait.Text = NewCharacter.PortraitPath;
-            for (int B = 0; B < NewCharacter.ArrayPortraitBustPath.Length; ++B)
+            frmDetailsEditor.txtPortrait.Text = LoadedCharacter.PortraitPath;
+            for (int B = 0; B < LoadedCharacter.ArrayPortraitBustPath.Length; ++B)
             {
-                frmDetailsEditor.lstBust.Items.Add(NewCharacter.ArrayPortraitBustPath[B]);
+                frmDetailsEditor.lstBust.Items.Add(LoadedCharacter.ArrayPortraitBustPath[B]);
             }
-            for (int B = 0; B < NewCharacter.ArrayPortraitBoxPath.Length; ++B)
+            for (int B = 0; B < LoadedCharacter.ArrayPortraitBoxPath.Length; ++B)
             {
-                frmDetailsEditor.lstBox.Items.Add(NewCharacter.ArrayPortraitBoxPath[B]);
+                frmDetailsEditor.lstBox.Items.Add(LoadedCharacter.ArrayPortraitBoxPath[B]);
             }
-            frmDetailsEditor.txtTags.Text = NewCharacter.Tags;
+            frmDetailsEditor.txtTags.Text = LoadedCharacter.Tags;
 
-            this.Text = NewCharacter.Name + " - Project Eternity Character Editor";
+            this.Text = LoadedCharacter.Name + " - Project Eternity Character Editor";
 
             //Update the editor's members.
-            txtName.Text = NewCharacter.Name;
-            txtEXP.Value = NewCharacter.EXPValue;
-            cbCanPilot.Checked = NewCharacter.CanPilot;
-            txtPersonality.Text = NewCharacter.Personality.Name;
-            txtBattleTheme.Text = NewCharacter.BattleThemeName;
-            if (NewCharacter.AceBonus != null)
-                txtAceBonus.Text = NewCharacter.AceBonus.Name;
-            if (NewCharacter.Slave != null)
-                txtSlave.Text = NewCharacter.Slave.FullName;
+            txtName.Text = LoadedCharacter.Name;
+            txtEXP.Value = LoadedCharacter.EXPValue;
+            cbCanPilot.Checked = LoadedCharacter.CanPilot;
+            txtPersonality.Text = LoadedCharacter.Personality.Name;
+            txtBattleTheme.Text = LoadedCharacter.BattleThemeName;
+            if (LoadedCharacter.AceBonus != null)
+                txtAceBonus.Text = LoadedCharacter.AceBonus.Name;
+            if (LoadedCharacter.Slave != null)
+                txtSlave.Text = LoadedCharacter.Slave.FullName;
 
             for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
             {
@@ -402,9 +402,9 @@ namespace ProjectEternity.Editors.CharacterEditor
 
                 MovementCell.Value = ActiveMovement.Name;
 
-                if (NewCharacter.DicRankByMovement.ContainsKey(M))
+                if (LoadedCharacter.DicRankByMovement.ContainsKey(M))
                 {
-                    RankCell.Value = Character.ListGrade[NewCharacter.DicRankByMovement[M]].ToString();
+                    RankCell.Value = Character.ListGrade[LoadedCharacter.DicRankByMovement[M]].ToString();
                 }
 
                 dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
@@ -413,114 +413,114 @@ namespace ProjectEternity.Editors.CharacterEditor
 
             txtPostMVLevel.Value = 1;
             txtReMoveLevel.Value = 0;
-            txtChargeCancelLevel.Value = NewCharacter.ChargedAttackCancelLevel;
+            txtChargeCancelLevel.Value = LoadedCharacter.ChargedAttackCancelLevel;
 
-            for (int S = 0; S < NewCharacter.ArrayPilotSpirit.Length; ++S)
+            for (int S = 0; S < LoadedCharacter.ArrayPilotSpirit.Length; ++S)
             {
                 switch (S)
                 {
                     case 0:
-                        txtPilotSpirit1.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit1SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit1LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit1.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit1SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit1LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 1:
-                        txtPilotSpirit2.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit2SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit2LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit2.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit2SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit2LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 2:
-                        txtPilotSpirit3.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit3SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit3LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit3.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit3SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit3LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 3:
-                        txtPilotSpirit4.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit4SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit4LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit4.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit4SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit4LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 4:
-                        txtPilotSpirit5.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit5SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit5LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit5.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit5SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit5LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 5:
-                        txtPilotSpirit6.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit6SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
-                        txtPilotSpirit6LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
+                        txtPilotSpirit6.Text = LoadedCharacter.ArrayPilotSpirit[S].FullName;
+                        txtPilotSpirit6SP.Text = LoadedCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
+                        txtPilotSpirit6LevelRequired.Text = LoadedCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
                 }
             }
 
             ArraySkillLevelsEditor = new SkillLevelsEditor[6];
-            for (int S = 0; S < NewCharacter.ArrayPilotSkill.Length; ++S)
+            for (int S = 0; S < LoadedCharacter.ArrayPilotSkill.Length; ++S)
             {
-                if (NewCharacter.ArrayPilotSkill[S] != null)
+                if (LoadedCharacter.ArrayPilotSkill[S] != null)
                 {
-                    ArraySkillLevelsEditor[S] = new SkillLevelsEditor(NewCharacter.ArrayPilotSkill[S].RelativePath, NewCharacter.ArrayPilotSkillLevels[S]);
+                    ArraySkillLevelsEditor[S] = new SkillLevelsEditor(LoadedCharacter.ArrayPilotSkill[S].RelativePath, LoadedCharacter.ArrayPilotSkillLevels[S]);
                 }
 
                 switch (S)
                 {
                     case 0:
-                        txtPilotSkill1.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill1.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels1.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill1.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill1.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels1.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 1:
-                        txtPilotSkill2.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill2.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels2.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill2.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill2.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels2.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 2:
-                        txtPilotSkill3.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill3.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels3.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill3.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill3.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels3.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 3:
-                        txtPilotSkill4.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill4.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels4.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill4.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill4.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels4.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 4:
-                        txtPilotSkill5.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill5.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels5.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill5.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill5.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels5.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 5:
-                        txtPilotSkill6.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
-                        ckLockedSkill6.Checked = NewCharacter.ArrayPilotSkillLocked[S];
-                        btnEditLevels6.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
+                        txtPilotSkill6.Text = LoadedCharacter.ArrayPilotSkill[S].RelativePath;
+                        ckLockedSkill6.Checked = LoadedCharacter.ArrayPilotSkillLocked[S];
+                        btnEditLevels6.Enabled = LoadedCharacter.ArrayPilotSkill[S] != null;
                         break;
                 }
             }
 
-            frmRelationshipEditor = new RelationshipEditor(NewCharacter.ArrayRelationshipBonus);
+            frmRelationshipEditor = new RelationshipEditor(LoadedCharacter.ArrayRelationshipBonus);
 
             //Versus names
-            for (int I = 0; I < NewCharacter.ListQuoteSetVersusName.Count; I++)
-                QuoteEditor.lsVersusQuotes.Items.Add(NewCharacter.ListQuoteSetVersusName[I]);
+            for (int I = 0; I < LoadedCharacter.ListQuoteSetVersusName.Count; I++)
+                frmQuoteEditor.lsVersusQuotes.Items.Add(LoadedCharacter.ListQuoteSetVersusName[I]);
 
             //Base quotes
             for (int I = 0; I < 6; I++)
-                QuoteEditor.lvBaseQuotes.Items[I].Tag = NewCharacter.ArrayBaseQuoteSet[I];
+                frmQuoteEditor.lvBaseQuotes.Items[I].Tag = LoadedCharacter.ArrayBaseQuoteSet[I];
 
             //Attack quotes
-            for (int i = 0; i < NewCharacter.DicAttackQuoteSet.Count; i++)
+            for (int i = 0; i < LoadedCharacter.DicAttackQuoteSet.Count; i++)
             {
-                KeyValuePair<string, Character.QuoteSet> NewQuoteSet = NewCharacter.DicAttackQuoteSet.ElementAt(i);
-                QuoteEditor.dgvQuoteSets.Rows.Add(NewQuoteSet.Key);
-                QuoteEditor.dgvQuoteSets.Rows[i].Tag = NewQuoteSet.Value;
+                KeyValuePair<string, Character.QuoteSet> NewQuoteSet = LoadedCharacter.DicAttackQuoteSet.ElementAt(i);
+                frmQuoteEditor.dgvQuoteSets.Rows.Add(NewQuoteSet.Key);
+                frmQuoteEditor.dgvQuoteSets.Rows[i].Tag = NewQuoteSet.Value;
             }
         }
 
@@ -556,12 +556,12 @@ namespace ProjectEternity.Editors.CharacterEditor
 
         private void btnEditQuotes_Click(object sender, EventArgs e)
         {
-            QuoteEditor.ShowDialog();
+            frmQuoteEditor.ShowDialog();
         }
 
         private void btnEditStats_Click(object sender, EventArgs e)
         {
-            StatsEditor.ShowDialog();
+            frmStatsEditor.ShowDialog();
         }
 
         private void btnPersonality_Click(object sender, EventArgs e)

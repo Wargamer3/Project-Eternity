@@ -46,6 +46,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         PushScreen(new BattleTesterScreen(Symbols, ActivePlayer));
                         break;
                     case 2:
+                        PushScreen(new CharacterSelectionScreen(Symbols, ActivePlayer));
                         break;
                     case 3:
                         break;
@@ -97,7 +98,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntArial12, "Change Book", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
             Y += EntryHeight + 10;
             DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntArial12, "Change Parts", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
+            g.DrawString(fntArial12, "Character Selection", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
             Y += EntryHeight + 10;
             DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
             g.DrawString(fntArial12, "Maintenance", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);

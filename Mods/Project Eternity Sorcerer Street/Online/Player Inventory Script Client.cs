@@ -38,8 +38,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             BR.Clear();
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
-
-            NewPlayer.LoadGamePieceModel();
         }
 
         protected override void Read(OnlineReader Sender)

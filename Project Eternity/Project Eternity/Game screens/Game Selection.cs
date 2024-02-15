@@ -186,7 +186,6 @@ namespace ProjectEternity
                         NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;
                         GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new List<GameScreens.SorcererStreetScreen.Card>());
-                        NewPlayerSS.LoadGamePieceModel();
                         NewMapSS.AddPlayer(NewPlayerSS);
                         NewMapSS.Load();
                         NewMapSS.Init();

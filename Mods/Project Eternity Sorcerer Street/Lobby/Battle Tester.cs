@@ -704,12 +704,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (--CursorIndex < 0)
                 {
-                    CursorIndex = ActivePlayer.Inventory.ListBook.Count + 1;
+                    CursorIndex = ActivePlayer.Inventory.DicOwnedBook.Count + 1;
                 }
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (++CursorIndex > ActivePlayer.Inventory.ListBook.Count + 1)
+                if (++CursorIndex > ActivePlayer.Inventory.DicOwnedBook.Count + 1)
                 {
                     CursorIndex = 0;
                 }

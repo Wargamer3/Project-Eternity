@@ -115,6 +115,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
     }
 
+    public class PlayerLoadout
+    {
+        public string Name;
+        public List<Squad> ListSpawnSquad;
+        public List<Commander> ListSpawnCommander;
+
+        public PlayerLoadout()
+        {
+            Name = "Loadout";
+            ListSpawnSquad = new List<Squad>();
+            ListSpawnCommander = new List<Commander>();
+        }
+    }
+
     public class BattleMapPlayerInventory
     {
         public UnitInventoryContainer RootUnitContainer;
@@ -144,9 +158,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            int ListOwnedUnitCount = BR.ReadInt32();
-            DicOwnedUnit = new Dictionary<string, UnitInfo>(ListOwnedUnitCount);
-            for (int S = 0; S < ListOwnedUnitCount; ++S)
+            int DicOwnedUnitCount = BR.ReadInt32();
+            DicOwnedUnit = new Dictionary<string, UnitInfo>(DicOwnedUnitCount);
+            for (int S = 0; S < DicOwnedUnitCount; ++S)
             {
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
@@ -160,9 +174,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 AddUnit(LoadedUnitInfo);
             }
 
-            int ListOwnedCharacterCount = BR.ReadInt32();
-            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(ListOwnedCharacterCount);
-            for (int C = 0; C < ListOwnedCharacterCount; ++C)
+            int DicOwnedCharacterCount = BR.ReadInt32();
+            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(DicOwnedCharacterCount);
+            for (int C = 0; C < DicOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
@@ -177,9 +191,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 AddCharacter(LoadedCharacterInfo);
             }
 
-            int ListOwnedMissionCount = BR.ReadInt32();
-            DicOwnedMission = new Dictionary<string, MissionInfo>();
-            for (int C = 0; C < ListOwnedMissionCount; ++C)
+            int DicOwnedMissionCount = BR.ReadInt32();
+            DicOwnedMission = new Dictionary<string, MissionInfo>(DicOwnedMissionCount);
+            for (int C = 0; C < DicOwnedMissionCount; ++C)
             {
                 string MissionPath = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
@@ -238,9 +252,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Load(ByteReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            int ListOwnedSquadCount = BR.ReadInt32();
-            DicOwnedUnit = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
-            for (int S = 0; S < ListOwnedSquadCount; ++S)
+            int DicOwnedSquadCount = BR.ReadInt32();
+            DicOwnedUnit = new Dictionary<string, UnitInfo>(DicOwnedSquadCount);
+            for (int S = 0; S < DicOwnedSquadCount; ++S)
             {
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
@@ -252,9 +266,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 DicOwnedUnit.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
             }
 
-            int ListOwnedCharacterCount = BR.ReadInt32();
-            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(ListOwnedCharacterCount);
-            for (int C = 0; C < ListOwnedCharacterCount; ++C)
+            int DicOwnedCharacterCount = BR.ReadInt32();
+            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(DicOwnedCharacterCount);
+            for (int C = 0; C < DicOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
@@ -266,9 +280,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 DicOwnedCharacter.Add(CharacterFullName, new CharacterInfo(LoadedCharacter, QuantityOwned));
             }
 
-            int ListOwnedMissionCount = BR.ReadInt32();
-            DicOwnedMission = new Dictionary<string, MissionInfo>();
-            for (int C = 0; C < ListOwnedMissionCount; ++C)
+            int DicOwnedMissionCount = BR.ReadInt32();
+            DicOwnedMission = new Dictionary<string, MissionInfo>(DicOwnedMissionCount);
+            for (int C = 0; C < DicOwnedMissionCount; ++C)
             {
                 string MissionPath = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
@@ -437,20 +451,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     CurrentCharacterContainer.AddCharacter(CharacterToAdd);
                 }
             }
-        }
-    }
-
-    public class PlayerLoadout
-    {
-        public string Name;
-        public List<Squad> ListSpawnSquad;
-        public List<Commander> ListSpawnCommander;
-
-        public PlayerLoadout()
-        {
-            Name = "Loadout";
-            ListSpawnSquad = new List<Squad>();
-            ListSpawnCommander = new List<Commander>();
         }
     }
 }

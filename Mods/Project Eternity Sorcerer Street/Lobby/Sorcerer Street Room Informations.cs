@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -36,9 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         Player NewPlayer = new Player(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32(), BR.ReadBoolean(),
                             Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255), new List<Card>());
 
-                        NewPlayer.Inventory.CharacterModelPath = BR.ReadString();
-
-                        NewPlayer.LoadGamePieceModel();
+                        NewPlayer.Inventory.Character = new PlayerCharacter(BR.ReadString(), GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 
                         CardBook NewActiveBook = new CardBook(BR.ReadString());
                         NewActiveBook.BookModel = BR.ReadString();
@@ -93,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         BW.Write(ActivePlayer.Color.G);
                         BW.Write(ActivePlayer.Color.B);
 
-                        BW.Write(ActivePlayer.Inventory.CharacterModelPath);
+                        BW.Write(ActivePlayer.Inventory.Character.CharacterPath);
 
                         BW.Write(ActivePlayer.Inventory.ActiveBook.BookName);
                         BW.Write(ActivePlayer.Inventory.ActiveBook.BookModel);

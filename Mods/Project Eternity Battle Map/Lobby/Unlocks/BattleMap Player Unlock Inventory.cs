@@ -1,13 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Units;
-using System;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

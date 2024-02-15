@@ -6,8 +6,9 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class PendingUnlockScreen : GameScreen
     {

@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (CreateNewBook)
             {
                 CardBook NewBook = new CardBook(BookNameInput.Text);
-                ActivePlayer.Inventory.ListBook.Add(NewBook);
+                ActivePlayer.Inventory.RootBookContainer.AddBook(NewBook);
             }
             else
             {

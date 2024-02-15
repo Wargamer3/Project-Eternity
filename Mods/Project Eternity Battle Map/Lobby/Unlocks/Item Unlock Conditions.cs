@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public interface ItemUnlockConditionsEvaluator
     {
-        List<PendingUnlockScreen> Evaluate(ContentManager Content);
+        List<GameScreen> Evaluate(ContentManager Content);
     }
 
     public class BattleMapItemUnlockConditionsEvaluator : ItemUnlockConditionsEvaluator
@@ -64,9 +64,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ConditionsOwner = ConditionsOwner;
         }
 
-        public List<PendingUnlockScreen> Evaluate(ContentManager Content)
+        public List<GameScreen> Evaluate(ContentManager Content)
         {
-            List<PendingUnlockScreen> ListPendingUnlocks = new List<PendingUnlockScreen>();
+            List<GameScreen> ListPendingUnlocks = new List<GameScreen>();
             bool NewUnlocks = false;
 
             if (BattleMapPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)

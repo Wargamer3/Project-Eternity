@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using ProjectEternity.Core.Editor;
+
+namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
+{
+    public partial class DetailsEditor : Form
+    {
+        private enum ItemSelectionChoices { ShopSprite,MapSprite,  Model };
+
+        private ItemSelectionChoices ItemSelectionChoice;
+
+        public DetailsEditor()
+        {
+            InitializeComponent();
+        }
+
+        private void btnChangeShopSprite_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.ShopSprite;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetShopSprites));
+        }
+
+        private void btnChangeMapSprite_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.MapSprite;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetMapSprites));
+        }
+
+        private void btnChange3DModel_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Model;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetCharacterModels));
+        }
+
+        protected void ListMenuItemsSelected(List<string> Items)
+        {
+            if (Items == null)
+                return;
+
+            string Name;
+            for (int I = 0; I < Items.Count; I++)
+            {
+                switch (ItemSelectionChoice)
+                {
+                    case ItemSelectionChoices.ShopSprite:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(37);
+                        txtShopSprite.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.MapSprite:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(32);
+                        txtMapSprite.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.Model:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(42);
+                        txt3DModel.Text = Name;
+                        break;
+                }
+            }
+        }
+    }
+}

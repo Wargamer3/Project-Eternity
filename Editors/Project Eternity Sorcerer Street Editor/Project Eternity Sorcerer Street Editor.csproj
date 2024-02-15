@@ -39,11 +39,37 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Editor.Designer.cs">
+      <DependentUpon>Character Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Details Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Details Editor.Designer.cs">
+      <DependentUpon>Character Details Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Quotes Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Quotes Editor.Designer.cs">
+      <DependentUpon>Character Quotes Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Relationship Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Relationship Editor.Designer.cs">
+      <DependentUpon>Character Relationship Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Spell Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +121,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Character Editor.resx">
+      <DependentUpon>Character Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Details Editor.resx">
+      <DependentUpon>Character Details Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Quotes Editor.resx">
+      <DependentUpon>Character Quotes Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Relationship Editor.resx">
+      <DependentUpon>Character Relationship Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Spell Editor.resx">
       <DependentUpon>Spell Editor.cs</DependentUpon>
     </EmbeddedResource>
@@ -155,6 +193,11 @@
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
       <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
+      <Project>{CCF148C7-FEC2-4CD2-BC4F-25BC6C3A102A}</Project>
+      <Name>Project Eternity Image Viewer</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Map Editor\Project Eternity Map Editor.csproj">

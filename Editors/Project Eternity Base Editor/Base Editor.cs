@@ -91,10 +91,14 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathCutscenes = "Cutscenes";
         public const string GUIRootPathScenes = "Scenes";
         public const string GUIRootPathSorcererStreetCards = "SorcererStreet/Cards";
+        public const string GUIRootPathSorcererStreetCharacters = "SorcererStreet/Characters";
         public const string GUIRootPathSorcererStreetCardsCreatures = "SorcererStreet/Cards/Creatures";
         public const string GUIRootPathSorcererStreetCardsItems = "SorcererStreet/Cards/Items";
         public const string GUIRootPathSorcererStreetCardsSpells = "SorcererStreet/Cards/Spells";
         public const string GUIRootPathSorcererStreetSkillChains = "SorcererStreet/Skill Chains";
+        public const string GUIRootPathSorcererStreetShopSprites = "SorcererStreet/Shop Sprites";
+        public const string GUIRootPathSorcererStreetMapSprites = "SorcererStreet/Map Sprites";
+        public const string GUIRootPathSorcererStreetCharacterModels = "SorcererStreet/Models/Characters";
         public const string GUIRootPathSorcererStreetSpells = "SorcererStreet/Spells";
 
         public BaseEditor()

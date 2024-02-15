@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
@@ -13,6 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string BookName;
         public string BookModel;
         public DateTime LastModification;
+        public string Tags;
 
         public int Wins;
         public int Matches;
@@ -67,6 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.BookName = BookName;
             BookModel = string.Empty;
+            Tags = string.Empty;
             ListCard = new List<Card>();
             DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
         }
@@ -74,6 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CardBook(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            Tags = string.Empty;
             DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
 
             BookName = BR.ReadString();
@@ -96,6 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CardBook(BinaryReader BR, CardBook GlobalBook, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            Tags = string.Empty;
             DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
 
             BookName = BR.ReadString();
@@ -121,6 +126,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CardBook(ByteReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            Tags = string.Empty;
             DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
 
             BookName = BR.ReadString();
@@ -143,6 +149,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CardBook(ByteReader BR, CardBook GlobalBook, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            Tags = string.Empty;
             DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
 
             BookName = BR.ReadString();
@@ -163,6 +170,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CopyCard.QuantityOwned = QuantityOwned;
                 AddCard(CopyCard);
             }
+        }
+
+        public static CardBook GetCardBook(string BookPath, CardBook GlobalBook, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
+            FileStream FS = new FileStream("Content/Sorcerer Street/Books/" + BookPath + ".peb", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
+
+            CardBook NewBook = new CardBook(BR, GlobalBook, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+            BR.Close();
+            FS.Close();
+
+            return NewBook;
         }
 
         public void Save(BinaryWriter BW)

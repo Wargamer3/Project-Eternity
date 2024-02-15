@@ -6,7 +6,7 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class TunnelManager
+    public class TunnelManager
     {
         private BasicEffect IndexedLinesEffect;
         private IndexedLines BackgroundGrid;

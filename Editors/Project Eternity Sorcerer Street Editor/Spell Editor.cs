@@ -7,7 +7,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Effects;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.Editors.SorcererStreetSpellEditor
