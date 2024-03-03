@@ -52,9 +52,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Owner.MaxSquadPerPlayer = MaxSquadPerPlayer;
             Owner.ListMandatoryMutator = ListMandatoryMutator;
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < Owner.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = Owner.ListUniqueOnlineConnection[P];
 
                 ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator, ListMapTeam));
             }

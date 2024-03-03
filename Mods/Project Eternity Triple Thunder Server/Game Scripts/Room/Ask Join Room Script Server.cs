@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             RoomInformations JoinedRoom = (RoomInformations)ActiveGroup.Room;
             List <Player> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);
 
-            foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
+            foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
             {
                 if (ActivePlayer == Sender)
                 {
@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                     DicNewScript = OnlineHelper.GetTripleThunderScriptsServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer);
                     Sender.AddOrReplaceScripts(DicNewScript);
 
-                    foreach (IOnlineConnection OtherPlayer in ActiveGroup.Room.ListOnlinePlayer)
+                    foreach (IOnlineConnection OtherPlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
                     {
                         if (OtherPlayer == Sender)
                         {

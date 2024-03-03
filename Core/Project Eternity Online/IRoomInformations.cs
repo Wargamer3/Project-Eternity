@@ -19,6 +19,7 @@ namespace ProjectEternity.Core.Online
         bool IsDead { get; }//Used when the DataManager need to tell that a Room is deleted.
 
         List<IOnlineConnection> ListOnlinePlayer { get; }
+        List<IOnlineConnection> ListUniqueOnlineConnection { get; }//Ignore local players
         void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType);
         void RemovePlayer(IOnlineConnection OnlinePlayerToRemove);
         void RemoveOnlinePlayer(int Index);

@@ -36,9 +36,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 Sender.Roles.AddRole(RoleManager.Ready);
             }
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < Owner.ListUniqueOnlineConnection.Count; P++)
             {
-                Owner.ListOnlinePlayer[P].Send(new ChangePlayerRolesScriptServer(Sender.ID, Sender.Roles.ListActiveRole));
+                Owner.ListUniqueOnlineConnection[P].Send(new ChangePlayerRolesScriptServer(Sender.ID, Sender.Roles.ListActiveRole));
             }
         }
 

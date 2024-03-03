@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class CharacterSelectionScreen : GameScreen
     {
-        private enum MenuSelections { Nothing, Folders, Unit }
-
         #region Ressources
 
         private CardSymbols Symbols;
@@ -29,19 +27,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #endregion
 
+        private int CharacterMenuX = 10;
+        private int CharacterMenuY = 150;
         private int BoxWidth = 160;
         private int BoxHeight = 140;
+        private int SpriteBoxWidth = 148;
+        private int LineHeight = 155;
+
+        private int RightSectionCenterX = 1500;
+        private int SkinSpriteWidth = 75;
+        private int SkinSpriteHeight = 64;
+        private int SkinBoxWidth = 90;
+        private int SkinBoxHeight = 74;
+        private int SkinSectionY = 800;
 
         private readonly Player ActivePlayer;
 
-        private MenuSelections MenuSelection;
         private int SelectionIndex;
         private int InventoryScrollbarValue;
 
         private CharacterInventoryContainer CurrentContainer;
         private List<CharacterInventoryContainer> ListLastContainer;
-
-        private int CursorIndex;
 
         public CharacterSelectionScreen(CardSymbols Symbols, Player ActivePlayer)
         {
@@ -77,37 +83,132 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActiveButton.Update(gameTime);
             }
 
-            if (InputHelper.InputConfirmPressed())
+            UpdateCharacterSelection();
+            UpdateCharacterSkinSelection();
+        }
+
+        private void UpdateCharacterSelection()
+        {
+            if (MouseHelper.InputLeftButtonPressed())
             {
-                if (MenuSelection == MenuSelections.Folders)
+                int SelectedCharacterIndex = GetCharacterUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+                if (SelectedCharacterIndex < 0)
                 {
-                    if (SelectionIndex == 0 && ListLastContainer.Count > 0)
+                    return;
+                }
+
+                if (ListLastContainer.Count > 0)
+                {
+                    --SelectedCharacterIndex;
+                }
+
+                if (SelectedCharacterIndex == -1)
+                {
+                    CurrentContainer = ListLastContainer[ListLastContainer.Count - 1];
+                    ListLastContainer.Remove(CurrentContainer);
+                }
+                else if (SelectedCharacterIndex >= CurrentContainer.DicFolder.Count)
+                {
+                    this.SelectionIndex = SelectedCharacterIndex - CurrentContainer.DicFolder.Count;
+                    ActivePlayer.Inventory.Character = CurrentContainer.ListCharacter[SelectedCharacterIndex - CurrentContainer.ListFolder.Count];
+                }
+                else
+                {
+                    ListLastContainer.Add(CurrentContainer);
+                    if (ListLastContainer.Count > 1)
                     {
-                        CurrentContainer = ListLastContainer[ListLastContainer.Count - 1];
-                        ListLastContainer.Remove(CurrentContainer);
+                        CurrentContainer = CurrentContainer.ListFolder[SelectedCharacterIndex];
                     }
                     else
                     {
-                        ListLastContainer.Add(CurrentContainer);
-                        if (ListLastContainer.Count > 1)
+                        CurrentContainer = CurrentContainer.ListFolder[SelectedCharacterIndex];
+                    }
+                }
+            }
+        }
+
+        private void UpdateCharacterSkinSelection()
+        {
+            if (MouseHelper.InputLeftButtonPressed())
+            {
+                int SelectedSkinIndex = GetCharacterSkinUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+                if (SelectedSkinIndex < 0)
+                {
+                    return;
+                }
+
+                ActivePlayer.Inventory.ActiveSkinIndex = (byte)SelectedSkinIndex;
+            }
+        }
+
+        private int GetCharacterUnderMouse(int MouseX, int MouseY)
+        {
+            int X = CharacterMenuX;
+            int DrawY = CharacterMenuY - InventoryScrollbarValue % BoxHeight;
+            int SpriteOffset = BoxWidth / 2 - SpriteBoxWidth / 2;
+
+            int BoxPerLine = (Constants.Width - Constants.Width / 3 - X) / BoxWidth;
+
+            int MouseIndex = (MouseX - X) / BoxWidth + ((MouseY - DrawY) / LineHeight) * BoxPerLine;
+            int MouseXFinal = (MouseX - X) % BoxWidth;
+            int MouseYFinal = (MouseY - DrawY) % LineHeight;
+
+            int ItemCount = CurrentContainer.ListCharacter.Count + CurrentContainer.ListFolder.Count;
+            if (ListLastContainer.Count > 0)
+            {
+                ItemCount += 1;
+            }
+
+            if (MouseIndex >= 0 && MouseIndex < ItemCount
+                && MouseXFinal >= SpriteOffset && MouseXFinal < SpriteOffset + BoxWidth
+                && MouseX >= X && MouseX < X + BoxPerLine * BoxWidth
+                && MouseYFinal >= 4 && MouseYFinal < 4 + BoxHeight)
+            {
+                if (MouseIndex >= CurrentContainer.ListFolder.Count)
+                {
+                    foreach (PlayerCharacterSkin ActiveSkin in CurrentContainer.ListCharacter[MouseIndex - CurrentContainer.ListFolder.Count].ListSkin)
+                    {
+                        if (ActiveSkin.Skin == null)
                         {
-                            CurrentContainer = CurrentContainer.ListFolder[SelectionIndex - 1];
-                        }
-                        else
-                        {
-                            CurrentContainer = CurrentContainer.ListFolder[SelectionIndex];
+                            ActiveSkin.Skin = new PlayerCharacter(ActiveSkin.SkinPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                         }
                     }
                 }
-                else if (MenuSelection == MenuSelections.Unit)
-                {
-                    PlayerCharacter UnitToBuy = CurrentContainer.ListCharacter[SelectionIndex];
-                }
+
+                return MouseIndex;
             }
-            else if (InputHelper.InputCancelPressed())
+
+            return -1;
+        }
+
+        private int GetCharacterSkinUnderMouse(int MouseX, int MouseY)
+        {
+            int X = RightSectionCenterX;
+            int DrawY = SkinSectionY;
+            int SpriteOffset = 5;
+
+            int BoxPerLine = 5;
+
+            int SkinCount = ActivePlayer.Inventory.Character.ListSkin.Count;
+            int TotalSkinSize = SkinCount * (SkinBoxWidth + 5);
+
+            X -= (TotalSkinSize - SkinBoxWidth - 5 + SkinBoxWidth) / 2;
+
+            int MouseIndex = (MouseX - X) / SkinBoxWidth + ((MouseY - DrawY) / LineHeight) * BoxPerLine;
+            int MouseXFinal = (MouseX - X) % SkinBoxWidth;
+            int MouseYFinal = (MouseY - DrawY) % LineHeight;
+
+            if (MouseIndex >= 0 && MouseIndex < SkinCount
+                && MouseXFinal >= SpriteOffset && MouseXFinal < SpriteOffset + SkinBoxWidth
+                && MouseX >= X && MouseX < X + BoxPerLine * SkinBoxWidth
+                && MouseYFinal >= 4 && MouseYFinal < 4 + SkinBoxHeight)
             {
-                RemoveScreen(this);
+                return MouseIndex;
             }
+
+            return -1;
         }
 
         private void OnInventoryScrollbarChange(float ScrollbarValue)
@@ -137,12 +238,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntArial12, "Character Selection", new Vector2(X, Y), Color.White);
             g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name, new Vector2(Constants.Width / 2, Y), Color.White);
 
-            X = 10;
-            Y = Constants.Height / 7;
-            int LineHeight = 155;
+            X = CharacterMenuX;
+            Y = CharacterMenuY;
 
-            int DrawY = 150;
-            int SpriteBoxWidth = 148;
+            int DrawY = CharacterMenuY;
             int SpriteOffset = BoxWidth / 2 - SpriteBoxWidth / 2;
 
             int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxHeight);
@@ -208,7 +307,42 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawY += LineHeight;
             }
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(-45, Constants.Height / 7 + LineHeight / 3 + CursorIndex * (LineHeight + 10)));
+            DrawY = CharacterMenuY;
+
+            int SelectedCharacterIndex = GetCharacterUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+            if (ListLastContainer.Count > 0)
+            {
+                SelectedCharacterIndex -= 1;
+            }
+
+            PlayerCharacter CharacterToDraw = ActivePlayer.Inventory.Character;
+
+            //Hover
+            if (SelectedCharacterIndex >= 0)
+            {
+                int FinalX = X + ((MouseHelper.MouseStateCurrent.X - X) / BoxWidth) * BoxWidth;
+                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / LineHeight) * LineHeight;
+
+                if (SelectedCharacterIndex >= CurrentContainer.ListFolder.Count)
+                {
+                    PlayerCharacter SelectedCharacter = CurrentContainer.ListCharacter[SelectedCharacterIndex - CurrentContainer.ListFolder.Count];
+
+                    CharacterToDraw = SelectedCharacter;
+
+                    g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidth, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    DrawBox(g, new Vector2(FinalX - 10, FinalY + BoxHeight), BoxWidth + 30, 25, Color.Black);
+                    g.DrawStringMiddleAligned(fntArial12,
+                        SelectedCharacter.Name,
+                        new Vector2(FinalX + 5 + BoxWidth / 2, FinalY + BoxHeight), Color.White);
+                }
+                else
+                {
+                    g.Draw(sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+            }
+
+            MenuHelper.DrawFingerIcon(g, new Vector2(-45, Constants.Height / 7 + LineHeight / 3 + SelectionIndex * (LineHeight + 10)));
 
             X = -10;
             Y = Constants.Height - 100;
@@ -218,20 +352,49 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntArial12, "Select a character", new Vector2(X, Y), Color.White);
 
             //Right Side
-            g.DrawString(fntArial12, "Select a skin", new Vector2(1500, Y), Color.White);
-            DrawEmptyBox(g, new Vector2(1500, 760), 70, 35);
-            g.DrawStringCentered(fntArial12, "Zeneth", new Vector2(1535, 780), Color.White);
-            X = 1490;
-            DrawEmptyBox(g, new Vector2(X, 800), 85, 74);
-            g.Draw(CurrentContainer.ListCharacter[31].SpriteShop, new Rectangle(X + 5, 805, 75, 64), Color.White);
+
+            X = RightSectionCenterX;
+            int CharacterModelBoxWidth = 450;
+            g.Draw(GameScreen.sprPixel, new Rectangle(X - CharacterModelBoxWidth / 2, 200, CharacterModelBoxWidth, 550), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
+            DrawEmptyBox(g, new Vector2(X - CharacterModelBoxWidth / 2, 200), CharacterModelBoxWidth, 550);
+
+            g.DrawStringCentered(fntArial12, "Select a skin", new Vector2(X, Y), Color.White);
+
+            int SkinCount = CharacterToDraw.ListSkin.Count;
+            int TotalSkinSize = SkinCount * (SkinBoxWidth + 5);
+
+            X -= (TotalSkinSize - SkinBoxWidth - 5) / 2;
+            for (int S = 0; S < SkinCount; ++S)
+            {
+                DrawEmptyBox(g, new Vector2(X - SkinBoxWidth / 2 - 2, SkinSectionY), SkinBoxWidth, SkinBoxHeight);
+                g.Draw(CharacterToDraw.ListSkin[S].Skin.SpriteShop, new Rectangle(X, SkinSectionY + 37, SkinSpriteWidth, SkinSpriteHeight), null, Color.White, 0, new Vector2(CharacterToDraw.ListSkin[S].Skin.SpriteShop.Width / 2, CharacterToDraw.ListSkin[S].Skin.SpriteShop.Height / 2), SpriteEffects.None, 0);
+
+                X += SkinBoxWidth;
+            }
+
+            X = RightSectionCenterX;
+            X -= (TotalSkinSize - SkinBoxWidth - 5 + SkinBoxWidth) / 2;
+
+            PlayerCharacterSkin SkinToDraw = ActivePlayer.Inventory.Character.ListSkin[0];
+
+            int SelectedSkinIndex = GetCharacterSkinUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+            if (SelectedSkinIndex >= 0)
+            {
+                SkinToDraw = CharacterToDraw.ListSkin[SelectedSkinIndex];
+                int FinalX = X + ((MouseHelper.MouseStateCurrent.X - X) / SkinBoxWidth) * SkinBoxWidth;
+                int FinalY = SkinSectionY + ((MouseHelper.MouseStateCurrent.Y - SkinSectionY) / LineHeight) * LineHeight;
+
+                g.Draw(sprPixel, new Rectangle(FinalX + 5, FinalY + 5, SkinBoxWidth - 10, SkinBoxHeight - 10), Color.FromNonPremultiplied(255, 255, 255, 127));
+            }
+
+            int NameWidth = (int)fntArial12.MeasureString(SkinToDraw.Skin.Name).X;
+            DrawEmptyBox(g, new Vector2(RightSectionCenterX - NameWidth / 2 - 5, 760), NameWidth + 6, 35);
+            g.DrawStringCentered(fntArial12, SkinToDraw.Skin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {
                 ActiveButton.Draw(g);
             }
-
-            g.Draw(GameScreen.sprPixel, new Rectangle(1300, 200, 450, 550), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
-            DrawEmptyBox(g, new Vector2(1300, 200), 450, 550);
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
@@ -241,9 +404,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Begin();
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            g.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
-            CurrentContainer.ListCharacter[31].Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1550, 750, 0), Projection, Matrix.Identity);
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            CharacterToDraw.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1500, 750, 0), Projection, Matrix.Identity);
         }
     }
 }

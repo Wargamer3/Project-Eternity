@@ -796,7 +796,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             if (InputHelper.InputConfirmPressed() && !WaitingForOtherPlayers)
             {
-                if (HasControl() || (Room != null && OnlineClient != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost) || Room.ListOnlinePlayer.Count == 1)
+                if (HasControl() || (Room != null && OnlineClient != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost) || Room.ListUniqueOnlineConnection.Count == 1)
                 {
                     AdvanceDialog();
 
@@ -806,7 +806,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                         WaitingForOtherPlayers = true;
                     }
                 }
-                else if (Room != null && OnlineClient != null && Room.ListOnlinePlayer.Count > 1 && HasMultipleChoices())
+                else if (Room != null && OnlineClient != null && Room.ListUniqueOnlineConnection.Count > 1 && HasMultipleChoices())
                 {//Wait for all players
                     OnlineClient.Host.Send(new ConfirmChoiceVisualNovelScriptClient(VisualNovelPath, ListDialog.IndexOf(CurrentDialog), DialogChoice));
                     WaitingForOtherPlayers = true;

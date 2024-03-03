@@ -32,6 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
+                PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
                 PushScreen(new SorcererStreetGamePreparationScreen(null, null, new SorcererStreetRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }

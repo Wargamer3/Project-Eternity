@@ -678,7 +678,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 Load();
 
-                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.Send(new ServerIsReadyScriptServer());
                 }
@@ -707,7 +707,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     }
                 }
 
-                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     if (ActivePlayer.IsGameReady)
                     {
@@ -723,7 +723,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             { 
                 if (ListLocalPlayer[P].OnlineClient == PlayerToRemove)
                 {
-                    foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                    foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListUniqueOnlineConnection)
                     {
                         ActivePlayer.Send(new PlayerLeftScriptServer(PlayerID, ListLocalPlayer[P].InGameRobot.ID));
                     }
@@ -900,7 +900,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (IsServer)
             {
-                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.Send(new SendPlayerRespawnScriptServer(FinalSpawn.Item2, RobotToRespawn.ID,
                     RobotToRespawn.Position.X, RobotToRespawn.Position.Y, RobotToRespawn.HP));
@@ -1008,7 +1008,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 NextLevel.Rules = Rules;
                 GameGroup.SetGame(NextLevel);
 
-                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.IsGameReady = false;
                     ActivePlayer.Send(new GoToNextMapScriptServer(NextLevelPath));

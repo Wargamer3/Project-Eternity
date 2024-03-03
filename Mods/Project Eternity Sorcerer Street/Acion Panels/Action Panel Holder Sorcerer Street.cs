@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (Map.IsServer && !Map.ListPlayer[Map.ActivePlayerIndex].IsPlayerControlled)
             {
-                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.Send(new OpenMenuScriptClient(NewActionPanel));
                 }
@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (Map.IsServer && !Map.ListPlayer[Map.ActivePlayerIndex].IsPlayerControlled)
             {
-                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.Send(new OpenMenuScriptClient(NewActionPanel));
                 }

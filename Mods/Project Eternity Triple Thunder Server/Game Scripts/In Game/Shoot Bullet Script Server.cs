@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                 Layer ActiveLayer = ActiveGame.ListLayer[LayerIndex];
                 ActiveLayer.DelayOnlineScript(this);
 
-                foreach (IOnlineConnection ActiveOnlinePlayer in ActiveGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActiveOnlinePlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
                 {
                     if (ActiveOnlinePlayer != Sender)
                     {

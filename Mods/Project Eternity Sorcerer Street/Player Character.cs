@@ -30,10 +30,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool Locked;
         public PlayerCharacter Skin;
 
+        public PlayerCharacterSkin(PlayerCharacter Clone)
+        {
+            SkinPath = Clone.CharacterPath;
+            Locked = false;
+            Skin = new PlayerCharacter(Clone);
+        }
+
+        public PlayerCharacterSkin(string SkinPath)
+        {
+            this.SkinPath = SkinPath;
+            Locked = false;
+        }
+
         public PlayerCharacterSkin(string SkinPath, bool Locked)
         {
             this.SkinPath = SkinPath;
             this.Locked = Locked;
+        }
+
+        public override string ToString()
+        {
+            return SkinPath;
         }
     }
 
@@ -65,6 +83,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public QuoteSet[] ArrayBaseQuoteSet = new QuoteSet[6];
         public Dictionary<string, QuoteSet> DicAttackQuoteSet;
         public List<string> ListQuoteSetVersusName;
+
+        public PlayerCharacter(PlayerCharacter Clone)
+        {
+            this.SpriteMapPath = Clone.SpriteMapPath;
+            this.SpriteMap = Clone.SpriteMap;
+            this.SpriteShopPath = Clone.SpriteShopPath;
+            this.SpriteShop = Clone.SpriteShop;
+            this.Model3DPath = Clone.Model3DPath;
+            this.Unit3DModel = Clone.Unit3DModel;
+
+            this.Tags = Clone.Tags;
+
+            this.Name = Clone.Name;
+            this.CharacterPath = Clone.CharacterPath;
+            this.Description = Clone.Description;
+            this.Price = Clone.Price;
+
+            this.ListWhitelist = new List<string>(Clone.ListWhitelist);
+            this.ListBlacklist = new List<string>(Clone.ListBlacklist);
+            this.ListSkin = new List<PlayerCharacterSkin>(Clone.ListSkin);
+            this.ListAIBook = new List<string>(Clone.ListAIBook);
+
+            this.ArraySpell = (ManualSkill[])Clone.ArraySpell.Clone();
+            this.ArraySkill = (BaseAutomaticSkill[])Clone.ArraySkill.Clone();
+            this.ArrayRelationshipBonus = (BaseAutomaticSkill[])Clone.ArrayRelationshipBonus.Clone();
+
+            this.ArrayBaseQuoteSet = (QuoteSet[])Clone.ArrayBaseQuoteSet.Clone();
+
+            this.DicAttackQuoteSet = new Dictionary<string, QuoteSet>(Clone.DicAttackQuoteSet);
+            this.ListQuoteSetVersusName = new List<string>(Clone.ListQuoteSetVersusName);
+        }
 
         public PlayerCharacter(string CharacterPath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
@@ -117,7 +166,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             byte ListLockedSkinCount = BR.ReadByte();
-            ListSkin = new List<PlayerCharacterSkin>(ListLockedSkinCount);
+            ListSkin = new List<PlayerCharacterSkin>(ListLockedSkinCount + 1);
             for (int S = 0; S < ListLockedSkinCount; ++S)
             {
                 ListSkin.Add(new PlayerCharacterSkin(BR.ReadString(), BR.ReadBoolean()));
@@ -155,6 +204,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int Q = 0; Q < ListQuoteSetVersusNameCount; Q++)
                 ListQuoteSetVersusName.Add(BR.ReadString());
 
+            ArrayBaseQuoteSet = new QuoteSet[6];
             //Base quotes
             for (int I = 0; I < 6; I++)
             {
@@ -232,6 +282,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
                 }
             }
+
+            ListSkin.Insert(0, new PlayerCharacterSkin(this));
         }
     }
 }

@@ -16,6 +16,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public delegate void OnClick(string SelectedItem);
         private readonly OnClick OnClickDelegate;
 
+        public static Texture2D sprArrow;
+
         private readonly Rectangle ButtonCollsionBox;
         private readonly SpriteFont fntText;
         private string SelectedItem;

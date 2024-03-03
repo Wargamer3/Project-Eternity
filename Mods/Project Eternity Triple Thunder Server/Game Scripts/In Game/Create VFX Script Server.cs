@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            foreach (IOnlineConnection ActiveOnlinePlayer in ActiveGroup.Room.ListOnlinePlayer)
+            foreach (IOnlineConnection ActiveOnlinePlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
             {
                 if (ActiveOnlinePlayer != Sender)
                 {

@@ -11,7 +11,6 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -502,7 +501,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 for (int P = 0; P < 10; P++)
                 {
-                    if (P < PlayerManager.ListLocalPlayer.Count)
+                    if (P < PlayerManager.ListLocalPlayer.Count && PlayerManager.ListLocalPlayer[P].OnlinePlayerType != OnlinePlayerBase.PlayerTypeNA)
                     {
                         OnlinePlayerBase ActivePlayer = PlayerManager.ListLocalPlayer[P];
                         NewMap.AddLocalPlayer(ActivePlayer);

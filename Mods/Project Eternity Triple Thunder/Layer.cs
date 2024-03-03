@@ -413,7 +413,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Owner.OnlineServer.SharedWriteBuffer.WriteScript(new SendPlayerDamageScriptServer(LayerIndex, ActiveRobot.ID, TargetRobot.ID, Position,
                     Damage, TargetRobot.HP, IsPlayerControlled));
 
-                foreach (IOnlineConnection ActivePlayer in Owner.GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in Owner.GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.SendWriteBuffer();
                 }

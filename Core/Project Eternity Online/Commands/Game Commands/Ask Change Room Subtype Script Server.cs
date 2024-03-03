@@ -31,10 +31,8 @@ namespace ProjectEternity.Core.Online
             Owner.RoomSubtype = RoomSubtype;
             //TODO: Update database
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            foreach (IOnlineConnection ActiveOnlinePlayer in Owner.ListUniqueOnlineConnection)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
-
                 ActiveOnlinePlayer.Send(new ChangeRoomSubtypeScriptServer(RoomSubtype));
             }
         }

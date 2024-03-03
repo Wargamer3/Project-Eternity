@@ -8,8 +8,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetUnit : UnitMapComponent
     {
-        public PlayerCharacter Character;
-
         public override int Width => 32;
 
         public override int Height => 32;

@@ -237,6 +237,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
+                if (Map.ListPlayer[P].OnlinePlayerType != OnlinePlayerBase.PlayerTypePlayer)
+                {
+                    continue;
+                }
+
                 g.Draw(GameScreen.sprPixel,
                     new Rectangle((int)Map.ListPlayer[P].GamePiece.X * Map.TileSize.X, (int)Map.ListPlayer[P].GamePiece.Y * Map.TileSize.Y,
                     Map.TileSize.X / 2, Map.TileSize.Y / 2), Color.FromNonPremultiplied(127, 127, 127, 127));

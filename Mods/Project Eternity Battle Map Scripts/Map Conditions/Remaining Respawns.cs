@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         public RemainingRespawnCondition(BattleMap Map)
-            : base(Map, 140, 70, "Current Turn", new string[] { "Check Condition" }, new string[] { "Condition is true", "Condition is false" })
+            : base(Map, 140, 70, "Remaining Respawns", new string[] { "Check Condition" }, new string[] { "Condition is true", "Condition is false" })
         {
             _PlayerIndex = 1;
             _RemainingSpawn = 0;

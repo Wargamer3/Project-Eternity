@@ -12,7 +12,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetLobby(bool UseOnline)
             : base(UseOnline)
         {
+            Card.Init();
             MenuHelper.Init(Content);
+            CardSymbols.Load(Content);
         }
 
         protected override void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)

@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial26 = Content.Load<SpriteFont>("Fonts/Arial26");
 
-            Symbols = CardSymbols.Load(Content);
+            Symbols = CardSymbols.Symbols;
         }
 
         public override void Update(GameTime gameTime)

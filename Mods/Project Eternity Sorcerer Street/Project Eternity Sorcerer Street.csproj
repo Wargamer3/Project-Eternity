@@ -100,6 +100,7 @@
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Animation Damage Timeline.cs" />
+    <Compile Include="Lobby\Bot.cs" />
     <Compile Include="Lobby\Unlocks\Sorcerer Street Unlock Inventory.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
@@ -144,9 +145,10 @@
     <Compile Include="Effects\Sorcerer Street Effect.cs" />
     <Compile Include="Effects\Sorcerer Street Requirement.cs" />
     <Compile Include="Effects\Sorceret Street Automatic Skill Target.cs" />
-    <Compile Include="Rules\Single Player Game Rule.cs" />
+    <Compile Include="Rules\Deathmatch Game Rule.cs" />
     <Compile Include="Environment\Default Weather.cs" />
     <Compile Include="Environment\Environment Manager.cs" />
+    <Compile Include="Terrain\Shrine Terrain.cs" />
     <Compile Include="Terrain\Castle Terrain.cs" />
     <Compile Include="Terrain\Tower Terrain.cs" />
     <Compile Include="Layers\Layer Holder.cs" />

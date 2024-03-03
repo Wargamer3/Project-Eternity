@@ -34,10 +34,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
             Owner.MaxKill = MaxKill;
             Owner.MaxGameLengthInMinutes = MaxGameLengthInMinutes;
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            foreach (IOnlineConnection ActiveOnlinePlayer in Owner.ListUniqueOnlineConnection)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
-
                 ActiveOnlinePlayer.Send(new ChangeRoomExtrasBattleScriptServer(MaxKill, MaxGameLengthInMinutes));
             }
         }

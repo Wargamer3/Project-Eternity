@@ -39,11 +39,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            for (int P = 0; P < ActiveGroup.Room.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < ActiveGroup.Room.ListUniqueOnlineConnection.Count; P++)
             {
-                if (SendBackToSender || ActiveGroup.Room.ListOnlinePlayer[P] != Sender)
+                if (SendBackToSender || ActiveGroup.Room.ListUniqueOnlineConnection[P] != Sender)
                 {
-                    ActiveGroup.Room.ListOnlinePlayer[P].Send(new UpdateMenuScriptServer(PanelName, ArrayUpdateData));
+                    ActiveGroup.Room.ListUniqueOnlineConnection[P].Send(new UpdateMenuScriptServer(PanelName, ArrayUpdateData));
                 }
             }
         }

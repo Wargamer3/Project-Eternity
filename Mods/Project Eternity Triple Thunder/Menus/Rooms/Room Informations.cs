@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public string Password { get; set; }
         public bool UseTeams { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }
+        public List<IOnlineConnection> ListUniqueOnlineConnection { get; }
         public byte CurrentPlayerCount { get; set; }
         public byte MinNumberOfPlayer { get; set; }
         public byte MaxNumberOfPlayer { get; set; }

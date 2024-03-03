@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 Map.GameGroup.SetGame(null);
 
-                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in Map.GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActivePlayer.IsGameReady = false;
                     ActivePlayer.Send(new GameEndedScriptServer());

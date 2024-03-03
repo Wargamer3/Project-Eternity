@@ -37,7 +37,7 @@ namespace ProjectEternity.Core.Online
             }
 
             ActiveGroup.IsGameReady = true;
-            foreach (IOnlineConnection ActiveRoomPlayer in ActiveGroup.Room.ListOnlinePlayer)
+            foreach (IOnlineConnection ActiveRoomPlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
             {
                 ActiveRoomPlayer.Send(new ServerIsReadyScriptServer());
             }

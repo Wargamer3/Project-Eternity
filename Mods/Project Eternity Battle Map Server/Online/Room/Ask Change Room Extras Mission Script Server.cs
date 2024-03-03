@@ -29,9 +29,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             //TODO: Update database
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < Owner.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = Owner.ListUniqueOnlineConnection[P];
 
                 ActiveOnlinePlayer.Send(new ChangeRoomExtrasMissionScriptServer());
             }

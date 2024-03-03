@@ -54,9 +54,8 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 
-            for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
+            foreach (IOnlineConnection ActiveOnlinePlayer in CreatedGroup.Room.ListUniqueOnlineConnection)
             {
-                IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListOnlinePlayer[P];
                 ActiveOnlinePlayer.Send(new CreateGameScriptServer());
             }
         }

@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             BattleMapRoomInformations JoinedRoom = (BattleMapRoomInformations)ActiveGroup.Room;
             List<OnlinePlayerBase> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);
 
-            foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
+            foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
             {
                 if (ActivePlayer == Sender)
                 {

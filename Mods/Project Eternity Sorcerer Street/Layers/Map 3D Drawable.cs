@@ -430,10 +430,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (Player ActivePlayer in Map.ListPlayer)
             {
                 //If it's dead, don't draw it unless it's an event unit.
-                if (ActivePlayer.Inventory == null || ActivePlayer.GamePiece.Character.Unit3DModel == null)
+                if (ActivePlayer.Inventory == null || ActivePlayer.Inventory.Character.Unit3DModel == null)
                     continue;
 
-                ActivePlayer.GamePiece.Character.Unit3DModel.Update(gameTime);
+                ActivePlayer.Inventory.Character.Unit3DModel.Update(gameTime);
             }
         }
 
@@ -1083,7 +1083,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
                     }
 
-                    if (ActivePlayer.GamePiece.Character.Unit3DModel == null)
+                    if (ActivePlayer.Inventory.Character.Unit3DModel == null)
                     {
                         ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
 
@@ -1098,7 +1098,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else
                     {
-                        ActivePlayer.GamePiece.Character.Unit3DModel.PlayAnimation("Walking");
+                        ActivePlayer.Inventory.Character.Unit3DModel.PlayAnimation("Walking");
                         Matrix RotationMatrix = Matrix.Identity;
                         if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                         {
@@ -1113,7 +1113,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
-                        ActivePlayer.GamePiece.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
+                        ActivePlayer.Inventory.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                     }
                 }
@@ -1144,7 +1144,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
                     }
 
-                    if (ActivePlayer.GamePiece.Character.Unit3DModel == null)
+                    if (ActivePlayer.Inventory.Character.Unit3DModel == null)
                     {
                         ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
 
@@ -1159,7 +1159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else
                     {
-                        ActivePlayer.GamePiece.Character.Unit3DModel.PlayAnimation("Idle");
+                        ActivePlayer.Inventory.Character.Unit3DModel.PlayAnimation("Idle");
                         Matrix RotationMatrix = Matrix.Identity;
                         if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                         {
@@ -1174,7 +1174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
-                        ActivePlayer.GamePiece.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
+                        ActivePlayer.Inventory.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                     }
                 }

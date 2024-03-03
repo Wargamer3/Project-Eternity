@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Map.IsServer)
             {
                 EndPhase.ActiveSelect = true;
-                foreach (IOnlineConnection ActiveOnlinePlayer in Map.GameGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActiveOnlinePlayer in Map.GameGroup.Room.ListUniqueOnlineConnection)
                 {
                     ActiveOnlinePlayer.Send(new OpenMenuScriptServer(new ActionPanel[] { EndPhase } ));
                 }

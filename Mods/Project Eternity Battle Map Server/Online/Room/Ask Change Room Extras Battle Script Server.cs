@@ -34,9 +34,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Owner.MaxKill = MaxKill;
             Owner.MaxGameLengthInMinutes = MaxGameLengthInMinutes;
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < Owner.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = Owner.ListUniqueOnlineConnection[P];
 
                 ActiveOnlinePlayer.Send(new ChangeRoomExtrasBattleScriptServer(MaxKill, MaxGameLengthInMinutes));
             }

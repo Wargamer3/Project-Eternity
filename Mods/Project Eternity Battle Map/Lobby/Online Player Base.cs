@@ -11,10 +11,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public abstract class OnlinePlayerBase
     {
         public const string PlayerTypeNA = "N/A";
+        public const string PlayerTypeBot = "Bot";
         public const string PlayerTypePlayer = "Player";
         public const string PlayerTypeSpectator = "Spectator";
 
-        public enum PlayerTypes { Offline, Player, Spectator }
+        public enum PlayerTypes { Offline, Bot, Player, Spectator }
 
         public string ConnectionID;
         public string Name;
@@ -95,6 +96,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (OnlinePlayerType == PlayerTypes.Player)
             {
                 this.OnlinePlayerType = PlayerTypePlayer;
+            }
+            else if(OnlinePlayerType == PlayerTypes.Bot)
+            {
+                this.OnlinePlayerType = PlayerTypeBot;
             }
             else
             {

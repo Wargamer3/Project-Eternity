@@ -123,45 +123,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprEnchantSingle;
         public Texture2D sprEnchantMultiple;
 
-        public static CardSymbols Load(ContentManager Content)
+        public static CardSymbols Symbols;
+
+        public static void Load(ContentManager Content)
         {
-            CardSymbols NewCardSymbols = new CardSymbols();
+            Symbols = new CardSymbols();
 
-            NewCardSymbols.sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Air");
-            NewCardSymbols.sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Earth");
-            NewCardSymbols.sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Fire");
-            NewCardSymbols.sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Water");
-            NewCardSymbols.sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Neutral");
-            NewCardSymbols.sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Multi");
+            Symbols.sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Air");
+            Symbols.sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Earth");
+            Symbols.sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Fire");
+            Symbols.sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Water");
+            Symbols.sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Neutral");
+            Symbols.sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Multi");
 
-            NewCardSymbols.sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/G");
-            NewCardSymbols.sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/TG");
-            NewCardSymbols.sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/ST");
-            NewCardSymbols.sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/HP");
-            NewCardSymbols.sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/MHP");
+            Symbols.sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/G");
+            Symbols.sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/TG");
+            Symbols.sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/ST");
+            Symbols.sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/HP");
+            Symbols.sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/MHP");
 
-            NewCardSymbols.sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
-            NewCardSymbols.sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Normal");
-            NewCardSymbols.sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
-            NewCardSymbols.sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Strange");
+            Symbols.sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
+            Symbols.sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Normal");
+            Symbols.sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
+            Symbols.sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Strange");
 
-            NewCardSymbols.sprItemsWeapon = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Weapon");
-            NewCardSymbols.sprItemsArmor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Armor");
-            NewCardSymbols.sprItemsTool = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Tool");
-            NewCardSymbols.sprItemsScroll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Scroll");
+            Symbols.sprItemsWeapon = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Weapon");
+            Symbols.sprItemsArmor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Armor");
+            Symbols.sprItemsTool = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Tool");
+            Symbols.sprItemsScroll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Scroll");
 
-            NewCardSymbols.sprSpellsSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell single");
-            NewCardSymbols.sprSpellsMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell Multiple");
+            Symbols.sprSpellsSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell single");
+            Symbols.sprSpellsMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell Multiple");
 
-            NewCardSymbols.sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Single");
-            NewCardSymbols.sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Multiple");
-
-            return NewCardSymbols;
+            Symbols.sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Single");
+            Symbols.sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Multiple");
         }
     }
 
     public abstract class Card
     {
+        private static readonly Dictionary<string, Dictionary<string, Card>> DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
+
         public enum CardRarities { Normal, Strange, Rare, Extra }
 
         public Texture2D sprCard;
@@ -195,11 +197,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListActiveSkill = new List<BaseAutomaticSkill>();
         }
 
+        public static void Init()
+        {
+            DicCardsByType.Add(CreatureCard.CreatureCardType, new Dictionary<string, Card>());
+            DicCardsByType.Add(ItemCard.ItemCardType, new Dictionary<string, Card>());
+            DicCardsByType.Add(SpellCard.SpellCardType, new Dictionary<string, Card>());
+        }
+
         public static Card LoadCard(string Path)
         {
-            string[] UnitInfo = Path.Split(new[] { "/", "\\" }, StringSplitOptions.None);
-
-            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), null, null, null, null, null);
+            return LoadCard(Path, null, null, null, null, null);
         }
 
         public static Card LoadCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
@@ -213,22 +220,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static Card FromType(string CardType, string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            switch(CardType)
+            Card LoadedCard = null;
+
+            switch (CardType)
             {
                 case "Creature":
                 case "Creature Cards":
-                    return new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                    if (!DicCardsByType[CreatureCard.CreatureCardType].TryGetValue(Path, out LoadedCard))
+                    {
+                        LoadedCard = new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                        DicCardsByType[CreatureCard.CreatureCardType].Add(Path, LoadedCard);
+                    }
+                    break;
 
                 case "Item":
                 case "Item Cards":
-                    return new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                    if (!DicCardsByType[ItemCard.ItemCardType].TryGetValue(Path, out LoadedCard))
+                    {
+                        LoadedCard = new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                        DicCardsByType[ItemCard.ItemCardType].Add(Path, LoadedCard);
+                    }
+                    break;
 
                 case "Spell Cards":
                 case SpellCard.SpellCardType:
-                    return new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    if (!DicCardsByType[SpellCard.SpellCardType].TryGetValue(Path, out LoadedCard))
+                    {
+                        LoadedCard = new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
+                        DicCardsByType[SpellCard.SpellCardType].Add(Path, LoadedCard);
+                    }
+                    break;
             }
 
-            throw new Exception("Unkown card type: " + CardType);
+            return LoadedCard.Copy(DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
         public void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)

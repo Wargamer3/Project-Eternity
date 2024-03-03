@@ -85,8 +85,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Dictionary<string, CardBook> DicOwnedBook;
         public Dictionary<string, PlayerCharacter> DicOwnedCharacter;
         public Dictionary<string, MissionInfo> DicOwnedMission;
+        public Dictionary<string, Bot> DicOwnedBot;
 
         public PlayerCharacter Character;
+        public byte ActiveSkinIndex;
         public CardBook ActiveBook;
 
         public SorcererStreetInventory()
@@ -99,6 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicOwnedBook = new Dictionary<string, CardBook>();
             DicOwnedCharacter = new Dictionary<string, PlayerCharacter>();
             DicOwnedMission = new Dictionary<string, MissionInfo>();
+            DicOwnedBot = new Dictionary<string, Bot>();
         }
 
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -107,6 +110,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GlobalBook = new CardBook(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             string ActiveBookName = BR.ReadString();
+
+            string CharacterPath = BR.ReadString();
+            ActiveSkinIndex = BR.ReadByte();
 
             int ListBookCount = BR.ReadInt32();
             for (int B = 0; B < ListBookCount; ++B)
@@ -132,10 +138,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 DicOwnedCharacter.Add(CharacterFullName, LoadedCharacter);
                 AddCharacter(LoadedCharacter);
+
+                if (CharacterPath == CharacterFullName)
+                {
+                    Character = LoadedCharacter;
+                }
             }
 
             int ListOwnedMissionCount = BR.ReadInt32();
-            DicOwnedMission = new Dictionary<string, MissionInfo>();
+            DicOwnedMission = new Dictionary<string, MissionInfo>(ListOwnedMissionCount);
             for (int C = 0; C < ListOwnedMissionCount; ++C)
             {
                 string MissionPath = BR.ReadString();
@@ -144,6 +155,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 MissionInfo LoadedMission = new MissionInfo(MissionPath, QuantityOwned);
 
                 DicOwnedMission.Add(MissionPath, LoadedMission);
+            }
+
+            int ListOwnedBotCount = BR.ReadInt32();
+            DicOwnedBot = new Dictionary<string, Bot>(ListOwnedBotCount);
+            for (int C = 0; C < ListOwnedBotCount; ++C)
+            {
+                string BotName = BR.ReadString();
+                PlayerCharacter Character = new PlayerCharacter(BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                int ListBotBookCount = BR.ReadInt32();
+                Dictionary<string, CardBook> DicBotOwnedBook = new Dictionary<string, CardBook>(ListBotBookCount);
+                for (int B = 0; B < ListBotBookCount; ++B)
+                {
+                    CardBook LoadedBook = new CardBook(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                    DicBotOwnedBook.Add(LoadedBook.BookName, LoadedBook);
+                }
+
+                Bot LoadedBot = new Bot(Character, DicBotOwnedBook);
+
+                DicOwnedBot.Add(BotName, LoadedBot);
             }
         }
 
@@ -155,8 +187,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void Save(BinaryWriter BW)
         {
             GlobalBook.Save(BW);
-
             BW.Write(ActiveBook.BookName);
+
+            BW.Write(Character.CharacterPath);
+            BW.Write(ActiveSkinIndex);
 
             BW.Write(DicOwnedBook.Count);
             foreach (CardBook ActiveBook in DicOwnedBook.Values)
@@ -175,6 +209,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 BW.Write(ActiveMission.MapPath);
                 BW.Write(ActiveMission.QuantityOwned);
+            }
+
+            BW.Write(DicOwnedBot.Count);
+            foreach (KeyValuePair<string, Bot> ActiveBot in DicOwnedBot)
+            {
+                BW.Write(ActiveBot.Key);
+                BW.Write(ActiveBot.Value.Character.CharacterPath);
+                BW.Write(ActiveBot.Value.DicOwnedBook.Count);
+                foreach (CardBook ActiveBook in ActiveBot.Value.DicOwnedBook.Values)
+                {
+                    ActiveBook.Save(BW);
+                }
             }
         }
 

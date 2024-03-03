@@ -324,7 +324,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private static void PopulateUnlockItems()
         {
-            Dictionary<string, string> ActiveHeaderValues = GlobalUnlockIniAsync.ReadAllHeaders();
+            Dictionary<string, string> ActiveHeaderValues = GlobalUnlockIniAsync.ReadAllValues();
 
             if (ActiveHeaderValues.Count > 0)
             {

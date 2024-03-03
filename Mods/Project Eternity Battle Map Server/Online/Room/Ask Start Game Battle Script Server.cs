@@ -51,9 +51,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             NewMap.InitOnlineServer(OnlineServer, CreatedGroup);
             CreatedGroup.SetGame(NewMap);
 
-            for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < CreatedGroup.Room.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListUniqueOnlineConnection[P];
                 OnlinePlayerBase ActivePlayer = Owner.ListRoomPlayer[P];
                 ActivePlayer.OnlineClient = ActiveOnlinePlayer;
 
@@ -67,9 +67,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 
-            for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < CreatedGroup.Room.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListUniqueOnlineConnection[P];
                 ActiveOnlinePlayer.Send(new CreateGameScriptServer());
             }
         }

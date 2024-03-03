@@ -232,7 +232,51 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Inventory.DicOwnedMission.Add(MissionPath, new MissionInfo(MissionPath, 0));
             }
 
+            InitFirstTimeBot();
+
             UnlockInventory.LoadPlayerUnlocks(Name);
+        }
+
+        private void InitFirstTimeBot()
+        {
+            IniFileReader GlobalUnlockIniAsync = new IniFileReader("Content/Sorcerer Street Lobby Default Bots.ini");
+
+            Dictionary<string, List<Tuple<string, string>>> DicContentByHeader = GlobalUnlockIniAsync.ReadAllContent();
+
+            foreach (string BotName in DicContentByHeader.Keys)
+            {
+                int BookNumber = 1;
+                string CharacterName = null;
+                CardBook ActiveBook = null;
+                Card ActiveCard = null;
+                Dictionary<string, CardBook> DicOwnedBook = new Dictionary<string, CardBook>();
+
+                foreach (Tuple<string, string> ActiveHeaderValues in DicContentByHeader[BotName])
+                {
+                    if (ActiveHeaderValues.Item1 == "Character")
+                    {
+                        CharacterName = ActiveHeaderValues.Item2;
+                    }
+                    else
+                    if (ActiveHeaderValues.Item1 == "Book" + BookNumber)
+                    {
+                        ActiveBook = new CardBook(ActiveHeaderValues.Item2);
+                        BookNumber++;
+                        DicOwnedBook.Add(ActiveHeaderValues.Item2, ActiveBook);
+                    }
+                    else if (ActiveHeaderValues.Item1 == "Card")
+                    {
+                        ActiveCard = Card.LoadCard(ActiveHeaderValues.Item2, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                        ActiveBook.AddCard(ActiveCard);
+                    }
+                    else if (ActiveHeaderValues.Item1 == "Quantity")
+                    {
+                        ActiveCard.QuantityOwned = int.Parse(ActiveHeaderValues.Item2);
+                    }
+                }
+
+                Inventory.DicOwnedBot.Add(BotName, new Bot(new PlayerCharacter(CharacterName, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget), DicOwnedBook));
+            }
         }
 
         protected override void DoSaveLocally(BinaryWriter BW)

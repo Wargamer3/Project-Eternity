@@ -116,7 +116,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         CurrentContainer = CurrentContainer.ListFolder[SelectedItemIndex];
                     }
                 }
-
             }
         }
 

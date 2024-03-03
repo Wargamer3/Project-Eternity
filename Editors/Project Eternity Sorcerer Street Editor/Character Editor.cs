@@ -5,13 +5,17 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.GameScreens.SorcererStreetScreen;
 using ProjectEternity.Editors.ImageViewer;
+using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 {
     public partial class CharacterEditor : BaseEditor
     {
+        private enum ItemSelectionChoices { Spell, Skill, Skin,  };
+
+        private ItemSelectionChoices ItemSelectionChoice;
+
         private DetailsEditor frmDetailsEditor;
         private CharacterQuotesEditor frmQuoteEditor;
         private RelationshipEditor frmRelationshipEditor;
@@ -244,6 +248,21 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 lsPassiveSkills.Items.Add(LoadedCharacter.ArraySkill[S]);
             }
 
+            for (int W = 0; W < LoadedCharacter.ListWhitelist.Count; ++W)
+            {
+                lsWhitelist.Items.Add(LoadedCharacter.ListWhitelist[W]);
+            }
+
+            for (int B = 0; B < LoadedCharacter.ListBlacklist.Count; ++B)
+            {
+                lsBlacklist.Items.Add(LoadedCharacter.ListBlacklist[B]);
+            }
+
+            for (int S = 1; S < LoadedCharacter.ListSkin.Count; ++S)
+            {
+                lsSkins.Items.Add(LoadedCharacter.ListSkin[S]);
+            }
+
             //Versus names
             for (int I = 0; I < LoadedCharacter.ListQuoteSetVersusName.Count; I++)
                 frmQuoteEditor.lsVersusQuotes.Items.Add(LoadedCharacter.ListQuoteSetVersusName[I]);
@@ -279,6 +298,213 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         private void tsmRelationships_Click(object sender, EventArgs e)
         {
             frmRelationshipEditor.ShowDialog();
+        }
+
+        #region Skills
+
+        private void lsSpells_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddSpell_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetSpell_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDeleteSpell_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSpellCost_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lsPassiveSkills_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddSkill_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetSkill_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDeleteSkill_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Whitelist
+
+        private void lsWhitelist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddWhitelist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetWhitelist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDeleteWhitelist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lsBlacklist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddBlacklist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetBlacklist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDeleteBlacklist_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Skins
+
+        private void lsSkins_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lsSkins.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            PlayerCharacterSkin SelectedSkin = (PlayerCharacterSkin)lsSkins.Items[lsSkins.SelectedIndex];
+            txtSkinName.Text = SelectedSkin.SkinPath;
+            ckLockedSkin.Checked = SelectedSkin.Locked;
+        }
+
+        private void btnAddSkin_Click(object sender, EventArgs e)
+        {
+            lsSkins.Items.Add(new PlayerCharacterSkin("Select A Skin"));
+        }
+
+        private void btnSetSkin_Click(object sender, EventArgs e)
+        {
+            if (lsSkins.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            ItemSelectionChoice = ItemSelectionChoices.Skin;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSorcererStreetCharacters));
+        }
+
+        private void btnDeleteSkin_Click(object sender, EventArgs e)
+        {
+            if (lsSkins.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            int SelectedIndex = lsSkins.SelectedIndex;
+            lsSkins.Items.RemoveAt(lsSkins.SelectedIndex);
+            if (lsSkins.Items.Count > 0)
+            {
+                if (SelectedIndex > 0)
+                {
+                    lsSkins.SelectedIndex = SelectedIndex - 1;
+                }
+                else
+                {
+
+                    lsSkins.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void ckLockedSkin_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Books
+
+        private void lsAIBooks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddAIBook_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetAIBook_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDeleteAIBook_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        protected void ListMenuItemsSelected(List<string> Items)
+        {
+            if (Items == null)
+                return;
+
+            string Name;
+            for (int I = 0; I < Items.Count; I++)
+            {
+                switch (ItemSelectionChoice)
+                {
+                    case ItemSelectionChoices.Spell:
+                        break;
+
+                    case ItemSelectionChoices.Skill:
+                        break;
+
+                    case ItemSelectionChoices.Skin:
+                        if (Items[I] != null)
+                        {
+                            Name = Items[I].Substring(0, Items[I].Length - 4).Substring(35);
+                            PlayerCharacterSkin SelectedSkin = (PlayerCharacterSkin)lsSkins.Items[lsSkins.SelectedIndex];
+                            SelectedSkin.SkinPath = Name;
+                            txtSkinName.Text = Name;
+                            lsSkins.Items[lsSkins.SelectedIndex] = SelectedSkin;
+                        }
+                        break;
+                }
+            }
         }
     }
 }

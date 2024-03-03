@@ -165,11 +165,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetMap(GameModeInfo GameInfo, SorcererStreetBattleParams Params)
             : this(Params)
         {
-            switch (GameInfo.Name)
+            CursorPosition = new Vector3(9, 13, 0);
+            CursorPositionVisible = CursorPosition;
+
+            ListTileSet = new List<Texture2D>();
+            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            Camera2DPosition = Vector3.Zero;
+
+            if (GameInfo == null)
             {
-                default:
-                    GameRule = new SinglePlayerGameRule(this);
-                    break;
+                GameRule = new DeathmatchGameRule(this, new DeathmatchGameInfo(true, null));
+            }
+            else
+            {
+                GameRule = GameInfo.GetRule(this);
+                if (GameRule == null)
+                {
+                    GameRule = new DeathmatchGameRule(this, new DeathmatchGameInfo(true, null));
+                }
             }
         }
 
@@ -250,7 +263,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 sprTileset = Content.Load<Texture2D>("Sorcerer Street/Ressources/Land/Tiles");
 
-                Symbols = CardSymbols.Load(Content);
+                Symbols = CardSymbols.Symbols;
 
                 sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
                 sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
@@ -1189,6 +1202,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
         {
             Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
+
+            DicGameType.Add(DeathmatchGameInfo.ModeName, new DeathmatchGameInfo(true, null));
 
             return DicGameType;
         }

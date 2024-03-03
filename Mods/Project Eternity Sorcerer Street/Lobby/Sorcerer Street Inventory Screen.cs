@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            Symbols = CardSymbols.Load(Content);
+            Symbols = CardSymbols.Symbols;
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
         }

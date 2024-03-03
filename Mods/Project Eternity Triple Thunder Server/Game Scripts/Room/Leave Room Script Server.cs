@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             }
 
             //Send created Player to all Players.
-            foreach (IOnlineConnection ActivePlayerInRoom in Owner.ListOnlinePlayer)
+            foreach (IOnlineConnection ActivePlayerInRoom in Owner.ListUniqueOnlineConnection)
             {
                 ActivePlayerInRoom.Send(new PlayerLeftScriptServer(Sender.ID, 0));
             }

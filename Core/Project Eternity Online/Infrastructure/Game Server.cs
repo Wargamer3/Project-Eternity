@@ -142,26 +142,26 @@ namespace ProjectEternity.Core.Online
                     ActiveGroup.CurrentGame.Update(DeltaTime);
                 }
 
-                for (int P = ActiveGroup.Room.ListOnlinePlayer.Count - 1; P >= 0; --P)
+                for (int P = ActiveGroup.Room.ListUniqueOnlineConnection.Count - 1; P >= 0; --P)
                 {
-                    IOnlineConnection ActivePlayer = ActiveGroup.Room.ListOnlinePlayer[P];
+                    IOnlineConnection ActivePlayer = ActiveGroup.Room.ListUniqueOnlineConnection[P];
 
                     if (!ActivePlayer.IsConnected())
                     {
                         if (ActivePlayer.HasLeftServer())
                         {
-                            string PlayerID = ActiveGroup.Room.ListOnlinePlayer[P].ID;
+                            string PlayerID = ActiveGroup.Room.ListUniqueOnlineConnection[P].ID;
                             ActiveGroup.Room.RemoveOnlinePlayer(P);
-                            Database.UpdatePlayerCountInRoom(ActiveGroup.Room.RoomID, (byte)ActiveGroup.Room.ListOnlinePlayer.Count);
+                            Database.UpdatePlayerCountInRoom(ActiveGroup.Room.RoomID, (byte)ActiveGroup.Room.ListUniqueOnlineConnection.Count);
 
-                            if (ActiveGroup.Room.ListOnlinePlayer.Count == 0)
+                            if (ActiveGroup.Room.ListUniqueOnlineConnection.Count == 0)
                             {
                                 ListLocalRoomToRemove.Add(ActiveGroup.Room.RoomID);
                             }
 
                             if (ActiveGroup.CurrentGame == null)
                             {
-                                foreach (IOnlineConnection OtherPlayer in ActiveGroup.Room.ListOnlinePlayer)
+                                foreach (IOnlineConnection OtherPlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
                                 {
                                     OtherPlayer.Send(new PlayerLeftScriptServer(PlayerID, 0));
                                 }
@@ -199,7 +199,7 @@ namespace ProjectEternity.Core.Online
 
             foreach (GameClientGroup ActiveGroup in DicTransferingRoom.Values)
             {
-                foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
+                foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListUniqueOnlineConnection)
                 {
                     lock (ActivePlayer.ListAsyncOnlineScript)
                     {

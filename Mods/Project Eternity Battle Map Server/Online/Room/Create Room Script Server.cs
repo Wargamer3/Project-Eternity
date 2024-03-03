@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             BattleMapRoomInformations NewRoom = (BattleMapRoomInformations)CreatedGroup.Room;
 
-            foreach (IOnlineConnection ActivePlayer in CreatedGroup.Room.ListOnlinePlayer)
+            foreach (IOnlineConnection ActivePlayer in CreatedGroup.Room.ListUniqueOnlineConnection)
             {
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(NewRoom, Owner);

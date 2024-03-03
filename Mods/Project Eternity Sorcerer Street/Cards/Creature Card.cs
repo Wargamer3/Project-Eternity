@@ -14,9 +14,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class CreatureCard : Card
     {
-        public enum ElementalAffinity { Neutral, Fire, Water, Earth, Air }
-
         public const string CreatureCardType = "Creature";
+
+        public enum ElementalAffinity { Neutral, Fire, Water, Earth, Air }
 
         public readonly int OriginalMaxHP;
         public readonly int OriginalST;

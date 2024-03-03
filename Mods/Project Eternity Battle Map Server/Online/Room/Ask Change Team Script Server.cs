@@ -38,9 +38,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 }
             }
 
-            for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
+            for (int P = 0; P < Owner.ListUniqueOnlineConnection.Count; P++)
             {
-                IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
+                IOnlineConnection ActiveOnlinePlayer = Owner.ListUniqueOnlineConnection[P];
 
                 ActiveOnlinePlayer.Send(new ChangeTeamScriptServer(Sender.ID, NewTeam));
             }

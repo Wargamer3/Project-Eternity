@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.BattleMapScreen.Server;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Server;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -95,9 +96,9 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 if (Info.Map.IsServer)
                 {
-                    for (int P = 0; P < Info.Map.GameGroup.Room.ListOnlinePlayer.Count; P++)
+                    foreach (IOnlineConnection ActivePlayer in Info.Map.GameGroup.Room.ListUniqueOnlineConnection)
                     {
-                        Info.Map.GameGroup.Room.ListOnlinePlayer[P].Send(new MoveUnitScriptServer(StartPosition, Info.ActiveSquad.Position));
+                        ActivePlayer.Send(new MoveUnitScriptServer(StartPosition, Info.ActiveSquad.Position));
                     }
                 }
 
