@@ -28,67 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lvBaseQuotes = new System.Windows.Forms.ListView();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbQuotes = new System.Windows.Forms.GroupBox();
             this.btnRemoveQuote = new System.Windows.Forms.Button();
             this.btnAddQuote = new System.Windows.Forms.Button();
             this.lstQuotes = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbQuoteEditor = new System.Windows.Forms.GroupBox();
             this.txtPortraitPath = new System.Windows.Forms.TextBox();
             this.btnSelectPortrait = new System.Windows.Forms.Button();
             this.txtQuoteEditor = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gbBaseQuotes = new System.Windows.Forms.GroupBox();
+            this.lvBaseQuotes = new System.Windows.Forms.ListView();
+            this.gbVersusQuotes = new System.Windows.Forms.GroupBox();
             this.lsVersusQuotes = new System.Windows.Forms.ListBox();
             this.btnDeleteVersusQuote = new System.Windows.Forms.Button();
             this.btnAddVersusQuote = new System.Windows.Forms.Button();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.dgvQuoteSets = new System.Windows.Forms.DataGridView();
-            this.clQuoteSetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuoteSets)).BeginInit();
+            this.gbMapQuotes = new System.Windows.Forms.GroupBox();
+            this.lsMapQuotes = new System.Windows.Forms.ListBox();
+            this.gbQuotes.SuspendLayout();
+            this.gbQuoteEditor.SuspendLayout();
+            this.gbBaseQuotes.SuspendLayout();
+            this.gbVersusQuotes.SuspendLayout();
+            this.gbMapQuotes.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // gbQuotes
             // 
-            this.groupBox1.Controls.Add(this.lvBaseQuotes);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(132, 130);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Base quotes";
-            // 
-            // lvBaseQuotes
-            // 
-            this.lvBaseQuotes.HideSelection = false;
-            this.lvBaseQuotes.Location = new System.Drawing.Point(6, 19);
-            this.lvBaseQuotes.MultiSelect = false;
-            this.lvBaseQuotes.Name = "lvBaseQuotes";
-            this.lvBaseQuotes.Size = new System.Drawing.Size(120, 105);
-            this.lvBaseQuotes.TabIndex = 7;
-            this.lvBaseQuotes.UseCompatibleStateImageBehavior = false;
-            this.lvBaseQuotes.View = System.Windows.Forms.View.List;
-            this.lvBaseQuotes.SelectedIndexChanged += new System.EventHandler(this.lvBaseQuotes_SelectedIndexChanged);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnRemoveQuote);
-            this.groupBox2.Controls.Add(this.btnAddQuote);
-            this.groupBox2.Controls.Add(this.lstQuotes);
-            this.groupBox2.Location = new System.Drawing.Point(354, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(266, 201);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Quotes";
+            this.gbQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbQuotes.Controls.Add(this.btnRemoveQuote);
+            this.gbQuotes.Controls.Add(this.btnAddQuote);
+            this.gbQuotes.Controls.Add(this.lstQuotes);
+            this.gbQuotes.Location = new System.Drawing.Point(360, 12);
+            this.gbQuotes.Name = "gbQuotes";
+            this.gbQuotes.Size = new System.Drawing.Size(260, 201);
+            this.gbQuotes.TabIndex = 2;
+            this.gbQuotes.TabStop = false;
+            this.gbQuotes.Text = "Quotes";
             // 
             // btnRemoveQuote
             // 
+            this.btnRemoveQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRemoveQuote.Location = new System.Drawing.Point(140, 172);
             this.btnRemoveQuote.Name = "btnRemoveQuote";
             this.btnRemoveQuote.Size = new System.Drawing.Size(120, 23);
@@ -99,6 +78,7 @@
             // 
             // btnAddQuote
             // 
+            this.btnAddQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAddQuote.Location = new System.Drawing.Point(6, 172);
             this.btnAddQuote.Name = "btnAddQuote";
             this.btnAddQuote.Size = new System.Drawing.Size(120, 23);
@@ -109,6 +89,8 @@
             // 
             // lstQuotes
             // 
+            this.lstQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lstQuotes.FormattingEnabled = true;
             this.lstQuotes.Location = new System.Drawing.Point(6, 19);
             this.lstQuotes.Name = "lstQuotes";
@@ -116,17 +98,18 @@
             this.lstQuotes.TabIndex = 0;
             this.lstQuotes.SelectedIndexChanged += new System.EventHandler(this.lstQuotes_SelectedIndexChanged);
             // 
-            // groupBox3
+            // gbQuoteEditor
             // 
-            this.groupBox3.Controls.Add(this.txtPortraitPath);
-            this.groupBox3.Controls.Add(this.btnSelectPortrait);
-            this.groupBox3.Controls.Add(this.txtQuoteEditor);
-            this.groupBox3.Location = new System.Drawing.Point(354, 219);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(266, 148);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Quote editor";
+            this.gbQuoteEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbQuoteEditor.Controls.Add(this.txtPortraitPath);
+            this.gbQuoteEditor.Controls.Add(this.btnSelectPortrait);
+            this.gbQuoteEditor.Controls.Add(this.txtQuoteEditor);
+            this.gbQuoteEditor.Location = new System.Drawing.Point(360, 219);
+            this.gbQuoteEditor.Name = "gbQuoteEditor";
+            this.gbQuoteEditor.Size = new System.Drawing.Size(260, 148);
+            this.gbQuoteEditor.TabIndex = 3;
+            this.gbQuoteEditor.TabStop = false;
+            this.gbQuoteEditor.Text = "Quote editor";
             // 
             // txtPortraitPath
             // 
@@ -156,17 +139,44 @@
             this.txtQuoteEditor.TabIndex = 4;
             this.txtQuoteEditor.TextChanged += new System.EventHandler(this.txtQuoteEditor_TextChanged);
             // 
-            // groupBox4
+            // gbBaseQuotes
             // 
-            this.groupBox4.Controls.Add(this.lsVersusQuotes);
-            this.groupBox4.Controls.Add(this.btnDeleteVersusQuote);
-            this.groupBox4.Controls.Add(this.btnAddVersusQuote);
-            this.groupBox4.Location = new System.Drawing.Point(12, 142);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(132, 222);
-            this.groupBox4.TabIndex = 4;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Versus quotes";
+            this.gbBaseQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbBaseQuotes.Controls.Add(this.lvBaseQuotes);
+            this.gbBaseQuotes.Location = new System.Drawing.Point(12, 12);
+            this.gbBaseQuotes.Name = "gbBaseQuotes";
+            this.gbBaseQuotes.Size = new System.Drawing.Size(204, 355);
+            this.gbBaseQuotes.TabIndex = 8;
+            this.gbBaseQuotes.TabStop = false;
+            this.gbBaseQuotes.Text = "Base Quotes";
+            // 
+            // lvBaseQuotes
+            // 
+            this.lvBaseQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.lvBaseQuotes.HideSelection = false;
+            this.lvBaseQuotes.Location = new System.Drawing.Point(6, 19);
+            this.lvBaseQuotes.MultiSelect = false;
+            this.lvBaseQuotes.Name = "lvBaseQuotes";
+            this.lvBaseQuotes.Size = new System.Drawing.Size(192, 330);
+            this.lvBaseQuotes.TabIndex = 7;
+            this.lvBaseQuotes.UseCompatibleStateImageBehavior = false;
+            this.lvBaseQuotes.View = System.Windows.Forms.View.List;
+            this.lvBaseQuotes.SelectedIndexChanged += new System.EventHandler(this.lvBaseQuotes_SelectedIndexChanged);
+            // 
+            // gbVersusQuotes
+            // 
+            this.gbVersusQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbVersusQuotes.Controls.Add(this.lsVersusQuotes);
+            this.gbVersusQuotes.Controls.Add(this.btnDeleteVersusQuote);
+            this.gbVersusQuotes.Controls.Add(this.btnAddVersusQuote);
+            this.gbVersusQuotes.Location = new System.Drawing.Point(222, 142);
+            this.gbVersusQuotes.Name = "gbVersusQuotes";
+            this.gbVersusQuotes.Size = new System.Drawing.Size(132, 225);
+            this.gbVersusQuotes.TabIndex = 10;
+            this.gbVersusQuotes.TabStop = false;
+            this.gbVersusQuotes.Text = "Versus Quotes";
             // 
             // lsVersusQuotes
             // 
@@ -177,7 +187,6 @@
             this.lsVersusQuotes.Name = "lsVersusQuotes";
             this.lsVersusQuotes.Size = new System.Drawing.Size(120, 134);
             this.lsVersusQuotes.TabIndex = 7;
-            this.lsVersusQuotes.SelectedIndexChanged += new System.EventHandler(this.lsVersusQuotes_SelectedIndexChanged);
             // 
             // btnDeleteVersusQuote
             // 
@@ -187,7 +196,6 @@
             this.btnDeleteVersusQuote.TabIndex = 6;
             this.btnDeleteVersusQuote.Text = "Delete versus quote";
             this.btnDeleteVersusQuote.UseVisualStyleBackColor = true;
-            this.btnDeleteVersusQuote.Click += new System.EventHandler(this.btnDeleteVersusQuote_Click);
             // 
             // btnAddVersusQuote
             // 
@@ -197,80 +205,67 @@
             this.btnAddVersusQuote.TabIndex = 5;
             this.btnAddVersusQuote.Text = "Add versus quote";
             this.btnAddVersusQuote.UseVisualStyleBackColor = true;
-            this.btnAddVersusQuote.Click += new System.EventHandler(this.btnAddVersusQuote_Click);
             // 
-            // groupBox7
+            // gbMapQuotes
             // 
-            this.groupBox7.Controls.Add(this.dgvQuoteSets);
-            this.groupBox7.Location = new System.Drawing.Point(144, 12);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(204, 352);
-            this.groupBox7.TabIndex = 8;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Quote sets";
+            this.gbMapQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbMapQuotes.Controls.Add(this.lsMapQuotes);
+            this.gbMapQuotes.Location = new System.Drawing.Point(222, 12);
+            this.gbMapQuotes.Name = "gbMapQuotes";
+            this.gbMapQuotes.Size = new System.Drawing.Size(132, 130);
+            this.gbMapQuotes.TabIndex = 9;
+            this.gbMapQuotes.TabStop = false;
+            this.gbMapQuotes.Text = "Map Quotes";
             // 
-            // dgvQuoteSets
+            // lsMapQuotes
             // 
-            this.dgvQuoteSets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuoteSets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clQuoteSetName});
-            this.dgvQuoteSets.Location = new System.Drawing.Point(6, 19);
-            this.dgvQuoteSets.MultiSelect = false;
-            this.dgvQuoteSets.Name = "dgvQuoteSets";
-            this.dgvQuoteSets.RowHeadersVisible = false;
-            this.dgvQuoteSets.Size = new System.Drawing.Size(192, 325);
-            this.dgvQuoteSets.TabIndex = 0;
-            this.dgvQuoteSets.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuoteSets_CellClick);
-            this.dgvQuoteSets.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvQuoteSets_UserAddedRow);
-            this.dgvQuoteSets.Click += new System.EventHandler(this.dgvQuoteSets_Click);
-            // 
-            // clQuoteSetName
-            // 
-            this.clQuoteSetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.clQuoteSetName.HeaderText = "Name";
-            this.clQuoteSetName.Name = "clQuoteSetName";
+            this.lsMapQuotes.FormattingEnabled = true;
+            this.lsMapQuotes.Items.AddRange(new object[] {
+            "Any"});
+            this.lsMapQuotes.Location = new System.Drawing.Point(6, 19);
+            this.lsMapQuotes.Name = "lsMapQuotes";
+            this.lsMapQuotes.Size = new System.Drawing.Size(120, 108);
+            this.lsMapQuotes.TabIndex = 8;
             // 
             // CharacterQuotesEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 379);
-            this.Controls.Add(this.groupBox7);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbVersusQuotes);
+            this.Controls.Add(this.gbMapQuotes);
+            this.Controls.Add(this.gbBaseQuotes);
+            this.Controls.Add(this.gbQuoteEditor);
+            this.Controls.Add(this.gbQuotes);
             this.Name = "CharacterQuotesEditor";
             this.Text = "Character Quotes Editor";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuoteSets)).EndInit();
+            this.gbQuotes.ResumeLayout(false);
+            this.gbQuoteEditor.ResumeLayout(false);
+            this.gbQuoteEditor.PerformLayout();
+            this.gbBaseQuotes.ResumeLayout(false);
+            this.gbVersusQuotes.ResumeLayout(false);
+            this.gbMapQuotes.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbQuotes;
         private System.Windows.Forms.ListBox lstQuotes;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gbQuoteEditor;
         private System.Windows.Forms.TextBox txtQuoteEditor;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button btnDeleteVersusQuote;
-        private System.Windows.Forms.Button btnAddVersusQuote;
         private System.Windows.Forms.Button btnRemoveQuote;
         private System.Windows.Forms.Button btnAddQuote;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clQuoteSetName;
-        public System.Windows.Forms.ListView lvBaseQuotes;
-        public System.Windows.Forms.DataGridView dgvQuoteSets;
-        public System.Windows.Forms.ListBox lsVersusQuotes;
+        private System.Windows.Forms.GroupBox gbBaseQuotes;
         private System.Windows.Forms.TextBox txtPortraitPath;
         private System.Windows.Forms.Button btnSelectPortrait;
+        public System.Windows.Forms.ListView lvBaseQuotes;
+        private System.Windows.Forms.GroupBox gbVersusQuotes;
+        public System.Windows.Forms.ListBox lsVersusQuotes;
+        private System.Windows.Forms.Button btnDeleteVersusQuote;
+        private System.Windows.Forms.Button btnAddVersusQuote;
+        private System.Windows.Forms.GroupBox gbMapQuotes;
+        public System.Windows.Forms.ListBox lsMapQuotes;
     }
 }

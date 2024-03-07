@@ -138,76 +138,33 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             if (frmQuoteEditor == null)
             {
                 BW.Write(0);
+                BW.Write(0);
             }
             else
             {
+                BW.Write(frmQuoteEditor.lsMapQuotes.Items.Count - 1);
+                for (int Q = 1; Q < frmQuoteEditor.lsMapQuotes.Items.Count; Q++)
+                    BW.Write((string)frmQuoteEditor.lsMapQuotes.Items[Q]);
+
                 BW.Write(frmQuoteEditor.lsVersusQuotes.Items.Count - 1);
                 for (int Q = 1; Q < frmQuoteEditor.lsVersusQuotes.Items.Count; Q++)
                     BW.Write((string)frmQuoteEditor.lsVersusQuotes.Items[Q]);
             }
 
+            BW.Write((byte)frmQuoteEditor.lvBaseQuotes.Items.Count);
+
             QuoteSet Quotes;
             //Base quotes
-            for (int I = 0; I < 6; I++)
+            for (int I = 0; I < frmQuoteEditor.lvBaseQuotes.Items.Count; I++)
             {
                 if (frmQuoteEditor == null)
                 {
                     BW.Write(0);
-                    BW.Write(0);
-                    BW.Write(string.Empty);
                 }
                 else
                 {
                     Quotes = (QuoteSet)frmQuoteEditor.lvBaseQuotes.Items[I].Tag;
-
-                    BW.Write(Quotes.ListQuote.Count);
-                    for (int Q = 0; Q < Quotes.ListQuote.Count; Q++)
-                        BW.Write(Quotes.ListQuote[Q]);
-
-                    //Versus quotes.
-                    BW.Write(Quotes.ListQuoteVersus.Count);
-                    for (int Q = 0; Q < Quotes.ListQuoteVersus.Count; Q++)
-                        BW.Write(Quotes.ListQuoteVersus[Q]);
-
-                    BW.Write(Quotes.PortraitPath);
-                }
-            }
-
-            //Attack Quotes.
-
-            //Count the actual number of quotes listed.
-            int QuoteCount = 0;
-
-            if (frmQuoteEditor != null)
-            {
-                for (int R = 0; R < frmQuoteEditor.dgvQuoteSets.Rows.Count; R++)
-                    if (!string.IsNullOrEmpty((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
-                        QuoteCount++;
-            }
-
-            BW.Write(QuoteCount);
-
-            if (frmQuoteEditor != null)
-            {
-                for (int R = 0; R < frmQuoteEditor.dgvQuoteSets.Rows.Count; R++)
-                {
-                    if (!string.IsNullOrEmpty((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue))
-                    {
-                        Quotes = (QuoteSet)frmQuoteEditor.dgvQuoteSets.Rows[R].Tag;
-
-                        BW.Write((string)frmQuoteEditor.dgvQuoteSets.Rows[R].Cells[0].EditedFormattedValue);
-
-                        BW.Write(Quotes.ListQuote.Count);
-                        for (int Q = 0; Q < Quotes.ListQuote.Count; Q++)
-                            BW.Write(Quotes.ListQuote[Q]);
-
-                        //Versus quotes.
-                        BW.Write(Quotes.ListQuoteVersus.Count);
-                        for (int Q = 0; Q < Quotes.ListQuoteVersus.Count; Q++)
-                            BW.Write(Quotes.ListQuoteVersus[Q]);
-
-                        BW.Write(Quotes.PortraitPath);
-                    }
+                    Quotes.Write(BW);
                 }
             }
 
@@ -263,21 +220,17 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 lsSkins.Items.Add(LoadedCharacter.ListSkin[S]);
             }
 
+            //Map names
+            for (int I = 0; I < LoadedCharacter.ListQuoteSetMapName.Count; I++)
+                frmQuoteEditor.lsMapQuotes.Items.Add(LoadedCharacter.ListQuoteSetMapName[I]);
+
             //Versus names
             for (int I = 0; I < LoadedCharacter.ListQuoteSetVersusName.Count; I++)
                 frmQuoteEditor.lsVersusQuotes.Items.Add(LoadedCharacter.ListQuoteSetVersusName[I]);
 
             //Base quotes
-            for (int I = 0; I < 6; I++)
+            for (int I = 0; I < LoadedCharacter.ArrayBaseQuoteSet.Length; I++)
                 frmQuoteEditor.lvBaseQuotes.Items[I].Tag = LoadedCharacter.ArrayBaseQuoteSet[I];
-
-            //Attack quotes
-            for (int i = 0; i < LoadedCharacter.DicAttackQuoteSet.Count; i++)
-            {
-                KeyValuePair<string, QuoteSet> NewQuoteSet = LoadedCharacter.DicAttackQuoteSet.ElementAt(i);
-                frmQuoteEditor.dgvQuoteSets.Rows.Add(NewQuoteSet.Key);
-                frmQuoteEditor.dgvQuoteSets.Rows[i].Tag = NewQuoteSet.Value;
-            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

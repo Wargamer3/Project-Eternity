@@ -66,6 +66,7 @@
     <Compile Include="Acion Panels\Battle\Share Battle Panel.cs" />
     <Compile Include="Acion Panels\Battle\Start Phase Panel.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
+    <Compile Include="Acion Panels\Dialog Phase.cs" />
     <Compile Include="Acion Panels\Options\Suspend.cs" />
     <Compile Include="Acion Panels\Player\Land Info.cs" />
     <Compile Include="Acion Panels\Player\Choose Direction.cs" />

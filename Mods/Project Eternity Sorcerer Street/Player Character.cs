@@ -12,15 +12,98 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class QuoteSet
     {
-        public List<string> ListQuote;
-        public List<string> ListQuoteVersus;
-        public string PortraitPath;
+        public List<QuoteSetMap> ListMapQuote;
 
         public QuoteSet()
         {
-            ListQuote = new List<string>();
-            ListQuoteVersus = new List<string>();
+            ListMapQuote = new List<QuoteSetMap>();
+        }
+
+        public QuoteSet(BinaryReader BR)
+        {
+            int ListQuoteCount = BR.ReadByte();
+            ListMapQuote = new List<QuoteSetMap>(ListQuoteCount);
+
+            for (int I = 0; I < ListQuoteCount; I++)
+            {
+                ListMapQuote.Add(new QuoteSetMap(BR));
+            }
+        }
+
+        public void Write(BinaryWriter BW)
+        {
+            BW.Write((byte)ListMapQuote.Count);
+            for (int I = 0; I < ListMapQuote.Count; I++)
+            {
+                ListMapQuote[I].Write(BW);
+            }
+        }
+    }
+
+    public class QuoteSetMap
+    {
+        public List<QuoteSetVersus> ListQuoteVersus;
+        public string PortraitPath;
+
+        public QuoteSetMap()
+        {
+            ListQuoteVersus = new List<QuoteSetVersus>();
             PortraitPath = "";
+        }
+
+        public QuoteSetMap(BinaryReader BR)
+        {
+            int ListQuoteCount = BR.ReadByte();
+            ListQuoteVersus = new List<QuoteSetVersus>(ListQuoteCount);
+
+            for (int I = 0; I < ListQuoteCount; I++)
+            {
+                ListQuoteVersus.Add(new QuoteSetVersus(BR));
+            }
+        }
+
+        internal void Write(BinaryWriter BW)
+        {
+            BW.Write((byte)ListQuoteVersus.Count);
+            for (int I = 0; I < ListQuoteVersus.Count; I++)
+            {
+                ListQuoteVersus[I].Write(BW);
+            }
+        }
+    }
+
+    public class QuoteSetVersus
+    {
+        public List<string> ListQuote;
+        public List<string> ListPortraitPath;
+
+        public QuoteSetVersus()
+        {
+            ListQuote = new List<string>();
+            ListPortraitPath = new List<string>();
+        }
+
+        public QuoteSetVersus(BinaryReader BR)
+        {
+            int ListQuoteCount = BR.ReadByte();
+            ListQuote = new List<string>(ListQuoteCount);
+            ListPortraitPath = new List<string>(ListQuoteCount);
+
+            for (int I = 0; I < ListQuoteCount; I++)
+            {
+                ListQuote.Add(BR.ReadString());
+                ListPortraitPath.Add(BR.ReadString());
+            }
+        }
+
+        internal void Write(BinaryWriter BW)
+        {
+            BW.Write((byte)ListQuote.Count);
+            for (int I = 0; I < ListQuote.Count; I++)
+            {
+                BW.Write(ListQuote[I]);
+                BW.Write(ListPortraitPath[I]);
+            }
         }
     }
 
@@ -80,8 +163,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BaseAutomaticSkill[] ArraySkill;
         public BaseAutomaticSkill[] ArrayRelationshipBonus;
 
-        public QuoteSet[] ArrayBaseQuoteSet = new QuoteSet[6];
-        public Dictionary<string, QuoteSet> DicAttackQuoteSet;
+        public QuoteSet[] ArrayBaseQuoteSet;
+        public List<string> ListQuoteSetMapName;
         public List<string> ListQuoteSetVersusName;
 
         public PlayerCharacter(PlayerCharacter Clone)
@@ -111,7 +194,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             this.ArrayBaseQuoteSet = (QuoteSet[])Clone.ArrayBaseQuoteSet.Clone();
 
-            this.DicAttackQuoteSet = new Dictionary<string, QuoteSet>(Clone.DicAttackQuoteSet);
             this.ListQuoteSetVersusName = new List<string>(Clone.ListQuoteSetVersusName);
         }
 
@@ -179,7 +261,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListAIBook.Add(BR.ReadString());
             }
 
-            int RelationshipBonusCount = BR.ReadInt32();
+            byte RelationshipBonusCount = BR.ReadByte();
             ArrayRelationshipBonus = new BaseAutomaticSkill[RelationshipBonusCount];
 
             for (int S = 0; S < RelationshipBonusCount; ++S)
@@ -199,48 +281,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             #region Quotes
 
+            int ListQuoteSetMapNameCount = BR.ReadInt32();
+            ListQuoteSetMapName = new List<string>(ListQuoteSetMapNameCount);
+            for (int Q = 0; Q < ListQuoteSetMapNameCount; Q++)
+                ListQuoteSetMapName.Add(BR.ReadString());
+
             int ListQuoteSetVersusNameCount = BR.ReadInt32();
             ListQuoteSetVersusName = new List<string>(ListQuoteSetVersusNameCount);
             for (int Q = 0; Q < ListQuoteSetVersusNameCount; Q++)
                 ListQuoteSetVersusName.Add(BR.ReadString());
 
-            ArrayBaseQuoteSet = new QuoteSet[6];
+            byte ArrayBaseQuoteSetCount = BR.ReadByte();
+            ArrayBaseQuoteSet = new QuoteSet[ArrayBaseQuoteSetCount];
             //Base quotes
-            for (int I = 0; I < 6; I++)
+            for (int I = 0; I < ArrayBaseQuoteSetCount; I++)
             {
-                ArrayBaseQuoteSet[I] = new QuoteSet();
-
-                int ListQuoteCount = BR.ReadInt32();
-                for (int Q = 0; Q < ListQuoteCount; Q++)
-                    ArrayBaseQuoteSet[I].ListQuote.Add(BR.ReadString());
-
-                //Versus quotes.
-                int ListQuoteVersusCount = BR.ReadInt32();
-                for (int Q = 0; Q < ListQuoteVersusCount; Q++)
-                    ArrayBaseQuoteSet[I].ListQuoteVersus.Add(BR.ReadString());
-
-                ArrayBaseQuoteSet[I].PortraitPath = BR.ReadString();
-            }
-
-            int DicAttackQuoteSetCount = BR.ReadInt32();
-            DicAttackQuoteSet = new Dictionary<string, QuoteSet>(DicAttackQuoteSetCount);
-            for (int i = 0; i < DicAttackQuoteSetCount; i++)
-            {
-                QuoteSet NewQuoteSet = new QuoteSet();
-
-                string QuoteSetName = BR.ReadString();
-
-                int ListQuoteCount = BR.ReadInt32();
-                for (int Q = 0; Q < ListQuoteCount; Q++)
-                    NewQuoteSet.ListQuote.Add(BR.ReadString());
-
-                int ListQuoteVersusCount = BR.ReadInt32();
-                for (int Q = 0; Q < ListQuoteVersusCount; Q++)
-                    NewQuoteSet.ListQuoteVersus.Add(BR.ReadString());
-
-                NewQuoteSet.PortraitPath = BR.ReadString();
-
-                DicAttackQuoteSet.Add(QuoteSetName, NewQuoteSet);
+                ArrayBaseQuoteSet[I] = new QuoteSet(BR);
             }
 
             #endregion

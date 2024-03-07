@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 {
@@ -17,27 +18,119 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             InitializeComponent();
 
             ListViewItem NewItem;
-            NewItem = new ListViewItem("Battle Start");
+            NewItem = new ListViewItem("Introduction");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
-            NewItem = new ListViewItem("Dodge");
+            NewItem = new ListViewItem("Alliance Introduction");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
-            NewItem = new ListViewItem("Damaged");
+            NewItem = new ListViewItem("Banter");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
-            NewItem = new ListViewItem("Destroyed");
+            NewItem = new ListViewItem("Alliance Banter");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
-            NewItem = new ListViewItem("Support Attack");
+            NewItem = new ListViewItem("Winning Banter");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
-            NewItem = new ListViewItem("Support Defend");
+            NewItem = new ListViewItem("Winning Alliance Banter");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Losing Banter");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Major Losing Banter");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Losing Alliance Banter");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Territory claiming");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Small chain");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Large chain");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Territory Level Up");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Territory High Level Up");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Successful Invasion");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Failed Invasion");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Successful Defense");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Failed Defense");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Small Money Loss");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Medium Money Loss");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Large Money Loss");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Small Money Gains");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Big Money Gains");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Opponent Achieve Objective");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Opponent Achieve Objective Alliance");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Achieve Objective");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Achieve Objective Alliance");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Won the match");
+            NewItem.Tag = new Character.QuoteSet();
+            lvBaseQuotes.Items.Add(NewItem);
+
+            NewItem = new ListViewItem("Won Alliance match");
             NewItem.Tag = new Character.QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
         }
@@ -49,24 +142,31 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
         private void lvBaseQuotes_SelectedIndexChanged(object sender, EventArgs e)
         {
+            UpdateQuotes();
+        }
+
+        private void UpdateQuotes()
+        {
+            lstQuotes.Items.Clear();
+
+            txtQuoteEditor.Text = "";
+            txtQuoteEditor.Enabled = false;
+
             if (lvBaseQuotes.SelectedIndices.Count == 1)
             {
+                int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+
                 lstQuotes.Items.Clear();
-                dgvQuoteSets.CurrentCell = null;
 
                 txtQuoteEditor.Text = "";
                 txtQuoteEditor.Enabled = false;
 
-                List<string> Items;
+                QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
 
-                if (lsVersusQuotes.SelectedIndex >= 1)//Base + Versus quotes.
-                    Items = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuoteVersus;
-                else//Base quotes.
-                    Items = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuote;
-
-                for (int I = 0; I < Items.Count; I++)
+                for (int I = 0; I < BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote.Count; I++)
                 {
-                    lstQuotes.Items.Add(Items[I]);
+                    lstQuotes.Items.Add(BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote[I]);
                 }
             }
         }
@@ -75,40 +175,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
         private void lsVersusQuotes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lstQuotes.Items.Clear();
-
-            txtQuoteEditor.Text = "";
-            txtQuoteEditor.Enabled = false;
-
-            //Pilot selected.
-            if (lsVersusQuotes.SelectedIndex >= 1)
-            {
-                List<string> Items;
-
-                if (lvBaseQuotes.SelectedIndices.Count == 1)//Base + Versus quotes.
-                    Items = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuoteVersus;
-                else//Attack + Versus quotes.
-                    Items = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuoteVersus;
-
-                for (int I = 0; I < Items.Count; I++)
-                {
-                    lstQuotes.Items.Add(Items[I]);
-                }
-            }
-            else//No pilot selected.
-            {
-                List<string> Items;
-
-                if (lvBaseQuotes.SelectedIndices.Count == 1)//Base + Versus quotes.
-                    Items = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuote;
-                else//Attack + Versus quotes.
-                    Items = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuote;
-
-                for (int I = 0; I < Items.Count; I++)
-                {
-                    lstQuotes.Items.Add(Items[I]);
-                }
-            }
+            UpdateQuotes();
         }
 
         private void btnAddVersusQuote_Click(object sender, EventArgs e)
@@ -138,11 +205,11 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
                 if (lvBaseQuotes.SelectedIndices.Count == 1)
                 {
-                    txtPortraitPath.Text = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).PortraitPath;
-                }
-                else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
-                {
-                    txtPortraitPath.Text = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).PortraitPath;
+                    int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                    int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+                    QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
+
+                    txtPortraitPath.Text = BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListPortraitPath[lstQuotes.SelectedIndex];
                 }
             }
         }
@@ -151,66 +218,39 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         {
             if (lvBaseQuotes.SelectedIndices.Count == 1)
             {
-                lstQuotes.Items.Add("New Quote");
+                int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+                QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
 
-                if (lsVersusQuotes.SelectedIndex >= 1)//Base + Versus quotes.
-                    ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuoteVersus.Add("New Quote");
-                else//Base quotes.
-                    ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuote.Add("New Quote");
-            }
-            else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
-            {
                 lstQuotes.Items.Add("New Quote");
-
-                if (lsVersusQuotes.SelectedIndex >= 1)//Attack + Versus quotes.
-                    ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuoteVersus.Add("New Quote");
-                else//Attack quotes.
-                    ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuote.Add("New Quote");
+                BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote.Add("New Quote");
+                BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListPortraitPath.Add(string.Empty);
             }
         }
 
         private void btnRemoveQuote_Click(object sender, EventArgs e)
         {
-            if (lstQuotes.SelectedIndex >= 0)
+            if (lvBaseQuotes.SelectedIndices.Count == 1 && lstQuotes.SelectedIndex >= 0)
             {
-                if (lvBaseQuotes.SelectedIndices.Count == 1)
-                {
-                    if (lsVersusQuotes.SelectedIndex >= 1)//Base + Versus quotes.
-                        ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuoteVersus.RemoveAt(lstQuotes.SelectedIndex);
-                    else//Base quotes.
-                        ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuote.RemoveAt(lstQuotes.SelectedIndex);
-                }
-                else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
-                {
-                    if (lsVersusQuotes.SelectedIndex >= 1)//Attack + Versus quotes.
-                        ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuoteVersus.RemoveAt(dgvQuoteSets.CurrentRow.Index);
-                    else//Attack quotes.
-                        ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuote.RemoveAt(dgvQuoteSets.CurrentRow.Index);
-                }
+                int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+                QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
 
+                BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote.RemoveAt(lstQuotes.SelectedIndex);
                 lstQuotes.Items.RemoveAt(lstQuotes.SelectedIndex);
             }
         }
 
         private void txtQuoteEditor_TextChanged(object sender, EventArgs e)
         {
-            if (lstQuotes.SelectedIndex >= 0)
+            if (lvBaseQuotes.SelectedIndices.Count == 1 && lstQuotes.SelectedIndex >= 0)
             {
+                int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+                QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
+
                 lstQuotes.Items[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
-                if (lvBaseQuotes.SelectedIndices.Count == 1)
-                {
-                    if (lsVersusQuotes.SelectedIndex >= 1)//Base + Versus quotes.
-                        ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuoteVersus[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
-                    else//Base quotes.
-                        ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).ListQuote[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
-                }
-                else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
-                {
-                    if (lsVersusQuotes.SelectedIndex >= 1)//Attack + Versus quotes.
-                        ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuoteVersus[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
-                    else//Attack quotes.
-                        ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuote[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
-                }
+                BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote[lstQuotes.SelectedIndex] = txtQuoteEditor.Text;
             }
         }
 
@@ -258,50 +298,9 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                             else//Base quotes.
                                 ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).PortraitPath = Name;
                         }
-                        else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
-                        {
-                            if (lsVersusQuotes.SelectedIndex >= 1)//Attack + Versus quotes.
-                                ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).PortraitPath = Name;
-                            else//Attack quotes.
-                                ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).PortraitPath = Name;
-                        }
                         txtPortraitPath.Text = Name;
                         break;
                 }
-            }
-        }
-
-        private void dgvQuoteSets_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            dgvQuoteSets.CurrentRow.Tag = new Character.QuoteSet();
-        }
-
-        private void dgvQuoteSets_Click(object sender, EventArgs e)
-        {
-            if (lvBaseQuotes.SelectedItems.Count == 1)
-                lvBaseQuotes.SelectedItems[0].Selected = false;
-        }
-
-        private void dgvQuoteSets_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dgvQuoteSets.CurrentRow.IsNewRow)
-                return;
-
-            lstQuotes.Items.Clear();
-
-            txtQuoteEditor.Text = "";
-            txtQuoteEditor.Enabled = false;
-
-            List<string> Items;
-
-            if (lsVersusQuotes.SelectedIndex >= 1)//Attack + Versus quotes.
-                Items = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuoteVersus;
-            else//Attack quotes.
-                Items = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).ListQuote;
-
-            for (int I = 0; I < Items.Count; I++)
-            {
-                lstQuotes.Items.Add(Items[I]);
             }
         }
     }

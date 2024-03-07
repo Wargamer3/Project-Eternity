@@ -43,7 +43,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(ListRelationshipSkill.Count);
+            BW.Write((byte)ListRelationshipSkill.Count);
             for (int C = 0; C < ListRelationshipSkill.Count; ++C)
             {
                 BW.Write(ListRelationshipSkill[C].Name);
