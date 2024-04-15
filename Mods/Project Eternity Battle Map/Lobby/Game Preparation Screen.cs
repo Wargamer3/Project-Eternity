@@ -110,6 +110,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             TunnelBackground = new TunnelManager();
             TunnelBackground.Load(GraphicsDevice);
+            for (int i = 0; i < 1400; ++i)
+            {
+                TunnelBackground.UpdateColored(0.016666);
+            }
 
             #region Ressources
 
@@ -172,7 +176,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBackground.UpdateColored(gameTime);
+            TunnelBackground.UpdateColored(gameTime.ElapsedGameTime.TotalSeconds);
 
             if (OnlineGameClient != null)
             {

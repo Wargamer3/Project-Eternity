@@ -46,6 +46,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             TunnelBackground = new TunnelManager();
             TunnelBackground.Load(GraphicsDevice);
+            for (int i = 0; i < 1400; ++i)
+            {
+                TunnelBackground.Update(0.016666);
+            }
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
@@ -121,7 +125,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBackground.Update(gameTime);
+            TunnelBackground.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             ActiveTab.Update(gameTime);
 

@@ -72,11 +72,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             TunnelBackground = new TunnelManager();
             TunnelBackground.Load(GraphicsDevice);
+            for (int i = 0; i < 1400; ++i)
+            {
+                TunnelBackground.Update(0.016666);
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBackground.Update(gameTime);
+            TunnelBackground.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

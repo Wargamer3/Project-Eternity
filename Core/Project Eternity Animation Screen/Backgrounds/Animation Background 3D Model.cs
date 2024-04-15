@@ -129,12 +129,12 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             foreach (AnimationBackground3DObject ActiveModel in ListBackgroundModel)
             {
-                ActiveModel.Model.Draw(Camera.View, Camera.Projection, Matrix.CreateScale(ActiveModel.Size.X, ActiveModel.Size.Y, ActiveModel.Size.Z) * Matrix.CreateScale(0.4f)
+                ActiveModel.Model.Draw(Camera.View, Camera.Projection, Matrix.CreateScale(ActiveModel.Size.X, ActiveModel.Size.Y, ActiveModel.Size.Z) * Matrix.CreateScale(1 / 32f)
                     * Matrix.CreateRotationX(ActiveModel.Rotation.X)
-                    * Matrix.CreateRotationY(ActiveModel.Rotation.Y) * Matrix.CreateRotationY(MathHelper.ToRadians(270))
-                    * Matrix.CreateRotationZ(ActiveModel.Rotation.Z) * Matrix.CreateRotationZ(MathHelper.ToRadians(180))
+                    * Matrix.CreateRotationY(ActiveModel.Rotation.Y) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+                    * Matrix.CreateRotationZ(ActiveModel.Rotation.Z) * Matrix.CreateRotationZ(MathHelper.ToRadians(0))
                     * Matrix.CreateTranslation(ActiveModel.Position)
-                    * Matrix.CreateTranslation(new Vector3(75, -31.2f, 60)));
+                    * Matrix.CreateTranslation(new Vector3(00, 16f, 192)));
             }
         }
 

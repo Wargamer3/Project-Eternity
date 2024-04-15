@@ -867,7 +867,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 for (int B = 0; B < ListBackground.Count; B++)
                 {
                     ListBackground[B].Draw(g, Constants.Width, Constants.Height);
-                    ListBackground[B].Draw3D(Camera3D, Matrix.Identity);
+                    ListBackground[B].Draw3D(Camera3D, Matrix.CreateTranslation(new Vector3(0, 0, 0)));
                 }
                 g.Begin();
             }

@@ -46,10 +46,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             AllowDynamicSmallChanges = true;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(double TimeElapsedInSeconds)
         {
-            double TimeElapsedInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
-
             if (AllowDynamicChanges)
             {
                 UpdateDynamicChanges(TimeElapsedInSeconds);

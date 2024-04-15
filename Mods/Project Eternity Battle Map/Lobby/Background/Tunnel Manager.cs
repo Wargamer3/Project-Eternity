@@ -61,29 +61,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(double TimeElapsedInSeconds)
         {
-            TunnelBehaviorSpeed.Update(gameTime);
-            TunnelBehaviorColor.Update(gameTime);
-            TunnelBehaviorSize.Update(gameTime);
-            TunnelBehaviorRotation.Update(gameTime);
-            TunnelBehaviorDirection.Update(gameTime);
+            TunnelBehaviorSpeed.Update(TimeElapsedInSeconds);
+            TunnelBehaviorColor.Update(TimeElapsedInSeconds);
+            TunnelBehaviorSize.Update(TimeElapsedInSeconds);
+            TunnelBehaviorRotation.Update(TimeElapsedInSeconds);
+            TunnelBehaviorDirection.Update(TimeElapsedInSeconds);
 
-            CreateSimpleBackground(gameTime);
+            CreateSimpleBackground(TimeElapsedInSeconds);
         }
 
-        public void UpdateColored(GameTime gameTime)
+        public void UpdateColored(double TimeElapsedInSeconds)
         {
-            TunnelBehaviorSpeed.Update(gameTime);
-            TunnelBehaviorColor.Update(gameTime);
-            TunnelBehaviorSize.Update(gameTime);
-            TunnelBehaviorRotation.Update(gameTime);
-            TunnelBehaviorDirection.Update(gameTime);
+            TunnelBehaviorSpeed.Update(TimeElapsedInSeconds);
+            TunnelBehaviorColor.Update(TimeElapsedInSeconds);
+            TunnelBehaviorSize.Update(TimeElapsedInSeconds);
+            TunnelBehaviorRotation.Update(TimeElapsedInSeconds);
+            TunnelBehaviorDirection.Update(TimeElapsedInSeconds);
 
-            CreateAnimatedBackground(gameTime);
+            CreateAnimatedBackground(TimeElapsedInSeconds);
         }
 
-        private void CreateSimpleBackground(GameTime gameTime)
+        private void CreateSimpleBackground(double TimeElapsedInSeconds)
         {
             Vector3 Up = Vector3.Up;
 
@@ -163,7 +163,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void CreateAnimatedBackground(GameTime gameTime)
+        private void CreateAnimatedBackground(double TimeElapsedInSeconds)
         {
             Vector3 Up = Vector3.Up;
 
@@ -190,8 +190,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             float Speed = 5;
-            float SpeedX = (float)(Math.Cos(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
-            float SpeedY = (float)(Math.Sin(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            float SpeedX = (float)(Math.Cos(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * TimeElapsedInSeconds);
+            float SpeedY = (float)(Math.Sin(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * TimeElapsedInSeconds);
             BackgroundEmiterPosition += new Vector3(SpeedX, SpeedY, (float)(Speed * 0.01f));
 
             ++CurrentPositionIndex;

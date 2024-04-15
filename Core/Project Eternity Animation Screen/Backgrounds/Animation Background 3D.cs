@@ -553,6 +553,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             Pitch = Yaw = Roll = 0;
 
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             Vector3 target = CameraPosition + CameraRotation.Forward;
 
             View = Matrix.CreateLookAt(CameraPosition, target, CameraRotation.Up);
