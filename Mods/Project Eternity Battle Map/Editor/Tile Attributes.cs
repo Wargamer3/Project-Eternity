@@ -262,5 +262,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
         }
+
+        public string GetTerrainName(int Index)
+        {
+            return cboTerrainType.Items[Index].ToString();
+        }
     }
 }

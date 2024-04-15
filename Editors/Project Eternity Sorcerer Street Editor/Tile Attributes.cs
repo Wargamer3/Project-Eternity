@@ -47,5 +47,10 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
         {
             DialogResult = DialogResult.OK;
         }
+
+        public string GetTerrainName(int Index)
+        {
+            return cboTerrainType.Items[Index].ToString();
+        }
     }
 }

@@ -3,14 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Core.ControlHelper;
-using System.Runtime.InteropServices;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -31,6 +30,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         //Spawn point related stuff.
         private EventPoint ActiveSpawn;
+
+        private bool AllowEvents = true;
 
         protected ITileAttributes TileAttributesEditor;
 
@@ -214,9 +215,14 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        private void DrawInfo(int MouseX, int MouseY)
+        private void DrawInfo()
         {//Draw the mouse position minus the map starting point.
-            tslInformation.Text = string.Format("X: {0}, Y: {1}", MouseX, MouseY);
+            tslInformation.Text = string.Format("X: {0}, Y: {1}, Z: {2}", ActiveMap.CursorPosition.X, ActiveMap.CursorPosition.Y, ActiveMap.CursorPosition.Z);
+
+            Terrain SelectedTerrain = Helper.GetTerrain((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z);
+
+            tslInformation.Text += " " + TileAttributesEditor.GetTerrainName(SelectedTerrain.TerrainTypeIndex);
+
             if (tabToolBox.SelectedIndex == 0)
             {
                 //Add the selection informations.
@@ -236,6 +242,8 @@ namespace ProjectEternity.Editors.MapEditor
                 tslInformation.Text += " Left click to place a new spawn point";
                 tslInformation.Text += " Right click to remove a spawn point";
             }
+
+            tslInformation.Text += ", Arrow keys, Q, E and Shift to move and rotate the camera";
         }
 
         #region Tile set change
@@ -358,6 +366,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (ActiveMap.CameraType != "3D" || !cbPreviewMap.Checked)
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+
             bool KeyProcessed = false;
 
             if (keyData == (Keys.Left | Keys.Shift))
@@ -422,6 +435,7 @@ namespace ProjectEternity.Editors.MapEditor
                 }
 
                 ActiveMap.CursorPosition.Z = NextZ;
+                SetLayerIndex();
                 KeyProcessed = true;
             }
             else if (keyData == Keys.E)
@@ -434,6 +448,7 @@ namespace ProjectEternity.Editors.MapEditor
                 }
 
                 ActiveMap.CursorPosition.Z = NextZ;
+                SetLayerIndex();
                 KeyProcessed = true;
             }
             if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
@@ -447,17 +462,27 @@ namespace ProjectEternity.Editors.MapEditor
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
+            DrawInfo();
             return true;
         }
 
         protected virtual void pnMapPreview_MouseMove(object sender, MouseEventArgs e)
         {
+            if (ActiveMap.CameraType == "3D" && cbPreviewMap.Checked)
+            {
+                return;
+            }
+
             Vector3 MapPreviewStartingPos = new Vector3(
                 ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
                 ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
                 ActiveMap.Camera2DPosition.Z);
 
-            DrawInfo((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y);
+            ActiveMap.CursorPosition.X = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
+            ActiveMap.CursorPosition.Y = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
+
+            DrawInfo();
+
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
                 switch (tabToolBox.SelectedIndex)
@@ -1148,6 +1173,11 @@ namespace ProjectEternity.Editors.MapEditor
         
         private void lsLayers_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!AllowEvents)
+            {
+                return;
+            }
+
             if (lsLayers.SelectedIndex >= 0)
             {
                 if (cbShowAllLayers.Checked)
@@ -1157,6 +1187,7 @@ namespace ProjectEternity.Editors.MapEditor
                 else
                 {
                     ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+                    ActiveMap.CursorPosition.Z = ActiveMap.ShowLayerIndex;
                 }
             }
         }
@@ -1342,6 +1373,29 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             return LastTopLayerIndex;
+        }
+
+        private void SetLayerIndex()
+        {
+            AllowEvents = false;
+            int LastTopLayerIndex = -1;
+
+            foreach (object ActiveLayer in Helper.GetLayersAndSubLayers())
+            {
+                if (LastTopLayerIndex == (int)ActiveMap.CursorPosition.Z)
+                {
+                    lsLayers.SelectedIndex = LastTopLayerIndex;
+                    return;
+                }
+
+                if (!(ActiveLayer is ISubMapLayer))
+                {
+                    ++LastTopLayerIndex;
+                }
+            }
+
+            lsLayers.SelectedIndex = LastTopLayerIndex;
+            AllowEvents = true;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
