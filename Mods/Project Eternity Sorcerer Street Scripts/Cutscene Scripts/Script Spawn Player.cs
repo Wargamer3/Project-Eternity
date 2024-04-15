@@ -61,7 +61,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.AddPlayer(NewPlayer);
                     NewPlayer.Color = Color.Blue;
                 }
-                NewPlayer.TotalMagic = NewPlayer.Gold = Map.MagicAtStart;
+
+                NewPlayer.Gold = Map.MagicAtStart;
+                if (!Map.DicTeam.ContainsKey(NewPlayer.TeamIndex))
+                {
+                    Map.DicTeam.Add(NewPlayer.TeamIndex, new Team(NewPlayer.TeamIndex));
+                    Map.DicTeam[NewPlayer.TeamIndex].TotalMagic = NewPlayer.Gold = Map.MagicAtStart;
+                }
+
 
                 for (int C = 0; C < 4; ++C)
                 {

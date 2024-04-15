@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Player ActivePlayer = Map.ListPlayer[P];
                 g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
-                g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
+                g.DrawStringCentered(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
                 g.DrawString(Map.fntArial12, ActivePlayer.Name, new Vector2(X + IconHeight + 5, Y), Color.White);
 
                 Y += LineHeight;
@@ -164,7 +164,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawString(Map.fntArial12, ActivePlayer.Gold.ToString(), new Vector2(X + IconWidth + 5, Y), Color.White);
 
                 g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 100, (int)Y, IconWidth, IconHeight), Color.White);
-                g.DrawString(Map.fntArial12, ActivePlayer.TotalMagic.ToString(), new Vector2(X + 100 + IconWidth + 5, Y), Color.White);
+                g.DrawString(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 100 + IconWidth + 5, Y), Color.White);
 
                 for (int C = 0; C < Map.ListCheckpoint.Count; C++)
                 {

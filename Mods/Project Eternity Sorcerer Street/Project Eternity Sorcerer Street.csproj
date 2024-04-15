@@ -110,6 +110,7 @@
     <Compile Include="Lobby\Unlocks\Unlockable Mission.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Book.cs" />
     <Compile Include="Lobby\Character Selection.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="Player Character.cs" />
     <Compile Include="Effects\Enchant.cs" />
     <Compile Include="Effects\Sorceret Street Manual Skill Target.cs" />

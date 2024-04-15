@@ -49,7 +49,7 @@ namespace ProjectEternity.Core.Skill
         {
             for (int P = Params.Map.ListPlayer.Count - 1; P >= 0; --P)
             {
-                if (Params.Map.ListPlayer[P].Team != Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].Team)
+                if (Params.Map.ListPlayer[P].TeamIndex != Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].TeamIndex)
                     continue;
 
                 for (int S = Params.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)

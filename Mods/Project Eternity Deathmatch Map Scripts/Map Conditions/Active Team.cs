@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(int Index)
         {
-            if (Map.ListPlayer[Map.ActivePlayerIndex].Team == ActiveTeam)
+            if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == ActiveTeam)
                 Map.ExecuteFollowingScripts(this, 0);
             else
                 Map.ExecuteFollowingScripts(this, 1);

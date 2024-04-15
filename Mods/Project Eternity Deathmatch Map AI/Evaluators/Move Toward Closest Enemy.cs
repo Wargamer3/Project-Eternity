@@ -32,7 +32,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 for (int P = 0; P < Info.Map.ListPlayer.Count; P++)
                 {
                     //If the player is from the same team as the current player or is dead, skip it.
-                    if (Info.Map.ListPlayer[P].Team == Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team
+                    if (Info.Map.ListPlayer[P].TeamIndex == Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex
                         || !Info.Map.ListPlayer[P].IsAlive)
                         continue;
                     for (int U = 0; U < Info.Map.ListPlayer[P].ListSquad.Count; U++)

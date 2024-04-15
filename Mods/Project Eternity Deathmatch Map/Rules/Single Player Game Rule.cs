@@ -48,14 +48,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActivePlayer.Inventory == null)
                     continue;
 
-                if (ActivePlayer.Team >= 0 && ActivePlayer.Team < Owner.ListMultiplayerColor.Count)
+                if (ActivePlayer.TeamIndex >= 0 && ActivePlayer.TeamIndex < Owner.ListMultiplayerColor.Count)
                 {
-                    ActivePlayer.Color = Owner.ListMultiplayerColor[ActivePlayer.Team];
+                    ActivePlayer.Color = Owner.ListMultiplayerColor[ActivePlayer.TeamIndex];
                 }
 
                 ActivePlayer.ListCommander.AddRange(ActivePlayer.Inventory.ActiveLoadout.ListSpawnCommander);
 
-                string PlayerTag = (ActivePlayer.Team + 1).ToString();
+                string PlayerTag = (ActivePlayer.TeamIndex + 1).ToString();
                 int SpawnSquadIndex = 0;
                 for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
                 {

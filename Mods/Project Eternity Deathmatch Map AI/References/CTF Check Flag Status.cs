@@ -43,7 +43,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     Flag DroppedFlag = Info.ActiveSquad.ItemHeld as Flag;
                     if (DroppedFlag != null)
                     {
-                        return DroppedFlag.Owner.Team != Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                        return DroppedFlag.Owner.Team != Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
                     }
                 }
                 else if (FlagStatus == FlagStatuses.Dropped)
@@ -76,7 +76,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             private FlagSpawner GetFlagSpawner()
             {
-                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
 
                 for (int L = 0; L < Info.Map.LayerManager.ListLayer.Count; L++)
                 {
@@ -102,7 +102,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             private Flag GetFlag()
             {
-                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
 
                 for (int L = 0; L < Info.Map.LayerManager.ListLayer.Count; L++)
                 {

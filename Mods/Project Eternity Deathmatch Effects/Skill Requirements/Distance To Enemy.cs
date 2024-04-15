@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             foreach (Player ActivePlayer in Params.Map.ListPlayer)
             {
-                if (ActivePlayer.Team != Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].Team)
+                if (ActivePlayer.TeamIndex != Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].TeamIndex)
                 {
                     continue;
                 }

@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (UpgradePrice <= ActivePlayer.Gold)
                     {
                         ActivePlayer.Gold -= UpgradePrice;
-                        ActiveTerrain.UpdateValue(ActivePlayer.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                        ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
                         Map.EndPlayerPhase();
                     }
                 }

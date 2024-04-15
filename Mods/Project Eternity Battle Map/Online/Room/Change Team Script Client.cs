@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             {
                 if (ActivePlayer.ConnectionID == PlayerID)
                 {
-                    ActivePlayer.Team = Team;
+                    ActivePlayer.TeamIndex = Team;
                 }
             }
         }

@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void SelectTargetAndAttack()
         {
-            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, false);
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, false);
             IEnumerable<Attack> ListAttackOrderedByPower = ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(Attack => Attack.GetPower(ActiveSquad.CurrentLeader, Map.Params.ActiveParser));
             foreach (Attack ActiveAttack in ListAttackOrderedByPower)
             {
@@ -177,7 +177,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 for (int P = 0; P < Map.ListPlayer.Count; P++)
                 {
-                    if (Map.ListPlayer[P].Team == Map.ListPlayer[ActivePlayerIndex].Team)//Don't check your team.
+                    if (Map.ListPlayer[P].TeamIndex == Map.ListPlayer[ActivePlayerIndex].TeamIndex)//Don't check your team.
                         continue;
 
                     for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
@@ -185,7 +185,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null)
                             continue;
 
-                        ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, Map.ListPlayer[P].ListSquad[U].Position, Map.ListPlayer[P].Team,
+                        ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, Map.ListPlayer[P].ListSquad[U].Position, Map.ListPlayer[P].TeamIndex,
                                 Map.ListPlayer[P].ListSquad[U].ArrayMapSize, Map.ListPlayer[P].ListSquad[U].CurrentTerrainIndex, false);
 
                         if (ActiveAttack.CanAttack)
@@ -288,7 +288,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveWingman.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
                 if (ActiveWingman.PLAAttack != null)
                 {
-                    ActiveWingman.PLAAttack.UpdateAttack(ActiveWingman, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
+                    ActiveWingman.PLAAttack.UpdateAttack(ActiveWingman, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].TeamIndex, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
 
                     if (ActiveWingman.PLAAttack.CanAttack)
                     {

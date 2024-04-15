@@ -136,7 +136,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                 {
                                     case "exist":
                                     case "exists":
-                                        if (ActivePlayer.Team >= 0)
+                                        if (ActivePlayer.TeamIndex >= 0)
                                         {
                                             return "1";
                                         }
@@ -230,7 +230,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Expression.Length >= 4)
             {
-                ReturnExpression = StatsFromCreature(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveCreature, ActivePlayer), Expression[3]);
+                ReturnExpression = StatsFromCreature(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveCreature, ActivePlayer, Params.Map.DicTeam[ActivePlayer.TeamIndex]), Expression[3]);
             }
 
             return ReturnExpression;
@@ -354,12 +354,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "standing":
                 case "currentstanding":
                 case "currentleadername":
-                    ReturnExpression = ActivePlayer.Rank.ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].Rank.ToString();
                     break;
 
                 case "territories":
                     int TerritoryCount = 0;
-                    foreach (byte ActiveElement in ActivePlayer.DicCreatureCountByElementType.Values)
+                    foreach (byte ActiveElement in Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType.Values)
                     {
                         TerritoryCount += ActiveElement;
                     }
@@ -367,23 +367,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "airterritories":
-                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air].ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air].ToString();
                     break;
 
                 case "earthterritories":
-                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth].ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth].ToString();
                     break;
 
                 case "fireterritories":
-                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire].ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire].ToString();
                     break;
 
                 case "waterterritories":
-                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water].ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water].ToString();
                     break;
 
                 case "neutralterritories":
-                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Neutral].ToString();
+                    ReturnExpression = Params.Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Neutral].ToString();
                     break;
 
                 case "magic":

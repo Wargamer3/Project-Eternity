@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public SimpleAnimation Animation;
             public int PlayerIndex;
             public Player Owner;
+            public Team OwnerTeam;
             public Card Item;
             public bool DamageReceivedIgnoreLandBonus;
             public int DamageReceived;
@@ -38,10 +39,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
             }
 
-            public BattleCreatureInfo(CreatureCard Creature, Player Owner)
+            public BattleCreatureInfo(CreatureCard Creature, Player Owner, Team OwnerTeam)
             {
                 this.Creature = Creature;
                 this.Owner = Owner;
+                this.OwnerTeam = OwnerTeam;
             }
 
             public void ReceiveDamage(int Damage)

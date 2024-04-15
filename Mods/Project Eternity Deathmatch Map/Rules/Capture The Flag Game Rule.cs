@@ -84,9 +84,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (Player ActivePlayer in Owner.ListPlayer)
             {
-                if (!DicPointsByTeam.ContainsKey(ActivePlayer.Team))
+                if (!DicPointsByTeam.ContainsKey(ActivePlayer.TeamIndex))
                 {
-                    DicPointsByTeam.Add(ActivePlayer.Team, 0);
+                    DicPointsByTeam.Add(ActivePlayer.TeamIndex, 0);
                 }
             }
         }

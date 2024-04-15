@@ -306,14 +306,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value;
 
             Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
-            Context.Defender.Owner.Rank = 2;
+            Context.Defender.OwnerTeam = new Team(2);
+            Context.Defender.OwnerTeam.Rank = 2;
             Context.Defender.Owner.Gold = 100;
             Context.Defender.Owner.ListCardInHand.Add(new CreatureCard(""));
-            Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
-            Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
-            Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
-            Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
-            Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
             Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
             Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
@@ -323,14 +324,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
 
             Context.Invader.Owner = new Player("Invader Player", "Invader Player", false);
-            Context.Invader.Owner.Rank = 1;
+            Context.Invader.OwnerTeam = new Team(1);
+            Context.Invader.OwnerTeam.Rank = 1;
             Context.Invader.Owner.Gold = 100;
             Context.Invader.Owner.ListCardInHand.Add(new CreatureCard(""));
-            Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
-            Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
-            Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
-            Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
-            Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
             Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
             Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
@@ -942,37 +944,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
         private void SetDefenderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
         private void SetDefenderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
         private void SetDefenderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
+            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
         private void SetDefenderRankInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Owner.Rank);
+            int.TryParse(InputValue, out Context.Defender.OwnerTeam.Rank);
         }
 
         private void SetDefenderGoldInput(TextInput Sender, string InputValue)
@@ -1107,37 +1109,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
         private void SetInvaderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
         private void SetInvaderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
         private void SetInvaderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
+            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
         private void SetInvaderRankInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Owner.Rank);
+            int.TryParse(InputValue, out Context.Invader.OwnerTeam.Rank);
         }
 
         private void SetInvaderGoldInput(TextInput Sender, string InputValue)

@@ -53,7 +53,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 }
 
                 Info.Map.UpdateAllAttacks(Info.ActiveSquad.CurrentLeader, Info.ActiveSquad.Position,
-                    Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team, Info.ActiveSquad.CanMove & _AddMovementToRange);
+                    Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex, Info.ActiveSquad.CanMove & _AddMovementToRange);
 
                 var ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, Info.ActiveSquad.Position,
                     ActiveAttack, MinRange, MaxRange, _AddMovementToRange, Info.ActiveSquad.CurrentLeader);

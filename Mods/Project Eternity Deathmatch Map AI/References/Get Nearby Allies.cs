@@ -25,11 +25,11 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 List<object> ListAlly = new List<object>();
 
-                int CurrentTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                int CurrentTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
                 
                 for (int P = Info.Map.ListPlayer.Count - 1; P >= 0; --P)
                 {
-                    if (Info.Map.ListPlayer[P].Team == CurrentTeam)
+                    if (Info.Map.ListPlayer[P].TeamIndex == CurrentTeam)
                     {
                         for (int S = Info.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
                         {

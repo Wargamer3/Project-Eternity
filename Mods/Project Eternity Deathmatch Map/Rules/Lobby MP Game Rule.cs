@@ -85,13 +85,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    int SpawnTeam = ActivePlayer.Team;
+                    int SpawnTeam = ActivePlayer.TeamIndex;
                     if (!UseTeamsForSpawns)
                     {
                         SpawnTeam = P;
                     }
 
-                    if (ActivePlayer.Team >= 0 && SpawnTeam < Owner.ListMultiplayerColor.Count)
+                    if (ActivePlayer.TeamIndex >= 0 && SpawnTeam < Owner.ListMultiplayerColor.Count)
                     {
                         ActivePlayer.Color = Owner.ListMultiplayerColor[SpawnTeam];
                     }
@@ -319,7 +319,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (!ActiveSquad.IsDead)
                     {
-                        ListAliveTeam.Add(ActivePlayer.Team);
+                        ListAliveTeam.Add(ActivePlayer.TeamIndex);
                         break;
                     }
                 }
@@ -330,7 +330,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
                 foreach (Player ActivePlayer in Owner.ListAllPlayer)
                 {
-                    if (ActivePlayer.Team == -1)
+                    if (ActivePlayer.TeamIndex == -1)
                     {
                         continue;
                     }
@@ -338,12 +338,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
                     foreach (Player OtherPlayer in Owner.ListAllPlayer)
                     {
-                        if (ActivePlayer.Team == OtherPlayer.Team || OtherPlayer.Team == -1)
+                        if (ActivePlayer.TeamIndex == OtherPlayer.TeamIndex || OtherPlayer.TeamIndex == -1)
                         {
                             continue;
                         }
 
-                        if (ListAliveTeam.Contains(ActivePlayer.Team))
+                        if (ListAliveTeam.Contains(ActivePlayer.TeamIndex))
                         {
                             NewGains.EXP += GetVictoryEXP(ActivePlayer, OtherPlayer);
                             NewGains.Money += GetVictoryMoney(ActivePlayer);
@@ -383,7 +383,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         LobbyDrawScreen NewLobbyVictoryScreen = new LobbyDrawScreen(Owner, ListGains);
                         Owner.PushScreen(NewLobbyVictoryScreen);
                     }
-                    else if (ListAliveTeam.Contains(PlayerManager.ListLocalPlayer[0].Team))
+                    else if (ListAliveTeam.Contains(PlayerManager.ListLocalPlayer[0].TeamIndex))
                     {
                         LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(Owner, ListGains);
                         Owner.PushScreen(NewLobbyVictoryScreen);
@@ -426,12 +426,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected virtual List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
         {
-            return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
         }
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
             if (ListPossibleSpawnPoint.Count == 0)
             {
                 return;
@@ -511,7 +511,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int Max = 0;
             for (int P = 0; P < Owner.ListAllPlayer.Count; ++P)
             {
-                if (Owner.ListAllPlayer[P].Team == -1)
+                if (Owner.ListAllPlayer[P].TeamIndex == -1)
                 {
                     continue;
                 }
@@ -526,7 +526,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float PosY = 175;
             for (int P = 0; P < Max; ++P)
             {
-                if (Owner.ListAllPlayer[P].Team == -1)
+                if (Owner.ListAllPlayer[P].TeamIndex == -1)
                 {
                     continue;
                 }

@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void GragFlag(Squad ActiveSquad)
         {
             //Brought back the enemy flag
-            if (Map.ListPlayer[Map.ActivePlayerIndex].Team == _Team && ActiveSquad.ItemHeld != null && ActiveSquad.ItemHeld.ItemType == "Flag")
+            if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == _Team && ActiveSquad.ItemHeld != null && ActiveSquad.ItemHeld.ItemType == "Flag")
             {
                 Flag ActiveFlag = (Flag)ActiveSquad.ItemHeld;
 
@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     ActiveSquad.CurrentLeader.RefillSP(10);
                                     ActiveSquad.CurrentLeader.RefillEN(5);
                                     //Get point
-                                    ((CaptureTheFlagGameRule)Map.GameRule).GetPoint(Map.ListPlayer[Map.ActivePlayerIndex].Team);
+                                    ((CaptureTheFlagGameRule)Map.GameRule).GetPoint(Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex);
                                     return;
                                 }
                             }
@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
-            else if (Map.ListPlayer[Map.ActivePlayerIndex].Team != _Team)
+            else if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex != _Team)
             {
                 ActiveSquad.PickupItem(TeamFlag);
                 IsUsed = true;

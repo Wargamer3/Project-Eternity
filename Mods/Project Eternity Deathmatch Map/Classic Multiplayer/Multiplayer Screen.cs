@@ -797,7 +797,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     continue;
 
                 g.DrawString(fntArial12, NewMap.ListPlayer[P].Name, new Vector2(100, 30 + P * fntArial12.LineSpacing), Color.Black);
-                g.DrawString(fntArial12, NewMap.ListPlayer[P].Team.ToString(), new Vector2(230, 30 + P * fntArial12.LineSpacing), Color.Black);
+                g.DrawString(fntArial12, NewMap.ListPlayer[P].TeamIndex.ToString(), new Vector2(230, 30 + P * fntArial12.LineSpacing), Color.Black);
             }
             //Messenger
             for (int i = 0; i < Messenger.Count(); i++)

@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPositionVisible = Map.CursorPosition;
 
             //Update weapons so you know which one is in attack range.
-            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, CanMove);
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, CanMove);
 
             ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[0];//Make sure you select the first weapon.
         }

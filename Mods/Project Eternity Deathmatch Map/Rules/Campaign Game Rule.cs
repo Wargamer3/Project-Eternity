@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -308,7 +308,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+                return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
             }
         }
 

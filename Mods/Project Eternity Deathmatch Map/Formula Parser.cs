@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 {
                                     case "exist":
                                     case "exists":
-                                        if (ActivePlayer.Team >= 0)
+                                        if (ActivePlayer.TeamIndex >= 0)
                                         {
                                             return "1";
                                         }

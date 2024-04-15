@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int TargetIndex = CheckForSquadAtPosition(P, PositionToCheck, Vector3.Zero);
 
-                if (TargetIndex >= 0 && (FriendlyFire || ListPlayer[ActivePlayerIndex].Team != ListPlayer[P].Team))
+                if (TargetIndex >= 0 && (FriendlyFire || ListPlayer[ActivePlayerIndex].TeamIndex != ListPlayer[P].TeamIndex))
                 {
                     return new Tuple<int, int>(P, TargetIndex);
                 }
@@ -220,7 +220,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < ListPlayer.Count; P++)
             {
                 //If the player is from the same team as the current player or is dead, skip it.
-                if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team || !ListPlayer[P].IsAlive)
+                if (ListPlayer[P].TeamIndex == ListPlayer[ActivePlayerIndex].TeamIndex || !ListPlayer[P].IsAlive)
                     continue;
 
                 for (int TargetSelect = 0; TargetSelect < ListPlayer[P].ListSquad.Count; TargetSelect++)
@@ -228,7 +228,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ListPlayer[P].ListSquad[TargetSelect].CurrentLeader == null)
                         continue;
 
-                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, Position, ListPlayer[ActivePlayerIndex].Team, ListPlayer[P].ListSquad[TargetSelect].Position, ListPlayer[P].Team,
+                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, Position, ListPlayer[ActivePlayerIndex].TeamIndex, ListPlayer[P].ListSquad[TargetSelect].Position, ListPlayer[P].TeamIndex,
                         ListPlayer[P].ListSquad[TargetSelect].ArrayMapSize, ListPlayer[P].ListSquad[TargetSelect].CurrentTerrainIndex, CanMove);
 
                     //Make sure you can use it.
@@ -280,7 +280,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     int TargetIndex = CheckForSquadAtPosition(P, ListAttackPosition[i].WorldPosition, Vector3.Zero);
                     //If one was found.
                     if (TargetIndex >= 0 && (FriendlyFire ||
-                                                ListPlayer[ActivePlayerIndex].Team != ListPlayer[P].Team))
+                                                ListPlayer[ActivePlayerIndex].TeamIndex != ListPlayer[P].TeamIndex))
                     {
                         ListMAPAttackTarget.Push(new Tuple<int, int>(P, TargetIndex));
                     }
@@ -320,7 +320,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ActiveSquad[U].PLAAttack != null)
                     {
-                        ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
+                        ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].TeamIndex, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].TeamIndex, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
 
                         if (ActiveSquad[U].PLAAttack.CanAttack)
                         {
@@ -344,7 +344,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (OppositeSquad.UnitsAliveInSquad > U)
                         {
-                            ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
+                            ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].TeamIndex, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].TeamIndex, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
 
                             if (ActiveSquad[U].PLAAttack.CanAttack)
                             {
@@ -825,7 +825,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Try to find a weapon to counter attack.
                 int DamageOld = 0;
 
-                DefenderUnit.UpdateNonMAPAttacks(DefenderSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, AttackerSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, AttackerSquad.ArrayMapSize, AttackerSquad.CurrentTerrainIndex, true);
+                DefenderUnit.UpdateNonMAPAttacks(DefenderSquad.Position, Map.ListPlayer[TargetPlayerIndex].TeamIndex, AttackerSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, AttackerSquad.ArrayMapSize, AttackerSquad.CurrentTerrainIndex, true);
 
                 if (!UsePLAWeapon)
                 {

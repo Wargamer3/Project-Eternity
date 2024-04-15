@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.ActiveSquadIndex = ActiveSquadIndex;
 
             //Update weapons to decide if the attack choice is drawn.
-            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, ActiveSquad.CanMove);
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.CanMove);
 
             ListNextChoice.Clear();
 
@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.ActiveSquadIndex = ActiveSquadIndex;
 
             //Update weapons to decide if the attack choice is drawn.
-            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, ActiveSquad.CanMove);
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.CanMove);
         }
 
         public override void DoWrite(ByteWriter BW)

@@ -46,18 +46,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override bool CanActivatePassive()
         {
             Player Owner;
+            Team OwnerTeam;
+
             if (_Target == Targets.Self)
             {
                 Owner = GlobalContext.SelfCreature.Owner;
+                OwnerTeam = GlobalContext.SelfCreature.OwnerTeam;
             }
             else
             {
                 Owner = GlobalContext.OpponentCreature.Owner;
+                OwnerTeam = GlobalContext.OpponentCreature.OwnerTeam;
             }
 
             int TerriotryOwnedFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_TerriotryOwned), CultureInfo.InvariantCulture);
             int OwnedTerritories = 0;
-            foreach (byte ActiveElement in Owner.DicCreatureCountByElementType.Values)
+            foreach (byte ActiveElement in OwnerTeam.DicCreatureCountByElementType.Values)
             {
                 OwnedTerritories += ActiveElement;
             }

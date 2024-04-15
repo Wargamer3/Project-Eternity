@@ -155,14 +155,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             //Draw Player Total Magic
             g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, IconWidth, IconHeight), Color.White);
-            g.DrawString(Map.fntArial12, ActivePlayer.TotalMagic.ToString(), new Vector2(X + 80, Y), Color.White);
+            g.DrawString(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 80, Y), Color.White);
 
             Y += LineHeight;
             //Draw Player color and it's position
             //Position if based on the number of checkpoints and then player order
             if (ActivePlayer.Color == Color.Red)
             {
-                if (ActivePlayer.Rank == 1)
+                if (Map.DicTeam[ActivePlayer.TeamIndex].Rank == 1)
                 {
                     g.Draw(Map.sprPlayerRed1, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
                 }
@@ -173,7 +173,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (ActivePlayer.Color == Color.Blue)
             {
-                if (ActivePlayer.Rank == 1)
+                if (Map.DicTeam[ActivePlayer.TeamIndex].Rank == 1)
                 {
                     g.Draw(Map.sprPlayerBlue1, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
                 }
@@ -185,7 +185,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
-                g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
+                g.DrawStringCentered(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
             }
 
             for (int C = 0; C < Map.ListCheckpoint.Count; C++)

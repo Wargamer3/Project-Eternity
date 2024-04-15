@@ -74,6 +74,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly Vector3 LastPosition;
         private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
+        public Dictionary<int, Team> DicTeam;
         public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
         public List<Player> ListAllPlayer { get { return ListPlayer; } }
         private TextInput ChatInput;
@@ -109,6 +110,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolderSorcererStreet(this);
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
+            DicTeam = new Dictionary<int, Team>();
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
 
@@ -284,7 +286,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ByteReader BR = new ByteReader(ArrayGameData);
 
-            int ListCharacterCount = BR.ReadInt32();
+            int ListCharacterCount = BR.ReadByte();
             for (int P = 0; P < ListCharacterCount; ++P)
             {
                 string PlayerID = BR.ReadString();
@@ -301,7 +303,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (PlayerManager.OnlinePlayerID == PlayerID)
                     {
                         NewPlayer = new Player(ActivePlayer, SorcererStreetParams);
-                        NewPlayer.Team = PlayerTeam;
+                        NewPlayer.TeamIndex = PlayerTeam;
                         NewPlayer.Color = PlayerColor;
                         AddLocalCharacter(NewPlayer);
                         //NewPlayer.InputManagerHelper = new PlayerRobotInputManager();
@@ -324,11 +326,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
 
-                NewPlayer.Team = PlayerTeam;
+                NewPlayer.TeamIndex = PlayerTeam;
                 NewPlayer.Color = PlayerColor;
-                NewPlayer.TotalMagic = NewPlayer.Gold = PlayerMagic;
+                NewPlayer.Gold = PlayerMagic;
                 NewPlayer.ListRemainingCardInDeck.Clear();
                 NewPlayer.ListCardInHand.Clear();
+
+                if (!DicTeam.ContainsKey(PlayerTeam))
+                {
+                    DicTeam.Add(PlayerTeam, new Team(PlayerTeam));
+                }
+
+                DicTeam[PlayerTeam].ListPlayer.Add(NewPlayer);
 
                 byte ListRemainingCardInDeckCount = BR.ReadByte();
                 for (int C = 0; C < ListRemainingCardInDeckCount; ++C)
@@ -413,9 +422,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             foreach (Player ActivePlayer in ListPlayer)
             {
-                if (ActivePlayer.Team >= 0 && ActivePlayer.Team < ListMultiplayerColor.Count)
+                if (ActivePlayer.TeamIndex >= 0 && ActivePlayer.TeamIndex < ListMultiplayerColor.Count)
                 {
-                    ActivePlayer.Color = ListMultiplayerColor[ActivePlayer.Team];
+                    ActivePlayer.Color = ListMultiplayerColor[ActivePlayer.TeamIndex];
                 }
             }
 
@@ -426,11 +435,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (ListAllPlayer[0].OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
                 {
                     ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
+                    ActionPanelDialogPhase.AddIntrodctionIfAvailable(this);
                 }
             }
             else if (IsClient && ListPlayer.Count > 0)
             {
                 ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
+                ActionPanelDialogPhase.AddIntrodctionIfAvailable(this);
             }
 
             base.Init();
@@ -494,7 +505,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListPlayer.Add(NewPlayer);
             ListLocalPlayerInfo.Add(NewPlayer);
-            UpdatePlayersRank();
         }
 
         public void AddLocalCharacter(Player NewLocalCharacter)
@@ -562,27 +572,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void UpdateTolls(Player ActivePlayer)
         {
-            ActivePlayer.TotalMagic = ActivePlayer.Gold;
-
-            for (int X = MapSize.X - 1; X >= 0; --X)
+            foreach (Team ActiveTeam in DicTeam.Values)
             {
-                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
+                ActiveTeam.TotalMagic = ActivePlayer.Gold;
+
+                for (int X = MapSize.X - 1; X >= 0; --X)
                 {
-                    TerrainSorcererStreet ActiveTerrain = GetTerrain(X, Y, 0);
-                    if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature != null)
+                    for (int Y = MapSize.Y - 1; Y >= 0; --Y)
                     {
-                        ActiveTerrain.UpdateValue(ActivePlayer.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
-                        ActivePlayer.TotalMagic += ActiveTerrain.CurrentValue;
+                        TerrainSorcererStreet ActiveTerrain = GetTerrain(X, Y, 0);
+                        if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature != null)
+                        {
+                            ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                            ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
+                        }
                     }
                 }
-            }
 
-            UpdatePlayersRank();
+                UpdatePlayersRank();
+            }
         }
 
         public void UpdatePlayersRank()
         {
-            List<Player> SortedList = ListPlayer.OrderBy(P => P.TotalMagic).ThenBy(P => ListPlayer.IndexOf(P)).ToList();
+            List<Team> SortedList = DicTeam.Values.OrderBy(P => P.TotalMagic).ThenBy(P => P.TeamIndex).ToList();
 
             for (int P = 0; P < SortedList.Count; ++P)
             {
@@ -1217,7 +1230,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 BW.AppendString(ActivePlayer.ConnectionID);
                 BW.AppendString(ActivePlayer.Name);
-                BW.AppendInt32(ActivePlayer.Team);
+                BW.AppendInt32(ActivePlayer.TeamIndex);
                 BW.AppendBoolean(ActivePlayer.IsPlayerControlled);
                 BW.AppendByte(ActivePlayer.Color.R);
                 BW.AppendByte(ActivePlayer.Color.G);

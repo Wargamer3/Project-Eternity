@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             {
                 if (ActivePlayer.ConnectionID == Sender.ID)
                 {
-                    ActivePlayer.Team = NewTeam;
+                    ActivePlayer.TeamIndex = NewTeam;
                 }
             }
 

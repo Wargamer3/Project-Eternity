@@ -282,7 +282,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (PlayerManager.OnlinePlayerID == PlayerID)
                 {
                     NewPlayer = new Player((BattleMapPlayer)PlayerManager.ListLocalPlayer[LocalPlayerIndex]);
-                    NewPlayer.Team = PlayerTeam;
+                    NewPlayer.TeamIndex = PlayerTeam;
                     NewPlayer.Color = PlayerColor;
                     AddLocalCharacter(NewPlayer);
                     //NewPlayer.InputManagerHelper = new PlayerRobotInputManager();
@@ -807,7 +807,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ListPlayer[P].ListSquad[U].CurrentLeader == null)
                         continue;
 
-                    CurrentUnit.UpdateAllAttacks(StartPosition, UnitTeam, ListPlayer[P].ListSquad[U].Position, ListPlayer[P].Team,
+                    CurrentUnit.UpdateAllAttacks(StartPosition, UnitTeam, ListPlayer[P].ListSquad[U].Position, ListPlayer[P].TeamIndex,
                             ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentTerrainIndex, CanMove);
                 }
             }
@@ -1190,7 +1190,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 BW.AppendString(ActivePlayer.ConnectionID);
                 BW.AppendString(ActivePlayer.Name);
-                BW.AppendInt32(ActivePlayer.Team);
+                BW.AppendInt32(ActivePlayer.TeamIndex);
                 BW.AppendBoolean(ActivePlayer.IsPlayerControlled);
                 BW.AppendByte(ActivePlayer.Color.R);
                 BW.AppendByte(ActivePlayer.Color.G);

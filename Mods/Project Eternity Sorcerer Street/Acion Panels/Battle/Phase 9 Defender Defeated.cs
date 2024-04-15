@@ -38,8 +38,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader.Creature;
             ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.Invader.Owner;
 
-            Map.GlobalSorcererStreetBattleContext.Invader.Owner.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.GlobalSorcererStreetBattleContext.Defender.Owner.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.GlobalSorcererStreetBattleContext.Invader.OwnerTeam.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.GlobalSorcererStreetBattleContext.Defender.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
 
             Map.RemoveCreature(Map.GlobalSorcererStreetBattleContext.Defender.Creature);
             Map.SummonCreature(Map.GlobalSorcererStreetBattleContext.Invader.Creature);

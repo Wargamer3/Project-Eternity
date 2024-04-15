@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < Owner.ListAllPlayer.Count; P++)
             {
                 Player ActivePlayer = Owner.ListAllPlayer[P];
-                if (ActivePlayer.Team < 0 || ActivePlayer.Team >= 10)
+                if (ActivePlayer.TeamIndex < 0 || ActivePlayer.TeamIndex >= 10)
                 {
                     continue;
                 }

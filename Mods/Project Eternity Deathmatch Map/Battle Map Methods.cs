@@ -185,7 +185,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(ActivePlayer.Name);
                 BW.Write(ActivePlayer.OnlinePlayerType);
                 BW.Write(ActivePlayer.IsPlayerControlled);
-                BW.Write(ActivePlayer.Team);
+                BW.Write(ActivePlayer.TeamIndex);
                 BW.Write(ActivePlayer.Color.R);
                 BW.Write(ActivePlayer.Color.G);
                 BW.Write(ActivePlayer.Color.B);

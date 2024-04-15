@@ -540,11 +540,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 }
             }
 
-            if (!Attacker.ListAttackedTeam.Contains(ListPlayer[DefenderPlayerIndex].Team))
-                Attacker.ListAttackedTeam.Add(ListPlayer[DefenderPlayerIndex].Team);
+            if (!Attacker.ListAttackedTeam.Contains(ListPlayer[DefenderPlayerIndex].TeamIndex))
+                Attacker.ListAttackedTeam.Add(ListPlayer[DefenderPlayerIndex].TeamIndex);
 
-            if (!Defender.ListAttackedTeam.Contains(ListPlayer[AttackerPlayerIndex].Team))
-                Defender.ListAttackedTeam.Add(ListPlayer[AttackerPlayerIndex].Team);
+            if (!Defender.ListAttackedTeam.Contains(ListPlayer[AttackerPlayerIndex].TeamIndex))
+                Defender.ListAttackedTeam.Add(ListPlayer[AttackerPlayerIndex].TeamIndex);
 
             return ListBattleRecap;
         }
@@ -641,7 +641,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             //Every allies gain morale.
             for (int P = 0; P < ListPlayer.Count; P++)
             {
-                if (ListPlayer[P].Team == ListPlayer[AttackerPlayerIndex].Team)
+                if (ListPlayer[P].TeamIndex == ListPlayer[AttackerPlayerIndex].TeamIndex)
                 {
                     for (int U = 0; U < ListPlayer[P].ListSquad.Count; U++)
                     {
@@ -654,7 +654,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                         }
                     }
                 }
-                else if (ListPlayer[P].Team == ListPlayer[DefenderPlayerIndex].Team)
+                else if (ListPlayer[P].TeamIndex == ListPlayer[DefenderPlayerIndex].TeamIndex)
                 {
                     for (int U = 0; U < ListPlayer[P].ListSquad.Count; U++)
                     {

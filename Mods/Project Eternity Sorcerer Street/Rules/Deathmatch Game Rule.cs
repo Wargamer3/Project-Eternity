@@ -98,7 +98,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(ActivePlayer.Team);
+                    if (!Owner.DicTeam.ContainsKey(ActivePlayer.TeamIndex))
+                    {
+                        Owner.DicTeam.Add(ActivePlayer.TeamIndex, new Team(ActivePlayer.TeamIndex));
+                        Owner.DicTeam[ActivePlayer.TeamIndex].TotalMagic = ActivePlayer.Gold = Owner.MagicAtStart;
+                    }
+
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(ActivePlayer.TeamIndex);
                     int SpawnSquadIndex = 0;
                     foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
@@ -128,11 +134,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             ActivePlayer.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
                         }
 
-                        ActivePlayer.Team = P;
-                        ActivePlayer.TotalMagic = ActivePlayer.Gold = Owner.MagicAtStart;
+                        Owner.DicTeam[ActivePlayer.TeamIndex].ListPlayer.Add(ActivePlayer);
                         break;
                     }
                 }
+
+                Owner.UpdatePlayersRank();
             }
         }
 

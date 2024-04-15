@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         BW.Write(ActivePlayer.ConnectionID);
                         BW.Write(ActivePlayer.Name);
                         BW.Write(ActivePlayer.OnlinePlayerType);
-                        BW.Write(ActivePlayer.Team);
+                        BW.Write(ActivePlayer.TeamIndex);
                         BW.Write(ActivePlayer.IsPlayerControlled);
                         BW.Write(ActivePlayer.Color.R);
                         BW.Write(ActivePlayer.Color.G);

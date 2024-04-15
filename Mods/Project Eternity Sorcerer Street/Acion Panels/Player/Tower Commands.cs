@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
             }
             ActivePlayer.Gold += Map.TowerMagicGain;
-            ActivePlayer.TotalMagic += Map.TowerMagicGain;
+            Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic += Map.TowerMagicGain;
             Map.UpdatePlayersRank();
         }
 

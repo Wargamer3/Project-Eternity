@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (IsDropped && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
-                if (Map.ListPlayer[Map.ActivePlayerIndex].Team == Owner.Team)
+                if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == Owner.Team)
                 {
                     Owner.ReturnFlag();
                 }
@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (IsDropped && StoppedSquad.X == Position.X && StoppedSquad.Y == Position.Y)
             {
-                if (Map.ListPlayer[Map.ActivePlayerIndex].Team == Owner.Team)
+                if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == Owner.Team)
                 {
                     Owner.ReturnFlag();
                 }

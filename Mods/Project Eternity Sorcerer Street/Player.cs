@@ -3,11 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
 
@@ -33,9 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetPlayerUnlockInventory UnlockInventory;
 
         public SorcererStreetUnit GamePiece;
-        public int Rank;//Rank in the game between players
         public int Gold;
-        public int TotalMagic;
         public int CompletedLaps;
 
         private PlayerAbilities Abilities;
@@ -46,7 +42,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BaseAutomaticSkill Enchant;
 
         public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
-        public Dictionary<byte, byte> DicCreatureCountByElementType;
         public Dictionary<ElementalAffinity, int> DicOwnedSymbols;
 
         public readonly List<Card> ListCardInDeck;
@@ -60,7 +55,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
 
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
-            DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListCardInDeck = new List<Card>();
@@ -77,7 +71,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
 
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
-            DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListCardInDeck = new List<Card>();
@@ -96,7 +89,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
 
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
-            DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
@@ -121,7 +113,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UnlocksEvaluator = new SorcererStreetUnlockConditionsEvaluator(this);
 
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
-            DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
@@ -143,7 +134,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ListCardInDeck = new List<Card>(Clone.Inventory.ActiveBook.ListCard.Count);
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
-            DicCreatureCountByElementType = new Dictionary<byte, byte>();
             GamePiece = Clone.GamePiece;
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
@@ -311,34 +301,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 ListRemainingCardInDeck[ShuffleIndex] = ListRemainingCardInDeck[RemainingCardToShuffleCount];
                 ListRemainingCardInDeck[RemainingCardToShuffleCount] = ActiveCard;
-            }
-        }
-
-        public void IncreaseChainLevels(byte TerrainTypeIndex)
-        {
-            byte ChainValue;
-
-            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
-            {
-                DicCreatureCountByElementType.Add(TerrainTypeIndex, 1);
-            }
-            else
-            {
-                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue + 1);
-            }
-        }
-
-        public void DecreaseChainLevels(byte TerrainTypeIndex)
-        {
-            byte ChainValue;
-
-            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
-            {
-                DicCreatureCountByElementType.Add(TerrainTypeIndex, 0);
-            }
-            else
-            {
-                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue - 1);
             }
         }
 

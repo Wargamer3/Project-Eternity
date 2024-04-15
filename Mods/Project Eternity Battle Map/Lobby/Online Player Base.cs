@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte License;
         public byte Ranking;
         public bool IsOnline;
-        public int Team;
+        public int TeamIndex;
         public int EXP;
         public int Level;
         public bool IsPlayerControlled;
@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Name = Name;
             this.OnlinePlayerType = OnlinePlayerType;
             this.IsOnline = IsOnline;
-            this.Team = Team;
+            this.TeamIndex = Team;
             this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
 
@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ConnectionID = ID;
             this.Name = Name;
             this.IsOnline = IsOnline;
-            this.Team = Team;
+            this.TeamIndex = Team;
             this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
 
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (Clone == null)
             {
-                Team = -1;
+                TeamIndex = -1;
                 OnlinePlayerType = PlayerTypeNA;
                 Records = new PlayerRecords();
                 return;
@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             License = Clone.License;
             Ranking = Clone.Ranking;
             IsOnline = Clone.IsOnline;
-            Team = Clone.Team;
+            TeamIndex = Clone.TeamIndex;
             Level = Clone.Level;
             IsPlayerControlled = Clone.IsPlayerControlled;
             Color = Clone.Color;

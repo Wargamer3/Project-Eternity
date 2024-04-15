@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelLandInfoPhase(Map, ActivePlayerIndex));
                 }
-                else if (PlayerOwner.Team == Map.ListPlayer[ActivePlayerIndex].Team)
+                else if (PlayerOwner.TeamIndex == Map.ListPlayer[ActivePlayerIndex].TeamIndex)
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map));
                 }

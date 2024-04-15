@@ -334,7 +334,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int DrawX = 5;
             int DrawY = 45;
-            bool ShowStats = ListPlayer[TargetPlayerIndex].IsPlayerControlled || SquadLeft.ListAttackedTeam.Contains(ListPlayer[ActivePlayerIndex].Team);
+            bool ShowStats = ListPlayer[TargetPlayerIndex].IsPlayerControlled || SquadLeft.ListAttackedTeam.Contains(ListPlayer[ActivePlayerIndex].TeamIndex);
 
             #region Leader
 

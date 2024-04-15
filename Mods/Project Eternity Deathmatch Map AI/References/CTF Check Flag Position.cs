@@ -61,7 +61,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             private FlagSpawner GetFlagSpawner()
             {
-                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
 
                 for (int L = 0; L < Info.Map.LayerManager.ListLayer.Count; L++)
                 {
@@ -87,7 +87,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             private Flag GetFlag()
             {
-                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                int CurrentPlayerTeam = Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].TeamIndex;
 
                 for (int L = 0; L < Info.Map.LayerManager.ListLayer.Count; L++)
                 {
