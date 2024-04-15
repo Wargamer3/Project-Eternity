@@ -43,12 +43,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class QuoteSetMap
     {
         public List<QuoteSetVersus> ListQuoteVersus;
-        public string PortraitPath;
 
         public QuoteSetMap()
         {
             ListQuoteVersus = new List<QuoteSetVersus>();
-            PortraitPath = "";
         }
 
         public QuoteSetMap(BinaryReader BR)
@@ -163,9 +161,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BaseAutomaticSkill[] ArraySkill;
         public BaseAutomaticSkill[] ArrayRelationshipBonus;
 
+        #region Quotes
+
         public QuoteSet[] ArrayBaseQuoteSet;
         public List<string> ListQuoteSetMapName;
         public List<string> ListQuoteSetVersusName;
+
+        public QuoteSet Introduction => ArrayBaseQuoteSet[0];
+        public QuoteSet AllianceIntroduction => ArrayBaseQuoteSet[1];
+        public QuoteSet Banter => ArrayBaseQuoteSet[2];
+        public QuoteSet AllianceBanter => ArrayBaseQuoteSet[3];
+        public QuoteSet WinningBanter => ArrayBaseQuoteSet[4];
+        public QuoteSet WinningAllianceBanter => ArrayBaseQuoteSet[5];
+        public QuoteSet LosingBanter => ArrayBaseQuoteSet[6];
+        public QuoteSet MajorLosingBanter => ArrayBaseQuoteSet[7];
+        public QuoteSet LosingAllianceBanter => ArrayBaseQuoteSet[8];
+        public QuoteSet TerritoryClaim => ArrayBaseQuoteSet[9];
+        public QuoteSet ChainSmall => ArrayBaseQuoteSet[10];
+        public QuoteSet ChainBig => ArrayBaseQuoteSet[11];
+        public QuoteSet TerritoryLevelUp => ArrayBaseQuoteSet[12];
+        public QuoteSet TerritoryLevelUpBig => ArrayBaseQuoteSet[13];
+        public QuoteSet SuccessfulInvasion => ArrayBaseQuoteSet[14];
+        public QuoteSet FailedInvasion => ArrayBaseQuoteSet[15];
+        public QuoteSet SuccessfulDefense => ArrayBaseQuoteSet[16];
+        public QuoteSet FailedDefense => ArrayBaseQuoteSet[17];
+        public QuoteSet SmallMoneyLoss => ArrayBaseQuoteSet[18];
+        public QuoteSet MediumMoneyLoss => ArrayBaseQuoteSet[19];
+        public QuoteSet LargeMoneyLoss => ArrayBaseQuoteSet[20];
+        public QuoteSet SmallMoneyGains => ArrayBaseQuoteSet[21];
+        public QuoteSet BigMoneyGains => ArrayBaseQuoteSet[22];
+        public QuoteSet OpponentAchieveObjective => ArrayBaseQuoteSet[23];
+        public QuoteSet OpponentAchieveObjectiveAlliance => ArrayBaseQuoteSet[24];
+        public QuoteSet AchieveObjective => ArrayBaseQuoteSet[25];
+        public QuoteSet AchieveObjectiveAlliance => ArrayBaseQuoteSet[26];
+        public QuoteSet WonMatch => ArrayBaseQuoteSet[27];
+        public QuoteSet WonAllianceMatch => ArrayBaseQuoteSet[28];
+
+        #endregion
 
         public PlayerCharacter(PlayerCharacter Clone)
         {

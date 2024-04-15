@@ -34,6 +34,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprPlayerRed1;
         public Texture2D sprPlayerRed2;
 
+        public Texture2D sprPortraitStart;
+        public Texture2D sprPortraitMiddle;
+        public Texture2D sprPortraitEnd;
+
         public Texture2D sprTerritory;
         public Texture2D sprMap;
         public Texture2D sprInfo;
@@ -238,6 +242,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
                 sprReturn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Return");
                 sprSuspend = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Suspend");
+
+                sprPortraitStart = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Portrait Start");
+                sprPortraitMiddle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Portrait Middle");
+                sprPortraitEnd = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Portrait End");
 
                 sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
                 sprPlayerBlue1 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Blue 1");
