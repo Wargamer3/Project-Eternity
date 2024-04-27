@@ -27,7 +27,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Focused will make every Unit attack the leader. Spread will make each Unit attack to opposite Unit. ALL is only used to show the leader is using an ALL attack and can't be toggled.
         /// </summary>
         public enum FormationChoices { Focused = 0, Spread = 1, ALL = 2 };
-        public enum Camera3DAngles { Front, Right, Back, Left, Top };
         
         #endregion
 
@@ -142,6 +141,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool ShowUnits;
         public bool ShowTerrainType;
         public bool ShowTerrainHeight;
+        public bool Show3DObjects;
         public List<string> ListBackgroundsPath;
         public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;
@@ -154,7 +154,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Camera3D Camera3D;
         public Camera3D Camera3DOverride;//Used by vehicles.
         public float Camera3DDistance = 255;
-        public Camera3DAngles Camera3DAngle = Camera3DAngles.Front;
+        public float Camera3DYawAngle = 11.5f;
+        public float Camera3DPitchAngle = 45;
 
         public uint OrderNumber;
         public byte PlayersMin;

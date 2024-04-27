@@ -367,27 +367,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void SetTarget(Vector3 Target)
         {
-            float YawRotation = 0.2f;
-            float PitchRotation = MathHelper.ToRadians(45);
-            if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Right)
-            {
-                YawRotation += MathHelper.ToRadians(90);
-            }
-            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Back)
-            {
-                YawRotation += MathHelper.ToRadians(180);
-            }
-            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Left)
-            {
-                YawRotation += MathHelper.ToRadians(270);
-            }
-            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Top)
-            {
-                YawRotation = 0;
-                PitchRotation = MathHelper.ToRadians(1);
-            }
+            float YawRotation = MathHelper.ToRadians(Map.Camera3DYawAngle);
+            float PitchRotation = MathHelper.ToRadians(Map.Camera3DPitchAngle);
+            float RollRotation = 0;
 
-            Matrix FinalMatrix = Matrix.CreateTranslation(0, Map.Camera3DDistance, 0) * Matrix.CreateFromYawPitchRoll(YawRotation, PitchRotation, 0);
+            Matrix FinalMatrix = Matrix.CreateTranslation(0, Map.Camera3DDistance, 0) * Matrix.CreateFromYawPitchRoll(YawRotation, PitchRotation, RollRotation);
             Camera.CameraPosition3D = FinalMatrix.Translation + Target;
 
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);

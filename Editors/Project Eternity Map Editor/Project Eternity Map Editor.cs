@@ -24,12 +24,14 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShowAllLayers;
         private CheckBox cbShowTerrainType;
         private CheckBox cbShowTerrainHeight;
+        private CheckBox cbShow3DObjects;
 
         protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
         protected IMapHelper Helper;
 
         //Spawn point related stuff.
         private EventPoint ActiveSpawn;
+        private System.Drawing.Point LastMousePosition;
 
         private bool AllowEvents = true;
 
@@ -121,6 +123,21 @@ namespace ProjectEternity.Editors.MapEditor
             //Make it 10 pixel after the last mnuToolBar item.
             cbShowTerrainHeight.Padding = new Padding(10, 0, 0, 0);
             mnuToolBar.Items.Add(new ToolStripControlHost(cbShowTerrainHeight));
+
+            #endregion
+
+            #region cbShow3DObjects
+
+            cbShow3DObjects = new CheckBox
+            {
+                Text = "Show 3D Objects"
+            };
+            //Link a CheckedChanged event to a method.
+            cbShow3DObjects.CheckedChanged += new EventHandler(cbShow3DObjects_CheckedChanged);
+            cbShow3DObjects.Checked = false;
+            //Make it 10 pixel after the last mnuToolBar item.
+            cbShow3DObjects.Padding = new Padding(10, 0, 0, 0);
+            mnuToolBar.Items.Add(new ToolStripControlHost(cbShow3DObjects));
 
             #endregion
 
@@ -218,6 +235,9 @@ namespace ProjectEternity.Editors.MapEditor
         private void DrawInfo()
         {//Draw the mouse position minus the map starting point.
             tslInformation.Text = string.Format("X: {0}, Y: {1}, Z: {2}", ActiveMap.CursorPosition.X, ActiveMap.CursorPosition.Y, ActiveMap.CursorPosition.Z);
+
+            if (ActiveMap.CursorPosition.X < 0 || ActiveMap.CursorPosition.X >= ActiveMap.MapSize.X || ActiveMap.CursorPosition.Y < 0 || ActiveMap.CursorPosition.Y >= ActiveMap.MapSize.Y || cboTiles.Items.Count == 0)
+                return;
 
             Terrain SelectedTerrain = Helper.GetTerrain((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z);
 
@@ -373,53 +393,86 @@ namespace ProjectEternity.Editors.MapEditor
 
             bool KeyProcessed = false;
 
+            bool IsMovingLeft = keyData == Keys.Left;
+            bool IsMovingRight = keyData == Keys.Right;
+            bool IsMovingUp = keyData == Keys.Up;
+            bool IsMovingDown = keyData == Keys.Down;
+
+            float PlatformAngle = ActiveMap.Camera3DYawAngle;
+
+            if (PlatformAngle >= 315 || PlatformAngle < 45)
+            {
+                //do nothing
+            }
+            else if (PlatformAngle >= 45 && PlatformAngle < 135)
+            {
+                IsMovingLeft = keyData == Keys.Up;
+                IsMovingRight = keyData == Keys.Down;
+                IsMovingUp = keyData == Keys.Right;
+                IsMovingDown = keyData == Keys.Left;
+            }
+            else if (PlatformAngle >= 135 && PlatformAngle < 225)
+            {
+                IsMovingLeft = keyData == Keys.Right;
+                IsMovingRight = keyData == Keys.Left;
+                IsMovingUp = keyData == Keys.Down;
+                IsMovingDown = keyData == Keys.Up;
+            }
+            else if (PlatformAngle >= 225 && PlatformAngle < 315)
+            {
+                IsMovingLeft = keyData == Keys.Down;
+                IsMovingRight = keyData == Keys.Up;
+                IsMovingUp = keyData == Keys.Left;
+                IsMovingDown = keyData == Keys.Right;
+            }
+
             if (keyData == (Keys.Left | Keys.Shift))
             {
-                ActiveMap.Camera3DAngle--;
-                if (ActiveMap.Camera3DAngle < 0)
+                ActiveMap.Camera3DYawAngle -= 90;
+                if (ActiveMap.Camera3DYawAngle < 0)
                 {
-                    ActiveMap.Camera3DAngle = BattleMap.Camera3DAngles.Left;
+                    ActiveMap.Camera3DYawAngle += 360;
                 }
                 KeyProcessed = true;
             }
             else if (keyData == (Keys.Right | Keys.Shift))
             {
-                ActiveMap.Camera3DAngle++;
-                if (ActiveMap.Camera3DAngle == BattleMap.Camera3DAngles.Top)
+                ActiveMap.Camera3DYawAngle += 90;
+                if (ActiveMap.Camera3DYawAngle > 360)
                 {
-                    ActiveMap.Camera3DAngle = BattleMap.Camera3DAngles.Front;
+                    ActiveMap.Camera3DYawAngle -= 360;
                 }
                 KeyProcessed = true;
             }
             else if (keyData == (Keys.Up | Keys.Shift) || keyData == (Keys.Down | Keys.Shift))
             {
-                if (ActiveMap.Camera3DAngle == BattleMap.Camera3DAngles.Top)
+                if (ActiveMap.Camera3DPitchAngle == 45)
                 {
-                    ActiveMap.Camera3DAngle = BattleMap.Camera3DAngles.Front;
+                    ActiveMap.Camera3DPitchAngle = 1;
                 }
                 else
                 {
-                    ActiveMap.Camera3DAngle = BattleMap.Camera3DAngles.Top;
+                    ActiveMap.Camera3DPitchAngle = 45;
                 }
                 KeyProcessed = true;
             }
-            else if (keyData == Keys.Left)
+            else if (IsMovingLeft)
             {
                 ActiveMap.CursorPosition.X -= (ActiveMap.CursorPosition.X > 0) ? 1 : 0;
                 KeyProcessed = true;
             }
-            else if (keyData == Keys.Right)
+            else if (IsMovingRight)
             {
                 ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X - 1) ? 1 : 0;
                 KeyProcessed = true;
             }
 
-            if (keyData == Keys.Up)
+            if (IsMovingUp)
             {
                 ActiveMap.CursorPosition.Y -= (ActiveMap.CursorPosition.Y > 0) ? 1 : 0;
                 KeyProcessed = true;
             }
-            else if (keyData == Keys.Down)
+            else if (IsMovingDown)
             {
                 ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y - 1) ? 1 : 0;
                 KeyProcessed = true;
@@ -451,6 +504,12 @@ namespace ProjectEternity.Editors.MapEditor
                 SetLayerIndex();
                 KeyProcessed = true;
             }
+
+            else if (keyData == Keys.C)
+            {
+                cbShow3DObjects.Checked = cbShow3DObjects.Checked;
+            }
+
             if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
             {
                 PlaceTile((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z, false, 0);
@@ -470,6 +529,22 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (ActiveMap.CameraType == "3D" && cbPreviewMap.Checked)
             {
+                if (e.Button == MouseButtons.Right)
+                {
+                    float Rotation = LastMousePosition.X - e.X;
+                    ActiveMap.Camera3DYawAngle += Rotation;
+                    if (ActiveMap.Camera3DYawAngle > 360)
+                    {
+                        ActiveMap.Camera3DYawAngle -= 360;
+                    }
+                    else if (ActiveMap.Camera3DYawAngle < 0)
+                    {
+                        ActiveMap.Camera3DYawAngle += 360;
+                    }
+                }
+
+                LastMousePosition = e.Location;
+
                 return;
             }
 
@@ -578,6 +653,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         protected virtual void pnMapPreview_MouseDown(object sender, MouseEventArgs e)
         {
+            LastMousePosition = e.Location;
+
             switch (tabToolBox.SelectedIndex)
             {
                 case 0:
@@ -1328,6 +1405,11 @@ namespace ProjectEternity.Editors.MapEditor
         private void cbShowTerrainHeight_CheckedChanged(object sender, EventArgs e)
         {
             ActiveMap.ShowTerrainHeight = cbShowTerrainHeight.Checked;
+        }
+
+        private void cbShow3DObjects_CheckedChanged(object sender, EventArgs e)
+        {
+            ActiveMap.Show3DObjects = cbShow3DObjects.Checked;
         }
 
         private void cbPreviewMap_CheckedChanged(object sender, EventArgs e)

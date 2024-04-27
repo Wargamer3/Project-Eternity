@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g)
         {
-            if (ModelToDraw != null)
+            if (ModelToDraw != null && Map.Show3DObjects)
             {
                 DrawModel(ModelToDraw, View, Projection,
                     Matrix.CreateRotationX(MathHelper.ToRadians(-90))

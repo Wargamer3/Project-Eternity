@@ -725,14 +725,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     MapEnvironment.Update(gameTime);
                 }
 
-                for (int B = 0; B < ListBackground.Count; ++B)
+                if (Show3DObjects)
                 {
-                    ListBackground[B].Update(gameTime);
-                }
+                    for (int B = 0; B < ListBackground.Count; ++B)
+                    {
+                        ListBackground[B].Update(gameTime);
+                    }
 
-                for (int F = 0; F < ListForeground.Count; ++F)
-                {
-                    ListForeground[F].Update(gameTime);
+                    for (int F = 0; F < ListForeground.Count; ++F)
+                    {
+                        ListForeground[F].Update(gameTime);
+                    }
                 }
 
                 LayerManager.Update(gameTime);
@@ -865,7 +868,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.Begin();
             }
 
-            if (ListBackground.Count > 0)
+            if (ListBackground.Count > 0 && Show3DObjects)
             {
                 g.End();
                 g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

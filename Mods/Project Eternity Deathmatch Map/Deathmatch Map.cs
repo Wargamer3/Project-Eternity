@@ -533,14 +533,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     MapEnvironment.Update(gameTime);
                 }
 
-                for (int B = 0; B < ListBackground.Count; ++B)
+                if (Show3DObjects)
                 {
-                    ListBackground[B].Update(gameTime);
-                }
+                    for (int B = 0; B < ListBackground.Count; ++B)
+                    {
+                        ListBackground[B].Update(gameTime);
+                    }
 
-                for (int F = 0; F < ListForeground.Count; ++F)
-                {
-                    ListForeground[F].Update(gameTime);
+                    for (int F = 0; F < ListForeground.Count; ++F)
+                    {
+                        ListForeground[F].Update(gameTime);
+                    }
                 }
 
                 LayerManager.Update(gameTime);
@@ -662,7 +665,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin();
             }
 
-            if (ListBackground.Count > 0)
+            if (ListBackground.Count > 0 && Show3DObjects)
             {
                 g.End();
                 for (int B = 0; B < ListBackground.Count; B++)
