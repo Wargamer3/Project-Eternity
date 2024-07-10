@@ -230,13 +230,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void LoadPlayerUnlocks(string PlayerName)
         {
-            if (!File.Exists("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin"))
+            if (!File.Exists("User data/Player Unlocks/Sorcerer Street/" + PlayerName + ".bin"))
             {
                 SaveLocally(PlayerName);
             }
 
             //Load unlocks first, then the shop items.
-            PlayerUnlocksFS = new FileStream("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin", FileMode.Open, FileAccess.Read);
+            PlayerUnlocksFS = new FileStream("User data/Player Unlocks/Sorcerer Street/" + PlayerName + ".bin", FileMode.Open, FileAccess.Read);
             PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
 
             RemainingNumberOfBooksToLoad = PlayerUnlocksBR.ReadInt32();

@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             List<GameScreen> ListPendingUnlocks = new List<GameScreen>();
             bool NewUnlocks = false;
 
-            if (BattleMapPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
+            if (BattleMapPlayerShopUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
                 if (!UpdateAvailableItemsIfNeeded())
                 {
@@ -105,6 +105,46 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             if (ActiveUnit.UnlockConditions.ListUnlockConditions.Count > 0)
                             {
                                 ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            }
+                        }
+                    }
+                }
+
+
+                foreach (UnlockableUnit ActiveUnit in BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values)
+                {
+                    for (int S = ActiveUnit.ListLockedSkin.Count - 1; S >= 0; --S)
+                    {
+                        UnlockableUnitSkin ActiveSkin = ActiveUnit.ListLockedSkin[S];
+
+                        if (IsValid(ActiveSkin.UnlockConditions, ConditionsOwner))
+                        {
+                            NewUnlocks = true;
+
+                            foreach (string UnlockMessage in ActiveSkin.Unlock(ConditionsOwner))
+                            {
+                                if (ActiveSkin.UnlockConditions.ListUnlockConditions.Count > 0)
+                                {
+                                    ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                                }
+                            }
+                        }
+                    }
+
+                    for (int S = ActiveUnit.ListLockedAlt.Count - 1; S >= 0; --S)
+                    {
+                        UnlockableUnitAlt ActiveAlt = ActiveUnit.ListLockedAlt[S];
+
+                        if (IsValid(ActiveAlt.UnlockConditions, ConditionsOwner))
+                        {
+                            NewUnlocks = true;
+
+                            foreach (string UnlockMessage in ActiveAlt.Unlock(ConditionsOwner))
+                            {
+                                if (ActiveAlt.UnlockConditions.ListUnlockConditions.Count > 0)
+                                {
+                                    ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                                }
                             }
                         }
                     }
@@ -154,11 +194,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdateAvailableItemsTask()
         {
-            ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit = new List<UnlockableUnit>(BattleMapPlayerUnlockInventory.DicUnitDatabase.Values);
+            ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit = new List<UnlockableUnit>(BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values);
 
-            foreach (UnlockableUnit NewUnit in BattleMapPlayerUnlockInventory.DicUnitDatabase.Values)
+            foreach (UnlockableUnit NewUnit in BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values)
             {
-                BattleMapPlayerUnlockInventory.UnitUnlockContainer CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
+                BattleMapPlayerShopUnlockInventory.UnitUnlockContainer CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
                 bool IsUnitValid = IsValid(NewUnit.UnlockConditions, ConditionsOwner);
 
                 if (IsUnitValid)
@@ -179,6 +219,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
                 }
+
+                UpdateAvailableUnitSkinsTask(NewUnit);
 
                 string[] Tags = NewUnit.UnitToBuy.UnitTags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ActiveTag in Tags)
@@ -207,10 +249,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string ActiveFolder in SubFolders)
                     {
-                        BattleMapPlayerUnlockInventory.UnitUnlockContainer NewContainer;
+                        BattleMapPlayerShopUnlockInventory.UnitUnlockContainer NewContainer;
                         if (!CurrentUnitContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
                         {
-                            NewContainer = new BattleMapPlayerUnlockInventory.UnitUnlockContainer(ActiveFolder);
+                            NewContainer = new BattleMapPlayerShopUnlockInventory.UnitUnlockContainer(ActiveFolder);
                             CurrentUnitContainer.DicFolder.Add(ActiveFolder, NewContainer);
                             CurrentUnitContainer.ListFolder.Add(NewContainer);
                         }
@@ -240,6 +282,63 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             lock (PopulatePlayerItemsTaskLockObject)
             {
                 IsInit = true;
+            }
+        }
+
+        private void UpdateAvailableUnitSkinsTask(UnlockableUnit NewUnit)
+        {
+            foreach (UnlockableUnitSkin NewSkin in BattleMapPlayerShopUnlockInventory.DicUnitSkinDatabase.Values)
+            {
+                if (NewUnit.Path != NewSkin.Path)
+                    continue;
+
+                bool IsUnitValid = IsValid(NewSkin.UnlockConditions, ConditionsOwner);
+
+                if (IsUnitValid)
+                {
+                    if (!NewUnit.ListUnlockedSkin.Contains(NewSkin))
+                    {
+                        NewUnit.ListUnlockedSkin.Add(NewSkin);
+                    }
+
+                    NewUnit.ListLockedSkin.Remove(NewSkin);
+                }
+                else
+                {
+                    if (!NewUnit.ListLockedSkin.Contains(NewSkin))
+                    {
+                        NewUnit.ListLockedSkin.Add(NewSkin);
+                    }
+
+                    NewUnit.ListUnlockedSkin.Remove(NewSkin);
+                }
+            }
+
+            foreach (UnlockableUnitAlt NewAlt in BattleMapPlayerShopUnlockInventory.DicUnitAltDatabase.Values)
+            {
+                if (NewUnit.Path != NewAlt.Path)
+                    continue;
+
+                bool IsUnitValid = IsValid(NewAlt.UnlockConditions, ConditionsOwner);
+
+                if (IsUnitValid)
+                {
+                    if (!NewUnit.ListUnlockedAlt.Contains(NewAlt))
+                    {
+                        NewUnit.ListUnlockedAlt.Add(NewAlt);
+                    }
+
+                    NewUnit.ListLockedAlt.Remove(NewAlt);
+                }
+                else
+                {
+                    if (!NewUnit.ListLockedAlt.Contains(NewAlt))
+                    {
+                        NewUnit.ListLockedAlt.Add(NewAlt);
+                    }
+
+                    NewUnit.ListUnlockedAlt.Remove(NewAlt);
+                }
             }
         }
 

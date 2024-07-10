@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         /*
          * Battle End = you have to survive the battle
-         * Upon Defeat = you have to die
+         * Upon Defeat = you have to die in the battle (aka spells won't activate it)
          * Upon Victory = you kill
          * Attack Bonus / Instant Death = activates immediately upon doing at least 1 point of damage 
          * Battle Start = activates at the beginning of battle

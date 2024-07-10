@@ -53,6 +53,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.sprTileset = sprTileset;
             this.TileSize = TileSize;
+            ListTileBrush[0] = new Rectangle(0, 0, TileSize.X, TileSize.Y);
         }
 
         public void InitTileset(string Tileset, Point TileSize)
@@ -62,6 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 sprTileset = content.Load<Texture2D>("Maps/Tilesets/" + Tileset);
             }
             this.TileSize = TileSize;
+            ListTileBrush[0] = new Rectangle(0, 0, TileSize.X, TileSize.Y);
         }
 
         public void SelectTile(Point TileToSelect, bool ExpendSelection, int BrushIndex)

@@ -43,19 +43,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int SquadScrollbarValue;
 
-        private BattleMapPlayerUnlockInventory UnlockInventory;
+        private BattleMapPlayerShopUnlockInventory UnlockInventory;
         private BattleMapPlayerInventory Inventory;
 
-        private BattleMapPlayerUnlockInventory.UnitUnlockContainer CurrentContainer;
-        private List<BattleMapPlayerUnlockInventory.UnitUnlockContainer> ListLastContainer;
+        private BattleMapPlayerShopUnlockInventory.UnitUnlockContainer CurrentContainer;
+        private List<BattleMapPlayerShopUnlockInventory.UnitUnlockContainer> ListLastContainer;
 
-        public ShopUnitScreen(ShopScreen Owner, BattleMapPlayerUnlockInventory UnlockInventory, BattleMapPlayerInventory Inventory)
+        public ShopUnitScreen(ShopScreen Owner, BattleMapPlayerShopUnlockInventory UnlockInventory, BattleMapPlayerInventory Inventory)
         {
             this.Owner = Owner;
             this.UnlockInventory = UnlockInventory;
             this.Inventory = Inventory;
             CurrentContainer = UnlockInventory.RootUnitContainer;
-            ListLastContainer = new List<BattleMapPlayerUnlockInventory.UnitUnlockContainer>();
+            ListLastContainer = new List<BattleMapPlayerShopUnlockInventory.UnitUnlockContainer>();
         }
 
         public override void Load()
@@ -78,6 +78,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (Owner.OnlineGameClient != null)
+            {
+            }
+            else
+            {
+                PendingUnlockScreen.CheckForUnlocks(this);
+            }
+
+            PendingUnlockScreen.UpdateUnlockScreens(this);
+
             SquadListScrollbar.Update(gameTime);
 
             int FolderY = Owner.MiddleSectionY + 55;
@@ -133,9 +143,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (MenuSelection == MenuSelections.Unit)
                 {
-                    UnlockableUnit UnitToBuy = CurrentContainer.ListUnlockedUnit[SelectionIndex];
-
-                    PushScreen(new ShopConfirmBuyUnitScreen(Inventory, UnitToBuy));
+                    UnlockableItem Itemfound;
+                    UnlockableUnit OwnerUnit;
+                    GetRealUnitItem(out Itemfound, out OwnerUnit);
+                    if (Itemfound is UnlockableUnit)
+                    {
+                        if (Owner.OnlineGameClient != null)
+                        {
+                        }
+                        else
+                        {
+                            PushScreen(new ShopConfirmBuyUnitScreen(Inventory, (UnlockableUnit)Itemfound));
+                        }
+                    }
+                    else if (Itemfound is UnlockableUnitSkin)
+                    {
+                        if (Owner.OnlineGameClient != null)
+                        {
+                        }
+                        else
+                        {
+                            PushScreen(new ShopConfirmBuyUnitSkinScreen(Inventory, OwnerUnit.Path, (UnlockableUnitSkin)Itemfound));
+                        }
+                    }
+                    else if (Itemfound is UnlockableUnitAlt)
+                    {
+                        //PushScreen(new ShopConfirmBuyUnitScreen(Inventory, (UnlockableUnitAlt)Itemfound));
+                    }
                 }
             }
         }
@@ -218,6 +252,52 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        private int GetRealUnitItem(out UnlockableItem Item, out UnlockableUnit ItemOwner)
+        {
+            int RealIndex = 0;
+            int UnitIndex = 0;
+            Item = null;
+            ItemOwner = null;
+
+            foreach (UnlockableUnit ActiveUnit in CurrentContainer.ListUnlockedUnit)
+            {
+                ItemOwner = ActiveUnit;
+                if (SelectionIndex == RealIndex)
+                {
+                    Item = CurrentContainer.ListUnlockedUnit[UnitIndex];
+                    return RealIndex;
+                }
+                if (RealIndex + ActiveUnit.ListUnlockedSkin.Count >= SelectionIndex)
+                {
+                    Item = CurrentContainer.ListUnlockedUnit[UnitIndex].ListUnlockedSkin[RealIndex + ActiveUnit.ListUnlockedSkin.Count - SelectionIndex];
+                    return RealIndex + (RealIndex + ActiveUnit.ListUnlockedSkin.Count - SelectionIndex);
+                }
+                RealIndex += ActiveUnit.ListUnlockedSkin.Count;
+                if (RealIndex + ActiveUnit.ListUnlockedAlt.Count >= SelectionIndex)
+                {
+                    Item = CurrentContainer.ListUnlockedUnit[UnitIndex].ListUnlockedAlt[RealIndex + ActiveUnit.ListUnlockedAlt.Count - SelectionIndex];
+                    return RealIndex + (RealIndex + ActiveUnit.ListUnlockedAlt.Count - SelectionIndex);
+                }
+                RealIndex += ActiveUnit.ListUnlockedAlt.Count;
+                if (RealIndex + ActiveUnit.ListLockedSkin.Count >= SelectionIndex)
+                {
+                    Item = CurrentContainer.ListUnlockedUnit[UnitIndex].ListLockedSkin[RealIndex + ActiveUnit.ListLockedSkin.Count - SelectionIndex];
+                    return RealIndex + (RealIndex + ActiveUnit.ListLockedSkin.Count - SelectionIndex);
+                }
+                RealIndex += ActiveUnit.ListLockedSkin.Count;
+                if (RealIndex + ActiveUnit.ListLockedAlt.Count >= SelectionIndex)
+                {
+                    Item = CurrentContainer.ListUnlockedUnit[UnitIndex].ListLockedAlt[RealIndex + ActiveUnit.ListLockedAlt.Count - SelectionIndex];
+                    return RealIndex + (RealIndex + ActiveUnit.ListLockedAlt.Count - SelectionIndex);
+                }
+                RealIndex += ActiveUnit.ListLockedAlt.Count;
+                ++RealIndex;
+                ++UnitIndex;
+            }
+
+            return SelectionIndex;
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 70;
@@ -239,68 +319,92 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawY += UnitHeight * UnitStartIndex;
 
-            for (int i = UnitStartIndex; i < CurrentContainer.ListUnlockedUnit.Count; ++i)
+            for (int U = UnitStartIndex; U < CurrentContainer.ListUnlockedUnit.Count; ++U)
             {
                 int DrawX = UnitX;
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), 240, 45);
                 DrawBox(g, new Vector2(DrawX + 6, DrawY + 4), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
-                UnlockableUnit ActiveUnit = CurrentContainer.ListUnlockedUnit[i];
+                UnlockableUnit ActiveUnit = CurrentContainer.ListUnlockedUnit[U];
                 if (ActiveUnit.UnitToBuy != null)
                 {
-                    g.Draw(ActiveUnit.UnitToBuy.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
-                    g.DrawString(fntArial12, ActiveUnit.UnitToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
-
-                    DrawX += 250;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 120, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "Rank: " + ActiveUnit.UnitToBuy.QualityRank + " (" + ActiveUnit.UnitToBuy.SpawnCost + ")", new Vector2(DrawX + 115, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-
-                    DrawX += 125;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 100, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "HP: " + ActiveUnit.UnitToBuy.MaxHP.ToString(), new Vector2(DrawX + 95, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-
-                    DrawX += 105;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 95, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "EN: " + ActiveUnit.UnitToBuy.MaxEN.ToString(), new Vector2(DrawX + 90, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-                   
-                    DrawX += 105;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 80, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "MV: " + ActiveUnit.UnitToBuy.MaxMovement, new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-
-                    DrawX += 90;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "SPD: " + ActiveUnit.UnitToBuy.Mobility, new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-
-                    DrawX += 80;
-                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 85, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, ActiveUnit.UnitToBuy.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
-
-                    DrawX += 95;
-                    if (Inventory.DicOwnedUnit.ContainsKey(ActiveUnit.UnitToBuy.RelativePath))
+                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveUnit.UnitToBuy, true);
+                    if (Inventory.DicOwnedUnit.ContainsKey(ActiveUnit.Path))
                     {
                         DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
-                        g.DrawStringRightAlignedBackground(fntArial12, Inventory.DicOwnedUnit[ActiveUnit.UnitToBuy.RelativePath].QuantityOwned + " Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                        g.DrawStringRightAlignedBackground(fntArial12, Inventory.DicOwnedUnit[ActiveUnit.Path].QuantityOwned + " Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    }
+
+                    if (ActiveUnit.ListUnlockedSkin.Count > 0)
+                    {
+                        if (ActiveUnit.ShowSkin || true)
+                        {
+                            g.DrawString(fntArial12, "v", new Vector2(DrawX - 20, DrawY + 11), Color.White);
+                            DrawX = UnitX + 50;
+                            foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListUnlockedSkin)
+                            {
+                                DrawY += UnitHeight;
+                                DrawEmptyBox(g, new Vector2(DrawX, DrawY), 240, 45);
+                                DrawBox(g, new Vector2(DrawX + 6, DrawY + 4), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
+                                g.DrawLine(sprPixel, new Vector2(UnitX + 25, DrawY - UnitHeight + 42), new Vector2(UnitX + 25, DrawY + 23), Color.White);
+                                g.DrawLine(sprPixel, new Vector2(UnitX + 25, DrawY + 23), new Vector2(DrawX + 3, DrawY + 23), Color.White);
+
+                                if (ActiveSkin.UnitSkinToBuy != null)
+                                {
+                                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveSkin.UnitSkinToBuy, false);
+                                    if (Inventory.DicOwnedUnit.ContainsKey(ActiveSkin.SkinTypeAndPath))
+                                    {
+                                        DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
+                                        g.DrawStringRightAlignedBackground(fntArial12, "Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                                    }
+                                }
+                            }
+                            foreach (UnlockableUnitAlt a in ActiveUnit.ListUnlockedAlt)
+                            {
+                                DrawY += UnitHeight;
+                            }
+                            foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListLockedSkin)
+                            {
+                                if (ActiveSkin.UnitSkinToBuy != null)
+                                {
+                                    g.Draw(ActiveSkin.UnitSkinToBuy.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
+                                    g.DrawString(fntArial12, ActiveSkin.UnitSkinToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
+                                }
+
+                                DrawY += UnitHeight;
+                            }
+                            foreach (UnlockableUnitAlt a in ActiveUnit.ListLockedAlt)
+                            {
+                                DrawY += UnitHeight;
+                            }
+                        }
+                        else
+                        {
+                            g.DrawString(fntArial12, ">", new Vector2(DrawX - 20, DrawY + 11), Color.White);
+                        }
                     }
                 }
 
                 DrawY += UnitHeight;
             }
-            for (int i = Math.Max(0, UnitStartIndex - CurrentContainer.ListUnlockedUnit.Count); i < CurrentContainer.ListLockedUnit.Count; ++i)
+
+            //Locked Units
+            for (int U = Math.Max(0, UnitStartIndex - CurrentContainer.ListUnlockedUnit.Count); U < CurrentContainer.ListLockedUnit.Count; ++U)
             {
                 int DrawX = UnitX;
                 g.Draw(sprPixel, new Rectangle(DrawX, DrawY, UnitWidth - 80, 45), Color.FromNonPremultiplied(0, 0, 0, 100));
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), 190, 45);
                 DrawBox(g, new Vector2(DrawX + 6, DrawY + 4), 38, 38, Color.Gray);
-                if (CurrentContainer.ListLockedUnit[i].UnitToBuy != null)
+                if (CurrentContainer.ListLockedUnit[U].UnitToBuy != null)
                 {
-                    g.DrawString(fntArial12, CurrentContainer.ListLockedUnit[i].UnitToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.DarkGray);
-                    g.Draw(CurrentContainer.ListLockedUnit[i].UnitToBuy.SpriteMap, new Vector2(DrawX + 9, DrawY + 7), Color.White);
+                    g.DrawString(fntArial12, CurrentContainer.ListLockedUnit[U].UnitToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.DarkGray);
+                    g.Draw(CurrentContainer.ListLockedUnit[U].UnitToBuy.SpriteMap, new Vector2(DrawX + 9, DrawY + 7), Color.White);
                 }
 
                 DrawX += 250 + 125 + 105 + 105 + 90 + 80;
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), 85, 45);
-                if (CurrentContainer.ListLockedUnit[i].UnitToBuy != null)
+                if (CurrentContainer.ListLockedUnit[U].UnitToBuy != null)
                 {
-                    g.DrawStringRightAligned(fntArial12, CurrentContainer.ListLockedUnit[i].UnitToBuy.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.DarkGray);
+                    g.DrawStringRightAligned(fntArial12, CurrentContainer.ListLockedUnit[U].UnitToBuy.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.DarkGray);
                 }
 
                 DrawY += UnitHeight;
@@ -319,8 +423,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (MenuSelection == MenuSelections.Unit && SelectionIndex < CurrentContainer.ListUnlockedUnit.Count)
             {
+                UnlockableItem Itemfound;
+                GetRealUnitItem(out Itemfound, out _);
                 g.Draw(sprPixel, new Rectangle(UnitX, GetUnitsY() + 40 + UnitHeight * SelectionIndex, UnitWidth, 45), Color.FromNonPremultiplied(255, 255, 255, 150));
-                DrawSelectedUnitStats(g, CurrentContainer.ListUnlockedUnit[SelectionIndex].UnitToBuy);
+                if (Itemfound is UnlockableUnit)
+                {
+                    DrawSelectedUnitStats(g, ((UnlockableUnit)Itemfound).UnitToBuy);
+                }
+                else if (Itemfound is UnlockableUnitSkin)
+                {
+                    DrawSelectedUnitStats(g, ((UnlockableUnitSkin)Itemfound).UnitSkinToBuy);
+                }
             }
 
             //Draw a panel to hide the menu scrolling up
@@ -346,6 +459,45 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawEmptyBox(g, new Vector2(Owner.LeftSideWidth - 200, DrawY), 155, 40);
             g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(Owner.LeftSideWidth - 55, DrawY + 10), Color.White);
+        }
+
+        private void DrawUnitDetails(CustomSpriteBatch g, ref int DrawX, int DrawY, Unit ActiveUnit, bool DrawRank)
+        {
+            g.Draw(ActiveUnit.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
+            g.DrawString(fntArial12, ActiveUnit.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
+
+            DrawX += 250;
+
+            if (DrawRank)
+            {
+                DrawEmptyBox(g, new Vector2(DrawX, DrawY), 120, 45);
+                g.DrawStringRightAlignedBackground(fntArial12, "Rank: " + ActiveUnit.QualityRank + " (" + ActiveUnit.UnitStat.SpawnCost + ")", new Vector2(DrawX + 115, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                DrawX += 125;
+            }
+            else
+            {
+                DrawX += 75;
+            }
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 100, 45);
+            g.DrawStringRightAlignedBackground(fntArial12, "HP: " + ActiveUnit.MaxHP.ToString(), new Vector2(DrawX + 95, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+            DrawX += 105;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 95, 45);
+            g.DrawStringRightAlignedBackground(fntArial12, "EN: " + ActiveUnit.MaxEN.ToString(), new Vector2(DrawX + 90, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+            DrawX += 105;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 80, 45);
+            g.DrawStringRightAlignedBackground(fntArial12, "MV: " + ActiveUnit.MaxMovement, new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+            DrawX += 90;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
+            g.DrawStringRightAlignedBackground(fntArial12, "SPD: " + ActiveUnit.Mobility, new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+            DrawX += 80;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 85, 45);
+            g.DrawStringRightAlignedBackground(fntArial12, ActiveUnit.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+            DrawX += 95;
         }
 
         private void DrawFolders(CustomSpriteBatch g, int DrawY)
@@ -513,7 +665,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.QualityRank, new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
             g.DrawString(fntFinlanderFont, "Spawn", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3), Color.Yellow);
             g.DrawString(fntFinlanderFont, "Cost", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.SpawnCost.ToString(), new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.White);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.UnitStat.SpawnCost.ToString(), new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.White);
         }
     }
 }

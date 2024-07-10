@@ -47,10 +47,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private GameScreen ActiveSubScreen;
 
+        public BattleMapOnlineClient OnlineGameClient;
         public BattleMapPlayer ActivePlayer;
 
-        public ShopScreen()
+        public ShopScreen(BattleMapOnlineClient OnlineGameClient)
         {
+            this.OnlineGameClient = OnlineGameClient;
             ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
 
             LeftSideX = 10;

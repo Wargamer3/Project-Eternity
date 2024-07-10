@@ -10,7 +10,7 @@ using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BattleMapPlayerUnlockInventory
+    public class BattleMapPlayerShopUnlockInventory
     {
         public struct UnitUnlockContainer
         {
@@ -42,12 +42,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        //Used to keep track of what is already unlocked to not unlock it again
         public static Dictionary<string, UnlockableCharacter> DicCharacterDatabase = new Dictionary<string, UnlockableCharacter>();
-        public static Dictionary<string, UnlockableUnit> DicUnitDatabase = new Dictionary<string, UnlockableUnit>();
+        public static Dictionary<string, UnlockableUnit> DicUnitDatabase = new Dictionary<string, UnlockableUnit>();//UnitTypeAndPath
+        public static Dictionary<string, UnlockableUnitSkin> DicUnitSkinDatabase = new Dictionary<string, UnlockableUnitSkin>();//UnitTypeAndPath + SkinTypeAndPath
+        public static Dictionary<string, UnlockableUnitAlt> DicUnitAltDatabase = new Dictionary<string, UnlockableUnitAlt>();//UnitTypeAndPath + SkinTypeAndPath
         public static Dictionary<string, UnlockableMission> DicMissionDatabase = new Dictionary<string, UnlockableMission>();
 
         public static Dictionary<string, UnlockableCharacter>.Enumerator DicCharacterDatabaseEnumeretor;
         public static Dictionary<string, UnlockableUnit>.Enumerator DicUnitDatabaseEnumerator;
+        public static Dictionary<string, UnlockableUnitSkin>.Enumerator DicUnitSkinDatabaseEnumerator;
+        public static Dictionary<string, UnlockableUnitAlt>.Enumerator DicUnitAltDatabaseEnumerator;
         public static Dictionary<string, UnlockableMission>.Enumerator DicMissionDatabaseEnumerator;
 
         private static IniFileReader GlobalUnlockIniAsync;
@@ -58,8 +63,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private static List<string> ListCharacterToPrioritiseLoadPath;//Path of characters to load in background;
         private static List<string> ListUnitToPrioritiseLoadPath;//Path of units to load in background;
+        private static List<string> ListUnitSkinToPrioritiseLoadPath;//Path of units to load in background;
+        private static List<string> ListUnitAltToPrioritiseLoadPath;//Path of units to load in background;
         private static List<string> ListMissionToPrioritiseLoadPath;//Path of missions to load in background;
 
+        //List of items to display in the shop
         public List<UnlockableCharacter> ListUnlockedCharacter;
         public UnitUnlockContainer RootUnitContainer;
         public List<UnlockableMission> ListUnlockedMission;
@@ -74,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int RemainingNumberOfMissionsToLoad;
         public bool HasFinishedReadingPlayerShopItems;
 
-        public BattleMapPlayerUnlockInventory()
+        public BattleMapPlayerShopUnlockInventory()
         {
             ListUnlockedCharacter = new List<UnlockableCharacter>();
             RootUnitContainer = new UnitUnlockContainer("ALL");
@@ -85,6 +93,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListCharacterToPrioritiseLoadPath = new List<string>();
             ListUnitToPrioritiseLoadPath = new List<string>();
+            ListUnitSkinToPrioritiseLoadPath = new List<string>();
+            ListUnitAltToPrioritiseLoadPath = new List<string>();
             ListMissionToPrioritiseLoadPath = new List<string>();
         }
 
@@ -121,6 +131,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
+                int ListUnlockedUnitSkinCount = BR.ReadByte();
+                for (int S = ListUnlockedUnitSkinCount - 1; S >= 0; --S)
+                {
+                    FillerItem.ListUnlockedSkin.Add(new UnlockableUnitSkin(ItemPath, BR.ReadString()));
+                }
+
+                int ListUnlockedUnitAltCount = BR.ReadByte();
+                for (int S = ListUnlockedUnitAltCount - 1; S >= 0; --S)
+                {
+                    FillerItem.ListUnlockedAlt.Add(new UnlockableUnitAlt(ItemPath, BR.ReadString()));
+                }
 
                 --RemainingNumberOfUnitsToLoad;
             }
@@ -157,6 +178,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (UnlockableUnit ActiveUnit in RootUnitContainer.ListUnlockedUnit)
             {
                 BW.Write(ActiveUnit.Path);
+                BW.Write((byte)ActiveUnit.ListUnlockedSkin.Count);
+
+                foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListUnlockedSkin)
+                {
+                    BW.Write(ActiveSkin.SkinTypeAndPath);
+                }
+
+                BW.Write((byte)ActiveUnit.ListUnlockedAlt.Count);
+
+                foreach (UnlockableUnitAlt ActiveAlt in ActiveUnit.ListUnlockedAlt)
+                {
+                    BW.Write(ActiveAlt.AltTypeAndPath);
+                }
             }
 
             foreach (UnlockableMission ActiveMission in ListUnlockedMission)
@@ -174,7 +208,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             while (GlobalUnlockIniAsync.CanRead)
             {
-                PopulateUnlockItems();
+                PopulateUnlockDictionariesAsync();
             }
         }
 
@@ -200,7 +234,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void LoadPlayerUnlocks(string PlayerName)
+        public void LoadUnlockedPlayerItems(string PlayerName)
         {
             if (!File.Exists("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin"))
             {
@@ -215,14 +249,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             RemainingNumberOfUnitsToLoad = PlayerUnlocksBR.ReadInt32();
             RemainingNumberOfMissionsToLoad = PlayerUnlocksBR.ReadInt32();
 
-            Task.Run(() => { LoadPlayerUnlocksAsyncTask(); });
+            Task.Run(() => { LoadUnlockedPlayerItemsAsyncTask(); });
         }
 
-        private void LoadPlayerUnlocksAsyncTask()
+        private void LoadUnlockedPlayerItemsAsyncTask()
         {
             while (!HasFinishedReadingPlayerShopItems)
             {
-                LoadNextPlayerUnlock();
+                LoadNextUnlockedPlayerItems();
             }
 
             PlayerUnlocksBR.Close();
@@ -237,7 +271,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void LoadNextPlayerUnlock()
+        private void LoadNextUnlockedPlayerItems()
         {
             if (RemainingNumberOfCharactersToLoad > 0)
             {
@@ -250,14 +284,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (RemainingNumberOfUnitsToLoad > 0)
             {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableUnit FillerItem = new UnlockableUnit(ItemPath);
+                string UnitTypeAndPath = PlayerUnlocksBR.ReadString();
 
-                if (!DicUnitDatabase.ContainsKey(ItemPath))
+                if (!DicUnitDatabase.ContainsKey(UnitTypeAndPath))
                 {
-                    DicUnitDatabase.Add(ItemPath, FillerItem);
+                    UnlockableUnit FillerItem = new UnlockableUnit(UnitTypeAndPath);
+                    DicUnitDatabase.Add(UnitTypeAndPath, FillerItem);
                     RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
                 }
+
+                int ListUnlockedUnitSkinCount = PlayerUnlocksBR.ReadByte();
+                for (int S = ListUnlockedUnitSkinCount - 1; S >= 0; --S)
+                {
+                    string SkinTypeAndPath = PlayerUnlocksBR.ReadString();
+
+                    UnlockableUnitSkin FillerItem = new UnlockableUnitSkin(UnitTypeAndPath, SkinTypeAndPath);
+                    DicUnitSkinDatabase.Add(UnitTypeAndPath + SkinTypeAndPath, FillerItem);
+                    DicUnitDatabase[UnitTypeAndPath].ListUnlockedSkin.Add(FillerItem);
+                }
+
+                int ListUnlockedUnitAltCount = PlayerUnlocksBR.ReadByte();
+                for (int S = ListUnlockedUnitAltCount - 1; S >= 0; --S)
+                {
+                    string AltPath = PlayerUnlocksBR.ReadString();
+
+                    UnlockableUnitAlt FillerItem = new UnlockableUnitAlt(UnitTypeAndPath, AltPath);
+                    DicUnitAltDatabase.Add(UnitTypeAndPath + AltPath, FillerItem);
+                    DicUnitDatabase[UnitTypeAndPath].ListUnlockedAlt.Add(FillerItem);
+                }
+
                 --RemainingNumberOfUnitsToLoad;
             }
             else if (RemainingNumberOfMissionsToLoad > 0)
@@ -281,20 +336,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             while (GlobalUnlockIniAsync.CanRead)
             {
-                PopulateUnlockItems();
+                PopulateUnlockDictionariesAsync();
             }
 
             DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
             DicUnitDatabaseEnumerator = DicUnitDatabase.GetEnumerator();
+            DicUnitSkinDatabaseEnumerator = DicUnitSkinDatabase.GetEnumerator();
+            DicUnitAltDatabaseEnumerator = DicUnitAltDatabase.GetEnumerator();
             DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
 
             while (!DatabaseLoaded)
             {
-                LoadUnlocksContentAsyncTask();
+                LoadUnlocksDictionariesContentAsyncTask();
             }
         }
 
-        private static void PopulateUnlockItems()
+        private static void PopulateUnlockDictionariesAsync()
         {
             Dictionary<string, string> ActiveHeaderValues = GlobalUnlockIniAsync.ReadAllValues();
 
@@ -328,6 +385,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
                         break;
 
+                    case "UnitSkin":
+                        string FullSkinPath = ItemPath + ActiveHeaderValues["SkinPath"];
+                        if (!DicUnitSkinDatabase.ContainsKey(FullSkinPath))
+                        {
+                            UnlockableUnitSkin NewUnitUnlock = new UnlockableUnitSkin(ItemPath, ActiveHeaderValues);
+                            DicUnitSkinDatabase.Add(FullSkinPath, NewUnitUnlock);
+                        }
+                        else
+                        {
+                            DicUnitSkinDatabase[FullSkinPath].ReadHeaders(ActiveHeaderValues);
+                        }
+                        break;
+
+                    case "UnitAlt":
+                        string FullAltPath = ItemPath + ActiveHeaderValues["AltPath"];
+                        if (!DicUnitAltDatabase.ContainsKey(FullAltPath))
+                        {
+                            UnlockableUnitAlt NewUnitUnlock = new UnlockableUnitAlt(ItemPath, ActiveHeaderValues);
+                            DicUnitAltDatabase.Add(FullAltPath, NewUnitUnlock);
+                        }
+                        else
+                        {
+                            DicUnitAltDatabase[FullAltPath].ReadHeaders(ActiveHeaderValues);
+                        }
+                        break;
+
                     case "Mission":
                         if (!DicMissionDatabase.ContainsKey(ItemPath))
                         {
@@ -346,10 +429,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private static void LoadUnlocksContentAsyncTask()
+        private static void LoadUnlocksDictionariesContentAsyncTask()
         {
             UnlockableCharacter CharacterToLoadInfo = null;
             UnlockableUnit UnitToLoadInfo = null;
+            UnlockableUnitSkin UnitSkinToLoadInfo = null;
+            UnlockableUnitAlt UnitAltToLoadInfo = null;
             UnlockableMission MissionToLoadInfo = null;
 
             if (ListCharacterToPrioritiseLoadPath.Count > 0)
@@ -371,6 +456,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (DicUnitDatabaseEnumerator.MoveNext())
             {
                 UnitToLoadInfo = DicUnitDatabaseEnumerator.Current.Value;
+            }
+            else if (ListUnitSkinToPrioritiseLoadPath.Count > 0)
+            {
+                UnitSkinToLoadInfo = DicUnitSkinDatabase[ListUnitSkinToPrioritiseLoadPath[0]];
+
+                ListUnitSkinToPrioritiseLoadPath.RemoveAt(0);
+            }
+            else if (DicUnitSkinDatabaseEnumerator.MoveNext())
+            {
+                UnitSkinToLoadInfo = DicUnitSkinDatabaseEnumerator.Current.Value;
+            }
+            else if (ListUnitAltToPrioritiseLoadPath.Count > 0)
+            {
+                UnitAltToLoadInfo = DicUnitAltDatabase[ListUnitAltToPrioritiseLoadPath[0]];
+
+                ListUnitAltToPrioritiseLoadPath.RemoveAt(0);
+            }
+            else if (DicUnitAltDatabaseEnumerator.MoveNext())
+            {
+                UnitAltToLoadInfo = DicUnitAltDatabaseEnumerator.Current.Value;
             }
             else if (ListMissionToPrioritiseLoadPath.Count > 0)
             {
@@ -394,6 +499,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Unit NewUnit = Unit.FromFullName(UnitToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                 UnitToLoadInfo.UnitToBuy = NewUnit;
+            }
+            else if (UnitSkinToLoadInfo != null)
+            {
+                Unit NewUnit = Unit.FromFullName(UnitSkinToLoadInfo.SkinTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                UnitSkinToLoadInfo.UnitSkinToBuy = NewUnit;
+            }
+            else if (UnitAltToLoadInfo != null)
+            {
+                Unit NewUnit = Unit.FromFullName(UnitAltToLoadInfo.AltTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                UnitAltToLoadInfo.UnitAltToBuy = NewUnit;
             }
             else if (MissionToLoadInfo != null)
             {

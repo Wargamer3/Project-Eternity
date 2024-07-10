@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             int PublicPort = int.Parse(ConnectionInfo.ReadField("Game Server Info", "Public Port"));
             Trace.Listeners.Add(new TextWriterTraceListener("Game Server Error.log", "myListener"));
 
-            BattleMapPlayerUnlockInventory.PopulateShopItemsServerTask();
+            BattleMapPlayerShopUnlockInventory.PopulateShopItemsServerTask();
 
             OnlineServer.StartListening(PublicIP, PublicPort);
             Console.WriteLine("Server Started");

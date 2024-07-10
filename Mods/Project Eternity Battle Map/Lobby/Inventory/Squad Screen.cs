@@ -117,6 +117,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
+            else if (MouseHelper.InputRightButtonPressed())
+            {
+                int SelectedItemIndex = GetOwnedSquadUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+                if (SelectedItemIndex < 0)
+                {
+                    return;
+                }
+
+                if (ListLastContainer.Count > 0)
+                {
+                    --SelectedItemIndex;
+                }
+
+                if (SelectedItemIndex >= CurrentContainer.DicFolder.Count)
+                {
+                    PushScreen(new InventoryUnitInformationScreen(Owner, CurrentContainer.ListUnit[SelectedItemIndex - CurrentContainer.DicFolder.Count].Leader));
+                }
+            }
         }
 
         private void StartDragDrop(UnitInfo EquipmentToDrag)

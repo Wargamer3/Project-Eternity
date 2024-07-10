@@ -142,7 +142,7 @@ namespace ProjectEternity
         protected override void Draw(GameTime gameTime)
         {
             for (int S = ListGameScreen.Count - 1; S >= 0; --S)
-                    ListGameScreen[S].BeginDraw(spriteBatch);
+                ListGameScreen[S].BeginDraw(spriteBatch);
 
             GraphicsDevice.SetRenderTarget(null);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

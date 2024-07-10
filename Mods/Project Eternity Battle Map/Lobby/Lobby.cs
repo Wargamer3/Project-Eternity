@@ -494,7 +494,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void OpenShop()
         {
-            PushScreen(new ShopScreen());
+            PushScreen(new ShopScreen(OnlineGameClient));
             sndButtonClick.Play();
         }
 

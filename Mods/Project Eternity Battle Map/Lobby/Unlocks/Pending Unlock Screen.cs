@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public FMODSound UnlockSound;
         private DynamicText Text;
 
-        public BattleMapPlayerUnlockInventory UnlockInventory;
+        public BattleMapPlayerShopUnlockInventory UnlockInventory;
 
         public static List<GameScreen> ListPendingUnlocks = new List<GameScreen>();
         private static DateTime LastUpdate = DateTime.UtcNow;

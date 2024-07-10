@@ -8,6 +8,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public const string UnitType = "Unit";
 
         public Unit UnitToBuy;
+        public List<UnlockableUnitSkin> ListUnlockedSkin = new List<UnlockableUnitSkin>();
+        public List<UnlockableUnitSkin> ListLockedSkin = new List<UnlockableUnitSkin>();
+        public List<UnlockableUnitAlt> ListUnlockedAlt = new List<UnlockableUnitAlt>();
+        public List<UnlockableUnitAlt> ListLockedAlt = new List<UnlockableUnitAlt>();
+        public bool ShowSkin;
 
         public UnlockableUnit(string Path)
             : base(UnitType)
@@ -54,6 +59,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return ListUnlockMessage;
+        }
+
+        public override string ToString()
+        {
+            return Path;
         }
     }
 }

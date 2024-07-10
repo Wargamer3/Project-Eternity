@@ -553,8 +553,8 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
                 ActiveMap.Camera2DPosition.Z);
 
-            ActiveMap.CursorPosition.X = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-            ActiveMap.CursorPosition.Y = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
+            ActiveMap.CursorPosition.X = (int)Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, (e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X));
+            ActiveMap.CursorPosition.Y = (int)Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, (e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y));
 
             DrawInfo();
 
@@ -1467,6 +1467,10 @@ namespace ProjectEternity.Editors.MapEditor
                 if (LastTopLayerIndex == (int)ActiveMap.CursorPosition.Z)
                 {
                     lsLayers.SelectedIndex = LastTopLayerIndex;
+                    if (!cbShowAllLayers.Checked)
+                    {
+                        ActiveMap.ShowLayerIndex = LastTopLayerIndex;
+                    }
                     return;
                 }
 
@@ -1477,6 +1481,10 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             lsLayers.SelectedIndex = LastTopLayerIndex;
+            if (!cbShowAllLayers.Checked)
+            {
+                ActiveMap.ShowLayerIndex = LastTopLayerIndex;
+            }
             AllowEvents = true;
         }
 
@@ -1826,7 +1834,6 @@ namespace ProjectEternity.Editors.MapEditor
             TileAttributesEditor = Helper.GetTileEditor();
 
             #endregion
-
 
             #region Layers
 
