@@ -373,7 +373,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawStringBackground(fntArial12, "Rank: " + LastSelectedEquipment.Leader.QualityRank,
                     new Vector2(X + 170, BattleMapInventoryScreen.BottomSectionY + 31), Color.White, sprPixel, Lobby.BackgroundColor);
 
-                g.DrawStringBackground(fntArial12, "Spawn Cost: " + LastSelectedEquipment.Leader.SpawnCost,
+                g.DrawStringBackground(fntArial12, "Spawn Cost: " + LastSelectedEquipment.Leader.UnitStat.SpawnCost,
                     new Vector2(X + 270, BattleMapInventoryScreen.BottomSectionY + 31), Color.White, sprPixel, Lobby.BackgroundColor);
             }
         }

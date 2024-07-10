@@ -45,7 +45,6 @@ namespace ProjectEternity.Core.Units.Normal
                 UnitTags = BR.ReadString();
                 Description = BR.ReadString();
                 Price = BR.ReadInt32();
-                SpawnCost = BR.ReadInt32();
 
                 _UnitStat = new UnitStats(ItemName, BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 

@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (DefeatedSquadPlayerIndex < ListRemainingResapwn.Count)
                 {
-                    ListRemainingResapwn[DefeatedSquadPlayerIndex] -= DefeatedSquad.At(0).SpawnCost;
+                    ListRemainingResapwn[DefeatedSquadPlayerIndex] -= DefeatedSquad.At(0).UnitStat.SpawnCost;
                     if (ListRemainingResapwn[DefeatedSquadPlayerIndex] < 0)
                     {
                         ListRemainingResapwn[DefeatedSquadPlayerIndex] = 0;

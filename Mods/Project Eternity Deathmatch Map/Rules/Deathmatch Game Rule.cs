@@ -195,7 +195,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
                     {
                         Unit ActiveUnit = ActiveSquad.At(U);
-                        if (ActiveUnit.SpawnCost > GameInfo.UnitValueLimit)
+                        if (ActiveUnit.UnitStat.SpawnCost > GameInfo.UnitValueLimit)
                         {
                             ListGameRuleError.Add(new GameRuleError("Unit Value is too high", ActiveUnit));
                         }

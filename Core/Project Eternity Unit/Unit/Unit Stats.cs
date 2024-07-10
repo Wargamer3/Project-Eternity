@@ -77,6 +77,7 @@ namespace ProjectEternity.Core.Units
         public byte SizeIndex;
         public byte Height;
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
+        public int SpawnCost;//Cost to spawn, also used to categorize Units by strength.
 
         public bool RegularAttackDisabled;
         public List<Attack> ListAttack;
@@ -167,6 +168,7 @@ namespace ProjectEternity.Core.Units
             PostMVLevel = BR.ReadByte();
             ReMoveLevel = BR.ReadByte();
             ChargedAttackCancelLevel = BR.ReadByte();
+            SpawnCost = BR.ReadInt32();
 
             AttackUpgradesSpeed = (AttackUpgradesSpeeds)BR.ReadByte();
             AttackUpgradesCost = (AttackUpgradesCosts)BR.ReadByte();
@@ -279,6 +281,8 @@ namespace ProjectEternity.Core.Units
                 int Y = Convert.ToInt32(ActiveField.Key.Substring(IndexOfY + 1));
                 ArrayMapSize[X, Y] = Convert.ToBoolean(ActiveField.Value);
             }
+
+            SpawnCost = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Spawn Cost"));
 
             //Read Pilots whitelist.
             ListCharacterIDWhitelist = new List<string>();

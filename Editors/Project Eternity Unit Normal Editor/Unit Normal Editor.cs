@@ -118,7 +118,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(txtDescription.Text);
 
             BW.Write(Convert.ToInt32(txtPrice.Value));
-            BW.Write(Convert.ToInt32(txtSpawnCost.Value));
             BW.Write((int)txtEXP.Value);
 
             BW.Write((int)txtBaseHP.Value);
@@ -130,6 +129,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write((byte)txtPostMVLevel.Value);
             BW.Write((byte)txtReMoveLevel.Value);
             BW.Write((byte)txtChargeCancelLevel.Value);
+
+            BW.Write(Convert.ToInt32(txtSpawnCost.Value));
 
             BW.Write(frmAttacks.AttackUpgradesValueIndex);
             BW.Write(frmAttacks.AttackUpgradesCostIndex);
@@ -357,7 +358,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             txtDescription.Text = LoadedUnit.Description;
 
             txtPrice.Text = LoadedUnit.Price.ToString();
-            txtSpawnCost.Value = LoadedUnit.SpawnCost;
+            txtSpawnCost.Value = LoadedUnit.UnitStat.SpawnCost;
             txtEXP.Value = LoadedUnit.UnitStat.EXPValue;
 
             txtBaseHP.Value = LoadedUnit.MaxHP;
