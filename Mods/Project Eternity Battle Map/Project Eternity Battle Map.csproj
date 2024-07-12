@@ -140,6 +140,7 @@
     <Compile Include="Lobby\Background\Tunnel Behvaior Direction Manager.cs" />
     <Compile Include="Lobby\Background\Tunnel Behvaior Speed Manager.cs" />
     <Compile Include="Lobby\Background\Tunnel Behvaior Size Manager.cs" />
+    <Compile Include="Lobby\Lobby White.cs" />
     <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />

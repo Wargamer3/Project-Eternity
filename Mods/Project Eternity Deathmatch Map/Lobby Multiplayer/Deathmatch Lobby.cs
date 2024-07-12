@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.DeathmatchMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    public class DeathmatchMapLobby : Lobby
+    public class DeathmatchMapLobby : LobbyWhite
     {
         public DeathmatchMapLobby(bool UseOnline)
             : base(UseOnline)

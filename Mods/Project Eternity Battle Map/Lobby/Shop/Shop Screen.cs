@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
             sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
 
-            Cube = Content.Load<Model>("Menus/Lobby/Shop/Cube thing");
+            Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
 
             int CubeTargetHeight = 900;
             CubeRenderTarget = new RenderTarget2D(GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
@@ -289,7 +289,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 * Matrix.CreateRotationX(0) * Matrix.CreateRotationY(RotationX)
                 * Matrix.CreateScale(0.4f) * Matrix.CreateTranslation(0, 0, -4200), View, Projection);
             g.GraphicsDevice.SetRenderTarget(null);
-            RotationX += 0.05f;
+            RotationX += 0.00625f;
         }
 
 
