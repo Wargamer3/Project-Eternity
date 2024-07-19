@@ -32,12 +32,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntOxanimumBoldBig;
         private SpriteFont fntOxanimumBoldTitle;
 
-        private Texture2D sprBackground;
         private Texture2D sprTitleHighlight;
         private Texture2D sprButtonInfo;
         private Texture2D sprButtonSettings;
-        private Texture2D sprButtonQuickStart;
-        private Texture2D sprButtonCreateARoom;
+        private Texture2D sprButtonBigColor;
+        private Texture2D sprButtonBigGray;
         private Texture2D sprButtonSmall;
         private Texture2D sprFriendsList;
         private Texture2D sprButtonFriendsActive;
@@ -149,14 +148,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprBackground = Content.Load<Texture2D>("Menus/Lobby/BG");
             sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
             sprButtonInfo = Content.Load<Texture2D>("Menus/Lobby/Button Info");
             sprButtonSettings = Content.Load<Texture2D>("Menus/Lobby/Button Settings");
-            sprButtonQuickStart = Content.Load<Texture2D>("Menus/Lobby/Button Quick Start");
-            sprButtonCreateARoom = Content.Load<Texture2D>("Menus/Lobby/Button Create A Room");
+            sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
+            sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
             sprButtonSmall = Content.Load<Texture2D>("Menus/Lobby/Button Small");
-            sprFriendsList = Content.Load<Texture2D>("Menus/Lobby/Friends List");
+            sprFriendsList = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
             sprButtonFriendsActive = Content.Load<Texture2D>("Menus/Lobby/Button Friend Active");
             sprButtonFriendsInactive = Content.Load<Texture2D>("Menus/Lobby/Button Friend Inactive");
             sprChatBox = Content.Load<Texture2D>("Menus/Lobby/Chat Box");
@@ -579,10 +577,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawX = 40;
             DrawY = 142;
-            g.Draw(sprButtonQuickStart, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprButtonBigColor, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             g.DrawString(fntOxanimumBoldBig, "Quick Start", new Vector2(DrawX + 30, DrawY + 34), TextColorDark);
             DrawX = 445;
-            g.Draw(sprButtonCreateARoom, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprButtonBigGray, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             g.DrawString(fntOxanimumBoldBig, "Create a Room", new Vector2(DrawX + 30, DrawY + 34), TextColorDark);
 
             DrawX = Constants.Width - 550;

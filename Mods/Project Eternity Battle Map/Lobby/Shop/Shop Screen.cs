@@ -292,12 +292,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             RotationX += 0.00625f;
         }
 
-
         public override void Draw(CustomSpriteBatch g)
         {
             float Ratio = Constants.Height / 2160f;
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(BackgroundColor);
+
+            DrawBackground(g);
 
             /*float aspectRatio = Constants.Width / Constants.Height;
 
@@ -334,7 +335,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MiddleSectionY = (HeaderSectionY + HeaderSectionHeight);
             MiddleSectionHeight = BottomSectionY - MiddleSectionY;
 
-            DrawBackground(g);
 
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);

@@ -165,7 +165,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
             {
                 PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
-                PushScreen(new GamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
+                PushScreen(new GamePreparationScreenWhite(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }
         }
