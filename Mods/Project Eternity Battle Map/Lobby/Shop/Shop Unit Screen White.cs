@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprListEntrySub = Content.Load<Texture2D>("Menus/Lobby/Shop/ContentFrame_Sub");
             sprDropDownClose = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Close");
             sprDropDownOpen = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Open");
-            sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Unit To Buy");
+            sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
 
             sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
             sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");

@@ -488,7 +488,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void OpenInventory()
         {
-            PushScreen(new BattleMapInventoryScreen());
+            PushScreen(new BattleMapInventoryWhiteScreen());
             sndButtonClick.Play();
         }
 

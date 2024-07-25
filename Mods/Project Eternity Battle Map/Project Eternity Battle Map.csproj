@@ -134,6 +134,9 @@
     <Compile Include="Lobby\Background\Tunnel Manager.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
     <Compile Include="Lobby\Game Preparation Screen White.cs" />
+    <Compile Include="Lobby\Inventory\Character Screen White.cs" />
+    <Compile Include="Lobby\Inventory\Inventory Screen White.cs" />
+    <Compile Include="Lobby\Inventory\Squad Screen White.cs" />
     <Compile Include="Lobby\Inventory\Unit Information Screen.cs" />
     <Compile Include="Lobby\Inventory\Squad Screen.cs" />
     <Compile Include="Lobby\Background\Tunnel Behvaior Rotation Manager.cs" />
