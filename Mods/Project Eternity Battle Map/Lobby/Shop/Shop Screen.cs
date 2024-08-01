@@ -31,23 +31,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private RenderTarget2D CubeRenderTarget;
         private Model Cube;
 
-        private EmptyBoxButton ReturnToLobbyButton;
+        private TextButton ReturnToLobbyButton;
 
-        private EmptyBoxButton UnitFilterButton;
-        private EmptyBoxButton CharacterFilterButton;
-        private EmptyBoxButton EquipmentFilterButton;
-        private EmptyBoxButton ConsumableFilterButton;
-
-        private EmptyDropDownButton CurrentLocalPlayerButton;
+        private TextButton UnitFilterButton;
+        private TextButton CharacterFilterButton;
+        private TextButton EquipmentFilterButton;
+        private TextButton ConsumableFilterButton;
 
         private IUIElement[] ArrayUIElement;
 
         public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-        private BasicEffect IndexedLinesEffect;
-        private IndexedLines BackgroundGrid;
-
-        public int LeftSideX;
         public int LeftSideWidth;
         public int TopSectionHeight;
         public int HeaderSectionY;
@@ -73,9 +67,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineGameClient = OnlineGameClient;
             ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
 
-            LeftSideX = 10;
             LeftSideWidth = (int)(Constants.Width * 0.5);
-            TopSectionHeight = (int)(Constants.Height * 0.11);
+            TopSectionHeight = (int)(Constants.Height * 0.15);
             HeaderSectionY = TopSectionHeight;
             HeaderSectionHeight = (int)(Constants.Height * 0.05);
 
@@ -96,8 +89,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button_Active");
-            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button_Inactive");
+            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Button Tab");
+            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Inactive");
             sprButtonBackToLobby = Content.Load<Texture2D>("Menus/Lobby/Button Back To Lobby");
             sprMoney = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Money");
 
@@ -114,15 +107,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            ReturnToLobbyButton = new EmptyBoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
+            float Ratio = Constants.Height / 2160f;
+            int DrawX = (int)(Constants.Width - 502 * Ratio);
+            int DrawY = (int)(100 * Ratio);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
 
-            UnitFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 4, HeaderSectionY + 4, 60, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
-            CharacterFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 64, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
-            EquipmentFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 154, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
-            ConsumableFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 244, HeaderSectionY + 4, 100, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
-
-            CurrentLocalPlayerButton = new EmptyDropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
-                new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, null);
+            DrawX = 280;
+            DrawY = 342;
+            UnitFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Units}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectUnitFilterButton);
+            DrawX += 500;
+            CharacterFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Characters}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectCharacterFilterButton);
+            DrawX += 500;
+            EquipmentFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Equipment}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectEquipmentFilterButton);
+            DrawX += 500;
+            ConsumableFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Consumable}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectConsumableFilterButton);
 
             UnitFilterButton.CanBeChecked = true;
             CharacterFilterButton.CanBeChecked = true;
@@ -133,6 +131,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayUIElement = new IUIElement[]
             {
+                ReturnToLobbyButton,
+                UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
             ShopUnitWhiteScreen NewShopUnitScreen = new ShopUnitWhiteScreen(this, ActivePlayer.UnlockInventory, ActivePlayer.Inventory);
@@ -150,49 +150,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             ActiveSubScreen = NewShopUnitScreen;
-
-            IndexedLinesEffect = new BasicEffect(GraphicsDevice);
-            IndexedLinesEffect.VertexColorEnabled = true;
-            IndexedLinesEffect.DiffuseColor = new Vector3(1, 1, 1);
-
-            VertexPositionColor[] ArrayVertex = new VertexPositionColor[24];
-
-            short[] ArrayBackgroundGridIndices = new short[(ArrayVertex.Length * 2) - 2];
-            for (int i = 0; i < ArrayBackgroundGridIndices.Length; ++i)
-            {
-                ArrayBackgroundGridIndices[i] = (short)(i);
-            }
-
-            Color LineColor = Color.White;
-
-            ArrayVertex[0] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
-            ArrayVertex[1] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
-            ArrayVertex[2] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
-            ArrayVertex[3] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[4] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[5] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[6] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[7] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
-
-            ArrayVertex[8] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
-            ArrayVertex[9] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
-            ArrayVertex[10] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
-            ArrayVertex[11] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
-            ArrayVertex[12] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[13] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
-            ArrayVertex[14] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
-            ArrayVertex[15] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
-
-            ArrayVertex[16] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
-            ArrayVertex[17] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
-            ArrayVertex[18] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
-            ArrayVertex[19] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
-            ArrayVertex[20] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
-            ArrayVertex[21] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
-            ArrayVertex[22] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
-            ArrayVertex[23] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
-
-            BackgroundGrid = new IndexedLines(ArrayVertex, ArrayBackgroundGridIndices);
         }
 
         public override void Unload()
@@ -300,41 +257,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawBackground(g);
 
-            /*float aspectRatio = Constants.Width / Constants.Height;
-
-            Vector3 position = new Vector3(0, 0, 6);
-
-            Vector3 target = new Vector3(0, 0, 3);
-
-            Vector3 up = Vector3.Up;
-            Matrix View = Matrix.CreateLookAt(position, target, up);
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                    aspectRatio,
-                                                                    0.1f, 1000);
-
-            IndexedLinesEffect.View = View;
-            IndexedLinesEffect.Projection = Projection;
-            IndexedLinesEffect.World = Matrix.CreateRotationX(1) * Matrix.CreateRotationY(1);
-
-            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                BackgroundGrid.Draw(g);
-            }
-*/
-            LeftSideX = 10;
-            LeftSideWidth = (int)(Constants.Width * 0.5);
-            TopSectionHeight = (int)(Constants.Height * 0.15);
-            HeaderSectionY = TopSectionHeight;
-            HeaderSectionHeight = (int)(Constants.Height * 0.05);
-
-            BottomSectionHeight = (int)(Constants.Height * 0.07);
-            BottomSectionY = Constants.Height - BottomSectionHeight;
-
-            MiddleSectionY = (HeaderSectionY + HeaderSectionHeight);
-            MiddleSectionHeight = BottomSectionY - MiddleSectionY;
-
 
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
@@ -342,30 +264,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
-
-            int DrawX = LeftSideX + 10;
-            int DrawY = HeaderSectionY - 30;
-            g.Draw(sprButtonSmallActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Units", new Vector2(DrawX + 54, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Characters", new Vector2(DrawX + 24, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Equipment", new Vector2(DrawX + 24, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Consumable", new Vector2(DrawX + 14, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX = (int)(Constants.Width - (sprButtonBackToLobby.Width + 50) * Ratio);
-            DrawY = (int)(26 * Ratio);
-            g.Draw(sprButtonBackToLobby, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-
-            g.DrawString(fntOxanimumBoldBig, "Return To Loby", new Vector2(DrawX + 94, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {
@@ -397,7 +295,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Begin(SpriteSortMode.Deferred, blend);
 
-            g.Draw(CubeRenderTarget, new Vector2(400, 180), Color.FromNonPremultiplied(5, 5, 5, 255));
+            g.Draw(CubeRenderTarget, new Vector2(400, 180), null, Color.FromNonPremultiplied(5, 5, 5, 255), 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
@@ -407,7 +305,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Begin(SpriteSortMode.Deferred, blend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone);
 
-            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0f);
+            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0.9f);
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             int LineX = 89;

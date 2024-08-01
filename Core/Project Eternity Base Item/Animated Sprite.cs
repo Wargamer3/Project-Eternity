@@ -161,11 +161,13 @@ namespace ProjectEternity.Core.Item
             return AnimationSpriteRealPosition;
         }
 
-        public Rectangle GetCollisionBox()
+        public Rectangle GetCollisionBox(float Scale = 1f)
         {
             Rectangle CollisionBox = ArraySpriteSource[AnimationSpriteRealPosition];
 
-            CollisionBox.Location = new Point((int)(Position.X - Origin.X), (int)(Position.Y - Origin.Y));
+            CollisionBox.Location = new Point((int)(Position.X - Origin.X * Scale), (int)(Position.Y - Origin.Y * Scale));
+            CollisionBox.Width = (int)(CollisionBox.Width * Scale);
+            CollisionBox.Height = (int)(CollisionBox.Height * Scale);
 
             return CollisionBox;
         }
@@ -173,6 +175,11 @@ namespace ProjectEternity.Core.Item
         public void Draw(CustomSpriteBatch g)
         {
             g.Draw(ActiveSprite, Position, ArraySpriteSource[AnimationSpriteRealPosition], Color.White, 0, Origin, 1, SpriteEffects.None, 0);
+        }
+
+        public void Draw(CustomSpriteBatch g, float Scale)
+        {
+            g.Draw(ActiveSprite, Position, ArraySpriteSource[AnimationSpriteRealPosition], Color.White, 0, Origin, Scale, SpriteEffects.None, 0);
         }
 
         public void Draw(CustomSpriteBatch g, Vector2 Position, Color DrawingColor)

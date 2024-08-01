@@ -6,8 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using ProjectEternity.GameScreens.UI;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private enum MenuSelections { Nothing, Folders, Unit }
 
-        private EmptyBoxScrollbar SquadListScrollbar;
+        private Scrollbar SquadListScrollbar;
 
         #region Ressources
 
@@ -29,10 +29,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Texture2D sprListEntry;
         private Texture2D sprListEntrySub;
+        private Texture2D sprArrowDown;
+        private Texture2D sprArrowRight;
 
         private Texture2D sprDropDownClose;
         private Texture2D sprDropDownOpen;
         private Texture2D sprSelectAUnitToBuy;
+
+        private Texture2D sprButtonFolderActive;
+        private Texture2D sprButtonFolderInactive;
+
+        private Texture2D sprFrameSelectedPopup;
+
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
 
         private Texture2D sprLand;
         private Texture2D sprSea;
@@ -47,12 +57,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly ShopScreen Owner;
 
-        int FolderX = 20;
-        int FolderWidth = 70;
-        int FolderHeight = 70;
+        int FolderBoxWidth;
+        int FolderBoxHeight;
+        int FolderX;
+        int FolderOffsetX;
+        int FolderOffsetY;
+        int UnitListY;
 
-        int UnitX = 25;
-        int UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 70 - 25;
+        int UnitX;
+        int UnitWidth;
         int UnitHeight = 50;
 
         private int SquadScrollbarValue;
@@ -70,16 +83,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Inventory = Inventory;
             CurrentContainer = UnlockInventory.RootUnitContainer;
             ListLastContainer = new List<BattleMapPlayerShopUnlockInventory.UnitUnlockContainer>();
+            UnitX = 50;
+            UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 12;
         }
 
         public override void Load()
         {
-            UnitListRenderTarget = new RenderTarget2D(GraphicsDevice, 1000, 650, false,
+            UnitListRenderTarget = new RenderTarget2D(GraphicsDevice, 1200, 650, false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-
-            SquadListScrollbar = new EmptyBoxScrollbar(new Vector2(Owner.LeftSideWidth, Owner.MiddleSectionY + 3), Owner.MiddleSectionHeight - 5, 10, OnSquadScrollbarChange);
-
-            SquadListScrollbar.ChangeMaxValue(300);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
@@ -88,9 +99,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             sprListEntry = Content.Load<Texture2D>("Menus/Lobby/Shop/ContentFrame_Main");
             sprListEntrySub = Content.Load<Texture2D>("Menus/Lobby/Shop/ContentFrame_Sub");
+            sprArrowDown = Content.Load<Texture2D>("Menus/Lobby/Shop/Arrow Down");
+            sprArrowRight = Content.Load<Texture2D>("Menus/Lobby/Shop/Arrow Right");
             sprDropDownClose = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Close");
             sprDropDownOpen = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Open");
             sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
+
+            sprButtonFolderActive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Active");
+            sprButtonFolderInactive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Inactive");
+
+            sprFrameSelectedPopup = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Selected Popup");
+
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Bar");
 
             sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
             sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
@@ -99,10 +120,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
+
+            float Ratio = Constants.Height / 2160f;
+
+            FolderX = (int)(110 * Ratio);
+            FolderBoxWidth = sprButtonFolderInactive.Width;
+            FolderBoxHeight = sprButtonFolderInactive.Height;
+            FolderOffsetX = (int)(40 * Ratio);
+            FolderOffsetY = (int)(30 * Ratio);
+            UnitListY = 600;
+
+            SquadListScrollbar = new Scrollbar(sprScrollbar, new Vector2(UnitX + UnitWidth + 120, (UnitListY + 50) * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnSquadScrollbarChange);
+
+            SquadListScrollbar.ChangeMaxValue(300);
         }
 
         public override void Update(GameTime gameTime)
         {
+            float Ratio = Constants.Height / 2160f;
+
             if (Owner.OnlineGameClient != null)
             {
             }
@@ -115,30 +151,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             SquadListScrollbar.Update(gameTime);
 
-            int FolderY = Owner.MiddleSectionY + 55;
-
-            int DrawY = FolderY + 45;
-            int FolderOffsetX = (FolderWidth + 5);
-
+            int DrawY = 0;
             int FolderCount = CurrentContainer.DicFolder.Count;
             if (ListLastContainer.Count > 0)
             {
                 FolderCount += 1;
             }
 
-            int FoldersOnLine = (Owner.LeftSideWidth - FolderX) / FolderOffsetX;
+            int FoldersOnLine = (int)(UnitWidth / (FolderBoxWidth * Ratio));
             int NumberOfFolderLines = (int)Math.Ceiling(FolderCount / (float)FoldersOnLine);
-            DrawY += FolderHeight * NumberOfFolderLines;
-            DrawY += 10;
 
-            DrawY += 40;
+            DrawY += (int)(FolderBoxHeight * NumberOfFolderLines * Ratio);
+            DrawY += FolderOffsetY * NumberOfFolderLines;
+            DrawY += GetUnitMenuHeight();
 
-            DrawY += CurrentContainer.ListUnlockedUnit.Count * UnitHeight;
-            DrawY += CurrentContainer.ListLockedUnit.Count * UnitHeight;
-
-            int BottomY = (Owner.BottomSectionY - 155) - (Owner.MiddleSectionY + 55);
-
-            SquadListScrollbar.ChangeMaxValue(DrawY - FolderY - BottomY);
+            SquadListScrollbar.ChangeMaxValue(DrawY);
 
             MenuSelection = MenuSelections.Nothing;
             UpdateFolderUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
@@ -178,7 +205,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
                         else
                         {
-                            PushScreen(new ShopConfirmBuyUnitScreen(Inventory, (UnlockableUnit)Itemfound));
+                            PushScreen(new ShopConfirmBuyUnitWhiteScreen(Inventory, (UnlockableUnit)Itemfound));
                         }
                     }
                     else if (Itemfound is UnlockableUnitSkin)
@@ -206,15 +233,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int GetFolderY()
         {
-            return Owner.MiddleSectionY + 55 - SquadScrollbarValue;
+            return UnitListY - SquadScrollbarValue;
         }
 
         private int GetUnitsY()
         {
-            int UnitY = GetFolderY();
-
-            UnitY += 45;
-            int FolderOffsetX = (FolderWidth + 5);
+            float Ratio = Constants.Height / 2160f;
+            int UnitY = (int)(GetFolderY() * Ratio);
 
             int FolderCount = CurrentContainer.DicFolder.Count;
             if (ListLastContainer.Count > 0)
@@ -222,18 +247,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FolderCount += 1;
             }
 
-            int FoldersOnLine = (Owner.LeftSideWidth - FolderX) / FolderOffsetX;
+            int FoldersOnLine = (int)(UnitWidth / (FolderBoxWidth * Ratio));
             int NumberOfFolderLines = (int)Math.Ceiling(FolderCount / (float)FoldersOnLine);
-            UnitY += FolderHeight * NumberOfFolderLines;
-            UnitY += 10;
+
+            UnitY += (int)(FolderBoxHeight * NumberOfFolderLines * Ratio);
+            UnitY += FolderOffsetY * NumberOfFolderLines;
 
             return UnitY;
         }
 
         private void UpdateFolderUnderMouse(int MouseX, int MouseY)
         {
-            int FolderY = GetFolderY();
-            if (FolderY <= 137 || MouseY <= 217)
+            float Ratio = Constants.Height / 2160f;
+            int FolderY = (int)(GetFolderY() * Ratio);
+            if (MouseY < FolderY)
             {
                 return;
             }
@@ -244,16 +271,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FolderCount += 1;
             }
 
-            FolderY += 45;
-            int FolderOffsetX = (FolderWidth + 5);
-            int IndexX = (int)Math.Floor((MouseX - FolderX) / (float)FolderOffsetX);
-            int IndexY = (int)Math.Floor((MouseY - FolderY) / (float)FolderHeight);
-            int FoldersOnLine = (Owner.LeftSideWidth - FolderX) / FolderOffsetX;
+            int IndexX = (int)Math.Floor((MouseX - FolderX) / (float)(FolderBoxWidth * Ratio + FolderOffsetX));
+            int IndexY = (int)Math.Floor((MouseY - FolderY) / (float)(FolderBoxHeight * Ratio + FolderOffsetY));
+            int FoldersOnLine = (int)(UnitWidth / (FolderBoxWidth * Ratio));
             int NumberOfFolderLines = (int)Math.Ceiling(FolderCount / (float)FoldersOnLine);
 
             if (IndexX >= 0 && IndexX < FoldersOnLine && IndexY >= 0 && IndexY < NumberOfFolderLines && IndexX + IndexY * FoldersOnLine < FolderCount)
             {
-                if (MouseX - FolderX < IndexX * FolderOffsetX + FolderWidth)
+                if ((MouseX - FolderX) % ((FolderBoxWidth * Ratio) + FolderOffsetX) < (FolderBoxWidth * Ratio)
+                    && (MouseY - FolderY) % ((FolderBoxHeight * Ratio) + FolderOffsetY) < (FolderBoxHeight * Ratio))
                 {
                     MenuSelection = MenuSelections.Folders;
                     SelectionIndex = IndexX + IndexY * FoldersOnLine;
@@ -264,8 +290,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdateUnitsUnderMouse(int MouseX, int MouseY)
         {
+            float Ratio = Constants.Height / 2160f;
             int UnitsY = GetUnitsY();
-            UnitsY += 40;
             int IndexY = (int)Math.Floor((MouseY - UnitsY) / (float)UnitHeight);
             int MaxIndex = (int)Math.Floor((Owner.BottomSectionY - 155 - UnitsY) / (float)UnitHeight);
 
@@ -323,6 +349,54 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return SelectionIndex;
         }
 
+        private int GetUnitMenuHeight()
+        {
+            int DrawY = 0;
+            for (int U = 0; U < CurrentContainer.ListUnlockedUnit.Count; ++U)
+            {
+                UnlockableUnit ActiveUnit = CurrentContainer.ListUnlockedUnit[U];
+                if (ActiveUnit.UnitToBuy != null)
+                {
+                    if (ActiveUnit.ListUnlockedSkin.Count > 0)
+                    {
+                        if (ActiveUnit.ShowSkin || true)
+                        {
+                            foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListUnlockedSkin)
+                            {
+                                DrawY += UnitHeight;
+
+                            }
+                            foreach (UnlockableUnitAlt a in ActiveUnit.ListUnlockedAlt)
+                            {
+                                DrawY += UnitHeight;
+                            }
+                            foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListLockedSkin)
+                            {
+                                if (ActiveSkin.UnitSkinToBuy != null)
+                                {
+                                }
+
+                                DrawY += UnitHeight;
+                            }
+                            foreach (UnlockableUnitAlt a in ActiveUnit.ListLockedAlt)
+                            {
+                                DrawY += UnitHeight;
+                            }
+                        }
+                    }
+                }
+
+                DrawY += UnitHeight;
+            }
+
+            for (int U = 0; U < CurrentContainer.ListLockedUnit.Count; ++U)
+            {
+                DrawY += UnitHeight;
+            }
+
+            return DrawY;
+        }
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.SetRenderTarget(UnitListRenderTarget);
@@ -340,8 +414,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawFilters(g);
                         
-            int DrawY = 300;
-            g.Draw(UnitListRenderTarget, new Vector2(0, DrawY), Color.White);
+            int DrawY = (int)(UnitListY * Ratio);
+            g.Draw(UnitListRenderTarget, new Vector2(0, DrawY), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
             //Bottom side
             int DrawX = (int)(45 / Ratio);
@@ -349,23 +423,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprSelectAUnitToBuy, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
             g.DrawString(fntOxanimumBold, "Select a Unit to buy", new Vector2(DrawX + (int)(12 / Ratio), DrawY + (int)(10 / Ratio)), TextColor);
 
-            SquadListScrollbar.Draw(g);
-            UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 70;
-            DrawY = Owner.BottomSectionY - 155;
-            int BottomHeight = 182;
-            DrawEmptyBox(g, new Vector2(5, DrawY), 240, BottomHeight);
-            DrawEmptyBox(g, new Vector2(275, DrawY), 206, BottomHeight);
-            DrawEmptyBox(g, new Vector2(509, DrawY), 106, BottomHeight);
-            DrawEmptyBox(g, new Vector2(643, DrawY), 130, BottomHeight);
+            g.Draw(sprScrollbarBackground, new Vector2(UnitX + UnitWidth + 120, (UnitListY + 50) * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.7f);
 
-            DrawY = Owner.BottomSectionY;
-            DrawY += Owner.BottomSectionHeight - 45;
+            SquadListScrollbar.Draw(g);
 
             if (MenuSelection == MenuSelections.Unit && SelectionIndex < CurrentContainer.ListUnlockedUnit.Count)
             {
                 UnlockableItem Itemfound;
                 GetRealUnitItem(out Itemfound, out _);
-                g.Draw(sprPixel, new Rectangle(UnitX, GetUnitsY() + 40 + UnitHeight * SelectionIndex, UnitWidth, 45), Color.FromNonPremultiplied(255, 255, 255, 150));
+                g.Draw(sprPixel, new Rectangle(UnitX, GetUnitsY() + UnitHeight * SelectionIndex, UnitWidth, 45), Color.FromNonPremultiplied(255, 255, 255, 150));
                 if (Itemfound is UnlockableUnit)
                 {
                     DrawSelectedUnitStats(g, ((UnlockableUnit)Itemfound).UnitToBuy);
@@ -392,18 +458,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void DrawUnitList(CustomSpriteBatch g)
         {
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
-            float Ratio = Constants.Height / 2160f * 0.8f;
-            int DrawY = GetFolderY() - 265;
             int DrawX = 5;
 
+            float Ratio = Constants.Height / 2160f;
+            int DrawY = (int)((GetFolderY() - UnitListY) * Ratio);
             DrawFolders(g, DrawY);
 
-            DrawY += 140;
+            DrawY = GetUnitsY() - (int)(UnitListY * Ratio);
 
-            int UnitStartIndex = (int)Math.Max(0, Math.Floor((SquadScrollbarValue - 158) / (double)UnitHeight));
-
-            DrawY += UnitHeight * UnitStartIndex;
-
+            int UnitStartIndex = (int)Math.Max(0, Math.Floor(-DrawY / (double)UnitHeight));
+            DrawY += UnitStartIndex * UnitHeight;
+            Ratio = Constants.Height / 2160f * 0.8f;
             for (int U = UnitStartIndex; U < CurrentContainer.ListUnlockedUnit.Count; ++U)
             {
                 DrawX = UnitX;
@@ -422,8 +487,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         if (ActiveUnit.ShowSkin || true)
                         {
-                            DrawX = UnitX + 20;
-                            g.DrawString(fntArial12, "v", new Vector2(DrawX - 20, DrawY + 11), Color.White);
+                            DrawX = UnitX + (int)(50 * Ratio);
+                            g.Draw(sprArrowDown, new Vector2(DrawX - 130 * Ratio, DrawY + 40 * Ratio), null, Color.White, 0, Vector2.Zero, Ratio, SpriteEffects.None, 0);
                             foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListUnlockedSkin)
                             {
                                 DrawY += UnitHeight;
@@ -460,7 +525,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
                         else
                         {
-                            g.DrawString(fntArial12, ">", new Vector2(DrawX - 20, DrawY + 11), Color.White);
+                            g.Draw(sprArrowRight, new Vector2(DrawX - 130 * Ratio, DrawY + 40 * Ratio), null, Color.White, 0, Vector2.Zero, Ratio, SpriteEffects.None, 0);
                         }
                     }
                 }
@@ -534,154 +599,213 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawFolders(CustomSpriteBatch g, int DrawY)
         {
-            int FolderX = this.FolderX;
-            int FolderOffsetX = (FolderWidth + 5);
+            float Ratio = Constants.Height / 2160f;
 
-            int FoldersOnLine = (Owner.LeftSideWidth - FolderX) / FolderOffsetX;
-            int NumberOfFolderLines = (int)Math.Ceiling(CurrentContainer.DicFolder.Count / (float)FoldersOnLine);
+            int FoldersOnLine = (int)(UnitWidth / (FolderBoxWidth * Ratio));
+            int StartIndex = (int)Math.Floor(SquadScrollbarValue / (double)FolderBoxHeight);
+            DrawY += (int)(FolderBoxHeight * Ratio + FolderOffsetY) * StartIndex;
+            StartIndex *= FoldersOnLine;
 
-            if (DrawY <= (NumberOfFolderLines - 1) * FolderHeight)
-            {
-                return;
-            }
-
-            g.DrawString(fntArial12, "FOLDERS", new Vector2(5, DrawY), Color.White);
-
-            DrawY += 34;
+            int TotalItem = CurrentContainer.ListFolder.Count;
 
             if (ListLastContainer.Count > 0)
             {
-                g.Draw(sprPixel, new Rectangle(FolderX, DrawY, FolderWidth, FolderHeight), Color.FromNonPremultiplied(0, 0, 0, 50));
-                DrawEmptyBox(g, new Vector2(FolderX, DrawY), FolderWidth, FolderHeight);
-                g.Draw(ListLastContainer[ListLastContainer.Count - 1].IconUnit.UnitToBuy.SpriteMap,
-                    new Rectangle(FolderX + FolderWidth / 2 - 16, DrawY + 7, 32, 32), Color.White);
-
-                g.DrawStringMiddleAligned(fntArial12, "Last Folder", new Vector2(FolderX + FolderWidth / 2, DrawY + FolderHeight - 25), Color.White);
-                FolderX += FolderOffsetX;
+                TotalItem += 1;
             }
 
-            foreach (string ActiveFolder in CurrentContainer.DicFolder.Keys)
-            {
-                g.Draw(sprPixel, new Rectangle(FolderX, DrawY, FolderWidth, FolderHeight), Color.FromNonPremultiplied(0, 0, 0, 50));
-                DrawEmptyBox(g, new Vector2(FolderX, DrawY), FolderWidth, FolderHeight);
-                g.Draw(CurrentContainer.DicFolder[ActiveFolder].IconUnit.UnitToBuy.SpriteMap,
-                    new Rectangle(FolderX + FolderWidth / 2 - 16, DrawY + 7, 32, 32), Color.White);
+            int XPos = 0;
 
-                g.DrawStringMiddleAligned(fntArial12, ActiveFolder, new Vector2(FolderX + FolderWidth / 2, DrawY + FolderHeight - 25), Color.White);
-                FolderX += FolderOffsetX;
-                if (FolderX > Owner.LeftSideWidth)
+            if (ListLastContainer.Count > 0)
+            {
+                int FinalX = (int)(FolderX + XPos * (FolderBoxWidth * Ratio + FolderOffsetX));
+                if (MenuSelection == MenuSelections.Folders && XPos + 0 == SelectionIndex)
                 {
-                    FolderX = 20;
-                    DrawY += FolderHeight;
+                    g.Draw(sprButtonFolderActive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
                 }
+                else
+                {
+                    g.Draw(sprButtonFolderInactive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                }
+
+                g.DrawStringCentered(fntOxanimumLight, "Last Folder", new Vector2(FinalX + FolderBoxWidth * Ratio / 2, DrawY + FolderBoxHeight * Ratio / 2), Color.White);
+
+                ++XPos;
             }
 
-            if (MenuSelection == MenuSelections.Folders)
+            for (int YPos = StartIndex; YPos < TotalItem; YPos += FoldersOnLine)
             {
-                g.Draw(sprPixel, new Rectangle(this.FolderX + FolderOffsetX * (SelectionIndex % FoldersOnLine), GetFolderY() + 45 + FolderHeight * (SelectionIndex / FoldersOnLine), FolderWidth, FolderHeight), Color.FromNonPremultiplied(255, 255, 255, 150));
+                while (XPos < FoldersOnLine && XPos + YPos < TotalItem)
+                {
+                    int FinalX = (int)(FolderX + XPos * (FolderBoxWidth * Ratio + FolderOffsetX));
+                    int CurrentIndex = XPos + YPos;
+
+                    if (ListLastContainer.Count > 0)
+                    {
+                        CurrentIndex -= 1;
+                    }
+
+                    if (MenuSelection == MenuSelections.Folders && XPos + YPos * FoldersOnLine == SelectionIndex)
+                    {
+                        g.Draw(sprButtonFolderActive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                    }
+                    else
+                    {
+                        g.Draw(sprButtonFolderInactive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                    }
+
+                    g.DrawStringCentered(fntOxanimumLight, CurrentContainer.ListFolder[CurrentIndex].Name, new Vector2(FinalX + FolderBoxWidth * Ratio / 2, DrawY + FolderBoxHeight * Ratio / 2), Color.White);
+
+                    ++XPos;
+                }
+
+                XPos = 0;
+
+                DrawY += (int)(FolderBoxHeight * Ratio + FolderOffsetY);
             }
         }
 
         private void DrawSelectedUnitStats(CustomSpriteBatch g, Unit ActiveUnit)
         {
-            int DrawY = Owner.BottomSectionY - 155;
+            float Ratio = Constants.Height / 2160f;
+            int DrawX = 2505;
+            int DrawY = 555;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            Color TextColorYellow = Color.FromNonPremultiplied(174, 138, 13, 255);
 
-            DrawY += 5;
 
-            int DrawX = 15;
+            g.Draw(sprFrameSelectedPopup, new Vector2(DrawX * Ratio, DrawY * Ratio), null, Color.White, 0, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+
+            g.DrawStringCentered(fntOxanimumBold, ActiveUnit.ItemName, new Vector2((DrawX + sprFrameSelectedPopup.Width / 2) * Ratio, (DrawY + 80) * Ratio), Color.FromNonPremultiplied(243, 243, 243, 255));
+
+            g.DrawString(fntOxanimumBold, "Rank", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.QualityRank, new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+
+            DrawX += 550;
+
+            g.DrawString(fntOxanimumBold, "Spawn Cost", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.UnitStat.SpawnCost.ToString(), new Vector2((DrawX + 520) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
 
             int DistanceBetweenText = 16;
             int MenuOffset = (int)(DistanceBetweenText * 0.5);
 
-            #region Stats 
-            g.DrawString(fntFinlanderFont, "HP", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxHP.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
+            #region Stats
 
-            g.DrawString(fntFinlanderFont, "EN", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxEN.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.White);
+            DrawX = 2505;
+            DrawY += 200;
 
-            g.DrawString(fntFinlanderFont, "Armor", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.Armor.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.White);
-            g.DrawString(fntFinlanderFont, "Mobility", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.Mobility.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.White);
+            g.DrawString(fntOxanimumBold, "HP", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.MaxHP.ToString(), new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
 
-            DrawX += 260 + 10;
+            DrawY += 100;
 
-            g.DrawString(fntFinlanderFont, "MV", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxMovement.ToString(), new Vector2(DrawX + 90, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
-            g.DrawString(fntFinlanderFont, "Size", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, UnitStats.ListUnitSize[ActiveUnit.SizeIndex], new Vector2(DrawX + 90, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.White);
-            g.DrawString(fntFinlanderFont, "Move Type", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.Yellow);
+            g.DrawString(fntOxanimumBold, "EN", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.MaxEN.ToString(), new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+
+            DrawY += 100;
+
+            g.DrawString(fntOxanimumBold, "Armor", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.Armor.ToString(), new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+
+            DrawY += 100;
+
+            g.DrawString(fntOxanimumBold, "Mobility", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.Mobility.ToString(), new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+            
+            DrawX = 2505;
+            DrawX += 550;
+            DrawY = 555;
+            DrawY += 200;
+
+            g.DrawString(fntOxanimumBold, "MV", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, ActiveUnit.MaxMovement.ToString(), new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+
+            DrawY += 100;
+
+            g.DrawString(fntOxanimumBold, "Size", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, UnitStats.ListUnitSize[ActiveUnit.SizeIndex], new Vector2((DrawX + 460) * Ratio, (DrawY + 170) * Ratio), TextColorYellow);
+
+            DrawY += 100;
+
+            g.DrawString(fntOxanimumBold, "Move Type", new Vector2((DrawX + 60) * Ratio, (DrawY + 170) * Ratio), TextColor);
+
+            DrawX = 2505;
+            DrawX += 620;
+            DrawY += 90;
 
             #endregion
 
             if (ActiveUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
             {
-                g.Draw(sprSky, new Vector2(DrawX, DrawY + 132), Color.White);
-                DrawX += 50;
+                g.Draw(sprSky, new Vector2(DrawX * Ratio, (DrawY + 170) * Ratio), Color.White);
+                DrawX += 70;
             }
             if (ActiveUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
             {
-                g.Draw(sprLand, new Vector2(DrawX, DrawY + 132), Color.White);
-                DrawX += 50;
+                g.Draw(sprLand, new Vector2(DrawX * Ratio, (DrawY + 170) * Ratio), Color.White);
+                DrawX += 70;
             }
             if (ActiveUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSeaIndex))
             {
-                g.Draw(sprSea, new Vector2(DrawX, DrawY + 132), Color.White);
-                DrawX += 50;
+                g.Draw(sprSea, new Vector2(DrawX * Ratio, (DrawY + 170) * Ratio), Color.White);
+                DrawX += 70;
             }
             if (ActiveUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSpaceIndex))
             {
-                g.Draw(sprSpace, new Vector2(DrawX, DrawY + 132), Color.White);
-                DrawX += 50;
+                g.Draw(sprSpace, new Vector2(DrawX * Ratio, (DrawY + 170) * Ratio), Color.White);
+                DrawX += 70;
             }
 
             int MiddlePosX = 520;
 
             int CurrentY = Owner.BottomSectionY - 150 + 52;
-            DrawY = Owner.BottomSectionY - 155 + 5;
+            DrawY = 1290;
 
             #region Terrain
 
-            g.DrawString(fntFinlanderFont, "Terrain", new Vector2(MiddlePosX + 3, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
+            DrawX = 2505 + (sprFrameSelectedPopup.Width / 2);
+            g.DrawStringCentered(fntOxanimumBold, "Terrain", new Vector2(DrawX * Ratio, (DrawY + 80) * Ratio), TextColor);
 
-            g.Draw(sprSky, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
+            DrawY = 1400;
+            int TerrinOffset = 200;
+            DrawX -= TerrinOffset + TerrinOffset / 2;
+            DrawX -= sprSpace.Width * 2;
+            g.Draw(sprSky, new Vector2(DrawX * Ratio, DrawY * Ratio), Color.White);
             if (ActiveUnit.UnitStat.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
             {
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainAirIndex).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntOxanimumBold, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainAirIndex).ToString(), new Vector2(DrawX * Ratio, (DrawY +  40) * Ratio), TextColor);
             }
             else
             {
-                g.DrawString(fntFinlanderFont, "-", new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntOxanimumBold, "-", new Vector2(DrawX * Ratio, (DrawY + 10) * Ratio), TextColor);
             }
 
-            CurrentY += fntFinlanderFont.LineSpacing + 6;
-            g.Draw(sprLand, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
+            DrawX += TerrinOffset;
+            g.Draw(sprLand, new Vector2(DrawX * Ratio, DrawY * Ratio), Color.White);
             if (ActiveUnit.UnitStat.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
             {
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainLandIndex).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntOxanimumBold, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainLandIndex).ToString(), new Vector2(DrawX * Ratio, (DrawY + 40) * Ratio), TextColor);
             }
             else
             {
                 g.DrawString(fntFinlanderFont, "-", new Vector2(MiddlePosX + 34, CurrentY), Color.White);
             }
 
-            CurrentY += fntFinlanderFont.LineSpacing + 6;
-            g.Draw(sprSea, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
+            DrawX += TerrinOffset;
+            g.Draw(sprSea, new Vector2(DrawX * Ratio, DrawY * Ratio), Color.White);
             if (ActiveUnit.UnitStat.DicRankByMovement.ContainsKey(UnitStats.TerrainSeaIndex))
             {
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSeaIndex).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntOxanimumBold, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSeaIndex).ToString(), new Vector2(DrawX * Ratio, (DrawY + 40) * Ratio), TextColor);
             }
             else
             {
                 g.DrawString(fntFinlanderFont, "-", new Vector2(MiddlePosX + 34, CurrentY), Color.White);
             }
 
-            CurrentY += fntFinlanderFont.LineSpacing + 6;
-            g.Draw(sprSpace, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
+            DrawX += TerrinOffset;
+            g.Draw(sprSpace, new Vector2(DrawX * Ratio, DrawY * Ratio), Color.White);
             if (ActiveUnit.UnitStat.DicRankByMovement.ContainsKey(UnitStats.TerrainSpaceIndex))
             {
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpaceIndex).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntOxanimumBold, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpaceIndex).ToString(), new Vector2(DrawX * Ratio, (DrawY + 40) * Ratio), TextColor);
             }
             else
             {
@@ -689,15 +813,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             #endregion
-
-            DrawY = Owner.BottomSectionY - 155 + 5;
-            DrawX = 643 + 10;
-
-            g.DrawString(fntFinlanderFont, "Rank", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.QualityRank, new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
-            g.DrawString(fntFinlanderFont, "Spawn", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3), Color.Yellow);
-            g.DrawString(fntFinlanderFont, "Cost", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.UnitStat.SpawnCost.ToString(), new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.White);
         }
     }
 }

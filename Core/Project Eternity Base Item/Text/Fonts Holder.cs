@@ -14,6 +14,12 @@ namespace ProjectEternity.Core.Item
         {
             fntDefaultFont = fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
+            this.Content = Content;
+        }
+
+        internal SpriteFont GetFont(string Font)
+        {
+            return Content.Load<SpriteFont>("Fonts/" + Font);
         }
     }
 }

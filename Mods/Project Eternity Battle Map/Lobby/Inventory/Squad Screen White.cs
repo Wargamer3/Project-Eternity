@@ -336,7 +336,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int FolderBoxHeight = (int)(sprButtonFolderInactive.Height * Ratio / 2);
             int BoxOffset = 20;
 
-            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxHeight);
+            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)FolderBoxHeight);
             int BoxPerLine = (Constants.Width - X) / FolderBoxWidth;
 
             int TotalItem = CurrentContainer.ListFolder.Count;
@@ -353,7 +353,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int FinalX = X + XPos * FolderBoxWidth;
                 g.Draw(sprButtonFolderInactive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
 
-                g.DrawStringCentered(fntArial12, "Last Folder", new Vector2(FinalX + FolderBoxWidth / 2, DrawY + BoxHeight / 2), Color.White);
+                g.DrawStringCentered(fntArial12, "Last Folder", new Vector2(FinalX + FolderBoxWidth / 2, DrawY + FolderBoxHeight / 2), Color.White);
 
                 ++XPos;
             }

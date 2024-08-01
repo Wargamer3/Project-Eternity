@@ -18,6 +18,8 @@ namespace ProjectEternity.Core.Item
         public bool IsAColumn = false;
         public bool Rainbow;
         public bool Wave;
+        public bool Centered;
+        public Color TextColor;
         int CurrentValue = 0;
 
         public RegularText(DynamicText Owner, string OriginalText)
@@ -200,6 +202,19 @@ namespace ProjectEternity.Core.Item
                 Offset = 0;
             }
 
+            if (DicSubTag.ContainsKey("Centered"))
+            {
+                Centered = true;
+            }
+            else if (Parent != null)
+            {
+                Centered = Parent.Centered;
+            }
+            else
+            {
+                Centered = false;
+            }
+
             if (DicSubTag.ContainsKey("Rainbow"))
             {
                 Rainbow = true;
@@ -226,6 +241,7 @@ namespace ProjectEternity.Core.Item
                 Wave = false;
             }
 
+            ReadColorTag();
             ReadFontTag();
         }
 
@@ -240,7 +256,7 @@ namespace ProjectEternity.Core.Item
                         break;
 
                     default:
-                        fntTextFont = Fonts.fntDefaultFont;
+                        fntTextFont = Fonts.GetFont(DicSubTag["Font"]);
                         break;
                 }
             }
@@ -251,6 +267,23 @@ namespace ProjectEternity.Core.Item
             else
             {
                 fntTextFont = Fonts.fntDefaultFont;
+            }
+        }
+
+        protected void ReadColorTag()
+        {
+            if (DicSubTag.ContainsKey("Color"))
+            {
+                string[] ArrayChannel = DicSubTag["Color"].Split(',');
+                TextColor = Color.FromNonPremultiplied(int.Parse(ArrayChannel[0]), int.Parse(ArrayChannel[1]), int.Parse(ArrayChannel[2]), int.Parse(ArrayChannel[3]));
+            }
+            else if (Parent != null)
+            {
+                TextColor = Parent.TextColor;
+            }
+            else
+            {
+                TextColor = Color.White;
             }
         }
 
@@ -410,7 +443,14 @@ namespace ProjectEternity.Core.Item
             {
                 foreach (KeyValuePair<Vector2, string> ActiveLine in DicTextByPosition)
                 {
-                    g.DrawString(fntTextFont, ActiveLine.Value, ActiveLine.Key + Offset, Color.White);
+                    if (Centered)
+                    {
+                        g.DrawStringCentered(fntTextFont, ActiveLine.Value, ActiveLine.Key + Offset, TextColor);
+                    }
+                    else
+                    {
+                        g.DrawString(fntTextFont, ActiveLine.Value, ActiveLine.Key + Offset, TextColor);
+                    }
                 }
             }
 
