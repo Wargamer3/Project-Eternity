@@ -88,8 +88,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
             sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
 
-            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button_Active");
-            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button_Inactive");
+            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Color");
+            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Color");
             sprButtonBackToLobby = Content.Load<Texture2D>("Menus/Lobby/Button Back To Lobby");
 
             Cube = Content.Load<Model>("Menus/Lobby/Cube thing");

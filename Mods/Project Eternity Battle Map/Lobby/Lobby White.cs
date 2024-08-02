@@ -33,7 +33,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntOxanimumBoldTitle;
 
         private Texture2D sprTitleHighlight;
-        private Texture2D sprButtonInfo;
+        private Texture2D sprBarLeft;
+        private Texture2D sprBarMiddle;
+
+        private Texture2D sprButtonHelp;
         private Texture2D sprButtonSettings;
         private Texture2D sprButtonBigColor;
         private Texture2D sprButtonBigGray;
@@ -52,6 +55,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprButtonLocalPlayerManagement;
 
         private TextInput ChatInput;
+
+        private TextButton LocalPlayerSelectionButton;
+
+        private TextButton CreateARoomButton;
+        private TextButton QuickStartButton;
+        private InteractiveButton WaitingRoomOnlyButton;
+
+        private TextButton InfoButton;
+        private TextButton RankingButton;
+        private TextButton OptionsButton;
+        private TextButton HelpButton;
+
+        private TextButton ShowAllPlayersFilter;
+        private TextButton ShowFriendsFilter;
+        private TextButton ShowGuildsFilter;
+
+        private TextButton ShopButton;
+        private TextButton InventoryButton;
 
         private Model Cube;
 
@@ -149,7 +170,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
             sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
-            sprButtonInfo = Content.Load<Texture2D>("Menus/Lobby/Button Info");
+            sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
+            sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
+            sprButtonHelp = Content.Load<Texture2D>("Menus/Lobby/Button Help");
             sprButtonSettings = Content.Load<Texture2D>("Menus/Lobby/Button Settings");
             sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
             sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
@@ -178,9 +201,56 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
+            float Ratio = Constants.Height / 2160f;
+
+            int DrawX = (int)(1180 * Ratio);
+            int DrawY = (int)(122 * Ratio);
+            LocalPlayerSelectionButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Local Players Management}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectLocalPlayers);
+
+            DrawX = (int)(464 * Ratio);
+            DrawY = (int)(384 * Ratio);
+            QuickStartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Quick Start}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            DrawX = (int)(1274 * Ratio);
+            CreateARoomButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Create a Room}}", "Menus/Lobby/Button Big Gray", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, CreateARoom);
+            WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(DrawX, DrawY), OnButtonOver, null);
+
+
+            DrawX = (int)(3472 * Ratio);
+            DrawY = (int)(122 * Ratio);
+            HelpButton = new TextButton(Content, "", "Menus/Lobby/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInfo);
+            DrawX += (int)(180 * Ratio);
+            OptionsButton = new TextButton(Content, "", "Menus/Lobby/Button Settings", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+
+            DrawX = (int)(2932 * Ratio);
+            DrawY = (int)(768 * Ratio);
+            ShowAllPlayersFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}All}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowAllPlayers);
+            DrawX += (int)(232 * Ratio);
+            ShowFriendsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Friends}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowFriends);
+            DrawX += (int)(232 * Ratio);
+            ShowGuildsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Guild}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowGuild);
+
+            DrawX = Constants.Width - 550 + sprButtonSmall.Width / 4;
+            DrawY = 147 + sprButtonSmall.Height / 4;
+            InventoryButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Inventory}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInventory);
+            DrawX += 290;
+            ShopButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Shop}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenShop);
+            DrawX = Constants.Width - 550 + sprButtonSmall.Width / 4;
+            DrawY = 238 + sprButtonSmall.Height / 4;
+            InfoButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Help}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            DrawX += 290;
+            RankingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Ranking}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+
+            ShowAllPlayersFilter.CanBeChecked = true;
+            ShowFriendsFilter.CanBeChecked = true;
+            ShowGuildsFilter.CanBeChecked = true;
+            ShowAllPlayersFilter.Select();
 
             ArrayMenuButton = new IUIElement[]
             {
+                LocalPlayerSelectionButton, CreateARoomButton, QuickStartButton,
+                InfoButton, RankingButton, OptionsButton, HelpButton,
+                ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter,
+                ShopButton, InventoryButton,
             };
 
             InitPlayer();
@@ -472,7 +542,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PushScreen(new LocalPlayerSelectionScreen());
             sndButtonClick.Play();
         }
-        
+
         protected virtual void CreateARoom()
         {
             PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
@@ -487,7 +557,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void OpenInventory()
         {
-            PushScreen(new BattleMapInventoryScreen());
+            PushScreen(new BattleMapInventoryWhiteScreen());
             sndButtonClick.Play();
         }
 
@@ -497,7 +567,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
         }
 
-        /*private void ShowAllPlayers()
+        private void ShowAllPlayers()
         {
             sndButtonClick.Play();
             ShowFriendsFilter.Unselect();
@@ -520,8 +590,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShowFriendsFilter.Unselect();
             PlayerListType = PlayerListTypes.Friends;
         }
-        */
+
         #endregion
+
 
         private void SendMessage(TextInput SenderInput, string InputMessage)
         {
@@ -550,17 +621,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprTitleHighlight, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
             g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(DrawX + 30, DrawY + 2), TextColorDark);
 
-            DrawX = 350;
-            DrawY = 22;
-            g.Draw(sprButtonLocalPlayerManagement, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBold, "Local Players Management", new Vector2(DrawX + 30, DrawY + 24), TextColorLight);
-
-            DrawX = Constants.Width - 222;
-            DrawY = 22;
-            g.Draw(sprButtonInfo, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            DrawX += 90;
-            g.Draw(sprButtonSettings, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-
             DrawX = 870;
             DrawY = 6;
             g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
@@ -575,47 +635,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             g.DrawString(fntOxanimumBold, "4", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
 
-            DrawX = 40;
-            DrawY = 142;
-            g.Draw(sprButtonBigColor, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBoldBig, "Quick Start", new Vector2(DrawX + 30, DrawY + 34), TextColorDark);
-            DrawX = 445;
-            g.Draw(sprButtonBigGray, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBoldBig, "Create a Room", new Vector2(DrawX + 30, DrawY + 34), TextColorDark);
-
-            DrawX = Constants.Width - 550;
-            DrawY = 147;
-            g.Draw(sprButtonSmall, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntOxanimumBold, "Inventory", new Vector2(DrawX + 120, DrawY + 47), TextColorDark);
-            DrawX += 290;
-            g.Draw(sprButtonSmall, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntOxanimumBold, "Shop", new Vector2(DrawX + 120, DrawY + 47), TextColorDark);
-
-            DrawX = Constants.Width - 550;
-            DrawY = 238;
-            g.Draw(sprButtonSmall, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntOxanimumBold, "Info", new Vector2(DrawX + 120, DrawY + 47), TextColorDark);
-            DrawX += 290;
-            g.Draw(sprButtonSmall, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntOxanimumBold, "Ranking", new Vector2(DrawX + 120, DrawY + 47), TextColorDark);
+            DrawX = Constants.Width - 540;
+            DrawY = 350;
+            g.Draw(sprFriendsList, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
             DrawX = 30;
             DrawY = 780;
             g.Draw(sprChatBox, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-
-            DrawX = Constants.Width - 540;
-            DrawY = 350;
-            g.Draw(sprFriendsList, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            DrawX += 30;
-            DrawY = 370;
-            g.Draw(sprButtonFriendsActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntaAtomicMd, "All", new Vector2(DrawX + 55, DrawY + 17), TextColorDark);
-            DrawX += 116;
-            g.Draw(sprButtonFriendsInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntaAtomicMd, "Friends", new Vector2(DrawX + 55, DrawY + 17), TextColorDark);
-            DrawX += 116;
-            g.Draw(sprButtonFriendsInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawStringCentered(fntaAtomicMd, "Guild", new Vector2(DrawX + 55, DrawY + 17), TextColorDark);
 
             g.DrawString(fntArial12, "Lv." + PlayerManager.OnlinePlayerLevel, new Vector2(LeftSideWidth + 38, 17), Color.White);
             g.DrawString(fntArial12, PlayerManager.OnlinePlayerName, new Vector2(LeftSideWidth + 98, 15), Color.White);
@@ -671,6 +697,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawLine(sprPixel, new Vector2(2200 * Ratio, 2402 * Ratio), new Vector2(2700 * Ratio, 2188 * Ratio), ColorLine2, 630);
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
+            int LineX = 89;
+            int LineY = 1507;
+            g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
+            g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(2518 * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
+
+            LineX = 110;
+            LineY = 222;
+            g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
+            g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(3592 * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
 
             RotationX += 0.005f;
         }
