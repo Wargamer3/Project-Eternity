@@ -8,6 +8,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -169,7 +170,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         private SpriteFont fntText;
-        private EmptyBoxScrollbar MapScrollbar;
+        private SpriteFont fntOxanimumRegular;
+        private SpriteFont fntOxanimumBold;
+
+        private Texture2D sprHighlight;
+
+        private Texture2D sprFrameTop;
+        private Texture2D sprFrameDescription;
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
+
+        private Scrollbar MapScrollbar;
 
         private readonly RoomInformations Room;
         private readonly GameOptionsScreen OptionsScreen;
@@ -181,11 +192,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private MapInfo ActiveMapInfo;
         private int MapScrollbarValue;
 
-        int PanelY = (int)(Constants.Height * 0.15);
-        int PanelWidth = (int)(Constants.Width * 0.4);
-        int PanelHeight = (int)(Constants.Height * 0.75);
+        int PanelY;
+        int PanelWidth;
 
-        int LeftPanelX = (int)(Constants.Width * 0.03);
+        int LeftPanelX;
+        int CategoryOffsetY;
+        int HeaderOffsetY;
+        int FirstLineOffsetY;
+        int LineOffsetY;
 
         public GameOptionsSelectMapScreen(RoomInformations Room, GameOptionsScreen OptionsScreen, GamePreparationScreen Owner)
         {
@@ -201,8 +215,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
 
-            MapScrollbar = new EmptyBoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
+            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+
+            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top Large");
+            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
+
+            float Ratio = Constants.Height / 2160f;
+            PanelY = (int)(510 * Ratio);
+            PanelWidth = (int)(sprFrameTop.Width * Ratio);
+
+            LeftPanelX = (int)(390 * Ratio);
+
+            CategoryOffsetY = (int)(200 * Ratio);
+            HeaderOffsetY = (int)(78 * Ratio);
+            FirstLineOffsetY = (int)(30 * Ratio);
+            LineOffsetY = (int)(76 * Ratio);
+
+            MapScrollbar = new Scrollbar(sprScrollbar, new Vector2(LeftPanelX + PanelWidth - 20, PanelY), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnGametypeScrollbarChange);
         }
 
         private void OnGametypeScrollbarChange(float ScrollbarValue)
@@ -214,20 +248,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             MapScrollbar.Update(gameTime);
 
-            float DrawY = PanelY + 5;
+            float DrawY = PanelY + FirstLineOffsetY;
             int CurrentIndex = 0;
             foreach (MapInfo ActiveMap in DicMapInfoByPath.Values)
             {
                 if (CurrentIndex >= MapScrollbarValue)
                 {
                     if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
+                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY
                         && InputHelper.InputConfirmPressed())
                     {
                         SelectMap(ActiveMap);
                     }
 
-                    DrawY += 20;
+                    DrawY += LineOffsetY;
                 }
 
                 ++CurrentIndex;
@@ -319,67 +353,73 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawEmptyBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, PanelHeight);
-            Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.8f), (int)(Lobby.BackgroundColor.G * 0.8f), (int)(Lobby.BackgroundColor.B * 0.8f), 150);
-            g.Draw(GameScreen.sprPixel, new Rectangle(LeftPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
+            float Ratio = Constants.Height / 2160f;
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
+
+            float DrawY = PanelY;
             MapScrollbar.Draw(g);
 
-            float DrawY = PanelY + 5;
+            g.Draw(sprFrameDescription, new Vector2(2280 * Ratio, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+
+            int BoxHeight = (DicMapInfoByPath.Values.Count * LineOffsetY);
+            g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
+
+            DrawY += FirstLineOffsetY;
+
             int CurrentIndex = 0;
             foreach (MapInfo ActiveMap in DicMapInfoByPath.Values)
             {
                 if (CurrentIndex >= MapScrollbarValue)
                 {
-                    g.DrawString(fntText, ActiveMap.MapName, new Vector2(LeftPanelX + 5, DrawY), Color.White);
                     if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
                         && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
                     {
-                        g.Draw(sprPixel, new Rectangle(LeftPanelX, (int)DrawY, PanelWidth, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
+                        g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY - 5), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                     }
 
-                    DrawY += 20;
+                    g.DrawString(fntOxanimumRegular, ActiveMap.MapName, new Vector2(LeftPanelX + 5, DrawY), ColorText);
+
+                    DrawY += LineOffsetY;
                 }
 
                 ++CurrentIndex;
             }
-
+            
             int RightPanelX = Constants.Width - LeftPanelX - PanelWidth;
             int RightPanelContentOffset = (int)(PanelWidth * 0.05);
             int RightPanelContentX = RightPanelX + RightPanelContentOffset;
             int RightPanelContentWidth = PanelWidth - RightPanelContentOffset - RightPanelContentOffset;
 
             int PreviewBoxY = PanelY + 10;
-            int PreviewBoxHeight = (int)(PanelHeight * 0.4);
+            int PreviewBoxHeight = (int)(500 * Ratio);
 
-            int DescriptionBoxY = PreviewBoxY + PreviewBoxHeight + 50;
-            int DescriptionHeight = PanelHeight - (DescriptionBoxY - PanelY) - 10;
+            int DescriptionBoxY = (int)(PreviewBoxY + PreviewBoxHeight + 150 * Ratio);
 
             int DescriptionBoxNameOffset = (int)(RightPanelContentWidth * 0.25);
             int DescriptionBoxNameX = RightPanelContentX + DescriptionBoxNameOffset;
             int DescriptionBoxNameWidth = RightPanelContentWidth - DescriptionBoxNameOffset - DescriptionBoxNameOffset;
             int DescriptionBoxNameHeight = 30;
 
-            DrawEmptyBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, PanelHeight);
-            g.Draw(GameScreen.sprPixel, new Rectangle(RightPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
-
-            DrawEmptyBox(g, new Vector2(RightPanelContentX, PreviewBoxY), RightPanelContentWidth, PreviewBoxHeight);
-            DrawEmptyBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight);
-            DrawEmptyBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30);
-
             if (ActiveMapInfo != null && ActiveMapInfo.MapName != null)
             {
-                g.DrawStringCentered(fntText, ActiveMapInfo.MapPlayers,
+                g.DrawStringCentered(fntOxanimumRegular, ActiveMapInfo.MapPlayers,
                     new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
-                        PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), Color.White);
-                g.DrawStringCentered(fntText, "Size: " + ActiveMapInfo.MapSize.X + " x " + ActiveMapInfo.MapSize.Y,
+                        PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), ColorText);
+
+                g.DrawStringCentered(fntOxanimumRegular, "Size: " + ActiveMapInfo.MapSize.X + " x " + ActiveMapInfo.MapSize.Y,
                     new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
-                        PreviewBoxY + PreviewBoxHeight + 20 + DescriptionBoxNameHeight / 2), Color.White);
-                g.DrawStringCentered(fntText, ActiveMapInfo.MapName, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2, DescriptionBoxY + DescriptionBoxNameHeight / 2), Color.White);
+                        PreviewBoxY + PreviewBoxHeight + 70 * Ratio + DescriptionBoxNameHeight / 2), ColorText);
+
+                g.DrawStringCentered(fntOxanimumRegular, ActiveMapInfo.MapName, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
+                    DescriptionBoxY + DescriptionBoxNameHeight / 2), ColorText);
 
                 float DescriptionY = DescriptionBoxY + DescriptionBoxNameHeight;
                 foreach (string ActiveLine in TextHelper.FitToWidth(fntText, ActiveMapInfo.MapDescription, RightPanelContentWidth - 5))
                 {
-                    g.DrawString(fntText, ActiveLine, new Vector2(RightPanelContentX + 5, DescriptionY), Color.White);
+                    g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(RightPanelContentX + 5, DescriptionY), ColorText);
                     DescriptionY += 20;
                 }
             }

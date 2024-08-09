@@ -30,12 +30,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private RenderTarget2D CubeRenderTarget;
         private Model Cube;
 
-        private IUIElement ReturnToLobbyButton;
+        private TextButton ReturnToLobbyButton;
 
-        private EmptyBoxButton UnitFilterButton;
-        private EmptyBoxButton CharacterFilterButton;
-        private EmptyBoxButton EquipmentFilterButton;
-        private EmptyBoxButton ConsumableFilterButton;
+        private TextButton UnitFilterButton;
+        private TextButton CharacterFilterButton;
+        private TextButton EquipmentFilterButton;
+        private TextButton ConsumableFilterButton;
 
         private IUIElement[] ArrayUIElement;
 
@@ -88,10 +88,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
             sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
 
-            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Color");
-            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Color");
-            sprButtonBackToLobby = Content.Load<Texture2D>("Menus/Lobby/Button Back To Lobby");
-
             Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
 
             int CubeTargetHeight = 900;
@@ -100,13 +96,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
+            float Ratio = Constants.Height / 2160f;
+            int DrawX = (int)(Constants.Width - 502 * Ratio);
+            int DrawY = (int)(100 * Ratio);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
 
-            ReturnToLobbyButton = new EmptyBoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight - 30), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
-
-            UnitFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 4, HeaderSectionY + 4, 58, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
-            CharacterFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 64, HeaderSectionY + 4, 88, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
-            EquipmentFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 154, HeaderSectionY + 4, 88, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
-            ConsumableFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 244, HeaderSectionY + 4, 98, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
+            DrawX = 280;
+            DrawY = 342;
+            UnitFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Units}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectUnitFilterButton);
+            DrawX += 500;
+            CharacterFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Characters}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectCharacterFilterButton);
+            DrawX += 500;
+            EquipmentFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Equipment}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectEquipmentFilterButton);
+            DrawX += 500;
+            ConsumableFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Consumable}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectConsumableFilterButton);
 
             UnitFilterButton.CanBeChecked = true;
             CharacterFilterButton.CanBeChecked = true;
@@ -117,6 +120,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayUIElement = new IUIElement[]
             {
+                ReturnToLobbyButton,
+                UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
             int MaxLoadouts = 0;
@@ -305,30 +310,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
-
-            int DrawX = (int)(124 * Ratio);
-            int DrawY = (int)(264 * Ratio);
-            g.Draw(sprButtonSmallActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Units", new Vector2(DrawX + 54, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Characters", new Vector2(DrawX + 24, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Equipment", new Vector2(DrawX + 24, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX += 250;
-            g.Draw(sprButtonSmallInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldBig, "Consumable", new Vector2(DrawX + 14, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
-            DrawX = (int)(Constants.Width - (sprButtonBackToLobby.Width + 50) * Ratio);
-            DrawY = (int)(26 * Ratio);
-            g.Draw(sprButtonBackToLobby, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-
-            g.DrawString(fntOxanimumBoldBig, "Return To Loby", new Vector2(DrawX + 94, DrawY + 20), Color.FromNonPremultiplied(65, 70, 65, 255));
-
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

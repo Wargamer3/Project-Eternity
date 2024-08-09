@@ -133,7 +133,7 @@
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
     <Compile Include="Lobby\Background\Tunnel Manager.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
-    <Compile Include="Lobby\Game Preparation Screen White.cs" />
+    <Compile Include="Lobby\Game Preparation Screen.cs" />
     <Compile Include="Lobby\Inventory\Character Screen White.cs" />
     <Compile Include="Lobby\Inventory\Inventory Screen White.cs" />
     <Compile Include="Lobby\Inventory\Squad Screen White.cs" />
@@ -168,7 +168,6 @@
     <Compile Include="Lobby\Game Options\Bot Config Screen.cs" />
     <Compile Include="Lobby\Game Options\Select Map Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Screen.cs" />
-    <Compile Include="Lobby\Game Preparation Screen.cs" />
     <Compile Include="Lobby\Shop\Character Screen.cs" />
     <Compile Include="Lobby\Shop\Consumable Screen.cs" />
     <Compile Include="Lobby\Shop\Equipment Screen.cs" />

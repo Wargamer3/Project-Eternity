@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,26 +36,41 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndButtonDeny;
 
         protected SpriteFont fntText;
+        private SpriteFont fntOxanimumRegular;
+        private SpriteFont fntOxanimumBold;
+        private SpriteFont fntOxanimumBoldSmall;
+        private SpriteFont fntOxanimumBoldBig;
+        private SpriteFont fntOxanimumBoldTitle;
 
-        private Texture2D sprHostText;
-        private Texture2D sprReadyText;
+        private Texture2D sprTitleHighlight;
+        private Texture2D sprRoomNameFrame;
+        private Texture2D sprButtonBigColor;
+        private Texture2D sprButtonBigGray;
+        private Texture2D sprButtonBigBlack;
+        private Texture2D sprButtonSmall;
+        private Texture2D sprPlayerBox;
+        private Texture2D sprPlayerIcon;
+        private Texture2D sprRoomInfo;
+        private Texture2D sprPlayerInfo;
+        private Texture2D sprChatBox;
+
+        private RenderTarget2D CubeRenderTarget;
+        private Model Cube;
 
         private TextInput ChatInput;
 
-        private EmptyBoxButton RoomSettingButton;
-        private EmptyBoxButton PlayerSettingsButton;
-
-        private EmptyBoxButton ReadyButton;
-        private EmptyBoxButton StartButton;
-        private EmptyBoxButton BackToLobbyButton;
-
         private AnimatedSprite sprTabChat;
+
+        private TextButton RoomSettingButton;
+        private TextButton PlayerSettingsButton;
+
+        private TextButton ReadyButton;
+        private TextButton StartButton;
+        private TextButton BackToLobbyButton;
 
         private IUIElement[] ArrayMenuButton;
 
         #endregion
-
-        private TunnelManager TunnelBackground;
 
         int LeftSideWidth;
         int RoomNameHeight;
@@ -70,6 +83,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int MapDetailTextHeight;
         int RoomOptionWidth;
         int RoomOptionHeight;
+
+        float RotationX;
 
         protected readonly RoomInformations Room;
         private Point MapSize;
@@ -108,13 +123,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            TunnelBackground = new TunnelManager();
-            TunnelBackground.Load(GraphicsDevice);
-            for (int i = 0; i < 1400; ++i)
-            {
-                TunnelBackground.UpdateColored(0.016666);
-            }
-
             #region Ressources
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Wait Room.mp3");
@@ -126,10 +134,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial16");
-            ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumBoldSmall = Content.Load<SpriteFont>("Fonts/Oxanium Bold Small");
+            fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
+            fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
-            sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
+            sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
+            sprRoomNameFrame = Content.Load<Texture2D>("Menus/Lobby/Waiting/Room Name Frame");
+            sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
+            sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
+            sprButtonBigBlack = Content.Load<Texture2D>("Menus/Lobby/Button Big Black");
+            sprButtonSmall = Content.Load<Texture2D>("Menus/Lobby/Button Small");
+            sprPlayerBox = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Slot");
+            sprPlayerIcon = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Icon");
+            sprPlayerInfo = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Info");
+            sprRoomInfo = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
+            sprChatBox = Content.Load<Texture2D>("Menus/Lobby/Chat Box");
+
+            Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
+
+            int CubeTargetHeight = 900;
+            CubeRenderTarget = new RenderTarget2D(GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
+                GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 16, RenderTargetUsage.DiscardContents);
+
+            ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
             LeftSideWidth = (int)(Constants.Width * 0.7);
             RoomNameHeight = (int)(Constants.Height * 0.05);
@@ -143,12 +172,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             RoomOptionWidth = (int)((RightSideWidth - 15) * 0.5);
             RoomOptionHeight = (int)(Constants.Height * 0.08);
 
-            RoomSettingButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Room Settings", OnButtonOver, OpenRoomSettingsScreen);
-            PlayerSettingsButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Player Settings", OnButtonOver, PlayerSettingsScreen);
+            float Ratio = Constants.Height / 2160f;
 
-            ReadyButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Ready", OnButtonOver, Ready);
-            StartButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Start", OnButtonOver, StartGame);
-            BackToLobbyButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Leave", OnButtonOver, ReturnToLobby);
+            int DrawX = (int)(2758 * Ratio) + sprButtonSmall.Width / 4;
+            int DrawY = (int)(726 * Ratio) + sprButtonSmall.Height / 4;
+
+            RoomSettingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Room Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenRoomSettingsScreen);
+            DrawX = (int)(3280 * Ratio) + sprButtonSmall.Width / 4;
+            PlayerSettingsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Player Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, PlayerSettingsScreen);
+
+            DrawX = (int)(2784 * Ratio) + sprButtonBigColor.Width / 4;
+            DrawY = (int)(1648 * Ratio) + sprButtonBigColor.Width / 16;
+            ReadyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Ready);
+            StartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, StartGame);
+            DrawY = (int)(1876 * Ratio) + sprButtonBigColor.Width / 16;
+            BackToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Leave}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ReturnToLobby);
 
             sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
@@ -176,8 +214,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBackground.UpdateColored(gameTime.ElapsedGameTime.TotalSeconds);
-
             if (OnlineGameClient != null)
             {
                 OnlineGameClient.ExecuteDelayedScripts();
@@ -544,66 +580,75 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            g.GraphicsDevice.SetRenderTarget(CubeRenderTarget);
+            g.GraphicsDevice.Clear(Color.Transparent);
+            float aspectRatio = 1f;
+
+            Vector3 position = new Vector3(0, 0, 6);
+
+            Vector3 target = new Vector3(0, 0, 3);
+
+            Vector3 up = Vector3.Up;
+            Matrix View = Matrix.CreateLookAt(position, target, up);
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(0.40f,
+                                                                    aspectRatio,
+                                                                    1000f, 18000);
+
+            ((BasicEffect)Cube.Meshes[0].Effects[0]).DiffuseColor = new Vector3(248f / 255f);
+            Cube.Draw(Matrix.CreateTranslation(0, 0, 0) * Matrix.CreateRotationX(1) * Matrix.CreateRotationY(1)
+                * Matrix.CreateRotationX(0) * Matrix.CreateRotationY(RotationX)
+                * Matrix.CreateScale(0.4f) * Matrix.CreateTranslation(0, 0, -4200), View, Projection);
+            g.GraphicsDevice.SetRenderTarget(null);
+            RotationX += 0.00625f;
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
+            float Ratio = Constants.Height / 2160f;
+            Color TextColorLight = Color.FromNonPremultiplied(243, 243, 243, 255);
+            Color TextColorDark = Color.FromNonPremultiplied(65, 70, 65, 255);
+            Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Lobby.BackgroundColor);
+            GraphicsDevice.Clear(BackgroundColor);
 
-            TunnelBackground.Draw(g);
+            DrawBackground(g);
+            g.Draw(sprTitleHighlight, new Vector2(90, 26), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(120, 28), TextColorDark);
+            g.Draw(sprRoomNameFrame, new Vector2(385, 24), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
-            g.End();
-            g.Begin();
+            g.Draw(sprPlayerInfo, new Vector2(Constants.Width - 559, 34), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
-            DrawEmptyBox(g, new Vector2(5, 5), LeftSideWidth - 10, RoomNameHeight - 10);
-            g.DrawString(fntText, "Room Name: " + Room.RoomName, new Vector2(10, 7), Color.White);
-            DrawEmptyBox(g, new Vector2(0, PlayerZoneY), LeftSideWidth, PlayerZoneHeight);
-            DrawEmptyBox(g, new Vector2(5, ChatZoneY + 5), LeftSideWidth - 10, ChatZoneHeight - 10);
-            g.DrawString(fntText, "Chat", new Vector2(10, ChatZoneY + 10), Color.White);
+            g.Draw(sprRoomInfo, new Vector2(Constants.Width - 550, 342), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
-            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, 5), RightSideWidth - 10, MapDetailTextY - 10);
-            g.DrawString(fntText, "Player Info", new Vector2(LeftSideWidth + 10, 7), Color.White);
+            int DrawY = 920;
+            g.DrawString(fntOxanimumBoldSmall, "Game Mode:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            g.DrawStringRightAligned(fntOxanimumBoldSmall, "Campaign", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            int GameModeY = MapDetailTextY + RoomOptionHeight;
+            DrawY += 74;
+            g.DrawString(fntOxanimumBoldSmall, "Players:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            g.DrawStringRightAligned(fntOxanimumBoldSmall, "2 - 6", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, fntText.LineSpacing * 3);
+            DrawY += 74;
+            g.DrawString(fntOxanimumBoldSmall, "Map Size:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            g.DrawStringRightAligned(fntOxanimumBoldSmall, "0 X 0", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+            DrawY += 150;
+            g.DrawString(fntOxanimumBoldSmall, "Map:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            g.DrawStringRightAligned(fntOxanimumBoldSmall, "Random", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            g.DrawString(fntText, "Game Mode:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            g.DrawStringMiddleAligned(fntText, "Campaign", new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            GameModeY += fntText.LineSpacing;
-            g.DrawString(fntText, "Players:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            if (Room.MinNumberOfPlayer != Room.MaxNumberOfPlayer)
-            {
-                g.DrawStringMiddleAligned(fntText, Room.MinNumberOfPlayer + " - " + Room.MaxNumberOfPlayer, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            }
-            else
-            {
-                g.DrawStringMiddleAligned(fntText, Room.MinNumberOfPlayer.ToString(), new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            }
-            GameModeY += fntText.LineSpacing;
-            g.DrawString(fntText, "Map Size:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            g.DrawStringMiddleAligned(fntText, MapSize.X + " x " + MapSize.Y, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            GameModeY += 90;
-            g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
-            GameModeY += 85;
-
-            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, fntText.LineSpacing * 4);
-
-            g.DrawString(fntText, "Map:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            if (Room.MapName != null)
-            {
-                g.DrawStringMiddleAligned(fntText, Room.MapName, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            }
-            GameModeY += fntText.LineSpacing;
-            g.DrawString(fntText, "Details:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            GameModeY += fntText.LineSpacing;
-            g.DrawString(fntText, "Tutorial map aimed to introduce the basics of the\r\ncampaign mode", new Vector2(LeftSideWidth + 15, GameModeY + 10), Color.White);
-
+            DrawY += 74;
+            g.DrawString(fntOxanimumBoldSmall, "Details:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            DrawY += 74;
+            g.DrawString(fntOxanimumBoldSmall, "Tutorial map", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);
             }
 
+            g.Draw(sprChatBox, new Vector2(30, 780), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             if (OnlineCommunicationClient != null)
             {
                 ChatHelper.DrawChat(g, fntText, OnlineCommunicationClient.Chat, ChatInput);
@@ -613,87 +658,112 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawOpenDropdown(g);
         }
 
+        private void DrawBackground(CustomSpriteBatch g)
+        {
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            g.GraphicsDevice.Clear(Color.FromNonPremultiplied(243, 243, 243, 255));
+            float Ratio = Constants.Height / 2160f;
+
+            g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 364 * Ratio), new Vector2(3000 * Ratio, -1346 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 240);
+            g.End();
+
+            BlendState blend = new BlendState();
+            blend.AlphaSourceBlend = Blend.One;
+            blend.AlphaDestinationBlend = Blend.One;
+            blend.ColorSourceBlend = Blend.One;
+            blend.ColorDestinationBlend = Blend.One;
+            blend.AlphaBlendFunction = BlendFunction.Min;
+
+            g.Begin(SpriteSortMode.Deferred, blend);
+
+            g.Draw(CubeRenderTarget, new Vector2(400, 180), Color.FromNonPremultiplied(5, 5, 5, 255));
+            g.End();
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 2544 * Ratio), new Vector2(3000 * Ratio, 658 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 600);
+            g.DrawLine(sprPixel, new Vector2(1800 * Ratio, 2238 * Ratio), new Vector2(3560 * Ratio, 1344 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 200);
+            g.End();
+
+            g.Begin(SpriteSortMode.Deferred, blend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone);
+
+            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0.99f);
+            g.End();
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
+        }
+
         protected virtual void DrawPlayers(CustomSpriteBatch g)
         {
-            int LeftSideWidth = (int)(Constants.Width * 0.7);
-
-            int DrawY = 65;
-
-            while (DrawY < ChatZoneY)
-            {
-                int DrawX = 10;
-                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
-
-                DrawY += 55;
-            }
-
-            DrawY = 65 + 55 * Room.ListRoomPlayer.Count;
+            float Ratio = Constants.Height / 2160f;
+            int PlayerDrawY = 292;
+            int DrawY = PlayerDrawY + 55 * Room.ListRoomPlayer.Count;
 
             for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
 
-                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
 
-                DrawY += 55;
+                DrawY += 160;
             }
 
-            DrawY = 65;
+            DrawY = PlayerDrawY;
 
             for (int P = Room.ListRoomPlayer.Count - 1; P >= 0; --P)
             {
-                int DrawX = 10;
+                int DrawX = 17;
 
-                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
-                DrawPlayerBox(g, DrawX + 5, DrawY + 10, (BattleMapPlayer)Room.ListRoomPlayer[P]);
+                DrawPlayerBox(g, DrawX, (int)(DrawY * Ratio), (BattleMapPlayer)Room.ListRoomPlayer[P]);
 
-                DrawY += 55;
+                DrawY += 160;
+            }
+            for (int P = 2; P >= 0; --P)
+            {
+                int DrawX = 17;
+
+                g.Draw(sprPlayerBox, new Vector2(DrawX, (int)(DrawY * Ratio)), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+
+                DrawY += 160;
             }
 
             for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
 
-                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
 
-                DrawY += 55;
+                DrawY += 160;
             }
         }
 
         private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw)
         {
+            float Ratio = Constants.Height / 2160f;
+            g.Draw(sprPlayerBox, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX, DrawY, 320, 25);
 
-            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 60, 25);
 
             if (PlayerToDraw.IsHost())
             {
-                g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
+                g.DrawString(fntOxanimumBold, "Host", new Vector2(1230, DrawY + 18), Color.White);
             }
             else if (PlayerToDraw.IsReady())
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
 
-            DrawX += 65;
-            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 25);
-            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 7, DrawY + 5), Color.White);
-            DrawX += 75;
-            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 200, 25);
-            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 5, DrawY + 5), Color.White);
-            DrawX += 205;
+            DrawX += 85;
+            g.DrawString(fntOxanimumRegular, PlayerToDraw.Name, new Vector2(DrawX + 5, DrawY + 18), Color.White);
+            DrawX += 230;
+            g.DrawString(fntOxanimumRegular, "Lv. 50", new Vector2(DrawX, DrawY + 18), Color.White);
+            DrawX += 155;
 
             Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY, 150, 25);
-            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 150, 25);
-            g.DrawString(fntText, "Loadout 1", new Vector2(DrawX + 5, DrawY + 5), Color.White);
-            DrawX += 155;
+            g.DrawString(fntOxanimumRegular, "Loadout 1", new Vector2(DrawX, DrawY + 18), Color.White);
+            DrawX += 190;
 
             if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0)
             {
-                DrawEmptyBox(g, new Vector2(DrawX, DrawY), 110, 25);
-                g.DrawStringMiddleAligned(fntText, ListAllTeamInfo[PlayerToDraw.TeamIndex].TeamName, new Vector2(DrawX + 55, DrawY + 5), Color.White);
+                g.DrawStringMiddleAligned(fntOxanimumRegular, ListAllTeamInfo[PlayerToDraw.TeamIndex].TeamName, new Vector2(DrawX + 55, DrawY + 5), Color.White);
                 DrawX += 120;
             }
 
@@ -701,7 +771,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S] != null)
                 {
-                    Rectangle UnitCollisionBox = new Rectangle(DrawX + S * 35, DrawY - 3, 32, 32);
+                    Rectangle UnitCollisionBox = new Rectangle(DrawX + S * 35, DrawY, 64, 64);
 
                     g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0).SpriteMap, UnitCollisionBox, Color.White);
 

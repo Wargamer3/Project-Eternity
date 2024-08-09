@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -23,16 +23,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         private SpriteFont fntText;
-        private EmptyBoxScrollbar GametypeScrollbar;
+        private SpriteFont fntOxanimumRegular;
+        private SpriteFont fntOxanimumBold;
+
+        private Texture2D sprHighlight;
+
+        private Texture2D sprFrameTop;
+        private Texture2D sprFrameDescription;
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
+
+        private Scrollbar GametypeScrollbar;
 
         private readonly RoomInformations Room;
         private readonly GameOptionsScreen Owner;
 
-        int PanelY = (int)(Constants.Height * 0.15);
-        int PanelWidth = (int)(Constants.Width * 0.4);
-        int PanelHeight = (int)(Constants.Height * 0.75);
+        int PanelY;
+        int PanelWidth;
 
-        int LeftPanelX = (int)(Constants.Width * 0.03);
+        int LeftPanelX;
+        int CategoryOffsetY;
+        int HeaderOffsetY;
+        int FirstLineOffsetY;
+        int LineOffsetY;
 
         protected GametypeCategory[] ArrayGametypeCategory;
         private int GametypeScrollbarValue;
@@ -47,16 +60,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+
+            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+
+            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top Large");
+            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
 
             LoadGameTypes();
 
-            int PanelY = (int)(Constants.Height * 0.15);
-            int PanelWidth = (int)(Constants.Width * 0.4);
-            int PanelHeight = (int)(Constants.Height * 0.75);
+            float Ratio = Constants.Height / 2160f;
+            PanelY = (int)(510 * Ratio);
+            PanelWidth = (int)(sprFrameTop.Width * Ratio);
 
-            int LeftPanelX = (int)(Constants.Width * 0.03);
+            LeftPanelX = (int)(390 * Ratio);
 
-            GametypeScrollbar = new EmptyBoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
+            CategoryOffsetY = (int)(200 * Ratio);
+            HeaderOffsetY = (int)(78 * Ratio);
+            FirstLineOffsetY = (int)(30 * Ratio);
+            LineOffsetY = (int)(76 * Ratio);
+
+            GametypeScrollbar = new Scrollbar(sprScrollbar, new Vector2(LeftPanelX + PanelWidth, PanelY), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnGametypeScrollbarChange);
         }
 
         protected virtual void LoadGameTypes()
@@ -107,22 +134,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void SelectGametype()
         {
-            float DrawY = PanelY + 5;
+            float DrawY = PanelY;
             int CurrentIndex = 0;
             for (int G = 0; G < ArrayGametypeCategory.Length; ++G)
             {
+                DrawY += HeaderOffsetY;
+                DrawY += FirstLineOffsetY;
+
                 if (SelectGametype(ArrayGametypeCategory[G], ref CurrentIndex, ref DrawY))
                     break;
+
+                DrawY += CategoryOffsetY;
             }
         }
 
         private bool SelectGametype(GametypeCategory ActiveCategory, ref int CurrentIndex, ref float DrawY)
         {
-            if (CurrentIndex >= GametypeScrollbarValue)
-            {
-                DrawY += 20;
-            }
-
             ++CurrentIndex;
 
             for (int G = 0; G < ActiveCategory.ArrayGametype.Length; ++G)
@@ -130,7 +157,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CurrentIndex >= GametypeScrollbarValue && ActiveCategory.ArrayGametype[G].IsUnlocked)
                 {
                     if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
+                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY
                         && InputHelper.InputConfirmPressed())
                     {
                         SelectedGametype = ActiveCategory.ArrayGametype[G];
@@ -140,7 +167,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                DrawY += 20;
+                DrawY += LineOffsetY;
                 ++CurrentIndex;
             }
 
@@ -154,47 +181,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawEmptyBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, PanelHeight);
+            float Ratio = Constants.Height / 2160f;
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.8f), (int)(Lobby.BackgroundColor.G * 0.8f), (int)(Lobby.BackgroundColor.B * 0.8f), 150);
-            g.Draw(GameScreen.sprPixel, new Rectangle(LeftPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
+            float DrawY = PanelY;
 
-            float DrawY = PanelY + 5;
+            g.Draw(sprFrameDescription, new Vector2(2280 * Ratio, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+
             int CurrentIndex = 0;
             for (int G = 0; G < ArrayGametypeCategory.Length; ++G)
             {
                 DrawGametypeCategory(g, ArrayGametypeCategory[G], ref CurrentIndex, ref DrawY);
+                DrawY += CategoryOffsetY;
             }
 
-            int RightPanelX = Constants.Width - LeftPanelX - PanelWidth;
-            int RightPanelContentOffset = (int)(PanelWidth * 0.05);
-            int RightPanelContentX = RightPanelX + RightPanelContentOffset;
-            int RightPanelContentWidth = PanelWidth - RightPanelContentOffset - RightPanelContentOffset;
+            g.Draw(sprHighlight, new Vector2(2484 * Ratio, 1100 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+            g.DrawStringCentered(fntOxanimumRegular, SelectedGametype.Name, new Vector2(2800 * Ratio, 1150 * Ratio), ColorText);
 
-            int PreviewBoxY = PanelY + 10;
-            int PreviewBoxHeight = (int)(PanelHeight * 0.4);
-
-            int DescriptionBoxY = PreviewBoxY + PreviewBoxHeight + 10;
-            int DescriptionHeight = PanelHeight - (DescriptionBoxY - PanelY) - 10;
-
-            int DescriptionBoxNameOffset = (int)(RightPanelContentWidth * 0.25);
-            int DescriptionBoxNameX = RightPanelContentX + DescriptionBoxNameOffset;
-            int DescriptionBoxNameWidth = RightPanelContentWidth - DescriptionBoxNameOffset - DescriptionBoxNameOffset;
-            int DescriptionBoxNameHeight = 30;
-
-            DrawEmptyBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, PanelHeight);
-            g.Draw(GameScreen.sprPixel, new Rectangle(RightPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
-
-            DrawEmptyBox(g, new Vector2(RightPanelContentX, PreviewBoxY), RightPanelContentWidth, PreviewBoxHeight);
-            DrawEmptyBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight);
-            DrawEmptyBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30);
-
-            g.DrawStringCentered(fntText, SelectedGametype.Name, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2, DescriptionBoxY + DescriptionBoxNameHeight / 2), Color.White);
-
-            float DescriptionY = DescriptionBoxY + DescriptionBoxNameHeight;
-            foreach (string ActiveLine in TextHelper.FitToWidth(fntText, SelectedGametype.Description, RightPanelContentWidth - 5))
+            float DescriptionY = 1220 * Ratio;
+            foreach (string ActiveLine in TextHelper.FitToWidth(fntText, SelectedGametype.Description, (int)(350 * Ratio)))
             {
-                g.DrawString(fntText, ActiveLine, new Vector2(RightPanelContentX + 5, DescriptionY), Color.White);
+                g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(2340 * Ratio, DescriptionY), ColorText);
                 DescriptionY += 20;
 
             }
@@ -204,12 +211,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawGametypeCategory(CustomSpriteBatch g, GametypeCategory ActiveCategory, ref int CurrentIndex, ref float DrawY)
         {
-            if (CurrentIndex >= GametypeScrollbarValue)
-            {
-                g.DrawStringMiddleAligned(fntText, ActiveCategory.Category, new Vector2(LeftPanelX + PanelWidth / 2, DrawY), Color.White);
-                DrawY += 20;
-            }
+            float Ratio = Constants.Height / 2160f;
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
+            g.DrawStringMiddleAligned(fntOxanimumBold, ActiveCategory.Category, new Vector2(LeftPanelX + PanelWidth / 2, DrawY), ColorText);
+            DrawY += HeaderOffsetY;
+
+            int BoxHeight = (int)(ActiveCategory.ArrayGametype.Length * LineOffsetY);
+
+            g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
+
+            DrawY += FirstLineOffsetY;
             ++CurrentIndex;
 
             for (int G = 0; G < ActiveCategory.ArrayGametype.Length; ++G)
@@ -218,21 +233,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ActiveCategory.ArrayGametype[G].IsUnlocked)
                     {
-                        g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.White);
-
                         if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
+                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY)
                         {
-                            g.Draw(sprPixel, new Rectangle(LeftPanelX, (int)DrawY, PanelWidth, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                         }
+
+                        g.DrawString(fntOxanimumRegular, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), ColorText);
                     }
                     else
                     {
-                        g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.Gray);
+                        g.DrawString(fntOxanimumRegular, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.Gray);
                     }
                 }
 
-                DrawY += 20;
+                DrawY += LineOffsetY;
                 ++CurrentIndex;
             }
         }

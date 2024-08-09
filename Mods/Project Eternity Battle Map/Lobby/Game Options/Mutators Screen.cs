@@ -15,16 +15,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         #region Ressources
 
-        private BoxScrollbar AvailableMutatorsScrollbar;
-        private BoxScrollbar ActiveMutatorsScrollbar;
-        private BoxButton AddButton;
-        private BoxButton AddAllButton;
-        private BoxButton RemoveButton;
-        private BoxButton RemoveAllButton;
+        private Scrollbar AvailableMutatorsScrollbar;
+        private Scrollbar ActiveMutatorsScrollbar;
+        private TextButton AddButton;
+        private TextButton AddAllButton;
+        private TextButton RemoveButton;
+        private TextButton RemoveAllButton;
 
         private IUIElement[] ArrayMenuButton;
 
         private SpriteFont fntText;
+        private SpriteFont fntOxanimumRegular;
+        private SpriteFont fntOxanimumBold;
+
+        private Texture2D sprHighlight;
+
+        private Texture2D sprFrameTop;
+        private Texture2D sprFrameDescription;
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
 
         #endregion
 
@@ -36,11 +45,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int LeftPanelX;
         private int RightPanelX;
-
-        private int ButtonsWidth;
-        private int ButtonsHeight;
-        private int ButtonsX;
-        private int ButtonsY;
 
         #endregion
 
@@ -60,36 +64,47 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Room = Room;
             this.Owner = Owner;
 
+            float Ratio = Constants.Height / 2160f;
+
+            ListAvailableMutators = new List<Mutator>();
             AvailableMutatorsValue = 0;
             SelectedActiveMutatorsIndex = -1;
 
-            PanelY = (int)(Constants.Height * 0.15);
             PanelWidth = (int)(Constants.Width * 0.37);
             PanelHeight = (int)(Constants.Height * 0.52);
 
-            LeftPanelX = (int)(Constants.Width * 0.03);
-            RightPanelX = Constants.Width - LeftPanelX - PanelWidth;
+            LeftPanelX = (int)(394 * Ratio);
+            PanelY = (int)(542 * Ratio);
+            RightPanelX = (int)(2278 * Ratio);
 
-            ButtonsWidth = (int)(Constants.Width * 0.13);
-            ButtonsHeight = 30;
-            ButtonsX = Constants.Width / 2 - ButtonsWidth / 2;
-            ButtonsY = PanelY + (PanelHeight - ButtonsHeight * 7) / 2;
         }
 
         public override void Load()
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
 
-            AvailableMutatorsScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY + 30), PanelHeight - 30, 5, OnAvailableMutatorsScrollbarChange);
-            ActiveMutatorsScrollbar = new BoxScrollbar(new Vector2(RightPanelX + PanelWidth - 20, PanelY + 30), PanelHeight - 30, 10, OnActiveMutatorsScrollbarChange);
-            
-            AddButton = new BoxButton(new Rectangle(ButtonsX, ButtonsY, ButtonsWidth, ButtonsHeight), fntText, "Add", OnButtonOver, OnAddPressed);
-            ButtonsY += 40;
-            AddAllButton = new BoxButton(new Rectangle(ButtonsX, ButtonsY, ButtonsWidth, ButtonsHeight), fntText, "Add All", OnButtonOver, OnAddAllPressed);
-            ButtonsY += 90;
-            RemoveButton = new BoxButton(new Rectangle(ButtonsX, ButtonsY, ButtonsWidth, ButtonsHeight), fntText, "Remove", OnButtonOver, OnRemovePressed);
-            ButtonsY += 40;
-            RemoveAllButton = new BoxButton(new Rectangle(ButtonsX, ButtonsY, ButtonsWidth, ButtonsHeight), fntText, "Remove All", OnButtonOver, OnRemoveAllPressed);
+            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+
+            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top");
+            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Description");
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
+            float Ratio = Constants.Height / 2160f;
+
+            AvailableMutatorsScrollbar = new Scrollbar(sprScrollbar, new Vector2(LeftPanelX + PanelWidth - 20, PanelY + 30), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 5, OnAvailableMutatorsScrollbarChange);
+            ActiveMutatorsScrollbar = new Scrollbar(sprScrollbar, new Vector2(RightPanelX + PanelWidth - 20, PanelY + 30), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnActiveMutatorsScrollbarChange);
+
+            int ButtonsX = (int)(1912 * Ratio);
+            int ButtonsY = (int)(770 * Ratio);
+            AddButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddPressed);
+            ButtonsY += (int)(132 * Ratio);
+            AddAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add All}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddAllPressed);
+            ButtonsY += (int)(306 * Ratio);
+            RemoveButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemovePressed);
+            ButtonsY += (int)(132 * Ratio);
+            RemoveAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove All}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemoveAllPressed);
 
             ArrayMenuButton = new IUIElement[]
             {
@@ -197,12 +212,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, PanelHeight, Color.White);
-            DrawBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, 30, Color.White);
-            DrawBox(g, new Vector2(LeftPanelX + PanelWidth - 132, PanelY + 3), 127, 24, Color.White);
-            g.DrawStringRightAligned(fntText, "Available Mutators", new Vector2(LeftPanelX + PanelWidth - 15, PanelY + 6), Color.White);
+            float Ratio = Constants.Height / 2160f;
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
+            int DrawX = LeftPanelX;
+            int DrawY = PanelY;
+            int BoxHeight = (int)(994 * Ratio);
+            g.DrawStringCentered(fntOxanimumBold, "Available Mutators", new Vector2(DrawX + (sprFrameTop.Width / 2) * Ratio, DrawY), ColorText);
 
-            float DrawY = PanelY + 32;
+            DrawY += (int)(42 * Ratio);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(DrawX), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
+            
+
+            DrawY = PanelY + 32;
             for (int M = AvailableMutatorsValue; M < ListAvailableMutators.Count; M++)
             {
                 Mutator ActiveMutator = ListAvailableMutators[M];
@@ -228,10 +252,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            DrawBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, PanelHeight, Color.White);
-            DrawBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, 30, Color.White);
-            DrawBox(g, new Vector2(RightPanelX + PanelWidth - 115, PanelY + 3), 110, 24, Color.White);
-            g.DrawStringRightAligned(fntText, "Active Mutators", new Vector2(RightPanelX + PanelWidth - 15, PanelY + 6), Color.White);
+            DrawX = RightPanelX;
+            DrawY = PanelY;
+            g.DrawStringCentered(fntOxanimumBold, "Active Mutators", new Vector2(DrawX + (sprFrameTop.Width / 2) * Ratio, DrawY), ColorText);
+
+            DrawY += (int)(42 * Ratio);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(DrawX), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawY = PanelY + 32;
             for (int M = AvailableMutatorsValue; M < Room.ListMutator.Count; M++)
@@ -259,14 +287,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            int DescriptionBoxY = PanelY + PanelHeight + 20;
-            int DescriptionWidth = (int)(Constants.Width * 0.94);
-            int DescriptionHeight = (int)(Constants.Height * 0.2);
+            int DescriptionBoxY = (int)(1650 * Ratio);
+            int DescriptionWidth = (int)(sprFrameDescription.Width * Ratio * 0.95f);
+            int DescriptionHeight = (int)(sprFrameDescription.Height * Ratio * 0.95f);
+            DrawX = LeftPanelX;
 
-            DrawBox(g, new Vector2(LeftPanelX, DescriptionBoxY), DescriptionWidth, DescriptionHeight, Color.White);
-            DrawBox(g, new Vector2(LeftPanelX, DescriptionBoxY), DescriptionWidth, 30, Color.White);
-            DrawBox(g, new Vector2(LeftPanelX + DescriptionWidth - 115, DescriptionBoxY + 3), 110, 24, Color.White);
-            g.DrawStringRightAligned(fntText, "Mutator Details", new Vector2(LeftPanelX + DescriptionWidth - 15, DescriptionBoxY + 6), Color.White);
+            g.Draw(sprFrameDescription, new Vector2(DrawX, DescriptionBoxY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.DrawStringRightAligned(fntOxanimumBold, "Mutator Details", new Vector2(3300 * Ratio, 1690 * Ratio), ColorText);
 
             if (ActiveMutator != null)
             {
