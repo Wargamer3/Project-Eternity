@@ -551,7 +551,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void OpenInfo()
         {
-            PushScreen(new RecordsScreen((BattleMapPlayer)PlayerManager.ListLocalPlayer[0], null));
+            PushScreen(new RecordsScreenWhite((BattleMapPlayer)PlayerManager.ListLocalPlayer[0], null));
             sndButtonClick.Play();
         }
 

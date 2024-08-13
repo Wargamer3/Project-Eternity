@@ -152,6 +152,13 @@
     <Compile Include="Lobby\Player\Campaign Record.cs" />
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
+    <Compile Include="Lobby\Records\Battle Records Tab.cs" />
+    <Compile Include="Lobby\Records\Bonus Records Tab.cs" />
+    <Compile Include="Lobby\Records\Multiplayer Records Tab.cs" />
+    <Compile Include="Lobby\Records\Player Records Tab.cs" />
+    <Compile Include="Lobby\Records\Progression Records Tab.cs" />
+    <Compile Include="Lobby\Records\Records Screen.cs" />
+    <Compile Include="Lobby\Records\Unit Records Tab.cs" />
     <Compile Include="Lobby\Shop\Confirm Unit Buy White.cs" />
     <Compile Include="Lobby\Shop\Confirm Unit Skin Buy.cs" />
     <Compile Include="Lobby\Shop\Confirm Unit Buy.cs" />
