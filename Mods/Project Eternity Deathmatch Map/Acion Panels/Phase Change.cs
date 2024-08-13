@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
                 {
-                    Map.OnNewTurn();
+                    OnNewTurn(Map);
                 }
 
                 Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
@@ -195,6 +195,81 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     ActiveSquad[U].OnPlayerPhaseStart(Map.ActivePlayerIndex, ActiveSquad);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called every time every players has finished their actions.
+        /// </summary>
+        public static void OnNewTurn(DeathmatchMap Map)
+        {
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                for (int S = 0; S < Map.ListPlayer[P].ListSquad.Count; S++)
+                {
+                    Squad ActiveSquad = Map.ListPlayer[P].ListSquad[S];
+                    if (ActiveSquad.CurrentLeader == null)
+                        continue;
+
+                    //Remove 5 EN each time the Squad spend a turn in the air.
+                    int ENUsedPerTurn = Map.TerrainRestrictions.GetENUsedPerTurnCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, ActiveSquad.CurrentTerrainIndex);
+                    if (ENUsedPerTurn > 0)
+                        ActiveSquad.CurrentLeader.ConsumeEN(ENUsedPerTurn);
+
+                    for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
+                    {
+                        foreach (Terrain ActiveTerrain in Map.GetAllTerrain(ActiveSquad, Map))
+                        {
+                            //Terrain passive bonus.
+                            for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
+                                switch (ActiveTerrain.ListActivation[i])
+                                {
+                                    case TerrainActivation.OnEveryTurns:
+                                        switch (ActiveTerrain.ListBonus[i])
+                                        {
+                                            case TerrainBonus.HPRegen:
+                                                ActiveSquad[U].HealUnit((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxHP));
+                                                break;
+
+                                            case TerrainBonus.ENRegen:
+                                                ActiveSquad[U].RefillEN((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxEN));
+                                                break;
+                                            case TerrainBonus.HPRestore:
+                                                ActiveSquad[U].HealUnit(ActiveTerrain.ListBonusValue[i]);
+                                                break;
+
+                                            case TerrainBonus.ENRestore:
+                                                ActiveSquad[U].RefillEN(ActiveTerrain.ListBonusValue[i]);
+                                                break;
+                                        }
+                                        break;
+                                }
+                        }
+                    }
+                }
+            }
+
+            Map.ActivePlayerIndex = 0;
+            Map.GameTurn++;
+
+            Map.UpdateMapEvent(DeathmatchMap.EventTypeTurn, 0);
+
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                for (int S = 0; S < Map.ListPlayer[P].ListSquad.Count; S++)
+                {
+                    Squad ActiveSquad = Map.ListPlayer[P].ListSquad[S];
+                    if (ActiveSquad.CurrentLeader == null)
+                        continue;
+
+                    ActiveSquad.StartTurn();
+
+                    //Update Effect based on Turns.
+                    for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
+                    {
+                        ActiveSquad[U].OnTurnEnd(Map.ActivePlayerIndex, ActiveSquad);
+                    }
                 }
             }
         }

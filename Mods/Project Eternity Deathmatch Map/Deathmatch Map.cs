@@ -46,7 +46,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public static readonly string MapType = "Deathmatch";
         
-        private SpriteFont fntArial16;
         public Texture2D sprTileBorderRed;
         public Texture2D sprTileBorderBlue;
 
@@ -70,7 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public UnitDeploymentScreen UnitDeploymentScreen;
         public DeathmatchParams GlobalBattleParams;
         public List<DeathmatchMutator> ListMutator;
-        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;
+        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;//Temporary obstacles
 
         public int ActiveSquadIndex
         {
@@ -257,7 +256,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NonDemoScreen.Load();
 
                 fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-                fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
                 sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
                 sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
             }

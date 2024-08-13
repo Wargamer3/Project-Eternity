@@ -90,7 +90,7 @@ namespace ProjectEternity.Core.Units.Conquest
 
         public Vector3 Position { get { return MapComponents.Position; } }
 
-        public uint ID { get { return MapComponents.ID; } set { MapComponents.ID = value; } }
+        public uint SpawnID { get { return MapComponents.ID; } set { MapComponents.ID = value; } }
         
         public bool CanMove { get { return MapComponents.CanMove; } }
 
@@ -181,7 +181,7 @@ namespace ProjectEternity.Core.Units.Conquest
             else
                 Weapon1.Sec = WeaponSecondaryProperty.None;
 
-            ListAttack.Add(Weapon1);
+            _UnitStat.ListAttack.Add(Weapon1);
 
             Attack Weapon2 = new Attack(Weapon2Name);
             Weapon2.RangeMinimum = Weapon2MinimumRange;
@@ -191,7 +191,7 @@ namespace ProjectEternity.Core.Units.Conquest
             else
                 Weapon2.Sec = WeaponSecondaryProperty.None;
 
-            ListAttack.Add(Weapon2);
+            _UnitStat.ListAttack.Add(Weapon2);
 
             _UnitStat.Init();
         }
@@ -239,6 +239,9 @@ namespace ProjectEternity.Core.Units.Conquest
         {
             get { return MapComponents; }
         }
+
+        public bool IsPlayerControlled { get; set; }
+        public bool IsEventSquad { get; set; }
 
         public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {

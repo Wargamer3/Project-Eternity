@@ -136,7 +136,6 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 return ListFinalMVChoice;
             }
 
-
             public override AIScript CopyScript()
             {
                 return new MoveTowardClosestEnemy();

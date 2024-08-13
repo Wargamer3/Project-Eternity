@@ -30,9 +30,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void SetMutators(List<Mutator> ListMutator);
 
-        public abstract void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove);
+        public abstract void RemoveUnit(int PlayerIndex, object UnitToRemove);
 
-        public abstract void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition);
+        public abstract void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition);
 
         public abstract void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile);
 

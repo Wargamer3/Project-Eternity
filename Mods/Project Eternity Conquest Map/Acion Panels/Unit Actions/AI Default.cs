@@ -54,13 +54,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelAIAttack(Map, Map.ActivePlayerIndex, U));
+                    AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(Map, Map.ActivePlayerIndex, U));
                 }
             }
 
             if (UnitsNotUpdatedCount == 0)
             {
-                Map.OnNewPhase();
+                RemoveAllActionPanels();
+                ActionPanelPhaseChange EndPhase = new ActionPanelPhaseChange(Map);
+                EndPhase.ActiveSelect = true;
+                ListActionMenuChoice.AddToPanelListAndSelect(EndPhase);
             }
         }
 

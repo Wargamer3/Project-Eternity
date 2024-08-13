@@ -123,9 +123,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                 }
 
+                public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+                {
+                }
+
                 public override void OnUnitStop(Squad StoppedUnit)
                 {
                     if (ForceHealOnStop && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+                    {
+
+                    }
+                }
+
+                public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+                {
+                    if (ForceHealOnStop && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y)
                     {
 
                     }

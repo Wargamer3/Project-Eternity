@@ -33,7 +33,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override void OnSelect()
         {
             AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveUnit));
-
             List<Tuple<int, int>> ListSquadFound = Map.CanSquadAttackWeapon1((int)ActiveUnit.X, (int)ActiveUnit.Y, Map.ActivePlayerIndex, ActiveUnit.ArmourType, ActiveUnit.ListAttack[0]);
             if (ListSquadFound != null && ListSquadFound.Count > 0)
             {

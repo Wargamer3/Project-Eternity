@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void OnSelect()
         {
-            Map.FinalizeMovement(ActiveUnit);
+            Map.FinalizeMovement(ActiveUnit, 0, new System.Collections.Generic.List<Vector3>());
             ActiveUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
             TerrainConquest ActiveTerrain = Map.GetTerrain(ActiveUnit.Components);
 

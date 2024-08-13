@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //If the player is from the same team as the current player or is dead, skip it.
-                if (Map.ListPlayer[P].Team == Map.ListPlayer[Map.ActivePlayerIndex].Team
+                if (Map.ListPlayer[P].TeamIndex == Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex
                     || !Map.ListPlayer[P].IsAlive)
                     continue;
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[FinalMV].WorldPosition);
             }
 
-            Map.FinalizeMovement(ActiveUnit);
+            Map.FinalizeMovement(ActiveUnit, 0, Map.GetPathToTerrain(ListMVChoice[FinalMV], ActiveUnit.Position));
         }
 
         public override void DoUpdate(GameTime gameTime)

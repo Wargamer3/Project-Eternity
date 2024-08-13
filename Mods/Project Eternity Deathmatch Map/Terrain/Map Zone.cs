@@ -5,7 +5,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    class MapZoneDeathmatch : MapZone
+    public class MapZoneDeathmatch : MapZone
     {
         private readonly DeathmatchMap Map;
 

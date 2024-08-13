@@ -44,11 +44,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void HealSquad(Squad SquadToHeal)
+        public void HealSquad(Unit UnitToHeal)
         {
-            if (SquadToHeal.CurrentLeader.HP < SquadToHeal.CurrentLeader.MaxHP)
+            if (UnitToHeal.HP < UnitToHeal.MaxHP)
             {
-                SquadToHeal.CurrentLeader.HealUnit(SquadToHeal.CurrentLeader.MaxHP / 2);
+                UnitToHeal.HealUnit(UnitToHeal.MaxHP / 2);
                 IsUsed = true;
                 TurnUsed = Map.ActivePlayerIndex;
                 TurnRemaining = 3;
@@ -71,6 +71,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
+                HealSquad(SelectedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+        {
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            {
                 HealSquad(SelectedUnit);
             }
         }
@@ -78,6 +86,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void OnUnitStop(Squad StoppedUnit)
         {
             if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            {
+                HealSquad(StoppedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+        {
+            if (!IsUsed && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y)
             {
                 HealSquad(StoppedUnit);
             }

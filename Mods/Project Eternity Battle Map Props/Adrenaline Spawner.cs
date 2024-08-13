@@ -44,11 +44,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void RefillAdrenaline(Squad SquadToHeal)
+        public void RefillAdrenaline(Unit UnitToHeal)
         {
-            if (SquadToHeal.CurrentLeader.Pilot.SP < SquadToHeal.CurrentLeader.Pilot.MaxSP)
+            if (UnitToHeal.Pilot.SP < UnitToHeal.Pilot.MaxSP)
             {
-                SquadToHeal.CurrentLeader.RefillSP(10);
+                UnitToHeal.RefillSP(10);
                 IsUsed = true;
                 TurnUsed = Map.ActivePlayerIndex;
                 TurnRemaining = 3;
@@ -71,6 +71,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
+                RefillAdrenaline(SelectedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+        {
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            {
                 RefillAdrenaline(SelectedUnit);
             }
         }
@@ -78,6 +86,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void OnUnitStop(Squad StoppedUnit)
         {
             if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            {
+                RefillAdrenaline(StoppedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+        {
+            if (!IsUsed && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y)
             {
                 RefillAdrenaline(StoppedUnit);
             }

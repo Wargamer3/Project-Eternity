@@ -15,32 +15,57 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     // Special EventArgs class to hold info about Shapes.
     public class NewPhaseEventArgs : EventArgs { }
 
-    public class Player
+    public class Player : BattleMapPlayer
     {
-        public string Name;
+        public List<UnitConquest> ListUnit;
+        public List<Commander> ListCommander;
+        public List<EventPoint> ListSpawnPoint;
+        public bool IsAlive;//If the player can play (always true if it still have any active units).
+        public int Kills;
+        public int Death;
+
         public Character CommandingOfficer;
         public string PlayerType;
         public bool IsHuman;
-        public bool IsOnline;
-        public List<UnitConquest> ListUnit;
-        public List<EventPoint> ListSpawnPoint;
-        public int Team;
-        public Color Color;
-        public bool IsAlive;//If the player can play (always true if it still have any active units).
         public PlayerStepDelegate PlayerStep;
         public PlayerDrawDelegate PlayerDraw;
 
-        public Player(string Name, string PlayerType, bool IsHuman, bool IsOnline, int Team, Color Color)
+        public Player(string Name, string PlayerType, bool IsPlayerControlled, bool IsOnline, int Team, Color Color)
+            : this("", Name, PlayerType, IsPlayerControlled, IsOnline, Team, Color)
         {
-            this.ListUnit = new List<UnitConquest>();
+        }
+
+        public Player(string ID, string Name, string PlayerType, bool IsPlayerControlled, bool IsOnline, int Team, Color Color)
+            : base(ID, Name, PlayerType, IsOnline, Team, IsPlayerControlled, Color)
+        {
+            ListUnit = new List<UnitConquest>();
+            ListCommander = new List<Commander>();
             ListSpawnPoint = new List<EventPoint>();
-            this.Name = Name;
-            this.PlayerType = PlayerType;
-            this.IsHuman = IsHuman;
-            this.IsOnline = IsOnline;
-            this.Team = Team;
+            this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
             this.IsAlive = false;
+        }
+
+
+        public Player(BattleMapPlayer Clone)
+            : base(Clone)
+        {
+            ListUnit = new List<UnitConquest>();
+            ListCommander = new List<Commander>();
+            ListSpawnPoint = new List<EventPoint>();
+            this.IsAlive = false;
+        }
+
+        public void UpdateAliveStatus()
+        {
+            this.IsAlive = false;
+            foreach (UnitConquest ActiveUnit in ListUnit)
+            {
+                if (ActiveUnit.HP > 0)
+                {
+                    this.IsAlive = true;
+                }
+            }
         }
     }
 }

@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             Map.CursorControl();
 
-            if ((InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased()) &&
+            if (MouseHelper.InputLeftButtonReleased() &&
                 ListMVPoints.Contains(Map.CursorPosition))//If the cursor is in the possible move list.
             {
                 //Movement initialisation.

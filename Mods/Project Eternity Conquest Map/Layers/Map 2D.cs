@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -9,11 +7,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class ConquestMap2D : Map2D
     {
         private readonly ConquestMap ActiveMap;
+        protected MapLayer Owner;
 
-        public ConquestMap2D(ConquestMap Map)
+        public ConquestMap2D(ConquestMap Map, MapLayer Owner)
             : base(Map)
         {
             ActiveMap = Map;
+            this.Owner = Owner;
 
             DrawableTile[,] ArrayTile = new DrawableTile[MapSize.X, MapSize.Y];
 
@@ -28,10 +28,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public ConquestMap2D(ConquestMap Map, BinaryReader BR)
+        public ConquestMap2D(ConquestMap Map, MapLayer Owner, BinaryReader BR)
             : base(Map)
         {
             ActiveMap = Map;
+            this.Owner = Owner;
 
             DrawableTile[,] ArrayTile = new DrawableTile[MapSize.X, MapSize.Y];
 
@@ -46,17 +47,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ReplaceGrid(ArrayTile);
 
             Load(BR);
-        }
-
-        public void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
-                {
-                    //DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S].Components, !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
-                }
-            }
         }
     }
 }

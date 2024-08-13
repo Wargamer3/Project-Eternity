@@ -208,9 +208,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     throw new NotImplementedException();
                 }
 
-                public void PickupWeapon(Squad SquadToUse, int LayerIndex)
+                public void PickupWeapon(Unit UnitToUse, int LayerIndex)
                 {
-                    SquadToUse.CurrentLeader.AddTemporaryAttack(WeaponName, SpritePath, sprWeapon, Unit3D.UnitEffect3D, Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
+                    UnitToUse.AddTemporaryAttack(WeaponName, SpritePath, sprWeapon, Unit3D.UnitEffect3D, Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
 
                     Map.Params.GlobalContext.ListAttackPickedUp.Add(WeaponName);
 
@@ -242,6 +242,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y && PositionMovedOn.Z == Position.Z)
                     {
+                        PickupWeapon(SelectedUnit.CurrentLeader, (int)PositionMovedOn.Z);
+                    }
+                }
+
+                public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+                {
+                    if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y && PositionMovedOn.Z == Position.Z)
+                    {
                         PickupWeapon(SelectedUnit, (int)PositionMovedOn.Z);
                     }
                 }
@@ -250,7 +258,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y && StoppedUnit.Z == Position.Z)
                     {
-                        PickupWeapon(StoppedUnit, (int)StoppedUnit.Z);
+                        PickupWeapon(StoppedUnit.CurrentLeader, (int)StoppedUnit.Z);
+                    }
+                }
+
+                public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+                {
+                    if (!IsUsed && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y && UnitPosition.Z == Position.Z)
+                    {
+                        PickupWeapon(StoppedUnit, (int)UnitPosition.Z);
                     }
                 }
 

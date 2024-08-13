@@ -16,13 +16,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
-        public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
+        public override void RemoveUnit(int PlayerIndex, object UnitToRemove)
         {
             /*ListPlayer[ActivePlayerIndex].ListSquad.Remove((Squad)UnitToRemove);
             ListPlayer[ActivePlayerIndex].UpdateAliveStatus();*/
         }
 
-        public override void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition)
+        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
         {
             /*Squad ActiveSquad = (Squad)UnitToAdd;
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)

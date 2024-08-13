@@ -28,13 +28,13 @@ namespace ProjectEternity.Core.Units
 
         public abstract void OnTurnEnd(Squad ActiveUnit, int PlayerIndex);
 
-        public abstract List<ActionPanel> OnUnitSelected(Squad ActiveSquad);
+        public abstract List<ActionPanel> OnUnitSelected(UnitMapComponent ActiveSquad);
 
-        public abstract List<ActionPanel> OnUnitBeforeStop(Squad ActiveSquad);
+        public abstract List<ActionPanel> OnUnitBeforeStop(UnitMapComponent ActiveSquad);
 
-        public abstract void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn);
+        public abstract void OnMovedOverBeforeStop(UnitMapComponent SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn);
 
-        public abstract void OnUnitStop(Squad StoppedUnit);
+        public abstract void OnUnitStop(UnitMapComponent StoppedUnit);
 
         public void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
         {

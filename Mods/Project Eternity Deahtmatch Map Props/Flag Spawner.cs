@@ -84,12 +84,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(_Team);
         }
 
-        public void GragFlag(Squad ActiveSquad)
+        public void GragFlag(Unit ActiveUnit, UnitMapComponent ActiveUnitComponent)
         {
             //Brought back the enemy flag
-            if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == _Team && ActiveSquad.ItemHeld != null && ActiveSquad.ItemHeld.ItemType == "Flag")
+            if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex == _Team && ActiveUnitComponent.ItemHeld != null && ActiveUnitComponent.ItemHeld.ItemType == "Flag")
             {
-                Flag ActiveFlag = (Flag)ActiveSquad.ItemHeld;
+                Flag ActiveFlag = (Flag)ActiveUnitComponent.ItemHeld;
 
                 if (ActiveFlag.Owner.Team != _Team)
                 {
@@ -104,9 +104,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 if (EnemyFlagSpawner._Team != _Team)
                                 {
                                     EnemyFlagSpawner.ReturnFlag();
-                                    ActiveSquad.DropItem();
-                                    ActiveSquad.CurrentLeader.RefillSP(10);
-                                    ActiveSquad.CurrentLeader.RefillEN(5);
+                                    ActiveUnitComponent.DropItem();
+                                    ActiveUnit.RefillSP(10);
+                                    ActiveUnit.RefillEN(5);
                                     //Get point
                                     ((CaptureTheFlagGameRule)Map.GameRule).GetPoint(Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex);
                                     return;
@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else if (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex != _Team)
             {
-                ActiveSquad.PickupItem(TeamFlag);
+                ActiveUnitComponent.PickupItem(TeamFlag);
                 IsUsed = true;
             }
         }
@@ -144,7 +144,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
-                GragFlag(SelectedUnit);
+                GragFlag(SelectedUnit.CurrentLeader, SelectedUnit);
+            }
+        }
+
+
+        public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+        {
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            {
+                GragFlag(SelectedUnit, PositionStoppedOn);
             }
         }
 
@@ -152,7 +161,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
             {
-                GragFlag(StoppedUnit);
+                GragFlag(StoppedUnit.CurrentLeader, StoppedUnit);
+            }
+        }
+
+        public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+        {
+            if (!IsUsed && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y)
+            {
+                GragFlag(StoppedUnit, UnitPosition);
             }
         }
 

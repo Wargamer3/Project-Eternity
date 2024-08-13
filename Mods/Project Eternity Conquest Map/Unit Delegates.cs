@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 for (int P = 0; P < ListPlayer.Count; P++)
                 {
                     //If the player is from the same team as the current player or is dead, skip it.
-                    if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team
+                    if (ListPlayer[P].TeamIndex == ListPlayer[ActivePlayerIndex].TeamIndex
                         || !ListPlayer[P].IsAlive)
                         continue;
                     for (int TargetSelect = 0; TargetSelect < ListPlayer[P].ListUnit.Count; TargetSelect++)
@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         ActiveUnit.SetPosition(CursorPosition);
                         ActiveUnit.SetPosition(ListRealChoice[Choice].WorldPosition);
 
-                        FinalizeMovement(ActiveUnit);
+                        FinalizeMovement(ActiveUnit, 0, GetPathToTerrain(ListRealChoice[Choice], ActiveUnit.Position));
                     }
                     else
                     {
@@ -176,7 +176,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 for (int P = 0; P < ListPlayer.Count; P++)
                 {
                     //If the player is from the same team as the current player or is dead, skip it.
-                    if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team
+                    if (ListPlayer[P].TeamIndex == ListPlayer[ActivePlayerIndex].TeamIndex
                         || !ListPlayer[P].IsAlive)
                         continue;
                     for (int TargetSelect = 0; TargetSelect < ListPlayer[P].ListUnit.Count; TargetSelect++)
@@ -224,7 +224,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         CursorPosition.Z = ListRealChoice[Choice].WorldPosition.Z;
                         ActiveUnit.SetPosition(ListRealChoice[Choice].WorldPosition);
 
-                        FinalizeMovement(ActiveUnit);
+                        FinalizeMovement(ActiveUnit, 0, GetPathToTerrain(ListRealChoice[Choice], ActiveUnit.Position));
                     }
                     else
                     {

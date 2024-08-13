@@ -14,7 +14,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void OnSelect()
         {
-            Map.OnNewPhase();
+            RemoveAllActionPanels();
+            ActionPanelPhaseChange EndPhase = new ActionPanelPhaseChange(Map);
+            EndPhase.ActiveSelect = true;
+            ListActionMenuChoice.AddToPanelListAndSelect(EndPhase);
         }
 
         public override void DoUpdate(GameTime gameTime)

@@ -215,7 +215,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         //Don't spawn the unit if there's already on with this ID.
                         for (int U = 0; U < Map.ListPlayer[SpawnPlayer].ListUnit.Count; U++)
                         {
-                            if (Map.ListPlayer[SpawnPlayer].ListUnit[U].ID == _UnitToSpawnID)
+                            if (Map.ListPlayer[SpawnPlayer].ListUnit[U].SpawnID == _UnitToSpawnID)
                                 return;
                         }
                     }
@@ -227,7 +227,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 _SpawnPosition = FinalSpawnPosition;
 
                 UnitConquest NewUnit = new UnitConquest(_UnitToSpawn.Remove(0, 9), Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect);
-                NewUnit.ID = _UnitToSpawnID;
+                NewUnit.SpawnID = _UnitToSpawnID;
 
                 if (!string.IsNullOrEmpty(AIPath))
                 {
@@ -235,7 +235,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     NewUnit.SquadAI.Load(AIPath);
                 }
 
-                Map.SpawnUnit(SpawnPlayer, NewUnit, _SpawnPosition);
+                Map.SpawnUnit(SpawnPlayer, NewUnit, _UnitToSpawnID, new Microsoft.Xna.Framework.Vector2(_SpawnPosition.X, _SpawnPosition.Y), (int)_SpawnPosition.Z);
             }
 
             #region Properties

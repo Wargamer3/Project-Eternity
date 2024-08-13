@@ -30,10 +30,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void OnScriptLoad(AIScript NewScript)
         {
-            ConquestScript NewDeathmatchScript = NewScript as ConquestScript;
-            if (NewDeathmatchScript != null)
+            ConquestScript NewConquestScript = NewScript as ConquestScript;
+            if (NewConquestScript != null)
             {
-                NewDeathmatchScript.Info = _Info;
+                NewConquestScript.Info = _Info;
             }
         }
     }

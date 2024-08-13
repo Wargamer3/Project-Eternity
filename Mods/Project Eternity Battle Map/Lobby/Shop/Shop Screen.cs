@@ -257,7 +257,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawBackground(g);
 
-
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
             ActiveSubScreen.Draw(g);

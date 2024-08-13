@@ -90,9 +90,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(_Ammo);
         }
 
-        public void PickupWeapon(Squad SquadToUse)
+        public void PickupWeapon(Unit UnitToUse)
         {
-            SquadToUse.CurrentLeader.AddTemporaryAttack(_WeaponName, _SpritePath, sprWeapon, Unit3D.UnitEffect3D, _Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
+            UnitToUse.AddTemporaryAttack(_WeaponName, _SpritePath, sprWeapon, Unit3D.UnitEffect3D, _Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
 
             Map.Params.GlobalContext.ListAttackPickedUp.Add(WeaponName);
 
@@ -117,6 +117,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
+                PickupWeapon(SelectedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn)
+        {
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            {
                 PickupWeapon(SelectedUnit);
             }
         }
@@ -124,6 +132,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void OnUnitStop(Squad StoppedUnit)
         {
             if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            {
+                PickupWeapon(StoppedUnit.CurrentLeader);
+            }
+        }
+
+        public override void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition)
+        {
+            if (!IsUsed && UnitPosition.X == Position.X && UnitPosition.Y == Position.Y)
             {
                 PickupWeapon(StoppedUnit);
             }

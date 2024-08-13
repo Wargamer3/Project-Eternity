@@ -172,7 +172,15 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.Conquest:
-                        PushScreen(new GameScreens.ConquestMapScreen.ConquestMap("Conquest Test", new GameModeInfo()));
+                        RemoveAllScreens();
+                        BattleMap NewConquestMap = BattleMap.DicBattmeMapType[GameScreens.ConquestMapScreen.ConquestMap.MapType].GetNewMap(null, string.Empty);
+                        NewConquestMap.BattleMapPath = "Conquest Test";
+                        NewConquestMap.ListGameScreen = ListGameScreen;
+                        NewConquestMap.Load();
+                        NewConquestMap.Init();
+                        NewConquestMap.TogglePreview(true);
+                        ListGameScreen.Insert(0, NewConquestMap);
+                        NewConquestMap.Update(gameTime);
                         break;
 
                     case MenuChoices.SorcererStreet:

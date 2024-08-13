@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             foreach (MovementAlgorithmTile ActiveDestination in ListLayerPossibility)
             {
-                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.X + OffsetY), ActiveDestination.LayerIndex);
+                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.Y + OffsetY), ActiveDestination.LayerIndex);
                 //Wall
                 if (ActiveTile == null || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 return null;
             }
 
-            return Map.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
+            return Map.LayerManager.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)

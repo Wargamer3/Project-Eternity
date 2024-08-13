@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             EnemyUnit.DamageUnit(TotalDamage);
             ActiveUnit.DamageUnit(TotalEnemyDamage);
 
-            Map.FinalizeMovement(ActiveUnit);
+            Map.FinalizeMovement(ActiveUnit, 0, new List<Vector3>());
             ActiveUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
 
             RemoveAllSubActionPanels();

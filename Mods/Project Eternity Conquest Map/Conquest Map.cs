@@ -16,45 +16,135 @@ using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
-{/*en gros, le but du jeu ce joue principalement sur la capture de batiment, les ville serve a créé de l'argent, les port a créé des bateau, les caserne a créé des unité de terre etc...
-  *et ultimement le but par défaut d'une partie c'est sois éliminé tout les unité ennemis ou sois de capturé le QG ennemis
- bob Le Nolife: c'est assez simpliste comme jeu, après il y a des subtilité comme le choix du générale qui donne des bonus, mais ça je m'en fou carrément, je prend toujours les généraux par défaut*/
-
-    public partial class ConquestMap : BattleMap
+{
+    public partial class ConquestMap : BattleMap, IProjectile3DSandbox
     {
-        public override MovementAlgorithmTile CursorTerrain { get { return ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        public static readonly string MapType = "Conquest";
+
+        public Texture2D sprTileBorderRed;
+        public Texture2D sprTileBorderBlue;
+
+        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
 
         public List<Dictionary<string, int>> ListUnitMovementCost;//Terrain Type Index, Movement type, how much it cost to move.
         public Dictionary<string, List<string>> DicWeapon1EffectiveAgainst;//Unit Name, Target Name.
         public Dictionary<string, List<string>> DicWeapon2EffectiveAgainst;//Unit Name, Target Name.
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon1;//Unit Name, <Target Name, Damage>.
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon2;//Unit Name, <Target Name, Damage>.
-        public List<MapLayer> ListLayer;
-        public LayerHolder LayerManager;
         public Dictionary<string, int> DicUnitCost;//Unit name, how much it cost to build.
         public int BuildingMenuCursor;
         public List<string> ListCurrentBuildingChoice;
         public Dictionary<string, List<string>> DicBuildingChoice;//Build type, list of units.
         public Vector3 LastPosition;
-        public List<Player> ListPlayer;
-        public MovementAlgorithm Pathfinder;
         public List<string> ListTerrainType;
 
-        public ConquestMap()
+        private List<Player> ListLocalPlayerInfo;
+        public List<Player> ListPlayer;
+        public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
+        public List<Player> ListAllPlayer { get { return ListPlayer; } }
+
+        public List<DelayedAttack> ListDelayedAttack;
+        public List<PERAttack> ListPERAttack;
+        public MovementAlgorithm Pathfinder;
+        public LayerHolderConquest LayerManager;
+
+        public ConquestParams GlobalBattleParams;
+        public List<ConquestMutator> ListMutator;
+        public Dictionary<Vector3, TerrainConquest> DicTemporaryTerrain;//Temporary obstacles
+
+        public int ActiveUnitIndex
         {
+            get
+            {
+                return _ActiveUnitIndex;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    _ActiveUnitIndex = value;
+                    _ActiveUnit = ListPlayer[ActivePlayerIndex].ListUnit[value];
+                }
+                else
+                {
+                    _ActiveUnitIndex = -1;
+                    _ActiveUnit = null;
+                }
+            }
         }
 
-        public ConquestMap(GameModeInfo GameInfo)
-        {
-            RequireDrawFocus = false;
-            ListActionMenuChoice = new ActionPanelHolder();
-            Pathfinder = new MovementAlgorithmConquest(this);
-            ListPlayer = new List<Player>();
-            ListLayer = new List<MapLayer>();
-            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+        private int _ActiveUnitIndex;//Unit selected by the active player.
+        public UnitConquest ActiveUnit { get { return _ActiveUnit; } }
 
-            CursorPosition = new Vector3(9, 13, 0);
-            CursorPositionVisible = CursorPosition;
+        private UnitConquest _ActiveUnit;
+
+        public int TargetSquadIndex
+        {
+            get
+            {
+                return _TargetSquadIndex;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    _TargetSquadIndex = value;
+                    _TargetSquad = ListPlayer[TargetPlayerIndex].ListUnit[value];
+                }
+                else
+                {
+                    _TargetSquadIndex = -1;
+                    _TargetSquad = null;
+                }
+            }
+        }
+
+        private int _TargetSquadIndex;//Unit targetted by the active player.
+        public UnitConquest TargetSquad { get { return _TargetSquad; } }
+
+        private UnitConquest _TargetSquad;
+        public int TargetPlayerIndex;//Player of controling TargetUnit.
+
+        public ConquestMap()
+            : this(new ConquestParams(new BattleContext()))
+        {
+            ConquestParams.DicParams.TryAdd(string.Empty, GlobalBattleParams);
+        }
+
+        public ConquestMap(ConquestParams Params)
+            : base()
+        {
+            this.Params = GlobalBattleParams = Params;
+            Params.AttackParams.SharedParams.Content = Content;
+
+            GameRule = new SinglePlayerGameRule(this);
+            LayerManager = new LayerHolderConquest(this);
+            MapEnvironment = new EnvironmentManagerConquest(this);
+            ListActionMenuChoice = new ActionPanelHolderConquest(this);
+            Params.ActiveParser = new ConquestFormulaParser(this);
+            ActivePlayerIndex = 0;
+            ListPlayer = new List<Player>();
+            ListLocalPlayerInfo = new List<Player>();
+            RequireFocus = false;
+            RequireDrawFocus = true;
+            Pathfinder = new MovementAlgorithmConquest(this);
+            ListDelayedAttack = new List<DelayedAttack>();
+            ListPERAttack = new List<PERAttack>();
+            ListMutator = new List<ConquestMutator>();
+            DicTemporaryTerrain = new Dictionary<Vector3, TerrainConquest>();
+
+            TerrainRestrictions = new UnitAndTerrainValues();
+            TerrainRestrictions.Load();
+        }
+
+        public ConquestMap(GameModeInfo GameInfo, ConquestParams Params)
+            : this(Params)
+        {
+            ListTileSet = new List<Texture2D>();
+            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            Camera2DPosition = Vector3.Zero;
+            ActiveUnitIndex = -1;
+
             ListTerrainType = new List<string>();
             ListCurrentBuildingChoice = new List<string>();
 
@@ -85,15 +175,26 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListTileSet = new List<Texture2D>();
             this.Camera2DPosition = Vector3.Zero;
 
-            this.ListPlayer = new List<Player>();
+            if (GameInfo == null)
+            {
+                GameRule = new SinglePlayerGameRule(this);
+            }
+            else
+            {
+                GameRule = GameInfo.GetRule(this);
+                if (GameRule == null)
+                {
+                    GameRule = new SinglePlayerGameRule(this);
+                }
+            }
         }
 
-        public ConquestMap(string BattleMapPath, GameModeInfo GameInfo)
-            : this(GameInfo)
+        public ConquestMap(string BattleMapPath, GameModeInfo GameInfo, ConquestParams Params)
+            : this(GameInfo, Params)
         {
             this.BattleMapPath = BattleMapPath;
         }
-        
+                
         public override void Save(string FilePath)
         {
             //Create the Part file.
@@ -105,12 +206,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             MapScript.SaveMapScripts(BW, ListMapScript);
 
             SaveTilesets(BW);
-            
-            BW.Write(ListLayer.Count);
-            foreach (MapLayer ActiveLayer in ListLayer)
-            {
-                ActiveLayer.Save(BW);
-            }
+
+            LayerManager.Save(BW);
+
+            MapEnvironment.Save(BW);
 
             FS.Close();
             BW.Close();
@@ -137,6 +236,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             PopulateBuildingChoice();
             PopulateUnitDamageWeapon1();
             PopulateUnitDamageWeapon2();
+
+            if (!IsServer)
+            {
+                fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+                sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
+                sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
+            }
         }
 
         public override void Load(byte[] ArrayGameData)
@@ -151,7 +257,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            //Map parameters.
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
@@ -160,12 +265,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             LoadTilesets(BR);
 
-            LoadMapGrid(BR);
+            LayerManager = new LayerHolderConquest(this, BR);
+
+            MapEnvironment = new EnvironmentManagerConquest(BR, this);
 
             BR.Close();
             FS.Close();
-
-            TogglePreview(BackgroundOnly);
         }
 
         protected void LoadMapGrid(BinaryReader BR)
@@ -174,7 +279,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int L = 0; L < LayerCount; ++L)
             {
-                ListLayer.Add(new MapLayer(this, BR, L));
+                LayerManager.ListLayer.Add(new MapLayer(this, BR, L));
             }
         }
 
@@ -194,9 +299,23 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
+        public override void Init()
+        {
+            base.Init();
+
+            GameRule.Init();
+
+            if (IsClient && ListPlayer.Count > 0)
+            {
+                ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
+            }
+
+            ActionPanelPhaseChange.OnNewTurn(this);
+        }
+
         public override void TogglePreview(bool UsePreview)
         {
-            ShowUnits = !ShowUnits;
+            ShowUnits = UsePreview;
         }
 
         public void PopulateUnitMovementCost()
@@ -959,19 +1078,29 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicBuildingChoice["Vehicle"].Add("Rig");
         }
 
-        public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
+        public void Reset()
         {
-            //ListPlayer[ActivePlayerIndex].ListUnit.Remove((UnitConquest)UnitToRemove);
+            LayerManager.LayerHolderDrawable.Reset();
+            MapEnvironment.Reset();
         }
 
-        public override void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition)
+        public override void RemoveUnit(int PlayerIndex, object UnitToRemove)
         {
-           /* UnitConquest ActiveSquad = (UnitConquest)UnitToAdd;
+            ListPlayer[ActivePlayerIndex].ListUnit.Remove((UnitConquest)UnitToRemove);
+            ListPlayer[ActivePlayerIndex].UpdateAliveStatus();
+        }
 
-            ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-            ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
+        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
+        {
+            UnitConquest ActiveUnit = (UnitConquest)UnitToAdd;
+            ActiveUnit.ReinitializeMembers(GlobalBattleParams.DicUnitType[ActiveUnit.UnitTypeName]);
+
+            ActiveUnit.ReloadSkills(GlobalBattleParams.DicUnitType[ActiveUnit.UnitTypeName], GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
+            ListPlayer[PlayerIndex].ListUnit.Add(ActiveUnit);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
-            ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
+            ActiveUnit.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
+
+            ActiveUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
         public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
@@ -1130,8 +1259,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-        public void FinalizeMovement(UnitConquest ActiveUnit)
+        public void FinalizeMovement(UnitConquest ActiveUnit, int UsedMovement, List<Vector3> ListMVHoverPoints)
         {
+            Params.GlobalContext.ListAttackPickedUp.Clear();
+            Params.GlobalContext.ListMVPoints.Clear();
+
+            Params.GlobalContext.ListMVPoints.AddRange(ListMVHoverPoints);
+
             TerrainConquest ActiveTerrain = GetTerrain(ActiveUnit.Components);
 
             if (ActiveUnit.Position != LastPosition && ActiveTerrain.CapturePoints > 0)
@@ -1139,49 +1273,154 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             ActiveUnit.CurrentMovement = ActiveTerrain.TerrainTypeIndex;
 
-            //Make it so it can't move anymore.
-            ActiveUnit.EndTurn();
+            HashSet<int> ListLayerIndex = new HashSet<int>();
 
+            if (ListMVHoverPoints.Count > 0)
+            {
+                float TotalENCost = 0;
+                foreach (Vector3 TerrainCrossed in ListMVHoverPoints)
+                {
+                    TotalENCost += TerrainRestrictions.GetENCost(ActiveUnit.Components, ActiveUnit.UnitStat, GetTerrain(TerrainCrossed).TerrainTypeIndex);
+                    ListLayerIndex.Add((int)TerrainCrossed.Z);
+                }
+                if (TotalENCost > 0)
+                {
+                    ActiveUnit.ConsumeEN((int)TotalENCost);
+                }
+
+                foreach (int ActiveLayerIndex in ListLayerIndex)
+                {
+                    BaseMapLayer ActiveLayer = LayerManager[ActiveLayerIndex];
+
+                    for (int P = ActiveLayer.ListProp.Count - 1; P >= 0; P--)
+                    {
+                        ActiveLayer.ListProp[P].FinishMoving(ActiveUnit, ActiveUnit.Components, ListMVHoverPoints);
+                    }
+
+                    for (int A = ActiveLayer.ListAttackPickup.Count - 1; A >= 0; A--)
+                    {
+                        Core.Attacks.TemporaryAttackPickup ActiveAttack = ActiveLayer.ListAttackPickup[A];
+                        if (ListMVHoverPoints.Contains(ActiveAttack.Position))
+                        {
+                            ActiveUnit.AddTemporaryAttack(ActiveAttack, Content, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                            Params.GlobalContext.ListAttackPickedUp.Add(ActiveAttack.AttackName);
+                            ActiveLayer.ListAttackPickup.RemoveAt(A);
+                        }
+                    }
+
+                    for (int I = ActiveLayer.ListHoldableItem.Count - 1; I >= 0; I--)
+                    {
+                        HoldableItem ActiveItem = ActiveLayer.ListHoldableItem[I];
+                        foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
+                        {
+                            ActiveItem.OnMovedOverBeforeStop(ActiveUnit.Components, MovedOverPoint, ActiveUnit.Position);
+                        }
+
+                        ActiveItem.OnUnitStop(ActiveUnit.Components);
+                    }
+                }
+            }
+
+            ActivateAutomaticSkills(null, ActiveUnit, BaseSkillRequirement.AfterMovingRequirementName, null, ActiveUnit);
             UpdateMapEvent(EventTypeUnitMoved, 0);
+            UpdateMapEvent(WeaponPickedUpMap, 0);
+            LayerManager.UnitMoved(ActivePlayerIndex);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (ShowUnits)
-            {
-                MapEnvironment.Update(gameTime);
-            }
-            for (int i = 0; i < ListLayer.Count; ++i)
-            {
-                ListLayer[i].Update(gameTime);
-            }
+            GlobalBattleParams.Map = this;
 
-            if (!IsInit)
+            if (!IsFrozen)
             {
-                Init();
-            }
-            else if (MovementAnimation.Count > 0)
-            {
-                MovementAnimation.MoveSquad(this);
-            }
-            else
-            {
-                if (!ListActionMenuChoice.HasMainPanel)
+                if (ShowUnits)
                 {
-                    if (ListPlayer[ActivePlayerIndex].IsHuman)
+                    MapEnvironment.Update(gameTime);
+                }
+
+                if (Show3DObjects)
+                {
+                    for (int B = 0; B < ListBackground.Count; ++B)
                     {
-                        ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
+                        ListBackground[B].Update(gameTime);
                     }
-                    else
+
+                    for (int F = 0; F < ListForeground.Count; ++F)
                     {
-                        ListActionMenuChoice.Add(new ActionPanelAIDefault(this));
+                        ListForeground[F].Update(gameTime);
                     }
                 }
 
-                ListActionMenuChoice.Last().Update(gameTime);
+                LayerManager.Update(gameTime);
+
+                UpdateCursorVisiblePosition(gameTime);
+
+                if (!IsOnTop || IsAPlatform)//Everything should be handled by the main map.
+                {
+                    return;
+                }
+
+                if (!IsInit)
+                {
+                    Init();
+                }
+                if (MovementAnimation.Count > 0)
+                {
+                    MovementAnimation.MoveSquad(this);
+                }
+                if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
+                {
+                    GameRule.Update(gameTime);
+                }
+
+                foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+                {
+                    ActivePlatform.Update(gameTime);
+                }
+            }
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
+
+            if (!IsInit)
+            {
+                if (ListGameScreen.Count == 0)
+                {
+                    Load();
+                    Init();
+                    TogglePreview(true);
+
+                    if (ListGameScreen.Count == 0)
+                    {
+                    }
+                    else
+                    {
+                        IsInit = false;
+                    }
+                }
+                else
+                {
+                    ListGameScreen[0].Update(UpdateTime);
+                    if (!ListGameScreen[0].Alive)
+                    {
+                        ListGameScreen.RemoveAt(0);
+                    }
+
+                    if (ListGameScreen.Count == 0)
+                    {
+                        IsInit = true;
+                    }
+                }
             }
 
-            UpdateCursorVisiblePosition(gameTime);
+            LayerManager.Update(UpdateTime);
+
+            if (!ListPlayer[ActivePlayerIndex].IsPlayerControlled && ListActionMenuChoice.HasMainPanel)
+            {
+                ListActionMenuChoice.Last().Update(UpdateTime);
+            }
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
@@ -1209,7 +1448,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public TerrainConquest GetTerrain(int X, int Y, int LayerIndex)
         {
-            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
+            return GetTerrain(new Vector3(X, Y, LayerIndex));
         }
 
         public TerrainConquest GetTerrain(UnitMapComponent ActiveUnit)
@@ -1217,30 +1456,62 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public TerrainConquest GetTerrain(Vector3 Position)
+        {
+            TerrainConquest TemporaryTerrain;
+            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            {
+                return TemporaryTerrain;
+            }
+            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
+        }
+
+        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
+            int NextX = StartingPosition.InternalPosition.X + OffsetX;
+            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
 
-            byte CurrentTerrainType = GetTerrain((int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex).TerrainTypeIndex;
-            float CurrentZ = StartingPosition.WorldPosition.Z + StartingPosition.LayerIndex;
+            if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
+            {
+                return null;
+            }
 
-            int ClosestLayerIndexDown = -1;
-            int ClosestLayerIndexUp = 0;
+            byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
+            TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
+
+            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
+
+            float CurrentZ = StartingPosition.WorldPosition.Z;
+
+            MovementAlgorithmTile ClosestLayerIndexDown = null;
+            MovementAlgorithmTile ClosestLayerIndexUp = StartingPosition;
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = ListLayer[L];
-                Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                byte NextTerrainType = GetTerrain(NextX, NextY, L).TerrainTypeIndex;
-                float NextTerrainZ = NextTerrain.WorldPosition.Z + L;
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
+                byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
+                TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
+                bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+
+                Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
+                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
+                bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+
+                if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
+                {
+                    break;
+                }
+
+                float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex)
+                if (IsOnUsableTerrain)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex)
+                    if (IsNextTerrainnUsable)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
@@ -1249,7 +1520,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                             if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
-                                ClosestLayerIndexDown = L;
+                                ClosestLayerIndexDown = NextTerrain;
                                 ListLayerPossibility.Add(NextTerrain);
                             }
                         }
@@ -1258,9 +1529,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                             float ZDiff = NextTerrainZ - CurrentZ;
                             if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                             {
-                                ClosestTerrainDistanceUp = ZDiff;
-                                ClosestLayerIndexUp = L;
-                                ListLayerPossibility.Add(NextTerrain);
+                                if (IsPreviousTerrainnUsable)
+                                {
+                                    ClosestTerrainDistanceUp = ZDiff;
+                                    ClosestLayerIndexUp = NextTerrain;
+                                    ListLayerPossibility.Add(NextTerrain);
+                                }
                             }
                         }
                     }
@@ -1268,7 +1542,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Already in void, check for any neighbors
                 else
                 {
-                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainType == CurrentTerrainType)
+                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
                         return NextTerrain;
                     }
@@ -1279,38 +1553,76 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         if (ZDiff < ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                         {
                             ClosestTerrainDistanceUp = ZDiff;
-                            ClosestLayerIndexUp = L;
+                            ClosestLayerIndexUp = NextTerrain;
                             ListLayerPossibility.Add(NextTerrain);
                         }
                     }
                 }
             }
 
-            if (ClosestLayerIndexDown >= 0)
+            if (ClosestLayerIndexDown != null)
             {
-                return ListLayer[ClosestLayerIndexDown].ArrayTerrain[NextX, NextY];
+                return ClosestLayerIndexDown;
             }
             else
             {
-                return ListLayer[ClosestLayerIndexUp].ArrayTerrain[NextX, NextY];
+                return ClosestLayerIndexUp;
             }
+        }
+
+        public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
+        {
+            if (!IsAPlatform)
+            {
+                foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+                {
+                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
+
+                    if (FoundTile != null)
+                    {
+                        return FoundTile;
+                    }
+                }
+            }
+
+            return GetTerrain(new Vector3(StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY, NextLayerIndex));
+        }
+
+        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
+        {
+            for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
+            {
+                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
+
+                byte NextTerrainType = ActiveTerrain.TerrainTypeIndex;
+                float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
+
+                float ZDiff = NextTerrainZ - CurrentZ;
+
+                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff != 0 && ZDiff < MaxClearance)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
         {
-            if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= ListLayer.Count)
+            if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
             {
                 return null;
             }
 
-            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
+            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
         public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
         {
             DrawableTile NewTile = new DrawableTile(ActiveTile);
 
-            ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
+            LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
             LayerManager.LayerHolderDrawable.Reset();
         }
 
@@ -1323,9 +1635,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
             }
 
-            for (int L = 0; L < ListLayer.Count; L++)
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
                 {
                     if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
@@ -1348,9 +1660,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             string PlayerTag = (Team + 1).ToString();
-            for (int L = 0; L < ListLayer.Count; L++)
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
@@ -1361,27 +1673,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             return ListPossibleSpawnPoint;
-        }
-
-        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
-        {
-            for (int L = StartLayer + 1; L < ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = ListLayer[L];
-                Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
-
-                byte NextTerrainType = GetTerrain(NextX, NextX, L).TerrainTypeIndex;
-                float NextTerrainZ = ActiveTerrain.WorldPosition.Z + L;
-
-                float ZDiff = NextTerrainZ - CurrentZ;
-
-                if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && ZDiff < MaxClearance)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
@@ -1399,14 +1690,39 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
+        public void CenterCamera()
+        {
+            if (ActiveUnit == null)
+                return;
+
+            if (ActiveUnit.X < Camera2DPosition.X || ActiveUnit.Y < Camera2DPosition.Y ||
+                ActiveUnit.X >= Camera2DPosition.X + ScreenSize.X || ActiveUnit.Y >= Camera2DPosition.Y + ScreenSize.Y)
+            {
+                PushScreen(new CenterOnSquadCutscene(null, this, ActiveUnit.Position));
+            }
+        }
+
         public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
         {
-            return new ConquestMap(GameInfo);
+            ConquestParams Params;
+            ConquestMap NewMap;
+
+            if (!ConquestParams.DicParams.TryGetValue(ParamsID, out Params))
+            {
+                Params = new ConquestParams();
+                Params.ID = ParamsID;
+                ConquestParams.DicParams.TryAdd(ParamsID, Params);
+                Params.Reload(this.Params, ParamsID);
+            }
+
+            NewMap = new ConquestMap(GameInfo, Params);
+            Params.Map = NewMap;
+            return NewMap;
         }
 
         public override string GetMapType()
         {
-            return "Conquest";
+            return MapType;
         }
 
         public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
@@ -1416,9 +1732,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return DicGameType;
         }
 
-        public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, Vector3 Position)
+        public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, uint ID, Vector2 Position, int LayerIndex)
         {
-            NewUnit.Components.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
             NewUnit.InitStat();
 
             while (ListPlayer.Count <= PlayerIndex)
@@ -1426,10 +1741,26 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Player NewPlayer = new Player("Enemy", "CPU", false, false, PlayerIndex, Color.Red);
                 ListPlayer.Add(NewPlayer);
             }
-            NewUnit.SetPosition(Position);
+            if (Content != null)
+            {
+                NewUnit.Components.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
+                Color OutlineColor = ListPlayer[PlayerIndex].Color;
+                NewUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+            }
 
             ListPlayer[PlayerIndex].IsAlive = true;
+
+            GlobalBattleParams.GlobalContext.SetContext(null, NewUnit, null, null, null, null, null);
+            NewUnit.Init();
+            NewUnit.StartTurn();
+            ActivateAutomaticSkills(null, NewUnit, string.Empty, null, NewUnit);
+            NewUnit.SpawnID = ID;
+            NewUnit.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
+
             ListPlayer[PlayerIndex].ListUnit.Add(NewUnit);
+
+            NewUnit.Components.CurrentTerrainIndex = UnitStats.TerrainLandIndex;
         }
 
         public uint GetNextUnusedUnitID()
@@ -1443,7 +1774,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     for (int S = 0; S < ListPlayer[P].ListUnit.Count; S++)
                     {
-                        if (ListPlayer[P].ListUnit[S].ID == NewUnitID)
+                        if (ListPlayer[P].ListUnit[S].SpawnID == NewUnitID)
                         {
                             NewUnitID++;
                             SameIDFound = true;
@@ -1459,15 +1790,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override byte[] GetSnapshotData()
         {
             return new byte[0];
-        }
-
-        public override void Update(double ElapsedSeconds)
-        {
-            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                ListLayer[L].Update(UpdateTime);
-            }
         }
 
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)
@@ -1487,6 +1809,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             return DicActionPanel;
+        }
+
+        public void AddProjectile(Projectile3D NewProjectile)
+        {
+            throw new NotImplementedException();
         }
     }
 }

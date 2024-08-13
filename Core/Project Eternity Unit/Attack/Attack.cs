@@ -93,6 +93,9 @@ namespace ProjectEternity.Core.Attacks
             DicRankByMovement.Add(UnitStats.TerrainAirIndex, 1);
             DicRankByMovement.Add(UnitStats.TerrainSeaIndex, 1);
             DicRankByMovement.Add(UnitStats.TerrainSpaceIndex, 1);
+
+            ListChargedAttack = new List<Attack>();
+            ListSecondaryAttack = new List<Attack>();
         }
 
         public Attack(string Name, string Description, int Price, string PowerFormula, byte RangeMin, byte RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,

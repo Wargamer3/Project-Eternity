@@ -13,9 +13,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public class DropFlagActionPanel : ActionPanelDeathmatch
         {
-            private readonly Squad Owner;
+            private readonly UnitMapComponent Owner;
 
-            public DropFlagActionPanel(DeathmatchMap Map, Squad Owner)
+            public DropFlagActionPanel(DeathmatchMap Map, UnitMapComponent Owner)
                 : base("Drop Flag", Map, false)
             {
                 this.Owner = Owner;
@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             IsDropped = true;
         }
 
-        public override List<ActionPanel> OnUnitBeforeStop(Squad ActiveSquad)
+        public override List<ActionPanel> OnUnitBeforeStop(UnitMapComponent ActiveSquad)
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPanel;
         }
 
-        public override List<ActionPanel> OnUnitSelected(Squad ActiveSquad)
+        public override List<ActionPanel> OnUnitSelected(UnitMapComponent ActiveSquad)
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPanel;
         }
 
-        public override void OnMovedOverBeforeStop(Squad SelectedSquad, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
+        public override void OnMovedOverBeforeStop(UnitMapComponent SelectedSquad, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
         {
             if (IsDropped && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public override void OnUnitStop(Squad StoppedSquad)
+        public override void OnUnitStop(UnitMapComponent StoppedSquad)
         {
             if (IsDropped && StoppedSquad.X == Position.X && StoppedSquad.Y == Position.Y)
             {

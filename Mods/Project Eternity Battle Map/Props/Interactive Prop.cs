@@ -81,13 +81,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnUnitStop(MovingSquad);
         }
 
+        public void FinishMoving(Unit MovingUnit, UnitMapComponent UnitPosition, List<Vector3> ListMVHoverPoints)
+        {
+            foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
+            {
+                OnMovedOverBeforeStop(MovingUnit, MovedOverPoint, UnitPosition);
+            }
+
+            OnUnitStop(MovingUnit, UnitPosition);
+        }
+
         public abstract void OnUnitSelected(ActionPanel PanelOwner, Squad SelectedUnit);
 
         public abstract void OnUnitBeforeStop(ActionPanel PanelOwner, Squad StoppedUnit, Vector3 PositionToStopOn);
 
         public abstract void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn);
 
+        public abstract void OnMovedOverBeforeStop(Unit SelectedUnit, Vector3 PositionMovedOn, UnitMapComponent PositionStoppedOn);
+
         public abstract void OnUnitStop(Squad StoppedUnit);
+
+        public abstract void OnUnitStop(Unit StoppedUnit, UnitMapComponent UnitPosition);
 
         public abstract void OnBattleEnd(Squad Attacker, Squad Defender);
 

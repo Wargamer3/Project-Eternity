@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelAIAttackBehavior(Map);
+            return new ActionPanelAIMoveBehavior(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                AddToPanelListAndSelect(new ActionPanelAIAttack(Map, ActivePlayerIndex, ActiveUnitIndex));
+                AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(Map, ActivePlayerIndex, ActiveUnitIndex));
             }
         }
 

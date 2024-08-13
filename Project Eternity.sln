@@ -377,6 +377,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Sorcerer Street Effects", "Mods\Project Eternity Sorcerer Street Effects\Project Eternity Sorcerer Street Effects.csproj", "{722F9B71-DA49-433C-B048-267A84B270E4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Eternity Adventure Map", "Project Eternity Adventure Map", "{AB94E337-2F8B-4A49-9858-DBB22FFC51AA}"
+	ProjectSection(SolutionItems) = preProject
+		Mods\Project Eternity Conquest Map\Acion Panels\Unit Actions\Attack.cs = Mods\Project Eternity Conquest Map\Acion Panels\Unit Actions\Attack.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Adventure Map", "Mods\Project Eternity Adventure Map\Project Eternity Adventure Map.csproj", "{5FFB04A9-36BA-4020-9FD9-DE0D690C2925}"
 EndProject

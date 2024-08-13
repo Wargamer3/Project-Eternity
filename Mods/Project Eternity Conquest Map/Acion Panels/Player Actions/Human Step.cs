@@ -7,9 +7,9 @@ using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
-    public class ActionPanelPlayerDefault : ActionPanelConquest
+    public class ActionPanelPlayerHumanStep : ActionPanelConquest
     {
-        public ActionPanelPlayerDefault(ConquestMap Map)
+        public ActionPanelPlayerHumanStep(ConquestMap Map)
             : base("Player Default", Map)
         {
         }
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override void DoUpdate(GameTime gameTime)
         {
             Map.CursorControl();
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (MouseHelper.InputLeftButtonReleased())
             {
                 UnitConquest ActiveUnit = null;
                 //Loop through the players to find a Unit to control.
@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelPlayerDefault(Map);
+            return new ActionPanelPlayerHumanStep(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

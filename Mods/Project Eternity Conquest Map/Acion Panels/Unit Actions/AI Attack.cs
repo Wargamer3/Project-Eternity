@@ -9,26 +9,37 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
-    public class ActionPanelAIAttack : ActionPanelConquest
+    public class ActionPanelAIAttackBehavior : ActionPanelConquest
     {
         private const string PanelName = "AIAttack";
 
         private int ActivePlayerIndex;
         private int ActiveUnitIndex;
+        private Tuple<int, int> Target;
         private UnitConquest ActiveUnit;
 
-        public ActionPanelAIAttack(ConquestMap Map)
+        public ActionPanelAIAttackBehavior(ConquestMap Map)
             : base(PanelName, Map)
         {
         }
 
-        public ActionPanelAIAttack(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex)
+        public ActionPanelAIAttackBehavior(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveUnitIndex = ActiveUnitIndex;
 
             ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
+        }
+
+        public ActionPanelAIAttackBehavior(ConquestMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Tuple<int, int> Target)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveUnitIndex = ActiveSquadIndex;
+            this.Target = Target;
+
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -42,7 +53,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit);
 
-                //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
                     TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].WorldPosition.X, (int)ListMVChoice[M].WorldPosition.Y, (int)ListMVChoice[M].WorldPosition.Z);
@@ -59,7 +69,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         //Move the Unit to the target position;
                         ActiveUnit.SetPosition(ListMVChoice[M].WorldPosition);
 
-                        Map.FinalizeMovement(ActiveUnit);
+                        Map.FinalizeMovement(ActiveUnit, 0, Map.GetPathToTerrain(ActiveTerrain, ActiveUnit.Position));
+                        return;
                     }
                 }
             }
@@ -102,7 +113,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-
         public override void DoRead(ByteReader BR)
         {
             ActivePlayerIndex = BR.ReadInt32();
@@ -118,7 +128,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelAIAttack(Map);
+            return new ActionPanelAIAttackBehavior(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

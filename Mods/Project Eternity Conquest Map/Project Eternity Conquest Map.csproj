@@ -52,24 +52,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acion Panels\Action Panel Conquest.cs" />
+    <Compile Include="Acion Panels\Action Panel Holder Conquest.cs" />
+    <Compile Include="Acion Panels\Attack\Init Delayed MAP Attack.cs" />
+    <Compile Include="Acion Panels\Map Switch Menu.cs" />
+    <Compile Include="Acion Panels\Movement\AI Move.cs" />
+    <Compile Include="Acion Panels\Attack\MAP Attack\MAP Direction.cs" />
+    <Compile Include="Acion Panels\Attack\MAP Attack\MAP Helper.cs" />
+    <Compile Include="Acion Panels\Attack\MAP Attack\MAP Spread.cs" />
+    <Compile Include="Acion Panels\Attack\MAP Attack\MAP Targeted.cs" />
+    <Compile Include="Acion Panels\Attack\MAP Attack\Use MAP Attack.cs" />
+    <Compile Include="Acion Panels\Attack\PER Attack\Attack PER Panel.cs" />
+    <Compile Include="Acion Panels\Attack\PER Attack\PER Attack Pahtfinding.cs" />
+    <Compile Include="Acion Panels\Attack\PER Attack\Update PER Attacks.cs" />
+    <Compile Include="Acion Panels\Movement\Auto Move.cs" />
     <Compile Include="Acion Panels\Map Menu\End.cs" />
     <Compile Include="Acion Panels\Map Menu\Intel.cs" />
     <Compile Include="Acion Panels\Map Menu\Options.cs" />
     <Compile Include="Acion Panels\Map Menu\Power.cs" />
     <Compile Include="Acion Panels\Map Menu\Save.cs" />
     <Compile Include="Acion Panels\Map Menu\Unit.cs" />
-    <Compile Include="Acion Panels\Phase Menu.cs" />
-    <Compile Include="Acion Panels\Player Actions\Move Unit.cs" />
+    <Compile Include="Acion Panels\Movement\Fall To Death.cs" />
+    <Compile Include="Acion Panels\Phase Change.cs" />
+    <Compile Include="Acion Panels\Player Actions\AI Step.cs" />
+    <Compile Include="Acion Panels\Movement\Move Unit.cs" />
     <Compile Include="Acion Panels\Player Actions\Building Unit Selected.cs" />
-    <Compile Include="Acion Panels\Player Actions\Player Default.cs" />
+    <Compile Include="Acion Panels\Player Actions\Human Step.cs" />
     <Compile Include="Acion Panels\Player Actions\Enemy Unit Selected.cs" />
     <Compile Include="Acion Panels\Player Actions\Main Menu.cs" />
+    <Compile Include="Acion Panels\Player Actions\Pre Phase AI Step.cs" />
     <Compile Include="Acion Panels\Player Actions\Unit Selected.cs" />
+    <Compile Include="Acion Panels\Start Battle.cs" />
     <Compile Include="Acion Panels\Unit Actions\AI Default.cs" />
     <Compile Include="Acion Panels\Unit Actions\AI Move Cursor.cs" />
     <Compile Include="Acion Panels\Unit Actions\AI Move Toward Enemy.cs" />
     <Compile Include="Acion Panels\Unit Actions\AI Attack.cs" />
-    <Compile Include="Acion Panels\Unit Actions\Attack.cs" />
+    <Compile Include="Acion Panels\Attack\Attack.cs" />
     <Compile Include="Acion Panels\Unit Actions\Capture.cs" />
     <Compile Include="Acion Panels\Unit Actions\Wait.cs" />
     <Compile Include="AI.cs" />
@@ -78,13 +95,53 @@
     <Compile Include="Conquest Map.cs" />
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Cutscene Script Holder.cs" />
-    <Compile Include="Map Layer.cs" />
+    <Compile Include="Conquest Params.cs" />
+    <Compile Include="Conquest Mutator.cs" />
+    <Compile Include="Delayed Attack.cs" />
+    <Compile Include="Effects\Attack PER Context.cs" />
+    <Compile Include="Effects\Attack PER Params.cs" />
+    <Compile Include="Effects\Attack PER Requirement.cs" />
+    <Compile Include="Effects\Attack Target Type.cs" />
+    <Compile Include="Effects\Automatic Skill Conquest.cs" />
+    <Compile Include="Effects\Conquest Attack PER Effect.cs" />
+    <Compile Include="Effects\Conquest Effect.cs" />
+    <Compile Include="Effects\Conquest Map Requirement.cs" />
+    <Compile Include="Effects\Conquest Squad PER Effect.cs" />
+    <Compile Include="Effects\Conquest Manual Skill Activation.cs" />
+    <Compile Include="Effects\PER Attack.cs" />
+    <Compile Include="Effects\Squad PER Context.cs" />
+    <Compile Include="Effects\Squad PER Params.cs" />
+    <Compile Include="Effects\Squad PER Requirement.cs" />
+    <Compile Include="Effects\Squad Target Type.cs" />
+    <Compile Include="Formula Parser.cs" />
+    <Compile Include="Game Over Menu.cs" />
     <Compile Include="Overlays.cs" />
     <Compile Include="Map Interaction.cs" />
-    <Compile Include="Drawable Grids.cs" />
     <Compile Include="Movement Algorithm Conquest.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Rules\Campaign Game Rule.cs" />
+    <Compile Include="Rules\Capture The Flag Game Rule.cs" />
+    <Compile Include="Rules\Deathmatch Game Rule.cs" />
+    <Compile Include="Rules\Lobby Defeat Screen.cs" />
+    <Compile Include="Rules\Lobby Draw Screen.cs" />
+    <Compile Include="Rules\Lobby MP Game Rule.cs" />
+    <Compile Include="Rules\Lobby Victory Screen.cs" />
+    <Compile Include="Rules\Single Player Game Rule.cs" />
     <Compile Include="Terrain Conquest.cs" />
+    <Compile Include="Layers\Default Weather.cs" />
+    <Compile Include="Layers\Environment Manager.cs" />
+    <Compile Include="Layers\Layer Holder.cs" />
+    <Compile Include="Layers\Map 2D Drawable.cs" />
+    <Compile Include="Layers\Map 2D.cs" />
+    <Compile Include="Layers\Map 3D Drawable.cs" />
+    <Compile Include="Layers\Map Layer.cs" />
+    <Compile Include="Layers\Map Zone.cs" />
+    <Compile Include="Layers\Rain Weather.cs" />
+    <Compile Include="Layers\Shadow overlay.cs" />
+    <Compile Include="Layers\Sub Map Layer.cs" />
+    <Compile Include="Layers\Weather Intensity Manager.cs" />
+    <Compile Include="Layers\Weather Lightning Manager.cs" />
+    <Compile Include="Layers\Weather Rain Size Manager.cs" />
     <Compile Include="Unit Delegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -142,6 +199,11 @@
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
+      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
+      <Name>Roslyn</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">

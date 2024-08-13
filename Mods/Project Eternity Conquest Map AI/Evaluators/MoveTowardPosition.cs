@@ -50,11 +50,11 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                     //Move the Unit to the target position;
                     Info.ActiveUnit.SetPosition(ListMVChoice[FinalMV].WorldPosition);
-                    Info.Map.FinalizeMovement(Info.ActiveUnit);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit, (int)Info.Map.GetTerrain(Info.ActiveUnit.Position).MovementCost, new List<Vector3>());
                 }
                 else
                 {
-                    Info.Map.FinalizeMovement(Info.ActiveUnit);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit, 1, new List<Vector3>());
                 }
 
                 Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, StartPosition, Info.ActiveUnit.Components.Position);
