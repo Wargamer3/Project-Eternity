@@ -9,6 +9,23 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public class GameModeInfoHolder
+    {
+        public string Name;
+        public GameModeInfo GameMode;
+
+        public GameModeInfoHolder(string Name, GameModeInfo GameMode)
+        {
+            this.Name = Name;
+            this.GameMode = GameMode;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
     public class GameModeInfo
     {
         public class EditableInGameAttribute : Attribute

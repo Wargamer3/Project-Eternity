@@ -21,7 +21,7 @@ namespace ProjectEternity.Editors.MapEditor
             txtPlayersMax.Value = ActiveMap.PlayersMax;
             txtMaxSquadsPerPlayer.Value = ActiveMap.MaxSquadsPerPlayer;
 
-            foreach (GameModeInfo ActiveGameType in ActiveMap.ListGameType)
+            foreach (GameModeInfoHolder ActiveGameType in ActiveMap.ListGameType)
             {
                 lstGameModes.Items.Add(ActiveGameType);
             }
@@ -34,6 +34,7 @@ namespace ProjectEternity.Editors.MapEditor
             foreach (GameModeInfo ActiveGameType in ActiveMap.GetAvailableGameModes().Values)
             {
                 cbGameMode.Items.Add(ActiveGameType);
+                cbGameRule.Items.Add(ActiveGameType);
             }
 
             if (lstGameModes.Items.Count > 0)
@@ -44,7 +45,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddGameMode_Click(object sender, EventArgs e)
         {
-            lstGameModes.Items.Add(((GameModeInfo)cbGameMode.Items[0]).Copy());
+            lstGameModes.Items.Add(new GameModeInfoHolder(cbGameMode.Items[0].ToString(), ((GameModeInfo)cbGameMode.Items[0]).Copy()));
         }
 
         private void btnRemoveGameMode_Click(object sender, EventArgs e)
@@ -59,13 +60,24 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstGameModes.SelectedIndex >= 0)
             {
-                pgGameModeAttributes.SelectedObject = lstGameModes.SelectedItem;
-                for(int i = 0; i < cbGameMode.Items.Count; ++i)
+                GameModeInfoHolder ActiveGameMode = ((GameModeInfoHolder)lstGameModes.SelectedItem);
+                pgGameModeAttributes.SelectedObject = ActiveGameMode.GameMode;
+                for (int i = 0; i < cbGameMode.Items.Count; ++i)
                 {
-                    if (cbGameMode.Items[i].ToString() == lstGameModes.SelectedItem.ToString())
+                    if (cbGameMode.Items[i].ToString() == ActiveGameMode.Name)
                     {
                         AllowEvent = false;
                         cbGameMode.SelectedIndex = i;
+                        AllowEvent = true;
+                        break;
+                    }
+                }
+                for (int i = 0; i < cbGameRule.Items.Count; ++i)
+                {
+                    if (cbGameRule.Items[i].ToString() == ActiveGameMode.GameMode.Name)
+                    {
+                        AllowEvent = false;
+                        cbGameRule.SelectedIndex = i;
                         AllowEvent = true;
                         break;
                     }
@@ -77,7 +89,15 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstGameModes.SelectedIndex >= 0 && AllowEvent)
             {
-                lstGameModes.Items[lstGameModes.SelectedIndex] = ((GameModeInfo)cbGameMode.SelectedItem).Copy();
+                lstGameModes.Items[lstGameModes.SelectedIndex] = new GameModeInfoHolder(cbGameMode.SelectedItem.ToString(), ((GameModeInfoHolder)lstGameModes.Items[lstGameModes.SelectedIndex]).GameMode);
+            }
+        }
+
+        private void cbGameRule_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstGameModes.SelectedIndex >= 0 && AllowEvent)
+            {
+                lstGameModes.Items[lstGameModes.SelectedIndex] = new GameModeInfoHolder(cbGameMode.SelectedItem.ToString(), ((GameModeInfo)cbGameRule.SelectedItem).Copy());
             }
         }
     }

@@ -1696,7 +1696,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             ActiveMap.ListGameType.Clear();
-            foreach (GameModeInfo ActiveRow in MS.frmDefaultGameModesConditions.lstGameModes.Items)
+            foreach (GameModeInfoHolder ActiveRow in MS.frmDefaultGameModesConditions.lstGameModes.Items)
             {
                 ActiveMap.ListGameType.Add(ActiveRow);
             }

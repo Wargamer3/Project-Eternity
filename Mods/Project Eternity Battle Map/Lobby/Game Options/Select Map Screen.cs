@@ -318,10 +318,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int ListGameTypeCount = BR.ReadByte();
             for (int G = 0; G < ListGameTypeCount; G++)
             {
+                string GameTypeCategoryName = BR.ReadString();
                 string GameTypeName = BR.ReadString();
                 GameModeInfo LoadedGameInfo = DicAvailableGameType[GameTypeName].Copy();
                 LoadedGameInfo.Load(BR);
-                if (GameMode == GameTypeName)
+                if (GameMode == GameTypeCategoryName)
                 {
                     MapInfoToSelect.GameInfo = LoadedGameInfo;
                     break;

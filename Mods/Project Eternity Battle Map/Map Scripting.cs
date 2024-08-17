@@ -59,6 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public const string EventTypeTurn = "Turn";
         public const string EventTypeUnitMoved = "Unit Moved";
         public const string EventTypeOnBattle = "On Battle";
+        public const string EventTypeGameOver = "Game Over";
         public const string WeaponPickedUpMap = "Weapon Picked Up Map";
 
         public Dictionary<string, MapEvent> DicMapEvent = new Dictionary<string, MapEvent>();

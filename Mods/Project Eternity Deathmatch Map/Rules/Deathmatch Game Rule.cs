@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int _UnitValueLimit;
         private int _UnitValueLimitMin;
         private int _UnitValueLimitMax;
+        private bool _TriggerGameOver;
 
         public DeathmatchGameInfo(bool IsUnlocked, Texture2D sprPreview)
             : base(ModeName, "Gain points for kills and assists, respawn on death.", CategoryPVP, IsUnlocked, sprPreview)
@@ -28,6 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _UnitValueLimit = 400;
             _UnitValueLimitMin = 0;
             _UnitValueLimitMax = 10000;
+            _TriggerGameOver = true;
         }
 
         protected override void DoSave(BinaryWriter BW)
@@ -39,6 +41,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(_UnitValueLimit);
             BW.Write(_UnitValueLimitMin);
             BW.Write(_UnitValueLimitMax);
+
+            BW.Write(_TriggerGameOver);
         }
 
         public override void Load(BinaryReader BR)
@@ -50,6 +54,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _UnitValueLimit = BR.ReadInt32();
             _UnitValueLimitMin = BR.ReadInt32();
             _UnitValueLimitMax = BR.ReadInt32();
+
+            _TriggerGameOver = BR.ReadBoolean();
         }
 
         public override IGameRule GetRule(BattleMap Map)
@@ -164,6 +170,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             set
             {
                 _UnitValueLimitMax = value;
+            }
+        }
+
+        [DisplayNameAttribute("Trigger Game Over"),
+        CategoryAttribute("Game"),
+        DescriptionAttribute("Automatically end the game when a team win."),
+        EditableInGame(false)]
+        public bool TriggerGameOver
+        {
+            get
+            {
+                return _TriggerGameOver;
+            }
+            set
+            {
+                _TriggerGameOver = value;
             }
         }
 

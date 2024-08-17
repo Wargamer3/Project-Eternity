@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapName;
         public string BattleMapPath;
         public IGameRule GameRule;
-        public List<GameModeInfo> ListGameType;
+        public List<GameModeInfoHolder> ListGameType;
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
         public static string NextMapPath = string.Empty;
@@ -244,7 +244,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsEditor = false;
             IsFrozen = false;
             OnlinePlayers = new OnlineConfiguration();
-            ListGameType = new List<GameModeInfo>();
+            ListGameType = new List<GameModeInfoHolder>();
 
             GameTurn = 0;
             ListTileSet = new List<Texture2D>();
@@ -320,7 +320,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write((byte)ListGameType.Count);
             for (int G = 0; G < ListGameType.Count; G++)
             {
-                ListGameType[G].Save(BW);
+                BW.Write(ListGameType[G].Name);
+                ListGameType[G].GameMode.Save(BW);
             }
 
             //The rest
@@ -458,6 +459,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicMapEvent.Add(EventTypeTurn, new BattleEvent(EventTypeTurn, new string[] { "Turn Start" }));
             DicMapEvent.Add(EventTypeUnitMoved, new BattleEvent(EventTypeUnitMoved, new string[] { "Unit Moved" }));
             DicMapEvent.Add(EventTypeOnBattle, new BattleEvent(EventTypeOnBattle, new string[] { "Battle Start", "Battle End" }));
+            DicMapEvent.Add(EventTypeGameOver, new BattleEvent(EventTypeGameOver, new string[] { "Game Over" }));
             DicMapEvent.Add(WeaponPickedUpMap, new WeaponPickedUpMapEvent(this));
 
             DicMapCondition = MapScript.LoadConditions<BattleCondition>(this);
@@ -496,10 +498,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int ListGameTypeCount = BR.ReadByte();
             for (int G = 0; G < ListGameTypeCount; G++)
             {
+                string GameTypeCategoryName = BR.ReadString();
                 string GameTypeName = BR.ReadString();
                 GameModeInfo LoadedGameType = DicAvailableGameType[GameTypeName].Copy();
                 LoadedGameType.Load(BR);
-                ListGameType.Add(LoadedGameType);
+                ListGameType.Add(new GameModeInfoHolder(GameTypeCategoryName, LoadedGameType));
             }
 
             TileSize.X = BR.ReadInt32();

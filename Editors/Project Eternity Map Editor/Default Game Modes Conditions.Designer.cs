@@ -48,6 +48,8 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtPlayersMax = new System.Windows.Forms.NumericUpDown();
             this.lblPlayersMin = new System.Windows.Forms.Label();
             this.txtPlayersMin = new System.Windows.Forms.NumericUpDown();
+            this.lblGameRule = new System.Windows.Forms.Label();
+            this.cbGameRule = new System.Windows.Forms.ComboBox();
             this.gbMandatoryMutators.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).BeginInit();
             this.gbGameModes.SuspendLayout();
@@ -65,7 +67,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbMandatoryMutators.Controls.Add(this.dgvMandatoryMutators);
             this.gbMandatoryMutators.Location = new System.Drawing.Point(510, 142);
             this.gbMandatoryMutators.Name = "gbMandatoryMutators";
-            this.gbMandatoryMutators.Size = new System.Drawing.Size(187, 149);
+            this.gbMandatoryMutators.Size = new System.Drawing.Size(187, 265);
             this.gbMandatoryMutators.TabIndex = 24;
             this.gbMandatoryMutators.TabStop = false;
             this.gbMandatoryMutators.Text = "Mandatory Mutators";
@@ -83,7 +85,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.dgvMandatoryMutators.MultiSelect = false;
             this.dgvMandatoryMutators.Name = "dgvMandatoryMutators";
             this.dgvMandatoryMutators.RowHeadersVisible = false;
-            this.dgvMandatoryMutators.Size = new System.Drawing.Size(175, 124);
+            this.dgvMandatoryMutators.Size = new System.Drawing.Size(175, 240);
             this.dgvMandatoryMutators.TabIndex = 1;
             // 
             // clMutatorName
@@ -101,7 +103,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbGameModes.Controls.Add(this.btnAddGameMode);
             this.gbGameModes.Location = new System.Drawing.Point(12, 12);
             this.gbGameModes.Name = "gbGameModes";
-            this.gbGameModes.Size = new System.Drawing.Size(194, 279);
+            this.gbGameModes.Size = new System.Drawing.Size(194, 395);
             this.gbGameModes.TabIndex = 25;
             this.gbGameModes.TabStop = false;
             this.gbGameModes.Text = "Game Modes";
@@ -152,10 +154,10 @@ namespace ProjectEternity.Editors.MapEditor
             this.pgGameModeAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgGameModeAttributes.Location = new System.Drawing.Point(6, 72);
+            this.pgGameModeAttributes.Location = new System.Drawing.Point(6, 149);
             this.pgGameModeAttributes.Name = "pgGameModeAttributes";
             this.pgGameModeAttributes.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgGameModeAttributes.Size = new System.Drawing.Size(280, 201);
+            this.pgGameModeAttributes.Size = new System.Drawing.Size(280, 239);
             this.pgGameModeAttributes.TabIndex = 27;
             this.pgGameModeAttributes.ToolbarVisible = false;
             // 
@@ -163,13 +165,15 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             this.gbGameModeAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbGameModeAttributes.Controls.Add(this.lblGameRule);
+            this.gbGameModeAttributes.Controls.Add(this.cbGameRule);
             this.gbGameModeAttributes.Controls.Add(this.lblGameModeAttributes);
             this.gbGameModeAttributes.Controls.Add(this.lblGameMode);
             this.gbGameModeAttributes.Controls.Add(this.pgGameModeAttributes);
             this.gbGameModeAttributes.Controls.Add(this.cbGameMode);
             this.gbGameModeAttributes.Location = new System.Drawing.Point(212, 12);
             this.gbGameModeAttributes.Name = "gbGameModeAttributes";
-            this.gbGameModeAttributes.Size = new System.Drawing.Size(292, 279);
+            this.gbGameModeAttributes.Size = new System.Drawing.Size(292, 395);
             this.gbGameModeAttributes.TabIndex = 26;
             this.gbGameModeAttributes.TabStop = false;
             this.gbGameModeAttributes.Text = "Game Mode Attributes";
@@ -177,7 +181,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblGameModeAttributes
             // 
             this.lblGameModeAttributes.AutoSize = true;
-            this.lblGameModeAttributes.Location = new System.Drawing.Point(6, 56);
+            this.lblGameModeAttributes.Location = new System.Drawing.Point(6, 130);
             this.lblGameModeAttributes.Name = "lblGameModeAttributes";
             this.lblGameModeAttributes.Size = new System.Drawing.Size(51, 13);
             this.lblGameModeAttributes.TabIndex = 29;
@@ -270,11 +274,32 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtPlayersMin.Size = new System.Drawing.Size(80, 20);
             this.txtPlayersMin.TabIndex = 2;
             // 
+            // lblGameRule
+            // 
+            this.lblGameRule.AutoSize = true;
+            this.lblGameRule.Location = new System.Drawing.Point(6, 56);
+            this.lblGameRule.Name = "lblGameRule";
+            this.lblGameRule.Size = new System.Drawing.Size(63, 13);
+            this.lblGameRule.TabIndex = 31;
+            this.lblGameRule.Text = "Game Rule:";
+            // 
+            // cbGameRule
+            // 
+            this.cbGameRule.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbGameRule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbGameRule.FormattingEnabled = true;
+            this.cbGameRule.Location = new System.Drawing.Point(9, 72);
+            this.cbGameRule.Name = "cbGameRule";
+            this.cbGameRule.Size = new System.Drawing.Size(277, 21);
+            this.cbGameRule.TabIndex = 30;
+            this.cbGameRule.SelectedIndexChanged += new System.EventHandler(this.cbGameRule_SelectedIndexChanged);
+            // 
             // DefaultGameModesConditions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 303);
+            this.ClientSize = new System.Drawing.Size(709, 419);
             this.Controls.Add(this.gbPlayers);
             this.Controls.Add(this.gbGameModeAttributes);
             this.Controls.Add(this.gbGameModes);
@@ -316,5 +341,7 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.Label lblMaxSquads;
         public System.Windows.Forms.NumericUpDown txtMaxSquadsPerPlayer;
         public System.Windows.Forms.ListBox lstGameModes;
+        private System.Windows.Forms.Label lblGameRule;
+        private System.Windows.Forms.ComboBox cbGameRule;
     }
 }

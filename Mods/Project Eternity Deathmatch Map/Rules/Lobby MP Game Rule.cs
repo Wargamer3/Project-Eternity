@@ -47,6 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected double GameLengthInSeconds;
         protected List<int> ListRemainingResapwn;
         protected bool CheckForGameOver = true;
+        protected bool TriggerGameOver = true;
         protected Player CurrentPlayer { get { return Owner.ListPlayer[Owner.ActivePlayerIndex]; } }
 
         public abstract string Name { get; }
@@ -327,6 +328,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ListAliveTeam.Count <= 1)
             {
+                if (!TriggerGameOver)
+                {
+                    Owner.UpdateMapEvent(BattleMap.EventTypeGameOver, 0);
+                    return;
+                }
+
                 List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
                 foreach (Player ActivePlayer in Owner.ListAllPlayer)
                 {
