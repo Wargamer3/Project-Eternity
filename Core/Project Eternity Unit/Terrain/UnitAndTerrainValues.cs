@@ -15,6 +15,11 @@ namespace ProjectEternity.Core.Units
 
         public void Load()
         {
+            if (!File.Exists("Content/Unit and Terrain Types.bin"))
+            {
+                Save();
+            }
+
             FileStream FS = new FileStream("Content/Unit and Terrain Types.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 

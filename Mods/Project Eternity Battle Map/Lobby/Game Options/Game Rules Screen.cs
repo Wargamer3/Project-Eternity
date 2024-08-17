@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             int DrawX = PanelX;
-            int DrawY = PanelY;
+            int DrawY = PanelY + 100;
             Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.8f), (int)(Lobby.BackgroundColor.G * 0.8f), (int)(Lobby.BackgroundColor.B * 0.8f), 150);
 
             DrawEmptyBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30);

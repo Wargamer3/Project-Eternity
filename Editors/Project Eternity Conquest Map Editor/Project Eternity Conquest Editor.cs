@@ -65,6 +65,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                                     TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(X, Y), L);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
                                     NewTerrain.DrawableTile = NewTile;
+                                    NewTerrain.Owner = ActiveMap;
                                     NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
                                     ArrayTerrain[X, Y] = NewTerrain;

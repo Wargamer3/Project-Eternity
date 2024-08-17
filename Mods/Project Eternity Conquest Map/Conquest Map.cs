@@ -1437,7 +1437,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             LayerManager.Draw(g);
 
-            if (IsOnTop)
+            if (IsOnTop && !IsEditor)
             {
                 if (ListActionMenuChoice.HasMainPanel)
                 {

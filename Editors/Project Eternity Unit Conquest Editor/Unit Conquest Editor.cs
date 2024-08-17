@@ -23,6 +23,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
+                SaveItem(FilePath, FilePath);
             }
 
             LoadUnit(this.FilePath);
