@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Units
 {
@@ -13,6 +14,8 @@ namespace ProjectEternity.Core.Units
         public Vector3 Position;
 
         public UnitMap3D Item3D;
+
+        public Texture2D sprItem;
 
         public abstract int Width { get; }
         public abstract int Height { get; }

@@ -366,7 +366,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTileset.WetEffect.Parameters["DesaturationValue"].SetValue(0.1f);
                 ActiveTileset.WetEffect.Parameters["LightIntensity"].SetValue(LightningManager.AmbiantLightMultiplier);
 
-                ActiveTileset.Draw(g);
+                ActiveTileset.Draw(g, Map, 1f);
             }
 
             g.Begin();

@@ -170,7 +170,7 @@
             this.tabToolBox.Location = new System.Drawing.Point(0, 0);
             this.tabToolBox.Name = "tabToolBox";
             this.tabToolBox.SelectedIndex = 0;
-            this.tabToolBox.Size = new System.Drawing.Size(248, 523);
+            this.tabToolBox.Size = new System.Drawing.Size(333, 523);
             this.tabToolBox.TabIndex = 1;
             this.tabToolBox.SelectedIndexChanged += new System.EventHandler(this.tabToolBox_SelectedIndexChanged);
             // 
@@ -189,14 +189,14 @@
             this.tabTiles.Location = new System.Drawing.Point(4, 22);
             this.tabTiles.Name = "tabTiles";
             this.tabTiles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTiles.Size = new System.Drawing.Size(240, 497);
+            this.tabTiles.Size = new System.Drawing.Size(325, 497);
             this.tabTiles.TabIndex = 2;
             this.tabTiles.Text = "Tiles";
             this.tabTiles.UseVisualStyleBackColor = true;
             // 
             // btn3DTileAttributes
             // 
-            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 140);
+            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 111);
             this.btn3DTileAttributes.Name = "btn3DTileAttributes";
             this.btn3DTileAttributes.Size = new System.Drawing.Size(105, 23);
             this.btn3DTileAttributes.TabIndex = 8;
@@ -206,16 +206,16 @@
             // 
             // TilesetViewer
             // 
-            this.TilesetViewer.Location = new System.Drawing.Point(3, 169);
+            this.TilesetViewer.Location = new System.Drawing.Point(3, 140);
             this.TilesetViewer.Margin = new System.Windows.Forms.Padding(3, 3, 0, 0);
             this.TilesetViewer.Name = "TilesetViewer";
-            this.TilesetViewer.Size = new System.Drawing.Size(219, 311);
+            this.TilesetViewer.Size = new System.Drawing.Size(302, 340);
             this.TilesetViewer.TabIndex = 7;
             this.TilesetViewer.Click += new System.EventHandler(this.TileViewer_Click);
             // 
             // btnTileAttributes
             // 
-            this.btnTileAttributes.Location = new System.Drawing.Point(10, 140);
+            this.btnTileAttributes.Location = new System.Drawing.Point(10, 111);
             this.btnTileAttributes.Name = "btnTileAttributes";
             this.btnTileAttributes.Size = new System.Drawing.Size(105, 23);
             this.btnTileAttributes.TabIndex = 6;
@@ -225,9 +225,9 @@
             // 
             // sclTileHeight
             // 
-            this.sclTileHeight.Location = new System.Drawing.Point(222, 169);
+            this.sclTileHeight.Location = new System.Drawing.Point(305, 140);
             this.sclTileHeight.Name = "sclTileHeight";
-            this.sclTileHeight.Size = new System.Drawing.Size(17, 315);
+            this.sclTileHeight.Size = new System.Drawing.Size(17, 340);
             this.sclTileHeight.TabIndex = 6;
             this.sclTileHeight.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sclTileHeight_Scroll);
             // 
@@ -236,17 +236,17 @@
             this.sclTileWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.sclTileWidth.Location = new System.Drawing.Point(3, 480);
             this.sclTileWidth.Name = "sclTileWidth";
-            this.sclTileWidth.Size = new System.Drawing.Size(222, 17);
+            this.sclTileWidth.Size = new System.Drawing.Size(302, 17);
             this.sclTileWidth.TabIndex = 6;
             this.sclTileWidth.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sclTileWidth_Scroll);
             // 
             // btnRemoveTile
             // 
-            this.btnRemoveTile.Location = new System.Drawing.Point(10, 111);
+            this.btnRemoveTile.Location = new System.Drawing.Point(148, 53);
             this.btnRemoveTile.Name = "btnRemoveTile";
-            this.btnRemoveTile.Size = new System.Drawing.Size(221, 23);
+            this.btnRemoveTile.Size = new System.Drawing.Size(125, 23);
             this.btnRemoveTile.TabIndex = 4;
-            this.btnRemoveTile.Text = "Remove active tile set";
+            this.btnRemoveTile.Text = "Remove";
             this.btnRemoveTile.UseVisualStyleBackColor = true;
             this.btnRemoveTile.Click += new System.EventHandler(this.btnRemoveTile_Click);
             // 
@@ -254,9 +254,9 @@
             // 
             this.btnAddTile.Location = new System.Drawing.Point(10, 53);
             this.btnAddTile.Name = "btnAddTile";
-            this.btnAddTile.Size = new System.Drawing.Size(221, 23);
+            this.btnAddTile.Size = new System.Drawing.Size(132, 23);
             this.btnAddTile.TabIndex = 3;
-            this.btnAddTile.Text = "Add new tile set";
+            this.btnAddTile.Text = "Add";
             this.btnAddTile.UseVisualStyleBackColor = true;
             this.btnAddTile.Click += new System.EventHandler(this.btnAddTile_Click);
             // 
@@ -264,7 +264,7 @@
             // 
             this.btnAddNewTileSetAsBackground.Location = new System.Drawing.Point(10, 82);
             this.btnAddNewTileSetAsBackground.Name = "btnAddNewTileSetAsBackground";
-            this.btnAddNewTileSetAsBackground.Size = new System.Drawing.Size(221, 23);
+            this.btnAddNewTileSetAsBackground.Size = new System.Drawing.Size(263, 23);
             this.btnAddNewTileSetAsBackground.TabIndex = 5;
             this.btnAddNewTileSetAsBackground.Text = "Add new tile set as background";
             this.btnAddNewTileSetAsBackground.UseVisualStyleBackColor = true;
@@ -285,7 +285,7 @@
             this.cboTiles.FormattingEnabled = true;
             this.cboTiles.Location = new System.Drawing.Point(6, 23);
             this.cboTiles.Name = "cboTiles";
-            this.cboTiles.Size = new System.Drawing.Size(227, 21);
+            this.cboTiles.Size = new System.Drawing.Size(267, 21);
             this.cboTiles.TabIndex = 2;
             this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
             // 
@@ -943,8 +943,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabToolBox);
             this.splitContainer1.Panel2MinSize = 252;
-            this.splitContainer1.Size = new System.Drawing.Size(928, 527);
-            this.splitContainer1.SplitterDistance = 672;
+            this.splitContainer1.Size = new System.Drawing.Size(1247, 527);
+            this.splitContainer1.SplitterDistance = 906;
             this.splitContainer1.TabIndex = 10;
             // 
             // BattleMapViewer
@@ -952,7 +952,7 @@
             this.BattleMapViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BattleMapViewer.Location = new System.Drawing.Point(0, 0);
             this.BattleMapViewer.Name = "BattleMapViewer";
-            this.BattleMapViewer.Size = new System.Drawing.Size(668, 523);
+            this.BattleMapViewer.Size = new System.Drawing.Size(902, 523);
             this.BattleMapViewer.TabIndex = 0;
             this.BattleMapViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnMapPreview_MouseDown);
             this.BattleMapViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnMapPreview_MouseMove);
@@ -964,7 +964,7 @@
             this.tslInformation});
             this.statusStrip1.Location = new System.Drawing.Point(0, 551);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(928, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1247, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -981,7 +981,7 @@
             this.tsmGlobalEnvironment});
             this.mnuToolBar.Location = new System.Drawing.Point(0, 0);
             this.mnuToolBar.Name = "mnuToolBar";
-            this.mnuToolBar.Size = new System.Drawing.Size(928, 24);
+            this.mnuToolBar.Size = new System.Drawing.Size(1247, 24);
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
             // 
@@ -996,7 +996,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(928, 573);
+            this.ClientSize = new System.Drawing.Size(1247, 573);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.mnuToolBar);

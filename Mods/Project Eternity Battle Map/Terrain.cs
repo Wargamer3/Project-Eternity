@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -13,6 +15,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public class TilesetPreset
         {
+            public enum TilesetTypes { Regular, Road, Water }
+
+            public TilesetTypes TilesetType;
             public string TilesetName;
             public Terrain[,] ArrayTerrain;
             public DrawableTile[,] ArrayTiles;
@@ -49,6 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public TilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index, bool LoadBackgroundPaths = true)
             {
                 TilesetName = BR.ReadString();
+                TilesetType = (TilesetTypes)BR.ReadByte();
 
                 ArrayTerrain = new Terrain[BR.ReadInt32(), BR.ReadInt32()];
                 ArrayTiles = new DrawableTile[ArrayTerrain.GetLength(0), ArrayTerrain.GetLength(1)];
@@ -93,19 +99,475 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return NewTilesetPreset;
             }
 
-            public static void SaveTerrainPreset(BinaryWriter BW, Terrain[,] ArrayTerrain, string TilesetName)
+            public static void SaveTerrainPreset(BinaryWriter BW, TilesetPreset Tileset)
             {
-                BW.Write(TilesetName);
+                BW.Write(Tileset.TilesetName);
+                BW.Write((byte)Tileset.TilesetType);
 
-                BW.Write(ArrayTerrain.GetLength(0));
-                BW.Write(ArrayTerrain.GetLength(1));
+                BW.Write(Tileset.ArrayTerrain.GetLength(0));
+                BW.Write(Tileset.ArrayTerrain.GetLength(1));
 
                 //Tiles
-                for (int Y = 0; Y < ArrayTerrain.GetLength(1); Y++)
+                for (int Y = 0; Y < Tileset.ArrayTerrain.GetLength(1); Y++)
                 {
-                    for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
+                    for (int X = 0; X < Tileset.ArrayTerrain.GetLength(0); X++)
                     {
-                        ArrayTerrain[X, Y].Save(BW);
+                        Tileset.ArrayTerrain[X, Y].Save(BW);
+                    }
+                }
+            }
+
+            internal void DrawPreview(SpriteBatch g, Point Position, Texture2D sprTileset)
+            {
+                switch(TilesetType)
+                {
+                    case TilesetTypes.Water:
+                        g.Draw(sprTileset, new Rectangle(Position.X, Position.Y, ArrayTiles[0, 0].Origin.Width, ArrayTiles[0, 0].Origin.Height), Color.White);
+                        break;
+                }
+                g.Draw(sprTileset, new Rectangle(Position.X, Position.Y, ArrayTiles[0, 0].Origin.Width, ArrayTiles[0, 0].Origin.Height), ArrayTiles[0, 0].Origin, Color.White);
+            }
+
+            public void UpdateSmartTile(int TilesetIndex, int X, int Y, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile)
+            {
+                switch (TilesetType)
+                {
+                    case TilesetTypes.Water:
+                        UpdtateSmartTileWater(TilesetIndex, X, Y, TileSizeX, TileSizeY, ArrayTile);
+                        break;
+                }
+                if (X > 0 && ArrayTile[X - 1, Y].TilesetIndex == TilesetIndex)
+                {
+                    switch (TilesetType)
+                    {
+                        case TilesetTypes.Water:
+                            UpdtateSmartTileWater(TilesetIndex, X - 1, Y, TileSizeX, TileSizeY, ArrayTile);
+                            break;
+                    }
+                }
+                if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y].TilesetIndex == TilesetIndex)
+                {
+                    switch (TilesetType)
+                    {
+                        case TilesetTypes.Water:
+                            UpdtateSmartTileWater(TilesetIndex, X + 1, Y, TileSizeX, TileSizeY, ArrayTile);
+                            break;
+                    }
+                }
+                if (Y > 0 && ArrayTile[X, Y - 1].TilesetIndex == TilesetIndex)
+                {
+                    switch (TilesetType)
+                    {
+                        case TilesetTypes.Water:
+                            UpdtateSmartTileWater(TilesetIndex, X, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                            break;
+                    }
+
+                    //Corners
+                    if (X > 0 && ArrayTile[X - 1, Y - 1].TilesetIndex == TilesetIndex)
+                    {
+                        switch (TilesetType)
+                        {
+                            case TilesetTypes.Water:
+                                UpdtateSmartTileWater(TilesetIndex, X - 1, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                                break;
+                        }
+                    }
+                    if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y - 1].TilesetIndex == TilesetIndex)
+                    {
+                        switch (TilesetType)
+                        {
+                            case TilesetTypes.Water:
+                                UpdtateSmartTileWater(TilesetIndex, X + 1, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                                break;
+                        }
+                    }
+                }
+                if (Y < ArrayTile.GetLength(1) - 1 && ArrayTile[X, Y + 1].TilesetIndex == TilesetIndex)
+                {
+                    switch (TilesetType)
+                    {
+                        case TilesetTypes.Water:
+                            UpdtateSmartTileWater(TilesetIndex, X, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                            break;
+                    }
+
+                    //Corners
+                    if (X > 0 && ArrayTile[X - 1, Y + 1].TilesetIndex == TilesetIndex)
+                    {
+                        switch (TilesetType)
+                        {
+                            case TilesetTypes.Water:
+                                UpdtateSmartTileWater(TilesetIndex, X - 1, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                                break;
+                        }
+                    }
+                    if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y + 1].TilesetIndex == TilesetIndex)
+                    {
+                        switch (TilesetType)
+                        {
+                            case TilesetTypes.Water:
+                                UpdtateSmartTileWater(TilesetIndex, X + 1, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            private void UpdtateSmartTileWater(int TilesetIndex, int X, int Y, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile)
+            {
+                DrawableTile LeftTile = new DrawableTile(Rectangle.Empty, -1);
+                DrawableTile UpTile = new DrawableTile(Rectangle.Empty, -1);
+                DrawableTile RightTile = new DrawableTile(Rectangle.Empty, -1);
+                DrawableTile DownTile = new DrawableTile(Rectangle.Empty, -1);
+
+                ArrayTile[X, Y].ArraySubTile = new Rectangle[0];
+
+                if (X > 0)
+                {
+                    LeftTile = ArrayTile[X - 1, Y];
+                }
+                if (Y > 0)
+                {
+                    UpTile = ArrayTile[X, Y - 1];
+                }
+                if (X < ArrayTile.GetLength(0) - 1)
+                {
+                    RightTile = ArrayTile[X + 1, Y];
+                }
+                if (Y < ArrayTile.GetLength(1) - 1)
+                {
+                    DownTile = ArrayTile[X, Y + 1];
+                }
+
+                if (TilesetIndex == LeftTile.TilesetIndex)
+                {
+                    if (TilesetIndex == UpTile.TilesetIndex)
+                    {
+                        if (TilesetIndex == RightTile.TilesetIndex)
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y - 1].TilesetIndex || TilesetIndex != ArrayTile[X + 1, Y - 1].TilesetIndex || TilesetIndex != ArrayTile[X - 1, Y + 1].TilesetIndex || TilesetIndex != ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                {
+                                    Rectangle TopLeft = new Rectangle(2 * TileSizeX, 0 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle TopRight = new Rectangle(2 * TileSizeX + TileSizeX / 2, 0 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomLeft = new Rectangle(2 * TileSizeX, TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomRight = new Rectangle(2 * TileSizeX + TileSizeX / 2,  TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    bool Split = false;
+
+                                    if (TilesetIndex == ArrayTile[X - 1, Y - 1].TilesetIndex)
+                                    {
+                                        Split = true;
+                                        TopLeft = new Rectangle(1 * TileSizeX, 2 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X + 1, Y - 1].TilesetIndex)
+                                    {
+                                        Split = true;
+                                        TopRight = new Rectangle(1 * TileSizeX + TileSizeX / 2, 2 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X - 1, Y + 1].TilesetIndex)
+                                    {
+                                        Split = true;
+                                        BottomLeft = new Rectangle(1 * TileSizeX, 2 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                    {
+                                        Split = true;
+                                        BottomRight = new Rectangle(1 * TileSizeX + TileSizeX / 2, 2 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (Split)
+                                    {
+                                        ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                        {
+                                            TopLeft, TopRight, BottomLeft, BottomRight
+                                        };
+                                    }
+                                    else
+                                    {
+                                        ArrayTile[X, Y].Origin.Location = new Point(2 * TileSizeX, 0 * TileSizeY);
+                                    }
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(1 * TileSizeX, 2 * TileSizeY);
+                                }
+                            }
+                            else//Nothing Down
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y - 1].TilesetIndex || TilesetIndex != ArrayTile[X + 1, Y - 1].TilesetIndex)
+                                {
+                                    Rectangle TopLeft =     new Rectangle(2 * TileSizeX,                    0 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle TopRight =    new Rectangle(2 * TileSizeX + TileSizeX / 2,    0 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomLeft =  new Rectangle(1 * TileSizeX,                    3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomRight = new Rectangle(1 * TileSizeX + TileSizeX / 2,    3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+
+                                    if (TilesetIndex == ArrayTile[X - 1, Y - 1].TilesetIndex)
+                                    {
+                                        TopLeft = new Rectangle(1 * TileSizeX,                      3 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X + 1, Y - 1].TilesetIndex)
+                                    {
+                                        TopRight = new Rectangle(1 * TileSizeX + TileSizeX / 2,     3 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    }
+
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[] { TopLeft, TopRight, BottomLeft, BottomRight };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(1 * TileSizeX, 3 * TileSizeY);
+                                }
+                            }
+                        }
+                        else//Nothing Right
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y - 1].TilesetIndex || TilesetIndex != ArrayTile[X - 1, Y + 1].TilesetIndex)
+                                {
+                                    Rectangle TopLeft =     new Rectangle(2 * TileSizeX,                    0 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle TopRight =    new Rectangle(2 * TileSizeX + TileSizeX / 2,    2 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomLeft =  new Rectangle(2 * TileSizeX,                    0 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomRight = new Rectangle(2 * TileSizeX + TileSizeX / 2,    2 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+
+                                    if (TilesetIndex == ArrayTile[X - 1, Y - 1].TilesetIndex)
+                                    {
+                                        TopLeft = new Rectangle(2 * TileSizeX,              2 * TileSizeY,                  TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X - 1, Y + 1].TilesetIndex)
+                                    {
+                                        BottomLeft = new Rectangle(2 * TileSizeX,           2 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2);
+                                    }
+
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[] { TopLeft, TopRight, BottomLeft, BottomRight };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(2 * TileSizeX, 2 * TileSizeY);
+                                }
+                            }
+                            else//Nothing Down
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y - 1].TilesetIndex)
+                                {
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                    {
+                                            new Rectangle(2 * TileSizeX,                    0 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2,    3 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX,                    3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2,    3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(2 * TileSizeX, 3 * TileSizeY);
+                                }
+                            }
+                        }
+                    }
+                    else//Nothing Up
+                    {
+                        if (TilesetIndex == RightTile.TilesetIndex)
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y + 1].TilesetIndex || TilesetIndex != ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                {
+                                    Rectangle TopLeft =     new Rectangle(1 * TileSizeX,                    1 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle TopRight =    new Rectangle(1 * TileSizeX + TileSizeX / 2,    1 * TileSizeY, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomLeft =  new Rectangle(2 * TileSizeX,                    0 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomRight = new Rectangle(2 * TileSizeX + TileSizeX / 2,    0 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+
+                                    if (TilesetIndex == ArrayTile[X - 1, Y + 1].TilesetIndex)
+                                    {
+                                        BottomLeft = new Rectangle(1 * TileSizeX,                       1 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                    {
+                                        BottomRight = new Rectangle(1 * TileSizeX + TileSizeX / 2,      1 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2);
+                                    }
+
+                                    ArrayTile[X, Y].Origin.Location = new Point(1 * TileSizeX, 1 * TileSizeY);
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[] { TopLeft, TopRight, BottomLeft, BottomRight };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(1 * TileSizeX, 1 * TileSizeY);
+                                }
+                            }
+                            else//Nothing Down
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(1 * TileSizeX,                    1 * TileSizeY,                  TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(1 * TileSizeX + TileSizeX / 2,    1 * TileSizeY,                  TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(1 * TileSizeX,                    3 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(1 * TileSizeX + TileSizeX / 2,    3 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                        }
+                        else//Nothing Right
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X - 1, Y + 1].TilesetIndex)
+                                {
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                    {
+                                            new Rectangle(2 * TileSizeX, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX, 0 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2, 1 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(2 * TileSizeX, 1 * TileSizeY);
+                                }
+                            }
+                            else
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(2 * TileSizeX, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                        }
+                    }
+                }
+                else//Nothing Left
+                {
+                    if (TilesetIndex == RightTile.TilesetIndex)
+                    {
+                        if (TilesetIndex == UpTile.TilesetIndex)
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X + 1, Y - 1].TilesetIndex || TilesetIndex != ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                {
+                                    Rectangle TopLeft =     new Rectangle(0 * TileSizeX,                    2 * TileSizeY,                  TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle TopRight =    new Rectangle(2 * TileSizeX + TileSizeX / 2,    0 * TileSizeY,                  TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomLeft =  new Rectangle(0 * TileSizeX,                    2 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2);
+                                    Rectangle BottomRight = new Rectangle(2 * TileSizeX + TileSizeX / 2,    0 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2);
+
+                                    if (TilesetIndex == ArrayTile[X + 1, Y - 1].TilesetIndex)
+                                    {
+                                        TopRight = new Rectangle(0 * TileSizeX + TileSizeX / 2,     2 * TileSizeY ,                 TileSizeX / 2, TileSizeY / 2);
+                                    }
+                                    if (TilesetIndex == ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                    {
+                                        BottomRight = new Rectangle(0 * TileSizeX + TileSizeX / 2,  2 * TileSizeY + TileSizeY / 2,  TileSizeX / 2, TileSizeY / 2);
+                                    }
+
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[] { TopLeft, TopRight, BottomLeft, BottomRight };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(0, 2 * TileSizeY);
+                                }
+                            }
+                            else//Nothing Down
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X + 1, Y - 1].TilesetIndex)
+                                {
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                    {
+                                            new Rectangle(0 * TileSizeX, 3 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2, 0 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(0 * TileSizeX, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(0 * TileSizeX + TileSizeX / 2, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(0, 3 * TileSizeY);
+                                }
+                            }
+                        }
+                        else//Nothing Up
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                //Corners
+                                if (TilesetIndex != ArrayTile[X + 1, Y + 1].TilesetIndex)
+                                {
+                                    ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                    {
+                                            new Rectangle(0 * TileSizeX, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(0 * TileSizeX + TileSizeX / 2, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(0 * TileSizeX, 1 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                            new Rectangle(2 * TileSizeX + TileSizeX / 2, 0 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    };
+                                }
+                                else
+                                {
+                                    ArrayTile[X, Y].Origin.Location = new Point(0, 1 * TileSizeY);
+                                }
+                            }
+                            else
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(0 * TileSizeX, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX + TileSizeX / 2, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX + TileSizeX / 2, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                        }
+                    }
+                    else//Nothing Right
+                    {
+                        if (TilesetIndex == UpTile.TilesetIndex)
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(0 * TileSizeX, 2 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 2 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX, 2 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 2 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                            else
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(0 * TileSizeX, 3 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 3 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 3 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                        }
+                        else//Nothing Up
+                        {
+                            if (TilesetIndex == DownTile.TilesetIndex)
+                            {
+                                ArrayTile[X, Y].ArraySubTile = new Rectangle[]
+                                {
+                                    new Rectangle(0 * TileSizeX, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 1 * TileSizeY, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(0 * TileSizeX, 1 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                    new Rectangle(2 * TileSizeX + TileSizeX / 2, 1 * TileSizeY + TileSizeY / 2, TileSizeX / 2, TileSizeY / 2),
+                                };
+                            }
+                            else
+                            {
+                            }
+                        }
                     }
                 }
             }

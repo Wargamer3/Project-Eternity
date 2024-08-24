@@ -8,7 +8,7 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.Editors.MapEditor
+namespace ProjectEternity.Editors.TilesetEditor
 {
     public partial class ProjectEternityTilesetPresetEditor : BaseEditor
     {
@@ -24,6 +24,8 @@ namespace ProjectEternity.Editors.MapEditor
         private BufferedGraphics pbTilePreviewGraphicDevice;
         private Point pbTilePreviewStartingPoint;//Point from which to start drawing the Tile preview.
 
+        private TileEditor frmTileEditor;
+
         private enum ItemSelectionChoices { Tile, BattleBackgroundAnimation };
 
         private ItemSelectionChoices ItemSelectionChoice;
@@ -37,28 +39,6 @@ namespace ProjectEternity.Editors.MapEditor
             TileSize = new Point(32, 32);
             ArrayTerrain = new Terrain[0, 0];
             ListBattleBackgroundAnimationPath = new List<string>();
-
-            cboTerrainBonusActivation.Items.Add("On every turns");
-            cboTerrainBonusActivation.Items.Add("On this turn");
-            cboTerrainBonusActivation.Items.Add("On next turn");
-            cboTerrainBonusActivation.Items.Add("On enter");
-            cboTerrainBonusActivation.Items.Add("On leaved");
-            cboTerrainBonusActivation.Items.Add("On attack");
-            cboTerrainBonusActivation.Items.Add("On hit");
-            cboTerrainBonusActivation.Items.Add("On miss");
-            cboTerrainBonusActivation.Items.Add("On defend");
-            cboTerrainBonusActivation.Items.Add("On hited");
-            cboTerrainBonusActivation.Items.Add("On missed");
-
-            cboTerrainBonusType.Items.Add("HP regen");
-            cboTerrainBonusType.Items.Add("EN regen");
-            cboTerrainBonusType.Items.Add("HP regain");
-            cboTerrainBonusType.Items.Add("EN regain");
-            cboTerrainBonusType.Items.Add("Armor");
-            cboTerrainBonusType.Items.Add("Accuracy");
-            cboTerrainBonusType.Items.Add("Evasion");
-
-            cboBattleAnimationBackground.Items.Add("None");
         }
 
         public ProjectEternityTilesetPresetEditor(string FilePath, object[] Params)
@@ -95,6 +75,7 @@ namespace ProjectEternity.Editors.MapEditor
             BW.Write(TileSize.Y);
 
             BW.Write(TilesetName);
+            BW.Write((byte)cbTilesetType.SelectedIndex);
 
             BW.Write(ArrayTerrain.GetLength(0));
             BW.Write(ArrayTerrain.GetLength(1));
@@ -138,16 +119,12 @@ namespace ProjectEternity.Editors.MapEditor
             FS.Close();
 
             TilesetName = NewTilesetPreset.TilesetName;
+            cbTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
 
             ArrayTerrain = NewTilesetPreset.ArrayTerrain;
 
-            foreach (string BattleBackgroundAnimationPath in NewTilesetPreset.ListBattleBackgroundAnimationPath)
-            {
-                if (!string.IsNullOrEmpty(BattleBackgroundAnimationPath) && !cboBattleAnimationBackground.Items.Contains(BattleBackgroundAnimationPath))
-                {
-                    cboBattleAnimationBackground.Items.Add(BattleBackgroundAnimationPath);
-                }
-            }
+            frmTileEditor = new TileEditor();
+            frmTileEditor.LoadTileset(NewTilesetPreset);
 
             if (!string.IsNullOrWhiteSpace(TilesetName))
                 InitTileset(TilesetName);
@@ -156,173 +133,6 @@ namespace ProjectEternity.Editors.MapEditor
         private void tsmSave_Click(object sender, EventArgs e)
         {
             SaveItem(FilePath, null);
-        }
-
-        private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void btnAddNewBonus_Click(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                lstTerrainBonus.Items.Add((lstTerrainBonus.Items.Count + 1) + ". HP regen (5 ) - On every turn");
-
-                int LastBonusIndex = ActiveTerrain.ListActivation.Length;
-
-                Array.Resize(ref ActiveTerrain.ListActivation, ActiveTerrain.ListActivation.Length + 1);
-                Array.Resize(ref ActiveTerrain.ListBonus, ActiveTerrain.ListBonus.Length + 1);
-                Array.Resize(ref ActiveTerrain.ListBonusValue, ActiveTerrain.ListBonusValue.Length + 1);
-
-                ActiveTerrain.ListActivation[LastBonusIndex] = TerrainActivation.OnEveryTurns;
-                ActiveTerrain.ListBonus[LastBonusIndex] = TerrainBonus.HPRegen;
-                ActiveTerrain.ListBonusValue[LastBonusIndex] = 5;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void btnRemoveBonus_Click(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0 && lstTerrainBonus.SelectedIndex >= 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                int Index = lstTerrainBonus.SelectedIndex;
-                Array.Resize(ref ActiveTerrain.ListActivation, ActiveTerrain.ListActivation.Length - 1);
-                Array.Resize(ref ActiveTerrain.ListBonus, ActiveTerrain.ListBonus.Length - 1);
-                Array.Resize(ref ActiveTerrain.ListBonusValue, ActiveTerrain.ListBonusValue.Length - 1);
-                lstTerrainBonus.Items.RemoveAt(lstTerrainBonus.SelectedIndex);
-
-                if (lstTerrainBonus.Items.Count > 0)
-                {
-                    if (Index >= lstTerrainBonus.Items.Count)
-                        lstTerrainBonus.SelectedIndex = lstTerrainBonus.Items.Count - 1;
-                    else
-                        lstTerrainBonus.SelectedIndex = Index;
-                }
-                else
-                {
-                    cboTerrainBonusActivation.Text = "";
-                    cboTerrainBonusType.Text = "";
-                    txtBonusValue.Text = "";
-                }
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void btnClearBonuses_Click(object sender, EventArgs e)
-        {
-            if (lstTerrainBonus.Items.Count > 0)
-            {
-                lstTerrainBonus.SelectedIndex = 0;
-                while (lstTerrainBonus.Items.Count > 0)
-                    btnRemoveBonus_Click(sender, e);
-            }
-        }
-
-        private void lstTerrainBonus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0 && lstTerrainBonus.SelectedIndex != -1)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
-                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
-                txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void cboTerrainBonusType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0 && lstTerrainBonus.SelectedIndex != -1)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
-                lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void cboTerrainBonusActivation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0 && lstTerrainBonus.SelectedIndex != -1)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
-                lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void txtBonusValue_TextChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0 && lstTerrainBonus.SelectedIndex != -1 && txtBonusValue.Text != "")
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex] = (int)txtBonusValue.Value;
-                lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackgroundsAll));
-        }
-
-        private void btnDeleteBattleAnimationBackground_Click(object sender, EventArgs e)
-        {
-            if (cboBattleAnimationBackground.SelectedIndex >= 0)
-            {
-                cboBattleAnimationBackground.Items.RemoveAt(cboBattleAnimationBackground.SelectedIndex);
-            }
-        }
-
-        private void UpdateAllTiles()
-        {
-            if (ListActiveTile.Count > 1)
-            {
-                Point OriginalTile = ListActiveTile[0];
-                Terrain OriginalTerrain = ArrayTerrain[OriginalTile.X, OriginalTile.Y];
-
-                for (int T = 1; T < ListActiveTile.Count; ++T)
-                {
-                    ArrayTerrain[ListActiveTile[T].X, ListActiveTile[T].Y] = new Terrain(OriginalTerrain, new Microsoft.Xna.Framework.Point(ListActiveTile[T].X, ListActiveTile[T].Y), 0);
-                }
-            }
         }
 
         private void DrawTilePreview()
@@ -377,25 +187,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             if (ListActiveTile.Count == 1)
             {
-                cboTerrainType.SelectedIndex = ArrayTerrain[ActiveTile.X, ActiveTile.Y].TerrainTypeIndex;
-                cboBattleAnimationBackground.SelectedIndex = ArrayTerrain[ActiveTile.X, ActiveTile.Y].BattleBackgroundAnimationIndex + 1;
-
-                lstTerrainBonus.Items.Clear();
-
-                //Load the lstTerrainBonus.
-                for (int i = 0; i < ArrayTerrain[ActiveTile.X, ActiveTile.Y].ListActivation.Length; i++)
-                {
-                    string ActiveBonus = cboTerrainBonusType.Items[(int)ActiveTerrain.ListBonus[i]].ToString();
-                    string ActiveBonusValue = ActiveTerrain.ListBonusValue[i].ToString();
-                    string ActiveBonusActivation = cboTerrainBonusActivation.Items[(int)ActiveTerrain.ListActivation[i]].ToString();
-
-                    lstTerrainBonus.Items.Add((i + 1) + ". " + ActiveBonus + " (" + ActiveBonusValue.ToString() + " ) - " + ActiveBonusActivation);
-                }
-
-                if (lstTerrainBonus.Items.Count > 0)
-                {
-                    lstTerrainBonus.SelectedIndex = 0;
-                }
+                frmTileEditor.SelectTerrain(ActiveTerrain);
             }
 
             panTilesetPreview.Refresh();
@@ -461,16 +253,18 @@ namespace ProjectEternity.Editors.MapEditor
                             pbTilePreview_MouseClick(this, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
                         }
                         break;
-
-                    case ItemSelectionChoices.BattleBackgroundAnimation:
-                        string BackgroundPath = Items[I];
-                        if (BackgroundPath != null)
-                        {
-                            cboBattleAnimationBackground.Items.Add(BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19));
-                        }
-                        break;
                 }
             }
+        }
+
+        private void tsmTileEditor_Click(object sender, EventArgs e)
+        {
+            frmTileEditor.Show();
+        }
+
+        private void ProjectEternityTilesetPresetEditor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            frmTileEditor.Close();
         }
     }
 }

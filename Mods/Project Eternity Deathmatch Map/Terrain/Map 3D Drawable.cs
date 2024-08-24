@@ -454,8 +454,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int Y = (int)ActivePoint.WorldPosition.Y;
                 float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.1f;
                 float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+
+                Terrain3D ActiveTerrain3D = ActivePoint.DrawableTile.Terrain3DInfo;
 
                 ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
@@ -480,8 +480,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int Y = (int)ActivePoint.WorldPosition.Y;
                 float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.15f;
                 float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+
+                Terrain3D ActiveTerrain3D = ActivePoint.DrawableTile.Terrain3DInfo;
 
                 ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
                 X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);

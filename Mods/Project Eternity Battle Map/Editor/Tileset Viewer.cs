@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Editor;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -19,9 +20,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point DrawOffset;
         public List<Rectangle> ListTileBrush;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
         public List<Color> ListTileBrushColor;
+        public List<TilesetPreset> ListSmartTilesetPresets;
+        public List<Texture2D> ListTilesetPresetsSprite;
 
         public TilesetViewerControl()
         {
+            ListSmartTilesetPresets = new List<TilesetPreset>();
+            ListTilesetPresetsSprite = new List<Texture2D>();
             ListTileBrush = new List<Rectangle>();
             ListTileBrushColor = new List<Color>();
             ListTileBrush.Add(new Rectangle());
@@ -102,11 +107,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Point GetTileFromBrush(Point MapTileToPaint, int BrushIndex)
         {
-            Rectangle TileBrushSize = ListTileBrush[BrushIndex];
+            Rectangle TileBrushPosition = ListTileBrush[BrushIndex];
+
+            if (ListSmartTilesetPresets.Count > 0)
+            {
+            }
 
             Point RealTile = new Point();
-            RealTile.X = TileBrushSize.X + MapTileToPaint.X % TileBrushSize.Width;
-            RealTile.Y = TileBrushSize.Y + MapTileToPaint.Y % TileBrushSize.Height;
+            RealTile.X = TileBrushPosition.X + MapTileToPaint.X % TileBrushPosition.Width;
+            RealTile.Y = TileBrushPosition.Y + MapTileToPaint.Y % TileBrushPosition.Height;
 
             return RealTile;
         }
@@ -122,9 +131,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GraphicsDevice.Clear(backColor);
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
+            int FirstLineY = -DrawOffset.Y;
+
+            if (ListSmartTilesetPresets.Count > 0)
+            {
+                Point Position = Point.Zero;
+                for (int i = 0; i < ListSmartTilesetPresets.Count; i++)
+                {
+                    TilesetPreset ActivePreset = ListSmartTilesetPresets[i];
+                    ActivePreset.DrawPreview(g, Position, ListTilesetPresetsSprite[i]);
+                    Position.X += TileSize.X;
+                }
+                FirstLineY += TileSize.Y;
+            }
+
             if (sprTileset != null)
             {
-                g.Draw(sprTileset, new Vector2(-DrawOffset.X, -DrawOffset.Y), Color.White);
+                g.Draw(sprTileset, new Vector2(-DrawOffset.X, FirstLineY), Color.White);
+
                 for (int B = 0; B < ListTileBrush.Count; B++)
                 {
                     Rectangle TileBrushSize = ListTileBrush[B];

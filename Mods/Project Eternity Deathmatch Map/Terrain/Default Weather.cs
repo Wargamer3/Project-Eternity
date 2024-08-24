@@ -57,8 +57,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
                     }
 
-                    DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
-                    DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
+                    DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                    DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
                 }
 			}
 		}
@@ -90,9 +90,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (Map.IsEditor)
                 {
-                    foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
                     {
-                        ActiveTileSet.Value.Draw(g);
+                        foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.Draw(g, Map, L);
+                        }
                     }
                 }
                 else
@@ -109,7 +112,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g);
+                            ActiveTileSet.Value.Draw(g, Map, L);
                         }
                     }
                 }
@@ -118,7 +121,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
                 {
-                    ActiveTileSet.Value.Draw(g);
+                    ActiveTileSet.Value.Draw(g, Map, Map.ShowLayerIndex);
                 }
             }
 

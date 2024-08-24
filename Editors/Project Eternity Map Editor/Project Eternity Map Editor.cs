@@ -804,6 +804,32 @@ namespace ProjectEternity.Editors.MapEditor
 
             Point TilePos = TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y), BrushIndex);
 
+            if (TilesetViewer.ListSmartTilesetPresets.Count > 0)
+            {
+                if (TilePos.Y == 0)
+                {
+                    if (TilePos.X >= TilesetViewer.ListSmartTilesetPresets.Count)
+                    {
+                        return;
+                    }
+
+                    Terrain SmartPresetTerrain = TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTerrain[0, 0];
+                    DrawableTile SmartPresetTile = TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTiles[0, 0];
+
+                    Helper.ReplaceTerrain(X, Y,
+                        SmartPresetTerrain, LayerIndex, ConsiderSubLayers);
+
+                    Helper.ReplaceTile(X, Y,
+                        SmartPresetTile, LayerIndex, ConsiderSubLayers);
+
+                    return;
+                }
+                else
+                {
+                    TilePos.Y -= 1;
+                }
+            }
+
             if (TilePos.X < 0 || TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
                 || TilePos.Y < 0 || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
             {
@@ -1511,6 +1537,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 }
 
                                 Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, ActiveMap.ListTilesetPreset.Count);
+                                Microsoft.Xna.Framework.Graphics.Texture2D NewTilesetSprite = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName);
                                 for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
                                 {
                                     string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
@@ -1559,6 +1586,8 @@ namespace ProjectEternity.Editors.MapEditor
                                 ActiveMap.ListTilesetPreset.Add(NewTileset);
                                 ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
 
+                                TilesetViewer.ListSmartTilesetPresets.Add(NewTileset);
+                                TilesetViewer.ListTilesetPresetsSprite.Add(NewTilesetSprite);
                                 cboTiles.Items.Add(Name);
                             }
                             else

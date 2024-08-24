@@ -56,23 +56,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private readonly DeathmatchMap Map;
         public readonly FlagSpawner Owner;
-        public readonly Texture2D sprFlag;
 
         private bool IsDropped = false;
         private int TurnUsed;
         private int TurnRemaining;
         private const int TurnsBeforeReturn = 2;
 
-        public override int Width => sprFlag.Width;
+        public override int Width => sprItem.Width;
 
-        public override int Height => sprFlag.Height;
+        public override int Height => sprItem.Height;
 
         public Flag(DeathmatchMap Map, FlagSpawner Owner, Texture2D sprFlag, UnitMap3D Item3D)
             : base("Flag")
         {
             this.Map = Map;
             this.Owner = Owner;
-            this.sprFlag = sprFlag;
+            this.sprItem = sprFlag;
             this.Item3D = Item3D;
         }
 

@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public struct DrawableTile
     {
         public Rectangle Origin;//X, Y origin from at which the tile is located in the TileSet.
+        public Rectangle[] ArraySubTile;//X, Y origin from at which the tile is located in the TileSet.
         public int TilesetIndex;
 
         public Terrain3D Terrain3DInfo;
@@ -17,6 +18,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             TilesetIndex = BR.ReadInt32();
             Origin = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth, TileHeight);
+            bool HasArraySubTile = BR.ReadBoolean();
+            if (HasArraySubTile)
+            {
+                int ArraySubTileLength = BR.ReadByte();
+                ArraySubTile = new Rectangle[ArraySubTileLength];
+                for (int T = 0; T < ArraySubTileLength; ++T)
+                {
+                    ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / ArraySubTileLength / 2, TileHeight / ArraySubTileLength / 2);
+                }
+            }
+            else
+            {
+                ArraySubTile = new Rectangle[0];
+            }
             bool HasTerrain3DInfo = BR.ReadBoolean();
             Terrain3DInfo = null;
             if (HasTerrain3DInfo)
@@ -29,6 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.Origin = Origin;
             this.TilesetIndex = TilesetIndex;
+            ArraySubTile = new Rectangle[0];
             Terrain3DInfo = new Terrain3D();
         }
 
@@ -37,6 +53,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.Origin = TilePreset.Origin;
             this.TilesetIndex = TilePreset.TilesetIndex;
+            this.ArraySubTile = new Rectangle[TilePreset.ArraySubTile.Length];
+            for (int T = 0; T < TilePreset.ArraySubTile.Length; ++T)
+            {
+                ArraySubTile[T] = TilePreset.ArraySubTile[T];
+            }
             if (TilePreset.Terrain3DInfo != null)
             {
                 this.Terrain3DInfo = new Terrain3D(TilePreset.Terrain3DInfo);
@@ -48,6 +69,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(TilesetIndex);
             BW.Write(Origin.X);
             BW.Write(Origin.Y);
+            if (ArraySubTile.Length > 0)
+            {
+                BW.Write(true);
+                BW.Write((byte)ArraySubTile.Length);
+                for (int T = 0; T < ArraySubTile.Length; ++T)
+                {
+                    BW.Write(ArraySubTile[T].X);
+                    BW.Write(ArraySubTile[T].Y);
+                }
+            }
+            else
+            {
+                BW.Write(false);
+            }
             BW.Write(Terrain3DInfo != null);
             if (Terrain3DInfo != null)
             {
@@ -61,6 +96,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void Save(BinaryWriter BW);
         void Load(BinaryReader BR);
         void RemoveTileset(int TilesetIndex);
+        void ReplaceTile(int X, int Y, DrawableTile ReplacementTile);
     }
 
     public abstract class Map2D : DrawableGrid

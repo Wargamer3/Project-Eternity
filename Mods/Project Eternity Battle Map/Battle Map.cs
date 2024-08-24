@@ -351,7 +351,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListTilesetPreset.Count);
             for (int T = 0; T < ListTilesetPreset.Count; T++)
             {
-                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T].ArrayTerrain, ListTilesetPreset[T].TilesetName);
+                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T]);
             }
 
             BW.Write(ListBattleBackgroundAnimationPath.Count);

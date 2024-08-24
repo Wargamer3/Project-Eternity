@@ -5,21 +5,26 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class Tile2DHolder
     {
-        private List<Terrain> ListTile2D;
-        Texture2D sprTileset;
-        Texture2D sprTilesetBumpMap;
-        Texture2D sprTilesetHeightMap;//R = Depth, G = Wall Left to right angle, B = Wall Up to down angle where 255 = upward wall
+        private List<Rectangle> ListTile2D;
+        private List<Vector3> ListTileWorldPosition;
+        private Texture2D sprTileset;
+        private TilesetPreset.TilesetTypes TilesetType;
+        private Texture2D sprTilesetBumpMap;
+        private Texture2D sprTilesetHeightMap;//R = Depth, G = Wall Left to right angle, B = Wall Up to down angle where 255 = upward wall
         public Effect WetEffect;
         private bool CanUseEffect;
+        private double TimeElapsed;
 
         public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
         {
-            ListTile2D = new List<Terrain>();
+            ListTile2D = new List<Rectangle>();
+            ListTileWorldPosition = new List<Vector3>();
 
             if (WetEffect != null)
             {
@@ -57,12 +62,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void AddTile(Terrain NewTile)
+        public Tile2DHolder(Texture2D sprTileset, TilesetPreset.TilesetTypes TilesetType)
         {
-            ListTile2D.Add(NewTile);
+            this.sprTileset = sprTileset;
+            this.TilesetType = TilesetType;
+            ListTile2D = new List<Rectangle>();
+            ListTileWorldPosition = new List<Vector3>();
+            CanUseEffect = false;
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void AddTile(Rectangle TileOrigin, Vector3 TileWorldPosition)
+        {
+            ListTile2D.Add(TileOrigin);
+            ListTileWorldPosition.Add(TileWorldPosition);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (TilesetType == TilesetPreset.TilesetTypes.Water)
+            {
+                TimeElapsed += gameTime.ElapsedGameTime.TotalSeconds;
+            }
+        }
+
+        public void Draw(CustomSpriteBatch g, BattleMap Owner, float LayerDepth)
         {
             if (CanUseEffect)
             {
@@ -73,25 +96,36 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             }
 
-            foreach (Terrain ActiveTile in ListTile2D)
-            {
-                Color FinalColor = Color.White;
-                float FinalHeight = ActiveTile.WorldPosition.Z - 1;
+            int OffsetX = sprTileset.Width / 4;
+            int FinalOffsetX = 0;
 
-                if (FinalHeight > ActiveTile.Owner.Camera2DPosition.Z && !ActiveTile.Owner.IsEditor)
+            if (TilesetType == TilesetPreset.TilesetTypes.Water)
+            {
+                FinalOffsetX = ((int)(TimeElapsed * 2) % 4) * OffsetX;
+            }
+
+            for (int T = 0; T < ListTile2D.Count; T++)
+            {
+                Rectangle ActiveTile = ListTile2D[T];
+                Vector3 ActiveTileWorldPosition = ListTileWorldPosition[T];
+
+                Color FinalColor = Color.White;
+                float FinalHeight = ActiveTileWorldPosition.Z - 1;
+
+                if (FinalHeight > Owner.Camera2DPosition.Z && !Owner.IsEditor)
                 {
-                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.Camera2DPosition.Z) * 255);
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - Owner.Camera2DPosition.Z) * 255);
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.Camera2DPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.Camera2DPosition.Y) * ActiveTile.Owner.TileSize.Y),
-                        ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
+                        new Vector2((ActiveTileWorldPosition.X - Owner.Camera2DPosition.X) * Owner.TileSize.X, (ActiveTileWorldPosition.Y - Owner.Camera2DPosition.Y) * Owner.TileSize.Y),
+                        new Rectangle((ActiveTile.X + FinalOffsetX) % sprTileset.Width, ActiveTile.Y, ActiveTile.Width, ActiveTile.Height), FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, LayerDepth);
             }
 
             g.End();
         }
 
-        public void Draw(CustomSpriteBatch g, Vector2 Offset)
+        public void Draw(CustomSpriteBatch g, Vector2 Offset, BattleMap Owner, float LayerDepth)
         {
             if (CanUseEffect)
             {
@@ -102,19 +136,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             }
 
-            foreach (Terrain ActiveTile in ListTile2D)
+            for (int T = 0; T < ListTile2D.Count; T++)
             {
-                Color FinalColor = Color.White;
-                float FinalHeight = ActiveTile.WorldPosition.Z;
+                Rectangle ActiveTile = ListTile2D[T];
+                Vector3 ActiveTileWorldPosition = ListTileWorldPosition[T];
 
-                if (FinalHeight > ActiveTile.Owner.Camera2DPosition.Z)
+                Color FinalColor = Color.White;
+                float FinalHeight = ActiveTileWorldPosition.Z - 1;
+
+                if (FinalHeight > Owner.Camera2DPosition.Z && !Owner.IsEditor)
                 {
-                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.Camera2DPosition.Z) * 255);
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - Owner.Camera2DPosition.Z) * 255);
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.Camera2DPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.Camera2DPosition.Y) * ActiveTile.Owner.TileSize.Y) + Offset,
-                        ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
+                        new Vector2((ActiveTileWorldPosition.X - Owner.Camera2DPosition.X) * Owner.TileSize.X, (ActiveTileWorldPosition.Y - Owner.Camera2DPosition.Y) * Owner.TileSize.Y),
+                        new Rectangle(ActiveTile.X, ActiveTile.Y, ActiveTile.Width, ActiveTile.Height), FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, LayerDepth);
             }
 
             g.End();

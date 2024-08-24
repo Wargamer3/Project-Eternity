@@ -41,14 +41,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
 				{
 					Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
-					DrawableTile ActiveTile = Owner.ArrayTerrain[X, Y].DrawableTile;
+					DrawableTile ActiveTile = Owner.LayerGrid.ArrayTile[X, Y];
 
 					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
 					{
 						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName + " WallMap", Map.Content, WetEffect));
 					}
 
-					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
+					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
 				foreach (Tile2DHolder ActiveTileset in DicTile2DByTileset.Values)
 				{
-					ActiveTileset.Draw(g, Offset);
+					ActiveTileset.Draw(g, Offset, Map, 1f);
 				}
 
 				ActiveLight.EndDrawingShadowCasters(g);

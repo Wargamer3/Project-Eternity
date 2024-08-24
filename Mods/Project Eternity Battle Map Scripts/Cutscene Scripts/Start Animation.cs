@@ -36,7 +36,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 IsActive = true;
                 IsDrawn = true;
 
-                AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, Vector2.Zero, _AnimationSpeed);
+                if (!string.IsNullOrEmpty(_AnimationPath))
+                {
+                    AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, Vector2.Zero, _AnimationSpeed);
+                }
             }
 
             public override void Update(GameTime gameTime)

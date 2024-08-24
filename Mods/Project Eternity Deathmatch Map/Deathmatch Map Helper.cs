@@ -100,16 +100,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DrawableTile NewTile = new DrawableTile(TilePreset);
 
+            MapLayer ActiveLayer;
+
             if (ConsiderSubLayers)
             {
-                GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
-                GetRealLayer(LayerIndex).ArrayTerrain[X, Y].DrawableTile = NewTile;
+                ActiveLayer = GetRealLayer(LayerIndex);
             }
             else
             {
-                ActiveMap.LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-                ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y].DrawableTile = NewTile;
+                ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
             }
+
+            ActiveLayer.LayerGrid.ReplaceTile(X, Y, NewTile);
+
+            ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateSmartTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.LayerGrid.ArrayTile);
+
+            ActiveLayer.ArrayTerrain[X, Y].DrawableTile = ActiveLayer.LayerGrid.GetTile(X, Y);
 
             ActiveMap.Reset();
         }
