@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void Resize(int Width, int Height)
         {
-            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Width, Height, 0, 0, -1f);
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.ScissorRectangle.Width, GraphicsDevice.ScissorRectangle.Height, 0, 0, -1f);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
             Matrix projectionMatrix = HalfPixelOffset * Projection;

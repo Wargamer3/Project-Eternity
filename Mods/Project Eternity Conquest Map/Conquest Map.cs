@@ -316,6 +316,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override void TogglePreview(bool UsePreview)
         {
             ShowUnits = UsePreview;
+
+            if (!UsePreview)
+            {
+                //Reset game
+                if (IsInit)
+                {
+                    Init();
+                }
+            }
+
+            LayerManager.TogglePreview(UsePreview);
         }
 
         public void PopulateUnitMovementCost()

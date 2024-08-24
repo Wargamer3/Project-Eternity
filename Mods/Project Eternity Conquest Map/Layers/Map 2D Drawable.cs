@@ -5,6 +5,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -18,6 +19,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         private readonly ConquestMap Map;
 
+        private Dictionary<int, Tile2DHolder> DicTile2DByTileset;
+        private Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
+
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
@@ -26,12 +30,86 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
+
+            CreateMap(Map, LayerManager);
+        }
+
+        private void CreateMap(ConquestMap Map, LayerHolderConquest LayerManager)
+        {
+            DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
+            DicTile2DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile2DHolder>>();
+
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, LayerManager.ListLayer[L], L);
+            }
+        }
+
+        protected void CreateMap(ConquestMap Map, MapLayer Owner, int LayerIndex)
+        {
+            foreach (SubMapLayer ActiveSubLayer in Owner.ListSubLayer)
+            {
+                CreateMap(Map, ActiveSubLayer, LayerIndex);
+            }
+
+            if (!DicTile2DByLayerByTileset.ContainsKey(LayerIndex))
+            {
+                DicTile2DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile2DHolder>());
+            }
+
+            if (Map.ListTileSet.Count > 0)
+            {
+                for (int X = Map.MapSize.X - 1; X >= 0; --X)
+                {
+                    for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                    {
+                        Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
+                        DrawableTile ActiveTile = Owner.LayerGrid.ArrayTile[X, Y];
+
+                        if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            TilesetPreset.TilesetTypes TilesetType = Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType;
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTileSet[ActiveTile.TilesetIndex], TilesetType));
+                        }
+
+                        if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile2DByTileset.Add(ActiveTile.TilesetIndex, DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex]);
+                        }
+
+                        if (ActiveTile.ArraySubTile.Length == 0)
+                        {
+                            DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                        }
+                        else
+                        {
+                            float OffsetSize = 1f / (ActiveTile.ArraySubTile.Length / 2f);
+                            for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
+                            {
+                                Vector3 TilePosition = ActiveTerrain.WorldPosition;
+                                TilePosition.X += OffsetSize * (T % (ActiveTile.ArraySubTile.Length / 2));
+                                TilePosition.Y += OffsetSize * (T / (ActiveTile.ArraySubTile.Length / 2));
+                                DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int L = 0; L < Owner.ListSubLayer.Count; L++)
+            {
+                CreateMap(Map, Owner.ListSubLayer[L], LayerIndex);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
             DicDrawablePointPerColor.Clear();
             DicDamageNumberByPosition.Clear();
+            foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
+            {
+                ActiveTileSet.Value.Update(gameTime);
+            }
         }
 
         public Point GetVisiblePosition(Vector3 Position)
@@ -64,6 +142,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void Reset()
         {
+            CreateMap(Map, Map.LayerManager);
         }
 
         public void CursorMoved()
@@ -201,21 +280,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Map.MapEnvironment.Draw(g);
 
-            if (Map.ShowLayerIndex == -1)
-            {
-                for (int L = 0; L < 1; L++)
-                {
-                    Draw(g, Map.LayerManager.ListLayer[L]);
-                    DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
-                }
-            }
-            else
-            {
-                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex]);
-                DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
-            }
+            g.End();
+
+            DrawMap(g);
+
+            g.Begin();
 
             Map.MapEnvironment.EndDraw(g);
+
 
             if (Map.ShowUnits)
             {
@@ -231,6 +303,82 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DrawPlayers(g);
 
             DrawDamageNumbers(g);
+        }
+
+        private void DrawMap(CustomSpriteBatch g)
+        {
+            if (Map.ShowLayerIndex == -1)
+            {
+                for (int L = 0; L < 1; L++)
+                {
+                    DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
+                }
+                if (Map.IsEditor)
+                {
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.Draw(g, Map, L);
+                        }
+
+                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.Draw(g, Map, L);
+                        }
+
+                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+            }
+            else
+            {
+                DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
+
+                foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
+                {
+                    ActiveTileSet.Value.Draw(g, Map, Map.ShowLayerIndex);
+                }
+
+                DrawItems(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
+            }
+        }
+
+        public void DrawItems(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
+        {
+            if (!Owner.IsVisible)
+            {
+                return;
+            }
+
+            if (IsSubLayer)
+            {
+                return;
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Draw(g);
+            }
+
+            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
+            {
+                g.Draw(Owner.ListAttackPickup[P].sprWeapon, new Rectangle((int)(Owner.ListAttackPickup[P].Position.X), (int)(Owner.ListAttackPickup[P].Position.Y), Map.TileSize.X, Map.TileSize.Y), null, Color.White);
+            }
+
+            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
+            {
+                g.Draw(Owner.ListHoldableItem[I].sprItem, new Rectangle((int)(Owner.ListHoldableItem[I].Position.X), (int)(Owner.ListHoldableItem[I].Position.Y), Map.TileSize.X, Map.TileSize.Y), null, Color.White);
+            }
         }
 
         public void DrawPlayers(CustomSpriteBatch g)
