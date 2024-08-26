@@ -83,7 +83,7 @@ namespace ProjectEternity.Core.Item
             SpriteWidth = (int)Math.Ceiling(ActiveSprite.Width / (float)ImagesPerLines);
             SpriteHeight = ActiveSprite.Height / NumberOfLines;
 
-            Origin = new Vector2(SpriteWidth / 2, SpriteHeight / 2);
+            Origin = new Vector2(SpriteWidth / 2f, SpriteHeight / 2f);
 
             ArraySpriteSource = new Rectangle[ImagesPerLines * NumberOfLines];
             for (int Y = 0; Y < NumberOfLines; ++Y)

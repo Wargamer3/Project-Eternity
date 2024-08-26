@@ -430,7 +430,7 @@ namespace ProjectEternity.Core.Item
                 g.Draw(sprCursor, new Rectangle((int)(TextInputPosition.X + MessageCursorPosition), (int)TextInputPosition.Y + 1, 1, (int)TextInputSize.Y - 2), Color.White);
             }
 
-            g.DrawString(fntText, TextVisible, new Vector2(TextInputPosition.X, TextInputPosition.Y), Color.White);
+            g.DrawStringVerticallyAligned(fntText, TextVisible, new Vector2(TextInputPosition.X, TextInputPosition.Y + TextInputSize.Y / 1.5f), Color.White);
         }
     }
 }

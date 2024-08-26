@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.UI;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -15,12 +16,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
+        private SpriteFont fntOxanimumBold;
+        private SpriteFont fntOxanimumLightBigger;
 
-        private BoxButton CloseButton;
+        private Texture2D sprBackground;
+
+        private TextButton CloseButton;
         private DropDownButton[] ArrayPlayerControlDropDown;
-        private BoxButton[] ArrayPlayerLoadProfileButton;
-        private BoxButton[] ArrayAddPlayerButton;
-        private BoxButton[] ArrayRemovePlayerButton;
+        private TextButton[] ArrayPlayerLoadProfileButton;
+        private TextButton[] ArrayAddPlayerButton;
+        private TextButton[] ArrayRemovePlayerButton;
 
         private IUIElement[] ArrayUIElement;
 
@@ -30,36 +35,41 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
+
+            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Large");
 
             ArrayPlayerControlDropDown = new DropDownButton[4];
-            ArrayPlayerLoadProfileButton = new BoxButton[4];
-            ArrayAddPlayerButton = new BoxButton[3];
-            ArrayRemovePlayerButton = new BoxButton[3];
+            ArrayPlayerLoadProfileButton = new TextButton[4];
+            ArrayAddPlayerButton = new TextButton[3];
+            ArrayRemovePlayerButton = new TextButton[3];
 
-            int MenuWidth = (int)(Constants.Width * 0.45);
-            int MenuHeight = (int)(Constants.Height * 0.45);
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
             int MenuX = Constants.Width / 2 - MenuWidth / 2;
             int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            CloseButton = new BoxButton(new Rectangle((int)MenuX + 10, (int)MenuY + MenuHeight + 5, 70, 30), fntArial12, "Confirm", OnButtonOver, OnConfirmButtonPressed);
+            CloseButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
 
             for (int P = 0; P < 4; P++)
             {
                 int LocalPlayerIndex = P;
-                int ActivePlayerY = MenuY + 75 + P * 40;
+                int ActivePlayerY = (int)(MenuY + 330 * Ratio + P * 120 * Ratio);
 
-                ArrayPlayerControlDropDown[P] = new DropDownButton(new Rectangle(MenuX + 150, ActivePlayerY, 95, 30), fntArial12, "M&K",
+                ArrayPlayerControlDropDown[P] = new DropDownButton(new Rectangle((int)(MenuX + 450 * Ratio), ActivePlayerY, 95, 30), fntArial12, "M&K",
                     new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, (SelectedItem) => { OnPlayerControlChange(LocalPlayerIndex, SelectedItem); });
 
-                ArrayPlayerLoadProfileButton[P] = new BoxButton(new Rectangle(MenuX + MenuWidth - 70, ActivePlayerY, 60, 30), fntArial12, "Load", OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
+                ArrayPlayerLoadProfileButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Load}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
             }
 
             for (int P = 0; P < 3; P++)
             {
-                int ActivePlayerY = MenuY + 115 + P * 40;
+                int ActivePlayerY = (int)(MenuY + 450 * Ratio + P * 120 * Ratio);
 
-                ArrayAddPlayerButton[P] = new BoxButton(new Rectangle(MenuX + 10, ActivePlayerY, 60, 30), fntArial12, "Add", OnButtonOver, OnAddPlayerPressed);
-                ArrayRemovePlayerButton[P] = new BoxButton(new Rectangle(MenuX + MenuWidth - 70, ActivePlayerY + 40, 60, 30), fntArial12, "Remove", OnButtonOver, OnRemovePlayerPressed);
+                ArrayAddPlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Add}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, OnAddPlayerPressed);
+                ArrayRemovePlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light}{Centered}{Color:243, 243, 243, 255}Remove}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY + 120 * Ratio), 4, 1, Ratio, OnButtonOver, OnRemovePlayerPressed);
             }
 
             UpdateUIElements();
@@ -180,26 +190,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int MenuWidth = (int)(Constants.Width * 0.45);
-            int MenuHeight = (int)(Constants.Height * 0.45);
+            g.End();
+            g.Begin();
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
             float MenuX = Constants.Width / 2 - MenuWidth / 2;
             float MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            DrawBox(g, new Vector2(MenuX, MenuY), MenuWidth, MenuHeight, Color.White);
+            Color WhiteText = Color.FromNonPremultiplied(233, 233, 233, 255);
+            Color BlackText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            DrawBox(g, new Vector2(MenuX, MenuY), MenuWidth, 40, Color.White);
-            g.DrawString(fntArial12, "Local Players Mangement", new Vector2(MenuX + 10, MenuY + 10), Color.White);
-            g.DrawString(fntArial12, "Name", new Vector2(MenuX + 10, MenuY + 42), Color.White);
-            g.DrawString(fntArial12, "Controls", new Vector2(MenuX + 150, MenuY + 42), Color.White);
-            g.DrawString(fntArial12, "Profile", new Vector2(MenuX + MenuWidth - 60, MenuY + 42), Color.White);
+            g.Draw(sprBackground, new Vector2(MenuX, MenuY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+
+            g.DrawStringRightAligned(fntOxanimumBold, "Local Players Mangement", new Vector2(MenuX + MenuWidth - 40 * Ratio, MenuY + 70 * Ratio), WhiteText);
+            g.DrawString(fntOxanimumBold, "Name", new Vector2(MenuX + 120 * Ratio, MenuY + 200 * Ratio), BlackText);
+            g.DrawString(fntOxanimumBold, "Controls", new Vector2(MenuX + 500 * Ratio, MenuY + 200 * Ratio), BlackText);
+            g.DrawStringMiddleAligned(fntOxanimumBold, "Profile", new Vector2(MenuX + MenuWidth - 300 * Ratio, MenuY + 200 * Ratio), BlackText);
+
+            g.Draw(sprPixel, new Rectangle((int)(MenuX + 100 * Ratio), (int)(MenuY + 280 * Ratio), (int)(1900 * Ratio), (int)(2 * Ratio)), BlackText);
+            g.Draw(sprPixel, new Rectangle((int)(MenuX + 100 * Ratio), (int)(MenuY + 750 * Ratio), (int)(1900 * Ratio), (int)(2 * Ratio)), BlackText);
 
             for (int P = 0; P < PlayerManager.ListLocalPlayer.Count; P++)
             {
-                float ActivePlayerY = MenuY + 75 + P * 40;
-                g.DrawString(fntArial12, PlayerManager.ListLocalPlayer[P].Name, new Vector2(MenuX + 10, ActivePlayerY + 5), Color.White);
+                float ActivePlayerY = MenuY + 300 * Ratio + P * 120 * Ratio;
+                g.DrawString(fntOxanimumLightBigger, PlayerManager.ListLocalPlayer[P].Name, new Vector2(MenuX + 150 * Ratio, ActivePlayerY + 5), BlackText);
             }
-
-            DrawBox(g, new Vector2(MenuX, MenuY + MenuHeight), MenuWidth, 40, Color.White);
 
             foreach (IUIElement ActiveUIElement in ArrayUIElement)
             {

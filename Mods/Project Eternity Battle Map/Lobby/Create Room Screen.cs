@@ -36,15 +36,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
+        private SpriteFont fntOxanimumBoldSmaller;
+        private SpriteFont fntOxanimumBold;
+        private SpriteFont fntOxanimumLightBigger;
 
-        protected EmptyBoxButton CancelButton;
-        protected EmptyBoxButton OKButton;
+        private Texture2D sprBackground;
+        private Texture2D sprInputSmall;
+        private Texture2D sprInputLarge;
+
+        protected TextButton CancelButton;
+        protected TextButton OKButton;
 
         protected TextInput RoomNameInput;
         protected TextInput PasswordInput;
 
-        private EmptyDropDownButton RoomTypeButton;
-        private EmptyDropDownButton RoomSubtypeButton;
+        protected TextInput MaxPlayerInput;
 
         private IUIElement[] ArrayMenuButton;
 
@@ -73,49 +79,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumBoldSmaller = Content.Load<SpriteFont>("Fonts/Oxanium Bold Smaller");
+            fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            int BoxWidth = (int)(Constants.Width * 0.55);
-            int InnerBoxWidth = (int)(BoxWidth * 0.95);
-            int BoxHeigth = (int)(Constants.Height * 0.7);
-            int BoxX = Constants.Width / 2 - BoxWidth / 2;
-            int InnerBoxX = BoxX + (int)(BoxWidth * 0.025);
-            int BoxY = Constants.Height / 2 - BoxHeigth / 2;
+            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Normal");
+            sprInputSmall = Content.Load<Texture2D>("Menus/Lobby/Interactive/Input Small");
+            sprInputLarge = Content.Load<Texture2D>("Menus/Lobby/Interactive/Input Large");
 
-            int RoomInfoX = InnerBoxX;
-            int RoomInfoY = BoxY + (int)(BoxHeigth * 0.1);
-            int RoomInfoHeight = (int)(BoxHeigth * 0.2);
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
+            int MenuX = Constants.Width / 2 - MenuWidth / 2;
+            int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            int ModeX = InnerBoxX;
-            int ModeY = RoomInfoY + RoomInfoHeight;
-            int ModeHeight = (int)(BoxHeigth * 0.28);
-            int ModeBoxWith = (int)(BoxWidth * 0.37);
-            int ModeBoxSeparation = (int)(BoxWidth * 0.01);
-            RoomTypeButton = new EmptyDropDownButton(new Rectangle(ModeX + 64, ModeY + 15, ModeBoxWith, 30), fntArial12, "PVE", new string[] { "PVE", "PVP" }, null, null);
-            RoomSubtypeButton = new EmptyDropDownButton(new Rectangle(ModeX + 64 + ModeBoxWith + ModeBoxSeparation + 10, ModeY + 15, ModeBoxWith, 30), fntArial12,
-                "Campaign", new string[] { "Campaign", "Horde" }, null, null);
+            OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, CreateRoom);
+            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, Cancel);
 
-            int PlayerX = InnerBoxX;
-            int PlayerY = ModeY + ModeHeight;
-            int PlayerHeight = (int)(BoxHeigth * 0.1);
+            RoomNameInput = new TextInput(fntOxanimumLightBigger, sprPixel, sprPixel, new Vector2(MenuX + 350 * Ratio + 20 * Ratio, MenuY + 100 * Ratio + 10 * Ratio), new Vector2(sprInputLarge.Width * Ratio - 40 * Ratio, sprInputLarge.Height * Ratio - 20 * Ratio));
+            PasswordInput = new TextInput(fntOxanimumLightBigger, sprPixel, sprPixel, new Vector2((int)(MenuX + 1520 * Ratio + 20 * Ratio), (int)(MenuY + 300 * Ratio + 10 * Ratio)), new Vector2(sprInputSmall.Width * Ratio - 40 * Ratio, sprInputSmall.Height * Ratio - 20 * Ratio), null, true);
 
-            int ButtonsWidth = (int)(BoxWidth * 0.17);
-            int ButtonsHeight = (int)(BoxHeigth * 0.07);
-            int ButtonOKX = InnerBoxX + (int)(InnerBoxWidth * 0.8);
-            int ButtonCancelX = ButtonOKX - ButtonsWidth - 5;
-            int ButtonsY = BoxY + (int)(BoxHeigth * 0.90);
-
-            CancelButton = new EmptyBoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "Cancel", OnButtonOver, Cancel);
-            OKButton = new EmptyBoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "OK", OnButtonOver, CreateRoom);
-
-            RoomNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(RoomInfoX + 74, RoomInfoY + 20), new Vector2(314, 20));
-            PasswordInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(BoxX + 280, BoxY + 90), new Vector2(84, 20), null, true);
+            MaxPlayerInput = new TextInput(fntOxanimumLightBigger, sprPixel, sprPixel, new Vector2(MenuX + 550 * Ratio + 210 * Ratio, MenuY + 480 * Ratio + 10 * Ratio), new Vector2(sprInputSmall.Width * Ratio - 40 * Ratio, sprInputSmall.Height * Ratio - 20 * Ratio));
 
             RoomNameInput.SetText("Let's have fun!");
 
             ArrayMenuButton = new IUIElement[]
             {
-                RoomTypeButton, RoomSubtypeButton,
-                RoomNameInput, PasswordInput,
+                RoomNameInput, PasswordInput, MaxPlayerInput,
                 CancelButton, OKButton,
             };
         }
@@ -139,11 +129,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void OnButtonOver()
         {
             sndButtonOver.Play();
-        }
-
-        private void SelectCaptureTheFlag()
-        {
-            RoomSubtype = "Capture The Flag";
         }
 
         public virtual void CreateRoom()
@@ -180,52 +165,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxWidth = (int)(Constants.Width * 0.55);
-            int InnerBoxWidth = (int)(BoxWidth * 0.95);
-            int BoxHeigth = (int)(Constants.Height * 0.7);
-            int BoxX = Constants.Width / 2 - BoxWidth / 2;
-            int InnerBoxX = BoxX + (int)(BoxWidth * 0.025);
-            int BoxY = Constants.Height / 2 - BoxHeigth / 2;
+            g.End();
+            g.Begin();
 
-            int RoomInfoX = InnerBoxX;
-            int RoomInfoY = BoxY + (int)(BoxHeigth * 0.1);
-            int RoomInfoHeight = (int)(BoxHeigth * 0.2);
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
+            int MenuX = Constants.Width / 2 - MenuWidth / 2;
+            int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            g.Draw(sprPixel, new Rectangle(BoxX, BoxY, BoxWidth, BoxHeigth),
-                Color.FromNonPremultiplied(
-                    (int)(Lobby.BackgroundColor.R * 0.9),
-                    (int)(Lobby.BackgroundColor.G * 0.9),
-                    (int)(Lobby.BackgroundColor.B * 0.9), 240));
+            Color WhiteText = Color.FromNonPremultiplied(233, 233, 233, 255);
+            Color BlackText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            DrawEmptyBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeigth, 2, BoxX / 21, 0);
+            g.Draw(sprBackground, new Vector2(MenuX, MenuY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
-            g.DrawString(fntArial12, "Create a Room", new Vector2(BoxX + 20, BoxY + 15), Color.White);
-            DrawBox(g, new Vector2(RoomInfoX, RoomInfoY), InnerBoxWidth, RoomInfoHeight, Color.White);
-            g.DrawString(fntArial12, "Name", new Vector2(BoxX + 25, RoomInfoY + 18), Color.White);
-            DrawBox(g, new Vector2(RoomInfoX + 64, RoomInfoY + 15), (int)(BoxWidth * 0.75), 30, Color.White);
-            g.DrawString(fntArial12, "Make a locked room", new Vector2(BoxX + 25, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 175, RoomInfoY + 53 + 5), 22, 22, Color.White);
-            g.DrawString(fntArial12, "Password", new Vector2(BoxX + 200, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 272, RoomInfoY + 53), (int)(BoxWidth * 0.32), 30, Color.White);
-            g.DrawString(fntArial12, "4 digit", new Vector2(BoxX + 360, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 280, RoomInfoY + 53), (int)(BoxWidth * 0.17), 30, Color.White);
+            g.DrawStringRightAligned(fntOxanimumBold, "Create a Room", new Vector2(MenuX + MenuWidth - 120 * Ratio, MenuY + 70 * Ratio), WhiteText);
+            g.DrawString(fntOxanimumBold, "Name", new Vector2(MenuX + 120 * Ratio, MenuY + 120 * Ratio), BlackText);
+            g.Draw(sprInputLarge, new Vector2(MenuX + 350 * Ratio, MenuY + 100 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            g.DrawString(fntOxanimumLightBigger, "Make a locked room", new Vector2(MenuX + 360 * Ratio, MenuY + 300 * Ratio), BlackText);
+            g.DrawString(fntOxanimumBold, "Password", new Vector2(MenuX + 1150 * Ratio, MenuY + 330 * Ratio), BlackText);
+            g.Draw(sprInputLarge, new Rectangle((int)(MenuX + 1520 * Ratio), (int)(MenuY + 300 * Ratio), (int)(sprInputSmall.Width * Ratio), (int)(sprInputSmall.Height * Ratio)), null, Color.White);
+            g.DrawStringCentered(fntOxanimumBold, "4 digit", new Vector2(MenuX + 1760 * Ratio, MenuY + 370 * Ratio), Color.FromNonPremultiplied(79, 84, 79, 255));
 
-            int ModeX = InnerBoxX;
-            int ModeY = RoomInfoY + RoomInfoHeight;
-            int ModeHeight = (int)(BoxHeigth * 0.28);
-            int ModeBoxWith = (int)(BoxWidth * 0.37);
-            int ModeBoxSeparation = (int)(BoxWidth * 0.01);
-            DrawBox(g, new Vector2(ModeX, ModeY), InnerBoxWidth, ModeHeight, Color.White);
-            g.DrawString(fntArial12, "Mode", new Vector2(ModeX + 15, ModeY + 18), Color.White);
-
-            g.DrawString(fntArial12, "Campaign", new Vector2(ModeX + 18, ModeY + 53), Color.White);
-            g.DrawString(fntArial12, "Progress through multiple missions to save the world", new Vector2(ModeX + 18, ModeY + 71), Color.White);
-
-            int PlayerX = InnerBoxX;
-            int PlayerY = ModeY + ModeHeight;
-            int PlayerHeight = (int)(BoxHeigth * 0.1);
-            DrawBox(g, new Vector2(PlayerX, PlayerY), InnerBoxWidth, PlayerHeight, Color.White);
-            g.DrawString(fntArial12, "Max Players", new Vector2(PlayerX + 15, PlayerY + 10), Color.White);
+            g.Draw(sprInputSmall, new Vector2(MenuX + 550 * Ratio, MenuY + 480 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            g.DrawString(fntOxanimumBold, "Max Players", new Vector2(MenuX + 120 * Ratio, MenuY + 500 * Ratio), BlackText);
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {

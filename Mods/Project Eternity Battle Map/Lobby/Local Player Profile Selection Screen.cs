@@ -16,11 +16,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
-        private SpriteFont fntArial12;
 
-        private BoxScrollbar ProfilesScrollbar;
-        private BoxButton ConfirmButton;
-        private BoxButton CancelButton;
+        private SpriteFont fntOxanimumBold;
+        private SpriteFont fntOxanimumLightBigger;
+
+        private Texture2D sprBackground;
+        private Texture2D sprSelector;
+
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
+
+        private Scrollbar ProfilesScrollbar;
+        private TextButton ConfirmButton;
+        private TextButton CancelButton;
 
         private IUIElement[] ArrayUIElement;
 
@@ -39,18 +47,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
+
+            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Large");
+            sprSelector = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Selector");
+
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Interactive/Scrollbar Frame");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Interactive/Scrollbar Bar");
 
             ListPlayerProfile = ActivePlayer.GetProfileNames();
 
-            int MenuWidth = (int)(Constants.Width * 0.45);
-            int MenuHeight = (int)(Constants.Height * 0.45);
-            float MenuX = Constants.Width / 2 - MenuWidth / 2;
-            float MenuY = Constants.Height / 2 - MenuHeight / 2;
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
+            int MenuX = Constants.Width / 2 - MenuWidth / 2;
+            int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            ProfilesScrollbar = new BoxScrollbar(new Vector2(MenuX + MenuWidth - 20, MenuY), MenuHeight, Math.Max(0, ListPlayerProfile.Count -  9), OnProfileScrollbarChange);
-            ConfirmButton = new BoxButton(new Rectangle((int)MenuX + 10, (int)MenuY + MenuHeight + 5, 70, 30), fntArial12, "Confirm", OnButtonOver, OnConfirmButtonPressed);
-            CancelButton = new BoxButton(new Rectangle((int)MenuX + MenuWidth - 80, (int)MenuY + MenuHeight + 5, 70, 30), fntArial12, "Cancel", OnButtonOver, OnCancelButtonPressed);
+            ProfilesScrollbar = new Scrollbar(sprScrollbar, new Vector2(MenuX + MenuWidth - 120 * Ratio, MenuY + 250 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnProfileScrollbarChange);
+
+            ConfirmButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Confirm}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
+
+            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCancelButtonPressed);
 
             ArrayUIElement = new IUIElement[]
             {
@@ -65,22 +83,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ActiveUIElement.Update(gameTime);
             }
 
-            int MenuWidth = (int)(Constants.Width * 0.45);
-            int MenuHeight = (int)(Constants.Height * 0.45);
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
             float MenuX = Constants.Width / 2 - MenuWidth / 2;
             float MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            float DrawY = MenuY + 45;
+            float DrawY = MenuY + 250 * Ratio;
             for (int CurrentIndex = MapScrollbarValue; CurrentIndex < ListPlayerProfile.Count; CurrentIndex++)
             {
                 if (InputHelper.InputConfirmPressed()
-                    &&MouseHelper.MouseStateCurrent.X >= MenuX && MouseHelper.MouseStateCurrent.X < MenuX + MenuWidth
-                    && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 25)
+                    &&MouseHelper.MouseStateCurrent.X >= MenuX + 120 * Ratio && MouseHelper.MouseStateCurrent.X < MenuX + MenuWidth - 150 * Ratio
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 120 * Ratio)
                 {
                     SelectedProfileIndex = CurrentIndex;
                 }
 
-                DrawY += 25;
+                DrawY += 120 * Ratio;
             }
         }
 
@@ -112,42 +131,46 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int MenuWidth = (int)(Constants.Width * 0.45);
-            int MenuHeight = (int)(Constants.Height * 0.45);
+            float Ratio = Constants.Height / 2160f;
+            int MenuWidth = (int)(sprBackground.Width * Ratio);
+            int MenuHeight = (int)(sprBackground.Height * Ratio);
             float MenuX = Constants.Width / 2 - MenuWidth / 2;
             float MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            DrawBox(g, new Vector2(MenuX, MenuY), MenuWidth, MenuHeight, Color.White);
+            Color WhiteText = Color.FromNonPremultiplied(233, 233, 233, 255);
+            Color BlackText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            DrawBox(g, new Vector2(MenuX, MenuY), MenuWidth, 40, Color.White);
-            g.DrawString(fntArial12, "Select Profile", new Vector2(MenuX + 10, MenuY + 10), Color.White);
+            g.Draw(sprBackground, new Vector2(MenuX, MenuY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
-            float DrawY = MenuY + 45;
+            g.DrawStringRightAligned(fntOxanimumBold, "Select Profile", new Vector2(MenuX + MenuWidth - 40 * Ratio, MenuY + 70 * Ratio), WhiteText);
+
+            g.Draw(sprPixel, new Rectangle((int)(MenuX + 100 * Ratio), (int)(MenuY + 210 * Ratio), (int)(1900 * Ratio), (int)(2 * Ratio)), BlackText);
+            g.Draw(sprPixel, new Rectangle((int)(MenuX + 100 * Ratio), (int)(MenuY + 750 * Ratio), (int)(1900 * Ratio), (int)(2 * Ratio)), BlackText);
+
+            float DrawY = MenuY + 250 * Ratio;
 
             for (int CurrentIndex = MapScrollbarValue; CurrentIndex < ListPlayerProfile.Count; CurrentIndex++)
             {
-                string ActiveMap = ListPlayerProfile[CurrentIndex];
-                g.DrawString(fntArial12, ActiveMap, new Vector2(MenuX + 10, DrawY), Color.White);
+                string ActiveProfileName = ListPlayerProfile[CurrentIndex];
 
-                if (CurrentIndex == SelectedProfileIndex)
+                if (CurrentIndex == SelectedProfileIndex ||
+                    (MouseHelper.MouseStateCurrent.X >= MenuX + 120 * Ratio && MouseHelper.MouseStateCurrent.X < MenuX + MenuWidth - 150 * Ratio
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 120 * Ratio))
                 {
-                    g.Draw(sprPixel, new Rectangle((int)MenuX + 5, (int)DrawY, MenuWidth - 25, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(sprSelector, new Vector2((int)(MenuX + 120 * Ratio), (int)DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+                    g.DrawString(fntOxanimumBold, ActiveProfileName, new Vector2(MenuX + 150 * Ratio, DrawY + 24 * Ratio), WhiteText);
+                }
+                else
+                {
+                    g.DrawString(fntOxanimumBold, ActiveProfileName, new Vector2(MenuX + 150 * Ratio, DrawY + 24 * Ratio), BlackText);
                 }
 
-                if (MouseHelper.MouseStateCurrent.X >= MenuX && MouseHelper.MouseStateCurrent.X < MenuX + MenuWidth
-                    && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 25)
-                {
-                    g.Draw(sprPixel, new Rectangle((int)MenuX + 5, (int)DrawY, MenuWidth - 25, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
-                }
-
-                DrawY += 25;
+                DrawY += 120 * Ratio;
                 if (DrawY >= MenuY + MenuHeight)
                 {
                     break;
                 }
             }
-
-            DrawBox(g, new Vector2(MenuX, MenuY + MenuHeight), MenuWidth, 40, Color.White);
 
             foreach (IUIElement ActiveUIElement in ArrayUIElement)
             {
