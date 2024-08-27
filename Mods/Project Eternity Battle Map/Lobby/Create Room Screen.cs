@@ -46,6 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected TextButton CancelButton;
         protected TextButton OKButton;
+        protected TextButton LockedRoomCheckbox;
 
         protected TextInput RoomNameInput;
         protected TextInput PasswordInput;
@@ -95,6 +96,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, CreateRoom);
             CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, Cancel);
+            LockedRoomCheckbox = new TextButton(Content, "", "Menus/Lobby/Interactive/Checkbox", new Vector2(MenuX + 250 * Ratio, MenuY + 318 * Ratio), 4, 1, Ratio, OnButtonOver, null);
+            LockedRoomCheckbox.CanBeChecked = true;
+            LockedRoomCheckbox.CanBeUnChecked = true;
 
             RoomNameInput = new TextInput(fntOxanimumLightBigger, sprPixel, sprPixel, new Vector2(MenuX + 350 * Ratio + 20 * Ratio, MenuY + 100 * Ratio + 10 * Ratio), new Vector2(sprInputLarge.Width * Ratio - 40 * Ratio, sprInputLarge.Height * Ratio - 20 * Ratio));
             PasswordInput = new TextInput(fntOxanimumLightBigger, sprPixel, sprPixel, new Vector2((int)(MenuX + 1520 * Ratio + 20 * Ratio), (int)(MenuY + 300 * Ratio + 10 * Ratio)), new Vector2(sprInputSmall.Width * Ratio - 40 * Ratio, sprInputSmall.Height * Ratio - 20 * Ratio), null, true);
@@ -105,7 +109,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayMenuButton = new IUIElement[]
             {
-                RoomNameInput, PasswordInput, MaxPlayerInput,
+                RoomNameInput, PasswordInput, MaxPlayerInput, LockedRoomCheckbox,
                 CancelButton, OKButton,
             };
         }

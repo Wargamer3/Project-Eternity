@@ -123,6 +123,7 @@
     <Compile Include="Projectile\Projectile 3D.cs" />
     <Compile Include="Projectile\Projectile 2D Context.cs" />
     <Compile Include="Projectile\Projectile 2D Params.cs" />
+    <Compile Include="UI\Numeric Up Down.cs" />
     <Compile Include="UI\Text Button.cs" />
     <Compile Include="UI\UIText.cs" />
     <Compile Include="UI\IUIElement.cs" />

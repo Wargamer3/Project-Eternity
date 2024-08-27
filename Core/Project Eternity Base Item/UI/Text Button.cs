@@ -18,6 +18,7 @@ namespace ProjectEternity.Core.Item
         private readonly DynamicText Text;
         private readonly Rectangle ButtonCollsionBox;
         public bool CanBeChecked;
+        public bool CanBeUnChecked;
 
         public bool IsIdle { get { return Button.GetFrame() == 0; } }
         public bool IsDisabled { get { return Button.GetFrame() == 1; } }
@@ -108,7 +109,14 @@ namespace ProjectEternity.Core.Item
 
         public void Select()
         {
-            Button.SetFrame(3);
+            if (IsChecked && CanBeChecked && CanBeUnChecked)
+            {
+                Button.SetFrame(0);
+            }
+            else
+            {
+                Button.SetFrame(3);
+            }
         }
 
         public void Unselect()
