@@ -18,7 +18,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntOxanimumBoldBig;
         private SpriteFont fntOxanimumBoldTitle;
 
-        private Texture2D sprBackground;
         private Texture2D sprTitleHighlight;
         private Texture2D sprBarLeft;
         private Texture2D sprBarMiddle;
@@ -83,7 +82,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Inventory/Background");
             sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
             sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
             sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
@@ -258,6 +256,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         #endregion
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             ActiveSubScreen.BeginDraw(g);

@@ -4,28 +4,39 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class InventoryCharacterWhiteScreen : GameScreen
+    public class InventoryCharacterWhiteScreen : GameScreen
     {
-
-        private EmptyBoxScrollbar CharacterListScrollbar;
-        private EmptyBoxScrollbar InventoryScrollbar;
+        private Scrollbar LoadoutListScrollbar;
+        private Scrollbar InventoryScrollbar;
 
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
+        private SpriteFont fntOxanimumLight;
+        private SpriteFont fntOxanimumLightSmall;
+        private SpriteFont fntOxanimumRegularSmall;
+        private SpriteFont fntOxanimumBoldSmall;
+        private SpriteFont fntOxanimumBoldSmaller;
+        private SpriteFont fntOxanimumBoldBig;
 
-        private const int CharacterHeight = 100;
-        private const int BoxWidth = 70;
-        private const int BoxHeight = 70;
-        private const int LineHeight = BoxHeight + 10;
+        private Texture2D sprLoadouts;
+        private Texture2D sprLoadoutsFrame;
+        private Texture2D sprLoadoutsName;
+        private Texture2D sprFrameDescription;
+
+        private Texture2D sprButtonFolderInactive;
+        private Texture2D sprButtonRename;
+
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
+
         private bool ShowCheckbox = false;
 
         private readonly BattleMapInventoryWhiteScreen Owner;
@@ -53,23 +64,42 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            CharacterListScrollbar = new EmptyBoxScrollbar(new Vector2(BattleMapInventoryScreen.LeftSideWidth - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnCharacterScrollbarChange);
-            InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
-
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumLight = Content.Load<SpriteFont>("Fonts/Oxanium Light Big");
+            fntOxanimumLightSmall = Content.Load<SpriteFont>("Fonts/Oxanium Light");
+            fntOxanimumRegularSmall = Content.Load<SpriteFont>("Fonts/Oxanium Regular Small");
+            fntOxanimumBoldSmall = Content.Load<SpriteFont>("Fonts/Oxanium Bold Small");
+            fntOxanimumBoldSmaller = Content.Load<SpriteFont>("Fonts/Oxanium Bold Smaller");
+            fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
+
+            sprLoadouts = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
+            sprLoadoutsFrame = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Loadout");
+            sprLoadoutsName = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Loadout Name");
+            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Description");
+
+            sprButtonFolderInactive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Inactive");
+            sprButtonRename = Content.Load<Texture2D>("Menus/Lobby/Inventory/Button Rename");
+
+            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Bar");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            CharacterListScrollbar.ChangeMaxValue(Owner.ActivePlayer.Inventory.ListSquadLoadout.Count * CharacterHeight - BattleMapInventoryScreen.MiddleSectionHeight);
-            InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListCharacter.Count * BoxHeight - BattleMapInventoryScreen.MiddleSectionHeight);
+            float Ratio = Constants.Height / 2160f;
+
+            InventoryScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, 648 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnInventoryScrollbarChange);
+            LoadoutListScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, 648 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnCharacterScrollbarChange);
+
+            InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListCharacter.Count * InventorySquadWhiteScreen.BoxHeight - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
+            LoadoutListScrollbar.ChangeMaxValue(Owner.ActivePlayer.Inventory.ListSquadLoadout.Count * InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (!IsDragDropActive)
             {
-                CharacterListScrollbar.Update(gameTime);
+                LoadoutListScrollbar.Update(gameTime);
                 InventoryScrollbar.Update(gameTime);
                 UpdateEquipmentPage();
             }
@@ -85,6 +115,45 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 int SelectedItemIndex = GetOwnedCharacterUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
+                if (ListLastContainer.Count > 0)
+                {
+                    --SelectedItemIndex;
+                }
+
+                if (SelectedItemIndex >= 0)
+                {
+                    StartDragDrop(CurrentContainer.ListCharacter[SelectedItemIndex]);
+                }
+                else
+                {
+                    int SelectedFolderIndex = GetFolderUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+                    if (SelectedFolderIndex >= 0)
+                    {
+                        if (ListLastContainer.Count > 0 && SelectedFolderIndex == 0)
+                        {
+                            CurrentContainer = ListLastContainer[ListLastContainer.Count - 1];
+                            ListLastContainer.Remove(CurrentContainer);
+                        }
+                        else
+                        {
+                            ListLastContainer.Add(CurrentContainer);
+                            if (ListLastContainer.Count > 1)
+                            {
+                                CurrentContainer = CurrentContainer.ListFolder[SelectedFolderIndex - 1];
+                            }
+                            else
+                            {
+                                CurrentContainer = CurrentContainer.ListFolder[SelectedFolderIndex];
+                            }
+                        }
+                    }
+                }
+            }
+            else if (MouseHelper.InputRightButtonPressed())
+            {
+                int SelectedItemIndex = GetOwnedCharacterUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
                 if (SelectedItemIndex < 0)
                 {
                     return;
@@ -95,28 +164,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     --SelectedItemIndex;
                 }
 
-                if (SelectedItemIndex == -1)
+                if (SelectedItemIndex >= CurrentContainer.DicFolder.Count)
                 {
-                    CurrentContainer = ListLastContainer[ListLastContainer.Count - 1];
-                    ListLastContainer.Remove(CurrentContainer);
+                    //PushScreen(new InventoryCharacterInformationScreen(Owner, CurrentContainer.ListCharacter[SelectedItemIndex - CurrentContainer.DicFolder.Count].Leader));
                 }
-                else if (SelectedItemIndex >= CurrentContainer.DicFolder.Count)
-                {
-                    StartDragDrop(CurrentContainer.ListCharacter[SelectedItemIndex - CurrentContainer.DicFolder.Count]);
-                }
-                else
-                {
-                    ListLastContainer.Add(CurrentContainer);
-                    if (ListLastContainer.Count > 1)
-                    {
-                        CurrentContainer = CurrentContainer.ListFolder[SelectedItemIndex];
-                    }
-                    else
-                    {
-                        CurrentContainer = CurrentContainer.ListFolder[SelectedItemIndex];
-                    }
-                }
-
             }
         }
 
@@ -127,26 +178,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DoDragDrop()
         {
-            int DrawX = 101;
-            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 + 4 + 45 - CharacterScrollbarValue;
+            float Ratio = Constants.Height / 2160f;
+            int DrawX = InventorySquadWhiteScreen.LoadoutX;
+            int DrawY = (int)(462 * Ratio - CharacterScrollbarValue % InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset);
 
             if (InputHelper.InputConfirmReleased())
             {
-                int X = (MouseHelper.MouseStateCurrent.X - DrawX) / 40;
-                int Y = (MouseHelper.MouseStateCurrent.Y - DrawY) / CharacterHeight;
                 int MouseX = MouseHelper.MouseStateCurrent.X;
                 int MouseY = MouseHelper.MouseStateCurrent.Y;
-                int SquadSlotIndex = X;
-                int SqaudLoatoutIndex = Y;
+                int MouseXFinal = (int)((MouseX - DrawX) % InventorySquadWhiteScreen.BoxWithOffsetFinal);
+                int MouseYFinal = (MouseY - DrawY) % InventorySquadWhiteScreen.BoxLineHeight;
 
-                if (SqaudLoatoutIndex < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count && SquadSlotIndex < LoadoutSize)
+                int SquadSlotIndex = (MouseHelper.MouseStateCurrent.X - DrawX) / InventorySquadWhiteScreen.LoadoutBoxWidthWithOffset;
+                int SqaudLoatoutIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset;
+
+                if (SquadSlotIndex >= 0 && SquadSlotIndex < LoadoutSize && SqaudLoatoutIndex < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count
+                    && MouseXFinal >= 0 && MouseXFinal < InventorySquadWhiteScreen.LoadoutBoxSize
+                    && MouseYFinal >= InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset && MouseYFinal < InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset + InventorySquadWhiteScreen.LoadoutBoxSize)
                 {
-                    if (MouseX >= DrawX + X * 40 && MouseX < DrawX + X * 40 + 38
-                        && MouseY >= DrawY + Y * CharacterHeight && MouseY < DrawY + Y * CharacterHeight + 38)
-                    {
-                        Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSpawnSquad[SquadSlotIndex].CurrentLeader.ArrayCharacterActive[0] = DragAndDropEquipment.Pilot;
-                        Owner.ActivePlayer.SaveLocally();
-                    }
+                    Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSpawnSquad[SquadSlotIndex].CurrentLeader.ArrayCharacterActive[0] = DragAndDropEquipment.Pilot;
+                    Owner.ActivePlayer.SaveLocally();
                 }
 
                 DragAndDropEquipment = null;
@@ -155,29 +206,47 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int GetOwnedCharacterUnderMouse(int MouseX, int MouseY)
         {
-            int X = BattleMapInventoryScreen.LeftSideWidth + 5;
-            int BoxHeight = 70;
-            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 - InventoryScrollbarValue % BoxHeight;
-            int LineHeight = BoxHeight + 10;
-            int BoxWidth = 70;
-            int SpriteBoxWidth = 38;
-            int SpriteOffset = BoxWidth / 2 - SpriteBoxWidth / 2;
+            float Ratio = Constants.Height / 2160f;
+            int X = (int)(140 * Ratio);
 
-            int BoxPerLine = (Constants.Width - X) / BoxWidth;
+            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight);
 
-            int MouseIndex = (MouseX - X) / BoxWidth + ((MouseY - DrawY) / LineHeight) * BoxPerLine;
-            int MouseXFinal = (MouseX - X) % BoxWidth;
-            int MouseYFinal = (MouseY - DrawY) % LineHeight;
+            int MouseIndex = (int)((MouseX - X) / InventorySquadWhiteScreen.BoxWithOffsetFinal + ((MouseY - DrawY) / InventorySquadWhiteScreen.BoxLineHeight) * InventorySquadWhiteScreen.BoxPerLine);
+            int MouseXFinal = (int)((MouseX - X) % InventorySquadWhiteScreen.BoxWithOffsetFinal);
+            int MouseYFinal = (MouseY - DrawY) % InventorySquadWhiteScreen.BoxLineHeight;
 
-            int ItemCount = CurrentContainer.ListCharacter.Count + CurrentContainer.ListFolder.Count;
+            int ItemCount = CurrentContainer.ListCharacter.Count;
+
+            if (MouseIndex >= 0 && MouseIndex < ItemCount
+                && MouseXFinal > 0 && MouseXFinal < InventorySquadWhiteScreen.BoxWidthFinal && MouseX < InventorySquadWhiteScreen.InventoryWidth
+                && MouseYFinal >= 0 && MouseYFinal < InventorySquadWhiteScreen.BoxLineHeight)
+            {
+                return MouseIndex;
+            }
+
+            return -1;
+        }
+
+        private int GetFolderUnderMouse(int MouseX, int MouseY)
+        {
+            float Ratio = Constants.Height / 2160f;
+
+            int X = (int)(140 * Ratio);
+            int DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight;
+
+            int MouseIndex = (int)((MouseX - X) / InventorySquadWhiteScreen.FolderWithOffsetFinal + ((MouseY - DrawY) / InventorySquadWhiteScreen.BoxLineHeight) * InventorySquadWhiteScreen.BoxPerLine);
+            int MouseXFinal = (int)((MouseX - X) % InventorySquadWhiteScreen.FolderWithOffsetFinal);
+            int MouseYFinal = (MouseY - DrawY) % InventorySquadWhiteScreen.BoxLineHeight;
+
+            int ItemCount = CurrentContainer.ListFolder.Count;
             if (ListLastContainer.Count > 0)
             {
                 ItemCount += 1;
             }
 
             if (MouseIndex >= 0 && MouseIndex < ItemCount
-                && MouseXFinal >= SpriteOffset && MouseXFinal < SpriteOffset + 38
-                && MouseYFinal >= 4 && MouseYFinal < 4 + 38)
+                && MouseXFinal > 0 && MouseXFinal < InventorySquadWhiteScreen.FolderWidthFinal && MouseXFinal < InventorySquadWhiteScreen.InventoryWidth
+                && MouseYFinal >= 4 && MouseYFinal < InventorySquadWhiteScreen.FolderBoxHeightFinal)
             {
                 return MouseIndex;
             }
@@ -197,70 +266,86 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            CharacterListScrollbar.Draw(g);
+            float Ratio = Constants.Height / 2160f;
+
+            g.Draw(sprScrollbarBackground, new Vector2(2144 * Ratio, 648 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
             InventoryScrollbar.Draw(g);
+            LoadoutListScrollbar.Draw(g);
 
-            //Left side
-            g.DrawString(fntArial12, "Loadouts", new Vector2(10, BattleMapInventoryScreen.TopSectionHeight + 5), Color.White);
+            DrawLoadout(g);
 
-            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 - CharacterScrollbarValue % CharacterHeight;
-            for (int L = (int)Math.Floor(CharacterScrollbarValue / (double)CharacterHeight); L < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count; ++L)
+            DrawInventory(g, InventorySquadWhiteScreen.InventoryX);
+
+            if (DragAndDropEquipment != null)
             {
-                DrawEmptyBox(g, new Vector2(5, DrawY), BattleMapInventoryScreen.LeftSideWidth - 30, 90);
-                DrawEmptyBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth - 115, DrawY + 5), 85, 35);
-                g.DrawString(fntArial12, "Rename", new Vector2(BattleMapInventoryScreen.LeftSideWidth - 108, DrawY + 11), Color.White);
-                g.DrawString(fntArial12, "Loadout " + (L + 1), new Vector2(11, DrawY + 11), Color.White);
+                g.Draw(DragAndDropEquipment.Pilot.sprPortrait, new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.White);
+            }
+        }
 
-                int DrawX = 101;
-                for (int S = 0; S < Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSpawnSquad.Count; S++)
+        private void DrawLoadout(CustomSpriteBatch g)
+        {
+            float Ratio = Constants.Height / 2160f;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            g.Draw(sprLoadouts, new Vector2(InventorySquadWhiteScreen.LoadoutX - 80 * Ratio, 260 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+            g.Draw(sprLoadoutsFrame, new Vector2(InventorySquadWhiteScreen.LoadoutX - 30 * Ratio, 416 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+            g.DrawString(fntOxanimumBoldBig, "Loadouts", new Vector2((BattleMapInventoryWhiteScreen.LoadoutX) * Ratio, 294 * Ratio), TextColor);
+
+            int DrawY = (int)(462 * Ratio - CharacterScrollbarValue % InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset);
+
+            for (int L = (int)Math.Floor(CharacterScrollbarValue / (double)InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset); L < 5; ++L)
+            {
+                int DrawX = InventorySquadWhiteScreen.LoadoutX;
+
+                g.Draw(sprLoadoutsName, new Vector2((int)(DrawX + 420 * Ratio), DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                g.Draw(sprButtonRename, new Vector2((int)(DrawX + 1074 * Ratio), DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                g.DrawString(fntOxanimumRegularSmall, "Rename", new Vector2((int)(DrawX + 1114 * Ratio), (int)((DrawY + 16 * Ratio))), TextColor);
+                g.DrawString(fntOxanimumRegularSmall, "Loadout " + (L + 1), new Vector2((int)(DrawX + 466 * Ratio), (int)((DrawY + 16 * Ratio))), TextColor);
+
+                for (int S = 0; S < 5; S++)
                 {
-                    DrawBox(g, new Vector2(DrawX, DrawY + 4), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
-                    DrawBox(g, new Vector2(DrawX, DrawY + 45), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
+                    g.Draw(sprPixel, new Rectangle(DrawX, (int)(DrawY), InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.FromNonPremultiplied(10, 10, 10, 255));
+                    g.Draw(sprPixel, new Rectangle(DrawX, (int)((DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset)), InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.FromNonPremultiplied(10, 10, 10, 255));
 
-                    Squad ActiveSquad = Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSpawnSquad[S];
-                    if (ActiveSquad != null)
+                    if (L < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count && S < Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSpawnSquad.Count)
                     {
-                        g.Draw(ActiveSquad.CurrentLeader.SpriteMap, new Vector2(DrawX + 3, DrawY + 7), Color.White);
-                        if (ActiveSquad.CurrentLeader.Pilot != null)
+                        Core.Units.Squad ActiveSquad = Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSpawnSquad[S];
+
+                        if (ActiveSquad != null)
                         {
-                            g.Draw(ActiveSquad.CurrentLeader.Pilot.sprPortrait, new Rectangle(DrawX + 3, DrawY + 48, 32, 32), Color.White);
+                            g.Draw(ActiveSquad.CurrentLeader.SpriteMap, new Rectangle(DrawX, (int)(DrawY), InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.White);
+
+                            if (ActiveSquad.CurrentLeader.Pilot != null)
+                            {
+                                g.Draw(ActiveSquad.CurrentLeader.Pilot.sprPortrait, new Rectangle(DrawX, DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset, InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.White);
+                            }
                         }
                     }
 
                     if (DragAndDropEquipment != null)
                     {
-                        g.Draw(sprPixel, new Rectangle(DrawX, DrawY + 45, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));
+                        g.Draw(sprPixel, new Rectangle(DrawX, DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset, InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.FromNonPremultiplied(255, 255, 255, 127));
                     }
-                    if (MouseHelper.MouseStateCurrent.X >= DrawX && MouseHelper.MouseStateCurrent.X < DrawX + 38
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY + 45 && MouseHelper.MouseStateCurrent.Y < DrawY + 45 + 38)
+                    if (MouseHelper.MouseStateCurrent.X >= DrawX && MouseHelper.MouseStateCurrent.X < DrawX + InventorySquadWhiteScreen.LoadoutBoxSize
+                        && MouseHelper.MouseStateCurrent.Y >= DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset && MouseHelper.MouseStateCurrent.Y < DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset + InventorySquadWhiteScreen.LoadoutBoxSize)
                     {
-                        g.Draw(sprPixel, new Rectangle(DrawX, DrawY + 45, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));
+                        g.Draw(sprPixel, new Rectangle(DrawX, DrawY + InventorySquadWhiteScreen.LoadoutBoxHeightWithOffset, InventorySquadWhiteScreen.LoadoutBoxSize, InventorySquadWhiteScreen.LoadoutBoxSize), Color.FromNonPremultiplied(255, 255, 255, 127));
                     }
-                    DrawX += 40;
+
+                    DrawX += InventorySquadWhiteScreen.LoadoutBoxWidthWithOffset;
                 }
-                DrawY += CharacterHeight;
-            }
 
-            //Right side
-            DrawInventory(g, BattleMapInventoryScreen.LeftSideWidth + 5);
-            DrawSelection(g, BattleMapInventoryScreen.LeftSideWidth + 5);
-
-            if (DragAndDropEquipment != null)
-            {
-                g.Draw(DragAndDropEquipment.Pilot.sprPortrait, new Vector2(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y), Color.White);
+                DrawY += InventorySquadWhiteScreen.LoadoutEntryHeightWithOffset;
             }
         }
 
-        private void DrawInventory(CustomSpriteBatch g, int X)
+        private void DrawFolders(CustomSpriteBatch g, int X)
         {
-            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 - InventoryScrollbarValue % BoxHeight;
-            int SpriteBoxWidth = 38;
-            int SpriteOffset = BoxWidth / 2 - SpriteBoxWidth / 2;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            float Ratio = Constants.Height / 2160f;
+            int DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight;
 
-            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxHeight);
-            int BoxPerLine = (Constants.Width - X) / BoxWidth;
-
-            int TotalItem = CurrentContainer.ListCharacter.Count + CurrentContainer.ListFolder.Count;
+            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)InventorySquadWhiteScreen.FolderBoxHeight);
+            int TotalItem = CurrentContainer.ListFolder.Count;
 
             if (ListLastContainer.Count > 0)
             {
@@ -271,99 +356,137 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ListLastContainer.Count > 0)
             {
-                int FinalX = X + XPos * BoxWidth;
-                DrawBox(g, new Vector2(FinalX + 8, DrawY + 12), BoxWidth - 16, BoxHeight - 24, Color.FromNonPremultiplied(255, 255, 255, 0));
-                g.Draw(GameScreen.sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Lobby.BackgroundColor);
-                g.DrawStringCenteredBackground(fntArial12, "Last Folder",
-                    new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White, sprPixel, Lobby.BackgroundColor);
+                int FinalX = X + XPos * InventorySquadWhiteScreen.FolderWithOffsetFinal;
+
+                g.Draw(sprButtonFolderInactive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                g.DrawStringCentered(fntOxanimumLight, "Last Folder", new Vector2(FinalX + InventorySquadWhiteScreen.FolderBoxWidth * Ratio / 2, DrawY + InventorySquadWhiteScreen.FolderBoxHeightFinal / 2 + 6 * Ratio), TextColor);
 
                 ++XPos;
             }
 
-            for (int YPos = StartIndex; YPos < TotalItem; YPos += BoxPerLine)
+            for (int YPos = StartIndex; YPos < TotalItem; YPos += InventorySquadWhiteScreen.FolderPerLine)
             {
-                while (XPos < BoxPerLine && XPos + YPos < TotalItem)
+                while (XPos < InventorySquadWhiteScreen.FolderPerLine && XPos + YPos < TotalItem)
                 {
-                    int FinalX = X + XPos * BoxWidth;
+                    int FinalX = X + XPos * InventorySquadWhiteScreen.FolderWithOffsetFinal;
                     int CurrentIndex = XPos + YPos;
-
-                    DrawEmptyBox(g, new Vector2(FinalX, DrawY), BoxWidth, BoxHeight);
 
                     if (ListLastContainer.Count > 0)
                     {
                         CurrentIndex -= 1;
                     }
 
-                    if (CurrentIndex < CurrentContainer.ListFolder.Count)
+                    g.Draw(sprButtonFolderInactive, new Vector2(FinalX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+                    g.DrawStringCentered(fntOxanimumLight, CurrentContainer.ListFolder[CurrentIndex].Name, new Vector2(FinalX + InventorySquadWhiteScreen.FolderBoxWidth * Ratio / 2, DrawY + InventorySquadWhiteScreen.FolderBoxHeightFinal / 2 + 6 * Ratio), TextColor);
+
+                    ++XPos;
+                }
+
+                XPos = 0;
+
+                DrawY += InventorySquadWhiteScreen.BoxLineHeight;
+            }
+        }
+
+        private void DrawInventory(CustomSpriteBatch g, int X)
+        {
+            float Ratio = Constants.Height / 2160f;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight);
+
+            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)InventorySquadWhiteScreen.BoxHeight);
+            int TotalItem = CurrentContainer.ListCharacter.Count;
+
+            DrawFolders(g, X);
+            int XPos = 0;
+            for (int YPos = StartIndex; YPos < TotalItem; YPos += InventorySquadWhiteScreen.BoxPerLine)
+            {
+                while (XPos < InventorySquadWhiteScreen.BoxPerLine && XPos + YPos < TotalItem)
+                {
+                    int FinalX = (int)(X + XPos * InventorySquadWhiteScreen.BoxWithOffsetFinal);
+                    int CurrentIndex = XPos + YPos;
+
+                    g.Draw(sprPixel, new Rectangle(FinalX, DrawY, InventorySquadWhiteScreen.BoxWidthFinal, InventorySquadWhiteScreen.BoxHeight), Color.FromNonPremultiplied(16, 16, 16, 255));
+                    g.Draw(sprPixel, new Rectangle(FinalX + 5, DrawY + 5, InventorySquadWhiteScreen.BoxWidthFinal - 10, 80), TextColor);
+                    g.Draw(sprPixel, new Rectangle(FinalX + 5, DrawY + InventorySquadWhiteScreen.BoxHeight - (int)(66 * Ratio), InventorySquadWhiteScreen.BoxWidthFinal - 10, (int)(56 * Ratio)), Color.FromNonPremultiplied(243, 243, 243, 255));
+                    if (ShowCheckbox)
                     {
-                        DrawBox(g, new Vector2(FinalX + 8, DrawY + 12), BoxWidth - 16, BoxHeight - 24, Color.FromNonPremultiplied(255, 255, 255, 0));
-                        g.Draw(GameScreen.sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Lobby.BackgroundColor);
-                        g.DrawStringCenteredBackground(fntArial12, CurrentContainer.ListFolder[CurrentIndex].Name,
-                            new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White, sprPixel, Lobby.BackgroundColor);
+                        DrawBox(g, new Vector2(FinalX + 6, DrawY + InventorySquadWhiteScreen.BoxHeight - 20), 15, 15, Color.White);
                     }
-                    else
+
+                    if (CurrentIndex < CurrentContainer.ListCharacter.Count)
                     {
-                        CurrentIndex -= CurrentContainer.ListFolder.Count;
+                        g.Draw(CurrentContainer.ListCharacter[CurrentIndex].Pilot.sprPortrait, new Rectangle(FinalX + InventorySquadWhiteScreen.SpriteOffset, DrawY + InventorySquadWhiteScreen.SpriteOffset, InventorySquadWhiteScreen.SpriteSizeFinal, InventorySquadWhiteScreen.SpriteSizeFinal), Color.White);
 
-                        DrawBox(g, new Vector2(FinalX + SpriteOffset, DrawY + 4), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
-                        if (ShowCheckbox)
-                        {
-                            DrawBox(g, new Vector2(FinalX + 6, DrawY + BoxHeight - 20), 15, 15, Color.White);
-                        }
-
-                        g.Draw(CurrentContainer.ListCharacter[CurrentIndex].Pilot.sprPortrait, new Rectangle(FinalX + SpriteOffset + 3, DrawY + 7, 32, 32), Color.White);
-
-                        g.DrawString(fntArial12, "x" + CurrentContainer.ListCharacter[CurrentIndex].QuantityOwned,
-                            new Vector2(FinalX + BoxWidth - 25, DrawY + BoxHeight - 20), Color.White);
+                        g.DrawString(fntOxanimumBoldSmall, "x" + CurrentContainer.ListCharacter[CurrentIndex].QuantityOwned, new Vector2(FinalX + InventorySquadWhiteScreen.BoxWidthFinal - 40, DrawY + InventorySquadWhiteScreen.BoxHeight - 30), TextColor);
                     }
 
                     ++XPos;
                 }
                 XPos = 0;
 
-                DrawY += LineHeight;
+                DrawY += (int)(276 * Ratio);
             }
+            DrawSelection(g, X);
         }
 
         private void DrawSelection(CustomSpriteBatch g, int X)
         {
-            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 - InventoryScrollbarValue % BoxHeight;
+            float Ratio = Constants.Height / 2160f;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+
+            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight);
 
             int SelectedItemIndex = GetOwnedCharacterUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
-
-            if (ListLastContainer.Count > 0)
-            {
-                SelectedItemIndex -= 1;
-            }
 
             //Hover
             if (SelectedItemIndex >= 0)
             {
-                int FinalX = X + ((MouseHelper.MouseStateCurrent.X - X) / BoxWidth) * BoxWidth;
-                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / LineHeight) * LineHeight;
+                int FinalX = (int)(X + ((MouseHelper.MouseStateCurrent.X - X) / InventorySquadWhiteScreen.BoxWithOffsetFinal) * InventorySquadWhiteScreen.BoxWithOffsetFinal);
+                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / InventorySquadWhiteScreen.BoxLineHeight) * InventorySquadWhiteScreen.BoxLineHeight;
 
-                if (SelectedItemIndex >= CurrentContainer.ListFolder.Count)
+                CharacterInfo SelectedEquipment = CurrentContainer.ListCharacter[SelectedItemIndex];
+
+                LastSelectedEquipment = SelectedEquipment;
+
+                g.Draw(sprPixel, new Rectangle(FinalX, FinalY, InventorySquadWhiteScreen.BoxWidthFinal, InventorySquadWhiteScreen.BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
+
+                DrawBox(g, new Vector2(FinalX - InventorySquadWhiteScreen.BoxOffsetFinal / 2, FinalY + InventorySquadWhiteScreen.BoxHeight), InventorySquadWhiteScreen.BoxWithOffsetFinal, (int)(50 * Ratio), Color.Black);
+                g.DrawStringMiddleAligned(fntArial12,
+                    SelectedEquipment.Pilot.Name,
+                    new Vector2(FinalX + InventorySquadWhiteScreen.BoxWidthFinal / 2, FinalY + InventorySquadWhiteScreen.BoxHeight + (int)(6 * Ratio)), Color.White);
+            }
+            else
+            {
+                int SelectedFolderIndex = GetFolderUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+
+                if (SelectedFolderIndex >= 0)
                 {
-                    CharacterInfo SelectedEquipment = CurrentContainer.ListCharacter[SelectedItemIndex - CurrentContainer.ListFolder.Count];
+                    DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % InventorySquadWhiteScreen.BoxHeight;
 
-                    LastSelectedEquipment = SelectedEquipment;
+                    int FinalX = (int)(X + ((MouseHelper.MouseStateCurrent.X - X) / InventorySquadWhiteScreen.FolderWithOffsetFinal) * InventorySquadWhiteScreen.FolderWithOffsetFinal);
+                    int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / InventorySquadWhiteScreen.BoxLineHeight) * InventorySquadWhiteScreen.BoxLineHeight;
 
-                    g.Draw(sprPixel, new Rectangle(FinalX + 16, FinalY + 4, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));
-                    DrawBox(g, new Vector2(FinalX - 10, FinalY + BoxHeight), BoxWidth + 30, 25, Color.Black);
-                    g.DrawStringMiddleAligned(fntArial12,
-                        SelectedEquipment.Pilot.Name,
-                        new Vector2(FinalX + 5 + BoxWidth / 2, FinalY + BoxHeight), Color.White);
-                }
-                else
-                {
-                    g.Draw(sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(sprPixel, new Rectangle(FinalX, FinalY, InventorySquadWhiteScreen.FolderWidthFinal, InventorySquadWhiteScreen.FolderBoxHeightFinal), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
             }
+
+            g.Draw(sprFrameDescription, new Vector2(X * Ratio, 1938 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
             if (LastSelectedEquipment != null)
             {
-                //Bottom
-                g.DrawStringRightAlignedBackground(fntArial12, LastSelectedEquipment.Pilot.Name,
-                    new Vector2(X + 70, BattleMapInventoryScreen.BottomSectionY + 11), Color.White, sprPixel, Lobby.BackgroundColor);
+                int SpriteSize = 128;
+                int SpriteBoxSize = SpriteSize + 22;
+                g.Draw(sprPixel, new Rectangle((int)((X + 32) * Ratio), (int)(1962 * Ratio), (int)(SpriteBoxSize * Ratio), (int)(SpriteBoxSize * Ratio)), TextColor);
+                DrawBox(g, new Vector2((int)((X + 32) * Ratio), (int)(1962 * Ratio)), (int)(SpriteBoxSize * Ratio), (int)(SpriteBoxSize * Ratio), Color.Transparent);
+                g.Draw(LastSelectedEquipment.Pilot.sprPortrait, new Rectangle((int)((X + 40) * Ratio), (int)(1976 * Ratio), (int)(SpriteSize * Ratio), (int)(SpriteSize * Ratio)), Color.White);
+
+                g.DrawString(fntOxanimumBoldSmaller, LastSelectedEquipment.Pilot.Name, new Vector2((X + 240) * Ratio, 1976 * Ratio), TextColor);
+
+                g.DrawString(fntOxanimumLightSmall, "MEL: " + LastSelectedEquipment.Pilot.MEL, new Vector2((X + 836) * Ratio, 1976 * Ratio), TextColor);
+
+                g.DrawString(fntOxanimumLightSmall, "RNG: " + LastSelectedEquipment.Pilot.RNG, new Vector2((X + 836) * Ratio, 2058 * Ratio), TextColor);
+
+                g.DrawString(fntOxanimumLightSmall, "DEF: " + LastSelectedEquipment.Pilot.DEF, new Vector2((X + 1412) * Ratio, 1976 * Ratio), TextColor);
             }
         }
     }
