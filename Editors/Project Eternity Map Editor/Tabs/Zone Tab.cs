@@ -1,0 +1,176 @@
+﻿using System;
+using System.Windows.Forms;
+using ProjectEternity.GameScreens.BattleMapScreen;
+
+namespace ProjectEternity.Editors.MapEditor
+{
+    class ZoneTab
+    {
+        private TabPage tabZones;
+        private Button btnAddZoneOval;
+        private ListBox lsZones;
+        private Button btnRemoveZone;
+        private Button btnAddZoneRectangle;
+        private Button btnEditZone;
+        private PropertyGrid pgZoneProperties;
+        private Button btnAddZoneFullMap;
+
+        public BattleMapViewerControl BattleMapViewer;
+        public TilesetViewerControl TilesetViewer;
+        public IMapHelper Helper;
+        private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
+
+        public TabPage InitTab(MenuStrip mnuToolBar)
+        {
+            this.tabZones = new TabPage();
+            this.btnAddZoneFullMap = new Button();
+            this.pgZoneProperties = new PropertyGrid();
+            this.btnEditZone = new Button();
+            this.btnAddZoneOval = new Button();
+            this.lsZones = new ListBox();
+            this.btnRemoveZone = new Button();
+            this.btnAddZoneRectangle = new Button();
+            this.tabZones.SuspendLayout();
+
+            // 
+            // tabZones
+            // 
+            this.tabZones.Controls.Add(this.btnAddZoneFullMap);
+            this.tabZones.Controls.Add(this.pgZoneProperties);
+            this.tabZones.Controls.Add(this.btnEditZone);
+            this.tabZones.Controls.Add(this.btnAddZoneOval);
+            this.tabZones.Controls.Add(this.lsZones);
+            this.tabZones.Controls.Add(this.btnRemoveZone);
+            this.tabZones.Controls.Add(this.btnAddZoneRectangle);
+            this.tabZones.Location = new System.Drawing.Point(4, 22);
+            this.tabZones.Name = "tabZones";
+            this.tabZones.Padding = new System.Windows.Forms.Padding(3);
+            this.tabZones.Size = new System.Drawing.Size(325, 497);
+            this.tabZones.TabIndex = 6;
+            this.tabZones.Text = "Zones";
+            this.tabZones.UseVisualStyleBackColor = true;
+            // 
+            // btnAddZoneFullMap
+            // 
+            this.btnAddZoneFullMap.Location = new System.Drawing.Point(6, 204);
+            this.btnAddZoneFullMap.Name = "btnAddZoneFullMap";
+            this.btnAddZoneFullMap.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneFullMap.TabIndex = 33;
+            this.btnAddZoneFullMap.Text = "Add Full Map";
+            this.btnAddZoneFullMap.UseVisualStyleBackColor = true;
+            this.btnAddZoneFullMap.Click += new System.EventHandler(this.btnAddZoneFullMap_Click);
+            // 
+            // pgZoneProperties
+            // 
+            this.pgZoneProperties.Location = new System.Drawing.Point(6, 249);
+            this.pgZoneProperties.Name = "pgZoneProperties";
+            this.pgZoneProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgZoneProperties.Size = new System.Drawing.Size(228, 242);
+            this.pgZoneProperties.TabIndex = 32;
+            this.pgZoneProperties.ToolbarVisible = false;
+            // 
+            // btnEditZone
+            // 
+            this.btnEditZone.Location = new System.Drawing.Point(121, 175);
+            this.btnEditZone.Name = "btnEditZone";
+            this.btnEditZone.Size = new System.Drawing.Size(109, 23);
+            this.btnEditZone.TabIndex = 31;
+            this.btnEditZone.Text = "Edit";
+            this.btnEditZone.UseVisualStyleBackColor = true;
+            this.btnEditZone.Click += new System.EventHandler(this.btnEditZone_Click);
+            // 
+            // btnAddZoneOval
+            // 
+            this.btnAddZoneOval.Location = new System.Drawing.Point(6, 175);
+            this.btnAddZoneOval.Name = "btnAddZoneOval";
+            this.btnAddZoneOval.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneOval.TabIndex = 30;
+            this.btnAddZoneOval.Text = "Add Oval";
+            this.btnAddZoneOval.UseVisualStyleBackColor = true;
+            this.btnAddZoneOval.Click += new System.EventHandler(this.btnAddZoneOval_Click);
+            // 
+            // lsZones
+            // 
+            this.lsZones.FormattingEnabled = true;
+            this.lsZones.Location = new System.Drawing.Point(6, 6);
+            this.lsZones.Name = "lsZones";
+            this.lsZones.Size = new System.Drawing.Size(228, 134);
+            this.lsZones.TabIndex = 29;
+            this.lsZones.SelectedIndexChanged += new System.EventHandler(this.lsZones_SelectedIndexChanged);
+            // 
+            // btnRemoveZone
+            // 
+            this.btnRemoveZone.Location = new System.Drawing.Point(121, 146);
+            this.btnRemoveZone.Name = "btnRemoveZone";
+            this.btnRemoveZone.Size = new System.Drawing.Size(109, 23);
+            this.btnRemoveZone.TabIndex = 28;
+            this.btnRemoveZone.Text = "Remove";
+            this.btnRemoveZone.UseVisualStyleBackColor = true;
+            this.btnRemoveZone.Click += new System.EventHandler(this.btnRemoveZone_Click);
+            // 
+            // btnAddZoneRectangle
+            // 
+            this.btnAddZoneRectangle.Location = new System.Drawing.Point(6, 146);
+            this.btnAddZoneRectangle.Name = "btnAddZoneRectangle";
+            this.btnAddZoneRectangle.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneRectangle.TabIndex = 27;
+            this.btnAddZoneRectangle.Text = "Add Rectangle";
+            this.btnAddZoneRectangle.UseVisualStyleBackColor = true;
+            this.btnAddZoneRectangle.Click += new System.EventHandler(this.btnAddZoneRectangle_Click);
+            this.tabZones.ResumeLayout(false);
+            return tabZones;
+        }
+
+        private void btnAddZoneRectangle_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Rectangle);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnAddZoneOval_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Oval);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnAddZoneFullMap_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Full);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnRemoveZone_Click(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                ActiveMap.MapEnvironment.ListMapZone.RemoveAt(lsZones.SelectedIndex);
+                lsZones.Items.RemoveAt(lsZones.SelectedIndex);
+            }
+        }
+
+        private void btnEditZone_Click(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                new ZoneEditor(ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex]).ShowDialog();
+            }
+        }
+
+        private void lsZones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                pgZoneProperties.SelectedObject = ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex];
+            }
+        }
+    }
+}

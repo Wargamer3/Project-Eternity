@@ -25,6 +25,9 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShowTerrainHeight;
         private CheckBox cbShow3DObjects;
 
+        private List<object> ListTab = new List<object>();
+        PropTab PropTab;
+        ZoneTab ZoneTab;
         LayerTab LayerTab;
 
         protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
@@ -33,8 +36,6 @@ namespace ProjectEternity.Editors.MapEditor
         //Spawn point related stuff.
         private EventPoint ActiveSpawn;
         private System.Drawing.Point LastMousePosition;
-
-        private bool AllowEvents = true;
 
         protected ITileAttributes TileAttributesEditor;
 
@@ -86,7 +87,22 @@ namespace ProjectEternity.Editors.MapEditor
             LayerTab.BattleMapViewer = BattleMapViewer;
             LayerTab.TilesetViewer = TilesetViewer;
 
+            ListTab.Add(LayerTab);
             tabToolBox.TabPages.Add(LayerTab.InitTab(mnuToolBar));
+
+            PropTab = new PropTab();
+            PropTab.BattleMapViewer = BattleMapViewer;
+            PropTab.TilesetViewer = TilesetViewer;
+
+            ListTab.Add(PropTab);
+            tabToolBox.TabPages.Add(PropTab.InitTab(mnuToolBar));
+
+            ZoneTab = new ZoneTab();
+            ZoneTab.BattleMapViewer = BattleMapViewer;
+            ZoneTab.TilesetViewer = TilesetViewer;
+
+            ListTab.Add(ZoneTab);
+            tabToolBox.TabPages.Add(ZoneTab.InitTab(mnuToolBar));
 
             #region cbShowTerrainType
 
@@ -224,6 +240,8 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             BattleMapViewer.Helper = Helper;
+            PropTab.Helper = Helper;
+            ZoneTab.Helper = Helper;
             LayerTab.Helper = Helper;
         }
 
@@ -753,14 +771,7 @@ namespace ProjectEternity.Editors.MapEditor
             //Spawn tab
             else if (tabToolBox.SelectedIndex == 4)
             {
-                if (e.Button == MouseButtons.Left)
-                {
-                    HandleProps(MouseX, MouseY);
-                }
-                else if (e.Button == MouseButtons.Right)
-                {
-                    RemoveProps(MouseX, MouseY);
-                }
+                PropTab.OnMouseMove(e, MouseX, MouseY);
             }
         }
 
@@ -1184,127 +1195,6 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.ScriptHelper.CreateScript((MapScript)((ListBox)sender).SelectedItem);
         }
 
-        #region Props
-
-        private void HandleProps(int X, int Y)
-        {
-            if (ActiveMap.TileSize.X != 0)
-            {
-                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-
-                //Loop in the Prop list to find if a Prop already exist at the X, Y position.
-                for (int P = 0; P < TopLayer.ListProp.Count; P++)
-                {
-                    if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
-                    {
-                        pgPropProperties.SelectedObject = TopLayer.ListProp[P];
-                        return;
-                    }
-                }
-
-                InteractiveProp ActiveProp = null;
-                if (tabPropsChoices.SelectedIndex == 0 && lsInteractiveProps.SelectedItem != null)
-                {
-                    ActiveProp = (InteractiveProp)lsInteractiveProps.SelectedItem;
-                }
-                else if (tabPropsChoices.SelectedIndex == 1 && lsPhysicalProps.SelectedItem != null)
-                {
-                    ActiveProp = (InteractiveProp)lsPhysicalProps.SelectedItem;
-                }
-                else if (tabPropsChoices.SelectedIndex == 2 && lsVisualProps.SelectedItem != null)
-                {
-                    ActiveProp = (InteractiveProp)lsVisualProps.SelectedItem;
-                }
-                else
-                {
-                    return;
-                }
-
-                ActiveProp = ActiveProp.Copy(new Vector3(X, Y, 0), TopLayerIndex);
-                pgPropProperties.SelectedObject = ActiveProp;
-
-                TopLayer.ListProp.Add(ActiveProp);
-            }
-        }
-
-        private void RemoveProps(int X, int Y)
-        {
-            if (ActiveMap.TileSize.X != 0)
-            {
-                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-
-                //Loop in the Prop list to find if a Prop already exist at the X, Y position.
-                for (int P = 0; P < TopLayer.ListProp.Count; P++)
-                {
-                    if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
-                    {
-                        TopLayer.ListProp.RemoveAt(P);
-                        break;
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Zones
-
-        private void btnAddZoneRectangle_Click(object sender, EventArgs e)
-        {
-            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Rectangle);
-            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
-            lsZones.Items.Add("Zone");
-            pgZoneProperties.SelectedObject = NewZone;
-            lsZones.SelectedIndex = lsZones.Items.Count - 1;
-        }
-
-        private void btnAddZoneOval_Click(object sender, EventArgs e)
-        {
-            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Oval);
-            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
-            lsZones.Items.Add("Zone");
-            pgZoneProperties.SelectedObject = NewZone;
-            lsZones.SelectedIndex = lsZones.Items.Count - 1;
-        }
-
-        private void btnAddZoneFullMap_Click(object sender, EventArgs e)
-        {
-            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Full);
-            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
-            lsZones.Items.Add("Zone");
-            pgZoneProperties.SelectedObject = NewZone;
-            lsZones.SelectedIndex = lsZones.Items.Count - 1;
-        }
-
-        private void btnRemoveZone_Click(object sender, EventArgs e)
-        {
-            if (lsZones.SelectedIndex >= 0)
-            {
-                ActiveMap.MapEnvironment.ListMapZone.RemoveAt(lsZones.SelectedIndex);
-                lsZones.Items.RemoveAt(lsZones.SelectedIndex);
-            }
-        }
-
-        private void btnEditZone_Click(object sender, EventArgs e)
-        {
-            if (lsZones.SelectedIndex >= 0)
-            {
-                new ZoneEditor(ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex]).ShowDialog();
-            }
-        }
-
-        private void lsZones_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lsZones.SelectedIndex >= 0)
-            {
-                pgZoneProperties.SelectedObject = ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex];
-            }
-        }
-
-        #endregion
-
         private void cbShowGrid_CheckedChanged(object sender, EventArgs e)
         {
             ActiveMap.ShowGrid = cbShowGrid.Checked;
@@ -1683,27 +1573,8 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
+            PropTab.OnMapLoaded();
             LayerTab.OnMapLoaded();
-
-            #region Props
-
-            foreach (InteractiveProp Instance in ActiveMap.DicInteractiveProp.Values)
-            {
-                if (Instance.PropCategory == InteractiveProp.PropCategories.Interactive)
-                {
-                    lsInteractiveProps.Items.Add(Instance);
-                }
-                else if (Instance.PropCategory == InteractiveProp.PropCategories.Physical)
-                {
-                    lsPhysicalProps.Items.Add(Instance);
-                }
-                else if (Instance.PropCategory == InteractiveProp.PropCategories.Visual)
-                {
-                    lsVisualProps.Items.Add(Instance);
-                }
-            }
-
-            #endregion
         }
     }
 }

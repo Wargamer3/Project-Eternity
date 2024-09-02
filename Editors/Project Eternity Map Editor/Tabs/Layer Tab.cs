@@ -1,15 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Scripts;
-using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {

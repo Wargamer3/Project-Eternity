@@ -275,6 +275,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             //Map.MapEnvironment.EndDraw(g);
 
+            DrawItems(g);
+
             if (Map.ShowUnits)
             {
                 DrawDrawablePoints(g);
@@ -308,8 +310,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
-
-                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
                     }
                 }
                 else
@@ -322,8 +322,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
-
-                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
                     }
                 }
             }
@@ -335,7 +333,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     ActiveTileSet.Value.Draw(g, Map, 0);
                 }
+            }
+        }
 
+        private void DrawItems(CustomSpriteBatch g)
+        {
+            if (Map.ShowLayerIndex == -1)
+            {
+                if (Map.IsEditor)
+                {
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                    {
+                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        DrawItems(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+            }
+            else
+            {
                 DrawItems(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
         }
