@@ -204,7 +204,7 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.TogglePreview(true);
 
             BattleMapViewer.SetListMapScript(NewMap.ListMapScript);
-            BattleMapViewer.Helper.OnSelect = (SelectedObject, RightClick) =>
+            BattleMapViewer.ScriptHelper.OnSelect = (SelectedObject, RightClick) =>
             {
                 if (RightClick && SelectedObject != null)
                 {
@@ -218,7 +218,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             for (int S = NewMap.ListMapScript.Count - 1; S >= 0; --S)
             {
-                BattleMapViewer.Helper.InitScript(NewMap.ListMapScript[S]);
+                BattleMapViewer.ScriptHelper.InitScript(NewMap.ListMapScript[S]);
             }
 
             if (NewMap.ListMultiplayerColor.Count > 0)
@@ -305,6 +305,7 @@ namespace ProjectEternity.Editors.MapEditor
             else
                 sclTileHeight.Visible = false;
 
+            BattleMapViewer.SelectedTilesetIndex = cboTiles.SelectedIndex;
             TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
         }
 
@@ -1211,7 +1212,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (((ListBox)sender).SelectedIndex == -1)
                 return;
 
-            BattleMapViewer.Helper.CreateScript((MapScript)((ListBox)sender).SelectedItem);
+            BattleMapViewer.ScriptHelper.CreateScript((MapScript)((ListBox)sender).SelectedItem);
         }
 
         #region Extra Layers
@@ -1802,7 +1803,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void tabToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ViewerIndex = tabToolBox.SelectedIndex;
+            BattleMapViewer.ViewerTabIndex = tabToolBox.SelectedIndex;
         }
 
         private void ProjectEternityMapEditor_Shown(object sender, EventArgs e)

@@ -359,13 +359,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
             float DrawY = PanelY;
-            MapScrollbar.Draw(g);
+            //MapScrollbar.Draw(g);
 
             g.Draw(sprFrameDescription, new Vector2(2280 * Ratio, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
             int BoxHeight = (DicMapInfoByPath.Values.Count * LineOffsetY);
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), null, ColorBox, 0f, Vector2.Zero, SpriteEffects.None, 0.8f);
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawY += FirstLineOffsetY;

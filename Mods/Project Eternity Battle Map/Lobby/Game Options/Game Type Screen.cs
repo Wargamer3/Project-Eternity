@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (string ActiveLine in TextHelper.FitToWidth(fntText, SelectedGametype.Description, (int)(350 * Ratio)))
             {
                 g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(2340 * Ratio, DescriptionY), ColorText);
-                DescriptionY += 20;
+                DescriptionY += 80 * Ratio;
 
             }
 
@@ -221,7 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int BoxHeight = (int)(ActiveCategory.ArrayGametype.Length * LineOffsetY);
 
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), null, ColorBox, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawY += FirstLineOffsetY;
@@ -233,10 +233,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ActiveCategory.ArrayGametype[G].IsUnlocked)
                     {
-                        if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY)
+                        if (SelectedGametype == ActiveCategory.ArrayGametype[G]
+                            || (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
+                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY))
                         {
-                            g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+                            g.Draw(sprHighlight, new Vector2(LeftPanelX - 20 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                         }
 
                         g.DrawString(fntOxanimumRegular, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), ColorText);

@@ -25,7 +25,7 @@ namespace ProjectEternity.Core.Item
         private float ScrollbarBarPositionY;
         private float ScrollbarValueMax;
         private float ScrollbarIncrementValue;
-        private int MovingScrollbarSelectionPoint;
+        private int MouseClickOffsetY;
 
         public Scrollbar(Texture2D sprScrollbar, Vector2 Position, int Height, float ScrollbarValueMax, OnScrollbarChangeDelegate OnScrollbarChange)
         {
@@ -37,7 +37,7 @@ namespace ProjectEternity.Core.Item
 
             HasArrows = true;
 
-            MovingScrollbarSelectionPoint = -1;
+            MouseClickOffsetY = -1;
 
             Width = sprScrollbar.Width / 4;
             SectionSize = sprScrollbar.Height / 4;
@@ -56,7 +56,7 @@ namespace ProjectEternity.Core.Item
             this.OnScrollbarChange = OnScrollbarChange;
             this.HasArrows = false;
 
-            MovingScrollbarSelectionPoint = -1;
+            MouseClickOffsetY = -1;
 
             Width = (int)(sprScrollbar.Width * Ratio);
             SectionSize = 0;
@@ -68,15 +68,15 @@ namespace ProjectEternity.Core.Item
 
         public void Update(GameTime gameTime)
         {
-            if (MovingScrollbarSelectionPoint >= 0)
+            if (MouseClickOffsetY >= 0)
             {
                 if (MouseHelper.MouseMoved() && MouseHelper.InputLeftButtonHold())
                 {
-                    float NewScrollbarValue = GetScrollbarValue(MouseHelper.MouseStateCurrent.Y - MovingScrollbarSelectionPoint);
+                    float NewScrollbarValue = GetScrollbarValue(MouseHelper.MouseStateCurrent.Y - MouseClickOffsetY);
                     if (NewScrollbarValue >= 0)
                     {
                         OnScrollbarChange(NewScrollbarValue);
-                        ScrollbarBarPositionY = Math.Min(Position.Y + SectionSize + ScrollbarBarUsableHeight, MouseHelper.MouseStateCurrent.Y - MovingScrollbarSelectionPoint);
+                        ScrollbarBarPositionY = Math.Min(Position.Y + SectionSize + ScrollbarBarUsableHeight, MouseHelper.MouseStateCurrent.Y - MouseClickOffsetY);
                     }
                 }
             }
@@ -86,14 +86,14 @@ namespace ProjectEternity.Core.Item
                 {
                     if (MouseHelper.InputLeftButtonPressed() && IsInsideScrollbarBar(new Vector2(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y)))
                     {
-                        MovingScrollbarSelectionPoint = (int)((MouseHelper.MouseStateCurrent.Y - (int)Position.Y - SectionSize) / (float)ScrollbarBarUsableHeight);
+                        MouseClickOffsetY = MouseHelper.MouseStateCurrent.Y - (int)Position.Y - SectionSize;
                     }
                 }
             }
 
             if (MouseHelper.InputLeftButtonReleased())
             {
-                MovingScrollbarSelectionPoint = -1;
+                MouseClickOffsetY = -1;
             }
         }
 

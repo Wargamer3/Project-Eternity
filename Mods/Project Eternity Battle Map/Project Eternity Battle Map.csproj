@@ -169,7 +169,7 @@
     <Compile Include="Lobby\Unlocks\Battle Map Player Shop Unlock Inventory.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
-    <Compile Include="Lobby\Game Options\Gametype Screen.cs" />
+    <Compile Include="Lobby\Game Options\Game Type Screen.cs" />
     <Compile Include="Lobby\Game Options\Mutators Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Rules Screen.cs" />
     <Compile Include="Lobby\Game Options\Bot Config Screen.cs" />

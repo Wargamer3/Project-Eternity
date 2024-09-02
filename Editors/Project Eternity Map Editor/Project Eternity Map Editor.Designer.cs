@@ -64,7 +64,7 @@
             this.cbDeadthmatch = new System.Windows.Forms.ComboBox();
             this.tabScripting = new System.Windows.Forms.TabPage();
             this.ScriptingContainer = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabScirptingList = new System.Windows.Forms.TabControl();
             this.tbEvents = new System.Windows.Forms.TabPage();
             this.lstEvents = new System.Windows.Forms.ListBox();
             this.tbTriggers = new System.Windows.Forms.TabPage();
@@ -73,8 +73,8 @@
             this.tabLayers = new System.Windows.Forms.TabPage();
             this.btnRemoveSublayer = new System.Windows.Forms.Button();
             this.btnAddSublayer = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLayerMoveDown = new System.Windows.Forms.Button();
+            this.btnLayerMoveUp = new System.Windows.Forms.Button();
             this.lsLayers = new System.Windows.Forms.ListBox();
             this.btnLayerAttributes = new System.Windows.Forms.Button();
             this.btnRemoveExtraLayer = new System.Windows.Forms.Button();
@@ -99,9 +99,9 @@
             this.btnAddZoneRectangle = new System.Windows.Forms.Button();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmMapProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.BattleMapViewer = new ProjectEternity.GameScreens.BattleMapScreen.BattleMapViewerControl();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
             this.tsmGlobalEnvironment = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,7 +117,7 @@
             this.ScriptingContainer.Panel1.SuspendLayout();
             this.ScriptingContainer.Panel2.SuspendLayout();
             this.ScriptingContainer.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabScirptingList.SuspendLayout();
             this.tbEvents.SuspendLayout();
             this.tbTriggers.SuspendLayout();
             this.tabLayers.SuspendLayout();
@@ -131,11 +131,11 @@
             this.tabPhysicalProps.SuspendLayout();
             this.tabVisualProps.SuspendLayout();
             this.tabZones.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.mnuToolBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -298,7 +298,7 @@
             this.tabEventPoints.Location = new System.Drawing.Point(4, 22);
             this.tabEventPoints.Name = "tabEventPoints";
             this.tabEventPoints.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEventPoints.Size = new System.Drawing.Size(240, 497);
+            this.tabEventPoints.Size = new System.Drawing.Size(325, 497);
             this.tabEventPoints.TabIndex = 0;
             this.tabEventPoints.Text = "Event points";
             this.tabEventPoints.UseVisualStyleBackColor = true;
@@ -532,7 +532,7 @@
             this.tabScripting.Location = new System.Drawing.Point(4, 22);
             this.tabScripting.Name = "tabScripting";
             this.tabScripting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScripting.Size = new System.Drawing.Size(240, 497);
+            this.tabScripting.Size = new System.Drawing.Size(325, 497);
             this.tabScripting.TabIndex = 3;
             this.tabScripting.Text = "Scripting";
             this.tabScripting.UseVisualStyleBackColor = true;
@@ -547,36 +547,36 @@
             // 
             // ScriptingContainer.Panel1
             // 
-            this.ScriptingContainer.Panel1.Controls.Add(this.tabControl1);
+            this.ScriptingContainer.Panel1.Controls.Add(this.tabScirptingList);
             // 
             // ScriptingContainer.Panel2
             // 
             this.ScriptingContainer.Panel2.Controls.Add(this.pgScriptProperties);
-            this.ScriptingContainer.Size = new System.Drawing.Size(234, 491);
+            this.ScriptingContainer.Size = new System.Drawing.Size(319, 491);
             this.ScriptingContainer.SplitterDistance = 241;
             this.ScriptingContainer.TabIndex = 7;
             // 
-            // tabControl1
+            // tabScirptingList
             // 
-            this.tabControl1.Controls.Add(this.tbEvents);
-            this.tabControl1.Controls.Add(this.tbConditions);
-            this.tabControl1.Controls.Add(this.tbTriggers);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Multiline = true;
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(230, 237);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
+            this.tabScirptingList.Controls.Add(this.tbEvents);
+            this.tabScirptingList.Controls.Add(this.tbConditions);
+            this.tabScirptingList.Controls.Add(this.tbTriggers);
+            this.tabScirptingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabScirptingList.Location = new System.Drawing.Point(0, 0);
+            this.tabScirptingList.Multiline = true;
+            this.tabScirptingList.Name = "tabScirptingList";
+            this.tabScirptingList.SelectedIndex = 0;
+            this.tabScirptingList.Size = new System.Drawing.Size(315, 237);
+            this.tabScirptingList.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabScirptingList.TabIndex = 0;
+            this.tabScirptingList.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
             // 
             // tbEvents
             // 
             this.tbEvents.Controls.Add(this.lstEvents);
             this.tbEvents.Location = new System.Drawing.Point(4, 22);
             this.tbEvents.Name = "tbEvents";
-            this.tbEvents.Size = new System.Drawing.Size(222, 211);
+            this.tbEvents.Size = new System.Drawing.Size(307, 211);
             this.tbEvents.TabIndex = 2;
             this.tbEvents.Text = "Events";
             this.tbEvents.UseVisualStyleBackColor = true;
@@ -587,7 +587,7 @@
             this.lstEvents.FormattingEnabled = true;
             this.lstEvents.Location = new System.Drawing.Point(0, 0);
             this.lstEvents.Name = "lstEvents";
-            this.lstEvents.Size = new System.Drawing.Size(222, 211);
+            this.lstEvents.Size = new System.Drawing.Size(307, 211);
             this.lstEvents.TabIndex = 0;
             this.lstEvents.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
             // 
@@ -617,7 +617,7 @@
             this.pgScriptProperties.Location = new System.Drawing.Point(0, 0);
             this.pgScriptProperties.Name = "pgScriptProperties";
             this.pgScriptProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgScriptProperties.Size = new System.Drawing.Size(230, 242);
+            this.pgScriptProperties.Size = new System.Drawing.Size(315, 242);
             this.pgScriptProperties.TabIndex = 0;
             this.pgScriptProperties.ToolbarVisible = false;
             // 
@@ -625,8 +625,8 @@
             // 
             this.tabLayers.Controls.Add(this.btnRemoveSublayer);
             this.tabLayers.Controls.Add(this.btnAddSublayer);
-            this.tabLayers.Controls.Add(this.button2);
-            this.tabLayers.Controls.Add(this.button1);
+            this.tabLayers.Controls.Add(this.btnLayerMoveDown);
+            this.tabLayers.Controls.Add(this.btnLayerMoveUp);
             this.tabLayers.Controls.Add(this.lsLayers);
             this.tabLayers.Controls.Add(this.btnLayerAttributes);
             this.tabLayers.Controls.Add(this.btnRemoveExtraLayer);
@@ -634,7 +634,7 @@
             this.tabLayers.Location = new System.Drawing.Point(4, 22);
             this.tabLayers.Name = "tabLayers";
             this.tabLayers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLayers.Size = new System.Drawing.Size(240, 497);
+            this.tabLayers.Size = new System.Drawing.Size(325, 497);
             this.tabLayers.TabIndex = 4;
             this.tabLayers.Text = "Layers";
             this.tabLayers.UseVisualStyleBackColor = true;
@@ -659,23 +659,23 @@
             this.btnAddSublayer.UseVisualStyleBackColor = true;
             this.btnAddSublayer.Click += new System.EventHandler(this.btnAddSublayer_Click);
             // 
-            // button2
+            // btnLayerMoveDown
             // 
-            this.button2.Location = new System.Drawing.Point(121, 204);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 23);
-            this.button2.TabIndex = 28;
-            this.button2.Text = "Move Down";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnLayerMoveDown.Location = new System.Drawing.Point(121, 204);
+            this.btnLayerMoveDown.Name = "btnLayerMoveDown";
+            this.btnLayerMoveDown.Size = new System.Drawing.Size(109, 23);
+            this.btnLayerMoveDown.TabIndex = 28;
+            this.btnLayerMoveDown.Text = "Move Down";
+            this.btnLayerMoveDown.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // btnLayerMoveUp
             // 
-            this.button1.Location = new System.Drawing.Point(6, 204);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(109, 23);
-            this.button1.TabIndex = 27;
-            this.button1.Text = "Move Up";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnLayerMoveUp.Location = new System.Drawing.Point(6, 204);
+            this.btnLayerMoveUp.Name = "btnLayerMoveUp";
+            this.btnLayerMoveUp.Size = new System.Drawing.Size(109, 23);
+            this.btnLayerMoveUp.TabIndex = 27;
+            this.btnLayerMoveUp.Text = "Move Up";
+            this.btnLayerMoveUp.UseVisualStyleBackColor = true;
             // 
             // lsLayers
             // 
@@ -722,7 +722,7 @@
             this.tabProps.Location = new System.Drawing.Point(4, 22);
             this.tabProps.Name = "tabProps";
             this.tabProps.Padding = new System.Windows.Forms.Padding(3);
-            this.tabProps.Size = new System.Drawing.Size(240, 497);
+            this.tabProps.Size = new System.Drawing.Size(325, 497);
             this.tabProps.TabIndex = 5;
             this.tabProps.Text = "Props";
             this.tabProps.UseVisualStyleBackColor = true;
@@ -742,7 +742,7 @@
             // PropsContainer.Panel2
             // 
             this.PropsContainer.Panel2.Controls.Add(this.pgPropProperties);
-            this.PropsContainer.Size = new System.Drawing.Size(234, 491);
+            this.PropsContainer.Size = new System.Drawing.Size(319, 491);
             this.PropsContainer.SplitterDistance = 241;
             this.PropsContainer.TabIndex = 8;
             // 
@@ -756,7 +756,7 @@
             this.tabPropsChoices.Multiline = true;
             this.tabPropsChoices.Name = "tabPropsChoices";
             this.tabPropsChoices.SelectedIndex = 0;
-            this.tabPropsChoices.Size = new System.Drawing.Size(230, 237);
+            this.tabPropsChoices.Size = new System.Drawing.Size(315, 237);
             this.tabPropsChoices.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabPropsChoices.TabIndex = 0;
             // 
@@ -765,7 +765,7 @@
             this.tabInteractiveProps.Controls.Add(this.lsInteractiveProps);
             this.tabInteractiveProps.Location = new System.Drawing.Point(4, 22);
             this.tabInteractiveProps.Name = "tabInteractiveProps";
-            this.tabInteractiveProps.Size = new System.Drawing.Size(222, 211);
+            this.tabInteractiveProps.Size = new System.Drawing.Size(307, 211);
             this.tabInteractiveProps.TabIndex = 2;
             this.tabInteractiveProps.Text = "Interactive";
             this.tabInteractiveProps.UseVisualStyleBackColor = true;
@@ -776,7 +776,7 @@
             this.lsInteractiveProps.FormattingEnabled = true;
             this.lsInteractiveProps.Location = new System.Drawing.Point(0, 0);
             this.lsInteractiveProps.Name = "lsInteractiveProps";
-            this.lsInteractiveProps.Size = new System.Drawing.Size(222, 211);
+            this.lsInteractiveProps.Size = new System.Drawing.Size(307, 211);
             this.lsInteractiveProps.TabIndex = 0;
             // 
             // tabPhysicalProps
@@ -823,7 +823,7 @@
             this.pgPropProperties.Location = new System.Drawing.Point(0, 0);
             this.pgPropProperties.Name = "pgPropProperties";
             this.pgPropProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgPropProperties.Size = new System.Drawing.Size(230, 242);
+            this.pgPropProperties.Size = new System.Drawing.Size(315, 242);
             this.pgPropProperties.TabIndex = 0;
             this.pgPropProperties.ToolbarVisible = false;
             // 
@@ -839,7 +839,7 @@
             this.tabZones.Location = new System.Drawing.Point(4, 22);
             this.tabZones.Name = "tabZones";
             this.tabZones.Padding = new System.Windows.Forms.Padding(3);
-            this.tabZones.Size = new System.Drawing.Size(240, 497);
+            this.tabZones.Size = new System.Drawing.Size(325, 497);
             this.tabZones.TabIndex = 6;
             this.tabZones.Text = "Zones";
             this.tabZones.UseVisualStyleBackColor = true;
@@ -926,26 +926,26 @@
             this.tsmMapProperties.Text = "Map properties";
             this.tsmMapProperties.Click += new System.EventHandler(this.tsmMapProperties_Click);
             // 
-            // splitContainer1
+            // splitContainer
             // 
-            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer.Location = new System.Drawing.Point(0, 24);
+            this.splitContainer.Name = "splitContainer";
             // 
-            // splitContainer1.Panel1
+            // splitContainer.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.BattleMapViewer);
-            this.splitContainer1.Panel1MinSize = 664;
+            this.splitContainer.Panel1.Controls.Add(this.BattleMapViewer);
+            this.splitContainer.Panel1MinSize = 664;
             // 
-            // splitContainer1.Panel2
+            // splitContainer.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.tabToolBox);
-            this.splitContainer1.Panel2MinSize = 252;
-            this.splitContainer1.Size = new System.Drawing.Size(1247, 527);
-            this.splitContainer1.SplitterDistance = 906;
-            this.splitContainer1.TabIndex = 10;
+            this.splitContainer.Panel2.Controls.Add(this.tabToolBox);
+            this.splitContainer.Panel2MinSize = 252;
+            this.splitContainer.Size = new System.Drawing.Size(1247, 527);
+            this.splitContainer.SplitterDistance = 906;
+            this.splitContainer.TabIndex = 10;
             // 
             // BattleMapViewer
             // 
@@ -958,15 +958,15 @@
             this.BattleMapViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnMapPreview_MouseMove);
             this.BattleMapViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnMapPreview_MouseUp);
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslInformation});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 551);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1247, 22);
-            this.statusStrip1.TabIndex = 8;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Location = new System.Drawing.Point(0, 551);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(1247, 22);
+            this.statusStrip.TabIndex = 8;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // tslInformation
             // 
@@ -997,8 +997,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1247, 573);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.splitContainer);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mnuToolBar);
             this.Name = "ProjectEternityMapEditor";
             this.Shown += new System.EventHandler(this.ProjectEternityMapEditor_Shown);
@@ -1017,7 +1017,7 @@
             this.ScriptingContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ScriptingContainer)).EndInit();
             this.ScriptingContainer.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.tabScirptingList.ResumeLayout(false);
             this.tbEvents.ResumeLayout(false);
             this.tbTriggers.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
@@ -1031,12 +1031,12 @@
             this.tabPhysicalProps.ResumeLayout(false);
             this.tabVisualProps.ResumeLayout(false);
             this.tabZones.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.mnuToolBar.ResumeLayout(false);
             this.mnuToolBar.PerformLayout();
             this.ResumeLayout(false);
@@ -1074,7 +1074,7 @@
         private System.Windows.Forms.ComboBox cbDeadthmatch;
         private System.Windows.Forms.TabPage tabScripting;
         private System.Windows.Forms.SplitContainer ScriptingContainer;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabScirptingList;
         private System.Windows.Forms.TabPage tbEvents;
         private System.Windows.Forms.ListBox lstEvents;
         private System.Windows.Forms.TabPage tbTriggers;
@@ -1082,8 +1082,8 @@
         private System.Windows.Forms.PropertyGrid pgScriptProperties;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.ToolStripMenuItem tsmMapProperties;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel tslInformation;
         private System.Windows.Forms.MenuStrip mnuToolBar;
         protected GameScreens.BattleMapScreen.BattleMapViewerControl BattleMapViewer;
@@ -1092,8 +1092,8 @@
         private System.Windows.Forms.Button btnRemoveExtraLayer;
         private System.Windows.Forms.Button btnAddExtraLayer;
         private System.Windows.Forms.Button btnLayerAttributes;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLayerMoveDown;
+        private System.Windows.Forms.Button btnLayerMoveUp;
         private System.Windows.Forms.ListBox lsLayers;
         private System.Windows.Forms.Button btnRemoveSublayer;
         private System.Windows.Forms.Button btnAddSublayer;

@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public ContentManager content;
         private CustomSpriteBatch g;
         private Texture2D sprPixel;
-        public int ViewerIndex;
+        public int ViewerTabIndex;
         public Rectangle TileReplacementZone;
 
         private HScrollBar sclMapWidth;
@@ -29,7 +29,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private ToolStripMenuItem tsmDeleteScript;
         private System.Diagnostics.Stopwatch Timer;
 
-        public MapScriptGUIHelper Helper;
+        public MapScriptGUIHelper ScriptHelper;
+        public IMapHelper Helper;
 
         protected override void Initialize()
         {
@@ -43,8 +44,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             content = new ContentManager(Services, "Content");
             g = new CustomSpriteBatch(new SpriteBatch(GraphicsDevice));
-            Helper = new MapScriptGUIHelper();
-            Helper.Load(content, g, GraphicsDevice);
+            ScriptHelper = new MapScriptGUIHelper();
+            ScriptHelper.Load(content, g, GraphicsDevice);
             sprPixel = content.Load<Texture2D>("Pixel");
 
             this.sclMapWidth = new HScrollBar();
@@ -90,7 +91,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void SetListMapScript(List<MapScript> ListMapScript)
         {
-            Helper.SetListMapScript(ListMapScript);
+            ScriptHelper.SetListMapScript(ListMapScript);
         }
 
         public void RefreshScrollbars()
@@ -147,8 +148,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 GraphicsDevice.Clear(backColor);
 
-                if (ViewerIndex == 2)
-                    Helper.DrawScripts();
+                if (ViewerTabIndex == 2)
+                    ScriptHelper.DrawScripts();
                 else
                     DrawMap();
             }
@@ -187,23 +188,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void tsmDeleteScript_Click(object sender, EventArgs e)
         {
-            Helper.DeleteSelectedScript();
+            ScriptHelper.DeleteSelectedScript();
         }
 
         public void Scripting_MouseDown(MouseEventArgs e)
         {
-            Helper.Select(e.Location);
+            ScriptHelper.Select(e.Location);
         }
 
         public void Scripting_MouseUp(MouseEventArgs e)
         {
-            Helper.Scripting_MouseUp(e.Location, (e.Button & MouseButtons.Left) == MouseButtons.Left, (e.Button & MouseButtons.Right) == MouseButtons.Right);
+            ScriptHelper.Scripting_MouseUp(e.Location, (e.Button & MouseButtons.Left) == MouseButtons.Left, (e.Button & MouseButtons.Right) == MouseButtons.Right);
         }
 
         public void Scripting_MouseMove(MouseEventArgs e)
         {
             int MaxX, MaxY;
-            Helper.MoveScript(e.Location, out MaxX, out MaxY);
+            ScriptHelper.MoveScript(e.Location, out MaxX, out MaxY);
 
             if (MaxX >= Width)
             {
@@ -242,7 +243,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void sclMapWidth_Scroll(object sender, ScrollEventArgs e)
         {
-            switch (ViewerIndex)
+            switch (ViewerTabIndex)
             {
                 case 0:
                 case 1:
@@ -250,14 +251,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case 2:
-                    Helper.ScriptStartingPos.X = e.NewValue;
+                    ScriptHelper.ScriptStartingPos.X = e.NewValue;
                     break;
             }
         }
 
         private void sclMapHeight_Scroll(object sender, ScrollEventArgs e)
         {
-            switch (ViewerIndex)
+            switch (ViewerTabIndex)
             {
                 case 0:
                 case 1:
@@ -265,7 +266,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case 2:
-                    Helper.ScriptStartingPos.Y = e.NewValue;
+                    ScriptHelper.ScriptStartingPos.Y = e.NewValue;
                     break;
             }
         }

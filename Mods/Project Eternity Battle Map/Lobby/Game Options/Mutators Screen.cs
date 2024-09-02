@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayMenuButton = new IUIElement[]
             {
-                AvailableMutatorsScrollbar, ActiveMutatorsScrollbar,
+                //AvailableMutatorsScrollbar, ActiveMutatorsScrollbar,
                 AddButton, AddAllButton, RemoveButton, RemoveAllButton,
             };
         }

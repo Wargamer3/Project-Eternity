@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewMap.CursorPositionVisible = new Vector3(-1, -1, 0);
 
                         BattleMapViewer.SetListMapScript(NewMap.ListMapScript);
-                        BattleMapViewer.Helper.OnSelect = (SelectedObject, RightClick) =>
+                        BattleMapViewer.ScriptHelper.OnSelect = (SelectedObject, RightClick) =>
                         {
                             if (RightClick && SelectedObject != null)
                             {
@@ -306,7 +306,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int S = NewMap.ListMapScript.Count - 1; S >= 0; --S)
                         {
-                            BattleMapViewer.Helper.InitScript(NewMap.ListMapScript[S]);
+                            BattleMapViewer.ScriptHelper.InitScript(NewMap.ListMapScript[S]);
                         }
 
                         for (int T = 0; T < TerrainAttribute.ListTerrainChangeLocation.Count; T++)
