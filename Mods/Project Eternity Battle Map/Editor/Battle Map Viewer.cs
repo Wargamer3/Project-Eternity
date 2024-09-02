@@ -21,6 +21,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private CustomSpriteBatch g;
         private Texture2D sprPixel;
         public int ViewerTabIndex;
+        public int SelectedTilesetIndex;
+        public int SelectedListLayerIndex;
         public Rectangle TileReplacementZone;
 
         private HScrollBar sclMapWidth;
@@ -183,7 +185,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             g.End();
         }
-                
+
+        public int GetRealTopLayerIndex(int LayerIndex)
+        {
+            int RealIndex = 0;
+            int LastTopLayerIndex = -1;
+
+            foreach (object ActiveLayer in Helper.GetLayersAndSubLayers())
+            {
+                if (!(ActiveLayer is ISubMapLayer))
+                {
+                    ++LastTopLayerIndex;
+                }
+                if (RealIndex == LayerIndex)
+                {
+                    return LastTopLayerIndex;
+                }
+
+                ++RealIndex;
+            }
+
+            return LastTopLayerIndex;
+        }
+
         #region Scripting
 
         private void tsmDeleteScript_Click(object sender, EventArgs e)

@@ -319,7 +319,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
 
                         DrawItems(g, Map.LayerManager.ListLayer[L], false);
@@ -333,7 +333,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
 
                         DrawItems(g, Map.LayerManager.ListLayer[L], false);
@@ -346,7 +346,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
                 {
-                    ActiveTileSet.Value.Draw(g, Map, Map.ShowLayerIndex);
+                    ActiveTileSet.Value.Draw(g, Map, 0);
                 }
 
                 DrawItems(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);

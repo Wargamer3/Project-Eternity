@@ -20,6 +20,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveMap.Init();
         }
 
+        public void InitEditor(TabControl tabToolBox)
+        {
+            TabPage tabSpawns = new TabPage();
+            tabSpawns.Location = new System.Drawing.Point(4, 22);
+            tabSpawns.Name = "tabSpawns";
+            tabSpawns.Padding = new System.Windows.Forms.Padding(3);
+            tabSpawns.Size = new System.Drawing.Size(325, 497);
+            tabSpawns.Text = "Spawns";
+            tabSpawns.UseVisualStyleBackColor = true;
+            _ = tabToolBox.Handle;//Hack to allow the Insert to work.
+            tabToolBox.TabPages.Insert(2, tabSpawns);
+        }
+
         public ITileAttributes GetTileEditor()
         {
             return new TileAttributes();

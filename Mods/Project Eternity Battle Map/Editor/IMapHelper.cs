@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public interface IMapHelper
     {
         void InitMap();
+        void InitEditor(TabControl tabToolBox);
         ITileAttributes GetTileEditor();
         Terrain GetTerrain(int X, int Y, int LayerIndex);
         DrawableTile GetTile(int X, int Y, int LayerIndex);

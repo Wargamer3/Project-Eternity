@@ -26,6 +26,10 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 ActiveMap.Load();
             }
 
+            public void InitEditor(TabControl tabToolBox)
+            {
+            }
+
             public ITileAttributes GetTileEditor()
             {
                 return new TileAttributes();

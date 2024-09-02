@@ -69,6 +69,7 @@
     <Compile Include="Default Game Modes Conditions.Designer.cs">
       <DependentUpon>Default Game Modes Conditions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Layer Tab.cs" />
     <Compile Include="Map Statistics.cs">
       <SubType>Form</SubType>
     </Compile>

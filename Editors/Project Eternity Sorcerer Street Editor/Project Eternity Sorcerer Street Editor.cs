@@ -27,6 +27,10 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ActiveMap.Init();
             }
 
+            public void InitEditor(TabControl tabToolBox)
+            {
+            }
+
             public ITileAttributes GetTileEditor()
             {
                 return new TileAttributes();

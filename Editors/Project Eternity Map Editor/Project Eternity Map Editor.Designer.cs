@@ -70,15 +70,6 @@
             this.tbTriggers = new System.Windows.Forms.TabPage();
             this.lstTriggers = new System.Windows.Forms.ListBox();
             this.pgScriptProperties = new System.Windows.Forms.PropertyGrid();
-            this.tabLayers = new System.Windows.Forms.TabPage();
-            this.btnRemoveSublayer = new System.Windows.Forms.Button();
-            this.btnAddSublayer = new System.Windows.Forms.Button();
-            this.btnLayerMoveDown = new System.Windows.Forms.Button();
-            this.btnLayerMoveUp = new System.Windows.Forms.Button();
-            this.lsLayers = new System.Windows.Forms.ListBox();
-            this.btnLayerAttributes = new System.Windows.Forms.Button();
-            this.btnRemoveExtraLayer = new System.Windows.Forms.Button();
-            this.btnAddExtraLayer = new System.Windows.Forms.Button();
             this.tabProps = new System.Windows.Forms.TabPage();
             this.PropsContainer = new System.Windows.Forms.SplitContainer();
             this.tabPropsChoices = new System.Windows.Forms.TabControl();
@@ -120,7 +111,6 @@
             this.tabScirptingList.SuspendLayout();
             this.tbEvents.SuspendLayout();
             this.tbTriggers.SuspendLayout();
-            this.tabLayers.SuspendLayout();
             this.tabProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PropsContainer)).BeginInit();
             this.PropsContainer.Panel1.SuspendLayout();
@@ -163,7 +153,6 @@
             this.tabToolBox.Controls.Add(this.tabTiles);
             this.tabToolBox.Controls.Add(this.tabEventPoints);
             this.tabToolBox.Controls.Add(this.tabScripting);
-            this.tabToolBox.Controls.Add(this.tabLayers);
             this.tabToolBox.Controls.Add(this.tabProps);
             this.tabToolBox.Controls.Add(this.tabZones);
             this.tabToolBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -621,101 +610,6 @@
             this.pgScriptProperties.TabIndex = 0;
             this.pgScriptProperties.ToolbarVisible = false;
             // 
-            // tabLayers
-            // 
-            this.tabLayers.Controls.Add(this.btnRemoveSublayer);
-            this.tabLayers.Controls.Add(this.btnAddSublayer);
-            this.tabLayers.Controls.Add(this.btnLayerMoveDown);
-            this.tabLayers.Controls.Add(this.btnLayerMoveUp);
-            this.tabLayers.Controls.Add(this.lsLayers);
-            this.tabLayers.Controls.Add(this.btnLayerAttributes);
-            this.tabLayers.Controls.Add(this.btnRemoveExtraLayer);
-            this.tabLayers.Controls.Add(this.btnAddExtraLayer);
-            this.tabLayers.Location = new System.Drawing.Point(4, 22);
-            this.tabLayers.Name = "tabLayers";
-            this.tabLayers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLayers.Size = new System.Drawing.Size(325, 497);
-            this.tabLayers.TabIndex = 4;
-            this.tabLayers.Text = "Layers";
-            this.tabLayers.UseVisualStyleBackColor = true;
-            // 
-            // btnRemoveSublayer
-            // 
-            this.btnRemoveSublayer.Location = new System.Drawing.Point(121, 175);
-            this.btnRemoveSublayer.Name = "btnRemoveSublayer";
-            this.btnRemoveSublayer.Size = new System.Drawing.Size(109, 23);
-            this.btnRemoveSublayer.TabIndex = 30;
-            this.btnRemoveSublayer.Text = "Remove Sublayer";
-            this.btnRemoveSublayer.UseVisualStyleBackColor = true;
-            this.btnRemoveSublayer.Click += new System.EventHandler(this.btnRemoveSublayer_Click);
-            // 
-            // btnAddSublayer
-            // 
-            this.btnAddSublayer.Location = new System.Drawing.Point(6, 175);
-            this.btnAddSublayer.Name = "btnAddSublayer";
-            this.btnAddSublayer.Size = new System.Drawing.Size(109, 23);
-            this.btnAddSublayer.TabIndex = 29;
-            this.btnAddSublayer.Text = "Add Sublayer";
-            this.btnAddSublayer.UseVisualStyleBackColor = true;
-            this.btnAddSublayer.Click += new System.EventHandler(this.btnAddSublayer_Click);
-            // 
-            // btnLayerMoveDown
-            // 
-            this.btnLayerMoveDown.Location = new System.Drawing.Point(121, 204);
-            this.btnLayerMoveDown.Name = "btnLayerMoveDown";
-            this.btnLayerMoveDown.Size = new System.Drawing.Size(109, 23);
-            this.btnLayerMoveDown.TabIndex = 28;
-            this.btnLayerMoveDown.Text = "Move Down";
-            this.btnLayerMoveDown.UseVisualStyleBackColor = true;
-            // 
-            // btnLayerMoveUp
-            // 
-            this.btnLayerMoveUp.Location = new System.Drawing.Point(6, 204);
-            this.btnLayerMoveUp.Name = "btnLayerMoveUp";
-            this.btnLayerMoveUp.Size = new System.Drawing.Size(109, 23);
-            this.btnLayerMoveUp.TabIndex = 27;
-            this.btnLayerMoveUp.Text = "Move Up";
-            this.btnLayerMoveUp.UseVisualStyleBackColor = true;
-            // 
-            // lsLayers
-            // 
-            this.lsLayers.FormattingEnabled = true;
-            this.lsLayers.Location = new System.Drawing.Point(6, 6);
-            this.lsLayers.Name = "lsLayers";
-            this.lsLayers.Size = new System.Drawing.Size(228, 134);
-            this.lsLayers.TabIndex = 26;
-            this.lsLayers.SelectedIndexChanged += new System.EventHandler(this.lsLayers_SelectedIndexChanged);
-            // 
-            // btnLayerAttributes
-            // 
-            this.btnLayerAttributes.Location = new System.Drawing.Point(6, 233);
-            this.btnLayerAttributes.Name = "btnLayerAttributes";
-            this.btnLayerAttributes.Size = new System.Drawing.Size(224, 23);
-            this.btnLayerAttributes.TabIndex = 25;
-            this.btnLayerAttributes.Text = "Layer Attributes";
-            this.btnLayerAttributes.UseVisualStyleBackColor = true;
-            this.btnLayerAttributes.Click += new System.EventHandler(this.btnLayerAttributes_Click);
-            // 
-            // btnRemoveExtraLayer
-            // 
-            this.btnRemoveExtraLayer.Location = new System.Drawing.Point(121, 146);
-            this.btnRemoveExtraLayer.Name = "btnRemoveExtraLayer";
-            this.btnRemoveExtraLayer.Size = new System.Drawing.Size(109, 23);
-            this.btnRemoveExtraLayer.TabIndex = 22;
-            this.btnRemoveExtraLayer.Text = "Remove";
-            this.btnRemoveExtraLayer.UseVisualStyleBackColor = true;
-            this.btnRemoveExtraLayer.Click += new System.EventHandler(this.btnRemoveExtraLayer_Click);
-            // 
-            // btnAddExtraLayer
-            // 
-            this.btnAddExtraLayer.Location = new System.Drawing.Point(6, 146);
-            this.btnAddExtraLayer.Name = "btnAddExtraLayer";
-            this.btnAddExtraLayer.Size = new System.Drawing.Size(109, 23);
-            this.btnAddExtraLayer.TabIndex = 21;
-            this.btnAddExtraLayer.Text = "Add";
-            this.btnAddExtraLayer.UseVisualStyleBackColor = true;
-            this.btnAddExtraLayer.Click += new System.EventHandler(this.btnAddExtraLayer_Click);
-            // 
             // tabProps
             // 
             this.tabProps.Controls.Add(this.PropsContainer);
@@ -1020,7 +914,6 @@
             this.tabScirptingList.ResumeLayout(false);
             this.tbEvents.ResumeLayout(false);
             this.tbTriggers.ResumeLayout(false);
-            this.tabLayers.ResumeLayout(false);
             this.tabProps.ResumeLayout(false);
             this.PropsContainer.Panel1.ResumeLayout(false);
             this.PropsContainer.Panel2.ResumeLayout(false);
@@ -1088,15 +981,6 @@
         private System.Windows.Forms.MenuStrip mnuToolBar;
         protected GameScreens.BattleMapScreen.BattleMapViewerControl BattleMapViewer;
         protected ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl TilesetViewer;
-        private System.Windows.Forms.TabPage tabLayers;
-        private System.Windows.Forms.Button btnRemoveExtraLayer;
-        private System.Windows.Forms.Button btnAddExtraLayer;
-        private System.Windows.Forms.Button btnLayerAttributes;
-        private System.Windows.Forms.Button btnLayerMoveDown;
-        private System.Windows.Forms.Button btnLayerMoveUp;
-        private System.Windows.Forms.ListBox lsLayers;
-        private System.Windows.Forms.Button btnRemoveSublayer;
-        private System.Windows.Forms.Button btnAddSublayer;
         private System.Windows.Forms.CheckBox btnMapSwitches;
         private System.Windows.Forms.Label lblMapSwitches;
         private System.Windows.Forms.TabPage tabProps;

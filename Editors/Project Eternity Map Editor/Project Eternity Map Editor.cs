@@ -21,10 +21,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
-        private CheckBox cbShowAllLayers;
         private CheckBox cbShowTerrainType;
         private CheckBox cbShowTerrainHeight;
         private CheckBox cbShow3DObjects;
+
+        LayerTab LayerTab;
 
         protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
         protected IMapHelper Helper;
@@ -81,20 +82,11 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
-            #region cbShowAllLayers
+            LayerTab = new LayerTab();
+            LayerTab.BattleMapViewer = BattleMapViewer;
+            LayerTab.TilesetViewer = TilesetViewer;
 
-            cbShowAllLayers = new CheckBox
-            {
-                Text = "Show All Layers"
-            };
-            //Link a CheckedChanged event to a method.
-            cbShowAllLayers.CheckedChanged += new EventHandler(cbShowAllLayers_CheckedChanged);
-            cbShowAllLayers.Checked = true;
-            //Make it 10 pixel after the last mnuToolBar item.
-            cbShowAllLayers.Padding = new Padding(10, 0, 0, 0);
-            mnuToolBar.Items.Add(new ToolStripControlHost(cbShowAllLayers));
-
-            #endregion
+            tabToolBox.TabPages.Add(LayerTab.InitTab(mnuToolBar));
 
             #region cbShowTerrainType
 
@@ -230,6 +222,9 @@ namespace ProjectEternity.Editors.MapEditor
 
                 btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(NewMap.ListMultiplayerColor[0].R, NewMap.ListMultiplayerColor[0].G, NewMap.ListMultiplayerColor[0].B);
             }
+
+            BattleMapViewer.Helper = Helper;
+            LayerTab.Helper = Helper;
         }
 
         private void DrawInfo()
@@ -479,32 +474,6 @@ namespace ProjectEternity.Editors.MapEditor
                 KeyProcessed = true;
             }
 
-            if (keyData == Keys.Q)
-            {
-                float NextZ = ActiveMap.CursorPosition.Z + 1;
-
-                if (NextZ >= lsLayers.Items.Count)
-                {
-                    NextZ = lsLayers.Items.Count - 1;
-                }
-
-                ActiveMap.CursorPosition.Z = NextZ;
-                SetLayerIndex();
-                KeyProcessed = true;
-            }
-            else if (keyData == Keys.E)
-            {
-                float NextZ = ActiveMap.CursorPosition.Z - 1;
-
-                if (NextZ < 0)
-                {
-                    NextZ = 0;
-                }
-
-                ActiveMap.CursorPosition.Z = NextZ;
-                SetLayerIndex();
-                KeyProcessed = true;
-            }
 
             else if (keyData == Keys.C)
             {
@@ -624,7 +593,7 @@ namespace ProjectEternity.Editors.MapEditor
                             {
                                 for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
                                 {
-                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true, BrushIndex);
+                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                                 }
                             }
                         }
@@ -740,19 +709,19 @@ namespace ProjectEternity.Editors.MapEditor
                     if (e.Button == MouseButtons.Left)
                     {
                         Point TilePos = new Point(MouseX, MouseY);
-                        Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
+                        Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
 
                         TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                         if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                         {
-                            Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, lsLayers.SelectedIndex, true);
+                            Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true);
                         }
                     }
                     else if (e.Button == MouseButtons.Right)
                     {//Get the Tile under the mouse base on the map starting pos.
                         Point TilePos = new Point(MouseX, MouseY);
-                        DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
+                        DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
 
                         TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
                             SelectedTerrain,
@@ -766,7 +735,7 @@ namespace ProjectEternity.Editors.MapEditor
                 //Just create a new Tile.
                 else if (ActiveMap.TileSize.X != 0)
                 {
-                    PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true, BrushIndex);
+                    PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                 }
             }
             //Spawn tab
@@ -876,8 +845,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewSpawnSingleplayer(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
@@ -907,8 +876,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewSpawnMultiplayer(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
@@ -938,8 +907,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewMapSwitchPoint(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             MapSwitchPoint OldEventPoint = null;
 
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
@@ -973,8 +942,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewTeleporterPoint(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             TeleportPoint OldEventPoint = null;
 
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
@@ -1215,97 +1184,14 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.ScriptHelper.CreateScript((MapScript)((ListBox)sender).SelectedItem);
         }
 
-        #region Extra Layers
-
-        private void btnAddExtraLayer_Click(object sender, EventArgs e)
-        {
-            Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-            lsLayers.Items.Add(Helper.CreateNewLayer(PresetTerrain, PresetTile));
-        }
-
-        private void btnRemoveExtraLayer_Click(object sender, EventArgs e)
-        {
-            if (lsLayers.SelectedIndex >= 0)
-            {
-                int Index = lsLayers.SelectedIndex;
-                Helper.RemoveLayer(Index);
-                lsLayers.Items.RemoveAt(Index);
-                lsLayers.SelectedIndex = lsLayers.Items.Count - 1;
-            }
-        }
-
-        private void btnAddSublayer_Click(object sender, EventArgs e)
-        {
-            if (lsLayers.SelectedIndex >= 0)
-            {
-                for (int L = lsLayers.SelectedIndex; L >= 0; --L)
-                {
-                    if (lsLayers.Items[L] is BaseMapLayer)
-                    {
-                        lsLayers.Items.Insert(L + 1, Helper.CreateNewSubLayer((BaseMapLayer)lsLayers.Items[L]));
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void btnRemoveSublayer_Click(object sender, EventArgs e)
-        {
-            if (lsLayers.SelectedIndex >= 0)
-            {
-                for (int L = lsLayers.SelectedIndex; L >= 0; --L)
-                {
-                    if (lsLayers.Items[L] is BaseMapLayer)
-                    {
-                        Helper.RemoveSubLayer((BaseMapLayer)lsLayers.Items[L], (ISubMapLayer)lsLayers.Items[lsLayers.SelectedIndex]);
-                        lsLayers.Items.RemoveAt(lsLayers.SelectedIndex);
-                    }
-                }
-            }
-        }
-
-        private void btnLayerAttributes_Click(object sender, EventArgs e)
-        {
-            if (lsLayers.SelectedIndex >= 0)
-            {
-                Helper.EditLayer(lsLayers.SelectedIndex);
-            }
-        }
-        
-        private void lsLayers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!AllowEvents)
-            {
-                return;
-            }
-
-            if (lsLayers.SelectedIndex >= 0)
-            {
-                if (cbShowAllLayers.Checked)
-                {
-                    ActiveMap.ShowLayerIndex = -1;
-                }
-                else
-                {
-                    ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                    ActiveMap.CursorPosition.Z = ActiveMap.ShowLayerIndex;
-                }
-            }
-        }
-
-        #endregion
-
         #region Props
 
         private void HandleProps(int X, int Y)
         {
             if (ActiveMap.TileSize.X != 0)
             {
-                int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)
@@ -1346,8 +1232,8 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (ActiveMap.TileSize.X != 0)
             {
-                int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
+                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)
@@ -1445,74 +1331,6 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 ActiveMap.TogglePreview(cbPreviewMap.Checked);
             }
-        }
-
-        private void cbShowAllLayers_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ActiveMap != null)
-            {
-                if (cbShowAllLayers.Checked)
-                {
-                    ActiveMap.ShowLayerIndex = -1;
-                }
-                else
-                {
-                    ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                }
-            }
-        }
-
-        private int GetRealTopLayerIndex(int LayerIndex)
-        {
-            int RealIndex = 0;
-            int LastTopLayerIndex = -1;
-
-            foreach (object ActiveLayer in Helper.GetLayersAndSubLayers())
-            {
-                if (!(ActiveLayer is ISubMapLayer))
-                {
-                    ++LastTopLayerIndex;
-                }
-                if (RealIndex == LayerIndex)
-                {
-                    return LastTopLayerIndex;
-                }
-
-                ++RealIndex;
-            }
-
-            return LastTopLayerIndex;
-        }
-
-        private void SetLayerIndex()
-        {
-            AllowEvents = false;
-            int LastTopLayerIndex = -1;
-
-            foreach (object ActiveLayer in Helper.GetLayersAndSubLayers())
-            {
-                if (LastTopLayerIndex == (int)ActiveMap.CursorPosition.Z)
-                {
-                    lsLayers.SelectedIndex = LastTopLayerIndex;
-                    if (!cbShowAllLayers.Checked)
-                    {
-                        ActiveMap.ShowLayerIndex = LastTopLayerIndex;
-                    }
-                    return;
-                }
-
-                if (!(ActiveLayer is ISubMapLayer))
-                {
-                    ++LastTopLayerIndex;
-                }
-            }
-
-            lsLayers.SelectedIndex = LastTopLayerIndex;
-            if (!cbShowAllLayers.Checked)
-            {
-                ActiveMap.ShowLayerIndex = LastTopLayerIndex;
-            }
-            AllowEvents = true;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -1664,7 +1482,7 @@ namespace ProjectEternity.Editors.MapEditor
                             {
                                 for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
-                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, lsLayers.SelectedIndex, 0,
+                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, BattleMapViewer.SelectedListLayerIndex, 0,
                                        0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
                                        0, true);
 
@@ -1865,19 +1683,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
-            #region Layers
-
-            foreach(object ActiveLayer in Helper.GetLayersAndSubLayers())
-            {
-                lsLayers.Items.Add(ActiveLayer);
-            }
-
-            if (lsLayers.Items.Count > 0)
-            {
-                lsLayers.SelectedIndex = 0;
-            }
-
-            #endregion
+            LayerTab.OnMapLoaded();
 
             #region Props
 

@@ -265,7 +265,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            Map.MapEnvironment.Draw(g);
+            //Map.MapEnvironment.Draw(g);
 
             g.End();
 
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.Begin();
 
-            Map.MapEnvironment.EndDraw(g);
+            //Map.MapEnvironment.EndDraw(g);
 
             if (Map.ShowUnits)
             {
@@ -306,7 +306,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
 
                         DrawItems(g, Map.LayerManager.ListLayer[L], false);
@@ -320,7 +320,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
 
                         DrawItems(g, Map.LayerManager.ListLayer[L], false);
@@ -333,7 +333,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
                 {
-                    ActiveTileSet.Value.Draw(g, Map, Map.ShowLayerIndex);
+                    ActiveTileSet.Value.Draw(g, Map, 0);
                 }
 
                 DrawItems(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);

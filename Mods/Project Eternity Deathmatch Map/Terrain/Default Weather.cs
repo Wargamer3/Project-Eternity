@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
                     }
                 }
@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.Draw(g, Map, L);
+                            ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);
                         }
                     }
                 }
@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
                 {
-                    ActiveTileSet.Value.Draw(g, Map, Map.ShowLayerIndex);
+                    ActiveTileSet.Value.Draw(g, Map, 0);
                 }
             }
 
