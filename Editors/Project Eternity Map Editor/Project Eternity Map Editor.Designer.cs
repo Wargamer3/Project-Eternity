@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tbConditions = new System.Windows.Forms.TabPage();
-            this.lstConditions = new System.Windows.Forms.ListBox();
             this.tabToolBox = new System.Windows.Forms.TabControl();
             this.tabTiles = new System.Windows.Forms.TabPage();
             this.btn3DTileAttributes = new System.Windows.Forms.Button();
@@ -42,34 +40,6 @@
             this.btnAddNewTileSetAsBackground = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cboTiles = new System.Windows.Forms.ComboBox();
-            this.tabEventPoints = new System.Windows.Forms.TabPage();
-            this.pgEventPoints = new System.Windows.Forms.PropertyGrid();
-            this.gbSingleplayerSpawns = new System.Windows.Forms.GroupBox();
-            this.btnSpawnAlly = new System.Windows.Forms.CheckBox();
-            this.btnSpawnNeutral = new System.Windows.Forms.CheckBox();
-            this.btnSpawnEnemy = new System.Windows.Forms.CheckBox();
-            this.btnSpawnPlayer = new System.Windows.Forms.CheckBox();
-            this.gbOtherEvents = new System.Windows.Forms.GroupBox();
-            this.btnTeleporters = new System.Windows.Forms.CheckBox();
-            this.lblTeleporters = new System.Windows.Forms.Label();
-            this.btnMapSwitches = new System.Windows.Forms.CheckBox();
-            this.lblMapSwitches = new System.Windows.Forms.Label();
-            this.btnEventSpawn = new System.Windows.Forms.CheckBox();
-            this.lblEventSpawns = new System.Windows.Forms.Label();
-            this.gbMultiplayerSpawns = new System.Windows.Forms.GroupBox();
-            this.btnRemoveDeathmatchTeam = new System.Windows.Forms.Button();
-            this.btnAddDeathmatchTeam = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btnSpawnDM = new System.Windows.Forms.CheckBox();
-            this.cbDeadthmatch = new System.Windows.Forms.ComboBox();
-            this.tabScripting = new System.Windows.Forms.TabPage();
-            this.ScriptingContainer = new System.Windows.Forms.SplitContainer();
-            this.tabScirptingList = new System.Windows.Forms.TabControl();
-            this.tbEvents = new System.Windows.Forms.TabPage();
-            this.lstEvents = new System.Windows.Forms.ListBox();
-            this.tbTriggers = new System.Windows.Forms.TabPage();
-            this.lstTriggers = new System.Windows.Forms.ListBox();
-            this.pgScriptProperties = new System.Windows.Forms.PropertyGrid();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
@@ -78,21 +48,8 @@
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
             this.tsmGlobalEnvironment = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
-            this.tabEventPoints.SuspendLayout();
-            this.gbSingleplayerSpawns.SuspendLayout();
-            this.gbOtherEvents.SuspendLayout();
-            this.gbMultiplayerSpawns.SuspendLayout();
-            this.tabScripting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ScriptingContainer)).BeginInit();
-            this.ScriptingContainer.Panel1.SuspendLayout();
-            this.ScriptingContainer.Panel2.SuspendLayout();
-            this.ScriptingContainer.SuspendLayout();
-            this.tabScirptingList.SuspendLayout();
-            this.tbEvents.SuspendLayout();
-            this.tbTriggers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -101,30 +58,9 @@
             this.mnuToolBar.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tbConditions
-            // 
-            this.tbConditions.Controls.Add(this.lstConditions);
-            this.tbConditions.Location = new System.Drawing.Point(4, 22);
-            this.tbConditions.Name = "tbConditions";
-            this.tbConditions.Size = new System.Drawing.Size(222, 211);
-            this.tbConditions.TabIndex = 0;
-            this.tbConditions.Text = "Conditions";
-            this.tbConditions.UseVisualStyleBackColor = true;
-            // 
-            // lstConditions
-            // 
-            this.lstConditions.FormattingEnabled = true;
-            this.lstConditions.Location = new System.Drawing.Point(0, 0);
-            this.lstConditions.Name = "lstConditions";
-            this.lstConditions.Size = new System.Drawing.Size(222, 199);
-            this.lstConditions.TabIndex = 0;
-            this.lstConditions.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
-            // 
             // tabToolBox
             // 
             this.tabToolBox.Controls.Add(this.tabTiles);
-            this.tabToolBox.Controls.Add(this.tabEventPoints);
-            this.tabToolBox.Controls.Add(this.tabScripting);
             this.tabToolBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabToolBox.Location = new System.Drawing.Point(0, 0);
             this.tabToolBox.Name = "tabToolBox";
@@ -248,338 +184,6 @@
             this.cboTiles.TabIndex = 2;
             this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
             // 
-            // tabEventPoints
-            // 
-            this.tabEventPoints.Controls.Add(this.pgEventPoints);
-            this.tabEventPoints.Controls.Add(this.gbSingleplayerSpawns);
-            this.tabEventPoints.Controls.Add(this.gbOtherEvents);
-            this.tabEventPoints.Controls.Add(this.gbMultiplayerSpawns);
-            this.tabEventPoints.Location = new System.Drawing.Point(4, 22);
-            this.tabEventPoints.Name = "tabEventPoints";
-            this.tabEventPoints.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEventPoints.Size = new System.Drawing.Size(325, 497);
-            this.tabEventPoints.TabIndex = 0;
-            this.tabEventPoints.Text = "Event points";
-            this.tabEventPoints.UseVisualStyleBackColor = true;
-            // 
-            // pgEventPoints
-            // 
-            this.pgEventPoints.Location = new System.Drawing.Point(6, 280);
-            this.pgEventPoints.Name = "pgEventPoints";
-            this.pgEventPoints.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgEventPoints.Size = new System.Drawing.Size(228, 211);
-            this.pgEventPoints.TabIndex = 14;
-            this.pgEventPoints.ToolbarVisible = false;
-            // 
-            // gbSingleplayerSpawns
-            // 
-            this.gbSingleplayerSpawns.Controls.Add(this.btnSpawnAlly);
-            this.gbSingleplayerSpawns.Controls.Add(this.btnSpawnNeutral);
-            this.gbSingleplayerSpawns.Controls.Add(this.btnSpawnEnemy);
-            this.gbSingleplayerSpawns.Controls.Add(this.btnSpawnPlayer);
-            this.gbSingleplayerSpawns.Location = new System.Drawing.Point(7, 6);
-            this.gbSingleplayerSpawns.Name = "gbSingleplayerSpawns";
-            this.gbSingleplayerSpawns.Size = new System.Drawing.Size(226, 86);
-            this.gbSingleplayerSpawns.TabIndex = 13;
-            this.gbSingleplayerSpawns.TabStop = false;
-            this.gbSingleplayerSpawns.Text = "Singleplayer Spawns";
-            // 
-            // btnSpawnAlly
-            // 
-            this.btnSpawnAlly.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnSpawnAlly.BackColor = System.Drawing.Color.Lime;
-            this.btnSpawnAlly.Location = new System.Drawing.Point(165, 19);
-            this.btnSpawnAlly.Name = "btnSpawnAlly";
-            this.btnSpawnAlly.Size = new System.Drawing.Size(47, 47);
-            this.btnSpawnAlly.TabIndex = 15;
-            this.btnSpawnAlly.Text = "A";
-            this.btnSpawnAlly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnSpawnAlly.UseVisualStyleBackColor = false;
-            this.btnSpawnAlly.CheckedChanged += new System.EventHandler(this.btnSpawnAlly_CheckedChanged);
-            // 
-            // btnSpawnNeutral
-            // 
-            this.btnSpawnNeutral.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnSpawnNeutral.BackColor = System.Drawing.Color.Yellow;
-            this.btnSpawnNeutral.Location = new System.Drawing.Point(112, 19);
-            this.btnSpawnNeutral.Name = "btnSpawnNeutral";
-            this.btnSpawnNeutral.Size = new System.Drawing.Size(47, 47);
-            this.btnSpawnNeutral.TabIndex = 14;
-            this.btnSpawnNeutral.Text = "N";
-            this.btnSpawnNeutral.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnSpawnNeutral.UseVisualStyleBackColor = false;
-            this.btnSpawnNeutral.CheckedChanged += new System.EventHandler(this.btnSpawnNeutral_CheckedChanged);
-            // 
-            // btnSpawnEnemy
-            // 
-            this.btnSpawnEnemy.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnSpawnEnemy.BackColor = System.Drawing.Color.Red;
-            this.btnSpawnEnemy.Location = new System.Drawing.Point(59, 19);
-            this.btnSpawnEnemy.Name = "btnSpawnEnemy";
-            this.btnSpawnEnemy.Size = new System.Drawing.Size(47, 47);
-            this.btnSpawnEnemy.TabIndex = 13;
-            this.btnSpawnEnemy.Text = "E";
-            this.btnSpawnEnemy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnSpawnEnemy.UseVisualStyleBackColor = false;
-            this.btnSpawnEnemy.CheckedChanged += new System.EventHandler(this.btnSpawnEnemy_CheckedChanged);
-            // 
-            // btnSpawnPlayer
-            // 
-            this.btnSpawnPlayer.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnSpawnPlayer.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnSpawnPlayer.Location = new System.Drawing.Point(6, 19);
-            this.btnSpawnPlayer.Name = "btnSpawnPlayer";
-            this.btnSpawnPlayer.Size = new System.Drawing.Size(47, 47);
-            this.btnSpawnPlayer.TabIndex = 12;
-            this.btnSpawnPlayer.Text = "P";
-            this.btnSpawnPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnSpawnPlayer.UseVisualStyleBackColor = false;
-            this.btnSpawnPlayer.CheckedChanged += new System.EventHandler(this.btnSpawnPlayer_CheckedChanged);
-            // 
-            // gbOtherEvents
-            // 
-            this.gbOtherEvents.Controls.Add(this.btnTeleporters);
-            this.gbOtherEvents.Controls.Add(this.lblTeleporters);
-            this.gbOtherEvents.Controls.Add(this.btnMapSwitches);
-            this.gbOtherEvents.Controls.Add(this.lblMapSwitches);
-            this.gbOtherEvents.Controls.Add(this.btnEventSpawn);
-            this.gbOtherEvents.Controls.Add(this.lblEventSpawns);
-            this.gbOtherEvents.Location = new System.Drawing.Point(7, 189);
-            this.gbOtherEvents.Name = "gbOtherEvents";
-            this.gbOtherEvents.Size = new System.Drawing.Size(226, 85);
-            this.gbOtherEvents.TabIndex = 12;
-            this.gbOtherEvents.TabStop = false;
-            this.gbOtherEvents.Text = "Other";
-            // 
-            // btnTeleporters
-            // 
-            this.btnTeleporters.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnTeleporters.BackColor = System.Drawing.Color.Firebrick;
-            this.btnTeleporters.Location = new System.Drawing.Point(168, 32);
-            this.btnTeleporters.Name = "btnTeleporters";
-            this.btnTeleporters.Size = new System.Drawing.Size(47, 47);
-            this.btnTeleporters.TabIndex = 14;
-            this.btnTeleporters.Text = "T";
-            this.btnTeleporters.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnTeleporters.UseVisualStyleBackColor = false;
-            this.btnTeleporters.CheckedChanged += new System.EventHandler(this.btnTeleporters_CheckedChanged);
-            // 
-            // lblTeleporters
-            // 
-            this.lblTeleporters.AutoSize = true;
-            this.lblTeleporters.Location = new System.Drawing.Point(165, 16);
-            this.lblTeleporters.Name = "lblTeleporters";
-            this.lblTeleporters.Size = new System.Drawing.Size(60, 13);
-            this.lblTeleporters.TabIndex = 15;
-            this.lblTeleporters.Text = "Teleporters";
-            // 
-            // btnMapSwitches
-            // 
-            this.btnMapSwitches.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnMapSwitches.BackColor = System.Drawing.Color.Moccasin;
-            this.btnMapSwitches.Location = new System.Drawing.Point(89, 32);
-            this.btnMapSwitches.Name = "btnMapSwitches";
-            this.btnMapSwitches.Size = new System.Drawing.Size(47, 47);
-            this.btnMapSwitches.TabIndex = 12;
-            this.btnMapSwitches.Text = "S";
-            this.btnMapSwitches.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnMapSwitches.UseVisualStyleBackColor = false;
-            this.btnMapSwitches.CheckedChanged += new System.EventHandler(this.btnMapSwitches_CheckedChanged);
-            // 
-            // lblMapSwitches
-            // 
-            this.lblMapSwitches.AutoSize = true;
-            this.lblMapSwitches.Location = new System.Drawing.Point(86, 16);
-            this.lblMapSwitches.Name = "lblMapSwitches";
-            this.lblMapSwitches.Size = new System.Drawing.Size(74, 13);
-            this.lblMapSwitches.TabIndex = 13;
-            this.lblMapSwitches.Text = "Map Switches";
-            // 
-            // btnEventSpawn
-            // 
-            this.btnEventSpawn.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnEventSpawn.BackColor = System.Drawing.Color.DarkViolet;
-            this.btnEventSpawn.Location = new System.Drawing.Point(6, 32);
-            this.btnEventSpawn.Name = "btnEventSpawn";
-            this.btnEventSpawn.Size = new System.Drawing.Size(47, 47);
-            this.btnEventSpawn.TabIndex = 11;
-            this.btnEventSpawn.Text = "O";
-            this.btnEventSpawn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnEventSpawn.UseVisualStyleBackColor = false;
-            this.btnEventSpawn.CheckedChanged += new System.EventHandler(this.btnEventSpawn_CheckedChanged);
-            // 
-            // lblEventSpawns
-            // 
-            this.lblEventSpawns.AutoSize = true;
-            this.lblEventSpawns.Location = new System.Drawing.Point(6, 16);
-            this.lblEventSpawns.Name = "lblEventSpawns";
-            this.lblEventSpawns.Size = new System.Drawing.Size(74, 13);
-            this.lblEventSpawns.TabIndex = 11;
-            this.lblEventSpawns.Text = "Event spawns";
-            // 
-            // gbMultiplayerSpawns
-            // 
-            this.gbMultiplayerSpawns.Controls.Add(this.btnRemoveDeathmatchTeam);
-            this.gbMultiplayerSpawns.Controls.Add(this.btnAddDeathmatchTeam);
-            this.gbMultiplayerSpawns.Controls.Add(this.label6);
-            this.gbMultiplayerSpawns.Controls.Add(this.btnSpawnDM);
-            this.gbMultiplayerSpawns.Controls.Add(this.cbDeadthmatch);
-            this.gbMultiplayerSpawns.Location = new System.Drawing.Point(7, 98);
-            this.gbMultiplayerSpawns.Name = "gbMultiplayerSpawns";
-            this.gbMultiplayerSpawns.Size = new System.Drawing.Size(226, 85);
-            this.gbMultiplayerSpawns.TabIndex = 1;
-            this.gbMultiplayerSpawns.TabStop = false;
-            this.gbMultiplayerSpawns.Text = "Multiplayer Spawns";
-            // 
-            // btnRemoveDeathmatchTeam
-            // 
-            this.btnRemoveDeathmatchTeam.Location = new System.Drawing.Point(145, 56);
-            this.btnRemoveDeathmatchTeam.Name = "btnRemoveDeathmatchTeam";
-            this.btnRemoveDeathmatchTeam.Size = new System.Drawing.Size(75, 23);
-            this.btnRemoveDeathmatchTeam.TabIndex = 13;
-            this.btnRemoveDeathmatchTeam.Text = "Remove";
-            this.btnRemoveDeathmatchTeam.UseVisualStyleBackColor = true;
-            this.btnRemoveDeathmatchTeam.Click += new System.EventHandler(this.btnRemoveDeathmatchTeam_Click);
-            // 
-            // btnAddDeathmatchTeam
-            // 
-            this.btnAddDeathmatchTeam.Location = new System.Drawing.Point(62, 56);
-            this.btnAddDeathmatchTeam.Name = "btnAddDeathmatchTeam";
-            this.btnAddDeathmatchTeam.Size = new System.Drawing.Size(75, 23);
-            this.btnAddDeathmatchTeam.TabIndex = 12;
-            this.btnAddDeathmatchTeam.Text = "Add";
-            this.btnAddDeathmatchTeam.UseVisualStyleBackColor = true;
-            this.btnAddDeathmatchTeam.Click += new System.EventHandler(this.btnAddDeathmatchTeam_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 16);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Deathmatch";
-            // 
-            // btnSpawnDM
-            // 
-            this.btnSpawnDM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnSpawnDM.BackColor = System.Drawing.Color.Turquoise;
-            this.btnSpawnDM.Location = new System.Drawing.Point(9, 32);
-            this.btnSpawnDM.Name = "btnSpawnDM";
-            this.btnSpawnDM.Size = new System.Drawing.Size(47, 47);
-            this.btnSpawnDM.TabIndex = 11;
-            this.btnSpawnDM.Text = "1";
-            this.btnSpawnDM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnSpawnDM.UseVisualStyleBackColor = false;
-            this.btnSpawnDM.CheckedChanged += new System.EventHandler(this.btnSpawnDM_CheckedChanged);
-            this.btnSpawnDM.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnSpawnDM_MouseClick);
-            this.btnSpawnDM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnSpawnDM_MouseDown);
-            this.btnSpawnDM.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnSpawnDM_MouseMove);
-            // 
-            // cbDeadthmatch
-            // 
-            this.cbDeadthmatch.FormattingEnabled = true;
-            this.cbDeadthmatch.Location = new System.Drawing.Point(9, 58);
-            this.cbDeadthmatch.Name = "cbDeadthmatch";
-            this.cbDeadthmatch.Size = new System.Drawing.Size(47, 21);
-            this.cbDeadthmatch.TabIndex = 0;
-            this.cbDeadthmatch.SelectedIndexChanged += new System.EventHandler(this.cbDeadthmatch_SelectedIndexChanged);
-            // 
-            // tabScripting
-            // 
-            this.tabScripting.Controls.Add(this.ScriptingContainer);
-            this.tabScripting.Location = new System.Drawing.Point(4, 22);
-            this.tabScripting.Name = "tabScripting";
-            this.tabScripting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScripting.Size = new System.Drawing.Size(325, 497);
-            this.tabScripting.TabIndex = 3;
-            this.tabScripting.Text = "Scripting";
-            this.tabScripting.UseVisualStyleBackColor = true;
-            // 
-            // ScriptingContainer
-            // 
-            this.ScriptingContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ScriptingContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScriptingContainer.Location = new System.Drawing.Point(3, 3);
-            this.ScriptingContainer.Name = "ScriptingContainer";
-            this.ScriptingContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // ScriptingContainer.Panel1
-            // 
-            this.ScriptingContainer.Panel1.Controls.Add(this.tabScirptingList);
-            // 
-            // ScriptingContainer.Panel2
-            // 
-            this.ScriptingContainer.Panel2.Controls.Add(this.pgScriptProperties);
-            this.ScriptingContainer.Size = new System.Drawing.Size(319, 491);
-            this.ScriptingContainer.SplitterDistance = 241;
-            this.ScriptingContainer.TabIndex = 7;
-            // 
-            // tabScirptingList
-            // 
-            this.tabScirptingList.Controls.Add(this.tbEvents);
-            this.tabScirptingList.Controls.Add(this.tbConditions);
-            this.tabScirptingList.Controls.Add(this.tbTriggers);
-            this.tabScirptingList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabScirptingList.Location = new System.Drawing.Point(0, 0);
-            this.tabScirptingList.Multiline = true;
-            this.tabScirptingList.Name = "tabScirptingList";
-            this.tabScirptingList.SelectedIndex = 0;
-            this.tabScirptingList.Size = new System.Drawing.Size(315, 237);
-            this.tabScirptingList.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabScirptingList.TabIndex = 0;
-            this.tabScirptingList.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
-            // 
-            // tbEvents
-            // 
-            this.tbEvents.Controls.Add(this.lstEvents);
-            this.tbEvents.Location = new System.Drawing.Point(4, 22);
-            this.tbEvents.Name = "tbEvents";
-            this.tbEvents.Size = new System.Drawing.Size(307, 211);
-            this.tbEvents.TabIndex = 2;
-            this.tbEvents.Text = "Events";
-            this.tbEvents.UseVisualStyleBackColor = true;
-            // 
-            // lstEvents
-            // 
-            this.lstEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstEvents.FormattingEnabled = true;
-            this.lstEvents.Location = new System.Drawing.Point(0, 0);
-            this.lstEvents.Name = "lstEvents";
-            this.lstEvents.Size = new System.Drawing.Size(307, 211);
-            this.lstEvents.TabIndex = 0;
-            this.lstEvents.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
-            // 
-            // tbTriggers
-            // 
-            this.tbTriggers.Controls.Add(this.lstTriggers);
-            this.tbTriggers.Location = new System.Drawing.Point(4, 22);
-            this.tbTriggers.Name = "tbTriggers";
-            this.tbTriggers.Size = new System.Drawing.Size(222, 211);
-            this.tbTriggers.TabIndex = 1;
-            this.tbTriggers.Text = "Triggers";
-            this.tbTriggers.UseVisualStyleBackColor = true;
-            // 
-            // lstTriggers
-            // 
-            this.lstTriggers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstTriggers.FormattingEnabled = true;
-            this.lstTriggers.Location = new System.Drawing.Point(0, 0);
-            this.lstTriggers.Name = "lstTriggers";
-            this.lstTriggers.Size = new System.Drawing.Size(222, 211);
-            this.lstTriggers.TabIndex = 0;
-            this.lstTriggers.DoubleClick += new System.EventHandler(this.lstChoices_DoubleClick);
-            // 
-            // pgScriptProperties
-            // 
-            this.pgScriptProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pgScriptProperties.Location = new System.Drawing.Point(0, 0);
-            this.pgScriptProperties.Name = "pgScriptProperties";
-            this.pgScriptProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgScriptProperties.Size = new System.Drawing.Size(315, 242);
-            this.pgScriptProperties.TabIndex = 0;
-            this.pgScriptProperties.ToolbarVisible = false;
-            // 
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
@@ -670,24 +274,9 @@
             this.Controls.Add(this.mnuToolBar);
             this.Name = "ProjectEternityMapEditor";
             this.Shown += new System.EventHandler(this.ProjectEternityMapEditor_Shown);
-            this.tbConditions.ResumeLayout(false);
             this.tabToolBox.ResumeLayout(false);
             this.tabTiles.ResumeLayout(false);
             this.tabTiles.PerformLayout();
-            this.tabEventPoints.ResumeLayout(false);
-            this.gbSingleplayerSpawns.ResumeLayout(false);
-            this.gbOtherEvents.ResumeLayout(false);
-            this.gbOtherEvents.PerformLayout();
-            this.gbMultiplayerSpawns.ResumeLayout(false);
-            this.gbMultiplayerSpawns.PerformLayout();
-            this.tabScripting.ResumeLayout(false);
-            this.ScriptingContainer.Panel1.ResumeLayout(false);
-            this.ScriptingContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ScriptingContainer)).EndInit();
-            this.ScriptingContainer.ResumeLayout(false);
-            this.tabScirptingList.ResumeLayout(false);
-            this.tbEvents.ResumeLayout(false);
-            this.tbTriggers.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -703,8 +292,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TabPage tbConditions;
-        private System.Windows.Forms.ListBox lstConditions;
         protected System.Windows.Forms.TabControl tabToolBox;
         private System.Windows.Forms.TabPage tabTiles;
         private System.Windows.Forms.Button btnTileAttributes;
@@ -715,28 +302,7 @@
         private System.Windows.Forms.Button btnAddNewTileSetAsBackground;
         private System.Windows.Forms.Label label1;
         protected System.Windows.Forms.ComboBox cboTiles;
-        private System.Windows.Forms.TabPage tabEventPoints;
-        private System.Windows.Forms.PropertyGrid pgEventPoints;
-        private System.Windows.Forms.GroupBox gbSingleplayerSpawns;
-        private System.Windows.Forms.CheckBox btnSpawnAlly;
-        private System.Windows.Forms.CheckBox btnSpawnNeutral;
-        private System.Windows.Forms.CheckBox btnSpawnEnemy;
-        private System.Windows.Forms.CheckBox btnSpawnPlayer;
-        private System.Windows.Forms.GroupBox gbOtherEvents;
-        private System.Windows.Forms.CheckBox btnEventSpawn;
-        private System.Windows.Forms.Label lblEventSpawns;
-        private System.Windows.Forms.GroupBox gbMultiplayerSpawns;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.CheckBox btnSpawnDM;
-        private System.Windows.Forms.ComboBox cbDeadthmatch;
-        private System.Windows.Forms.TabPage tabScripting;
-        private System.Windows.Forms.SplitContainer ScriptingContainer;
-        private System.Windows.Forms.TabControl tabScirptingList;
-        private System.Windows.Forms.TabPage tbEvents;
-        private System.Windows.Forms.ListBox lstEvents;
-        private System.Windows.Forms.TabPage tbTriggers;
-        private System.Windows.Forms.ListBox lstTriggers;
-        private System.Windows.Forms.PropertyGrid pgScriptProperties;
+
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.ToolStripMenuItem tsmMapProperties;
         private System.Windows.Forms.SplitContainer splitContainer;
@@ -745,13 +311,7 @@
         private System.Windows.Forms.MenuStrip mnuToolBar;
         protected GameScreens.BattleMapScreen.BattleMapViewerControl BattleMapViewer;
         protected ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl TilesetViewer;
-        private System.Windows.Forms.CheckBox btnMapSwitches;
-        private System.Windows.Forms.Label lblMapSwitches;
-        private System.Windows.Forms.Button btnRemoveDeathmatchTeam;
-        private System.Windows.Forms.Button btnAddDeathmatchTeam;
         private System.Windows.Forms.Button btn3DTileAttributes;
-        private System.Windows.Forms.CheckBox btnTeleporters;
-        private System.Windows.Forms.Label lblTeleporters;
         private System.Windows.Forms.ToolStripMenuItem tsmGlobalEnvironment;
     }
 }

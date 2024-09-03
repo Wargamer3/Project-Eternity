@@ -12,6 +12,20 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public interface IMapEditorTab
+    {
+        BattleMapViewerControl BattleMapViewer { get; set; }
+        TilesetViewerControl TilesetViewer { get; set; }
+        IMapHelper Helper { get; set; }
+        TabPage InitTab(MenuStrip mnuToolBar);
+        bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData);
+        void OnMouseDown(MouseEventArgs e);
+        void OnMouseUp(MouseEventArgs e);
+        void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY);
+        void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice);
+        void OnMapLoaded();
+    }
+
     public class BattleMapViewerControl : GraphicsDeviceControl
     {
         public enum ScriptLinkTypes { None, Trigger, Event };
@@ -20,7 +34,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public ContentManager content;
         private CustomSpriteBatch g;
         private Texture2D sprPixel;
-        public int ViewerTabIndex;
         public int SelectedTilesetIndex;
         public int SelectedListLayerIndex;
         public Rectangle TileReplacementZone;
@@ -28,9 +41,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private HScrollBar sclMapWidth;
         private VScrollBar sclMapHeight;
         public ContextMenuStrip cmsScriptMenu;
-        private ToolStripMenuItem tsmDeleteScript;
         private System.Diagnostics.Stopwatch Timer;
 
+        public IMapEditorTab ActiveTab;
         public MapScriptGUIHelper ScriptHelper;
         public IMapHelper Helper;
 
@@ -73,22 +86,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Controls.Add(this.sclMapHeight);
 
             this.cmsScriptMenu = new ContextMenuStrip();
-            this.tsmDeleteScript = new ToolStripMenuItem();
             // 
             // cmsScriptMenu
             // 
-            this.cmsScriptMenu.Items.AddRange(new ToolStripItem[] {
-            this.tsmDeleteScript});
             this.cmsScriptMenu.Name = "cmsScriptMenu";
             this.cmsScriptMenu.Size = new System.Drawing.Size(141, 26);
-
-            // 
-            // tsmDeleteScript
-            //
-            this.tsmDeleteScript.Name = "tsmDeleteScript";
-            this.tsmDeleteScript.Size = new System.Drawing.Size(140, 22);
-            this.tsmDeleteScript.Text = "Delete Script";
-            this.tsmDeleteScript.Click += tsmDeleteScript_Click;
         }
 
         public void SetListMapScript(List<MapScript> ListMapScript)
@@ -150,14 +152,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 GraphicsDevice.Clear(backColor);
 
-                if (ViewerTabIndex == 2)
-                    ScriptHelper.DrawScripts();
+                if (ActiveTab != null)
+                {
+                    ActiveTab.DrawMap(g, GraphicsDevice);
+                }
                 else
+                {
                     DrawMap();
+                }
             }
         }
 
-        private void DrawMap()
+        public void DrawMap()
         {
             GraphicsDevice.Clear(Color.Black);
 
@@ -208,28 +214,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return LastTopLayerIndex;
         }
 
-        #region Scripting
-
-        private void tsmDeleteScript_Click(object sender, EventArgs e)
+        public void UpdateDimensions(int MaxX, int MaxY)
         {
-            ScriptHelper.DeleteSelectedScript();
-        }
-
-        public void Scripting_MouseDown(MouseEventArgs e)
-        {
-            ScriptHelper.Select(e.Location);
-        }
-
-        public void Scripting_MouseUp(MouseEventArgs e)
-        {
-            ScriptHelper.Scripting_MouseUp(e.Location, (e.Button & MouseButtons.Left) == MouseButtons.Left, (e.Button & MouseButtons.Right) == MouseButtons.Right);
-        }
-
-        public void Scripting_MouseMove(MouseEventArgs e)
-        {
-            int MaxX, MaxY;
-            ScriptHelper.MoveScript(e.Location, out MaxX, out MaxY);
-
             if (MaxX >= Width)
             {
                 sclMapWidth.Maximum = MaxX - Size.Width;
@@ -247,31 +233,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 sclMapHeight.Visible = false;
         }
 
-        #endregion
-
-        #region Zones
-
-        public void Zones_MouseDown(MouseEventArgs e)
-        {
-        }
-
-        public void Zones_MouseUp(MouseEventArgs e)
-        {
-        }
-
-        public void Zones_MouseMove(MouseEventArgs e)
-        {
-        }
-
-        #endregion
-
         private void sclMapWidth_Scroll(object sender, ScrollEventArgs e)
         {
-            switch (ViewerTabIndex)
+            switch (0)
             {
                 case 0:
                 case 1:
                     ActiveMap.Camera2DPosition.X = e.NewValue;
+                    ScriptHelper.ScriptStartingPos.X = e.NewValue;
                     break;
 
                 case 2:
@@ -282,7 +251,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void sclMapHeight_Scroll(object sender, ScrollEventArgs e)
         {
-            switch (ViewerTabIndex)
+            switch (0)
             {
                 case 0:
                 case 1:
@@ -303,6 +272,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             ActiveMap.Resize(Width, Height);
+
+            ActiveTab.OnResize();
 
             RefreshScrollbars();
         }

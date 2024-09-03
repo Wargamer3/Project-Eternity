@@ -58,15 +58,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void Resize(int Width, int Height)
         {
-            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.ScissorRectangle.Width, GraphicsDevice.ScissorRectangle.Height, 0, 0, -1f);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            try
+            {
+                Matrix Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.ScissorRectangle.Width, GraphicsDevice.ScissorRectangle.Height, 0, 0, -1f);
+                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
-            Matrix projectionMatrix = HalfPixelOffset * Projection;
+                Matrix projectionMatrix = HalfPixelOffset * Projection;
 
-            fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
+                fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
 
-            MapRenderTarget = new RenderTarget2D(GraphicsDevice, Width, Height, false,
-                GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+                MapRenderTarget = new RenderTarget2D(GraphicsDevice, Width, Height, false,
+                    GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            }
+            catch
+            {
+
+            }
         }
 
         public abstract void SetWorld(Matrix World);

@@ -107,6 +107,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Point GetTileFromBrush(Point MapTileToPaint, int BrushIndex)
         {
+            while (BrushIndex >= ListTileBrush.Count)
+            {
+                ListTileBrush.Add(ListTileBrush[0]);
+            }
+            while (BrushIndex >= ListTileBrushColor.Count)
+            {
+                ListTileBrushColor.Add(Color.FromNonPremultiplied(Core.RandomHelper.Next(255), Core.RandomHelper.Next(255), Core.RandomHelper.Next(255), 255));
+            }
+
             Rectangle TileBrushPosition = ListTileBrush[BrushIndex];
 
             if (ListSmartTilesetPresets.Count > 0)

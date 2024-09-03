@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class ZoneTab
+    class ZoneTab : IMapEditorTab
     {
         private TabPage tabZones;
         private Button btnAddZoneOval;
@@ -15,9 +17,9 @@ namespace ProjectEternity.Editors.MapEditor
         private PropertyGrid pgZoneProperties;
         private Button btnAddZoneFullMap;
 
-        public BattleMapViewerControl BattleMapViewer;
-        public TilesetViewerControl TilesetViewer;
-        public IMapHelper Helper;
+        public BattleMapViewerControl BattleMapViewer { get; set; }
+        public TilesetViewerControl TilesetViewer { get; set; }
+        public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
         public TabPage InitTab(MenuStrip mnuToolBar)
@@ -119,6 +121,32 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnAddZoneRectangle.Click += new System.EventHandler(this.btnAddZoneRectangle_Click);
             this.tabZones.ResumeLayout(false);
             return tabZones;
+        }
+
+        public void OnMapLoaded()
+        {
+        }
+
+        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            return false;
+        }
+
+        public void OnMouseDown(MouseEventArgs e)
+        {
+        }
+
+        public void OnMouseUp(MouseEventArgs e)
+        {
+        }
+
+        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        {
+        }
+
+        public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)
+        {
+            BattleMapViewer.DrawMap();
         }
 
         private void btnAddZoneRectangle_Click(object sender, EventArgs e)

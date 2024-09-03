@@ -261,9 +261,6 @@ namespace ProjectEternity.Editors.WorldMapEditor
                     pnMapPreview_MouseMove(sender, e);
                     break;
 
-                case 2:
-                    BattleMapViewer.Scripting_MouseUp(e);
-                    break;
                 case 3:
                     if (lvZones.SelectedIndices.Count == 0)
                         return;

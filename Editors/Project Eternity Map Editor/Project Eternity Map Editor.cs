@@ -25,7 +25,9 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShowTerrainHeight;
         private CheckBox cbShow3DObjects;
 
-        private List<object> ListTab = new List<object>();
+        private List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
+        EventPointsTab EventPointsTab;
+        ScriptsTab ScriptsTab;
         PropTab PropTab;
         ZoneTab ZoneTab;
         LayerTab LayerTab;
@@ -34,7 +36,6 @@ namespace ProjectEternity.Editors.MapEditor
         protected IMapHelper Helper;
 
         //Spawn point related stuff.
-        private EventPoint ActiveSpawn;
         private System.Drawing.Point LastMousePosition;
 
         protected ITileAttributes TileAttributesEditor;
@@ -83,26 +84,27 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
-            LayerTab = new LayerTab();
-            LayerTab.BattleMapViewer = BattleMapViewer;
-            LayerTab.TilesetViewer = TilesetViewer;
+            EventPointsTab = new EventPointsTab();
+            ListTab.Add(EventPointsTab);
 
+            ScriptsTab = new ScriptsTab();
+            ListTab.Add(ScriptsTab);
+
+            LayerTab = new LayerTab();
             ListTab.Add(LayerTab);
-            tabToolBox.TabPages.Add(LayerTab.InitTab(mnuToolBar));
 
             PropTab = new PropTab();
-            PropTab.BattleMapViewer = BattleMapViewer;
-            PropTab.TilesetViewer = TilesetViewer;
-
             ListTab.Add(PropTab);
-            tabToolBox.TabPages.Add(PropTab.InitTab(mnuToolBar));
 
             ZoneTab = new ZoneTab();
-            ZoneTab.BattleMapViewer = BattleMapViewer;
-            ZoneTab.TilesetViewer = TilesetViewer;
-
             ListTab.Add(ZoneTab);
-            tabToolBox.TabPages.Add(ZoneTab.InitTab(mnuToolBar));
+
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                ActiveTab.BattleMapViewer = BattleMapViewer;
+                ActiveTab.TilesetViewer = TilesetViewer;
+                tabToolBox.TabPages.Add(ActiveTab.InitTab(mnuToolBar));
+            }
 
             #region cbShowTerrainType
 
@@ -211,38 +213,12 @@ namespace ProjectEternity.Editors.MapEditor
             Helper.InitMap();
             ActiveMap.TogglePreview(true);
 
-            BattleMapViewer.SetListMapScript(NewMap.ListMapScript);
-            BattleMapViewer.ScriptHelper.OnSelect = (SelectedObject, RightClick) =>
-            {
-                if (RightClick && SelectedObject != null)
-                {
-                    BattleMapViewer.cmsScriptMenu.Show(BattleMapViewer, PointToClient(Cursor.Position));
-                }
-                else
-                {
-                    pgScriptProperties.SelectedObject = SelectedObject;
-                }
-            };
-
-            for (int S = NewMap.ListMapScript.Count - 1; S >= 0; --S)
-            {
-                BattleMapViewer.ScriptHelper.InitScript(NewMap.ListMapScript[S]);
-            }
-
-            if (NewMap.ListMultiplayerColor.Count > 0)
-            {
-                for (int C = 0; C < NewMap.ListMultiplayerColor.Count; C++)
-                {
-                    cbDeadthmatch.Items.Add(C + 1);
-                }
-
-                btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(NewMap.ListMultiplayerColor[0].R, NewMap.ListMultiplayerColor[0].G, NewMap.ListMultiplayerColor[0].B);
-            }
-
             BattleMapViewer.Helper = Helper;
-            PropTab.Helper = Helper;
-            ZoneTab.Helper = Helper;
-            LayerTab.Helper = Helper;
+
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                ActiveTab.Helper = Helper;
+            }
         }
 
         private void DrawInfo()
@@ -491,11 +467,14 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y - 1) ? 1 : 0;
                 KeyProcessed = true;
             }
-
-
             else if (keyData == Keys.C)
             {
                 cbShow3DObjects.Checked = cbShow3DObjects.Checked;
+            }
+
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                KeyProcessed |= ActiveTab.ProcessCmdKey(ref msg, keyData);
             }
 
             if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
@@ -546,43 +525,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             DrawInfo();
 
-            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
-            {
-                switch (tabToolBox.SelectedIndex)
-                {
-                    case 0:
-                    case 1:
-                    case 4:
-                        Map_MouseMove(e);
-                        break;
-
-                    case 2:
-                        BattleMapViewer.Scripting_MouseMove(e);
-                        break;
-
-                    case 5:
-                        BattleMapViewer.Zones_MouseMove(e);
-                        break;
-                }
-            }
-            else
-            {
-                switch (tabToolBox.SelectedIndex)
-                {
-                    case 0:
-                    case 1:
-
-                        break;
-
-                    case 2:
-                        BattleMapViewer.Scripting_MouseMove(e);
-                        break;
-
-                    case 5:
-                        BattleMapViewer.Zones_MouseMove(e);
-                        break;
-                }
-            }
+            Map_MouseMove(e);
         }
 
         protected virtual void pnMapPreview_MouseUp(object sender, MouseEventArgs e)
@@ -623,17 +566,8 @@ namespace ProjectEternity.Editors.MapEditor
                         BattleMapViewer.TileReplacementZone = new Rectangle();
                         break;
 
-                    case 1:
-                    case 4:
-                        pnMapPreview_MouseMove(sender, e);
-                        break;
-
-                    case 2:
-                        BattleMapViewer.Scripting_MouseUp(e);
-                        break;
-
-                    case 5:
-                        BattleMapViewer.Zones_MouseUp(e);
+                    default:
+                        ListTab[tabToolBox.SelectedIndex - 1].OnMouseUp(e);
                         break;
                 }
             }
@@ -661,15 +595,8 @@ namespace ProjectEternity.Editors.MapEditor
                     }
                     break;
 
-                case 1:
-                    break;
-
-                case 2:
-                    BattleMapViewer.Scripting_MouseDown(e);
-                    break;
-
-                case 5:
-                    BattleMapViewer.Zones_MouseDown(e);
+                default:
+                    ListTab[tabToolBox.SelectedIndex - 1].OnMouseDown(e);
                     break;
             }
         }
@@ -688,8 +615,10 @@ namespace ProjectEternity.Editors.MapEditor
                 return;
 
             //Tile tab
-            if (tabToolBox.SelectedIndex == 0)
+            if (tabToolBox.SelectedIndex == 0 )
             {
+                if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+                { 
                 int BrushIndex = 0;
                 if (e.Button == MouseButtons.Right)
                 {
@@ -697,81 +626,69 @@ namespace ProjectEternity.Editors.MapEditor
                 }
 
                 Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
-                if (TileReplacementZone.Width > 0)
-                {
-                    if (MouseX > TileReplacementZone.X)
+                    if (TileReplacementZone.Width > 0)
                     {
-                        TileReplacementZone.Width = MouseX - TileReplacementZone.X + 1;
-                    }
-                    else if (MouseX < TileReplacementZone.X)
-                    {
-                        int Right = TileReplacementZone.Right;
-                        TileReplacementZone.X = MouseX;
-                        TileReplacementZone.Width = Right - MouseX;
-                    }
-                    if (MouseY > TileReplacementZone.Y)
-                    {
-                        TileReplacementZone.Height = MouseY - TileReplacementZone.Y + 1;
-                    }
-                    else if (MouseY < TileReplacementZone.Y)
-                    {
-                        int Bottom = TileReplacementZone.Bottom;
-                        TileReplacementZone.Y = MouseY;
-                        TileReplacementZone.Height = Bottom - MouseY;
-                    }
-
-                    BattleMapViewer.TileReplacementZone = TileReplacementZone;
-                }
-                else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-                {
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        Point TilePos = new Point(MouseX, MouseY);
-                        Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
-
-                        TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
-
-                        if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+                        if (MouseX > TileReplacementZone.X)
                         {
-                            Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true);
+                            TileReplacementZone.Width = MouseX - TileReplacementZone.X + 1;
+                        }
+                        else if (MouseX < TileReplacementZone.X)
+                        {
+                            int Right = TileReplacementZone.Right;
+                            TileReplacementZone.X = MouseX;
+                            TileReplacementZone.Width = Right - MouseX;
+                        }
+                        if (MouseY > TileReplacementZone.Y)
+                        {
+                            TileReplacementZone.Height = MouseY - TileReplacementZone.Y + 1;
+                        }
+                        else if (MouseY < TileReplacementZone.Y)
+                        {
+                            int Bottom = TileReplacementZone.Bottom;
+                            TileReplacementZone.Y = MouseY;
+                            TileReplacementZone.Height = Bottom - MouseY;
+                        }
+
+                        BattleMapViewer.TileReplacementZone = TileReplacementZone;
+                    }
+                    else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                    {
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            Point TilePos = new Point(MouseX, MouseY);
+                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
+
+                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
+
+                            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+                            {
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true);
+                            }
+                        }
+                        else if (e.Button == MouseButtons.Right)
+                        {//Get the Tile under the mouse base on the map starting pos.
+                            Point TilePos = new Point(MouseX, MouseY);
+                            DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
+
+                            TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
+                                SelectedTerrain,
+                                ActiveMap);
+
+                            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+                            {
+                            }
                         }
                     }
-                    else if (e.Button == MouseButtons.Right)
-                    {//Get the Tile under the mouse base on the map starting pos.
-                        Point TilePos = new Point(MouseX, MouseY);
-                        DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
-
-                        TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
-                            SelectedTerrain,
-                            ActiveMap);
-
-                        if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
-                        {
-                        }
+                    //Just create a new Tile.
+                    else if (ActiveMap.TileSize.X != 0)
+                    {
+                        PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                     }
                 }
-                //Just create a new Tile.
-                else if (ActiveMap.TileSize.X != 0)
-                {
-                    PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
-                }
             }
-            //Spawn tab
-            else if (tabToolBox.SelectedIndex == 1)
+            else
             {
-                if (e.Button == MouseButtons.Left)
-                {
-                    HandleEventPoint(MouseX, MouseY, ActiveSpawn);
-                }
-                else if (e.Button == MouseButtons.Right)
-                {
-                    HandleEventPoint(MouseX, MouseY, null);
-                }
-            }
-            //Spawn tab
-            else if (tabToolBox.SelectedIndex == 4)
-            {
-                PropTab.OnMouseMove(e, MouseX, MouseY);
+                ListTab[tabToolBox.SelectedIndex - 1].OnMouseMove(e, MouseX, MouseY);
             }
         }
 
@@ -829,344 +746,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         #endregion
 
-        #region Spawn points
-
-        private void HandleEventPoint(int X, int Y, EventPoint Spawn)
-        {//If there is an active Spawn and a map loaded.
-            if (ActiveMap.TileSize.X != 0)
-            {
-                if (btnTeleporters.Checked)
-                {
-                    NewTeleporterPoint(X, Y, Spawn);
-                }
-                else if (btnMapSwitches.Checked)
-                {
-                    NewMapSwitchPoint(X, Y, Spawn);
-                }
-                else if (btnSpawnDM.Checked)
-                {
-                    NewSpawnMultiplayer(X, Y, Spawn);
-                }
-                else if (btnSpawnPlayer.Checked || btnSpawnAlly.Checked || btnSpawnEnemy.Checked || btnSpawnNeutral.Checked)
-                {
-                    NewSpawnSingleplayer(X, Y, Spawn);
-                }
-            }
-        }
-
-        private void NewSpawnSingleplayer(int X, int Y, EventPoint Spawn)
-        {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-            if (Spawn != null)
-            {
-                Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
-            }
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListCampaignSpawns.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListCampaignSpawns[S].Position.X == X && TopLayer.ListCampaignSpawns[S].Position.Y == Y)
-                {
-                    //Delete it.
-                    TopLayer.ListCampaignSpawns.RemoveAt(S);
-                    if (Spawn != null)
-                    {
-                        //Add the new one.
-                        TopLayer.ListCampaignSpawns.Add(Spawn);
-                    }
-                    return;
-                }
-            }
-            if (Spawn != null)
-            {
-                //Add the new SpawnPoint.
-                TopLayer.ListCampaignSpawns.Add(Spawn);
-            }
-        }
-
-        private void NewSpawnMultiplayer(int X, int Y, EventPoint Spawn)
-        {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-            if (Spawn != null)
-            {
-                Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
-            }
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListMultiplayerSpawns[S].Position.X == X && TopLayer.ListMultiplayerSpawns[S].Position.Y == Y && (Spawn == null || TopLayer.ListMultiplayerSpawns[S].Tag == Spawn.Tag))
-                {
-                    //Delete it.
-                    TopLayer.ListMultiplayerSpawns.RemoveAt(S);
-                    if (Spawn != null)
-                    {
-                        //Add the new one.
-                        TopLayer.ListMultiplayerSpawns.Add(Spawn);
-                    }
-                    return;
-                }
-            }
-            if (Spawn != null)
-            {
-                //Add the new SpawnPoint.
-                TopLayer.ListMultiplayerSpawns.Add(Spawn);
-            }
-        }
-
-        private void NewMapSwitchPoint(int X, int Y, EventPoint Spawn)
-        {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-            MapSwitchPoint OldEventPoint = null;
-
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListMapSwitchPoint.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListMapSwitchPoint[S].Position.X == X && TopLayer.ListMapSwitchPoint[S].Position.Y == Y)
-                {
-                    OldEventPoint = TopLayer.ListMapSwitchPoint[S];
-                }
-            }
-
-            if (Spawn != null)
-            {
-                if (OldEventPoint == null)
-                {
-                    MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
-                    TopLayer.ListMapSwitchPoint.Add(NewMapSwitchPoint);
-                    pgEventPoints.SelectedObject = NewMapSwitchPoint;
-                }
-                else
-                {
-                    pgEventPoints.SelectedObject = OldEventPoint;
-                }
-            }
-            else if (OldEventPoint != null)
-            {
-                TopLayer.ListMapSwitchPoint.Remove(OldEventPoint);
-            }
-        }
-
-        private void NewTeleporterPoint(int X, int Y, EventPoint Spawn)
-        {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-            TeleportPoint OldEventPoint = null;
-
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListTeleportPoint.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListTeleportPoint[S].Position.X == X && TopLayer.ListTeleportPoint[S].Position.Y == Y)
-                {
-                    OldEventPoint = TopLayer.ListTeleportPoint[S];
-                }
-            }
-
-            if (Spawn != null)
-            {
-                if (OldEventPoint == null)
-                {
-                    TeleportPoint NewMapSwitchPoint = new TeleportPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
-                    TopLayer.ListTeleportPoint.Add(NewMapSwitchPoint);
-                    pgEventPoints.SelectedObject = NewMapSwitchPoint;
-                }
-                else
-                {
-                    pgEventPoints.SelectedObject = OldEventPoint;
-                }
-            }
-            else if (OldEventPoint != null)
-            {
-                TopLayer.ListTeleportPoint.Remove(OldEventPoint);
-            }
-        }
-
-        #region Selection spawn changes
-
-        private void ResetSpawn(CheckBox Sender)
-        {
-            ActiveSpawn = null;
-            if (Sender != btnSpawnPlayer)
-                btnSpawnPlayer.Checked = false;
-            if (Sender != btnSpawnEnemy)
-                btnSpawnEnemy.Checked = false;
-            if (Sender != btnSpawnDM)
-                btnSpawnDM.Checked = false;
-            if (Sender != btnEventSpawn)
-                btnEventSpawn.Checked = false;
-            if (Sender != btnMapSwitches)
-                btnMapSwitches.Checked = false;
-            if (Sender != btnTeleporters)
-                btnTeleporters.Checked = false;
-        }
-
-        private void btnSpawnPlayer_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btnSpawnPlayer.Checked)
-            {
-                //Reset the Spawn buttons
-                ResetSpawn(btnSpawnPlayer);
-                //Set a new ActiveSpawn.
-                ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnPlayer.Text, btnSpawnPlayer.BackColor.R, btnSpawnPlayer.BackColor.G, btnSpawnPlayer.BackColor.B);
-            }
-        }
-
-        private void btnSpawnEnemy_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btnSpawnEnemy.Checked)
-            {
-                //Reset the Spawn buttons
-                ResetSpawn(btnSpawnEnemy);
-                //Set a new ActiveSpawn.
-                ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnEnemy.Text, btnSpawnEnemy.BackColor.R, btnSpawnEnemy.BackColor.G, btnSpawnEnemy.BackColor.B);
-            }
-        }
-
-        private void btnSpawnNeutral_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btnSpawnNeutral.Checked)
-            {
-                //Reset the Spawn buttons
-                ResetSpawn(btnSpawnNeutral);
-                //Set a new ActiveSpawn.
-                ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnNeutral.Text, btnSpawnNeutral.BackColor.R, btnSpawnNeutral.BackColor.G, btnSpawnNeutral.BackColor.B);
-            }
-        }
-
-        private void btnSpawnAlly_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btnSpawnAlly.Checked)
-            {
-                //Reset the Spawn buttons
-                ResetSpawn(btnSpawnAlly);
-                //Set a new ActiveSpawn.
-                ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnAlly.Text, btnSpawnAlly.BackColor.R, btnSpawnAlly.BackColor.G, btnSpawnAlly.BackColor.B);
-            }
-        }
-
-        private void btnSpawnDM_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox CheckBoxSender = (CheckBox)sender;
-            //Reset the Spawn buttons
-            ResetSpawn((CheckBox)sender);
-            //Set a new ActiveSpawn.
-            ActiveSpawn = new EventPoint(Vector3.Zero, CheckBoxSender.Text, CheckBoxSender.BackColor.R, CheckBoxSender.BackColor.G, CheckBoxSender.BackColor.B);
-        }
-
-        #endregion
-
-        #region Multiplayer
-
-        private void btnSpawnDM_MouseMove(object sender, MouseEventArgs e)
-        {//If left clicked and moving, open the team selector.
-            if (e.Button == MouseButtons.Left)
-                cbDeadthmatch.DroppedDown = true;
-        }
-
-        private void btnSpawnDM_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {//If left click and over the little black cursor at the bottom right, open the team selector.
-                if (e.X > btnSpawnDM.Width - 10 && e.Y > btnSpawnDM.Height - 10)
-                    cbDeadthmatch.DroppedDown = true;
-            }
-        }
-
-        private void btnSpawnDM_MouseDown(object sender, MouseEventArgs e)
-        {//If right clicked, open a new color Dialog.
-            if (e.Button == MouseButtons.Right)
-            {
-                ColorDialog CD = new ColorDialog();
-                if (CD.ShowDialog() == DialogResult.OK)
-                {//Change the button color and the color in the list at the same time with the returned color.
-                    btnSpawnDM.BackColor = CD.Color;
-                    int MPColorIndex = Math.Max(0, cbDeadthmatch.SelectedIndex);
-                    ActiveMap.ListMultiplayerColor[MPColorIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
-                    if (btnSpawnDM.Checked)
-                    {
-                        ActiveSpawn.ColorRed = btnSpawnDM.BackColor.R;
-                        ActiveSpawn.ColorGreen = btnSpawnDM.BackColor.G;
-                        ActiveSpawn.ColorRed = btnSpawnDM.BackColor.B;
-                    }
-
-                    foreach (BaseMapLayer ActiveLayer in Helper.GetLayersAndSubLayers())
-                    {
-                        for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
-                        {
-                            if (ActiveLayer.ListMultiplayerSpawns[S].Tag == btnSpawnDM.Text)
-                            {
-                                ActiveLayer.ListMultiplayerSpawns[S].ColorRed = CD.Color.R;
-                                ActiveLayer.ListMultiplayerSpawns[S].ColorGreen = CD.Color.G;
-                                ActiveLayer.ListMultiplayerSpawns[S].ColorBlue = CD.Color.B;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //A new team is selected.
-        private void cbDeadthmatch_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            btnSpawnDM.Text = cbDeadthmatch.Text;//Give the button the selected text.
-            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].R,
-                                                                 ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].G,
-                                                                 ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].B);//Give the button the selected color.
-            btnSpawnDM.Checked = true;//Press the button.
-            //Update the ActiveSpawn.
-            ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnDM.Text, btnSpawnDM.BackColor.R, btnSpawnDM.BackColor.G, btnSpawnDM.BackColor.B);
-        }
-
-        private void btnAddDeathmatchTeam_Click(object sender, EventArgs e)
-        {
-            Color[] ArrayColorChoices = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
-            ActiveMap.ListMultiplayerColor.Add(ArrayColorChoices[Math.Min(ArrayColorChoices.Length - 1, ActiveMap.ListMultiplayerColor.Count)]);
-            cbDeadthmatch.Items.Add(ActiveMap.ListMultiplayerColor.Count);
-        }
-
-        private void btnRemoveDeathmatchTeam_Click(object sender, EventArgs e)
-        {
-            if (cbDeadthmatch.SelectedIndex >= 0)
-            {
-                ActiveMap.ListMultiplayerColor.RemoveAt(cbDeadthmatch.SelectedIndex);
-                cbDeadthmatch.Items.RemoveAt(cbDeadthmatch.SelectedIndex);
-            }
-        }
-
-        #endregion
-
-        private void btnEventSpawn_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btnEventSpawn.Checked)
-            {
-                ResetSpawn((CheckBox)sender);
-                ActiveSpawn = new EventPoint(Vector3.Zero, "O", Color.DarkViolet.R, Color.DarkViolet.G, Color.DarkViolet.B);
-            }
-        }
-        
-        private void btnMapSwitches_CheckedChanged(object sender, EventArgs e)
-        {
-            //Reset the Spawn buttons
-            ResetSpawn(btnMapSwitches);
-            //Set a new ActiveSpawn.
-            ActiveSpawn = new EventPoint(Vector3.Zero, btnMapSwitches.Text, btnMapSwitches.BackColor.R, btnMapSwitches.BackColor.G, btnMapSwitches.BackColor.B);
-        }
-
-        private void btnTeleporters_CheckedChanged(object sender, EventArgs e)
-        {
-            //Reset the Spawn buttons
-            ResetSpawn(btnTeleporters);
-            //Set a new ActiveSpawn.
-            ActiveSpawn = new EventPoint(Vector3.Zero, btnTeleporters.Text, btnTeleporters.BackColor.R, btnTeleporters.BackColor.G, btnTeleporters.BackColor.B);
-        }
-
-        #endregion
-
         #region Scroll bars
 
         private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
@@ -1184,16 +763,6 @@ namespace ProjectEternity.Editors.MapEditor
         }
 
         #endregion
-
-        private void lstChoices_DoubleClick(object sender, EventArgs e)
-        {
-            if (!(sender is ListBox))
-                return;
-            if (((ListBox)sender).SelectedIndex == -1)
-                return;
-
-            BattleMapViewer.ScriptHelper.CreateScript((MapScript)((ListBox)sender).SelectedItem);
-        }
 
         private void cbShowGrid_CheckedChanged(object sender, EventArgs e)
         {
@@ -1511,7 +1080,14 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void tabToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ViewerTabIndex = tabToolBox.SelectedIndex;
+            if (tabToolBox.SelectedIndex > 0)
+            {
+                BattleMapViewer.ActiveTab = ListTab[tabToolBox.SelectedIndex - 1];
+            }
+            else
+            {
+                BattleMapViewer.ActiveTab = null;
+            }
         }
 
         private void ProjectEternityMapEditor_Shown(object sender, EventArgs e)
@@ -1519,9 +1095,6 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap == null)
                 return;
 
-            lstEvents.Items.AddRange(ActiveMap.DicMapEvent.Values.ToArray());
-            lstConditions.Items.AddRange(ActiveMap.DicMapCondition.Values.ToArray());
-            lstTriggers.Items.AddRange(ActiveMap.DicMapTrigger.Values.ToArray());
             BattleMapViewer.RefreshScrollbars();
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);
@@ -1573,8 +1146,10 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
-            PropTab.OnMapLoaded();
-            LayerTab.OnMapLoaded();
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                ActiveTab.OnMapLoaded();
+            }
         }
     }
 }

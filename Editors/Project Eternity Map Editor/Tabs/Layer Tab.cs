@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class LayerTab
+    class LayerTab : IMapEditorTab
     {
         private TabPage tabLayers;
         private Button btnRemoveExtraLayer;
@@ -21,9 +23,9 @@ namespace ProjectEternity.Editors.MapEditor
 
         private bool AllowEvents = true;
 
-        public BattleMapViewerControl BattleMapViewer;
-        public TilesetViewerControl TilesetViewer;
-        public IMapHelper Helper;
+        public BattleMapViewerControl BattleMapViewer { get; set; }
+        public TilesetViewerControl TilesetViewer { get; set; }
+        public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
         public TabPage InitTab(MenuStrip mnuToolBar)
@@ -161,7 +163,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        protected bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
 
             if (keyData == Keys.Q)
@@ -194,6 +196,23 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             return false;
+        }
+
+        public void OnMouseDown(MouseEventArgs e)
+        {
+        }
+
+        public void OnMouseUp(MouseEventArgs e)
+        {
+        }
+
+        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        {
+        }
+
+        public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)
+        {
+            BattleMapViewer.DrawMap();
         }
 
         private void SetLayerIndex()

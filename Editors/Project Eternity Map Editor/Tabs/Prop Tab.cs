@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class PropTab
+    class PropTab : IMapEditorTab
     {
         private TabPage tabProps;
         private SplitContainer PropsContainer;
@@ -18,9 +20,9 @@ namespace ProjectEternity.Editors.MapEditor
         private ListBox lsVisualProps;
         private ListBox lsPhysicalProps;
 
-        public BattleMapViewerControl BattleMapViewer;
-        public TilesetViewerControl TilesetViewer;
-        public IMapHelper Helper;
+        public BattleMapViewerControl BattleMapViewer { get; set; }
+        public TilesetViewerControl TilesetViewer { get; set; }
+        public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
         public TabPage InitTab(MenuStrip mnuToolBar)
@@ -171,6 +173,19 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
+        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            return false;
+        }
+
+        public void OnMouseDown(MouseEventArgs e)
+        {
+        }
+
+        public void OnMouseUp(MouseEventArgs e)
+        {
+        }
+
         public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
         {
             if (e.Button == MouseButtons.Left)
@@ -181,6 +196,11 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 RemoveProps(MouseX, MouseY);
             }
+        }
+
+        public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)
+        {
+            BattleMapViewer.DrawMap();
         }
 
         private void HandleProps(int X, int Y)

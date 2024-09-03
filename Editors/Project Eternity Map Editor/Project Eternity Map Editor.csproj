@@ -77,6 +77,8 @@
       <DependentUpon>Map Statistics.cs</DependentUpon>
     </Compile>
     <Compile Include="Tabs\Prop Tab.cs" />
+    <Compile Include="Tabs\Event Points Tab.cs" />
+    <Compile Include="Tabs\Scripts Tab.cs" />
     <Compile Include="Zone Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +151,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
+      <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">

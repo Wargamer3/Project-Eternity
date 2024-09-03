@@ -298,10 +298,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (Map.ShowLayerIndex == -1)
             {
-                for (int L = 0; L < 1; L++)
-                {
-                    DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
-                }
                 if (Map.IsEditor)
                 {
                     for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
@@ -327,8 +323,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
-
                 foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
                 {
                     ActiveTileSet.Value.Draw(g, Map, 0);
@@ -342,6 +336,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (Map.IsEditor)
                 {
+                    for (int L = 0; L < 1; L++)
+                    {
+                        DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
+                    }
+
                     for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
                     {
                         DrawItems(g, Map.LayerManager.ListLayer[L], false);
@@ -359,6 +358,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
+                if (Map.IsEditor)
+                {
+                    DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
+                }
+
                 DrawItems(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
         }

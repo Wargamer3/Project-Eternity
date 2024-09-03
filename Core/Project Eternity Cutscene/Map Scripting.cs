@@ -312,8 +312,11 @@ namespace ProjectEternity.Core.Scripts
             }
             g.End();
 
-            NewScript.ScriptTexture = ScriptBuffer;
             GraphicsDevice.SetRenderTarget(null);
+            Color[] texdata = new Color[NewScript.ScriptSize.Width * NewScript.ScriptSize.Height];
+            ScriptBuffer.GetData(texdata);
+            NewScript.ScriptTexture = new Texture2D(GraphicsDevice, NewScript.ScriptSize.Width, NewScript.ScriptSize.Height);
+            NewScript.ScriptTexture.SetData(texdata);
         }
 
         public void CreateScript(MapScript OriginalToCopy)
