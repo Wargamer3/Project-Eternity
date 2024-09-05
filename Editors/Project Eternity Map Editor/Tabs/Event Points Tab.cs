@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class EventPointsTab : IMapEditorTab
+    public class EventPointsTab : IMapEditorTab
     {
         private TabPage tabEventPoints;
         private PropertyGrid pgEventPoints;
@@ -33,7 +33,6 @@ namespace ProjectEternity.Editors.MapEditor
         private EventPoint ActiveSpawn;
         
         public BattleMapViewerControl BattleMapViewer { get; set; }
-        public TilesetViewerControl TilesetViewer { get; set; }
         public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
@@ -318,16 +317,16 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public bool TabProcessCmdKey(ref Message msg, Keys keyData)
         {
             return false;
         }
 
-        public void OnMouseDown(MouseEventArgs e)
+        public void TabOnMouseDown(MouseEventArgs e)
         {
         }
 
-        public void OnMouseUp(MouseEventArgs e)
+        public void TabOnMouseUp(MouseEventArgs e)
         {
         }
 
@@ -341,6 +340,17 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 HandleEventPoint(MouseX, MouseY, null);
             }
+        }
+
+        public void OnMapResize(int NewMapSizeX, int NewMapSizeY)
+        {
+        }
+
+
+        public void DrawInfo(ToolStripStatusLabel tslInformation)
+        {
+            tslInformation.Text += " Left click to place a new spawn point";
+            tslInformation.Text += " Right click to remove a spawn point";
         }
 
         public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)

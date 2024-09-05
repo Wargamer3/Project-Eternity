@@ -322,14 +322,5 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             this.Text = BattleMapViewer.ActiveMap.MapName + " - Project Eternity Conquest Map Editor";
         }
-
-        //Open a tile attributes dialog.
-        protected override void btnTileAttributes_Click(object sender, EventArgs e)
-        {
-            TileAttributes TA = new TileAttributes(0);
-            if (TA.ShowDialog() == DialogResult.OK)
-            {//Set the current tile attributes based on the TileAttibutes return.
-            }
-        }
     }
 }

@@ -119,6 +119,7 @@
     <Compile Include="Creature Card Editor.Designer.cs">
       <DependentUpon>Creature Card Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tileset Tab.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Character Editor.resx">

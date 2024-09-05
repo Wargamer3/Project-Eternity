@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class PropTab : IMapEditorTab
+    public class PropTab : IMapEditorTab
     {
         private TabPage tabProps;
         private SplitContainer PropsContainer;
@@ -21,7 +21,6 @@ namespace ProjectEternity.Editors.MapEditor
         private ListBox lsPhysicalProps;
 
         public BattleMapViewerControl BattleMapViewer { get; set; }
-        public TilesetViewerControl TilesetViewer { get; set; }
         public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
@@ -173,16 +172,16 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public bool TabProcessCmdKey(ref Message msg, Keys keyData)
         {
             return false;
         }
 
-        public void OnMouseDown(MouseEventArgs e)
+        public void TabOnMouseDown(MouseEventArgs e)
         {
         }
 
-        public void OnMouseUp(MouseEventArgs e)
+        public void TabOnMouseUp(MouseEventArgs e)
         {
         }
 
@@ -196,6 +195,14 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 RemoveProps(MouseX, MouseY);
             }
+        }
+
+        public void OnMapResize(int NewMapSizeX, int NewMapSizeY)
+        {
+        }
+
+        public void DrawInfo(ToolStripStatusLabel tslInformation)
+        {
         }
 
         public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)

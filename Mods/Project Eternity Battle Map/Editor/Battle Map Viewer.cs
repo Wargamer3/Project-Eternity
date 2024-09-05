@@ -15,15 +15,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public interface IMapEditorTab
     {
         BattleMapViewerControl BattleMapViewer { get; set; }
-        TilesetViewerControl TilesetViewer { get; set; }
         IMapHelper Helper { get; set; }
         TabPage InitTab(MenuStrip mnuToolBar);
-        bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData);
-        void OnMouseDown(MouseEventArgs e);
-        void OnMouseUp(MouseEventArgs e);
+        bool TabProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData);
+        void TabOnMouseDown(MouseEventArgs e);
+        void TabOnMouseUp(MouseEventArgs e);
         void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY);
+        void OnMapResize(int NewMapSizeX, int NewMapSizeY);
         void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice);
         void OnMapLoaded();
+        void DrawInfo(ToolStripStatusLabel tslInformation);
     }
 
     public class BattleMapViewerControl : GraphicsDeviceControl
@@ -46,6 +47,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public IMapEditorTab ActiveTab;
         public MapScriptGUIHelper ScriptHelper;
         public IMapHelper Helper;
+        public TilesetViewerControl TilesetViewer;
 
         protected override void Initialize()
         {
@@ -55,7 +57,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Timer = new System.Diagnostics.Stopwatch();
             Mouse.WindowHandle = this.Handle;
-
 
             content = new ContentManager(Services, "Content");
             g = new CustomSpriteBatch(new SpriteBatch(GraphicsDevice));
@@ -272,8 +273,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             ActiveMap.Resize(Width, Height);
-
-            ActiveTab.OnResize();
 
             RefreshScrollbars();
         }

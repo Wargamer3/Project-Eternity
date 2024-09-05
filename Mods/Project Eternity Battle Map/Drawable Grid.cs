@@ -40,6 +40,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public DrawableTile(Rectangle[] ArraySubTile)
+        {
+            this.ArraySubTile = ArraySubTile;
+            Origin = Rectangle.Empty;
+            TilesetIndex = 0;
+            Terrain3DInfo = null;
+        }
+
         public DrawableTile(Rectangle Origin, int TilesetIndex)
         {
             this.Origin = Origin;

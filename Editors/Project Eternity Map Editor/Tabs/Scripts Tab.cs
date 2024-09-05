@@ -8,7 +8,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class ScriptsTab : IMapEditorTab
+    public class ScriptsTab : IMapEditorTab
     {
         private TabPage tabScripting;
         private SplitContainer ScriptingContainer;
@@ -23,7 +23,6 @@ namespace ProjectEternity.Editors.MapEditor
         private ToolStripMenuItem tsmDeleteScript;
 
         public BattleMapViewerControl BattleMapViewer { get; set; }
-        public TilesetViewerControl TilesetViewer { get; set; }
         public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
@@ -203,7 +202,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.tsmDeleteScript.Click += tsmDeleteScript_Click;
         }
 
-        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public bool TabProcessCmdKey(ref Message msg, Keys keyData)
         {
             return false;
         }
@@ -216,14 +215,22 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.UpdateDimensions(MaxX, MaxY);
         }
 
-        public void OnMouseDown(MouseEventArgs e)
+        public void TabOnMouseDown(MouseEventArgs e)
         {
             BattleMapViewer.ScriptHelper.Select(e.Location);
         }
 
-        public void OnMouseUp(MouseEventArgs e)
+        public void TabOnMouseUp(MouseEventArgs e)
         {
             BattleMapViewer.ScriptHelper.Scripting_MouseUp(e.Location, (e.Button & MouseButtons.Left) == MouseButtons.Left, (e.Button & MouseButtons.Right) == MouseButtons.Right);
+        }
+
+        public void OnMapResize(int NewMapSizeX, int NewMapSizeY)
+        {
+        }
+
+        public void DrawInfo(ToolStripStatusLabel tslInformation)
+        {
         }
 
         public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)

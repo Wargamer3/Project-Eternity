@@ -15,10 +15,6 @@ namespace ProjectEternity.Editors.MapEditor
 {
     public partial class ProjectEternityMapEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { Tile, TileAsBackground, BGM, UnitPosition, Cutscene };
-
-        private ItemSelectionChoices ItemSelectionChoice;
-
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
         private CheckBox cbShowTerrainType;
@@ -26,6 +22,7 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShow3DObjects;
 
         private List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
+        TilesetTab TilesetTab;
         EventPointsTab EventPointsTab;
         ScriptsTab ScriptsTab;
         PropTab PropTab;
@@ -38,11 +35,7 @@ namespace ProjectEternity.Editors.MapEditor
         //Spawn point related stuff.
         private System.Drawing.Point LastMousePosition;
 
-        protected ITileAttributes TileAttributesEditor;
-
         private static DeathmatchParams Params;
-        [DllImport("user32.dll")]
-        public static extern short GetAsyncKeyState(Keys key);
 
         public ProjectEternityMapEditor()
         {
@@ -84,6 +77,9 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
+            TilesetTab = new TilesetTab();
+            ListTab.Add(TilesetTab);
+
             EventPointsTab = new EventPointsTab();
             ListTab.Add(EventPointsTab);
 
@@ -102,7 +98,6 @@ namespace ProjectEternity.Editors.MapEditor
             foreach (IMapEditorTab ActiveTab in ListTab)
             {
                 ActiveTab.BattleMapViewer = BattleMapViewer;
-                ActiveTab.TilesetViewer = TilesetViewer;
                 tabToolBox.TabPages.Add(ActiveTab.InitTab(mnuToolBar));
             }
 
@@ -225,152 +220,13 @@ namespace ProjectEternity.Editors.MapEditor
         {//Draw the mouse position minus the map starting point.
             tslInformation.Text = string.Format("X: {0}, Y: {1}, Z: {2}", ActiveMap.CursorPosition.X, ActiveMap.CursorPosition.Y, ActiveMap.CursorPosition.Z);
 
-            if (ActiveMap.CursorPosition.X < 0 || ActiveMap.CursorPosition.X >= ActiveMap.MapSize.X || ActiveMap.CursorPosition.Y < 0 || ActiveMap.CursorPosition.Y >= ActiveMap.MapSize.Y || cboTiles.Items.Count == 0)
+            if (ActiveMap.CursorPosition.X < 0 || ActiveMap.CursorPosition.X >= ActiveMap.MapSize.X || ActiveMap.CursorPosition.Y < 0 || ActiveMap.CursorPosition.Y >= ActiveMap.MapSize.Y)
                 return;
 
-            Terrain SelectedTerrain = Helper.GetTerrain((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z);
-
-            tslInformation.Text += " " + TileAttributesEditor.GetTerrainName(SelectedTerrain.TerrainTypeIndex);
-
-            if (tabToolBox.SelectedIndex == 0)
-            {
-                //Add the selection informations.
-                if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-                    tslInformation.Text += " Tile attribues";
-                else
-                {
-                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
-                        tslInformation.Text += " Rectangle";
-                    else
-                        tslInformation.Text += " Hold shift to place tiles in a rectangle";
-                    tslInformation.Text += ", hold ctrl to change the selected tile attributes";
-                }
-            }
-            else if (tabToolBox.SelectedIndex == 1)
-            {
-                tslInformation.Text += " Left click to place a new spawn point";
-                tslInformation.Text += " Right click to remove a spawn point";
-            }
+            ListTab[tabToolBox.SelectedIndex].DrawInfo(tslInformation);
 
             tslInformation.Text += ", Arrow keys, Q, E and Shift to move and rotate the camera";
         }
-
-        #region Tile set change
-
-        //Change the ActiveTile to the mouse position.
-        private void TileViewer_Click(object sender, EventArgs e)
-        {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
-            if (ActiveMap.TileSize.X != 0)
-            {
-                int BrushIndex = 0;
-                if (((MouseEventArgs)e).Button == MouseButtons.Right)
-                {
-                    BrushIndex = 1;
-                }
-
-                Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
-                //Set the ActiveTile to the mouse position.
-                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
-                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y),
-                                                     Control.ModifierKeys == Keys.Shift, BrushIndex);
-            }
-        }
-
-        private void cboTiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Initialise the scroll bars.
-            if (ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width >= TilesetViewer.Width)
-            {
-                sclTileWidth.Maximum = ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width - TilesetViewer.Width;
-                sclTileWidth.Visible = true;
-            }
-            else
-                sclTileWidth.Visible = false;
-            if (ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height >= TilesetViewer.Height)
-            {
-                sclTileHeight.Maximum = ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height - TilesetViewer.Height;
-                sclTileHeight.Visible = true;
-            }
-            else
-                sclTileHeight.Visible = false;
-
-            BattleMapViewer.SelectedTilesetIndex = cboTiles.SelectedIndex;
-            TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
-        }
-
-        private void btnAddTile_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapTilesets));
-        }
-
-        private void btnAddNewTileSetAsBackground_Click(object sender, EventArgs e)
-        {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
-            if (ActiveMap.TileSize.X != 0)
-            {
-                ItemSelectionChoice = ItemSelectionChoices.TileAsBackground;
-                ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapTilesetImages));
-            }
-        }
-
-        private void btnRemoveTile_Click(object sender, EventArgs e)
-        {//If there's a tile set selected.
-            if (cboTiles.SelectedIndex >= 0)
-            {//Put the current index in a buffer.
-                int Index = cboTiles.SelectedIndex;
-
-                Helper.RemoveTileset(Index);
-                //Move the current tile set.
-                cboTiles.Items.RemoveAt(Index);
-
-                //Replace the index with a new one.
-                if (cboTiles.Items.Count > 0)
-                {
-                    if (Index >= cboTiles.Items.Count)
-                        cboTiles.SelectedIndex = cboTiles.Items.Count - 1;
-                    else
-                        cboTiles.SelectedIndex = Index;
-                }
-                else
-                    cboTiles.Text = "";
-            }
-        }
-
-        //Open a tile attributes dialog.
-        protected virtual void btnTileAttributes_Click(object sender, EventArgs e)
-        {
-            if (cboTiles.SelectedIndex >= 0)
-            {
-                Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-                Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-                TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
-
-                if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
-                {
-                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TileAttributesEditor.ActiveTerrain;
-                }
-            }
-        }
-
-        private void btn3DTileAttributes_Click(object sender, EventArgs e)
-        {
-            if (ActiveMap.ListTilesetPreset.Count <= 0)
-            {
-                return;
-            }
-
-            Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-            TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
-                ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y],
-                ActiveMap);
-
-            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
-            {
-            }
-        }
-
-        #endregion
 
         #region Map
 
@@ -472,16 +328,7 @@ namespace ProjectEternity.Editors.MapEditor
                 cbShow3DObjects.Checked = cbShow3DObjects.Checked;
             }
 
-            foreach (IMapEditorTab ActiveTab in ListTab)
-            {
-                KeyProcessed |= ActiveTab.ProcessCmdKey(ref msg, keyData);
-            }
-
-            if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
-            {
-                PlaceTile((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z, false, 0);
-                KeyProcessed = true;
-            }
+            KeyProcessed |= ListTab[tabToolBox.SelectedIndex].TabProcessCmdKey(ref msg, keyData);
 
             if (!KeyProcessed)
             {
@@ -525,51 +372,20 @@ namespace ProjectEternity.Editors.MapEditor
 
             DrawInfo();
 
-            Map_MouseMove(e);
+            int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
+            int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
+
+            if (MouseX < 0 || MouseX >= ActiveMap.MapSize.X || MouseY < 0 || MouseY >= ActiveMap.MapSize.Y)
+                return;
+
+            ListTab[tabToolBox.SelectedIndex].OnMouseMove(e, MouseX, MouseY);
         }
 
         protected virtual void pnMapPreview_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
-                switch (tabToolBox.SelectedIndex)
-                {
-                    case 0:
-                        Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
-
-                        if (TileReplacementZone.Width > 0 && ActiveMap.TileSize.X != 0)
-                        {
-                            int BrushIndex = 0;
-                            if (e.Button == MouseButtons.Right)
-                            {
-                                BrushIndex = 1;
-                            }
-
-                            Vector3 MapPreviewStartingPos = new Vector3(
-                                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                                ActiveMap.Camera2DPosition.Z);
-
-                            for (int X = TileReplacementZone.X; X < TileReplacementZone.Right; ++X)
-                            {
-                                for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
-                                {
-                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            pnMapPreview_MouseMove(sender, e);
-                        }
-
-                        BattleMapViewer.TileReplacementZone = new Rectangle();
-                        break;
-
-                    default:
-                        ListTab[tabToolBox.SelectedIndex - 1].OnMouseUp(e);
-                        break;
-                }
+                ListTab[tabToolBox.SelectedIndex].TabOnMouseUp(e);
             }
         }
 
@@ -577,189 +393,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             LastMousePosition = e.Location;
 
-            switch (tabToolBox.SelectedIndex)
-            {
-                case 0:
-
-                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
-                    {
-                        Vector3 MapPreviewStartingPos = new Vector3(
-                            ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                            ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                            ActiveMap.Camera2DPosition.Z);
-
-                        int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-                        int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
-
-                        BattleMapViewer.TileReplacementZone = new Rectangle(MouseX, MouseY, 1, 1);
-                    }
-                    break;
-
-                default:
-                    ListTab[tabToolBox.SelectedIndex - 1].OnMouseDown(e);
-                    break;
-            }
-        }
-
-        private void Map_MouseMove(MouseEventArgs e)
-        {
-            Vector3 MapPreviewStartingPos = new Vector3(
-                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                ActiveMap.Camera2DPosition.Z);
-
-            int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-            int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
-
-            if (MouseX < 0 || MouseX >= ActiveMap.MapSize.X || MouseY < 0 || MouseY >= ActiveMap.MapSize.Y || cboTiles.Items.Count == 0)
-                return;
-
-            //Tile tab
-            if (tabToolBox.SelectedIndex == 0 )
-            {
-                if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
-                { 
-                int BrushIndex = 0;
-                if (e.Button == MouseButtons.Right)
-                {
-                    BrushIndex = 1;
-                }
-
-                Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
-                    if (TileReplacementZone.Width > 0)
-                    {
-                        if (MouseX > TileReplacementZone.X)
-                        {
-                            TileReplacementZone.Width = MouseX - TileReplacementZone.X + 1;
-                        }
-                        else if (MouseX < TileReplacementZone.X)
-                        {
-                            int Right = TileReplacementZone.Right;
-                            TileReplacementZone.X = MouseX;
-                            TileReplacementZone.Width = Right - MouseX;
-                        }
-                        if (MouseY > TileReplacementZone.Y)
-                        {
-                            TileReplacementZone.Height = MouseY - TileReplacementZone.Y + 1;
-                        }
-                        else if (MouseY < TileReplacementZone.Y)
-                        {
-                            int Bottom = TileReplacementZone.Bottom;
-                            TileReplacementZone.Y = MouseY;
-                            TileReplacementZone.Height = Bottom - MouseY;
-                        }
-
-                        BattleMapViewer.TileReplacementZone = TileReplacementZone;
-                    }
-                    else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-                    {
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            Point TilePos = new Point(MouseX, MouseY);
-                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
-
-                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
-
-                            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
-                            {
-                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true);
-                            }
-                        }
-                        else if (e.Button == MouseButtons.Right)
-                        {//Get the Tile under the mouse base on the map starting pos.
-                            Point TilePos = new Point(MouseX, MouseY);
-                            DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
-
-                            TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
-                                SelectedTerrain,
-                                ActiveMap);
-
-                            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
-                            {
-                            }
-                        }
-                    }
-                    //Just create a new Tile.
-                    else if (ActiveMap.TileSize.X != 0)
-                    {
-                        PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
-                    }
-                }
-            }
-            else
-            {
-                ListTab[tabToolBox.SelectedIndex - 1].OnMouseMove(e, MouseX, MouseY);
-            }
-        }
-
-        private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers, int BrushIndex)
-        {
-            if (X < 0 || X >= ActiveMap.MapSize.X
-                || Y < 0 || Y >= ActiveMap.MapSize.Y)
-            {
-                return;
-            }
-
-            Point TilePos = TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y), BrushIndex);
-
-            if (TilesetViewer.ListSmartTilesetPresets.Count > 0)
-            {
-                if (TilePos.Y == 0)
-                {
-                    if (TilePos.X >= TilesetViewer.ListSmartTilesetPresets.Count)
-                    {
-                        return;
-                    }
-
-                    Terrain SmartPresetTerrain = TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTerrain[0, 0];
-                    DrawableTile SmartPresetTile = TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTiles[0, 0];
-
-                    Helper.ReplaceTerrain(X, Y,
-                        SmartPresetTerrain, LayerIndex, ConsiderSubLayers);
-
-                    Helper.ReplaceTile(X, Y,
-                        SmartPresetTile, LayerIndex, ConsiderSubLayers);
-
-                    return;
-                }
-                else
-                {
-                    TilePos.Y -= 1;
-                }
-            }
-
-            if (TilePos.X < 0 || TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
-                || TilePos.Y < 0 || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
-            {
-                return;
-            }
-
-            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-            Helper.ReplaceTerrain(X, Y,
-                PresetTerrain, LayerIndex, ConsiderSubLayers);
-
-            Helper.ReplaceTile(X, Y,
-                PresetTile, LayerIndex, ConsiderSubLayers);
-        }
-
-        #endregion
-
-        #region Scroll bars
-
-        private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
-        {
-            Point DrawOffset = TilesetViewer.DrawOffset;
-            DrawOffset.X = e.NewValue;
-            TilesetViewer.DrawOffset = DrawOffset;
-        }
-
-        private void sclTileHeight_Scroll(object sender, ScrollEventArgs e)
-        {
-            Point DrawOffset = TilesetViewer.DrawOffset;
-            DrawOffset.Y = e.NewValue;
-            TilesetViewer.DrawOffset = DrawOffset;
+            ListTab[tabToolBox.SelectedIndex].TabOnMouseDown(e);
         }
 
         #endregion
@@ -789,174 +423,6 @@ namespace ProjectEternity.Editors.MapEditor
             if (ActiveMap != null)
             {
                 ActiveMap.TogglePreview(cbPreviewMap.Checked);
-            }
-        }
-
-        protected void ListMenuItemsSelected(List<string> Items)
-        {
-            if (Items == null)
-                return;
-
-            for (int I = 0; I < Items.Count; I++)
-            {
-                switch (ItemSelectionChoice)
-                {
-                    case ItemSelectionChoices.Tile:
-                        string TilePath = Items[I];
-                        if (TilePath != null)
-                        {
-                            if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
-
-                                Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, ActiveMap.ListTilesetPreset.Count);
-                                Microsoft.Xna.Framework.Graphics.Texture2D NewTilesetSprite = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName);
-                                for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
-                                {
-                                    string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
-
-                                    if (ActiveMap.ListBattleBackgroundAnimationPath.Contains(NewBattleBackgroundPath))
-                                    {
-                                        byte MapBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.IndexOf(NewBattleBackgroundPath);
-
-                                        for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
-                                        {
-                                            for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
-                                            {
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
-                                                {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = MapBackgroundIndex;
-                                                }
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
-                                                {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = MapBackgroundIndex;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        byte NewBattleBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.Count;
-                                        ActiveMap.ListBattleBackgroundAnimationPath.Add(NewBattleBackgroundPath);
-
-                                        for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
-                                        {
-                                            for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
-                                            {
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
-                                                {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
-                                                }
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
-                                                {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                ActiveMap.ListTilesetPreset.Add(NewTileset);
-                                ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
-
-                                TilesetViewer.ListSmartTilesetPresets.Add(NewTileset);
-                                TilesetViewer.ListTilesetPresetsSprite.Add(NewTilesetSprite);
-                                cboTiles.Items.Add(Name);
-                            }
-                            else
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
-                                Microsoft.Xna.Framework.Graphics.Texture2D Tile = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
-
-                                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
-                                ActiveMap.ListTileSet.Add(Tile);
-                                //Add the file name to the tile combo box.
-                                cboTiles.Items.Add(Name);
-                            }
-
-                            cboTiles.SelectedIndex = ActiveMap.ListTilesetPreset.Count - 1;
-
-                            if (ActiveMap.ListTileSet.Count == 1)
-                            {
-                                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[0].ArrayTerrain[0, 0];
-                                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[0].ArrayTiles[0, 0];
-
-                                //Asign a new tile at the every position, based on its atribtues.
-                                for (int X = ActiveMap.MapSize.X - 1; X >= 0; --X)
-                                {
-                                    for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
-                                    {
-                                        Helper.ReplaceTerrain(X, Y, PresetTerrain, 0, true);
-                                        Helper.ReplaceTile(X, Y, PresetTile, 0, true);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
-                    case ItemSelectionChoices.TileAsBackground:
-                        string TileAsBackgroundPath = Items[I];
-                        if (TileAsBackgroundPath != null)
-                        {
-                            string TileName = Path.GetFileNameWithoutExtension(TileAsBackgroundPath);
-                            if (cboTiles.Items.Contains(TileName))
-                            {
-                                MessageBox.Show("This tile is already listed.\r\n" + TileName);
-                                return;
-                            }
-
-                            ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + TileName));
-                            //Add the file name to the tile combo box.
-                            cboTiles.Items.Add(TileName);
-                            cboTiles.SelectedIndex = ActiveMap.ListTileSet.Count - 1;
-
-                            //Initialise the scroll bars.
-                            if (ActiveMap.ListTileSet.Last().Width >= TilesetViewer.Width)
-                            {
-                                sclTileWidth.Maximum = ActiveMap.ListTileSet.Last().Width - TilesetViewer.Width - 1;
-                                sclTileWidth.Visible = true;
-                            }
-                            else
-                                sclTileWidth.Visible = false;
-                            if (ActiveMap.ListTileSet.Last().Height >= TilesetViewer.Height)
-                            {
-                                sclTileHeight.Maximum = ActiveMap.ListTileSet.Last().Height - TilesetViewer.Height - 1;
-                                sclTileHeight.Visible = true;
-                            }
-                            else
-                                sclTileHeight.Visible = false;
-
-                            //Asign a new tile at the every position, based on its atribtues.
-                            for (int X = ActiveMap.MapSize.X - 1; X >= 0; --X)
-                            {
-                                for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
-                                {
-                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, BattleMapViewer.SelectedListLayerIndex, 0,
-                                       0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
-                                       0, true);
-
-                                    Helper.ReplaceTile(X, Y, 
-                                       new DrawableTile(
-                                           new Rectangle((X % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(0))) * ActiveMap.TileSize.X,
-                                                        (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
-                                                        ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
-                                           cboTiles.Items.Count - 1),
-                                       0, true);
-                                }
-                            }
-                        }
-                        break;
-                }
             }
         }
 
@@ -1034,14 +500,7 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.RealTime;
             }
 
-            Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-            if (cboTiles.SelectedIndex >= 0)
-            {
-                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-                Helper.ResizeTerrain(MapSize.X, MapSize.Y, PresetTerrain, PresetTile);
-            }
+            ListTab[tabToolBox.SelectedIndex].OnMapResize(MapSize.X, MapSize.Y);
 
             BattleMapViewer.RefreshScrollbars();
 
@@ -1080,14 +539,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void tabToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabToolBox.SelectedIndex > 0)
-            {
-                BattleMapViewer.ActiveTab = ListTab[tabToolBox.SelectedIndex - 1];
-            }
-            else
-            {
-                BattleMapViewer.ActiveTab = null;
-            }
+            BattleMapViewer.ActiveTab = ListTab[tabToolBox.SelectedIndex];
         }
 
         private void ProjectEternityMapEditor_Shown(object sender, EventArgs e)
@@ -1103,48 +555,6 @@ namespace ProjectEternity.Editors.MapEditor
             Matrix projectionMatrix = HalfPixelOffset * Projection;
 
             ActiveMap.fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
-
-            #region Tiles
-
-            for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; T++)
-            {
-                ItemInfo Item = GetItemByKey(GUIRootPathMapTilesetImages, ActiveMap.ListTilesetPreset[T].TilesetName);
-
-                if (Item.Path != null)
-                {
-                    if (Item.Name.StartsWith("Tileset presets"))
-                    {
-                        cboTiles.Items.Add(Item.Name);
-                    }
-                    else
-                    {
-                        cboTiles.Items.Add(Item.Name);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(ActiveMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
-                    cboTiles.Items.Add("Default");
-                }
-            }
-
-            if (ActiveMap.ListTilesetPreset.Count > 0)
-            {
-                cboTiles.SelectedIndex = 0;
-            }
-
-            if (cboTiles.SelectedIndex >= 0)
-            {
-                TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
-            }
-            else
-            {
-                TilesetViewer.InitTileset(string.Empty, ActiveMap.TileSize);
-            }
-
-            TileAttributesEditor = Helper.GetTileEditor();
-
-            #endregion
 
             foreach (IMapEditorTab ActiveTab in ListTab)
             {

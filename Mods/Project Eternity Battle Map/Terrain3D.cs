@@ -25,6 +25,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Terrain3D()
         {
             TerrainStyle = TerrainStyles.Flat;
+            FrontFace = new DrawableTile(new Rectangle[0]);
+            BackFace = new DrawableTile(new Rectangle[0]);
+            LeftFace = new DrawableTile(new Rectangle[0]);
+            RightFace = new DrawableTile(new Rectangle[0]);
         }
 
         public Terrain3D(Terrain3D Other)

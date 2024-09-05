@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    class LayerTab : IMapEditorTab
+    public class LayerTab : IMapEditorTab
     {
         private TabPage tabLayers;
         private Button btnRemoveExtraLayer;
@@ -24,7 +24,6 @@ namespace ProjectEternity.Editors.MapEditor
         private bool AllowEvents = true;
 
         public BattleMapViewerControl BattleMapViewer { get; set; }
-        public TilesetViewerControl TilesetViewer { get; set; }
         public IMapHelper Helper { get; set; }
         private BattleMap ActiveMap => BattleMapViewer.ActiveMap;
 
@@ -163,7 +162,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        public bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public bool TabProcessCmdKey(ref Message msg, Keys keyData)
         {
 
             if (keyData == Keys.Q)
@@ -198,15 +197,23 @@ namespace ProjectEternity.Editors.MapEditor
             return false;
         }
 
-        public void OnMouseDown(MouseEventArgs e)
+        public void TabOnMouseDown(MouseEventArgs e)
         {
         }
 
-        public void OnMouseUp(MouseEventArgs e)
+        public void TabOnMouseUp(MouseEventArgs e)
         {
         }
 
         public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        {
+        }
+
+        public void OnMapResize(int NewMapSizeX, int NewMapSizeY)
+        {
+        }
+
+        public void DrawInfo(ToolStripStatusLabel tslInformation)
         {
         }
 
@@ -263,7 +270,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddExtraLayer_Click(object sender, EventArgs e)
         {
-            Rectangle DefaultTile = TilesetViewer.ListTileBrush[0];
+            Rectangle DefaultTile = BattleMapViewer.TilesetViewer.ListTileBrush[0];
             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[BattleMapViewer.SelectedTilesetIndex].ArrayTerrain[DefaultTile.X / ActiveMap.TileSize.X, DefaultTile.Y / ActiveMap.TileSize.Y];
             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[BattleMapViewer.SelectedTilesetIndex].ArrayTiles[DefaultTile.X / ActiveMap.TileSize.X, DefaultTile.Y / ActiveMap.TileSize.Y];
 

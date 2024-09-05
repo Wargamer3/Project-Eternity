@@ -69,6 +69,7 @@
     <Compile Include="Tile Attributes.Designer.cs">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tileset Tab.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Map Statistics.resx">

@@ -79,6 +79,7 @@
     <Compile Include="Tabs\Prop Tab.cs" />
     <Compile Include="Tabs\Event Points Tab.cs" />
     <Compile Include="Tabs\Scripts Tab.cs" />
+    <Compile Include="Tabs\Tileset Tab.cs" />
     <Compile Include="Zone Editor.cs">
       <SubType>Form</SubType>
     </Compile>
