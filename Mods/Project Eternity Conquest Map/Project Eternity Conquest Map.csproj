@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -144,6 +145,7 @@
     <Compile Include="Layers\Weather Rain Size Manager.cs" />
     <Compile Include="Unit Delegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit Spawn.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">

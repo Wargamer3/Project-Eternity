@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
-    class SorcererStreetTilesetTab : MapEditor.TilesetTab
+    class ConquestTilesetTab : MapEditor.TilesetTab
     {
         protected override void btnTileAttributes_Click(object sender, EventArgs e)
         {

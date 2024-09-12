@@ -346,7 +346,6 @@ namespace ProjectEternity.Editors.MapEditor
         {
         }
 
-
         public void DrawInfo(ToolStripStatusLabel tslInformation)
         {
             tslInformation.Text += " Left click to place a new spawn point";

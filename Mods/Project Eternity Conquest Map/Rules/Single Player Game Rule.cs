@@ -60,7 +60,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 int SpawnSquadIndex = 0;
                 for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
                 {
-                    BaseMapLayer ActiveLayer = Owner.LayerManager[L];
+                    MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
+
+                    if (!Owner.IsEditor)
+                    {
+                        for (int S = 0; S < ActiveLayer.ListUnitSpawn.Count; S++)
+                        {
+                            if (ActiveLayer.ListUnitSpawn[S].SpawnPlayer == ActivePlayer.TeamIndex)
+                            {
+                                UnitConquest NewUnit = new UnitConquest(ActiveLayer.ListUnitSpawn[S].UnitPath, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect);
+
+                                NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
+
+                                NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
+                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector2(ActiveLayer.ListUnitSpawn[S].SpawnPositionX, ActiveLayer.ListUnitSpawn[S].SpawnPositionY), L);
+                                ++SpawnSquadIndex;
+                            }
+                        }
+                    }
+
                     for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
                     {
                         if (ActiveLayer.ListCampaignSpawns[S].Tag == PlayerTag)

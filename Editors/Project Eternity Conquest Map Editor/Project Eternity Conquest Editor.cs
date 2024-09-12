@@ -27,8 +27,19 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ActiveMap.Init();
             }
 
-            public void InitEditor(TabControl tabToolBox)
+            public List<IMapEditorTab> GetEditorTabs()
             {
+                List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
+
+                ListTab.Add(new ConquestTilesetTab());
+                ListTab.Add(new EventPointsTab());
+                ListTab.Add(new SpawnsTab());
+                ListTab.Add(new ScriptsTab());
+                ListTab.Add(new LayerTab());
+                ListTab.Add(new PropTab());
+                ListTab.Add(new ZoneTab());
+
+                return ListTab;
             }
 
             public ITileAttributes GetTileEditor()

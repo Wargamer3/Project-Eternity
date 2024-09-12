@@ -45,7 +45,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.tabZones.Controls.Add(this.btnAddZoneRectangle);
             this.tabZones.Location = new System.Drawing.Point(4, 22);
             this.tabZones.Name = "tabZones";
-            this.tabZones.Padding = new System.Windows.Forms.Padding(3);
+            this.tabZones.Padding = new Padding(3);
             this.tabZones.Size = new System.Drawing.Size(325, 497);
             this.tabZones.TabIndex = 6;
             this.tabZones.Text = "Zones";
@@ -65,7 +65,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             this.pgZoneProperties.Location = new System.Drawing.Point(6, 249);
             this.pgZoneProperties.Name = "pgZoneProperties";
-            this.pgZoneProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgZoneProperties.PropertySort = PropertySort.Categorized;
             this.pgZoneProperties.Size = new System.Drawing.Size(228, 242);
             this.pgZoneProperties.TabIndex = 32;
             this.pgZoneProperties.ToolbarVisible = false;
@@ -78,7 +78,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnEditZone.TabIndex = 31;
             this.btnEditZone.Text = "Edit";
             this.btnEditZone.UseVisualStyleBackColor = true;
-            this.btnEditZone.Click += new System.EventHandler(this.btnEditZone_Click);
+            this.btnEditZone.Click += new EventHandler(this.btnEditZone_Click);
             // 
             // btnAddZoneOval
             // 
@@ -88,7 +88,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnAddZoneOval.TabIndex = 30;
             this.btnAddZoneOval.Text = "Add Oval";
             this.btnAddZoneOval.UseVisualStyleBackColor = true;
-            this.btnAddZoneOval.Click += new System.EventHandler(this.btnAddZoneOval_Click);
+            this.btnAddZoneOval.Click += new EventHandler(this.btnAddZoneOval_Click);
             // 
             // lsZones
             // 
@@ -97,7 +97,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.lsZones.Name = "lsZones";
             this.lsZones.Size = new System.Drawing.Size(228, 134);
             this.lsZones.TabIndex = 29;
-            this.lsZones.SelectedIndexChanged += new System.EventHandler(this.lsZones_SelectedIndexChanged);
+            this.lsZones.SelectedIndexChanged += new EventHandler(this.lsZones_SelectedIndexChanged);
             // 
             // btnRemoveZone
             // 
@@ -107,7 +107,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnRemoveZone.TabIndex = 28;
             this.btnRemoveZone.Text = "Remove";
             this.btnRemoveZone.UseVisualStyleBackColor = true;
-            this.btnRemoveZone.Click += new System.EventHandler(this.btnRemoveZone_Click);
+            this.btnRemoveZone.Click += new EventHandler(this.btnRemoveZone_Click);
             // 
             // btnAddZoneRectangle
             // 
@@ -117,8 +117,9 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnAddZoneRectangle.TabIndex = 27;
             this.btnAddZoneRectangle.Text = "Add Rectangle";
             this.btnAddZoneRectangle.UseVisualStyleBackColor = true;
-            this.btnAddZoneRectangle.Click += new System.EventHandler(this.btnAddZoneRectangle_Click);
+            this.btnAddZoneRectangle.Click += new EventHandler(this.btnAddZoneRectangle_Click);
             this.tabZones.ResumeLayout(false);
+
             return tabZones;
         }
 

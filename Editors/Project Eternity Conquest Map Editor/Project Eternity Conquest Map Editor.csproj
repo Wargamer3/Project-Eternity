@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Spawns Tab.cs" />
     <Compile Include="Map Statistics.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +71,12 @@
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </Compile>
     <Compile Include="Tileset Tab.cs" />
+    <Compile Include="Spawn Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Spawn Control.Designer.cs">
+      <DependentUpon>Spawn Control.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Map Statistics.resx">
@@ -81,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tile Attributes.resx">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Spawn Control.resx">
+      <DependentUpon>Spawn Control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +109,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
       <Name>Project Eternity Unit</Name>
@@ -112,6 +127,11 @@
     <ProjectReference Include="..\..\Mods\Project Eternity Conquest Map\Project Eternity Conquest Map.csproj">
       <Project>{e91e70d4-da94-403b-952b-8e3eb630e8e0}</Project>
       <Name>Project Eternity Conquest Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
+      <Project>{EF17745E-1116-499C-94D0-5D3607EE8FA4}</Project>
+      <Name>Project Eternity Unit Conquest</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">

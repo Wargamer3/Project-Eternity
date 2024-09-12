@@ -22,12 +22,6 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShow3DObjects;
 
         private List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
-        TilesetTab TilesetTab;
-        EventPointsTab EventPointsTab;
-        ScriptsTab ScriptsTab;
-        PropTab PropTab;
-        ZoneTab ZoneTab;
-        LayerTab LayerTab;
 
         protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
         protected IMapHelper Helper;
@@ -76,30 +70,6 @@ namespace ProjectEternity.Editors.MapEditor
             mnuToolBar.Items.Add(new ToolStripControlHost(cbPreviewMap));
 
             #endregion
-
-            TilesetTab = new TilesetTab();
-            ListTab.Add(TilesetTab);
-
-            EventPointsTab = new EventPointsTab();
-            ListTab.Add(EventPointsTab);
-
-            ScriptsTab = new ScriptsTab();
-            ListTab.Add(ScriptsTab);
-
-            LayerTab = new LayerTab();
-            ListTab.Add(LayerTab);
-
-            PropTab = new PropTab();
-            ListTab.Add(PropTab);
-
-            ZoneTab = new ZoneTab();
-            ListTab.Add(ZoneTab);
-
-            foreach (IMapEditorTab ActiveTab in ListTab)
-            {
-                ActiveTab.BattleMapViewer = BattleMapViewer;
-                tabToolBox.TabPages.Add(ActiveTab.InitTab(mnuToolBar));
-            }
 
             #region cbShowTerrainType
 
@@ -206,6 +176,14 @@ namespace ProjectEternity.Editors.MapEditor
             NewMap.ListGameScreen = new List<GameScreens.GameScreen>();
             NewMap.Content = BattleMapViewer.content;
             Helper.InitMap();
+            ListTab = Helper.GetEditorTabs();
+
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                ActiveTab.BattleMapViewer = BattleMapViewer;
+                tabToolBox.TabPages.Add(ActiveTab.InitTab(mnuToolBar));
+            }
+
             ActiveMap.TogglePreview(true);
 
             BattleMapViewer.Helper = Helper;

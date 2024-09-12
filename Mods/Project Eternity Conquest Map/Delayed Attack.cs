@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ProjectEternity.Core.Units;
+﻿using System;
+using System.Collections.Generic;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;

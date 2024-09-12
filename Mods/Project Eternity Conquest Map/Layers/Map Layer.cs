@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public bool IsVisible;
         private int ToggleTimer;
         private ConquestMap Map;
+        public List<UnitSpawn> ListUnitSpawn;
 
         public MapLayer(ConquestMap Map, int LayerIndex)
         {
@@ -27,6 +28,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTeleportPoint = new List<TeleportPoint>();
+            ListUnitSpawn = new List<UnitSpawn>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -58,6 +60,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTeleportPoint = new List<TeleportPoint>();
+            ListUnitSpawn = new List<UnitSpawn>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -168,6 +171,15 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ListTeleportPoint.Add(NewTeleportPoint);
             }
 
+            int ListUnitSpawnsCount = BR.ReadInt32();
+            ListUnitSpawn = new List<UnitSpawn>(ListUnitSpawnsCount);
+
+            for (int S = 0; S < ListUnitSpawnsCount; S++)
+            {
+                UnitSpawn NewPoint = new UnitSpawn(BR);
+                ListUnitSpawn.Add(NewPoint);
+            }
+
             int ListPropCount = BR.ReadInt32();
             ListProp = new List<InteractiveProp>(ListPropCount);
             for (int L = 0; L < ListPropCount; L++)
@@ -219,6 +231,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int T = 0; T < ListTeleportPoint.Count; T++)
             {
                 ListTeleportPoint[T].Save(BW);
+            }
+            BW.Write(ListUnitSpawn.Count);
+            for (int T = 0; T < ListUnitSpawn.Count; T++)
+            {
+                ListUnitSpawn[T].Save(BW);
             }
 
             BW.Write(ListProp.Count);

@@ -79,6 +79,12 @@
     <Compile Include="Battle Context.cs" />
     <Compile Include="Battle Params.cs" />
     <Compile Include="Editor\AttackSelector.cs" />
+    <Compile Include="Editor\Tabs\Event Points Tab.cs" />
+    <Compile Include="Editor\Tabs\Layer Tab.cs" />
+    <Compile Include="Editor\Tabs\Prop Tab.cs" />
+    <Compile Include="Editor\Tabs\Scripts Tab.cs" />
+    <Compile Include="Editor\Tabs\Tileset Tab.cs" />
+    <Compile Include="Editor\Tabs\Zone Tab.cs" />
     <Compile Include="Editor\Tile Attributes 3D.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,12 @@
     </Compile>
     <Compile Include="Editor\Tile Viewer 3D.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\Zone Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Zone Editor.Designer.cs">
+      <DependentUpon>Zone Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Environment\BattleMapOverlay.cs" />
     <Compile Include="Environment\Battle Map Light.cs" />
@@ -398,6 +410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Tile Attributes.resx">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Zone Editor.resx">
+      <DependentUpon>Zone Editor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

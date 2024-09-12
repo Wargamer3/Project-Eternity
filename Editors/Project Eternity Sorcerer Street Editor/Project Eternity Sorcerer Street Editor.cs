@@ -27,8 +27,18 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ActiveMap.Init();
             }
 
-            public void InitEditor(TabControl tabToolBox)
+            public List<IMapEditorTab> GetEditorTabs()
             {
+                List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
+
+                ListTab.Add(new TilesetTab());
+                ListTab.Add(new EventPointsTab());
+                ListTab.Add(new ScriptsTab());
+                ListTab.Add(new LayerTab());
+                ListTab.Add(new PropTab());
+                ListTab.Add(new ZoneTab());
+
+                return ListTab;
             }
 
             public ITileAttributes GetTileEditor()
