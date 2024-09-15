@@ -445,6 +445,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Sorcerer S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Graphics", "Core\Project Eternity Graphics\Project Eternity Graphics.csproj", "{6F5B12C0-09A2-43F8-B564-8786ADE58E59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Conquest Building Editor", "Editors\Project Eternity Conquest Building Editor\Project Eternity Conquest Building Editor.csproj", "{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -889,6 +891,9 @@ Global
 		{6F5B12C0-09A2-43F8-B564-8786ADE58E59}.Debug|x86.ActiveCfg = Debug|x86
 		{6F5B12C0-09A2-43F8-B564-8786ADE58E59}.Debug|x86.Build.0 = Debug|x86
 		{6F5B12C0-09A2-43F8-B564-8786ADE58E59}.Release|x86.ActiveCfg = Release|x86
+		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Debug|x86.ActiveCfg = Debug|x86
+		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Debug|x86.Build.0 = Debug|x86
+		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1007,6 +1012,7 @@ Global
 		{197774AE-DC07-4B0B-813A-164E26817294} = {82632809-01BF-4D8F-AF71-9C4AE291C643}
 		{EBCAC523-FE03-4CBA-B729-FAFBE9E22E9C} = {B7DECFC1-4C7D-41F1-B151-91C9734B5216}
 		{6F5B12C0-09A2-43F8-B564-8786ADE58E59} = {DDBEFB7A-32E0-4FF3-BE92-66E31BE553D1}
+		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8} = {F774D98B-8C76-48C4-BD9A-AFB29F5E728C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDDE4437-1061-4E3A-8C8F-A1F2AA9F76A8}

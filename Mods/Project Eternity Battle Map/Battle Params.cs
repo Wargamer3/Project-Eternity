@@ -60,6 +60,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             DicMutator = new Dictionary<string, Mutator>();
 
+            if (!Directory.Exists("Units"))
+            {
+                return;
+            }
+
             LoadUnits();
             LoadEffects();
             LoadSkillRequirements();
