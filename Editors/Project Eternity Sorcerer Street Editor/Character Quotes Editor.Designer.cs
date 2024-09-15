@@ -205,6 +205,7 @@
             this.btnAddVersusQuote.TabIndex = 5;
             this.btnAddVersusQuote.Text = "Add versus quote";
             this.btnAddVersusQuote.UseVisualStyleBackColor = true;
+            this.btnAddVersusQuote.Click += new System.EventHandler(this.btnAddVersusQuote_Click_1);
             // 
             // gbMapQuotes
             // 

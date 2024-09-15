@@ -14,6 +14,8 @@ namespace ProjectEternity.Core.Item
         public readonly Dictionary<string, string> DicSubTag;
         public List<DynamicTextPart> ListSubTextSection;
 
+        public bool Rainbow;
+        public bool Wave;
         public Vector2 Position;
         public float MaxWidth;
         public float MaxHeight;
@@ -48,7 +50,7 @@ namespace ProjectEternity.Core.Item
 
         public void ProcessInternalText(string TextToParse, ref int i)
         {
-            while (TextToParse[i] == '{')
+            while (TextToParse[i] == '{' && i + 1 < TextToParse.Length && TextToParse[i + 1] != '{')
             {
                 int j = i + 1;
                 ++i;

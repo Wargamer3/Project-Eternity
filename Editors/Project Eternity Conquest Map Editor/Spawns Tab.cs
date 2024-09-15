@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Drawing;
 using System.Windows.Forms;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units.Conquest;

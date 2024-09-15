@@ -19,119 +19,119 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
             ListViewItem NewItem;
             NewItem = new ListViewItem("Introduction");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Alliance Introduction");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Alliance Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Winning Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Winning Alliance Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Losing Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Major Losing Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Losing Alliance Banter");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Territory claiming");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Small chain");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Large chain");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Territory Level Up");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Territory High Level Up");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Successful Invasion");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Failed Invasion");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Successful Defense");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Failed Defense");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Small Money Loss");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Medium Money Loss");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Large Money Loss");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Small Money Gains");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Big Money Gains");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Opponent Achieve Objective");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Opponent Achieve Objective Alliance");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Achieve Objective");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Achieve Objective Alliance");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Won the match");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
 
             NewItem = new ListViewItem("Won Alliance match");
-            NewItem.Tag = new Character.QuoteSet();
+            NewItem.Tag = new QuoteSet();
             lvBaseQuotes.Items.Add(NewItem);
         }
 
@@ -225,6 +225,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 lstQuotes.Items.Add("New Quote");
                 BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote.Add("New Quote");
                 BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListPortraitPath.Add(string.Empty);
+                lstQuotes.SelectedIndex = lstQuotes.Items.Count - 1;
             }
         }
 
@@ -263,6 +264,11 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 ItemSelectionChoice = ItemSelectionChoices.Portrait;
                 ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathVisualNovelCharacters));
             }
+        }
+
+        private void btnAddVersusQuote_Click_1(object sender, EventArgs e)
+        {
+
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

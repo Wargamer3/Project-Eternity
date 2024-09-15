@@ -16,11 +16,8 @@ namespace ProjectEternity.Core.Item
         public new RegularText Parent;
         public float Offset = 0;
         public bool IsAColumn = false;
-        public bool Rainbow;
-        public bool Wave;
         public bool Centered;
         public Color TextColor;
-        int CurrentValue = 0;
 
         public RegularText(DynamicText Owner, string OriginalText)
              : base(Owner, OriginalText, "Text:")
@@ -294,8 +291,6 @@ namespace ProjectEternity.Core.Item
 
         public override void Update(GameTime gameTime)
         {
-            ++CurrentValue;
-
             foreach (DynamicTextPart ActiveSubSection in ListSubTextSection)
             {
                 ActiveSubSection.Update(gameTime);
@@ -424,7 +419,7 @@ namespace ProjectEternity.Core.Item
                         Color CurrentColor = Color.White;
                         if (Rainbow)
                         {
-                            float ColorValue = CurrentValue + i * 30;
+                            float ColorValue = (float)(DynamicText.AnimationProgression + DynamicText.CurrentDrawnCharacterIndex * 30);
                             CurrentColor = IncreaseHueBy(Color.Red, ColorValue);
                         }
 
@@ -432,10 +427,12 @@ namespace ProjectEternity.Core.Item
 
                         if (Wave)
                         {
-                            YOffset = (float)Math.Sin(i + (CurrentValue / 10f)) * 10;
+                            YOffset = (float)Math.Sin(DynamicText.CurrentDrawnCharacterIndex + (DynamicText.AnimationProgression / 10f)) * 10;
                         }
 
                         g.DrawString(fntTextFont, ActiveChar, ActiveLine.Key + Offset + new Vector2(fntTextFont.MeasureString(ActiveLine.Value.Substring(0, i)).X, YOffset), CurrentColor);
+
+                        ++DynamicText.CurrentDrawnCharacterIndex;
                     }
                 }
             }

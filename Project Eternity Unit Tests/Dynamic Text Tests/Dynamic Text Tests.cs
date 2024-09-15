@@ -27,6 +27,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new ImagelessIconProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             DynamicTextPart FirstImage = DynamicTextTest.Root.ListSubTextSection[1];
@@ -49,6 +50,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new ImagelessIconProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             DynamicTextPart FirstImage = DynamicTextTest.Root.ListSubTextSection[1];
@@ -71,6 +73,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new ImagelessIconProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             DynamicTextPart FirstImage = DynamicTextTest.Root.ListSubTextSection[1];
@@ -89,6 +92,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new ImagelessIconProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             Assert.AreEqual(3, DynamicTextTest.Root.ListSubTextSection.Count);
@@ -127,6 +131,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new FontlessRegularTextProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             Assert.AreEqual(2, DynamicTextTest.Root.ListSubTextSection.Count);
@@ -146,12 +151,34 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
             DynamicTextTest.ListProcessor.Add(new FontlessRegularTextProcessor(DynamicTextTest));
             DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
             DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
             DynamicTextTest.ParseText(TestText);
 
             DynamicTextPart FirstImage = DynamicTextTest.Root.ListSubTextSection[0];
             Assert.AreEqual(0, FirstImage.Position.X);
             Assert.AreEqual(0, FirstImage.Position.Y);
             Assert.AreEqual(4, FirstImage.DicSubTag.Count);
+        }
+
+        [TestMethod]
+        public void TestTextRainbowPlayerName()
+        {
+            string TestText = "{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}{{Player:Self}}{{Icon:Fire}}More super long text}}{{Player:Ally}}{{Icon:Fire}} with other icon";
+            DynamicText DynamicTextTest = new DynamicText();
+            DynamicTextTest.TextMaxWidthInPixel = 300;
+            DynamicTextTest.LineHeight = 20;
+            DynamicTextTest.ListProcessor.Add(new PlayerNameTextProcessor(DynamicTextTest));
+            DynamicTextTest.ListProcessor.Add(new FontlessRegularTextProcessor(DynamicTextTest));
+            DynamicTextTest.ListProcessor.Add(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.SetDefaultProcessor(new FontlessDefaultTextProcessor(DynamicTextTest));
+            DynamicTextTest.Load(null);
+            DynamicTextTest.ParseText(TestText);
+
+            DynamicTextPart FirstImage = DynamicTextTest.Root.ListSubTextSection[0];
+            Assert.AreEqual(0, FirstImage.Position.X);
+            Assert.AreEqual(0, FirstImage.Position.Y);
+            Assert.AreEqual(4, FirstImage.DicSubTag.Count);
+            Assert.AreEqual("Success", FirstImage.ListSubTextSection[0].OriginalText);
         }
     }
 }

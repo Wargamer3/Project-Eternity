@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public enum QuoteEventTypes { TerritoryCommand, BattleEnd, TerritoryClaim }
         public enum QuoteTypes { Introduction, Banter, TerritoryClaim, Chain, TerritoryLevelUp, SuccessfulInvasion, FailedInvasion, Defense, MoneyGain, MoneyLoss, ObjectiveAchieved, Won }
 
-        private QuoteSetVersus QuoteSet;
+        private List<QuoteSetVersus> QuoteSet;
         private Texture2D sprPortrait;
 
         private static DynamicText Text;
@@ -26,10 +26,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelDialogPhase(SorcererStreetMap Map, QuoteSetVersus QuoteSet)
+        public ActionPanelDialogPhase(SorcererStreetMap Map, List<QuoteSetVersus> ListQuoteSet)
             : base(PanelName, Map, false)
         {
-            this.QuoteSet = QuoteSet;
+            this.QuoteSet = ListQuoteSet;
 
             if (Text == null)
             {
@@ -38,16 +38,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Text.LineHeight = 20;
                 Text.ListProcessor.Add(new RegularTextProcessor(Text));
                 Text.ListProcessor.Add(new IconProcessor(Text));
+                Text.ListProcessor.Add(new PlayerNameProcessor(Text, Map));
                 Text.ListProcessor.Add(new DefaultTextProcessor(Text));
                 Text.SetDefaultProcessor(new DefaultTextProcessor(Text));
                 Text.Load(Map.Content);
             }
 
-            if (QuoteSet.ListQuote.Count > 0)
+            int TotalQuotes = 0;
+            foreach (QuoteSetVersus ActiveQuoteSet in ListQuoteSet)
             {
-                int RandomIndex = RandomHelper.Next(QuoteSet.ListQuote.Count);
-                Text.ParseText(QuoteSet.ListQuote[RandomIndex]);
+                TotalQuotes += ActiveQuoteSet.ListQuote.Count;
             }
+
+            if (TotalQuotes > 0)
+            {
+                int RandomIndex = RandomHelper.Next(TotalQuotes);
+
+                foreach (QuoteSetVersus ActiveQuoteSet in ListQuoteSet)
+                {
+                    if (RandomIndex >= ActiveQuoteSet.ListQuote.Count)
+                    {
+                        RandomIndex -= ActiveQuoteSet.ListQuote.Count;
+                        continue;
+                    }
+
+                    Text.ParseText("{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}{{Player:Self}}{{Icon:Fire}}More super long text}}{{Player:Ally}}{{Icon:Fire}} with other icon");
+                    
+                    //Text.ParseText(ActiveQuoteSet.ListQuote[RandomIndex]);
+                }
+            }
+            Text.ParseText("{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}Welcome {{Player:Ally}}{{Icon:Fire}}, time to dddddduel.}}{{Player:Self}}{{Icon:Fire}} with other icon");
+
         }
 
         public static void AddIntrodctionIfAvailable(SorcererStreetMap Map)
@@ -57,9 +78,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Player ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
                 TerrainSorcererStreet HoverTerrain = Map.GetTerrain(new Vector3(ActivePlayer.GamePiece.X, ActivePlayer.GamePiece.Y / Map.TileSize.Y, ActivePlayer.GamePiece.Z));
 
-                QuoteSetVersus QuoteSet = ExtractQuote(Map, GetQuote(Map, ActivePlayer, HoverTerrain, QuoteTypes.Introduction), ActivePlayer);
+                List<QuoteSetVersus> ListQuoteSet = ExtractQuote(Map, GetQuote(Map, ActivePlayer, HoverTerrain, QuoteTypes.Introduction), ActivePlayer);
 
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelDialogPhase(Map, QuoteSet));
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelDialogPhase(Map, ListQuoteSet));
             }
         }
 
@@ -169,25 +190,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return null;
         }
 
-        private static QuoteSetVersus ExtractQuote(SorcererStreetMap Map, QuoteSet ActiveQuoteSet, Player ActivePlayer)
+        private static List<QuoteSetVersus> ExtractQuote(SorcererStreetMap Map, QuoteSet ActiveQuoteSet, Player ActivePlayer)
         {
-            QuoteSetMap ActiveQuoteSetVersus = ActiveQuoteSet.ListMapQuote[0];
+            List<QuoteSetMap> ListQuoteSetVersus = new List<QuoteSetMap>();
+            ListQuoteSetVersus.Add(ActiveQuoteSet.ListMapQuote[0]);
+            List<QuoteSetVersus> ListReturnQuote = new List<QuoteSetVersus>();
 
             for (int M = 1; M < ActiveQuoteSet.ListMapQuote.Count; ++M)
             {
                 if (ActivePlayer.Inventory.Character.ListQuoteSetMapName[M - 1] == Map.MapName)
                 {
-                    ActiveQuoteSetVersus = ActiveQuoteSet.ListMapQuote[M];
+                    ListQuoteSetVersus.Add(ActiveQuoteSet.ListMapQuote[M]);
                     break;
                 }
             }
 
-            return ExtractText(Map, ActiveQuoteSetVersus, ActivePlayer);
+            foreach (QuoteSetMap ActiveQuoteSetVersus in ListQuoteSetVersus)
+            {
+                ListReturnQuote.AddRange(ExtractText(Map, ActiveQuoteSetVersus, ActivePlayer));
+            }
+
+            return ListReturnQuote;
         }
 
-        private static QuoteSetVersus ExtractText(SorcererStreetMap Map, QuoteSetMap ActiveQuoteSet, Player ActivePlayer)
+        private static List<QuoteSetVersus> ExtractText(SorcererStreetMap Map, QuoteSetMap ActiveQuoteSet, Player ActivePlayer)
         {
-            QuoteSetVersus ActiveQuoteSetVersus = ActiveQuoteSet.ListQuoteVersus[0];
+            List<QuoteSetVersus> ListReturnQuote = new List<QuoteSetVersus>();
+            ListReturnQuote.Add(ActiveQuoteSet.ListQuoteVersus[0]);
 
             if (Map.GlobalSorcererStreetBattleContext.OpponentCreature != null && Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner != null)
             {
@@ -195,13 +224,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ActivePlayer.Inventory.Character.ListQuoteSetVersusName[P - 1] == Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Inventory.Character.Name)
                     {
-                        ActiveQuoteSetVersus = ActiveQuoteSet.ListQuoteVersus[P];
+                        ListReturnQuote.Add(ActiveQuoteSet.ListQuoteVersus[P]);
                         break;
                     }
                 }
             }
 
-            return ActiveQuoteSetVersus;
+            return ListReturnQuote;
         }
 
         public override void OnSelect()
@@ -238,7 +267,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(Map.sprPortraitMiddle, new Rectangle(Map.sprPortraitStart.Width - 1, Constants.Height - Map.sprPortraitMiddle.Height, TextboxWidth, Map.sprPortraitMiddle.Height), Color.White);
             g.Draw(Map.sprPortraitEnd, new Vector2(Map.sprPortraitStart.Width + TextboxWidth - 2, Constants.Height - Map.sprPortraitEnd.Height), Color.White);
             g.DrawString(Map.fntArial12, "Zeneth", new Vector2(370, Constants.Height - 230), Color.White);
-            Text.Draw(g, new Vector2());
+            Text.Draw(g, new Vector2(350, Constants.Height - 170));
         }
     }
 }

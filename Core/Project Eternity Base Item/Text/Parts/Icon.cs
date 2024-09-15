@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
+using System;
 
 namespace ProjectEternity.Core.Item
 {
@@ -70,6 +71,19 @@ namespace ProjectEternity.Core.Item
             {
                 MaxWidth = Owner.TextMaxWidthInPixel;
             }
+
+            if (DicSubTag.ContainsKey("Wave"))
+            {
+                Wave = true;
+            }
+            else if (Parent != null)
+            {
+                Wave = Parent.Wave;
+            }
+            else
+            {
+                Wave = false;
+            }
         }
 
         public virtual float GetImageSize()
@@ -83,7 +97,13 @@ namespace ProjectEternity.Core.Item
 
         public override void Draw(CustomSpriteBatch g, Vector2 Offset)
         {
-            g.Draw(sprIcon, ImagePosition, Color.White);
+            float YOffset = 0;
+            if (Wave)
+            {
+                YOffset = (float)Math.Sin(DynamicText.CurrentDrawnCharacterIndex + (DynamicText.AnimationProgression++ / 10f)) * 10;
+            }
+
+            g.Draw(sprIcon, new Vector2(ImagePosition.X + Offset.X, ImagePosition.Y + Offset.Y + YOffset), Color.White);
         }
     }
 }

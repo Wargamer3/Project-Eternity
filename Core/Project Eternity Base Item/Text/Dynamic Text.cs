@@ -16,6 +16,8 @@ namespace ProjectEternity.Core.Item
         public DynamicTextProcessor DefaultProcessor;
         public List<DynamicTextProcessor> ListProcessor;
 
+        public static double AnimationProgression;
+        public static int CurrentDrawnCharacterIndex;
         private bool UpdatePositions;
 
         public DynamicTextPart Root;
@@ -57,6 +59,8 @@ namespace ProjectEternity.Core.Item
 
         public void Update(GameTime gameTime)
         {
+            AnimationProgression += gameTime.ElapsedGameTime.TotalSeconds;
+
             Root.Update(gameTime);
 
             if (UpdatePositions)
@@ -82,6 +86,7 @@ namespace ProjectEternity.Core.Item
 
         public void Draw(CustomSpriteBatch g, Vector2 Offset)
         {
+            CurrentDrawnCharacterIndex = 0;
             Root.Draw(g, Offset);
         }
     }

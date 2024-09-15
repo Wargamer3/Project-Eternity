@@ -101,6 +101,7 @@
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Animation Damage Timeline.cs" />
+    <Compile Include="Sorcerer Street Text Processor.cs" />
     <Compile Include="Lobby\Bot.cs" />
     <Compile Include="Lobby\Unlocks\Sorcerer Street Unlock Inventory.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />

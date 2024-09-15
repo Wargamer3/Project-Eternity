@@ -81,7 +81,6 @@
     <Compile Include="Text\Processors\RegularTextProcessor.cs" />
     <Compile Include="Text\Parts\Streching Text.cs" />
     <Compile Include="Text\Parts\Regular Text.cs" />
-    <Compile Include="Text\Parts\Image Text.cs" />
     <Compile Include="Text\Dynamic Text.cs" />
     <Compile Include="Projectile\Collision Object 3D.cs" />
     <Compile Include="Projectile\Collision Object Holder 3D.cs" />

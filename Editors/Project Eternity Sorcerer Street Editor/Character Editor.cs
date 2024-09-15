@@ -139,6 +139,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             {
                 BW.Write(0);
                 BW.Write(0);
+                BW.Write(0);
             }
             else
             {
@@ -149,22 +150,23 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 BW.Write(frmQuoteEditor.lsVersusQuotes.Items.Count - 1);
                 for (int Q = 1; Q < frmQuoteEditor.lsVersusQuotes.Items.Count; Q++)
                     BW.Write((string)frmQuoteEditor.lsVersusQuotes.Items[Q]);
-            }
 
-            BW.Write((byte)frmQuoteEditor.lvBaseQuotes.Items.Count);
 
-            QuoteSet Quotes;
-            //Base quotes
-            for (int I = 0; I < frmQuoteEditor.lvBaseQuotes.Items.Count; I++)
-            {
-                if (frmQuoteEditor == null)
+                BW.Write((byte)frmQuoteEditor.lvBaseQuotes.Items.Count);
+
+                QuoteSet Quotes;
+                //Base quotes
+                for (int I = 0; I < frmQuoteEditor.lvBaseQuotes.Items.Count; I++)
                 {
-                    BW.Write(0);
-                }
-                else
-                {
-                    Quotes = (QuoteSet)frmQuoteEditor.lvBaseQuotes.Items[I].Tag;
-                    Quotes.Write(BW);
+                    if (frmQuoteEditor == null)
+                    {
+                        BW.Write(0);
+                    }
+                    else
+                    {
+                        Quotes = (QuoteSet)frmQuoteEditor.lvBaseQuotes.Items[I].Tag;
+                        Quotes.Write(BW);
+                    }
                 }
             }
 
