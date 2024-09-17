@@ -44,6 +44,7 @@
             this.btnAddVersusQuote = new System.Windows.Forms.Button();
             this.gbMapQuotes = new System.Windows.Forms.GroupBox();
             this.lsMapQuotes = new System.Windows.Forms.ListBox();
+            this.btnAddBatchQuote = new System.Windows.Forms.Button();
             this.gbQuotes.SuspendLayout();
             this.gbQuoteEditor.SuspendLayout();
             this.gbBaseQuotes.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             this.gbQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbQuotes.Controls.Add(this.btnAddBatchQuote);
             this.gbQuotes.Controls.Add(this.btnRemoveQuote);
             this.gbQuotes.Controls.Add(this.btnAddQuote);
             this.gbQuotes.Controls.Add(this.lstQuotes);
@@ -68,9 +70,9 @@
             // btnRemoveQuote
             // 
             this.btnRemoveQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRemoveQuote.Location = new System.Drawing.Point(140, 172);
+            this.btnRemoveQuote.Location = new System.Drawing.Point(171, 172);
             this.btnRemoveQuote.Name = "btnRemoveQuote";
-            this.btnRemoveQuote.Size = new System.Drawing.Size(120, 23);
+            this.btnRemoveQuote.Size = new System.Drawing.Size(89, 23);
             this.btnRemoveQuote.TabIndex = 4;
             this.btnRemoveQuote.Text = "Remove quote";
             this.btnRemoveQuote.UseVisualStyleBackColor = true;
@@ -81,7 +83,7 @@
             this.btnAddQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAddQuote.Location = new System.Drawing.Point(6, 172);
             this.btnAddQuote.Name = "btnAddQuote";
-            this.btnAddQuote.Size = new System.Drawing.Size(120, 23);
+            this.btnAddQuote.Size = new System.Drawing.Size(72, 23);
             this.btnAddQuote.TabIndex = 3;
             this.btnAddQuote.Text = "Add quote";
             this.btnAddQuote.UseVisualStyleBackColor = true;
@@ -229,6 +231,17 @@
             this.lsMapQuotes.Size = new System.Drawing.Size(120, 108);
             this.lsMapQuotes.TabIndex = 8;
             // 
+            // btnAddBatchQuote
+            // 
+            this.btnAddBatchQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddBatchQuote.Location = new System.Drawing.Point(84, 172);
+            this.btnAddBatchQuote.Name = "btnAddBatchQuote";
+            this.btnAddBatchQuote.Size = new System.Drawing.Size(81, 23);
+            this.btnAddBatchQuote.TabIndex = 5;
+            this.btnAddBatchQuote.Text = "Add batch";
+            this.btnAddBatchQuote.UseVisualStyleBackColor = true;
+            this.btnAddBatchQuote.Click += new System.EventHandler(this.btnAddBatchQuote_Click);
+            // 
             // CharacterQuotesEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,5 +281,6 @@
         private System.Windows.Forms.Button btnAddVersusQuote;
         private System.Windows.Forms.GroupBox gbMapQuotes;
         public System.Windows.Forms.ListBox lsMapQuotes;
+        private System.Windows.Forms.Button btnAddBatchQuote;
     }
 }

@@ -229,6 +229,29 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             }
         }
 
+        private void btnAddBatchQuote_Click(object sender, EventArgs e)
+        {
+            if (lvBaseQuotes.SelectedIndices.Count == 1)
+            {
+                int MapIndex = Math.Max(0, lsMapQuotes.SelectedIndex);
+                int VersusIndex = Math.Max(0, lsVersusQuotes.SelectedIndex);
+                QuoteSet BaseQuote = (QuoteSet)lvBaseQuotes.SelectedItems[0].Tag;
+
+                BatchQuoteForm AddBatchQuoteForm = new BatchQuoteForm();
+                if (AddBatchQuoteForm.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (string ActiveLine in AddBatchQuoteForm.txtQuotesToAdd.Lines)
+                    {
+                        lstQuotes.Items.Add(ActiveLine);
+                        BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListQuote.Add(ActiveLine);
+                        BaseQuote.ListMapQuote[MapIndex].ListQuoteVersus[VersusIndex].ListPortraitPath.Add(string.Empty);
+                    }
+
+                    lstQuotes.SelectedIndex = lstQuotes.Items.Count - 1;
+                }
+            }
+        }
+
         private void btnRemoveQuote_Click(object sender, EventArgs e)
         {
             if (lvBaseQuotes.SelectedIndices.Count == 1 && lstQuotes.SelectedIndex >= 0)

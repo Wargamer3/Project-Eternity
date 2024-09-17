@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Batch Quote Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Batch Quote Form.Designer.cs">
+      <DependentUpon>Batch Quote Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Character Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +128,9 @@
     <Compile Include="Tileset Tab.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Batch Quote Form.resx">
+      <DependentUpon>Batch Quote Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Character Editor.resx">
       <DependentUpon>Character Editor.cs</DependentUpon>
     </EmbeddedResource>
