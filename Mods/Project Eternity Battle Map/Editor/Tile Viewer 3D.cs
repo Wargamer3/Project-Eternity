@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PolygonEffect.View = Camera.View;
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             foreach (Tile3D ActiveTile in ListTile3D)

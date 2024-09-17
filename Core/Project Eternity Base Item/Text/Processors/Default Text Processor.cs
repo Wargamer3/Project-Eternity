@@ -20,11 +20,6 @@ namespace ProjectEternity.Core.Item
             this.DefaultFont = DefaultFont;
         }
 
-        public override DynamicTextPart GetTextObject(string Prefix)
-        {
-            return new RegularText(Owner, string.Empty);
-        }
-
         public override void Load(ContentManager Content)
         {
             Fonts = new FontsHolder(Content);
@@ -32,6 +27,11 @@ namespace ProjectEternity.Core.Item
             {
                 Fonts.fntDefaultFont = DefaultFont;
             }
+        }
+
+        public override DynamicTextPart GetTextObject(string Prefix)
+        {
+            return new RegularText(Owner, string.Empty);
         }
 
         public override DynamicTextPart ParseText(string Text)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Item
 {
@@ -6,15 +7,26 @@ namespace ProjectEternity.Core.Item
     {
         private readonly DynamicText Owner;
         private FontsHolder Fonts;
+        private SpriteFont DefaultFont;
 
         public RegularTextProcessor(DynamicText Owner)
         {
             this.Owner = Owner;
         }
 
+        public RegularTextProcessor(DynamicText Owner, SpriteFont DefaultFont)
+        {
+            this.Owner = Owner;
+            this.DefaultFont = DefaultFont;
+        }
+
         public override void Load(ContentManager Content)
         {
             Fonts = new FontsHolder(Content);
+            if (DefaultFont != null)
+            {
+                Fonts.fntDefaultFont = DefaultFont;
+            }
         }
 
         public override DynamicTextPart GetTextObject(string Prefix)

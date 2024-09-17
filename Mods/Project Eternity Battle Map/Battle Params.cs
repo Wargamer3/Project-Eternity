@@ -2,12 +2,12 @@
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Effects;
 using Roslyn;
-using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

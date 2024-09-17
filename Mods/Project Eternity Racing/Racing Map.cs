@@ -452,7 +452,7 @@ namespace ProjectEternity.GameScreens.RacingScreen
         public void DrawMap(CustomSpriteBatch g)
         {
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             for (int T = ListAITunnel.Count - 1; T >= 0; --T)

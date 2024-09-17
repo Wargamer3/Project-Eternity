@@ -351,7 +351,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListTilesetPreset.Count);
             for (int T = 0; T < ListTilesetPreset.Count; T++)
             {
-                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T]);
+                ListTilesetPreset[T].Write(BW);
             }
 
             BW.Write(ListBattleBackgroundAnimationPath.Count);
@@ -363,6 +363,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
+            if (!IsEditor)
+            {
+                Show3DObjects = true;
+            }
             ListSubMap.Add(this);
             if (!IsServer)
             {
@@ -527,13 +531,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        protected virtual Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        {
+            return new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+        }
+
         protected void LoadTilesets(BinaryReader BR)
         {
             //Tile sets
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                ListTilesetPreset.Add(new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, T, false));
+                ListTilesetPreset.Add(ReadTileset(BR, T));
 
                 #region Load Tilesets
 

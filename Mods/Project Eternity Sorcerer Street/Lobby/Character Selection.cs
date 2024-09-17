@@ -89,6 +89,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             UpdateCharacterSelection();
             UpdateCharacterSkinSelection();
+
+            if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape))
+            {
+                RemoveScreen(this);
+            }
         }
 
         private void UpdateCharacterSelection()

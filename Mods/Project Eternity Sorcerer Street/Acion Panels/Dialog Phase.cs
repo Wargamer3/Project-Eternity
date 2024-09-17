@@ -36,11 +36,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Text = new DynamicText();
                 Text.TextMaxWidthInPixel = Constants.Width;
                 Text.LineHeight = 20;
-                Text.ListProcessor.Add(new RegularTextProcessor(Text));
+                Text.ListProcessor.Add(new RegularTextProcessor(Text, Map.fntDefaultText));
                 Text.ListProcessor.Add(new IconProcessor(Text));
-                Text.ListProcessor.Add(new PlayerNameProcessor(Text, Map));
-                Text.ListProcessor.Add(new DefaultTextProcessor(Text));
-                Text.SetDefaultProcessor(new DefaultTextProcessor(Text));
+                Text.ListProcessor.Add(new PlayerNameProcessor(Text, Map.fntDefaultText, Map));
+                Text.ListProcessor.Add(new DefaultTextProcessor(Text, Map.fntDefaultText));
+                Text.SetDefaultProcessor(new DefaultTextProcessor(Text, Map.fntDefaultText));
                 Text.Load(Map.Content);
             }
 
@@ -62,12 +62,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         continue;
                     }
 
-                    Text.ParseText("{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}{{Player:Self}}{{Icon:Fire}}More super long text}}{{Player:Ally}}{{Icon:Fire}} with other icon");
-                    
-                    //Text.ParseText(ActiveQuoteSet.ListQuote[RandomIndex]);
+                    Text.ParseText(ActiveQuoteSet.ListQuote[RandomIndex]);
                 }
             }
-            Text.ParseText("{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}Welcome {{Player:Ally}}{{Icon:Fire}}, time to dddddduel.}}{{Player:Self}}{{Icon:Fire}} with other icon");
 
         }
 
@@ -241,6 +238,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Text.Update(gameTime);
 
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                RemoveFromPanelList(this);
+            }
         }
 
         protected override void OnCancelPanel()
@@ -262,12 +263,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            float Scale = 1.4f;
             int TextboxWidth = 700;
-            g.Draw(Map.sprPortraitStart, new Vector2(0, Constants.Height - Map.sprPortraitStart.Height), Color.White);
-            g.Draw(Map.sprPortraitMiddle, new Rectangle(Map.sprPortraitStart.Width - 1, Constants.Height - Map.sprPortraitMiddle.Height, TextboxWidth, Map.sprPortraitMiddle.Height), Color.White);
-            g.Draw(Map.sprPortraitEnd, new Vector2(Map.sprPortraitStart.Width + TextboxWidth - 2, Constants.Height - Map.sprPortraitEnd.Height), Color.White);
-            g.DrawString(Map.fntArial12, "Zeneth", new Vector2(370, Constants.Height - 230), Color.White);
-            Text.Draw(g, new Vector2(350, Constants.Height - 170));
+            g.Draw(Map.sprPortraitStart, new Vector2(0, (int)(Constants.Height - Map.sprPortraitStart.Height * Scale)), null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 1f);
+            g.Draw(Map.sprPortraitMiddle, new Rectangle((int)(Map.sprPortraitStart.Width * Scale - Scale), (int)(Constants.Height - Map.sprPortraitMiddle.Height * Scale), (int)(TextboxWidth * Scale), (int)(Map.sprPortraitMiddle.Height * Scale)), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+            g.Draw(Map.sprPortraitEnd, new Vector2((Map.sprPortraitStart.Width + TextboxWidth) * Scale - 3 * Scale, (int)(Constants.Height - Map.sprPortraitEnd.Height * Scale)), null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 1f);
+            g.DrawString(Map.fntFinlanderFont, "Zeneth", new Vector2(370 * Scale, Constants.Height - 230 * Scale), Color.White);
+            Text.Draw(g, new Vector2(350 * Scale, Constants.Height - 170 * Scale));
+
+            g.End();
+            g.Begin();
+
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            Projection = HalfPixelOffset * Projection;
+
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            PlayerCharacter ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex].Inventory.Character;
+            ActivePlayer.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(7f) * Matrix.CreateTranslation(150, 2000, 0), Projection, Matrix.Identity);
+
+            g.End();
+            g.Begin();
         }
     }
 }

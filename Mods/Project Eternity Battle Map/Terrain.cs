@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(BR, X, Y, 0, 0);
+                        Terrain NewTerrain = ReadTerrain(BR, X, Y, 0, 0);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), Index);
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTiles[X, Y] = NewTile;
@@ -78,6 +78,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
                     {
                         ListBattleBackgroundAnimationPath.Add(BR.ReadString());
+                    }
+                }
+            }
+
+            protected virtual Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
+            {
+                return new Terrain(BR, X, Y, LayerIndex, LayerDepth);
+            }
+
+            public void Write(BinaryWriter BW)
+            {
+                BW.Write(TilesetName);
+                BW.Write((byte)TilesetType);
+
+                BW.Write(ArrayTerrain.GetLength(0));
+                BW.Write(ArrayTerrain.GetLength(1));
+
+                //Tiles
+                for (int Y = 0; Y < ArrayTerrain.GetLength(1); Y++)
+                {
+                    for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
+                    {
+                        ArrayTerrain[X, Y].Save(BW);
                     }
                 }
             }
@@ -97,24 +120,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FS.Close();
 
                 return NewTilesetPreset;
-            }
-
-            public static void SaveTerrainPreset(BinaryWriter BW, TilesetPreset Tileset)
-            {
-                BW.Write(Tileset.TilesetName);
-                BW.Write((byte)Tileset.TilesetType);
-
-                BW.Write(Tileset.ArrayTerrain.GetLength(0));
-                BW.Write(Tileset.ArrayTerrain.GetLength(1));
-
-                //Tiles
-                for (int Y = 0; Y < Tileset.ArrayTerrain.GetLength(1); Y++)
-                {
-                    for (int X = 0; X < Tileset.ArrayTerrain.GetLength(0); X++)
-                    {
-                        Tileset.ArrayTerrain[X, Y].Save(BW);
-                    }
-                }
             }
 
             internal void DrawPreview(SpriteBatch g, Point Position, Texture2D sprTileset)

@@ -141,7 +141,7 @@ namespace ProjectEternity.Core.Graphics
                         BaseEffect.Projection = Projection;
                         BaseEffect.EnableDefaultLighting();
                         BaseEffect.PreferPerPixelLighting = true;
-                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(2.1f, 2.1f, 2.1f);
+                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(1.1f, 1.1f, 1.1f);
                         BaseEffect.DirectionalLight0.Direction = new Vector3(0.2f, -0.4f, -0.8f);
                         BaseEffect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
                     }

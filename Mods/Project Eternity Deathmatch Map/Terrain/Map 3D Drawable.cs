@@ -789,7 +789,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Draw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             Matrix View = Map.Camera3D.View;
             Matrix World = PolygonEffect.World;

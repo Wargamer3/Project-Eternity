@@ -2,9 +2,28 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
+    public class SorcererStreetTilesetPreset : TilesetPreset
+    {
+        public SorcererStreetTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            :base (TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex)
+        {
+        }
+
+        public SorcererStreetTilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index, bool LoadBackgroundPaths = true)
+            : base(BR, TileSizeX, TileSizeY, Index, LoadBackgroundPaths)
+        {
+        }
+
+        protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
+        {
+            return new TerrainSorcererStreet(BR, X, Y, LayerIndex, LayerDepth);
+        }
+    }
+
     public class TerrainSorcererStreet : Terrain
     {
         public const string Castle = "Castle";
@@ -19,6 +38,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string WestTower = "Weast Gate";
         public const string SouthTower = "South Gate";
         public const string NorthTower = "North Gate";
+        public const string Shrine = "Shrine";
+        public const string FortuneTeller = "Fortune Teller";
 
         public CreatureCard DefendingCreature;
         public Player PlayerOwner;
@@ -55,6 +76,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TollMultiplier = 1;
             BaseValue = 100;
             LandLevel = 1;
+        }
+
+        public TerrainSorcererStreet(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
+            : base(XPos, YPos, LayerIndex, LayerDepth)
+        {
+            TerrainTypeIndex = BR.ReadByte();
+            Height = BR.ReadSingle();
         }
 
         public override void Save(BinaryWriter BW)

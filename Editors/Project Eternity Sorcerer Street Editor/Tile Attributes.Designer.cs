@@ -38,6 +38,7 @@
             // 
             // cboTerrainType
             // 
+            this.cboTerrainType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTerrainType.FormattingEnabled = true;
             this.cboTerrainType.Items.AddRange(new object[] {
             "Not Assigned",
@@ -53,9 +54,10 @@
             "West Tower",
             "South Tower",
             "North Tower",
+            "Shrine",
+            "Fortune Teller",
             "Warp",
             "Bridge",
-            "Fortune Teller",
             "Spell Circle",
             "Path Switch",
             "Card Shop",
@@ -66,7 +68,6 @@
             this.cboTerrainType.Name = "cboTerrainType";
             this.cboTerrainType.Size = new System.Drawing.Size(121, 21);
             this.cboTerrainType.TabIndex = 0;
-            this.cboTerrainType.Text = "Morph";
             this.cboTerrainType.SelectedIndexChanged += new System.EventHandler(this.cboTerrainType_SelectedIndexChanged);
             // 
             // label1

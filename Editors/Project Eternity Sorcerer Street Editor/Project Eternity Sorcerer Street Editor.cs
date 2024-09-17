@@ -31,7 +31,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             {
                 List<IMapEditorTab> ListTab = new List<IMapEditorTab>();
 
-                ListTab.Add(new TilesetTab());
+                ListTab.Add(new SorcererStreetTilesetTab());
                 ListTab.Add(new EventPointsTab());
                 ListTab.Add(new ScriptsTab());
                 ListTab.Add(new LayerTab());

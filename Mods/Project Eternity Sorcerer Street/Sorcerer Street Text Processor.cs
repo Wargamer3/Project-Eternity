@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -30,6 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private readonly DynamicText Owner;
         private FontsHolder Fonts;
+        private SpriteFont DefaultFont;
         private readonly SorcererStreetMap Map;
 
         public PlayerNameProcessor(DynamicText Owner, SorcererStreetMap Map)
@@ -38,9 +40,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Map = Map;
         }
 
+        public PlayerNameProcessor(DynamicText Owner, SpriteFont DefaultFont, SorcererStreetMap Map)
+        {
+            this.Owner = Owner;
+            this.DefaultFont = DefaultFont;
+            this.Map = Map;
+        }
+
         public override void Load(ContentManager Content)
         {
             Fonts = new FontsHolder(Content);
+            if (DefaultFont != null)
+            {
+                Fonts.fntDefaultFont = DefaultFont;
+            }
         }
 
         public override DynamicTextPart GetTextObject(string Prefix)

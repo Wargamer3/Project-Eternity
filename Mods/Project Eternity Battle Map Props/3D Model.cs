@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly BattleMap Map;
 
-        Model ModelToDraw;
+        private Model ModelToDraw;
 
         private string _ModelPath;
         private Vector3 _Offset;
@@ -54,6 +54,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Map = Map;
 
             _ModelPath = string.Empty;
+
+            Scale = Vector3.One;
         }
 
         public override void Load(ContentManager Content)
@@ -71,7 +73,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!string.IsNullOrEmpty(_ModelPath))
             {
                 ModelToDraw = Map.Content.Load<Model>("Maps/Models/" + _ModelPath);
+                foreach (ModelMesh mesh in ModelToDraw.Meshes)
+                {
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                        Effect NewEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D").Clone();
+                        NewEffect.Parameters["ModelTexture"].SetValue(((BasicEffect)part.Effect).Texture);
+                        part.Effect = NewEffect;
+                    }
+                }
             }
+
         }
 
         public override void DoSave(BinaryWriter BW)
@@ -136,11 +148,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g)
         {
+            float aspectRatio = GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height;
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+
             if (ModelToDraw != null && Map.Show3DObjects)
             {
-                DrawModel(ModelToDraw, View, Projection,
-                    Matrix.CreateRotationX(MathHelper.ToRadians(-90))
-                    * Matrix.CreateScale(Map.TileSize.X, Map.LayerHeight, Map.TileSize.Y)
+                DrawModel2(ModelToDraw, View, Projection,
+                    Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.X))
+                    * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Y))
+                    * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Z))
+                    * Matrix.CreateScale(Scale.X, Scale.Y, Scale.Z)
                     * Matrix.CreateTranslation((Position.X + Offset.X) * Map.TileSize.X, (Position.Z + Offset.Z) * Map.LayerHeight, (Position.Y + Offset.Y) * Map.TileSize.Y));
             }
         }
@@ -149,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
-
+            
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -163,6 +182,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        private void DrawModel2(Model model, Matrix view, Matrix projection, Matrix world)
+        {
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (ModelMeshPart part in mesh.MeshParts)
+                {
+                    Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(world));
+                    part.Effect.Parameters["WorldInverseTransposeMatrix"].SetValue(worldInverseTransposeMatrix);
+                    part.Effect.Parameters["WorldMatrix"].SetValue(world);
+                    part.Effect.Parameters["ViewMatrix"].SetValue(view);
+                    part.Effect.Parameters["ProjectionMatrix"].SetValue(projection);
+                    part.Effect.Parameters["AmbienceColor"].SetValue(new Vector4(0.5f, 0.5f, 0.5f, 1));
+                    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(2f, 2f, 2f, 1));
+                    part.Effect.Parameters["DiffuseLightDirection"].SetValue(new Vector3(-1.0f, 0.0f, 0f));
+                }
+
+                mesh.Draw();
+            }
+        }
         protected override InteractiveProp Copy()
         {
             Model3DSpawner NewProp = new Model3DSpawner(Map);

@@ -27,6 +27,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Ressources
 
+        public SpriteFont fntDefaultText;
+
         public Texture2D sprActiveCreatureCursor;
         public Texture2D sprPlayerBackground;
         public Texture2D sprPlayerBlue1;
@@ -147,9 +149,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListTerrainType.Add(TerrainSorcererStreet.WestTower);
             ListTerrainType.Add(TerrainSorcererStreet.SouthTower);
             ListTerrainType.Add(TerrainSorcererStreet.NorthTower);
+            ListTerrainType.Add(TerrainSorcererStreet.Shrine);
+            ListTerrainType.Add(TerrainSorcererStreet.FortuneTeller);
             ListTerrainType.Add("Warp");
             ListTerrainType.Add("Bridge");
-            ListTerrainType.Add("Fortune Teller");
             ListTerrainType.Add("Spell Circle");
             ListTerrainType.Add("Path Switch");
             ListTerrainType.Add("Card Shop");
@@ -231,6 +234,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!IsServer)
             {
                 ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
+
+                fntDefaultText = Content.Load<SpriteFont>("Fonts/Oxanium Bold Bigger");
 
                 sprActiveCreatureCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Active Creature Cursor");
 
@@ -424,6 +429,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             FS.Close();
 
             TogglePreview(BackgroundOnly);
+        }
+
+        protected override Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        {
+            return new SorcererStreetTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
         public override void Init()

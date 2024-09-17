@@ -135,6 +135,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void CreateMap(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager)
         {
+            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+            PolygonEffect.Projection = Projection;
+
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
@@ -222,16 +228,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Point Location = ActiveTerrain.Origin.Location;
                     Point TextureSize = Map.TileSize;
 
-                    if (ActiveTerrain.TilesetIndex == 0)
+                    List<Tile3D> ListNew3DTile;
+
+                    if (ActiveTerrain.TilesetIndex == 0 || Owner.ArrayTerrain[X, Y].TerrainTypeIndex > 0)
                     {
                         TextureSize = new Point(128, 128);
 
                         switch (Map.ListTerrainType[Owner.ArrayTerrain[X, Y].TerrainTypeIndex])
                         {
-                            case TerrainSorcererStreet.Castle:
-                                Location = new Point(128 * 4, 128);
-                                break;
-
                             case TerrainSorcererStreet.FireElement:
                                 Location = new Point(0, 0);
                                 break;
@@ -263,15 +267,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             case TerrainSorcererStreet.WestTower:
                                 Location = new Point(128 * 3, 128);
                                 break;
+
+                            case TerrainSorcererStreet.Castle:
+                                Location = new Point(128 * 4, 128);
+                                break;
+
+                            case TerrainSorcererStreet.Shrine:
+                                Location = new Point(128 * 5, 128);
+                                break;
+
+                            case TerrainSorcererStreet.FortuneTeller:
+                                Location = new Point(128 * 6, 128);
+                                break;
                         }
+
+                        ListNew3DTile = ActiveTerrain3D.CreateTile3D(0, Location,
+                                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
+                                                Map.TileSize, TextureSize, ListTileset, ZFront, ZBack, ZLeft, ZRight, 0);
                     }
                     else
                     {
+                        ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, Location,
+                                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
+                                                Map.TileSize, TextureSize, ListTileset, ZFront, ZBack, ZLeft, ZRight, 0);
                     }
 
-                    List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, Location,
-                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
-                                            Map.TileSize, TextureSize, ListTileset, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     Tile3D TopTile = ListNew3DTile[0];
                     if (TopTile.ArrayVertex.Length == 4)
@@ -401,7 +421,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void Update(GameTime gameTime)
         {
-            if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive))
+            if (!Map.IsEditor && (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive)))
             {
                 UpdateCamera();
             }
@@ -729,6 +749,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void Reset()
         {
+            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+            PolygonEffect.Projection = Projection;
+
             CreateMap(Map, Map.LayerManager);
         }
 
@@ -840,7 +866,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void Draw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             Matrix View = Map.Camera3D.View;
             Matrix World = PolygonEffect.World;
@@ -918,12 +944,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (DrawUpperLayers || Map.IsEditor)
                 {
-                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+                    if (Map.IsEditor && Map.Show3DObjects)
                     {
-                        ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
-                        ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
+                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+                        {
+                            ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                            ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
-                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                        }
                     }
 
                     for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
@@ -1020,9 +1049,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return;
             }
 
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+
             for (int P = 0; P < Owner.ListProp.Count; ++P)
             {
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice,View, g);
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, View, g);
             }
 
             for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
@@ -1188,8 +1219,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawCreatures(CustomSpriteBatch g, Matrix View)
         {
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             for (int Z = 0; Z < Map.LayerManager.ListLayer.Count; ++Z)
             {
                 for (int X = MapSize.X - 1; X >= 0; --X)

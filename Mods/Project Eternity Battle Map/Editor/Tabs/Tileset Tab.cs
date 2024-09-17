@@ -398,9 +398,9 @@ namespace ProjectEternity.Editors.MapEditor
                 tslInformation.Text += ", hold ctrl to change the selected tile attributes";
             }
         }
-
         public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)
         {
+            BattleMapViewer.DrawMap();
         }
 
         //Change the ActiveTile to the mouse position.
