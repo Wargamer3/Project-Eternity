@@ -58,6 +58,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (MouseHelper.MouseMoved())
             {
+                ActiveTerrain = null;
+
                 CursorPosition.X = MouseHelper.MouseStateCurrent.X;
                 CursorPosition.Y = MouseHelper.MouseStateCurrent.Y;
 

@@ -73,6 +73,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!string.IsNullOrEmpty(_ModelPath))
             {
                 ModelToDraw = Map.Content.Load<Model>("Maps/Models/" + _ModelPath);
+
                 foreach (ModelMesh mesh in ModelToDraw.Meshes)
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
@@ -83,7 +84,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
-
         }
 
         public override void DoSave(BinaryWriter BW)
@@ -155,12 +155,43 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ModelToDraw != null && Map.Show3DObjects)
             {
+                foreach (ModelMesh mesh in ModelToDraw.Meshes)
+                {
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                        part.Effect.Parameters["ShowAlpha"].SetValue(0f);
+                    }
+
+                }
+                
                 DrawModel2(ModelToDraw, View, Projection,
                     Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.X))
                     * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Y))
                     * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Z))
                     * Matrix.CreateScale(Scale.X, Scale.Y, Scale.Z)
                     * Matrix.CreateTranslation((Position.X + Offset.X) * Map.TileSize.X, (Position.Z + Offset.Z) * Map.LayerHeight, (Position.Y + Offset.Y) * Map.TileSize.Y));
+                
+                foreach (ModelMesh mesh in ModelToDraw.Meshes)
+                {
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                        part.Effect.Parameters["ShowAlpha"].SetValue(1f);
+                    }
+                }
+
+                GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+                GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+                DrawModel2(ModelToDraw, View, Projection,
+                    Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.X))
+                    * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Y))
+                    * Matrix.CreateRotationX(MathHelper.ToRadians(Rotation.Z))
+                    * Matrix.CreateScale(Scale.X, Scale.Y, Scale.Z)
+                    * Matrix.CreateTranslation((Position.X + Offset.X) * Map.TileSize.X, (Position.Z + Offset.Z) * Map.LayerHeight, (Position.Y + Offset.Y) * Map.TileSize.Y));
+
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+                GraphicsDevice.BlendState = BlendState.AlphaBlend;
             }
         }
 
@@ -196,14 +227,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     part.Effect.Parameters["WorldMatrix"].SetValue(world);
                     part.Effect.Parameters["ViewMatrix"].SetValue(view);
                     part.Effect.Parameters["ProjectionMatrix"].SetValue(projection);
-                    part.Effect.Parameters["AmbienceColor"].SetValue(new Vector4(0.5f, 0.5f, 0.5f, 1));
-                    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(2f, 2f, 2f, 1));
-                    part.Effect.Parameters["DiffuseLightDirection"].SetValue(new Vector3(-1.0f, 0.0f, 0f));
+                    part.Effect.Parameters["AmbienceColor"].SetValue(new Vector4(0.0f, 0.0f, 0.0f, 1));
+                    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(4f, 4f, 4f, 1));
+                    part.Effect.Parameters["DiffuseLightDirection"].SetValue(new Vector3(0.3f, 0.9f, 0.9f));
                 }
 
                 mesh.Draw();
             }
         }
+
         protected override InteractiveProp Copy()
         {
             Model3DSpawner NewProp = new Model3DSpawner(Map);

@@ -116,6 +116,34 @@ namespace ProjectEternity.Core.Graphics
             }
         }
 
+        public void SetLightDirection(Vector3 LightDirection)
+        {
+            foreach (ModelMesh ActiveMesh in OriginalModel.Meshes)
+            {
+                foreach (Effect ActiveEffect in ActiveMesh.Effects)
+                {
+                    if (ActiveEffect is BasicEffect)
+                    {
+                        BasicEffect BaseEffect = ActiveEffect as BasicEffect;
+                        BaseEffect.EnableDefaultLighting();
+                        BaseEffect.PreferPerPixelLighting = true;
+                        BaseEffect.DirectionalLight0.Direction = LightDirection;
+                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(1.1f, 1.1f, 1.1f);
+                        BaseEffect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
+                    }
+                    else if (ActiveEffect is SkinnedEffect)
+                    {
+                        SkinnedEffect SkinEffect = ActiveEffect as SkinnedEffect;
+                        SkinEffect.EnableDefaultLighting();
+                        SkinEffect.PreferPerPixelLighting = true;
+                        SkinEffect.DirectionalLight0.Direction = LightDirection;
+                        SkinEffect.DirectionalLight0.DiffuseColor = new Vector3(2.1f, 2.1f, 2.1f);
+                        SkinEffect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
+                    }
+                }
+            }
+        }
+
         public void Draw(Matrix View, Matrix Projection, Matrix World)
         {
             if (OriginalModel == null)
@@ -139,11 +167,6 @@ namespace ProjectEternity.Core.Graphics
                         BaseEffect.World = ListBone[ActiveMesh.ParentBone.Index].AbsoluteTransform * World;
                         BaseEffect.View = View;
                         BaseEffect.Projection = Projection;
-                        BaseEffect.EnableDefaultLighting();
-                        BaseEffect.PreferPerPixelLighting = true;
-                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(1.1f, 1.1f, 1.1f);
-                        BaseEffect.DirectionalLight0.Direction = new Vector3(0.2f, -0.4f, -0.8f);
-                        BaseEffect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
                     }
                     else if (ActiveEffect is SkinnedEffect)
                     {
@@ -151,12 +174,7 @@ namespace ProjectEternity.Core.Graphics
                         SkinEffect.World = ListBone[ActiveMesh.ParentBone.Index].AbsoluteTransform * World;
                         SkinEffect.View = View;
                         SkinEffect.Projection = Projection;
-                        SkinEffect.EnableDefaultLighting();
-                        SkinEffect.PreferPerPixelLighting = true;
                         SkinEffect.SetBoneTransforms(ArrayBoneTransform);
-                        SkinEffect.DirectionalLight0.DiffuseColor = new Vector3(2.1f, 2.1f, 2.1f);
-                        SkinEffect.DirectionalLight0.Direction = new Vector3(0.2f, -0.4f, -0.8f);
-                        SkinEffect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
                     }
                 }
 

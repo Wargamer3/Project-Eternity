@@ -1199,6 +1199,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
+                        ActivePlayer.Inventory.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
                         ActivePlayer.Inventory.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * Map.LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                     }
