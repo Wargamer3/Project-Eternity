@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Ressources
 
+        public SpriteFont fntMenuText;
         public SpriteFont fntDefaultText;
 
         public Texture2D sprActiveCreatureCursor;
@@ -76,6 +77,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprTileBorderBlue;
 
         #endregion
+
+        public static Color TextColor = Color.FromNonPremultiplied(210, 210, 210, 255);
 
         public readonly Vector3 LastPosition;
         private List<Player> ListLocalPlayerInfo;
@@ -233,8 +236,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!IsServer)
             {
-                ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
+                ChatInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
+                fntMenuText = Content.Load<SpriteFont>("Fonts/Arial16");
+                fntMenuText = Content.Load<SpriteFont>("Fonts/Arial30");
                 fntDefaultText = Content.Load<SpriteFont>("Fonts/Oxanium Bold Bigger");
 
                 sprActiveCreatureCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Active Creature Cursor");
@@ -917,7 +922,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (OnlineCommunicationClient != null && IsChatOpen)
             {
-                ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
+                ChatHelper.DrawChat(g, fntMenuText, OnlineCommunicationClient.Chat, ChatInput);
             }
 
             #region Handle screen shaking.

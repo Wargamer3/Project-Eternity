@@ -84,21 +84,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int ActionInfoBoxX = Constants.Width / 16;
-            int ActionInfoBoxY = Constants.Height / 3;
-            int ActionInfoBoxWidth = Constants.Width / 5;
-            int ActionInfoBoxHeight = Constants.Height / 14;
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, Map.ListAllPlayer[ActivePlayerIndex], Constants.Width / 16, Constants.Height / 10);
-            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
-            g.DrawStringCentered(Map.fntArial12, "Command Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, Map.ListAllPlayer[ActivePlayerIndex]);
+            ActionPanelPlayerDefault.DrawPhase(g, Map, "Command Selection");
 
-            float Scale = 0.52f;
-            int DistanceBetweenCard = Constants.Width / 8;
-            float CardsHeight = Constants.Height - 100;
+            float Scale = 0.545f;
+            int DistanceBetweenCard = 234;
 
             MenuHelper.DrawUpArrow(g);
 
-            float X = DistanceBetweenCard;
+            float X = DistanceBetweenCard + 27;
             Color CardColor = Color.FromNonPremultiplied(255, 255, 255, 200);
             DrawCardMiniature(g, Map.sprMap, CardColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprInfo, CardColor, ActionMenuCursor == 1, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
@@ -115,12 +109,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int TextWidth = BoxWidth - 60;
 
             MenuHelper.DrawNamedBox(g, "Command", new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
-            TextHelper.DrawTextMultiline(g, Map.fntArial12, TextHelper.FitToWidth(Map.fntArial12, ListNextChoice[ActionMenuCursor].ToString(), TextWidth), TextHelper.TextAligns.Left, InfoBoxX + BoxWidth / 2, InfoBoxY + 5, TextWidth);
+            TextHelper.DrawTextMultiline(g, Map.fntMenuText, TextHelper.FitToWidth(Map.fntMenuText, ListNextChoice[ActionMenuCursor].ToString(), TextWidth), TextHelper.TextAligns.Left, InfoBoxX + BoxWidth / 2, InfoBoxY + 5, TextWidth, SorcererStreetMap.TextColor);
         }
 
         private static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCard, Color CardFrontColor, bool Selected, float X, float MaxScale, float AnimationTime, float ExtraAnimationScale)
         {
-            float Y = Constants.Height - Constants.Height / 6;
+            float Y = 870;
 
             float Scale = ExtraAnimationScale;
             if (Selected)

@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain, Constants.Width / 12f, Constants.Height / 10f);
+            ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, ActiveTerrain);
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = 137;
@@ -109,14 +109,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float InfoBoxY = Constants.Height / 10;
 
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntArial12, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
+            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY - 10;
 
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Make it what terrain?", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Make it what terrain?", new Vector2(CurrentX, CurrentY), Color.White);
 
             CurrentY += 20;
             Color TextColor = Color.White;
@@ -125,9 +125,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 TextColor = Color.Gray;
             }
-            g.DrawString(Map.fntArial12, "Level 2", new Vector2(CurrentX + 10, CurrentY), TextColor);
+            g.DrawString(Map.fntMenuText, "Level 2", new Vector2(CurrentX + 10, CurrentY), TextColor);
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
+            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(3 - ActiveTerrain.LandLevel);
@@ -136,9 +136,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 TextColor = Color.Gray;
             }
 
-            g.DrawString(Map.fntArial12, "Level 3", new Vector2(CurrentX + 10, CurrentY), TextColor);
+            g.DrawString(Map.fntMenuText, "Level 3", new Vector2(CurrentX + 10, CurrentY), TextColor);
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
+            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(4 - ActiveTerrain.LandLevel);
@@ -147,9 +147,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 TextColor = Color.Gray;
             }
 
-            g.DrawString(Map.fntArial12, "Level 4", new Vector2(CurrentX + 10, CurrentY), TextColor);
+            g.DrawString(Map.fntMenuText, "Level 4", new Vector2(CurrentX + 10, CurrentY), TextColor);
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
+            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(5 - ActiveTerrain.LandLevel);
@@ -158,12 +158,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 TextColor = Color.Gray;
             }
 
-            g.DrawString(Map.fntArial12, "Level 5", new Vector2(CurrentX + 10, CurrentY), TextColor);
+            g.DrawString(Map.fntMenuText, "Level 5", new Vector2(CurrentX + 10, CurrentY), TextColor);
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
+            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 
             MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, InfoBoxY + 30 + 20 * ActionMenuCursor));
         }

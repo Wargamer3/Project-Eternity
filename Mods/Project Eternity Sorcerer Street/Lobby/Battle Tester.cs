@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private CardSymbols Symbols;
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
         private Texture2D sprVS;
 
         private FMODSound sndButtonOver;
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
             sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
             Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
@@ -157,7 +157,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.DefenderTerrain.TerrainTypeIndex = 2;
             Context.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;
 
-            ButtonHeight = fntArial12.LineSpacing + 2;
+            ButtonHeight = fntMenuText.LineSpacing + 2;
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
@@ -169,103 +169,103 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             #region Setup UI
 
-            InvaderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCreatureSelection);
-            InvaderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderItemSelection);
-            InvaderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderEnchantSelection);
-            InvaderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderPlayerEnchantSelection);
+            InvaderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, InvaderCreatureSelection);
+            InvaderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, InvaderItemSelection);
+            InvaderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, InvaderEnchantSelection);
+            InvaderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, InvaderPlayerEnchantSelection);
 
-            InvaderPlayerCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInHand, true);
+            InvaderPlayerCardsInHandInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInHand, true);
             InvaderPlayerCardsInHandInput.SetText("1");
-            InvaderPlayerCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInDeck, true);
+            InvaderPlayerCardsInDeckInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInDeck, true);
             InvaderPlayerCardsInDeckInput.SetText("1");
-            InvaderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderHPInput, true);
+            InvaderHPInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderHPInput, true);
             InvaderHPInput.SetText("30");
-            InvaderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderMaxHPInput, true);
+            InvaderMaxHPInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderMaxHPInput, true);
             InvaderMaxHPInput.SetText("30");
-            InvaderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSTInput, true);
+            InvaderSTInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSTInput, true);
             InvaderSTInput.SetText("30");
-            InvaderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSupportSTBonusInput, true);
+            InvaderSupportSTBonusInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSupportSTBonusInput, true);
             InvaderSupportSTBonusInput.SetText("1");
-            InvaderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderAirLandsInput, true);
+            InvaderAirLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderAirLandsInput, true);
             InvaderAirLandsInput.SetText("1");
-            InvaderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderEarthLandsInput, true);
+            InvaderEarthLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderEarthLandsInput, true);
             InvaderEarthLandsInput.SetText("1");
-            InvaderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderFireLandsInput, true);
+            InvaderFireLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderFireLandsInput, true);
             InvaderFireLandsInput.SetText("1");
-            InvaderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderWaterLandsInput, true);
+            InvaderWaterLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderWaterLandsInput, true);
             InvaderWaterLandsInput.SetText("1");
-            InvaderRankInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderRankInput, true);
+            InvaderRankInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderRankInput, true);
             InvaderRankInput.SetText("1");
-            InvaderGoldInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderGoldInput, true);
+            InvaderGoldInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderGoldInput, true);
             InvaderGoldInput.SetText("100");
-            InvaderLapInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderLapInput, true);
+            InvaderLapInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderLapInput, true);
             InvaderLapInput.SetText("0");
 
-            InvaderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderMapCreaturesSelection);
+            InvaderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, InvaderMapCreaturesSelection);
 
             MenuHeight = ButtonHeight * SetupMenuItemsDefender;
             X = Constants.Width - ButtonsWidth;
             Y = (Constants.Height - MenuHeight - HeaderHeight) / 2 + HeaderHeight;
 
-            DefenderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, fntArial12.LineSpacing), fntArial12, "Select", OnButtonOver, DefenderCreatureSelection);
-            DefenderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderItemSelection);
-            DefenderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderEnchantSelection);
-            DefenderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderPlayerEnchantSelection);
+            DefenderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, fntMenuText.LineSpacing), fntMenuText, "Select", OnButtonOver, DefenderCreatureSelection);
+            DefenderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, DefenderItemSelection);
+            DefenderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, DefenderEnchantSelection);
+            DefenderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, DefenderPlayerEnchantSelection);
 
-            DefenderPlayerCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInHand, true);
+            DefenderPlayerCardsInHandInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInHand, true);
             DefenderPlayerCardsInHandInput.SetText("1");
-            DefenderPlayerCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInDeck, true);
+            DefenderPlayerCardsInDeckInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInDeck, true);
             DefenderPlayerCardsInDeckInput.SetText("1");
-            DefenderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderHPInput, true);
+            DefenderHPInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderHPInput, true);
             DefenderHPInput.SetText("30");
-            DefenderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderMaxHPInput, true);
+            DefenderMaxHPInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderMaxHPInput, true);
             DefenderMaxHPInput.SetText("30");
-            DefenderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSTInput, true);
+            DefenderSTInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSTInput, true);
             DefenderSTInput.SetText("30");
-            DefenderTerrainHPBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderTerrainHPBonusInput, true);
+            DefenderTerrainHPBonusInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderTerrainHPBonusInput, true);
             DefenderTerrainHPBonusInput.SetText("1");
-            DefenderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSupportSTBonusInput, true);
+            DefenderSupportSTBonusInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSupportSTBonusInput, true);
             DefenderSupportSTBonusInput.SetText("1");
-            DefenderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderAirLandsInput, true);
+            DefenderAirLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderAirLandsInput, true);
             DefenderAirLandsInput.SetText("1");
-            DefenderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderEarthLandsInput, true);
+            DefenderEarthLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderEarthLandsInput, true);
             DefenderEarthLandsInput.SetText("1");
-            DefenderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderFireLandsInput, true);
+            DefenderFireLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderFireLandsInput, true);
             DefenderFireLandsInput.SetText("1");
-            DefenderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderWaterLandsInput, true);
+            DefenderWaterLandsInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderWaterLandsInput, true);
             DefenderWaterLandsInput.SetText("1");
-            DefenderRankInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderRankInput, true);
+            DefenderRankInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderRankInput, true);
             DefenderRankInput.SetText("2");
-            DefenderGoldInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderGoldInput, true);
+            DefenderGoldInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderGoldInput, true);
             DefenderGoldInput.SetText("100");
 
-            DefenderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderMapCreaturesSelection);
+            DefenderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntMenuText, "Select", OnButtonOver, DefenderMapCreaturesSelection);
 
-            DefenderLapInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderLapInput, true);
+            DefenderLapInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderLapInput, true);
             DefenderLapInput.SetText("0");
-            DefenderRoundInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetRoundInput, true);
+            DefenderRoundInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetRoundInput, true);
             DefenderRoundInput.SetText("1");
 
-            DefenderTerrainType = new DropDownButton(new Rectangle(X, Y += ButtonHeight, 95, 30), fntArial12, TerrainSorcererStreet.FireElement,
+            DefenderTerrainType = new DropDownButton(new Rectangle(X, Y += ButtonHeight, 95, 30), fntMenuText, TerrainSorcererStreet.FireElement,
                 new string[] { TerrainSorcererStreet.FireElement, TerrainSorcererStreet.WaterElement, TerrainSorcererStreet.EarthElement, TerrainSorcererStreet.AirElement, TerrainSorcererStreet.NeutralElement }, OnButtonOver, (SelectedItem) => { SetDefenderTerrainTerrainTypeIndex(SelectedItem); });
 
             #endregion
 
             #region Phases UI
 
-            MenuHeight = fntArial12.LineSpacing * PhaseMenuItems;
+            MenuHeight = fntMenuText.LineSpacing * PhaseMenuItems;
             X = (Constants.Width - PhasesMenuWidth) / 2;
             Y = (Constants.Height - MenuHeight - HeaderHeight) / 2 + HeaderHeight;
 
-            IntroPhaseButton = new BoxButton(new Rectangle(X, Y, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Intro Modifier", OnButtonOver, IntroPhaseSelection);
-            LandModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Land Modifier", OnButtonOver, LandModifierPhaseSelection);
-            CreatureModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Creature Modifier", OnButtonOver, CreatureModifierPhaseSelection);
-            EnchantModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Enchant Modifier", OnButtonOver, EnchantModifierPhaseSelection);
-            ItemModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Item Modifier", OnButtonOver, ItemModifierPhaseSelection);
-            BoostModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Boost Modifier", OnButtonOver, BoostModifierPhaseSelection);
-            AttackPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Attack", OnButtonOver, AttackPhaseSelection);
-            CounterPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Counter", OnButtonOver, CounterPhaseSelection);
-            ResultPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Result", OnButtonOver, ResultPhaseSelection);
+            IntroPhaseButton = new BoxButton(new Rectangle(X, Y, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Intro Modifier", OnButtonOver, IntroPhaseSelection);
+            LandModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Land Modifier", OnButtonOver, LandModifierPhaseSelection);
+            CreatureModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Creature Modifier", OnButtonOver, CreatureModifierPhaseSelection);
+            EnchantModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Enchant Modifier", OnButtonOver, EnchantModifierPhaseSelection);
+            ItemModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Item Modifier", OnButtonOver, ItemModifierPhaseSelection);
+            BoostModifierPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Boost Modifier", OnButtonOver, BoostModifierPhaseSelection);
+            AttackPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Attack", OnButtonOver, AttackPhaseSelection);
+            CounterPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Counter", OnButtonOver, CounterPhaseSelection);
+            ResultPhaseButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, PhasesMenuWidth, fntMenuText.LineSpacing), fntMenuText, "Result", OnButtonOver, ResultPhaseSelection);
 
             #endregion
 
@@ -1303,12 +1303,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (PhasesChoice)
             {
                 case PhasesChoices.Idle:
-                    ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
                     break;
 
                 case PhasesChoices.IntroPhase:
-                    ActionPanelBattleStartPhase.DrawAnimation(g, Context, fntArial12, sprVS);
+                    ActionPanelBattleStartPhase.DrawAnimation(g, Context, fntMenuText, sprVS);
                     break;
 
                 case PhasesChoices.CreatureModifierPhase:
@@ -1322,22 +1322,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.InvaderBattleEnd:
                 case PhasesChoices.UponDefeat:
                 case PhasesChoices.UponVictory:
-                    ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
-                    ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
+                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
+                    ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntMenuText, Context);
                     break;
 
                 case PhasesChoices.InvaderAttackPhase1:
                 case PhasesChoices.InvaderAttackPhase2:
                 case PhasesChoices.CounterPhase1:
                 case PhasesChoices.CounterPhase2:
-                    ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
                     break;
 
                 default:
-                    ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
                     break;
             }
 
@@ -1357,137 +1357,137 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int X = 0;
             int Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
             DrawBox(g, new Vector2(X, Y), SetupMenuWidth, HeaderHeight, Color.Black);
-            g.DrawStringCentered(fntArial12, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
+            g.DrawStringCentered(fntMenuText, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
 
             Y += HeaderHeight;
             DrawBox(g, new Vector2(X, Y), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Creature", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Invader Creature", new Vector2(X + 5, Y + 1), Color.White);
 
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Item", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Invader Item", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Enchant", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Invader Enchant", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Player Enchant", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Player Enchant", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Player Cards in hand", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Player Cards in hand", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Player Cards in deck", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Player Cards in deck", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader HP", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader HP", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Max HP", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Max HP", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader ST", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader ST", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Support ST Bonus", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Support ST Bonus", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Air Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Air Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Earth Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Earth Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Fire Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Fire Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Water Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Water Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Rank", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Rank", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Gold", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Gold", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Lap", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Lap", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Map Creatures", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Invader Map Creatures", new Vector2(X + 5, Y), Color.White);
 
             MenuHeight = ButtonHeight * SetupMenuItemsDefender;
             X = Constants.Width - SetupMenuWidth - ButtonsWidth;
             Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
 
             DrawBox(g, new Vector2(X, Y), SetupMenuWidth, HeaderHeight, Color.Black);
-            g.DrawStringCentered(fntArial12, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
+            g.DrawStringCentered(fntMenuText, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
 
             Y += HeaderHeight;
             DrawBox(g, new Vector2(X, Y), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Creature", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Defender Creature", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Item", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Defender Item", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Enchant", new Vector2(X + 5, Y + 1), Color.White);
+            g.DrawString(fntMenuText, "Defender Enchant", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Player Enchant", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Player Enchant", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Player Cards in hand", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Player Cards in hand", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Player Cards in deck", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Player Cards in deck", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender HP", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender HP", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Max HP", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Max HP", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender ST", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender ST", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Terrain HP Bonus", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Terrain HP Bonus", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Support ST Bonus", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Support ST Bonus", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Air Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Air Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Earth Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Earth Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Fire Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Fire Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Water Lands", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Water Lands", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Rank", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Rank", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Gold", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Gold", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Map Creatures", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Defender Map Creatures", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Current Lap", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Current Lap", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Current Round", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Current Round", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Terrain Type", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntMenuText, "Terrain Type", new Vector2(X + 5, Y), Color.White);
         }
 
         public void DrawPhaseSelectionMenu(CustomSpriteBatch g)
         {
-            int MenuHeight = fntArial12.LineSpacing * PhaseMenuItems;
+            int MenuHeight = fntMenuText.LineSpacing * PhaseMenuItems;
 
             int X = (Constants.Width - PhasesMenuWidth) / 2;
             int Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
 
             DrawBox(g, new Vector2(X, Y), PhasesMenuWidth, HeaderHeight, Color.Black);
-            g.DrawStringCentered(fntArial12, "Phases", new Vector2(X + PhasesMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
+            g.DrawStringCentered(fntMenuText, "Phases", new Vector2(X + PhasesMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
 
             Y += HeaderHeight;
             DrawBox(g, new Vector2(X, Y), PhasesMenuWidth, MenuHeight, Color.White);

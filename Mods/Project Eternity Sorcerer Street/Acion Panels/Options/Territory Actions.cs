@@ -100,28 +100,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float InfoBoxY = Constants.Height / 10;
 
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntArial12, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
+            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY - 10;
 
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "What would you like to do?", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "What would you like to do?", new Vector2(CurrentX, CurrentY), Color.White);
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Land Level Up", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Terrain Change", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Creature Movement", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;
-            g.DrawString(Map.fntArial12, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 
             MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, InfoBoxY + 30 + 20 * ActionMenuCursor));
 
-            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain, Constants.Width / 12f, Constants.Height / 10f);
+            ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, ActiveTerrain);
         }
     }
 }

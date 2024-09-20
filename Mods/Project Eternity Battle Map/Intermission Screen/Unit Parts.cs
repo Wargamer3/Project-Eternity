@@ -404,7 +404,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 TextHelper.DrawTextMultiline(g, fntFinlanderFont,
                     TextHelper.FitToWidth(fntFinlanderFont,
                         ListPartInfo[CursorIndexListPart - 1].ActivePart.Description, 300),
-                    TextHelper.TextAligns.Left, 335, Y + 25, 0);
+                    TextHelper.TextAligns.Left, 335, Y + 25, 0, Color.White);
             }
 
             if (ShowListPartCursor)

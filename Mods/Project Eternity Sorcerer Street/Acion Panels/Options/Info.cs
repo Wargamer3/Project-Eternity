@@ -34,6 +34,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
+                if (CursorIndex == 4)
+                {
+                    RemoveFromPanelList(this);
+                }
             }
             else if (InputHelper.InputUpPressed())
             {
@@ -74,25 +78,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int MenuBoxX = Constants.Width / 12;
-            int MenuBoxY = Constants.Height / 10;
-            int MenuBoxWidth = Constants.Width / 6;
-            int MenuBoxHeight = Constants.Height / 5;
-            int LineHeight = Constants.Height / 35;
+            int MenuBoxX = 190;
+            int MenuBoxY = 110;
+            int MenuBoxWidth = 446;
+            int MenuBoxHeight = 330;
+            int LineHeight = 52;
 
             MenuHelper.DrawNamedBox(g, "Menu", new Vector2(MenuBoxX, MenuBoxY), MenuBoxWidth, MenuBoxHeight);
 
-            g.DrawString(Map.fntArial12, "Information Menu", new Vector2(MenuBoxX + 20, MenuBoxY + 10), Color.White);
-            g.DrawString(Map.fntArial12, "Hand Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight), CursorIndex == 0 ? Color.Orange : Color.White);
-            g.DrawString(Map.fntArial12, "Player Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 2), CursorIndex == 1 ? Color.Orange : Color.White);
-            g.DrawString(Map.fntArial12, "Symbol Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 3), CursorIndex == 2 ? Color.Orange : Color.White);
-            g.DrawString(Map.fntArial12, "Land Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 4), CursorIndex == 3 ? Color.Orange : Color.White);
-            g.DrawString(Map.fntArial12, "Return", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 5), CursorIndex == 4 ? Color.Orange : Color.White);
+            MenuBoxX += 42;
+            MenuBoxY += 12;
 
-            int InformationBoxX = Constants.Width / 3;
-            int InformationBoxY = Constants.Height / 9;
-            int InformationBoxWidth = Constants.Width / 2;
-            int InformationBoxHeight = (int)(Constants.Height / 1.5f);
+            g.DrawString(Map.fntMenuText, "Information Menu", new Vector2(MenuBoxX + 20, MenuBoxY), Color.White);
+
+            MenuBoxX += 66;
+            MenuBoxY += 6;
+
+            g.DrawString(Map.fntMenuText, "Hand Info", new Vector2(MenuBoxX, MenuBoxY + LineHeight), CursorIndex == 0 ? Color.Orange : Color.White);
+            g.DrawString(Map.fntMenuText, "Player Info", new Vector2(MenuBoxX, MenuBoxY + LineHeight * 2), CursorIndex == 1 ? Color.Orange : Color.White);
+            g.DrawString(Map.fntMenuText, "Symbol Info", new Vector2(MenuBoxX, MenuBoxY + LineHeight * 3), CursorIndex == 2 ? Color.Orange : Color.White);
+            g.DrawString(Map.fntMenuText, "Land Info", new Vector2(MenuBoxX, MenuBoxY + LineHeight * 4), CursorIndex == 3 ? Color.Orange : Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(MenuBoxX, MenuBoxY + LineHeight * 5), CursorIndex == 4 ? Color.Orange : Color.White);
+
+            int InformationBoxX = 650;
+            int InformationBoxY = 110;
+            int InformationBoxWidth = 1110;
+            int InformationBoxHeight = 724;
 
             MenuHelper.DrawNamedBox(g, "Information", new Vector2(InformationBoxX, InformationBoxY), InformationBoxWidth, InformationBoxHeight);
 
@@ -107,64 +118,83 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
             }
 
-            int GameInformationBoxX = Constants.Width / 3;
-            int GameInformationBoxY = InformationBoxY + InformationBoxHeight + 54;
-            int GameInformationBoxWidth = Constants.Width / 2;
-            int GameInformationBoxHeight = Constants.Height / 20;
+            int GameInformationBoxX = 650;
+            int GameInformationBoxY = 880;
+            int GameInformationBoxWidth = 1110;
+            int GameInformationBoxHeight = 70;
 
-            int IconWidth = Constants.Width / 112;
-            int IconHeight = Constants.Width / 60;
+            int IconWidth = (int)(17 * 1.4f);
+            int IconHeight = (int)(32 * 1.4f);
+
             MenuHelper.DrawNamedBox(g, "Information", new Vector2(GameInformationBoxX, GameInformationBoxY), GameInformationBoxWidth, GameInformationBoxHeight);
-            g.DrawStringVerticallyAligned(Map.fntArial12, "Round: " + Map.GameTurn, new Vector2(GameInformationBoxX + 40, GameInformationBoxY + GameInformationBoxHeight / 2), Color.White);
-            g.DrawStringVerticallyAligned(Map.fntArial12, "Objective", new Vector2(GameInformationBoxX + 150, GameInformationBoxY + GameInformationBoxHeight / 2), Color.White);
-            g.Draw(Map.Symbols.sprMenuTG, new Rectangle(GameInformationBoxX + 240, GameInformationBoxY + GameInformationBoxHeight / 2 - Map.Symbols.sprMenuTG.Height / 2, IconWidth, IconHeight), Color.White);
-            g.DrawStringVerticallyAligned(Map.fntArial12, Map.MagicGoal.ToString(), new Vector2(GameInformationBoxX + 280, GameInformationBoxY + GameInformationBoxHeight / 2), Color.White);
-            g.DrawStringVerticallyAligned(Map.fntArial12, "Unlimited Rounds", new Vector2(GameInformationBoxX + 380, GameInformationBoxY + GameInformationBoxHeight / 2), Color.White);
+            GameInformationBoxX += 66;
+            g.DrawString(Map.fntMenuText, "Round: " + Map.GameTurn, new Vector2(GameInformationBoxX, GameInformationBoxY + 16), Color.White);
+            GameInformationBoxX += 246;
+            g.DrawString(Map.fntMenuText, "Objective", new Vector2(GameInformationBoxX, GameInformationBoxY + 16), Color.White);
+            GameInformationBoxX += 190;
+            g.Draw(Map.Symbols.sprMenuTG, new Rectangle(GameInformationBoxX, GameInformationBoxY + 10, IconWidth, IconHeight), Color.White);
+            GameInformationBoxX += 176;
+            g.DrawStringRightAligned(Map.fntMenuText, Map.MagicGoal.ToString(), new Vector2(GameInformationBoxX, GameInformationBoxY + 16), Color.White);
+            GameInformationBoxX = 1358;
+            g.DrawString(Map.fntMenuText, "Unlimited Rounds", new Vector2(GameInformationBoxX, GameInformationBoxY + 16), Color.White);
         }
 
-        private void DrawHandInfo(CustomSpriteBatch g, float X, float Y, int Width)
+        private void DrawHandInfo(CustomSpriteBatch g, int X, int Y, int Width)
         {
-            int LineHeight = Constants.Height / 35;
+            int IconWidth = (int)(17 * 1.4f);
+            int IconHeight = (int)(32 * 1.4f);
 
-            g.DrawString(Map.fntArial12, "Hand " + ActivePlayer.ListCardInHand.Count + " Cards", new Vector2(X + 20, Y + 10), Color.White);
-            Y += LineHeight + 5;
-            g.DrawLine(GameScreen.sprPixel, new Vector2(X + 20, Y), new Vector2(X + Width - 40, Y), Color.White);
+            int LineHeight = Map.fntMenuText.LineSpacing;
+            X += 66;
+            g.DrawString(Map.fntMenuText, "Hand " + ActivePlayer.ListCardInHand.Count + " Cards", new Vector2(X, Y + 10), Color.White);
+            Y += LineHeight + 10;
+            g.DrawLine(GameScreen.sprPixel, new Vector2(X, Y), new Vector2(X + Width - 146, Y), Color.White, 2);
+            Y += 8;
             foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
             {
-                int Offset = 30;
+                int Offset = 0;
                 foreach (Texture2D ActiveIcon in ActiveCard.GetIcons(Map.Symbols))
                 {
-                    g.Draw(ActiveIcon, new Vector2(X + Offset, Y + 5), Color.White);
-                    Offset += ActiveIcon.Width + 10;
+                    g.Draw(ActiveIcon, new Rectangle(X + Offset, Y + 6, IconHeight, IconHeight), Color.White);
+                    Offset += 50;
                 }
 
-                g.DrawString(Map.fntArial12, ActiveCard.Name, new Vector2(X + Offset, Y + 10), Color.White);
+                g.DrawString(Map.fntMenuText, ActiveCard.Name, new Vector2(X + Offset, Y), Color.White);
+
+                g.Draw(Map.Symbols.sprMenuG, new Rectangle(X + 534, Y + 6, IconWidth, IconHeight), Color.White);
+
+                g.DrawStringRightAligned(Map.fntMenuText, ActiveCard.MagicCost.ToString(), new Vector2(X + 654, Y), Color.White);
                 Y += LineHeight;
             }
         }
 
         private void DrawPlayerInfo(CustomSpriteBatch g, float X, float Y, int Width)
         {
-            int LineHeight = Constants.Height / 30;
-            int IconWidth = Constants.Width / 112;
-            int IconHeight = Constants.Width / 60;
+            int LineHeight = 52;
+            int IconWidth = (int)(17 * 1.5f);
+            int IconHeight = (int)(32 * 1.5f);
 
             Y += 10;
-            X += 30;
+            X += 60;
 
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 Player ActivePlayer = Map.ListPlayer[P];
+                if (ActivePlayer.TeamIndex < 0)
+                {
+                    continue;
+                }
+
                 g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
-                g.DrawStringCentered(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
-                g.DrawString(Map.fntArial12, ActivePlayer.Name, new Vector2(X + IconHeight + 5, Y), Color.White);
+                g.DrawStringCentered(Map.fntMenuText, Map.DicTeam[ActivePlayer.TeamIndex].Rank.ToString(), new Vector2(X + 22, Y  + 28), Color.White);
+                g.DrawString(Map.fntMenuText, ActivePlayer.Name, new Vector2(X + IconHeight + 5, Y), Color.White);
 
                 Y += LineHeight;
                 g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, IconWidth, IconHeight), Color.White);
-                g.DrawString(Map.fntArial12, ActivePlayer.Gold.ToString(), new Vector2(X + IconWidth + 5, Y), Color.White);
+                g.DrawString(Map.fntMenuText, ActivePlayer.Gold.ToString(), new Vector2(X + IconWidth + 5, Y + 6), Color.White);
 
-                g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 100, (int)Y, IconWidth, IconHeight), Color.White);
-                g.DrawString(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 100 + IconWidth + 5, Y), Color.White);
+                g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 210, (int)Y, IconWidth, IconHeight), Color.White);
+                g.DrawString(Map.fntMenuText, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 210 + IconWidth + 5, Y + 6), Color.White);
 
                 for (int C = 0; C < Map.ListCheckpoint.Count; C++)
                 {
@@ -174,16 +204,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         switch (ActiveCheckpoint)
                         {
                             case SorcererStreetMap.Checkpoints.North:
-                                g.Draw(Map.sprDirectionNorthFilled, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionNorthFilled, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.South:
-                                g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.East:
-                                g.Draw(Map.sprDirectionEastFilled, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionEastFilled, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.West:
-                                g.Draw(Map.sprDirectionWestFilled, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionWestFilled, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                         }
                     }
@@ -192,16 +222,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         switch (ActiveCheckpoint)
                         {
                             case SorcererStreetMap.Checkpoints.North:
-                                g.Draw(Map.sprDirectionNorth, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionNorth, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.South:
-                                g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.East:
-                                g.Draw(Map.sprDirectionEast, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionEast, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                             case SorcererStreetMap.Checkpoints.West:
-                                g.Draw(Map.sprDirectionWest, new Rectangle((int)X + 200 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                                g.Draw(Map.sprDirectionWest, new Rectangle((int)X + 412 + C * 34, (int)Y, IconHeight, IconHeight), Color.White);
                                 break;
                         }
                     }
@@ -212,7 +242,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (P + 1 < Map.ListPlayer.Count)
                 {
                     Y += LineHeight + 5;
-                    g.DrawLine(GameScreen.sprPixel, new Vector2(X + 20, Y), new Vector2(X + Width - 40, Y), Color.White);
+                    g.DrawLine(GameScreen.sprPixel, new Vector2(X, Y), new Vector2(X + Width - 146, Y), Color.White, 2);
                 }
 
                 Y += 10;

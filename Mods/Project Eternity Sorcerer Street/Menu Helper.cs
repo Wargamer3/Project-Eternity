@@ -211,7 +211,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawDownArrow(CustomSpriteBatch g)
         {
-            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20 - (float)Math.Sin(AnimationTimer * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
+            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 66 - (float)Math.Sin(AnimationTimer * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
         }
 
         public static void DrawRightArrow(CustomSpriteBatch g)

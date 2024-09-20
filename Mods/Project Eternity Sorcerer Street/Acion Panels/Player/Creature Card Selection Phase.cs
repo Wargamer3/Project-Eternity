@@ -56,13 +56,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             base.Draw(g);
-            int ActionInfoBoxX = Constants.Width / 16;
-            int ActionInfoBoxY = Constants.Height / 3;
-            int ActionInfoBoxWidth = Constants.Width / 5;
-            int ActionInfoBoxHeight = Constants.Height / 14;
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
-            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
-            g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
+
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer);
+            ActionPanelPlayerDefault.DrawPhase(g, Map, "Creature Selection");
             MenuHelper.DrawUpArrow(g);
             MenuHelper.DrawDownArrow(g);
         }

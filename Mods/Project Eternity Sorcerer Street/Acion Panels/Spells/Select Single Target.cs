@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Acion_Panels
         {
 
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 70), 200, 30, Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, "Select a target", new Vector2(Constants.Width / 2, Constants.Height - 65), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Select a target", new Vector2(Constants.Width / 2, Constants.Height - 65), Color.White);
             g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width / 2 + 76, Constants.Height - 65, 18, 18), Color.White);
         }
     }

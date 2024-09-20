@@ -11,7 +11,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
+        private SpriteFont fntMenuTextBigger;
         private SpriteFont fntArial26;
 
         private CardSymbols Symbols;
@@ -45,7 +46,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial16");
+            fntMenuTextBigger = Content.Load<SpriteFont>("Fonts/Arial18");
             fntArial26 = Content.Load<SpriteFont>("Fonts/Arial26");
 
             Symbols = CardSymbols.Symbols;
@@ -86,23 +88,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
 
             X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, "Book Edit", new Vector2(X, Y), Color.White);
-            g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
             X = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntArial12, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
-            g.DrawString(fntArial12, "OK", new Vector2(X + 20, Y), Color.White);
+            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
+            g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
 
             g.Draw(ActiveCard.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.sprCard.Width / 2, ActiveCard.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
             g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 16 - HeaderHeight - 30), Color.White);
-            ActiveCard.DrawCardInfo(g, Symbols, fntArial12, 0,  70);
+            ActiveCard.DrawCardInfo(g, Symbols, fntMenuTextBigger, 0,  70);
 
             X = -10;
             Y = Constants.Height - Constants.Height / 16 - HeaderHeight;
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
             X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
                 + " [Arrows] Adjust Card Count"
                 + " [Q] Toggle Info"
                 + " [X] Confirm Card Count"

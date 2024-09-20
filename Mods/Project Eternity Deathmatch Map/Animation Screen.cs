@@ -694,12 +694,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveQuoteSet != null)
                 {
-                    TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 38, 500);
+                    TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 38, 500, Color.White);
                 }
             }
             else if (ActiveQuoteSet != null)
             {
-                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 10, 500);
+                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 10, 500, Color.White);
             }
 
             g.End();

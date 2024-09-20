@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Ressources
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
 
         #endregion
 
@@ -265,7 +265,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / CardsPerLine);
             MissionScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height / 6), Constants.Height - Constants.Height / 3, MaxY, OnMissionScrollbarChange);
 
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
         }
 
         private void OnMissionScrollbarChange(float ScrollbarValue)
@@ -397,15 +397,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
 
             X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, "Book Edit", new Vector2(X, Y), Color.White);
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
             if (ActivePlayer != null)
             {
-                g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+                g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
             }
             X = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntArial12, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
-            g.DrawString(fntArial12, "OK", new Vector2(X + 20, Y), Color.White);
+            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
+            g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
 
             int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7) - 50;
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);
@@ -415,8 +415,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = Constants.Height - Constants.Height / 20 - HeaderHeight;
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
             X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, "Edit this Book's contents", new Vector2(X, Y), Color.White);
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, "Edit this Book's contents", new Vector2(X, Y), Color.White);
 
             MissionScrollbar.Draw(g);
         }

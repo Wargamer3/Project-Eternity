@@ -162,10 +162,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
             Map.GlobalSorcererStreetBattleContext.Background.Draw(g, Constants.Width, Constants.Height);
 
-            DrawAnimation(g, Map.GlobalSorcererStreetBattleContext, Map.fntArial12, Map.sprVS);
+            DrawAnimation(g, Map.GlobalSorcererStreetBattleContext, Map.fntMenuText, Map.sprVS);
         }
 
-        public static void DrawAnimation(CustomSpriteBatch g, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, SpriteFont fntArial12, Texture2D sprVS)
+        public static void DrawAnimation(CustomSpriteBatch g, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, SpriteFont fntMenuText, Texture2D sprVS)
         {
             if (AnimationTime >= 2)
             {
@@ -182,7 +182,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     IntroduceInvader(g, GlobalSorcererStreetBattleContext);
                     IntroduceDefender(g, GlobalSorcererStreetBattleContext);
-                    DisplayVersusText(g, GlobalSorcererStreetBattleContext, fntArial12, sprVS);
+                    DisplayVersusText(g, GlobalSorcererStreetBattleContext, fntMenuText, sprVS);
                 }
             }
         }

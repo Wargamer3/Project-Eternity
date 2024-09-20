@@ -233,13 +233,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 DrawnCard.DrawCard(g);
-                DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+                DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
 
                 int BoxY = Constants.Height - Constants.Height / 10;
                 int BoxHeight = Constants.Height / 20;
 
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 2 - 100, BoxY), Constants.Width / 8, BoxHeight);
-                g.DrawStringCentered(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, BoxY + BoxHeight / 2), Color.White);
+                g.DrawStringCentered(Map.fntMenuText, "Drew 1 card", new Vector2(Constants.Width / 2, BoxY + BoxHeight / 2), SorcererStreetMap.TextColor);
                 MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 2 + 76, BoxY + 3));
             }
         }

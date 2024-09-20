@@ -9,9 +9,9 @@ namespace ProjectEternity.Core.Graphics
     public abstract class Camera3D
     {
         public Matrix View;
+        public Matrix Projection;
         protected Matrix CameraRotation;
         public Vector3 CameraPosition3D;
-        public Matrix Projection;
 
         public Camera3D(GraphicsDevice g)
         {

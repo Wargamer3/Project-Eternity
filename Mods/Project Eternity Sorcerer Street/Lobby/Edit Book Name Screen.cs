@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected FMODSound sndButtonOver;
         protected FMODSound sndButtonClick;
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
 
         protected BoxButton CancelButton;
         protected BoxButton OKButton;
@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
 
             int BoxWidth = (int)(Constants.Width * 0.55);
             int InnerBoxWidth = (int)(BoxWidth * 0.95);
@@ -71,10 +71,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int ButtonCancelX = ButtonOKX - ButtonsWidth - 5;
             int ButtonsY = BoxY + BoxHeigth - ButtonsHeight - 10;
 
-            CancelButton = new BoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "Cancel", OnButtonOver, Cancel);
-            OKButton = new BoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "OK", OnButtonOver, ConfirmName);
+            CancelButton = new BoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntMenuText, "Cancel", OnButtonOver, Cancel);
+            OKButton = new BoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntMenuText, "OK", OnButtonOver, ConfirmName);
 
-            BookNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(RoomInfoX + 74, RoomInfoY + 20), new Vector2(314, 20));
+            BookNameInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(RoomInfoX + 74, RoomInfoY + 20), new Vector2(314, 20));
 
             BookNameInput.SetText(OriginalBookName);
 
@@ -149,9 +149,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int RoomInfoY = BoxY + (int)(BoxHeigth * 0.1);
             int RoomInfoHeight = (int)(BoxHeigth * 0.5);
             DrawBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeigth, Color.White);
-            g.DrawString(fntArial12, "Choose Book Name", new Vector2(BoxX + 20, BoxY + 15), Color.White);
+            g.DrawString(fntMenuText, "Choose Book Name", new Vector2(BoxX + 20, BoxY + 15), Color.White);
             DrawBox(g, new Vector2(RoomInfoX, RoomInfoY), InnerBoxWidth, RoomInfoHeight, Color.White);
-            g.DrawString(fntArial12, "Name", new Vector2(BoxX + 25, RoomInfoY + 18), Color.White);
+            g.DrawString(fntMenuText, "Name", new Vector2(BoxX + 25, RoomInfoY + 18), Color.White);
             DrawBox(g, new Vector2(RoomInfoX + 64, RoomInfoY + 15), (int)(BoxWidth * 0.75), 30, Color.White);
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)

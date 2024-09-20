@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            Vector3 Visible3DPosition = new Vector3(CursorPosition.X, CursorPosition.Z * Map3DDrawable.LayerHeight, CursorPosition.Y);
+            Vector3 Visible3DPosition = new Vector3(CursorPosition.X, CursorPosition.Z * Map.LayerHeight, CursorPosition.Y);
             Vector3 Position = new Vector3(Visible3DPosition.X, Visible3DPosition.Y, Visible3DPosition.Z);
 
             Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, Camera.Projection, Camera.View, Matrix.Identity);
@@ -104,10 +104,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (HoverTerrain.TerrainTypeIndex != 0)
             {
-                ActionPanelPlayerDefault.DrawLandInformation(g, Map, HoverTerrain, Constants.Width / 12f, Constants.Height / 10f);
+                ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, HoverTerrain);
                 if (HoverTerrain.DefendingCreature != null)
                 {
-                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
 
                     int BoxWidth = (int)(Constants.Width / 2.8);
                     int BoxHeight = (int)(Constants.Height / 8);
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     float InfoBoxY = Constants.Height / 2 + Constants.Height / 5;
 
                     GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-                    g.DrawString(Map.fntArial12, "Support", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
+                    g.DrawString(Map.fntMenuText, "Support", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
                     GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
 
                     float CurrentX = InfoBoxX + 10;
@@ -123,11 +123,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     CurrentY += 20;
 
-                    g.DrawString(Map.fntArial12, "Support / Land Effect", new Vector2(CurrentX, CurrentY), Color.White);
+                    g.DrawString(Map.fntMenuText, "Support / Land Effect", new Vector2(CurrentX, CurrentY), Color.White);
                     CurrentY += 20;
-                    g.DrawString(Map.fntArial12, "+" + 10, new Vector2(CurrentX + 10, CurrentY), Color.White);
-                    g.DrawString(Map.fntArial12, "/", new Vector2(CurrentX + 60, CurrentY), Color.White);
-                    g.DrawString(Map.fntArial12, "+" + 10, new Vector2(CurrentX + 85, CurrentY), Color.White);
+                    g.DrawString(Map.fntMenuText, "+" + 10, new Vector2(CurrentX + 10, CurrentY), Color.White);
+                    g.DrawString(Map.fntMenuText, "/", new Vector2(CurrentX + 60, CurrentY), Color.White);
+                    g.DrawString(Map.fntMenuText, "+" + 10, new Vector2(CurrentX + 85, CurrentY), Color.White);
                 }
             }
         }

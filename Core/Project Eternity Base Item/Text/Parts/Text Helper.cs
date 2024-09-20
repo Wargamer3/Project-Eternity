@@ -158,7 +158,7 @@ namespace ProjectEternity.Core
             }
         }
 
-        public static void DrawTextMultiline(CustomSpriteBatch g, SpriteFont TextFont, List<string> ListText, TextAligns TextAlign, float XPos, float YPos, int TextMaxWidthInPixel)
+        public static void DrawTextMultiline(CustomSpriteBatch g, SpriteFont TextFont, List<string> ListText, TextAligns TextAlign, float XPos, float YPos, int TextMaxWidthInPixel, Color TextColor)
         {
             float YOffset = 0;
 
@@ -167,7 +167,7 @@ namespace ProjectEternity.Core
                 XPos -= TextMaxWidthInPixel / 2;
                 foreach (string ActiveLine in ListText)
                 {
-                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), TextColor);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -177,7 +177,7 @@ namespace ProjectEternity.Core
                 foreach (string ActiveLine in ListText)
                 {
                     int TextWidth = (int)TextFont.MeasureString(ActiveLine).X;
-                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), TextColor, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -186,7 +186,7 @@ namespace ProjectEternity.Core
                 foreach (string ActiveLine in ListText)
                 {
                     int TextWidth = (int)TextFont.MeasureString(ActiveLine).X / 2;
-                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), TextColor, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -201,7 +201,7 @@ namespace ProjectEternity.Core
                     for (int C = 0; C < ActiveLine.Length; ++C)
                     {
                         float Offset = TextFont.MeasureString(ActiveLine.Substring(0, C)).X;
-                        g.DrawString(TextFont, ActiveLine[C].ToString(), new Vector2(XPos + Offset * ScaleFactor, YPos + YOffset), Color.White);
+                        g.DrawString(TextFont, ActiveLine[C].ToString(), new Vector2(XPos + Offset * ScaleFactor, YPos + YOffset), TextColor);
                     }
                     YOffset += TextFont.LineSpacing;
                 }

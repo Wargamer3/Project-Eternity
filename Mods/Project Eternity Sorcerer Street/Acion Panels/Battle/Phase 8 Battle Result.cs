@@ -200,31 +200,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = Constants.Height / 4;
             MenuHelper.DrawBox(g, new Vector2(Constants.Width / 16, Y), Constants.Width - Constants.Width / 8, Constants.Height / 5);
             Y = Constants.Height / 4 + 10;
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name + "'s", new Vector2(Constants.Width / 4, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name + "'s", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name + "'s", new Vector2(Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name + "'s", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
             Y = Constants.Height / 4 + 35;
             g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 12, Y), new Vector2(Constants.Width - Constants.Width / 12, Y), Color.White);
             Y = Constants.Height / 4 + 40;
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.Name, new Vector2(Constants.Width / 4, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Creature.Name, new Vector2(Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Creature.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
 
             Y += 30;
             if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP > 0)
             {
                 if (Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP > 0)
                 {
-                    g.DrawStringMiddleAligned(Map.fntArial12, "survived", new Vector2(Constants.Width / 4, Y), Color.White);
+                    g.DrawStringMiddleAligned(Map.fntMenuText, "survived", new Vector2(Constants.Width / 4, Y), Color.White);
                 }
                 else
                 {
-                    g.DrawStringMiddleAligned(Map.fntArial12, "was destroyed", new Vector2(Constants.Width / 4, Y), Color.White);
+                    g.DrawStringMiddleAligned(Map.fntMenuText, "was destroyed", new Vector2(Constants.Width / 4, Y), Color.White);
                 }
-                g.DrawStringMiddleAligned(Map.fntArial12, "defended the land", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "defended the land", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
             }
             else
             {
-                g.DrawStringMiddleAligned(Map.fntArial12, "took the land", new Vector2(Constants.Width / 4, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "was destroyed", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "took the land", new Vector2(Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "was destroyed", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
             }
         }
     }

@@ -106,58 +106,78 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxHeight = Constants.Height / 6;
+            int BoxHeight = 200;
 
-            int BoxPostion = Constants.Height / 10;
+            int BoxPostion = 100;
             for (int P = 0; P < Map.ListPlayer.Count; ++P)
             {
                 if (Map.ListPlayer[P].Inventory == null)
                     continue;
 
-                DrawPlayerInformation(g, Map, Map.ListPlayer[P], Constants.Width / 16, BoxPostion);
+                DrawPlayerInformation(g, Map, Map.ListPlayer[P], 160, BoxPostion);
                 BoxPostion += BoxHeight;
             }
 
-            int BoxWidth = Constants.Width / 10;
-            BoxHeight = Constants.Height / 10;
-            float X = (Constants.Width - BoxWidth) / 2;
-            float Y = Constants.Height * 0.8f;
-            MenuHelper.DrawBorderlessBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
-            MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 45, Y + BoxHeight - 50));
+            int BoxWidth = 400;
 
-            X += 7;
-            //Draw Round + round number
-            g.DrawString(Map.fntArial12, "Round " + Map.GameTurn, new Vector2(X + 30, Y + 15), Color.White);
-
-            Y += 25;
             //Draw Player Name's turn
-            g.DrawString(Map.fntArial12, Map.ListPlayer[Map.ActivePlayerIndex].Name + "'s turn", new Vector2(X + 30, Y + 15), Color.White);
+            System.Collections.Generic.List<string> ListLine = TextHelper.FitToWidth(Map.fntMenuText, Map.ListPlayer[Map.ActivePlayerIndex].Name + "'s turn", BoxWidth);
+
+            BoxHeight = 62 + Map.fntMenuText.LineSpacing + Map.fntMenuText.LineSpacing * ListLine.Count;
+            float X = (Constants.Width - BoxWidth) / 2;
+            float Y = 830 - BoxHeight / 2;
+            MenuHelper.DrawBorderlessBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
+            MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 50, Y + BoxHeight - 55));
+
+            X += 70;
+            Y += 26;
+            //Draw Round + round number
+            g.DrawString(Map.fntMenuText, "Round " + Map.GameTurn, new Vector2(X, Y), SorcererStreetMap.TextColor);
+
+            Y += Map.fntMenuText.LineSpacing;
+            TextHelper.DrawTextMultiline(g, Map.fntMenuText, ListLine, TextHelper.TextAligns.Left, X + BoxWidth / 2, Y, BoxWidth, SorcererStreetMap.TextColor);
+        }
+
+        public static void DrawPhase(CustomSpriteBatch g, SorcererStreetMap Map, string PhaseName)
+        {
+            int ActionInfoBoxX = 160;
+            int ActionInfoBoxY = 446;
+            int ActionInfoBoxWidth = 620;
+            int ActionInfoBoxHeight = 90;
+            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
+            g.DrawStringCentered(Map.fntMenuText, PhaseName, new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2 + 6), SorcererStreetMap.TextColor);
+        }
+
+        public static void DrawPlayerInformation(CustomSpriteBatch g, SorcererStreetMap Map, Player ActivePlayer)
+        {
+            DrawPlayerInformation(g, Map, ActivePlayer, 140, 100);
         }
 
         public static void DrawPlayerInformation(CustomSpriteBatch g, SorcererStreetMap Map, Player ActivePlayer, float X, float Y)
         {
-            int BoxWidth = (int)(Constants.Width / 3);
-            int BoxHeight = (Constants.Height / 9);
-            int IconWidth = Constants.Width / 112;
-            int IconHeight = Constants.Width / 60;
-            int LineHeight = IconHeight + 5;
+            int BoxWidth = 530;
+            int BoxHeight = 180;
+            int IconWidth = (int)(17 * 1.5);
+            int IconHeight = (int)(32 * 1.5);
+            int LineHeight = Map.fntMenuText.LineSpacing;
 
             MenuHelper.DrawBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
 
-            X += 7;
+            X += 40;
+            Y += 14;
             //Draw Player name
-            g.DrawString(Map.fntArial12, ActivePlayer.Name, new Vector2(X, Y + 5), Color.White);
+            g.DrawString(Map.fntMenuText, ActivePlayer.Name, new Vector2(X, Y), SorcererStreetMap.TextColor);
 
-            Y += LineHeight;
+            Y += LineHeight + 6;
             //Draw Player Magic
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, IconWidth, IconHeight), Color.White);
-            g.DrawString(Map.fntArial12, ActivePlayer.Gold.ToString(), new Vector2(X + 20, Y), Color.White);
+            g.DrawString(Map.fntMenuText, ActivePlayer.Gold.ToString(), new Vector2(X + 30, Y + 6), SorcererStreetMap.TextColor);
 
             //Draw Player Total Magic
-            g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, IconWidth, IconHeight), Color.White);
-            g.DrawString(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 80, Y), Color.White);
+            g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 160, (int)Y, IconWidth, IconHeight), Color.White);
+            g.DrawString(Map.fntMenuText, Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic.ToString(), new Vector2(X + 190, Y + 6), SorcererStreetMap.TextColor);
 
-            Y += LineHeight;
+            Y += LineHeight +8;
             //Draw Player color and it's position
             //Position if based on the number of checkpoints and then player order
             if (ActivePlayer.Color == Color.Red)
@@ -185,9 +205,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
-                g.DrawStringCentered(Map.fntArial12, Map.DicTeam[ActivePlayer.TeamIndex].Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
+                g.DrawStringCentered(Map.fntMenuText, Map.DicTeam[ActivePlayer.TeamIndex].Rank.ToString(), new Vector2(X + IconHeight / 2 - 2, Y + IconHeight / 2 + 4), SorcererStreetMap.TextColor);
             }
 
+            X += 80;
             for (int C = 0; C < Map.ListCheckpoint.Count; C++)
             {
                 SorcererStreetMap.Checkpoints ActiveCheckpoint = Map.ListCheckpoint[C];
@@ -230,41 +251,52 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public static void DrawLandInformationTop(CustomSpriteBatch g, SorcererStreetMap Map, TerrainSorcererStreet HoverTerrain)
+        {
+            DrawLandInformation(g, Map, HoverTerrain, 160, 100);
+        }
+
+        public static void DrawLandInformationBottom(CustomSpriteBatch g, SorcererStreetMap Map, TerrainSorcererStreet HoverTerrain)
+        {
+            DrawLandInformation(g, Map, HoverTerrain, Constants.Width / 16f, Constants.Height - Constants.Height / 3.5f);
+        }
+
         public static void DrawLandInformation(CustomSpriteBatch g, SorcererStreetMap Map, TerrainSorcererStreet HoverTerrain, float X, float Y)
         {
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = (int)(Constants.Height / 5);
+            int BoxWidth = 685;
+            int BoxHeight = 236;
+            int IconWidth = (int)(32 * 1.5);
+            int IconHeight = (int)(32 * 1.5);
 
             MenuHelper.DrawNamedBox(g, "Land Information", new Vector2(X, Y), BoxWidth, BoxHeight);
 
             float CurrentX = X + 50;
-            float CurrentY = Y - 10;
+            float CurrentY = Y + 18;
 
-            float LineHight = Constants.Height / 30;
+            float LineHight = 56;
 
-            CurrentY += 20;
-
-            g.DrawString(Map.fntArial12, "Owner: " + "None", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Owner: " + "None", new Vector2(CurrentX, CurrentY), Color.White);
             CurrentY += LineHight;
-            g.DrawString(Map.fntArial12, "Value: " + HoverTerrain.CurrentValue, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Value: " + HoverTerrain.CurrentValue, new Vector2(CurrentX, CurrentY), Color.White);
             CurrentY += LineHight;
-            g.DrawString(Map.fntArial12, "Toll: " + HoverTerrain.CurrentToll, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Toll: " + HoverTerrain.CurrentToll, new Vector2(CurrentX, CurrentY), Color.White);
             CurrentY += LineHight;
-            g.DrawString(Map.fntArial12, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), Color.White);
 
+            CurrentX = X + 180;
             switch (Map.ListTerrainType[HoverTerrain.TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.FireElement:
-                    g.Draw(Map.Symbols.sprElementFire, new Vector2((int)X + 110, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementFire, new Rectangle((int)CurrentX, (int)CurrentY - 2, IconWidth, IconHeight), Color.White);
                     break;
                 case TerrainSorcererStreet.WaterElement:
-                    g.Draw(Map.Symbols.sprElementWater, new Vector2((int)X + 110, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementWater, new Rectangle((int)CurrentX, (int)CurrentY - 2, IconWidth, IconHeight), Color.White);
                     break;
                 case TerrainSorcererStreet.EarthElement:
-                    g.Draw(Map.Symbols.sprElementEarth, new Vector2((int)X + 110, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementEarth, new Rectangle((int)CurrentX, (int)CurrentY - 2, IconWidth, IconHeight), Color.White);
                     break;
                 case TerrainSorcererStreet.AirElement:
-                    g.Draw(Map.Symbols.sprElementAir, new Vector2((int)X + 110, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementAir, new Rectangle((int)CurrentX, (int)CurrentY - 2, IconWidth, IconHeight), Color.White);
                     break;
             }
         }

@@ -253,7 +253,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         (int)ActiveNode.Size.X + 10, (int)ActiveNode.Size.Y + 10, Color.White);
 
                     TextHelper.DrawTextMultiline(g, fntArial8, TextHelper.FitToWidth(fntArial8, ActiveNode.Name, 100),
-                        TextHelper.TextAligns.Center, ActiveNode.Position.X + NodeOffsetX, ActiveNode.Position.Y + ActiveNode.Size.Y + NodeOffsetY - 10, 100);
+                        TextHelper.TextAligns.Center, ActiveNode.Position.X + NodeOffsetX, ActiveNode.Position.Y + ActiveNode.Size.Y + NodeOffsetY - 10, 100, Color.White);
                 }
                 DrawBox(g, new Vector2(ActiveNode.Position.X + NodeOffsetX - ActiveNode.Size.X / 2, ActiveNode.Position.Y + NodeOffsetY - ActiveNode.Size.Y / 2),
                     (int)ActiveNode.Size.X, (int)ActiveNode.Size.Y, Color.Black);

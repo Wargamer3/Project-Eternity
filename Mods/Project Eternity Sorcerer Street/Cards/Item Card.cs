@@ -107,10 +107,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
         {
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = (int)(Constants.Height / 2);
-            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth + OffsetX;
-            float InfoBoxY = Constants.Height / 10 + OffsetY;
+            int BoxWidth = 620;
+            int BoxHeight = 540;
+            float InfoBoxX = Constants.Width - BoxWidth - 50 + OffsetX;
+            float InfoBoxY = 108;
+            int IconWidth = 17;
+            int IconHeight = 32;
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY + Constants.Height / 24;

@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
         }
 
         public override void Update(GameTime gameTime)

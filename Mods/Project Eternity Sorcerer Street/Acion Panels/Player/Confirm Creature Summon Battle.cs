@@ -118,12 +118,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             SelectedCard.DrawCard(g);
-            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
 
             MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 2 - 150, Constants.Height - 120), 300, 90);
-            g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, "Yes", new Vector2(Constants.Width / 2, Constants.Height - 85), Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, "No", new Vector2(Constants.Width / 2, Constants.Height - 60), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Yes", new Vector2(Constants.Width / 2, Constants.Height - 85), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "No", new Vector2(Constants.Width / 2, Constants.Height - 60), Color.White);
             MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 95 + CursorIndex * 25));
         }
     }

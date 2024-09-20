@@ -319,55 +319,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public virtual void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
         {
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = (int)(Constants.Height / 2);
-            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth + OffsetX;
-            float InfoBoxY = Constants.Height / 10 + OffsetY;
-            int IconWidth = Constants.Width / 112;
-            int IconHeight = Constants.Width / 60;
+            int BoxWidth = 620;
+            int BoxHeight = 610;
+            float InfoBoxX = Constants.Width - BoxWidth - 50 + OffsetX;
+            float InfoBoxY = 106;
+            int IconWidth = 17;
+            int IconHeight = 32;
 
             MenuHelper.DrawNamedBox(g, CardType, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
 
-            float CurrentX = InfoBoxX + 10;
-            float CurrentY = InfoBoxY - 10;
+            float CurrentX = InfoBoxX + 50;
+            float CurrentY = InfoBoxY + 10;
 
-            CurrentY += 20;
-
-            g.DrawString(fntCardInfo, Name, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(fntCardInfo, Name, new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             switch (Rarity)
             {
                 case CardRarities.Normal:
-                    g.Draw(Symbols.sprRarityN, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    g.Draw(Symbols.sprRarityN, new Vector2((int)InfoBoxX + BoxWidth - 60, (int)CurrentY), Color.White);
                     break;
 
                 case CardRarities.Strange:
-                    g.Draw(Symbols.sprRarityS, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    g.Draw(Symbols.sprRarityS, new Vector2((int)InfoBoxX + BoxWidth - 60, (int)CurrentY), Color.White);
                     break;
 
                 case CardRarities.Rare:
-                    g.Draw(Symbols.sprRarityR, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    g.Draw(Symbols.sprRarityR, new Vector2((int)InfoBoxX + BoxWidth - 60, (int)CurrentY), Color.White);
                     break;
 
                 case CardRarities.Extra:
-                    g.Draw(Symbols.sprRarityE, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    g.Draw(Symbols.sprRarityE, new Vector2((int)InfoBoxX + BoxWidth - 60, (int)CurrentY), Color.White);
                     break;
             }
 
+            CurrentY += 40;
+
+            g.DrawString(fntCardInfo, CardType, new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+
             CurrentY += Constants.Height / 24;
 
-            g.DrawString(fntCardInfo, CardType, new Vector2(CurrentX, CurrentY), Color.White);
-
-            CurrentY += Constants.Height / 24;
-
-            CurrentY += 24;
+            CurrentY += 40;
             
-            g.Draw(Symbols.sprMenuG, new Rectangle((int)CurrentX - 5, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
+            g.Draw(Symbols.sprMenuG, new Rectangle((int)CurrentX, (int)CurrentY, IconWidth, IconHeight), Color.White);
+            g.DrawStringVerticallyAligned(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
 
             CurrentY += Constants.Height / 24;
 
-            List<string> ListLine = TextHelper.FitToWidth(fntCardInfo, Description, BoxWidth - 20);
-            TextHelper.DrawTextMultiline(g, fntCardInfo, ListLine, TextHelper.TextAligns.Left, CurrentX + BoxWidth / 2, CurrentY, BoxWidth);
+            int MaxTextWidth = BoxWidth - 100;
+            List<string> ListLine = TextHelper.FitToWidth(fntCardInfo, Description, MaxTextWidth);
+            TextHelper.DrawTextMultiline(g, fntCardInfo, ListLine, TextHelper.TextAligns.Left, CurrentX + MaxTextWidth / 2, CurrentY, MaxTextWidth, SorcererStreetMap.TextColor);
         }
 
         public static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCardFront, Texture2D sprCardBack, Color CardFrontColor,

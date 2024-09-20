@@ -172,63 +172,63 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
 
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 6, Constants.Height / 12), Constants.Width - Constants.Width / 3, 30);
-                g.DrawStringMiddleAligned(Map.fntArial12, Map.ListPlayer[ActivePlayerIndex].Name + "'s item selection", new Vector2(Constants.Width - Constants.Width / 2, Constants.Height / 12 + 5), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, Map.ListPlayer[ActivePlayerIndex].Name + "'s item selection", new Vector2(Constants.Width - Constants.Width / 2, Constants.Height / 12 + 5), Color.White);
 
                 int Y = Constants.Height / 4 - 25;
                 TextHelper.DrawTextMiddleAligned(g, "BATTLE", new Vector2(Constants.Width / 2, Y), Color.White);
                 Y = Constants.Height / 4;
                 MenuHelper.DrawBox(g, new Vector2(Constants.Width / 10, Y), Constants.Width - Constants.Width / 8, Constants.Height / 3);
                 Y = Constants.Height / 4 + 10;
-                g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name, new Vector2(Constants.Width / 4, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Invasion / Defense", new Vector2(Constants.Width - Constants.Width / 2, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name, new Vector2(Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Invasion / Defense", new Vector2(Constants.Width - Constants.Width / 2, Y), Color.White);
 
                 //Invader
                 Y = Constants.Height / 4 + 35;
                 g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 7, Y), new Vector2(Constants.Width - Constants.Width / 7, Y), Color.White);
                 Y = Constants.Height / 4 + 40;
-                g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Animation.Name, new Vector2(Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Animation.Name, new Vector2(Constants.Width / 4, Y), Color.White);
                 int X = Constants.Width / 4;
                 Y += 30;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Ability Values", new Vector2(Constants.Width / 2, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Ability Values", new Vector2(Constants.Width / 2, Y), Color.White);
 
                 Y += 25;
-                g.DrawString(Map.fntArial12, "+0", new Vector2(X - 20, Y), Color.White);
-                g.DrawString(Map.fntArial12, "+0", new Vector2(X + 45, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Support / Land", new Vector2(Constants.Width / 2, Y), Color.White);
+                g.DrawString(Map.fntMenuText, "+0", new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, "+0", new Vector2(X + 45, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Support / Land", new Vector2(Constants.Width / 2, Y), Color.White);
                 Y += 25;
                 g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 7, Y), new Vector2(Constants.Width - Constants.Width / 7, Y), Color.White);
                 Y += 10;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.FinalST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.FinalST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.FinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Total", new Vector2(Constants.Width / 2, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.FinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Total", new Vector2(Constants.Width / 2, Y), Color.White);
 
                 //Defender
                 X = Constants.Width - Constants.Width / 4;
                 Y = Constants.Height / 4 + 40;
-                g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Animation.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+                g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Animation.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
                 Y += 30;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
 
                 Y += 25;
-                g.DrawString(Map.fntArial12, "+0", new Vector2(X - 20, Y), Color.White);
-                g.DrawString(Map.fntArial12, "+0", new Vector2(X + 45, Y), Color.White);
+                g.DrawString(Map.fntMenuText, "+0", new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, "+0", new Vector2(X + 45, Y), Color.White);
                 Y += 25;
                 g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 7, Y), new Vector2(Constants.Width - Constants.Width / 7, Y), Color.White);
                 Y += 10;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.FinalST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.FinalST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.FinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
+                g.DrawString(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.FinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
             }
             else
             {

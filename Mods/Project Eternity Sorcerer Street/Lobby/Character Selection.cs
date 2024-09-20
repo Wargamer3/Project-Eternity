@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private CardSymbols Symbols;
 
-        private SpriteFont fntArial12;
+        private SpriteFont fntMenuText;
 
         private EmptyBoxScrollbar InventoryScrollbar;
 
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 InventoryScrollbar,
             };
 
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
 
             TunnelBackground = new TunnelManager();
             TunnelBackground.Load(GraphicsDevice);
@@ -243,9 +243,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
 
             X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, "Character Selection", new Vector2(X, Y), Color.White);
-            g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name, new Vector2(Constants.Width / 2, Y), Color.White);
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, "Character Selection", new Vector2(X, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name, new Vector2(Constants.Width / 2, Y), Color.White);
 
             X = CharacterMenuX;
             Y = CharacterMenuY;
@@ -270,7 +270,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int FinalX = X + XPos * BoxWidth;
                 DrawBox(g, new Vector2(FinalX + 8, DrawY + 12), BoxWidth - 16, BoxHeight - 24, Color.FromNonPremultiplied(255, 255, 255, 0));
                 g.Draw(GameScreen.sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Lobby.BackgroundColor);
-                g.DrawStringCenteredBackground(fntArial12, "Last Folder",
+                g.DrawStringCenteredBackground(fntMenuText, "Last Folder",
                     new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White, sprPixel, Lobby.BackgroundColor);
 
                 ++XPos;
@@ -294,7 +294,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         DrawBox(g, new Vector2(FinalX + 8, DrawY + 12), BoxWidth - 16, BoxHeight - 24, Color.FromNonPremultiplied(255, 255, 255, 0));
                         g.Draw(GameScreen.sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), Lobby.BackgroundColor);
-                        g.DrawStringCenteredBackground(fntArial12, CurrentContainer.ListFolder[CurrentIndex].Name,
+                        g.DrawStringCenteredBackground(fntMenuText, CurrentContainer.ListFolder[CurrentIndex].Name,
                             new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White, sprPixel, Lobby.BackgroundColor);
                     }
                     else
@@ -341,7 +341,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidth, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
                     DrawBox(g, new Vector2(FinalX - 10, FinalY + BoxHeight), BoxWidth + 30, 25, Color.Black);
-                    g.DrawStringMiddleAligned(fntArial12,
+                    g.DrawStringMiddleAligned(fntMenuText,
                         SelectedCharacter.Name,
                         new Vector2(FinalX + 5 + BoxWidth / 2, FinalY + BoxHeight), Color.White);
                 }
@@ -357,8 +357,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = Constants.Height - 100;
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
             X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
-            g.DrawString(fntArial12, "Select a character", new Vector2(X, Y), Color.White);
+            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
+            g.DrawString(fntMenuText, "Select a character", new Vector2(X, Y), Color.White);
 
             //Right Side
 
@@ -367,7 +367,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(GameScreen.sprPixel, new Rectangle(X - CharacterModelBoxWidth / 2, 200, CharacterModelBoxWidth, 550), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
             DrawEmptyBox(g, new Vector2(X - CharacterModelBoxWidth / 2, 200), CharacterModelBoxWidth, 550);
 
-            g.DrawStringCentered(fntArial12, "Select a skin", new Vector2(X, Y), Color.White);
+            g.DrawStringCentered(fntMenuText, "Select a skin", new Vector2(X, Y), Color.White);
 
             int SkinCount = CharacterToDraw.ListSkin.Count;
             int TotalSkinSize = SkinCount * (SkinBoxWidth + 5);
@@ -396,9 +396,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.Draw(sprPixel, new Rectangle(FinalX + 5, FinalY + 5, SkinBoxWidth - 10, SkinBoxHeight - 10), Color.FromNonPremultiplied(255, 255, 255, 127));
             }
 
-            int NameWidth = (int)fntArial12.MeasureString(SkinToDraw.Skin.Name).X;
+            int NameWidth = (int)fntMenuText.MeasureString(SkinToDraw.Skin.Name).X;
             DrawEmptyBox(g, new Vector2(RightSectionCenterX - NameWidth / 2 - 5, 760), NameWidth + 6, 35);
-            g.DrawStringCentered(fntArial12, SkinToDraw.Skin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
+            g.DrawStringCentered(fntMenuText, SkinToDraw.Skin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

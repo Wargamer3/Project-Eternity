@@ -58,14 +58,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             base.Draw(g);
 
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
-
-            int ActionInfoBoxX = Constants.Width / 16;
-            int ActionInfoBoxY = Constants.Height / 3;
-            int ActionInfoBoxWidth = Constants.Width / 5;
-            int ActionInfoBoxHeight = Constants.Height / 14;
-            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
-            g.DrawStringCentered(Map.fntArial12, "Spell Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer);
+            ActionPanelPlayerDefault.DrawPhase(g, Map, "Spell Selection");
         }
 
         public override void DrawArrows(CustomSpriteBatch g)

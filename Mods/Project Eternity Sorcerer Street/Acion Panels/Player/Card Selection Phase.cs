@@ -229,8 +229,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Display END at the right of the cards in the hand to end your turn
                 //Display Start at the right of the cards in the hand for a battle
 
-                float Scale = 0.52f;
-                int DistanceBetweenCard = Constants.Width / 8;
+                float Scale = 0.545f;
+                int DistanceBetweenCard = 234;
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
@@ -239,12 +239,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }
 
-                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == ActionMenuCursor, C * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.02f);
+                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == ActionMenuCursor,
+                        C * DistanceBetweenCard + DistanceBetweenCard + 27, Scale, AnimationTimer, 0.02f);
                 }
 
                 if (DrawDrawInfo && ActionMenuCursor < ActivePlayer.ListCardInHand.Count)
                 {
-                    ActivePlayer.ListCardInHand[ActionMenuCursor].DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+                    ActivePlayer.ListCardInHand[ActionMenuCursor].DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
                 }
 
                 if (EndCardText != string.Empty)
@@ -272,7 +273,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCard, Color CardFrontColor, bool Selected, float X, float MaxScale, float AnimationTimer, float ExtraAnimationScale)
         {
-            float Y = Constants.Height - Constants.Height / 6;
+            float Y = 870;
 
             float Scale = ExtraAnimationScale;
             if (Selected)

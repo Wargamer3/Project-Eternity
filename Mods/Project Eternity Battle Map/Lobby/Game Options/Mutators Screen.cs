@@ -298,7 +298,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (ActiveMutator != null)
             {
                 TextHelper.DrawTextMultiline(g, fntText, TextHelper.FitToWidth(fntText, ActiveMutator.Description, DescriptionWidth - 15),
-                    TextHelper.TextAligns.Left, LeftPanelX + DescriptionWidth / 2, DescriptionBoxY + 30, DescriptionWidth - 15);
+                    TextHelper.TextAligns.Left, LeftPanelX + DescriptionWidth / 2, DescriptionBoxY + 30, DescriptionWidth - 15, Color.White);
             }
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)

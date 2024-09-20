@@ -287,17 +287,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
         {
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = (int)(Constants.Height / 2);
-            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth + OffsetX;
-            float InfoBoxY = Constants.Height / 10 + OffsetY;
-            int IconWidth = Constants.Width / 112;
-            int IconHeight = Constants.Width / 60;
-
-            float CurrentX = InfoBoxX + 10;
-            float CurrentY = InfoBoxY + Constants.Height / 24;
+            int BoxWidth = 620;
+            int BoxHeight = 540;
+            float InfoBoxX = Constants.Width - BoxWidth - 50 + OffsetX;
+            float InfoBoxY = 108;
+            int IconWidth = 17;
+            int IconHeight = 32;
 
             base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
+
+            float CurrentX = InfoBoxX + 10;
+            float CurrentY = InfoBoxY + 50;
 
             for (int A = 0; A < Abilities.ArrayElementAffinity.Length; A++)
             {
@@ -305,33 +305,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (ActiveAffinity)
                 {
                     case ElementalAffinity.Neutral:
-                        g.Draw(Symbols.sprElementNeutral, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38 - Constants.Width / 38 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementNeutral, new Vector2((int)InfoBoxX + BoxWidth - 60 - 60 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Fire:
-                        g.Draw(Symbols.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38 - Constants.Width / 38 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - 60 - 60 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Air:
-                        g.Draw(Symbols.sprElementAir, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38 - Constants.Width / 38 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementAir, new Vector2((int)InfoBoxX + BoxWidth - 60 - 60 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Earth:
-                        g.Draw(Symbols.sprElementEarth, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38 - Constants.Width / 38 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementEarth, new Vector2((int)InfoBoxX + BoxWidth - 60 - 60 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Water:
-                        g.Draw(Symbols.sprElementWater, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38 - Constants.Width / 38 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementWater, new Vector2((int)InfoBoxX + BoxWidth - 60 - 60 * A, (int)CurrentY), Color.White);
                         break;
                 }
             }
 
-            CurrentY += Constants.Height / 24;
+            CurrentX = InfoBoxX + 50;
+            CurrentY += 48;
 
-            g.Draw(Symbols.sprMenuST, new Rectangle((int)CurrentX - 5, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntCardInfo, CurrentST.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
+            g.Draw(Symbols.sprMenuST, new Rectangle((int)CurrentX, (int)CurrentY, IconWidth, IconHeight), Color.White);
+            g.DrawStringVerticallyAligned(fntCardInfo, CurrentST.ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
 
-            g.Draw(Symbols.sprMenuHP, new Rectangle((int)CurrentX + 45, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntCardInfo, CurrentHP.ToString(), new Vector2(CurrentX + 65, CurrentY), Color.White);
+            CurrentX += 100;
+            g.Draw(Symbols.sprMenuHP, new Rectangle((int)CurrentX, (int)CurrentY, IconWidth, IconHeight), Color.White);
+            g.DrawStringVerticallyAligned(fntCardInfo, CurrentHP.ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
 
-            g.Draw(Symbols.sprMenuMHP, new Rectangle((int)CurrentX + 95, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntCardInfo, MaxHP.ToString(), new Vector2(CurrentX + 115, CurrentY), Color.White);
+            CurrentX += 100;
+            g.Draw(Symbols.sprMenuMHP, new Rectangle((int)CurrentX, (int)CurrentY, IconWidth, IconHeight), Color.White);
+            g.DrawStringVerticallyAligned(fntCardInfo, MaxHP.ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
         }
     }
 }
