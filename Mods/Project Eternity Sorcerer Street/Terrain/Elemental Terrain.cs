@@ -4,8 +4,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ElementalTerrain : TerrainSorcererStreet
     {
-        public ElementalTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
+        public ElementalTerrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth, TerrainTypeIndex)
         {
 
         }

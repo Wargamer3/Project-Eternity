@@ -16,7 +16,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Attack ActiveAttack;
         public Squad Owner;
         public int PlayerIndex;//Only decrement TurnsRemaining if the current player index correspond
-        public Vector3 Position;
+        private Vector3 _Position;
+        public Vector3 Position { get => _Position; }
         public Attack3D Map3DComponent;
         public AnimatedModel Unit3DModel;
         public bool IsOnGround = false;//Follow slopes if on ground
@@ -29,7 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Owner = Owner;
             this.PlayerIndex = PlayerIndex;
             this.Map = Map;
-            this.Position = Position;
+            this._Position = Position;
             this.Speed = Speed;
 
             if (!string.IsNullOrEmpty(ActiveAttack.PERAttributes.ProjectileAnimation.Path))
@@ -58,14 +59,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void SetPosition(Vector3 NewPosition)
         {
-            Position = NewPosition;
+            _Position = NewPosition;
 
             if (Map3DComponent != null)
             {
+                Vector3 CurrentPosition = Position;
+                if (IsOnGround)
+                {
+                    CurrentPosition = Map.GetFinalPosition(Position);
+                }
+
                 Map3DComponent.SetPosition(
-                    Position.X * Map.TileSize.X + 0.5f,
-                    Position.Z * Map.LayerHeight,
-                    Position.Y * Map.TileSize.Y + 0.5f);
+                    CurrentPosition.X * Map.TileSize.X + 0.5f,
+                    CurrentPosition.Z * Map.LayerHeight,
+                    CurrentPosition.Y * Map.TileSize.Y + 0.5f);
             }
         }
 
@@ -91,7 +98,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 else
                 {
                     ListAttackTarget.Push(ActiveTarget);
-                    Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
+                    Map.AttackDirectly(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
                 }
 
                 return true;

@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Vehicle;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -118,8 +116,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 CreateMap(Map, LayerManager);
 
                 float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
-                Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
+                DrawableTile ActiveTerrain = LayerManager.ListLayer[0].ArrayTile[0, 0];
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                 Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                     0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
@@ -184,8 +181,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 CreateMap(Map, ActiveSubLayer, LayerIndex);
             }
 
-            Map2D GroundLayer = Owner.LayerGrid;
-
             if (!DicTile3DByLayerByTileset.ContainsKey(LayerIndex))
             {
                 DicTile3DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile3DHolder>());
@@ -195,7 +190,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                    DrawableTile ActiveTerrain = Owner.ArrayTile[X, Y];
                     Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                     if (ActiveTerrain3D.TerrainStyle == Terrain3D.TerrainStyles.Invisible)
                     {
@@ -208,25 +203,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     float ZBack = MinZ;
                     float ZRight = MinZ;
                     float ZLeft = MinZ;
-                    if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTerrain[X, Y + 1].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTile[X, Y + 1].Terrain3DInfo.TerrainStyle))
                     {
                         ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X, Y - 1].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X, Y - 1].Terrain3DInfo.TerrainStyle))
                     {
                         ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X - 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X - 1, Y].Terrain3DInfo.TerrainStyle))
                     {
                         ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTerrain[X + 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTile[X + 1, Y].Terrain3DInfo.TerrainStyle))
                     {
                         ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * Map.LayerHeight;
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
+                                            Owner.ArrayTerrain[X, Y].WorldPosition.X, Owner.ArrayTerrain[X, Y].WorldPosition.Y, Z, MinZ,
                                             Map.TileSize, Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     if (ListIgnoredTerrain.Contains(ActiveTerrain))
@@ -318,14 +313,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
             {
-                int X = (int)Map.CursorPositionVisible.X;
-                int Y = (int)Map.CursorPositionVisible.Y;
-                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * Map.LayerHeight + 0.3f;
-                Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * Map.LayerHeight + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                Cursor = Map.CreateTile3D(0, Map.CursorPosition, Point.Zero, Map.TileSize, Map.TileSize, 0f);
             }
 
             if (!Map.IsAPlatform && !Map.IsServer)
@@ -451,14 +439,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             foreach (MovementAlgorithmTile ActivePoint in ListPoint)
             {
-                int X = (int)ActivePoint.WorldPosition.X;
-                int Y = (int)ActivePoint.WorldPosition.Y;
-                float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.1f;
-                float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-                Terrain3D ActiveTerrain3D = ActivePoint.DrawableTile.Terrain3DInfo;
-
-                ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                ListDrawablePoint3D.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, Point.Zero, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
             }
 
             DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
@@ -476,15 +457,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     Next = ListPoint[P + 1];
                 }
 
-                int X = (int)ActivePoint.WorldPosition.X;
-                int Y = (int)ActivePoint.WorldPosition.Y;
-                float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.15f;
-                float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-
-                Terrain3D ActiveTerrain3D = ActivePoint.DrawableTile.Terrain3DInfo;
-
-                ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
+                ListDrawableArrowPerColor.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, GetCursorTextureOffset(Previous, ActivePoint, Next), ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
             }
         }
 
@@ -626,12 +599,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             bool BorderCreated = false;
             foreach (UnitConquest ActiveUnit in Map.ListPlayer[PlayerIndex].ListUnit)
             {
-                Terrain ActiveTerrain = Map.GetTerrain(ActiveUnit.Components);
-                Terrain3D ActiveTerrain3D = ActiveTerrain.DrawableTile.Terrain3DInfo;
-                float Z = ActiveTerrain.WorldPosition.Z * Map.LayerHeight;
-
-                Tile3D BorderTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    ActiveTerrain.WorldPosition.X * Map.TileSize.X, ActiveTerrain.WorldPosition.Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * Map.LayerHeight + 0.001f, new Point(Map.TileSize.X, Map.TileSize.Y), new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), new List<Texture2D>() { Map.sprTileBorderRed }, Z, Z, Z, Z, 0)[0];
+                Tile3D BorderTile = Map.CreateTile3D(0, ActiveUnit.Position, Map.TileSize, Point.Zero, new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), 0f);
 
                 DicTileBorderPerPlayer[PlayerIndex].AddTile(BorderTile);
                 BorderCreated = true;
@@ -667,12 +635,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     continue;
                 }
 
-                Terrain ActiveTerrain = Map.GetTerrain(ActiveUnit.Components);
-                Terrain3D ActiveTerrain3D = ActiveTerrain.DrawableTile.Terrain3DInfo;
-                float Z = ActiveTerrain.WorldPosition.Z * Map.LayerHeight;
-
-                Tile3D BorderTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    ActiveTerrain.WorldPosition.X * Map.TileSize.X, ActiveTerrain.WorldPosition.Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * Map.LayerHeight + 0.001f, new Point(Map.TileSize.X, Map.TileSize.Y), new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), new List<Texture2D>() { Map.sprTileBorderRed }, Z, Z, Z, Z, 0)[0];
+                Tile3D BorderTile = Map.CreateTile3D(0, ActiveUnit.Position, Point.Zero, Map.TileSize, new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), 0f);
 
                 DicTileShadowPerPlayer[PlayerIndex].AddTile(BorderTile);
                 ShadowCreated = true;
@@ -701,14 +664,18 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     if (ActiveUnit.Z + 1 < Map.LayerManager.ListLayer.Count)
                     {
-                        Terrain UpperTerrain = Map.GetTerrain(new Vector3(ActiveUnit.X, ActiveUnit.Z, ActiveUnit.Z + 1));
+                        int X = (int)ActiveUnit.X;
+                        int Y = (int)ActiveUnit.Y;
+                        int LayerIndex = (int)ActiveUnit.Z;
+                        Terrain UpperTerrain = Map.LayerManager.ListLayer[LayerIndex + 1].ArrayTerrain[X, Y];
+                        DrawableTile ActiveTile = Map.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
                         TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
 
-                        if (UpperTerrainType.ListRestriction.Count > 0 || UpperTerrain.DrawableTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
-                            && !ListIgnoredTerrain.Contains(UpperTerrain.DrawableTile))
+                        if (UpperTerrainType.ListRestriction.Count > 0 || ActiveTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
+                            && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
-                            ListIgnoredTerrain.Add(UpperTerrain.DrawableTile);
-                            FloodFill(new Vector3(UpperTerrain.InternalPosition.X, UpperTerrain.InternalPosition.Y, UpperTerrain.LayerIndex), UpperTerrain.TerrainTypeIndex);
+                            ListIgnoredTerrain.Add(ActiveTile);
+                            FloodFill(new Vector3(UpperTerrain.GridPosition.X, UpperTerrain.GridPosition.Y, UpperTerrain.LayerIndex), UpperTerrain.TerrainTypeIndex);
                         }
                     }
                 }
@@ -727,14 +694,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             while (ListTerrainPositionToHide.Count != 0)
             {
                 Vector3 ActivePosition = ListTerrainPositionToHide.Pop();
-                float ActiveY = ActivePosition.Y;
-                Terrain ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
+                int X = (int)ActivePosition.X;
+                int Y = (int)ActivePosition.Y;
+                int ActiveY = Y;
+                Terrain ActiveTerrain = Map.LayerManager.ListLayer[Z].ArrayTerrain[X, ActiveY];
+                DrawableTile ActiveTile = Map.LayerManager.ListLayer[Z].ArrayTile[X, ActiveY];
 
-                while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                 {
                     if (--ActiveY >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
+                        ActiveTerrain = Map.GetTerrain(new Vector3(X, ActiveY, Z));
                     }
                 }
 
@@ -744,34 +714,36 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 while (ActiveY < Map.MapSize.Y && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex)
                 {
-                    ListIgnoredTerrain.Add(Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z)).DrawableTile);
+                    ListIgnoredTerrain.Add(Map.LayerManager.ListLayer[Z].ArrayTile[X, ActiveY]);
 
-                    if (ActivePosition.X - 1 >= 0)
+                    if (X - 1 >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X - 1, ActiveY, Z));
+                        ActiveTerrain = Map.LayerManager.ListLayer[Z].ArrayTerrain[X - 1, ActiveY];
+                        ActiveTile = Map.LayerManager.ListLayer[Z].ArrayTile[X - Map.TileSize.X, ActiveY];
 
-                        if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
-                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X - 1, ActiveY, Z));
+                            ListTerrainPositionToHide.Push(new Vector3(X - 1, ActiveY, Z));
                             spanLeft = true;
                         }
-                        else if (spanLeft && ActivePosition.X - 1 == 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        else if (spanLeft && X - 1 == 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
                             spanLeft = false;
 
                         }
                     }
 
-                    if (ActivePosition.X + 1 < Map.MapSize.X)
+                    if (X + 1 < Map.MapSize.X)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X + 1, ActiveY, Z));
+                        ActiveTerrain = Map.LayerManager.ListLayer[Z].ArrayTerrain[X + 1, ActiveY];
+                        ActiveTile = Map.LayerManager.ListLayer[Z].ArrayTile[X + Map.TileSize.X, ActiveY];
 
-                        if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
-                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X + 1, ActiveY, Z));
+                            ListTerrainPositionToHide.Push(new Vector3(X + 1, ActiveY, Z));
                             spanRight = true;
                         }
-                        else if (spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        else if (spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
                             spanRight = false;
                         }
@@ -1007,11 +979,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveUnit.Components);
 
-                        if (ActiveUnit.Components.Speed == Vector3.Zero)
-                        {
-                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
-                        }
-
                         if (ActiveUnit.Components.ItemHeld != null)
                         {
                             ActiveUnit.Components.ItemHeld.Item3D.SetViewMatrix(View);
@@ -1026,16 +993,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                         if (ActiveUnit.Unit3DModel == null)
                         {
-                            ActiveUnit.Components.Unit3DSprite.SetViewMatrix(View);
+                            ActiveUnit.Unit3DSprite.SetViewMatrix(View);
 
-                            ActiveUnit.Components.Unit3DSprite.SetPosition(
+                            ActiveUnit.Unit3DSprite.SetPosition(
                                 CurrentPosition.X * Map.TileSize.X,
                                 (CurrentPosition.Z + 0.5f) * Map.LayerHeight,
                                 CurrentPosition.Y * Map.TileSize.Y);
 
-                            ActiveUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+                            ActiveUnit.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
 
-                            ActiveUnit.Components.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                            ActiveUnit.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                         }
                         else
                         {
@@ -1064,11 +1031,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                         Vector3 CurrentPosition = ActiveUnit.Position;
 
-                        if (ActiveUnit.Components.Speed == Vector3.Zero)
-                        {
-                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
-                        }
-
                         if (ActiveUnit.Components.ItemHeld != null)
                         {
                             ActiveUnit.Components.ItemHeld.Item3D.SetViewMatrix(View);
@@ -1083,16 +1045,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                         if (ActiveUnit.Unit3DModel == null)
                         {
-                            ActiveUnit.Components.Unit3DSprite.SetViewMatrix(View);
+                            ActiveUnit.Unit3DSprite.SetViewMatrix(View);
 
-                            ActiveUnit.Components.Unit3DSprite.SetPosition(
+                            ActiveUnit.Unit3DSprite.SetPosition(
                                 CurrentPosition.X * Map.TileSize.X,
                                 (CurrentPosition.Z + 0.5f) * Map.LayerHeight,
                                 CurrentPosition.Y * Map.TileSize.Y);
 
-                            ActiveUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveUnit.CanMove && P == Map.ActivePlayerIndex);
+                            ActiveUnit.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveUnit.CanMove && P == Map.ActivePlayerIndex);
 
-                            ActiveUnit.Components.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                            ActiveUnit.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                         }
                         else
                         {
@@ -1154,13 +1116,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     ActiveAttack.DrawableAttackPosition3D.Effect3D.Parameters["Color"].SetValue(Color.FromNonPremultiplied(139, 0, 0, 190).ToVector4());
                     foreach (MovementAlgorithmTile ActivePosition in ActiveAttack.ListAttackPosition)
                     {
-                        float X = ActivePosition.WorldPosition.X;
-                        float Y = ActivePosition.WorldPosition.Y;
-                        float Z = ActivePosition.WorldPosition.Z * Map.LayerHeight + 0.3f;
-
-                        Tile3D AttackTile = ActivePosition.DrawableTile.Terrain3DInfo.CreateTile3D(0, Point.Zero,
-                            X * Map.TileSize.X + BorderX, Y * Map.TileSize.Y + BorderY, Z, Z + 0.3f, BorderSize, Map.TileSize, new List<Texture2D>() { GameScreen.sprPixel }, Z, Z, Z, Z, 0)[0];
-                        ActiveAttack.DrawableAttackPosition3D.AddTile(AttackTile);
+                        ActiveAttack.DrawableAttackPosition3D.AddTile(Map.CreateTile3D(0, ActivePosition.WorldPosition, Point.Zero, BorderSize, Map.TileSize, 0f));
                     }
 
                     ActiveAttack.DrawableAttackPosition3D.Finish(GameScreen.GraphicsDevice);
@@ -1181,9 +1137,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                 {
                                     if (Math.Abs(OffsetX) + Math.Abs(OffsetY) < ActiveAttack.ActiveAttack.ExplosionOption.ExplosionRadius)
                                     {
-                                        Tile3D AttackTile = ActivePosition.DrawableTile.Terrain3DInfo.CreateTile3D(0, Point.Zero,
-                                            (X + OffsetX) * Map.TileSize.X + BorderX, (Y + OffsetY) * Map.TileSize.Y + BorderY, Z, Z + 0.3f, BorderSize, Map.TileSize, new List<Texture2D>() { GameScreen.sprPixel }, Z, Z, Z, Z, 0)[0];
-                                        ActiveAttack.DrawableAttackExplosionPosition3D.AddTile(AttackTile);
+                                        ActiveAttack.DrawableAttackPosition3D.AddTile(Map.CreateTile3D(0, ActivePosition.WorldPosition, Point.Zero, BorderSize, Map.TileSize, 0f));
                                     }
                                 }
                             }
@@ -1213,7 +1167,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 if (ActiveAttack.IsOnGround)
                 {
-                    CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
+                    CurrentPosition = Map.GetFinalPosition(CurrentPosition);
                 }
 
                 if (ActiveAttack.Map3DComponent != null)
@@ -1249,31 +1203,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 PolygonEffect.Texture = ActiveVehicle.sprVehicle;
                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                ActiveVehicle.Draw3D(g.GraphicsDevice);
-
-                foreach (VehicleSeat ActiveSeat in ActiveVehicle.ListSeat)
-                {
-                    if (ActiveSeat.User != null)
-                    {
-                        ActiveSeat.User.Unit3DSprite.SetViewMatrix(View);
-
-                        Vector3 UserPositon = new Vector3(ActiveVehicle.Position.X - ActiveVehicle.sprVehicle.Width / 2 + ActiveSeat.SeatOffset.X,
-                            ActiveVehicle.Position.Y, ActiveVehicle.Position.Z - ActiveVehicle.sprVehicle.Height / 2 + ActiveSeat.SeatOffset.Y);
-                        var a = Matrix.CreateTranslation(
-                            new Vector3(
-                                -ActiveVehicle.Position.X,
-                                -ActiveVehicle.Position.Y,
-                                -ActiveVehicle.Position.Z))
-                            * Matrix.CreateRotationY(ActiveVehicle.Yaw) * Matrix.CreateTranslation(ActiveVehicle.Position);
-                        Vector3 UserPos2 = Vector3.Transform(UserPositon, a);
-                        ActiveSeat.User.Unit3DSprite.SetPosition(
-                            UserPos2.X,
-                            UserPos2.Y + 8,
-                            UserPos2.Z);
-
-                        ActiveSeat.User.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                    }
-                }
+                ActiveVehicle.DrawVehicle(g.GraphicsDevice, View, PolygonEffect.Projection);
             }
 
             PolygonEffect.World = Map.World;

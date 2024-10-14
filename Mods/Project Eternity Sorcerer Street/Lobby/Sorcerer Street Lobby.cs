@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.SorcererStreetScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class SorcererStreetLobby : Lobby
+    public class SorcererStreetLobby : LobbyWhite
     {
         public SorcererStreetLobby(bool UseOnline)
             : base(UseOnline)

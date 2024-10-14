@@ -235,12 +235,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawnCard.DrawCard(g);
                 DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
 
-                int BoxY = Constants.Height - Constants.Height / 10;
-                int BoxHeight = Constants.Height / 20;
+                int BoxWidth = 400;
+                int BoxHeight = 2 + Map.fntMenuText.LineSpacing + Map.fntMenuText.LineSpacing;
+                float X = (Constants.Width - BoxWidth) / 2;
+                float Y = 830 - BoxHeight / 2;
+                MenuHelper.DrawBorderlessBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
+                MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 50, Y + BoxHeight - 55));
 
-                MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 2 - 100, BoxY), Constants.Width / 8, BoxHeight);
-                g.DrawStringCentered(Map.fntMenuText, "Drew 1 card", new Vector2(Constants.Width / 2, BoxY + BoxHeight / 2), SorcererStreetMap.TextColor);
-                MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 2 + 76, BoxY + 3));
+                X += 90;
+                Y += 26;
+                //Draw Round + round number
+                g.DrawString(Map.fntMenuText, "Drew 1 card", new Vector2(X, Y), SorcererStreetMap.TextColor);
             }
         }
     }

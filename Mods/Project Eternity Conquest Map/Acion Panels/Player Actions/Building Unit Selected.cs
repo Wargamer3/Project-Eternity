@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                     NewUnit.EndTurn();
                     NewUnit.SpawnID = NewUnitID;
-                    Map.SpawnUnit(Map.ActivePlayerIndex, NewUnit, 0, new Vector2(Map.CursorPosition.X, Map.CursorPosition.Y), (int)Map.CursorPosition.Z);
+                    Map.SpawnUnit(Map.ActivePlayerIndex, NewUnit, 0, Map.CursorPosition);
                 }
                 else if (InputHelper.InputCancelPressed() || MouseHelper.InputRightButtonReleased())
                 {

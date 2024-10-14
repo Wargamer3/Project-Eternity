@@ -188,8 +188,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Creature.CardType);
             BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Creature.Path);
 
-            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.InternalPosition.X);
-            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.InternalPosition.Y);
+            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.GridPosition.X);
+            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.GridPosition.Y);
             BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.LayerIndex);
 
             BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP);

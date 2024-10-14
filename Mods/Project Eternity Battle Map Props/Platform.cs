@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float LengthY = CenterY * (float)Math.Cos(Platform.Yaw);
 
             Platform.Position = new Vector3(CenterX + LengthX, 32, CenterY + LengthY);*/
-            Platform.Position = new Vector3(Position.X * Map.TileSize.X + Map.TileSize.X / 2, Position.Z, Position.Y * Map.TileSize.Y  + Map.TileSize.Y / 2);
+            Platform.Position = new Vector3(Position.X, Position.Z, Position.Y);
             Platform.UpdateWorld();
         }
 
@@ -159,8 +159,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            float PosX = (Position.X - Map.Camera2DPosition.X) * Map.TileSize.X;
-            float PosY = (Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
+            float PosX = Position.X - Map.Camera2DPosition.X;
+            float PosY = Position.Y - Map.Camera2DPosition.Y;
             g.Draw(GameScreen.sprPixel, new Rectangle((int)PosX, (int)PosY, 32, 32), Color.Red);
         }
 

@@ -138,6 +138,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int TotalCreaturesDestroyed;
         public int CurrentTurn;
 
+        public MovementAlgorithmTile[] ArrayAttackPosition;
         public ActionPanelHolder ListBattlePanelHolder;
 
         public AnimationBackground Background;
@@ -267,6 +268,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         // There should never be more than one instance of the global context.
         public readonly new SorcererStreetBattleContext GlobalContext;
         public readonly SorcererStreetPlayerMovementContext GlobalPlayerMovementContext;
+        public SquadPERContext GlobalSquadContext;
+        public SquadPERParams SquadParams;
+        public AttackPERContext GlobalAttackContext;
+        public AttackPERParams AttackParams;
 
         public bool RememberEffects;
         public new SorcererStreetMap Map;//The map is shared and changed as needed.

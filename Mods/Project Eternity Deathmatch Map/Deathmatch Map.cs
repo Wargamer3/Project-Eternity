@@ -478,32 +478,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             MapEnvironment.Reset();
         }
 
+        public byte GetTerrainType(Vector3 WorldPosition)
+        {
+            return GetTerrain(WorldPosition).TerrainTypeIndex;
+        }
+
+        public DeathmatchTerrainBonusInfo GetTerrainInfo(Vector3 WorldPosition)
+        {
+            return GetTerrain(WorldPosition).BonusInfo;
+        }
+
         public Terrain GetTerrain(Vector3 Position)
         {
+            Position = new Vector3((float)Math.Floor(Position.X / TileSize.X), (float)Math.Floor(Position.Y / TileSize.Y), (float)Math.Floor(Position.Z / LayerHeight));
+
+            if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
+            {
+                return null;
+            }
+
             Terrain TemporaryTerrain;
             if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
             {
                 return TemporaryTerrain;
             }
+
             return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
-        public Terrain GetTerrain(UnitMapComponent ActiveUnit)
-        {
-            return GetTerrain(ActiveUnit.Position);
-        }
-
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
-        {
-            if (X < 0 || X >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
-            {
-                return null;
-            }
-
-            return GetTerrain(new Vector3(X, Y, LayerIndex));
-        }
-
-        public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, BattleMap ActiveMap)
+        public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, DeathmatchMap ActiveMap)
         {
             List<MovementAlgorithmTile> ListTerrainFound = new List<MovementAlgorithmTile>();
             for (int X = 0; X < ActiveUnit.ArrayMapSize.GetLength(0); ++X)
@@ -512,7 +515,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveUnit.ArrayMapSize[X, Y])
                     {
-                        ListTerrainFound.Add(ActiveMap.GetMovementTile((int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y, (int)ActiveUnit.Z));
+                        ListTerrainFound.Add(ActiveMap.GetTerrain(new Vector3(ActiveUnit.Position.X + X * TileSize.X, ActiveUnit.Position.Y + Y * TileSize.Y, ActiveUnit.Position.Z)));
                     }
                 }
             }
@@ -809,7 +812,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
 
                     CurrentUnit.UpdateAllAttacks(StartPosition, UnitTeam, ListPlayer[P].ListSquad[U].Position, ListPlayer[P].TeamIndex,
-                            ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentTerrainIndex, CanMove);
+                            ListPlayer[P].ListSquad[U].ArrayMapSize, TileSize, ListPlayer[P].ListSquad[U].CurrentTerrainIndex, CanMove);
                 }
             }
         }
@@ -829,7 +832,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return StartingMV;
         }
 
-        public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad, BattleMap ActiveMap)
+        public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad, DeathmatchMap ActiveMap)
         {
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
@@ -864,10 +867,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public List<MovementAlgorithmTile> GetAttackChoice(Squad ActiveSquad, int RangeMaximum)
         {
-            BattleMap ActiveMap = this;
+            DeathmatchMap ActiveMap = this;
             if (ActivePlatform != null)
             {
-                ActiveMap = ActivePlatform.Map;
+                ActiveMap = (DeathmatchMap)ActivePlatform.Map;
             }
 
             //Init A star.
@@ -895,10 +898,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int MaxMovement = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
-            BattleMap ActiveMap = this;
+            DeathmatchMap ActiveMap = this;
             if (ActivePlatform != null)
             {
-                ActiveMap = ActivePlatform.Map;
+                ActiveMap = (DeathmatchMap)ActivePlatform.Map;
             }
 
             //Init A star.
@@ -975,15 +978,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPathNode;
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.InternalPosition.X + OffsetX;
-            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
+            int NextX = StartingPosition.GridPosition.X + OffsetX;
+            int NextY = StartingPosition.GridPosition.Y + OffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
-                return null;
+                return StartingPosition.WorldPosition;
             }
             
             byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
@@ -1001,13 +1004,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + OffsetX * TileSize.X, StartingPosition.WorldPosition.Y + OffsetY * TileSize.Y, L * LayerHeight));
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
                 TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
 
-                Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
-                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
+                int PreviousTerrain = GetTerrainType(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
+                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain];
                 bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
 
                 if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
@@ -1053,7 +1056,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
-                        return NextTerrain;
+                        return NextTerrain.WorldPosition;
                     }
                     //Prioritize going upward
                     else if (NextTerrainZ > StartingPosition.LayerIndex)
@@ -1071,21 +1074,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ClosestLayerIndexDown != null)
             {
-                return ClosestLayerIndexDown;
+                return ClosestLayerIndexDown.WorldPosition;
             }
             else
             {
-                return ClosestLayerIndexUp;
+                return ClosestLayerIndexUp.WorldPosition;
             }
         }
 
-        public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
+        public MovementAlgorithmTile GetTerrainIncludingPlatforms(Vector3 WorldPosition)
         {
             if (!IsAPlatform)
             {
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
-                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
+                    MovementAlgorithmTile FoundTile = ((DeathmatchMap)ActivePlatform.Map).GetTerrain(WorldPosition);
 
                     if (FoundTile != null)
                     {
@@ -1094,14 +1097,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            return GetTerrain(new Vector3(StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY, NextLayerIndex));
+            return GetTerrain(WorldPosition);
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
             for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
-                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
+                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX * TileSize.X, NextY * TileSize.Y, L * LayerHeight));
 
                 byte NextTerrainType = ActiveTerrain.TerrainTypeIndex;
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
@@ -1124,7 +1127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Params.GlobalContext.ListMVPoints.AddRange(ListMVHoverPoints);
 
-            ActiveSquad.CurrentTerrainIndex = GetTerrain(ActiveSquad).TerrainTypeIndex;
+            ActiveSquad.CurrentTerrainIndex = GetTerrain(ActiveSquad.Position).TerrainTypeIndex;
             HashSet<int> ListLayerIndex = new HashSet<int>();
 
             if (ListMVHoverPoints.Count > 0)

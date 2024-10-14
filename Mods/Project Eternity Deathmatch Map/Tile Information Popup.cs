@@ -33,8 +33,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             continue;
                         }
 
-                        if (ActiveSquad.Position.X == ActivePopup.CurrentTile.InternalPosition.X
-                            && ActiveSquad.Position.Y == ActivePopup.CurrentTile.InternalPosition.Y)
+                        if (ActiveSquad.Position.X == ActivePopup.CurrentTile.GridPosition.X
+                            && ActiveSquad.Position.Y == ActivePopup.CurrentTile.GridPosition.Y)
                         {
                             ActivePopup.ListVisibleExtraText.AddRange(TextHelper.FitToWidth(TextHelper.fntShadowFont, ActiveSquad.CurrentLeader.ToString(), 120));
                         }
@@ -45,8 +45,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
                 {
-                    if (ActiveProp.Position.X == ActivePopup.CurrentTile.InternalPosition.X 
-                        && ActiveProp.Position.Y == ActivePopup.CurrentTile.InternalPosition.Y)
+                    if (ActiveProp.Position.X == ActivePopup.CurrentTile.GridPosition.X 
+                        && ActiveProp.Position.Y == ActivePopup.CurrentTile.GridPosition.Y)
                     {
                         ActivePopup.ListVisibleExtraText.AddRange(TextHelper.FitToWidth(TextHelper.fntShadowFont, ActiveProp.ToString(), 120));
                     }

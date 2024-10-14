@@ -29,7 +29,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
         public void Init(Terrain ActiveTerrain,  BattleMap Map)
         {
-            ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
+            ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain, ActiveTerrain.GridPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

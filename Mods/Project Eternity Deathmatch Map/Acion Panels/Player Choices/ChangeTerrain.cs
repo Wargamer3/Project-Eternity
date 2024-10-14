@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ActiveSquad.SetPosition(new Vector3(NeighbourTerrain.InternalPosition.X, NeighbourTerrain.InternalPosition.Y, NeighbourTerrain.LayerIndex));
+            ActiveSquad.SetPosition(new Vector3(NeighbourTerrain.GridPosition.X, NeighbourTerrain.GridPosition.Y, NeighbourTerrain.LayerIndex));
             ActiveSquad.CurrentTerrainIndex = NeighbourTerrain.TerrainTypeIndex;
             Map.CursorPosition = ActiveSquad.Position;
             Map.LayerManager.CursorMoved();
@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
         {
-            TerrainType CurrentTerrain = Map.TerrainRestrictions.ListTerrainType[Map.GetTerrain(ActiveSquad).TerrainTypeIndex];
+            TerrainType CurrentTerrain = Map.TerrainRestrictions.ListTerrainType[Map.GetTerrain(ActiveSquad.Position).TerrainTypeIndex];
 
             #region X - 1
 

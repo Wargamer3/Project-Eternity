@@ -71,10 +71,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Vector2 ActivePosition = ListTerrainChangeLocation[T];
                         int X = (int)ActivePosition.X;
                         int Y = (int)ActivePosition.Y;
-                        DrawableTile ActiveTile = ActiveLayer.LayerGrid.GetTile(X, Y);
+                        DrawableTile ActiveTile = ActiveLayer.ArrayTile[X, Y];
                         ActiveTile.Origin = TerrainAttribute.Origin;
                         ActiveTile.TilesetIndex = TilesetIndex;
-                        ActiveLayer.LayerGrid.ReplaceTile(X, Y, ActiveTile);
+                        ActiveLayer.ArrayTile[X, Y] = ActiveTile;
                     }
 
                     CurrentTransformingIndex += _MinSimultaneousTiles;

@@ -225,7 +225,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (Map.BattleMenuCursorIndexSecond == 0)
                 {
-                    TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].TeamIndex,  ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentTerrainIndex, true);
+                    TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].TeamIndex,  ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.ArrayMapSize, Map.TileSize, ActiveSquad.CurrentTerrainIndex, true);
                     AttackOld = TargetSquad.CurrentLeader.CurrentAttack;
                     TargetSquad.CurrentLeader.CurrentAttack = ListAttackTargetSquad[0];//Make sure you select the first weapon.
                     Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
@@ -406,7 +406,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (Map.BattleMenuCursorIndexSecond == 0)
                     {
-                        TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].TeamIndex, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentTerrainIndex, TargetSquad.CanMove);
+                        TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].TeamIndex, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, ActiveSquad.ArrayMapSize, Map.TileSize, ActiveSquad.CurrentTerrainIndex, TargetSquad.CanMove);
 
                         AttackOld = TargetSquad.CurrentLeader.CurrentAttack;
                         TargetSquad.CurrentLeader.CurrentAttack = ListAttackTargetSquad[0];//Make sure you select the first weapon.

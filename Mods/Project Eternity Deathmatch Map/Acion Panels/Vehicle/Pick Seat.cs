@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Remove(ActiveSquad);
             ActiveSeat.User = ActiveSquad;
 
-            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad.Position).MovementCost, ListMVHoverPoints);
             ActiveSquad.EndTurn();
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
 

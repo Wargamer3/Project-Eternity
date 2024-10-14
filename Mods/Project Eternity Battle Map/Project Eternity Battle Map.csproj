@@ -266,7 +266,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Environment\DayNightCycle.cs" />
-    <Compile Include="Drawable Grid.cs" />
+    <Compile Include="Drawable Tile.cs" />
     <Compile Include="Abstract Methods.cs" />
     <Compile Include="Battle Map.cs" />
     <Compile Include="Battle Methods.cs" />

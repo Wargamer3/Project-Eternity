@@ -156,28 +156,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CreatePreview()
         {
-            MovementAlgorithmTile SpawnTerrain = Map.GetMovementTile((int)Position.X, (int)Position.Y, (int)Position.Z);
-            Terrain3D ActiveTerrain3D = SpawnTerrain.DrawableTile.Terrain3DInfo;
-
-            int X = SpawnTerrain.InternalPosition.X;
-            int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
-            Preview3D = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X,
-                Y * Map.TileSize.Y,
-                Z,
-                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
-                new Point(UnitToSpawn.SpriteMap.Width, UnitToSpawn.SpriteMap.Height),
-                new Point(UnitToSpawn.SpriteMap.Width, UnitToSpawn.SpriteMap.Height),
-                new List<Texture2D>() { UnitToSpawn.SpriteMap }, Z, Z, Z, Z, 0)[0];
+            Preview3D = Map.CreateTile3D(0, Position, Point.Zero, Map.TileSize, Map.TileSize, 0f);
         }
 
         private void SpawnVehicle()
         {
-            MovementAlgorithmTile SpawnTerrain = Map.GetMovementTile((int)Position.X, (int)Position.Y, (int)Position.Z);
+            MovementAlgorithmTile SpawnTerrain = Map.GetTerrain(Position);
 
-            int X = SpawnTerrain.InternalPosition.X;
-            int Y = SpawnTerrain.InternalPosition.Y;
+            int X = SpawnTerrain.GridPosition.X;
+            int Y = SpawnTerrain.GridPosition.Y;
             float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
 
             Squad NewSquad = new Squad("", UnitToSpawn, null, null, null);

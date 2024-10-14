@@ -127,8 +127,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                BW.AppendFloat(NextTerrain.InternalPosition.X);
-                BW.AppendFloat(NextTerrain.InternalPosition.Y);
+                BW.AppendFloat(NextTerrain.GridPosition.X);
+                BW.AppendFloat(NextTerrain.GridPosition.Y);
                 BW.AppendFloat(NextTerrain.LayerIndex);
             }
             BW.AppendInt32(Movement);
@@ -150,8 +150,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                BW.AppendFloat(NextTerrain.InternalPosition.X);
-                BW.AppendFloat(NextTerrain.InternalPosition.Y);
+                BW.AppendFloat(NextTerrain.GridPosition.X);
+                BW.AppendFloat(NextTerrain.GridPosition.Y);
                 BW.AppendFloat(NextTerrain.LayerIndex);
             }
             BW.AppendInt32(Movement);
@@ -174,7 +174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void MoveToNextTerrain()
         {
-            Vector3 FinalPosition = new Vector3(NextTerrain.InternalPosition.X, NextTerrain.InternalPosition.Y, NextTerrain.LayerIndex);
+            Vector3 FinalPosition = new Vector3(NextTerrain.GridPosition.X, NextTerrain.GridPosition.Y, NextTerrain.LayerIndex);
             Map.MovementAnimation.Add(ActivePlayer.GamePiece, ActivePlayer.GamePiece.Position, FinalPosition);
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
 

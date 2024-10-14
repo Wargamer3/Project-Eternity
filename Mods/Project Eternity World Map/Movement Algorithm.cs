@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            Map.GetNextLayerIndex(StartingNode, (int)OffsetX, (int)OffsetY, 1f, 15, out ListLayerPossibility);
+            Map.GetNextLayerTile(StartingNode, (int)OffsetX, (int)OffsetY, 1f, 15, out ListLayerPossibility);
 
             foreach (MovementAlgorithmTile ActiveDestination in ListLayerPossibility)
             {

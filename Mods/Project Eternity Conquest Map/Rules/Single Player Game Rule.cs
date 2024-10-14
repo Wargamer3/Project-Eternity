@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                 NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
 
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector2(ActiveLayer.ListUnitSpawn[S].SpawnPositionX, ActiveLayer.ListUnitSpawn[S].SpawnPositionY), L);
+                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX, ActiveLayer.ListUnitSpawn[S].SpawnPositionY, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
                                 ++SpawnSquadIndex;
                             }
                         }
@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                             NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
 
                             NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                            Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector2(ActiveLayer.ListCampaignSpawns[S].Position.X, ActiveLayer.ListCampaignSpawns[S].Position.Y), L);
+                            Owner.SpawnUnit(PlayerIndex, NewUnit, 0, ActiveLayer.ListCampaignSpawns[S].Position);
                             ++SpawnSquadIndex;
 
                             if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)

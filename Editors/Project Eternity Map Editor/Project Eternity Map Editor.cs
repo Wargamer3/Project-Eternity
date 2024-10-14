@@ -341,22 +341,18 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             Vector3 MapPreviewStartingPos = new Vector3(
-                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
+                ActiveMap.Camera2DPosition.X,
+                ActiveMap.Camera2DPosition.Y,
                 ActiveMap.Camera2DPosition.Z);
 
-            ActiveMap.CursorPosition.X = (int)Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, (e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X));
-            ActiveMap.CursorPosition.Y = (int)Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, (e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y));
+            ActiveMap.CursorPosition.X = (int)Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * ActiveMap.TileSize.X, (e.X + MapPreviewStartingPos.X)));
+            ActiveMap.CursorPosition.Y = (int)Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * ActiveMap.TileSize.Y, (e.Y + MapPreviewStartingPos.Y)));
+            ActiveMap.CursorPosition.X = (int)Math.Floor(ActiveMap.CursorPosition.X / ActiveMap.TileSize.X) * ActiveMap.TileSize.X;
+            ActiveMap.CursorPosition.Y = (int)Math.Floor(ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y;
 
             DrawInfo();
 
-            int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-            int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
-
-            if (MouseX < 0 || MouseX >= ActiveMap.MapSize.X || MouseY < 0 || MouseY >= ActiveMap.MapSize.Y)
-                return;
-
-            ListTab[tabToolBox.SelectedIndex].OnMouseMove(e, MouseX, MouseY);
+            ListTab[tabToolBox.SelectedIndex].OnMouseMove(e);
         }
 
         protected virtual void pnMapPreview_MouseUp(object sender, MouseEventArgs e)

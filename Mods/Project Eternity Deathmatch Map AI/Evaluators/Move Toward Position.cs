@@ -54,7 +54,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                     //Move the Unit to the target position;
                     Info.ActiveSquad.SetPosition(ListMVChoice[FinalMV]);
-                    Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad).MovementCost, new List<Vector3>());
+                    Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad.Position).MovementCost, new List<Vector3>());
                 }
                 else
                 {

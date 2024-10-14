@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 TileAttributesForm.cboTerrainType.Items.Insert(0, "None");
                 if (value == null)
                 {
-                    TileAttributesForm.Init(new Terrain(0, 0, 0, 0), Owner.Map);
+                    TileAttributesForm.Init(new Terrain(0, 0, 0, 0, 0, 0, 0), Owner.Map);
                 }
                 else
                 {
@@ -152,10 +152,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (HasTerrain)
             {
-                _ReplacementTerrain = new Terrain(BR, (int)Position.X, (int)Position.Y, (int)Position.Z, Depth);
+                _ReplacementTerrain = new Terrain(BR, (int)Position.X, (int)Position.Y, Map.TileSize.X, Map.TileSize.Y, (int)Position.Z, Map.LayerHeight, Depth);
                 _ReplacementTerrain.Owner = Map;
                 _ReplacementTerrain.WorldPosition.Z = _ReplacementTerrain.Height + Position.Z;
-                _ReplacementTerrain.DrawableTile = new DrawableTile(Rectangle.Empty, -1);
                 Map.DicTemporaryTerrain.Add(Position, _ReplacementTerrain);
             }
 

@@ -9,6 +9,7 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Units
 {
@@ -35,6 +36,8 @@ namespace ProjectEternity.Core.Units
         public bool IsWingmanALocked;
         public bool IsWingmanBLocked;
         public bool IsDead;
+
+        private Matrix WorldPosition;
 
         public override int Width { get { return CurrentLeader.SpriteMap.Width; } }
         public override int Height { get { return CurrentLeader.SpriteMap.Height; } }
@@ -172,9 +175,62 @@ namespace ProjectEternity.Core.Units
             }
         }
 
+        public override void SetPosition(Vector3 Position)
+        {
+            base.SetPosition(Position);
+
+            if (ItemHeld != null)
+            {
+                ItemHeld.Item3D.SetPosition(
+                    Position.X,
+                    (Position.Z + 1f),
+                    (Position.Y - 0.5f));
+            }
+
+            if (CurrentLeader.Unit3DModel == null)
+            {
+                CurrentLeader.Unit3DSprite.SetPosition(Position.X, Position.Y, Position.Z);
+            }
+            else
+            {
+                Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(Direction));
+
+                Vector3 FinalPosition = new Vector3(Position.X, Position.Y, Position.Z);
+
+                if (CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) > 1)
+                {
+                    FinalPosition.X += 0.5f * CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) - 0.5f;
+                    FinalPosition.Y += 0.5f * CurrentLeader.UnitStat.ArrayMapSize.GetLength(1) - 0.5f;
+                }
+
+                WorldPosition = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
+            }
+        }
+
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
-            g.Draw(CurrentLeader.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), UnitColor);
+            g.Draw(CurrentLeader.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(CurrentLeader.SpriteMap.Width / 2, CurrentLeader.SpriteMap.Height / 2), SpriteEffects.None, 0.2f);
+        }
+
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            if (ItemHeld != null)
+            {
+                ItemHeld.Item3D.SetViewMatrix(View);
+
+                ItemHeld.Item3D.Draw(GraphicsDevice);
+            }
+
+            if (CurrentLeader.Unit3DModel == null)
+            {
+                CurrentLeader.Unit3DSprite.SetViewMatrix(View);
+
+                CurrentLeader.Unit3DSprite.Draw(GraphicsDevice);
+            }
+            else
+            {
+                CurrentLeader.Unit3DModel.Draw(View, Projection, WorldPosition);
+            }
         }
 
         public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
@@ -220,9 +276,9 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public bool IsUnitAtPosition(Vector3 PositionToCheck)
+        public bool IsUnitAtPosition(Vector3 PositionToCheck, Point TerrainSize)
         {
-            return CurrentLeader.UnitStat.IsUnitAtPosition(Position, PositionToCheck);
+            return CurrentLeader.UnitStat.IsUnitAtPosition(Position, PositionToCheck, TerrainSize);
         }
 
         public void UpdateSquad()

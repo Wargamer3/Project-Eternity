@@ -1,4 +1,4 @@
-﻿using ProjectEternity.Core;
+﻿using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -15,15 +15,28 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             this.Map = Map;
 
-            BaseMenuX = (int)(Map.CursorPosition.X + 1 - Map.Camera2DPosition.X) * Map.TileSize.X;
-            BaseMenuY = (int)(Map.CursorPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
+            Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
 
-            if (BaseMenuX + MinActionMenuWidth >= Constants.Width)
-                BaseMenuX = Constants.Width - MinActionMenuWidth;
+            BaseMenuX = MenuPosition.X + Map.TileSize.X;
+            BaseMenuY = MenuPosition.Y;
 
-            int MenuHeight = ListNextChoice.Count * PannelHeight + 6 * 2;
-            if (BaseMenuY + MenuHeight >= Constants.Height)
-                BaseMenuY = Constants.Height - MenuHeight;
+            UpdateFinalMenuPosition();
+        }
+
+        public ActionPanelConquest(string Name, ConquestMap Map, PlayerInput ActiveInputManager, bool CanCancel = true)
+            : base(Name, Map.ListActionMenuChoice, ActiveInputManager, CanCancel)
+        {
+            this.Map = Map;
+
+            if (!Map.IsServer && Map.IsInit)
+            {
+                Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
+
+                BaseMenuX = MenuPosition.X + Map.TileSize.X;
+                BaseMenuY = MenuPosition.Y;
+
+                UpdateFinalMenuPosition();
+            }
         }
 
         protected override void OnCancelPanel()

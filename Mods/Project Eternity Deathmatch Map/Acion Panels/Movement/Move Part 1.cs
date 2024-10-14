@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ActiveSquad.SetPosition(new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex));
+            ActiveSquad.SetPosition(LastPosition.WorldPosition + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0));
             ActiveSquad.Direction = LastDirection;
             Map.CursorPosition = ActiveSquad.Position;
             Map.CursorPositionVisible = Map.CursorPosition;
@@ -61,10 +61,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Map.Camera2DPosition = LastCameraPosition;
 
-            ListMVChoice = Map.GetMVChoice(ActiveSquad, LastPosition.Owner);
+            ListMVChoice = Map.GetMVChoice(ActiveSquad, (DeathmatchMap)LastPosition.Owner);
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
-            ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad));
+            ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.Position));
             ListMovedOverPoint.Add(ActiveSquad.Position);
             ActiveSquad.CurrentLeader.CurrentAttack = null;
         }
@@ -115,13 +115,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListMovedOverTerrain.Clear();
                 ListMovedOverPoint.Clear();
-                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad));
+                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.Position));
                 ListMovedOverPoint.Add(ActiveSquad.Position);
                 LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
             }
             else if (ListMVChoice.Contains(LastPosition.Owner.CursorTerrain) && LastPosition.Owner.CursorTerrain != LastCusorMVPosition)
             {
-                if (Math.Abs(LastCusorMVPosition.InternalPosition.X - LastPosition.Owner.CursorPosition.X) + Math.Abs(LastCusorMVPosition.InternalPosition.Y - LastPosition.Owner.CursorPosition.Y) > 1)
+                if (Math.Abs(LastCusorMVPosition.GridPosition.X - LastPosition.Owner.CursorPosition.X / LastPosition.Owner.TileSize.X) + Math.Abs(LastCusorMVPosition.GridPosition.Y - LastPosition.Owner.CursorPosition.Y / LastPosition.Owner.TileSize.Y) > 1)
                 {
                     ComputeNewHoverPath();
                 }
@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int MaxMV = Map.GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
-            MovementAlgorithmTile LastTerrin = Map.GetTerrain(ActiveSquad);
+            MovementAlgorithmTile LastTerrin = Map.GetTerrain(ActiveSquad.Position);
             float CurrentMVCost = 0;
             for (int T = 1; T < ListMovedOverTerrain.Count; T++)
             {
@@ -245,7 +245,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void OnCancelPanel()
         {
-            Map.CursorPosition = new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex);
+            Map.CursorPosition = LastPosition.WorldPosition + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0);
             Map.CursorPositionVisible = Map.CursorPosition;
 
             Map.Camera2DPosition = LastCameraPosition;
@@ -257,7 +257,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             HasFocus = BR.ReadBoolean();
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            LastPosition = Map.GetMovementTile(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
+            LastPosition = Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
             LastDirection = BR.ReadFloat();
             LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
@@ -281,9 +281,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendBoolean(HasFocus);
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
-            BW.AppendInt32(LastPosition.InternalPosition.X);
-            BW.AppendInt32(LastPosition.InternalPosition.Y);
-            BW.AppendInt32(LastPosition.LayerIndex);
+            BW.AppendFloat(LastPosition.WorldPosition.X);
+            BW.AppendFloat(LastPosition.WorldPosition.Y);
+            BW.AppendFloat(LastPosition.WorldPosition.Z);
             BW.AppendFloat(LastDirection);
             BW.AppendFloat(LastCameraPosition.X);
             BW.AppendFloat(LastCameraPosition.Y);

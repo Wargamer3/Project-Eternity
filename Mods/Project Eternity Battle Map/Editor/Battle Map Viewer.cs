@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         bool TabProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData);
         void TabOnMouseDown(MouseEventArgs e);
         void TabOnMouseUp(MouseEventArgs e);
-        void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY);
+        void OnMouseMove(MouseEventArgs e);
         void OnMapResize(int NewMapSizeX, int NewMapSizeY);
         void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice);
         void OnMapLoaded();

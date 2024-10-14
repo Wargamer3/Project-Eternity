@@ -97,10 +97,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (Map.UpdateMapNavigation(ActiveInputManager))
+            if (Map.CursorControl(ActiveInputManager))
             {
-                Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
-                Vector3 TargetPosition = Map.GetTerrain(Map.CursorPosition).GetRealPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;
+                Vector3 StartPosition = Map.GetFinalPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
+                Vector3 TargetPosition = Map.GetFinalPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;
                 StartPosition = new Vector3(StartPosition.X, StartPosition.Z, StartPosition.Y);
                 TargetPosition = new Vector3(TargetPosition.X, TargetPosition.Z, TargetPosition.Y);
 
@@ -110,7 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveInputManager.InputConfirmPressed())
             {
-                Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
+                Vector3 StartPosition = Map.GetFinalPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
                 ActiveSquad.SetPosition(StartPosition);
                 ActiveSquad.IsOnGround = false;
                 ActiveSquad.CurrentTerrainIndex = UnitStats.TerrainAirIndex;
@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int StartX = (int)Math.Max(0, ActiveSquad.Position.X - MaxDist);
             int StartY = (int)Math.Max(0, ActiveSquad.Position.Y - MaxDist);
             int StartZ = (int)ActiveSquad.Position.Z;
-            Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
+            Vector3 StartPosition = ActiveSquad.Position;
             StartPosition = new Vector3(StartPosition.X, StartPosition.Z, StartPosition.Y);
 
             int EndX = (int)Math.Min(Map.MapSize.X - 1, ActiveSquad.Position.X + MaxDist);
@@ -153,7 +153,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     for (int Z = EndZ; Z >= 0; --Z)
                     {
                         Vector3 Position = new Vector3(X, Y, Z);
-                        Vector3 TargetPosition = Map.GetTerrain(Position).GetRealPosition(new Vector3(X + 0.5f, Y + 0.5f, Z)) * 32;
+                        Vector3 TargetPosition = Map.GetFinalPosition(new Vector3(X + 0.5f, Y + 0.5f, Z)) * 32;
                         TargetPosition = new Vector3(TargetPosition.X, TargetPosition.Z, TargetPosition.Y);
 
                         Terrain ActiveTerrain = Map.GetTerrain(new Vector3(X, Y, Z));
@@ -175,7 +175,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         int Z = Math.Max(0, StartZ - 1);
                         Vector3 Position = new Vector3(X, Y, Z);
-                        Vector3 TargetPosition = Map.GetTerrain(Position).GetRealPosition(new Vector3(X + 0.5f, Y + 0.5f, Z)) * 32;
+                        Vector3 TargetPosition = Map.GetFinalPosition(new Vector3(X + 0.5f, Y + 0.5f, Z)) * 32;
                         TargetPosition = new Vector3(TargetPosition.X, TargetPosition.Z, TargetPosition.Y);
 
                         if (ArcBeamHelper.SolveBallisticArc(StartPosition, JumpSpeed, TargetPosition, 1, out _, out _) == 2)

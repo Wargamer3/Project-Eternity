@@ -222,25 +222,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         foreach (Terrain ActiveTerrain in Map.GetAllTerrain(ActiveSquad, Map))
                         {
                             //Terrain passive bonus.
-                            for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
-                                switch (ActiveTerrain.ListActivation[i])
+                            for (int i = 0; i < ActiveTerrain.BonusInfo.ListActivation.Length; i++)
+                                switch (ActiveTerrain.BonusInfo.ListActivation[i])
                                 {
                                     case TerrainActivation.OnEveryTurns:
-                                        switch (ActiveTerrain.ListBonus[i])
+                                        switch (ActiveTerrain.BonusInfo.ListBonus[i])
                                         {
                                             case TerrainBonus.HPRegen:
-                                                ActiveSquad[U].HealUnit((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxHP));
+                                                ActiveSquad[U].HealUnit((int)(ActiveTerrain.BonusInfo.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxHP));
                                                 break;
 
                                             case TerrainBonus.ENRegen:
-                                                ActiveSquad[U].RefillEN((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxEN));
+                                                ActiveSquad[U].RefillEN((int)(ActiveTerrain.BonusInfo.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxEN));
                                                 break;
                                             case TerrainBonus.HPRestore:
-                                                ActiveSquad[U].HealUnit(ActiveTerrain.ListBonusValue[i]);
+                                                ActiveSquad[U].HealUnit(ActiveTerrain.BonusInfo.ListBonusValue[i]);
                                                 break;
 
                                             case TerrainBonus.ENRestore:
-                                                ActiveSquad[U].RefillEN(ActiveTerrain.ListBonusValue[i]);
+                                                ActiveSquad[U].RefillEN(ActiveTerrain.BonusInfo.ListBonusValue[i]);
                                                 break;
                                         }
                                         break;

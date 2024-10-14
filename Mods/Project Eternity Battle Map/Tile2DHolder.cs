@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTileWorldPosition.X - Owner.Camera2DPosition.X) * Owner.TileSize.X, (ActiveTileWorldPosition.Y - Owner.Camera2DPosition.Y) * Owner.TileSize.Y),
+                        new Vector2(ActiveTileWorldPosition.X - Owner.Camera2DPosition.X, ActiveTileWorldPosition.Y - Owner.Camera2DPosition.Y),
                         new Rectangle((ActiveTile.X + FinalOffsetX) % sprTileset.Width, ActiveTile.Y, ActiveTile.Width, ActiveTile.Height), FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, LayerDepth);
             }
 

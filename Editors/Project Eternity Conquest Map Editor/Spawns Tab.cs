@@ -87,20 +87,23 @@ namespace ProjectEternity.Editors.MapEditor
         {
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
+                int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+                int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+
                 if (lvUnits.SelectedIndices.Count > 0)
                 {
                     int UnitIndex = lvUnits.SelectedIndices[0];
 
                     int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-                    UnitSpawn NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(MouseX, MouseY), (byte)TopLayerIndex);
+                    UnitSpawn NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)TopLayerIndex);
                     pgUnit.SelectedObject = NewUnit;
 
-                    NewSpawn(MouseX, MouseY, TopLayer, NewUnit);
+                    NewSpawn(GridX, GridY, TopLayer, NewUnit);
                 }
             }
             else if (e.Button == MouseButtons.Right)

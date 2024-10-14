@@ -49,7 +49,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 else
                 {
                     ListMVChoice = new List<MovementAlgorithmTile>();
-                    ListMVChoice.Add(Info.Map.GetTerrain(Info.ActiveSquad));
+                    ListMVChoice.Add(Info.Map.GetTerrain(Info.ActiveSquad.Position));
                 }
 
                 //Remove everything that is closer then DistanceMax.

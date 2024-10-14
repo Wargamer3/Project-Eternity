@@ -152,7 +152,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
             Context.ListSummonedCreature = new List<CreatureCard>();
             Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
-            Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0);
+            Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);
             Context.DefenderTerrain.LandLevel = 1;
             Context.DefenderTerrain.TerrainTypeIndex = 2;
             Context.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;

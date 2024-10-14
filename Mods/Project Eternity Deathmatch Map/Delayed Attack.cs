@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 

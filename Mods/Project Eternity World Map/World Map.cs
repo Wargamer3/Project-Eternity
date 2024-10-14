@@ -58,7 +58,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public List<MapZoneInfo> ListZone;
         public List<MapConsumable> ListConsumable;
         public List<MapLayer> ListLayer;
-        protected DrawableGrid MapGrid { get { return ListLayer[0].LayerGrid; } set { ListLayer[0].LayerGrid = value; } }
 
         #endregion
 
@@ -139,8 +138,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             LoadMap();
             LoadMapAssets();
 
-            MapGrid = new WorldMap2D(this);
-
             sprWaypoint = Content.Load<Texture2D>("Maps/World Maps/Constructions/Humans/Unit Factory/Waypoint");
             Player NewPlayer = new Player("Player", "Human", true, 0, Factions.Humans, Color.Blue);
             LoadFactionPlayerHumans(NewPlayer);
@@ -196,6 +193,11 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             FS.Close();
             BR.Close();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
         }
 
         protected void LoadMapGrid(BinaryReader BR)
@@ -381,7 +383,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public void SpawnUnit(int PlayerIndex, UnitMap NewUnit, Vector3 SpawnPosition, Vector3 SpawnDestination)
         {
-            NewUnit.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.ActiveUnit.SpriteMap, 1);
+            NewUnit.ActiveUnit.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.ActiveUnit.SpriteMap, 1);
             NewUnit.ActiveUnit.Init();
             ListPlayer[PlayerIndex].ListUnit.Add(NewUnit);
 
@@ -419,7 +421,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 for (int W = 0; W < CurrentUnit.ListAttack.Count; W++)
                 {
                     CurrentUnit.ListAttack[W].UpdateAttack(CurrentUnit, Position, ListPlayer[ActivePlayerIndex].Team, ListPlayer[TargetPlayerIndex].ListConstruction[C].Position, ListPlayer[TargetPlayerIndex].Team,
-                        ListPlayer[TargetPlayerIndex].ListConstruction[C].ArrayMapSize, ListPlayer[TargetPlayerIndex].ListConstruction[C].CurrentTerrainIndex, HasMoved);
+                        ListPlayer[TargetPlayerIndex].ListConstruction[C].ArrayMapSize, TileSize, ListPlayer[TargetPlayerIndex].ListConstruction[C].CurrentTerrainIndex, HasMoved);
                 }
             }
         }
@@ -444,7 +446,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                     ++S;
                     continue;
                 }
-                if (ListPlayer[PlayerIndex].ListUnit[S].ActiveUnit.UnitStat.IsUnitAtPosition(ListPlayer[PlayerIndex].ListUnit[S].Position, FinalPosition))
+                if (ListPlayer[PlayerIndex].ListUnit[S].ActiveUnit.UnitStat.IsUnitAtPosition(ListPlayer[PlayerIndex].ListUnit[S].Position, FinalPosition, TileSize))
                     SquadFound = true;
                 else
                     ++S;

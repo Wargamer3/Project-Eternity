@@ -107,5 +107,30 @@ namespace ProjectEternity.Core.Vehicle
         {
             g.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, ArrayVertex, 0, ArrayVertex.Length, ArrayIndex, 0, TriangleCount);
         }
+
+        public void DrawVehicle(GraphicsDevice g, Matrix View, Matrix Projection)
+        {
+            Draw3D(g);
+
+            foreach (VehicleSeat ActiveSeat in ListSeat)
+            {
+                if (ActiveSeat.User != null)
+                {
+                    Vector3 UserPositon = new Vector3(Position.X - sprVehicle.Width / 2 + ActiveSeat.SeatOffset.X,
+                        Position.Y, Position.Z - sprVehicle.Height / 2 + ActiveSeat.SeatOffset.Y);
+                    var a = Matrix.CreateTranslation(
+                        new Vector3(
+                            -Position.X,
+                            -Position.Y,
+                            -Position.Z))
+                        * Matrix.CreateRotationY(Yaw) * Matrix.CreateTranslation(Position);
+                    Vector3 UserPos2 = Vector3.Transform(UserPositon, a);
+
+                    ActiveSeat.User.SetPosition(new Vector3(UserPos2.X, UserPos2.Y + 8, UserPos2.Z));
+
+                    ActiveSeat.User.Draw3DOnMap(g, View, Projection);
+                }
+            }
+        }
     }
 }

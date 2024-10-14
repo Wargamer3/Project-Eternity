@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                bool CursorMoved = Map.UpdateMapNavigation(ActiveInputManager);
+                bool CursorMoved = Map.CursorControl(ActiveInputManager);
                 if (CursorMoved)
                 {
                     ListAttackDirectionHelper = PERAttack.PredictAttackMovement(Map, ActiveUnit.Position + new Vector3(0.5f, 0.5f, 0.5f), Map.CursorPosition + new Vector3(0.5f, 0.5f, 0.5f));
@@ -209,8 +209,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int A = 0; A < ListAttackTerrain.Count; ++A)
             {
-                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.X);
-                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackTerrain[A].GridPosition.X);
+                BW.AppendInt32(ListAttackTerrain[A].GridPosition.Y);
                 BW.AppendInt32(ListAttackTerrain[A].LayerIndex);
             }
 

@@ -226,10 +226,13 @@ namespace ProjectEternity.Editors.MapEditor
             TileAttributesEditor = Helper.GetTileEditor();
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
             if (cboTiles.Items.Count == 0)
                 return;
+
+            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
 
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
@@ -242,25 +245,25 @@ namespace ProjectEternity.Editors.MapEditor
                 Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
                 if (TileReplacementZone.Width > 0)
                 {
-                    if (MouseX > TileReplacementZone.X)
+                    if (GridX > TileReplacementZone.X)
                     {
-                        TileReplacementZone.Width = MouseX - TileReplacementZone.X + 1;
+                        TileReplacementZone.Width = GridX - TileReplacementZone.X + 1;
                     }
-                    else if (MouseX < TileReplacementZone.X)
+                    else if (GridX < TileReplacementZone.X)
                     {
                         int Right = TileReplacementZone.Right;
-                        TileReplacementZone.X = MouseX;
-                        TileReplacementZone.Width = Right - MouseX;
+                        TileReplacementZone.X = GridX;
+                        TileReplacementZone.Width = Right - GridX;
                     }
-                    if (MouseY > TileReplacementZone.Y)
+                    if (GridY > TileReplacementZone.Y)
                     {
-                        TileReplacementZone.Height = MouseY - TileReplacementZone.Y + 1;
+                        TileReplacementZone.Height = GridY - TileReplacementZone.Y + 1;
                     }
-                    else if (MouseY < TileReplacementZone.Y)
+                    else if (GridY < TileReplacementZone.Y)
                     {
                         int Bottom = TileReplacementZone.Bottom;
-                        TileReplacementZone.Y = MouseY;
-                        TileReplacementZone.Height = Bottom - MouseY;
+                        TileReplacementZone.Y = GridY;
+                        TileReplacementZone.Height = Bottom - GridY;
                     }
 
                     BattleMapViewer.TileReplacementZone = TileReplacementZone;
@@ -269,7 +272,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     if (e.Button == MouseButtons.Left)
                     {
-                        Point TilePos = new Point(MouseX, MouseY);
+                        Point TilePos = new Point(GridX, GridY);
                         Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
 
                         TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
@@ -281,7 +284,7 @@ namespace ProjectEternity.Editors.MapEditor
                     }
                     else if (e.Button == MouseButtons.Right)
                     {//Get the Tile under the mouse base on the map starting pos.
-                        Point TilePos = new Point(MouseX, MouseY);
+                        Point TilePos = new Point(GridX, GridY);
                         DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
 
                         TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
@@ -296,7 +299,7 @@ namespace ProjectEternity.Editors.MapEditor
                 //Just create a new Tile.
                 else if (ActiveMap.TileSize.X != 0)
                 {
-                    PlaceTile(MouseX, MouseY, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
+                    PlaceTile(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                 }
             }
         }
@@ -306,18 +309,12 @@ namespace ProjectEternity.Editors.MapEditor
             if (cboTiles.Items.Count == 0)
                 return;
 
-
             if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
-                Vector3 MapPreviewStartingPos = new Vector3(
-                    ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                    ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                    ActiveMap.Camera2DPosition.Z);
+                int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+                int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
 
-                int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-                int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
-
-                BattleMapViewer.TileReplacementZone = new Rectangle(MouseX, MouseY, 1, 1);
+                BattleMapViewer.TileReplacementZone = new Rectangle(GridX, GridY, 1, 1);
             }
         }
 
@@ -325,6 +322,9 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (cboTiles.Items.Count == 0)
                 return;
+
+            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
 
             Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
 
@@ -336,30 +336,17 @@ namespace ProjectEternity.Editors.MapEditor
                     BrushIndex = 1;
                 }
 
-                Vector3 MapPreviewStartingPos = new Vector3(
-                    ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                    ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                    ActiveMap.Camera2DPosition.Z);
-
                 for (int X = TileReplacementZone.X; X < TileReplacementZone.Right; ++X)
                 {
                     for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
                     {
-                        PlaceTile(X + (int)(MapPreviewStartingPos.X) / ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
+                        PlaceTile(X + GridX, Y + GridY, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                     }
                 }
             }
             else
             {
-                Vector3 MapPreviewStartingPos = new Vector3(
-                    ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
-                    ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
-                    ActiveMap.Camera2DPosition.Z);
-
-                int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
-                int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
-
-                OnMouseMove(e, MouseX, MouseY);
+                OnMouseMove(e);
             }
 
             BattleMapViewer.TileReplacementZone = new Rectangle();
@@ -618,13 +605,13 @@ namespace ProjectEternity.Editors.MapEditor
                                         {
                                             for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
                                             {
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = MapBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex = MapBackgroundIndex;
                                                 }
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = MapBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex = MapBackgroundIndex;
                                                 }
                                             }
                                         }
@@ -638,13 +625,13 @@ namespace ProjectEternity.Editors.MapEditor
                                         {
                                             for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
                                             {
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
                                                 }
-                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
                                                 }
                                             }
                                         }
@@ -731,7 +718,7 @@ namespace ProjectEternity.Editors.MapEditor
                             {
                                 for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
-                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, BattleMapViewer.SelectedListLayerIndex, 0,
+                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, 0, ActiveMap.LayerHeight,
                                        0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
                                        0, true);
 

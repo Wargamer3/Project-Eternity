@@ -330,15 +330,18 @@ namespace ProjectEternity.Editors.MapEditor
         {
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
+            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+
             if (e.Button == MouseButtons.Left)
             {
-                HandleEventPoint(MouseX, MouseY, ActiveSpawn);
+                HandleEventPoint(GridX, GridY, ActiveSpawn);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                HandleEventPoint(MouseX, MouseY, null);
+                HandleEventPoint(GridX, GridY, null);
             }
         }
 

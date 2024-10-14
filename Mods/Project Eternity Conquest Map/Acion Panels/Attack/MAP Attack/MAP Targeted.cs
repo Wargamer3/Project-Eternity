@@ -65,10 +65,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public List<MovementAlgorithmTile> GetAttackChoice(UnitConquest ActiveUnit, int RangeMaximum)
         {
-            BattleMap ActiveMap = Map;
+            ConquestMap ActiveMap = Map;
             if (Map.ActivePlatform != null)
             {
-                ActiveMap = Map.ActivePlatform.Map;
+                ActiveMap = (ConquestMap)Map.ActivePlatform.Map;
             }
 
             //Init A star.

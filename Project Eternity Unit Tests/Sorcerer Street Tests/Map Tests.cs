@@ -210,7 +210,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, 0, 0, 0);
+                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, DummyMap.TileSize.X, DummyMap.TileSize.Y, 0, 0, 0, 0);
                 }
             }
 

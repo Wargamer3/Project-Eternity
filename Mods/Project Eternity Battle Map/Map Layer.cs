@@ -7,11 +7,13 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BaseMapLayer
+    public abstract class BaseMapLayer
     {
         public int StartupDelay;
         public int ToggleDelayOn;
         public int ToggleDelayOff;
+
+        public DrawableTile[,] ArrayTile;
 
         public List<EventPoint> ListCampaignSpawns;
         public List<EventPoint> ListMultiplayerSpawns;
@@ -20,6 +22,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<InteractiveProp> ListProp;
         public List<HoldableItem> ListHoldableItem;
         public List<TemporaryAttackPickup> ListAttackPickup;
+
+        public void RemoveTileset(int TilesetIndex)
+        {
+            for (int X = ArrayTile.GetLength(0) - 1; X >= 0; --X)
+            {
+                for (int Y = ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
+                {
+                    if (ArrayTile[X, Y].TilesetIndex > TilesetIndex)
+                    {
+                        --ArrayTile[X, Y].TilesetIndex;
+                    }
+                }
+            }
+        }
+
+        public abstract MovementAlgorithmTile GetTile(int X, int Y);
     }
 
     public interface ISubMapLayer

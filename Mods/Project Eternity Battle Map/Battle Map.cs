@@ -131,6 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public UnitAndTerrainValues TerrainRestrictions;
 
         public bool IsInit = false;
+        public string MapTerrainType;//Grid, Spots, Free roam
         public Point TileSize;
         public int LayerHeight = 32;
         public Point MapSize;
@@ -719,7 +720,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (CursorPositionVisible.X < CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.0005f;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.X += CursorSpeed;
@@ -728,7 +729,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (CursorPositionVisible.X > CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.0005f;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.X -= CursorSpeed;
@@ -737,7 +738,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             if (CursorPositionVisible.Y < CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.0005f;
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.Y += CursorSpeed;
@@ -746,7 +747,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (CursorPositionVisible.Y > CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.0005f;
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
 
@@ -756,16 +757,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public bool IsInsideMap(Vector3 WorldPosition)
+        {
+            return WorldPosition.X >= MapSize.X * TileSize.X || WorldPosition.X < 0 || WorldPosition.Y >= MapSize.Y || WorldPosition.Y >= MapSize.Y * TileSize.Y;
+        }
+
         public void GetEmptyPosition(Vector3 TargetPosition, out Vector3 FinalPosition)
         {
-            if (TargetPosition.X < 0 || TargetPosition.Y < 0 || TargetPosition.Z < 0
-                || TargetPosition.X >= MapSize.X || TargetPosition.Y >= MapSize.Y)
+            if (!IsInsideMap(TargetPosition))
             {
                 FinalPosition = TargetPosition;
                 return;
             }
 
-            int MaxValue = 1;
+            int MaxValue = TileSize.X;
             bool ObstacleFound = true;
             int X = 0, Y = 0;
             FinalPosition = new Vector3(0, 0, TargetPosition.Z);
@@ -781,8 +786,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     while (TargetPosition.Y + Y >= 0 && (X + Y) <= MaxValue && ObstacleFound)
                     {
                         if (ObstacleFound &&
-                            TargetPosition.X - X >= 0 && TargetPosition.X - X < MapSize.X &&
-                            TargetPosition.Y + Y >= 0 && TargetPosition.Y + Y < MapSize.Y)
+                            IsInsideMap(new Vector3(TargetPosition.X - X, TargetPosition.Y + Y, TargetPosition.Z)))
                         {
                             ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(-X, Y, 0));
 
@@ -794,8 +798,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
 
                         if (ObstacleFound &&
-                            TargetPosition.X + X >= 0 && TargetPosition.X + X < MapSize.X &&
-                            TargetPosition.Y + Y >= 0 && TargetPosition.Y + Y < MapSize.Y)
+                            IsInsideMap(new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z)))
                         {
                             ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(X, Y, 0));
 
@@ -807,8 +810,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
 
                         if (ObstacleFound &&
-                            TargetPosition.X - X >= 0 && TargetPosition.X - X < MapSize.X &&
-                            TargetPosition.Y - Y >= 0 && TargetPosition.Y - Y < MapSize.Y)
+                            IsInsideMap(new Vector3(TargetPosition.X - X, TargetPosition.Y - Y, TargetPosition.Z)))
                         {
                             ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(-X, -Y, 0));
 
@@ -820,8 +822,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
 
                         if (ObstacleFound &&
-                            TargetPosition.X + X >= 0 && TargetPosition.X + X < MapSize.X &&
-                            TargetPosition.Y - Y >= 0 && TargetPosition.Y - Y < MapSize.Y)
+                            IsInsideMap(new Vector3(TargetPosition.X + X, TargetPosition.Y - Y, TargetPosition.Z)))
                         {
                             ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(X, -Y, 0));
 
@@ -831,12 +832,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                 FinalPosition.Y = TargetPosition.Y - Y;
                             }
                         }
-                        Y++;//Proceed vertically.
+                        Y += TileSize.Y;//Proceed vertically.
                     }
-                    X++;//Proceed horizontally.
+                    X += TileSize.X;//Proceed horizontally.
                 }
                 if (ObstacleFound)
-                    ++MaxValue;
+                    ++TileSize.X;
             }
             while (ObstacleFound);
         }
@@ -845,47 +846,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Move the cursor on the map.
         /// </summary>
         /// <returns>Returns true if the cursor was moved</returns>
-        public bool CursorControl(PlayerInput ActiveInputManager)
+        public bool CursorControlGrid(PlayerInput ActiveInputManager, out Point Offset, out BattleMap ActiveMap)
         {
-            Point Offset = Point.Zero;
+            Offset = Point.Zero;
             bool CursorMoved = false;
 
-            /*if (MouseHelper.MouseMoved())
-            {
-                float NewX = MouseHelper.MouseStateCurrent.X / TileSize.X;
-                float NewY = MouseHelper.MouseStateCurrent.Y / TileSize.Y;
-                
-                NewX += CameraPosition.X;
-                NewY += CameraPosition.Y;
-
-                if (NewX < 0)
-                    NewX = 0;
-                else if (NewX >= MapSize.X)
-                    NewX = MapSize.X - 1;
-                if (NewY < 0)
-                    NewY = 0;
-                else if (NewY >= MapSize.Y)
-                    NewY = MapSize.Y - 1;
-
-                if (NewX != CursorPosition.X || NewY != CursorPosition.Y)
-                {
-                    //Update the camera if needed.
-                    if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > -3)
-                        --CameraPosition.X;
-                    else if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X + 3)
-                        ++CameraPosition.X;
-
-                    if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > -3)
-                        --CameraPosition.Y;
-                    else if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y + 3)
-                        ++CameraPosition.Y;
-
-                    CursorPosition.X = NewX;
-                    CursorPosition.Y = NewY;
-                    CursorMoved = true;
-                }
-            }
-            */
             bool CanKeyboardMove = false;
             if (ActiveInputManager.InputLeftHold() || ActiveInputManager.InputRightHold() || ActiveInputManager.InputUpHold() || ActiveInputManager.InputDownHold())
             {
@@ -914,7 +879,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorHoldTime = -1;
             }
 
-            BattleMap ActiveMap = this;
+            ActiveMap = this;
             bool IsMovingLeft = ActiveInputManager.InputLeftHold();
             bool IsMovingRight = ActiveInputManager.InputRightHold();
             bool IsMovingUp = ActiveInputManager.InputUpHold();
@@ -945,12 +910,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
+            float CameraSpeed = 23;
             //X
             if (IsMovingLeft && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - Camera2DPosition.X - 3 < 0 && Camera2DPosition.X > -3)
-                    --Camera2DPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X - 3 * TileSize.X < 0 && Camera2DPosition.X > -3 * TileSize.X)
+                    Camera2DPosition.X -= CameraSpeed;
 
                 Offset.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
@@ -958,18 +924,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (IsMovingRight && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - Camera2DPosition.X + 3 >= ScreenSize.X && Camera2DPosition.X + ScreenSize.X < MapSize.X + 3)
-                    ++Camera2DPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X + 3 * TileSize.X >= ScreenSize.X * TileSize.X && Camera2DPosition.X + ScreenSize.X * TileSize.X < (MapSize.X + 3) * TileSize.X)
+                    Camera2DPosition.X += CameraSpeed;
 
-                Offset.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
+                Offset.X += (CursorPosition.X < (MapSize.X - 1) * TileSize.X) ? 1 : 0;
                 CursorMoved = true;
             }
             //Y
             if (IsMovingUp && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - Camera2DPosition.Y - 3 < 0 && Camera2DPosition.Y > -3)
-                    --Camera2DPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
+                    Camera2DPosition.Y -= CameraSpeed;
 
                 Offset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
@@ -977,28 +943,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (IsMovingDown && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - Camera2DPosition.Y + 3 >= ScreenSize.Y && Camera2DPosition.Y + ScreenSize.Y < MapSize.Y + 3)
-                    ++Camera2DPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y + 3 * TileSize.Y >= ScreenSize.Y * TileSize.Y && Camera2DPosition.Y + ScreenSize.Y * TileSize.Y < (MapSize.Y + 3) * TileSize.Y)
+                    Camera2DPosition.Y += CameraSpeed;
 
-                Offset.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
+                Offset.Y += (CursorPosition.Y < (MapSize.Y - 1) * TileSize.Y) ? 1 : 0;
                 CursorMoved = true;
-            }
-
-            if (CursorMoved)
-            {
-                MovementAlgorithmTile NextTerrain = GetNextLayerIndex(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
-                if (NextTerrain == ActiveMap.CursorTerrain)//Force movement
-                {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, NextTerrain.InternalPosition.X + Offset.X));
-                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, NextTerrain.InternalPosition.Y + Offset.Y));
-                }
-                else
-                {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = NextTerrain.InternalPosition.X;
-                    ActiveMap.CursorPosition.Y = NextTerrain.InternalPosition.Y;
-                }
             }
 
             return CursorMoved;

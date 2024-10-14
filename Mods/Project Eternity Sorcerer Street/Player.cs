@@ -48,6 +48,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly List<Card> ListCardInHand;
         public readonly List<Card> ListRemainingCardInDeck;
 
+        public readonly List<SorcererStreetUnit> ListCreatureOnBoard;
+
         public Player()
         {
             Inventory = new SorcererStreetInventory();
@@ -60,6 +62,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCardInDeck = new List<Card>();
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
+            ListCreatureOnBoard = new List<SorcererStreetUnit>();
             Init();
         }
 
@@ -76,6 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCardInDeck = new List<Card>();
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
+            ListCreatureOnBoard = new List<SorcererStreetUnit>();
             Init();
         }
 
@@ -93,6 +97,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
+            ListCreatureOnBoard = new List<SorcererStreetUnit>();
 
             CardBook NewCardBook = new CardBook();
             foreach (Card ActiveCard in ListCardInDeck)
@@ -117,6 +122,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
+            ListCreatureOnBoard = new List<SorcererStreetUnit>();
             Init();
         }
 
@@ -138,6 +144,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
+            ListCreatureOnBoard = new List<SorcererStreetUnit>();
             Init();
             FillDeck(Params);
             Refill();

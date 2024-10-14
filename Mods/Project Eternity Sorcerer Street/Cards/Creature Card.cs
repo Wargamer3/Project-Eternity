@@ -42,7 +42,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string AttackStartAnimationPath = "Start";
         public string AttackEndAnimationPath = "End Hit";
         public bool UseCardAnimation = true;
-        public AnimatedModel Map3DModel;
+
+        public SorcererStreetUnit GamePiece;
 
         private CardAbilities Abilities;
         private CardAbilities EnchantAbilities;//Based on Abilities
@@ -143,8 +144,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/" + Path);
 
-                Map3DModel = new AnimatedModel("Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
-                Map3DModel.LoadContent(Content);
+                GamePiece.Unit3DModel = new AnimatedModel("Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
+                GamePiece.Unit3DModel.LoadContent(Content);
             }
         }
 
@@ -217,9 +218,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             sprCard = Clone.sprCard;
-            if (Clone.Map3DModel != null)
+            if (Clone.GamePiece.Unit3DModel != null)
             {
-                Map3DModel = new AnimatedModel(Clone.Map3DModel);
+                GamePiece.Unit3DModel = new AnimatedModel(Clone.GamePiece.Unit3DModel);
             }
         }
 

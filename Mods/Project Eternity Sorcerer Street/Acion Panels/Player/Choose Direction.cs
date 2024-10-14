@@ -162,8 +162,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (KeyValuePair<float, TerrainSorcererStreet> NextTerrain in DicNextTerrain)
             {
                 BW.AppendFloat(NextTerrain.Key);
-                BW.AppendFloat(NextTerrain.Value.InternalPosition.X);
-                BW.AppendFloat(NextTerrain.Value.InternalPosition.Y);
+                BW.AppendFloat(NextTerrain.Value.GridPosition.X);
+                BW.AppendFloat(NextTerrain.Value.GridPosition.Y);
                 BW.AppendFloat(NextTerrain.Value.LayerIndex);
             }
         }

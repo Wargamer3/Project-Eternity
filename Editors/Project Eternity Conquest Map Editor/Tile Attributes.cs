@@ -27,7 +27,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
         public void Init(Terrain ActiveTerrain, BattleMap Map)
         {
-            ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
+            ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain, ActiveTerrain.GridPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

@@ -126,6 +126,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LayerHolderDrawable.AddDamageNumber(Damage, Position);
         }
 
+        public void UnitMoved(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitMoved(PlayerIndex);
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitKilled(PlayerIndex);
+        }
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             LayerHolderDrawable.BeginDraw(g);

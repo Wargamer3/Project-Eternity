@@ -32,9 +32,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ListPlayer[PlayerIndex].ListSquad.Count == 0)
                 return -1;
 
-            Vector3 FinalPosition = Position + Displacement;
+            Vector3 FinalPosition = Position + new Vector3(Displacement.X * TileSize.X, Displacement.Y * TileSize.Y, Displacement.Z * LayerHeight);
 
-            if (FinalPosition.X < 0 || FinalPosition.X >= MapSize.X || FinalPosition.Y < 0 || FinalPosition.Y >= MapSize.Y)
+            if (!IsInsideMap(FinalPosition))
                 return -1;
 
             int S = 0;
@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ++S;
                     continue;
                 }
-                if (ListPlayer[PlayerIndex].ListSquad[S].IsUnitAtPosition(FinalPosition))
+                if (ListPlayer[PlayerIndex].ListSquad[S].IsUnitAtPosition(FinalPosition, TileSize))
                     SquadFound = true;
                 else
                     ++S;
@@ -57,118 +57,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return S;
 
             return -1;
-        }
-        
-        public bool UpdateMapNavigation(PlayerInput ActiveInputManager)
-        {
-            bool CursorMoved = CursorControl(ActiveInputManager);//Move the cursor
-            if (CursorMoved)
-            {
-                foreach (TeleportPoint ActiveTeleport in LayerManager.ListLayer[(int)CursorPosition.Z].ListTeleportPoint)
-                {
-                    if (ActiveTeleport.Position.X == CursorPosition.X && ActiveTeleport.Position.Y == CursorPosition.Y)
-                    {
-                        CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X;
-                        CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y;
-                        CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer;
-                        break;
-                    }
-                }
-            }
-
-            if (InputHelper.InputLButtonPressed())
-            {
-                if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)
-                    return CursorMoved;
-
-                int UnitIndex = 0;
-                if (ActiveSquad != null)
-                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
-
-                int StartIndex = UnitIndex;
-                bool UnmovedSquadFound = false;
-
-                do
-                {
-                    ++UnitIndex;
-
-                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
-                        UnitIndex = 0;
-
-                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
-                    {
-                        UnmovedSquadFound = true;
-                    }
-                }
-                while (StartIndex != UnitIndex && !UnmovedSquadFound);
-
-                if (!UnmovedSquadFound)
-                {
-                    do
-                    {
-                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
-                            UnitIndex = 0;
-                    }
-                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
-                }
-
-                ActiveSquadIndex = UnitIndex;
-                CursorPosition = ActiveSquad.Position;
-                CursorPositionVisible = CursorPosition;
-
-                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
-                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
-                {
-                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
-                }
-            }
-            else if (InputHelper.InputRButtonPressed())
-            {
-                if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)
-                    return CursorMoved;
-
-                int UnitIndex = 0;
-                if (ActiveSquad != null)
-                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
-                int StartIndex = UnitIndex;
-                bool UnmovedSquadFound = false;
-
-                do
-                {
-                    --UnitIndex;
-
-                    if (UnitIndex < 0)
-                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
-
-                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
-                    {
-                        UnmovedSquadFound = true;
-                    }
-                }
-                while (StartIndex != UnitIndex && !UnmovedSquadFound);
-
-                if (!UnmovedSquadFound)
-                {
-                    do
-                    {
-                        if (--UnitIndex < 0)
-                            UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
-                    }
-                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
-                }
-
-                ActiveSquadIndex = UnitIndex;
-                CursorPosition = ActiveSquad.Position;
-                CursorPositionVisible = CursorPosition;
-
-                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
-                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
-                {
-                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
-                }
-            }
-
-            return CursorMoved;
         }
     }
 }

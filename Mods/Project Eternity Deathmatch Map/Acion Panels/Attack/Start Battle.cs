@@ -464,7 +464,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     HandleKnockback(FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad, FinalAttack, FinalTargetPlayerIndex, FinalTargetSquadIndex, FinalTargetSquad);
                 }
 
-                Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost, ListMVHoverPoint);
+                Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad.Position).MovementCost, ListMVHoverPoint);
                 FinalActiveSquad.EndTurn();
             }
 
@@ -483,7 +483,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     HasAfterAttack = true;
                     Map.CursorPosition = FinalActiveSquad.Position;
-                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, Map.GetTerrain(FinalActiveSquad), ActiveSquad.Direction, Map.Camera2DPosition, true));
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, Map.GetTerrain(FinalActiveSquad.Position), ActiveSquad.Direction, Map.Camera2DPosition, true));
                 }
 
                 if (HasAfterAttack)

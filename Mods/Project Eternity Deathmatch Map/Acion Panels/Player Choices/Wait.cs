@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad.Position).MovementCost, ListMVHoverPoints);
             ActiveSquad.EndTurn();
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
 

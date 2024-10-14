@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
@@ -58,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int TargetSelect = 0;
                 //Verify if the cursor is over one of the possible position.
-                while ((Map.CursorPosition.X != ListThrowLocation[TargetSelect].InternalPosition.X || Map.CursorPosition.Y != ListThrowLocation[TargetSelect].InternalPosition.Y)
+                while ((Map.CursorPosition.X != ListThrowLocation[TargetSelect].GridPosition.X || Map.CursorPosition.Y != ListThrowLocation[TargetSelect].GridPosition.Y)
                     && ++TargetSelect < ListThrowLocation.Count) ;
 
                 //If nothing was found.
@@ -66,8 +65,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     return;
 
                 List<PERAttack> ListAttackToUpdate = new List<PERAttack>();
-                Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
-                AttackToThrow.Position = StartPosition;
+                Vector3 StartPosition = ActiveSquad.Position;
+                AttackToThrow.SetPosition(StartPosition);
                 AttackToThrow.Speed = new Vector3(ArcBeamEffect.HighAngleSpeed.X, ArcBeamEffect.HighAngleSpeed.Z, ArcBeamEffect.HighAngleSpeed.Y);
                 AttackToThrow.IsOnGround = false;
                 ListAttackToUpdate.Add(AttackToThrow);
@@ -76,10 +75,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                if (Map.UpdateMapNavigation(ActiveInputManager))
+                if (Map.CursorControl(ActiveInputManager))
                 {
-                    Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
-                    Vector3 TargetPosition = Map.GetTerrain(Map.CursorPosition).GetRealPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;
+                    Vector3 StartPosition = ActiveSquad.Position;
+                    Vector3 TargetPosition = Map.CursorPosition;
                     ArcBeamEffect.UpdateList(StartPosition, TargetPosition, 13, Gravity);
                 }
             }

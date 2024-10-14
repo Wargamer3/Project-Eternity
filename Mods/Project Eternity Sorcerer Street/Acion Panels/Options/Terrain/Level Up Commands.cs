@@ -84,8 +84,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
-            BW.AppendInt32(ActiveTerrain.InternalPosition.X);
-            BW.AppendInt32(ActiveTerrain.InternalPosition.Y);
+            BW.AppendInt32(ActiveTerrain.GridPosition.X);
+            BW.AppendInt32(ActiveTerrain.GridPosition.Y);
             BW.AppendInt32(ActiveTerrain.LayerIndex);
         }
 

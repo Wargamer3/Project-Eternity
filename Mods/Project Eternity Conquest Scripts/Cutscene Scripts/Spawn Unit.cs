@@ -235,7 +235,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     NewUnit.SquadAI.Load(AIPath);
                 }
 
-                Map.SpawnUnit(SpawnPlayer, NewUnit, _UnitToSpawnID, new Microsoft.Xna.Framework.Vector2(_SpawnPosition.X, _SpawnPosition.Y), (int)_SpawnPosition.Z);
+                Map.SpawnUnit(SpawnPlayer, NewUnit, _UnitToSpawnID, _SpawnPosition);
             }
 
             #region Properties

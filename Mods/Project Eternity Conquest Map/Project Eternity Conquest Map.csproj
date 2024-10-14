@@ -133,7 +133,6 @@
     <Compile Include="Layers\Environment Manager.cs" />
     <Compile Include="Layers\Layer Holder.cs" />
     <Compile Include="Layers\Map 2D Drawable.cs" />
-    <Compile Include="Layers\Map 2D.cs" />
     <Compile Include="Layers\Map 3D Drawable.cs" />
     <Compile Include="Layers\Map Layer.cs" />
     <Compile Include="Layers\Map Zone.cs" />

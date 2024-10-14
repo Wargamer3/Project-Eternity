@@ -2,9 +2,13 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Units
 {
+    /// <summary>
+    /// An invisible componenent  that is placed on map. Because of transforming units the visible part need to be implemented by its parent, usually a Unit.
+    /// </summary>
     public abstract class UnitMapComponent
     {
         public const float DirectionNone = -1;
@@ -33,7 +37,6 @@ namespace ProjectEternity.Core.Units
         public Vector3 Position { get { return _Position; } }
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }
 
-        public UnitMap3D Unit3DSprite;
         private HoldableItem _ItemHeld;
         public HoldableItem ItemHeld => _ItemHeld;
         public List<UnitMapComponent> ListTransportedUnit;
@@ -53,6 +56,8 @@ namespace ProjectEternity.Core.Units
         }
 
         public abstract void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor);
+
+        public abstract void Draw3DOnMap(Microsoft.Xna.Framework.Graphics.GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection);
 
         public abstract void DrawExtraOnMap(CustomSpriteBatch g, Vector3 PositionY, Color UnitColor);
 
@@ -96,14 +101,9 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void SetPosition(Vector3 Position)
+        public virtual void SetPosition(Vector3 Position)
         {
             _Position = Position;
-
-            if (Unit3DSprite != null)
-            {
-                Unit3DSprite.SetPosition(Position.X, Position.Z, Position.Y);
-            }
         }
 
         protected void DrawHealthBar(CustomSpriteBatch g, Vector3 Position, int HP, int MaxHP, int HealthBarWidth)
@@ -131,15 +131,53 @@ namespace ProjectEternity.Core.Units
     public class StandaloneUnitMapCompontent : UnitMapComponent
     {
         public AnimatedSprite SpriteMap;
+        public UnitMap3D Unit3DSprite;
+        public string Model3DPath;
+        public AnimatedModel Unit3DModel;
+
+        private Matrix WorldPosition;
 
         public override int Width { get { return SpriteMap.SpriteWidth; } }
         public override int Height { get { return SpriteMap.SpriteHeight; } }
         public override bool[,] ArrayMapSize { get { return new bool[,] { { true } }; } }
         public override bool IsActive { get { return true; } }
 
+        public override void SetPosition(Vector3 Position)
+        {
+            base.SetPosition(Position);
+
+            if (Unit3DModel == null)
+            {
+                Unit3DSprite.SetPosition(Position.X, Position.Y, Position.Z);
+            }
+            else
+            {
+                Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(Direction));
+
+                Vector3 FinalPosition = new Vector3(Position.X, Position.Y, Position.Z);
+
+                WorldPosition = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
+            }
+        }
+
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
             SpriteMap.Draw(g, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), UnitColor);
+        }
+
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            if (Unit3DModel == null)
+            {
+                Unit3DSprite.SetViewMatrix(View);
+
+                Unit3DSprite.Draw(GraphicsDevice);
+            }
+            else
+            {
+                Unit3DModel.PlayAnimation("Idle");
+                Unit3DModel.Draw(View, Projection, WorldPosition);
+            }
         }
 
         public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)

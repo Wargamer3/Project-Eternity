@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void DoUpdate(GameTime gameTime)
         {
             Terrain StartTerrain = Map.GetTerrain(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
-            Vector3 NextTerrainRealPosition = StartTerrain.GetRealPosition(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
+            Vector3 NextTerrainRealPosition = Map.GetFinalPosition(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
             Vector3 Position = new Vector3(NextTerrainRealPosition.X * Map.TileSize.X,
                                 (NextTerrainRealPosition.Z + 1f) * Map.LayerHeight,
                                 (NextTerrainRealPosition.Y) * Map.TileSize.Y);
@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             Terrain NextTerrain = Map.GetTerrain(new Vector3((int)NextPosition.X, (int)NextPosition.Y, (int)NextPosition.Z));
-            Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPosition);
+            Vector3 NextTerrainRealPosition = Map.GetFinalPosition(NextPosition);
             float Incline = NextPosition.Z - HubSquad.LastRealPosition.Z;
             if (HubSquad.IsOnGround)
             {
@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Terrain UpperNextTerrain = Map.GetTerrain(new Vector3(NextPosition.X, NextPosition.Y, NextPosition.Z + MaxInclineDeviationAllowed));
                 if (UpperNextTerrain != NextTerrain)
                 {
-                    Vector3 UpperNextTerrainRealPosition = NextTerrain.GetRealPosition(NextPosition);
+                    Vector3 UpperNextTerrainRealPosition = Map.GetFinalPosition(NextPosition);
                     Incline = UpperNextTerrainRealPosition.Z - HubSquad.LastRealPosition.Z;
                 }
             }

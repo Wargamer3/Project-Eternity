@@ -9,10 +9,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public float Depth { get { return _Depth; } set { _Depth = value; if (LayerGrid != null) LayerGrid.Depth = value; } }
+        public float Depth { get { return _Depth; } set { _Depth = value; } }
         private float _Depth;
 
-        public readonly SorcererStreetMap2D LayerGrid;
         public TerrainSorcererStreet[,] ArrayTerrain;//Array of every tile on the map.
 
         public bool IsVisible;
@@ -40,14 +39,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, _Depth);
+                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, _Depth);
                     ArrayTerrain[X, Y].Owner = Map;
                     ArrayTerrain[X, Y].WorldPosition.Z = LayerIndex;
                 }
             }
 
-            LayerGrid = new SorcererStreetMap2D(Map, this);
-            _Depth = LayerGrid.Depth;
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y), 0);
+                }
+            }
         }
 
         public MapLayer(SorcererStreetMap Map, BinaryReader BR, int LayerIndex)
@@ -91,35 +97,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     switch (Map.ListTerrainType[TerrainTypeIndex])
                     {
                         case TerrainSorcererStreet.Castle:
-                            ArrayTerrain[X, Y] = new CastleTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new CastleTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             break;
 
                         case TerrainSorcererStreet.FireElement:
                         case TerrainSorcererStreet.WaterElement:
                         case TerrainSorcererStreet.EarthElement:
                         case TerrainSorcererStreet.AirElement:
-                            ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             break;
 
                         case TerrainSorcererStreet.EastTower:
-                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.East);
                             break;
                         case TerrainSorcererStreet.WestTower:
-                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.West);
                             break;
                         case TerrainSorcererStreet.SouthTower:
-                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.South);
                             break;
                         case TerrainSorcererStreet.NorthTower:
-                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.North);
                             break;
 
                         default:
-                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             break;
                     }
 
@@ -129,20 +135,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            LayerGrid = new SorcererStreetMap2D(Map, this, BR);
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(BR, Map.TileSize.X, Map.TileSize.Y);
+                }
+            }
+
             int ListSubLayerCount = BR.ReadInt32();
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
             for (int L = 0; L < ListSubLayerCount; L++)
             {
                 ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
-            }
-
-            for (int Y = 0; Y < Map.MapSize.Y; Y++)
-            {
-                for (int X = 0; X < Map.MapSize.X; X++)
-                {
-                    ArrayTerrain[X, Y].DrawableTile = LayerGrid.ArrayTile[X, Y];
-                }
             }
 
             int ListSingleplayerSpawnsCount = BR.ReadInt32();
@@ -208,8 +214,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR, LayerIndex));
             }
-
-            LayerGrid.Depth = Depth;
         }
 
         public void Save(BinaryWriter BW)
@@ -227,7 +231,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            LayerGrid.Save(BW);
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y].Save(BW);
+                }
+            }
+
             BW.Write(ListSubLayer.Count);
             for (int L = 0; L < ListSubLayer.Count; L++)
             {
@@ -291,6 +302,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ActiveSubLayer.Update(gameTime);
             }
+        }
+
+        public override MovementAlgorithmTile GetTile(int X, int Y)
+        {
+            return ArrayTerrain[X, Y];
         }
 
         public override string ToString()

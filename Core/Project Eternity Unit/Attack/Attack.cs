@@ -70,6 +70,7 @@ namespace ProjectEternity.Core.Attacks
 
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
+        public ExplosionOptions ExplosionOption;
         public KnockbackAttackAttributes KnockbackAttributes;
         public RotationAttackAttributes RotationAttributes;
         public byte ALLLevel;//Number of Units an ALL Attack can hit
@@ -79,7 +80,6 @@ namespace ProjectEternity.Core.Attacks
         public byte ChargedAttackCancelLevel;
         public List<Attack> ListChargedAttack;
         public List<Attack> ListSecondaryAttack;
-        public ExplosionOptions ExplosionOption;
         public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
 
@@ -297,9 +297,9 @@ namespace ProjectEternity.Core.Attacks
                 ListQuoteSet.Add(BR.ReadString());
         }
 
-        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
+        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, Point TerrainSize, byte TargetMovementType, bool CanMove)
         {
-            if (CanAttackTarget(CurrentUnit, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove))
+            if (CanAttackTarget(CurrentUnit, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TerrainSize, TargetMovementType, CanMove))
             {
                 _CanAttack = true;
             }
@@ -314,7 +314,7 @@ namespace ProjectEternity.Core.Attacks
             _CanAttack = false;
         }
 
-        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
+        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, Point TerrainSize, byte TargetMovementType, bool CanMove)
         {
             //If the Mech have enough EN to use the weapon and the weapon have enough ammo to fire.
             if (CurrentUnit.EN < ENCost || (Ammo <= 0 && MaxAmmo > 0)
@@ -353,7 +353,7 @@ namespace ProjectEternity.Core.Attacks
                         {
                             if (ArrayTargetMapSize[X, Y])
                             {
-                                if (MAPAttributes.CanAttackTarget(StartPosition, new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z), (int)Math.Max(0, MinDistance + ExplosionOption.ExplosionRadius), MaxDistance + (int)ExplosionOption.ExplosionRadius))
+                                if (MAPAttributes.CanAttackTarget(StartPosition, new Vector3(TargetPosition.X + X * TerrainSize.X, TargetPosition.Y + Y * TerrainSize.Y, TargetPosition.Z), (int)Math.Max(0, MinDistance + ExplosionOption.ExplosionRadius), MaxDistance + (int)ExplosionOption.ExplosionRadius))
                                 {
                                     return true;
                                 }
@@ -372,7 +372,7 @@ namespace ProjectEternity.Core.Attacks
                         {
                             if (ArrayTargetMapSize[X, Y])
                             {
-                                float Distance = Math.Abs(StartPosition.X - (TargetPosition.X + X)) + Math.Abs(StartPosition.Y - (TargetPosition.Y + Y));
+                                float Distance = Math.Abs(StartPosition.X - (TargetPosition.X + X * TerrainSize.X)) / TerrainSize.X + Math.Abs(StartPosition.Y - (TargetPosition.Y + Y * TerrainSize.Y)) / TerrainSize.Y;
                                 //If a Unit is in range.
                                 if (Distance >= MinDistance && Distance <= MaxDistance)
                                 {

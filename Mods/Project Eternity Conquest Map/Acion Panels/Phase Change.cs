@@ -209,25 +209,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     foreach (Terrain ActiveTerrain in Map.GetAllTerrain(ActiveUnit.Components, Map))
                     {
                         //Terrain passive bonus.
-                        for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
-                            switch (ActiveTerrain.ListActivation[i])
+                        for (int i = 0; i < ActiveTerrain.BonusInfo.ListActivation.Length; i++)
+                            switch (ActiveTerrain.BonusInfo.ListActivation[i])
                             {
                                 case TerrainActivation.OnEveryTurns:
-                                    switch (ActiveTerrain.ListBonus[i])
+                                    switch (ActiveTerrain.BonusInfo.ListBonus[i])
                                     {
                                         case TerrainBonus.HPRegen:
-                                            ActiveUnit.HealUnit((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveUnit.MaxHP));
+                                            ActiveUnit.HealUnit((int)(ActiveTerrain.BonusInfo.ListBonusValue[i] / 100.0f * ActiveUnit.MaxHP));
                                             break;
 
                                         case TerrainBonus.ENRegen:
-                                            ActiveUnit.RefillEN((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveUnit.MaxEN));
+                                            ActiveUnit.RefillEN((int)(ActiveTerrain.BonusInfo.ListBonusValue[i] / 100.0f * ActiveUnit.MaxEN));
                                             break;
                                         case TerrainBonus.HPRestore:
-                                            ActiveUnit.HealUnit(ActiveTerrain.ListBonusValue[i]);
+                                            ActiveUnit.HealUnit(ActiveTerrain.BonusInfo.ListBonusValue[i]);
                                             break;
 
                                         case TerrainBonus.ENRestore:
-                                            ActiveUnit.RefillEN(ActiveTerrain.ListBonusValue[i]);
+                                            ActiveUnit.RefillEN(ActiveTerrain.BonusInfo.ListBonusValue[i]);
                                             break;
                                     }
                                     break;

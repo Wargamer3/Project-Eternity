@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     Terrain NextTerrain = Map.GetTerrain(new Vector3((int)NextPosition.X, (int)NextPosition.Y, (int)NextPosition.Z));
-                    Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPosition);
+                    Vector3 NextTerrainRealPosition = Map.GetFinalPosition(NextPosition);
                     float Incline = NextPosition.Z - ActiveAttack.LastRealPosition.Z;
                     if (ActiveAttack.Owner.IsOnGround)
                     {
@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Terrain UpperNextTerrain = Map.GetTerrain(new Vector3(NextPosition.X, NextPosition.Y, NextPosition.Z + MaxInclineDeviationAllowed));
                         if (UpperNextTerrain != NextTerrain)
                         {
-                            Vector3 UpperNextTerrainRealPosition = NextTerrain.GetRealPosition(NextPosition);
+                            Vector3 UpperNextTerrainRealPosition = Map.GetFinalPosition(NextPosition);
                             Incline = UpperNextTerrainRealPosition.Z - ActiveAttack.LastRealPosition.Z;
                         }
                     }

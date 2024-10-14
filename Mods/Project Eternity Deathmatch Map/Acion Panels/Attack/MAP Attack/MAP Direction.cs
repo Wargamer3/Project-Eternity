@@ -176,8 +176,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackTerrain.Count; ++A)
             {
-                BW.AppendInt32((int)ListAttackTerrain[A].InternalPosition.X);
-                BW.AppendInt32((int)ListAttackTerrain[A].InternalPosition.Y);
+                BW.AppendInt32((int)ListAttackTerrain[A].GridPosition.X);
+                BW.AppendInt32((int)ListAttackTerrain[A].GridPosition.Y);
                 BW.AppendInt32(ListAttackTerrain[A].LayerIndex);
             }
         }

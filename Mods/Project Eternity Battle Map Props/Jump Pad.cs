@@ -103,8 +103,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsUsed)
             {
-                float PosX = (Position.X - Map.Camera2DPosition.X) * Map.TileSize.X;
-                float PosY = (Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
+                float PosX = Position.X - Map.Camera2DPosition.X;
+                float PosY = Position.Y - Map.Camera2DPosition.Y;
 
                 g.Draw(sprFlag, new Vector2(PosX, PosY), Color.White);
             }

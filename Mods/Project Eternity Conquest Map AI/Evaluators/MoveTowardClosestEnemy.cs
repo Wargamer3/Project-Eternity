@@ -75,8 +75,8 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     if (DistanceMax < Math.Abs(Info.ActiveUnit.X - TargetSquad.X) + Math.Abs(Info.ActiveUnit.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
-                        Info.Map.CursorPosition.X = ListMVTile[FinalMV].InternalPosition.X;
-                        Info.Map.CursorPosition.Y = ListMVTile[FinalMV].InternalPosition.Y;
+                        Info.Map.CursorPosition.X = ListMVTile[FinalMV].GridPosition.X;
+                        Info.Map.CursorPosition.Y = ListMVTile[FinalMV].GridPosition.Y;
                         Info.Map.CursorPositionVisible = ListMVPoints[FinalMV];
                         //Move the Unit to the target position;
                         Info.ActiveUnit.SetPosition(ListMVPoints[FinalMV]);

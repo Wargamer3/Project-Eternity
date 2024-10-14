@@ -246,7 +246,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                             {
                                 for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 0);
+                                    ArrayTerrain[X, Y] = new Terrain(X, Y, TileSize.X, TileSize.Y, 0, 0, 0);
                                     ArrayTerrain[X, Y].TerrainTypeIndex = 1;
                                 }
                             }

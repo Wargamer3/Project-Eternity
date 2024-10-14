@@ -5,44 +5,41 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    partial class DeathmatchMap
+    public class ActionPanelDebugScreen : ActionPanelDeathmatch
     {
-        public class ActionPanelDebugScreen : ActionPanelDeathmatch
+
+        public ActionPanelDebugScreen(DeathmatchMap Map)
+            : base("Log", Map)
+        {
+        }
+
+        public override void OnSelect()
+        {
+            Map.PushScreen(GameScreen.Debug);
+            GameScreen.Debug.Init();
+            RemoveFromPanelList(this);
+        }
+
+        public override void DoUpdate(GameTime gameTime)
         {
 
-            public ActionPanelDebugScreen(DeathmatchMap Map)
-                : base("Log", Map)
-            {
-            }
+        }
 
-            public override void OnSelect()
-            {
-                Map.PushScreen(Debug);
-                Debug.Init();
-                RemoveFromPanelList(this);
-            }
+        public override void DoRead(ByteReader BR)
+        {
+        }
 
-            public override void DoUpdate(GameTime gameTime)
-            {
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
 
-            }
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelDebugScreen(Map);
+        }
 
-            public override void DoRead(ByteReader BR)
-            {
-            }
-
-            public override void DoWrite(ByteWriter BW)
-            {
-            }
-
-            protected override ActionPanel Copy()
-            {
-                return new ActionPanelDebugScreen(Map);
-            }
-
-            public override void Draw(CustomSpriteBatch g)
-            {
-            }
+        public override void Draw(CustomSpriteBatch g)
+        {
         }
     }
 }

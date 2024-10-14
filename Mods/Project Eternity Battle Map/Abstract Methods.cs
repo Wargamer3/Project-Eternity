@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +10,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public partial class BattleMap
     {
+        /// <summary>
+        /// Move the cursor on the map.
+        /// </summary>
+        /// <returns>Returns true if the cursor was moved</returns>
+        public abstract bool CursorControl(PlayerInput ActiveInputManager);
+        public abstract Vector3 GetFinalPosition(Vector3 WorldPosition);
+        public abstract Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset);
         public abstract byte[] GetSnapshotData();
         public abstract void Update(double ElapsedSeconds);
         public abstract void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer);
@@ -32,17 +38,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void RemoveUnit(int PlayerIndex, object UnitToRemove);
 
-        public abstract void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition);
+        public abstract void AddUnit(int PlayerIndex, object UnitToAdd, Vector3 NewPosition);
 
-        public abstract void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile);
+        public abstract List<Vector3> GetCampaignEnemySpawnLocations();
 
-        public abstract MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility);
-
-        public abstract MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex);
-
-        public abstract List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations();
-
-        public abstract List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team);
+        public abstract List<Vector3> GetMultiplayerSpawnLocations(int Team);
 
         public abstract void Save(string FilePath);
 

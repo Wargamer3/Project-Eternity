@@ -113,8 +113,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendFloat(ListAttackChoice[A].InternalPosition.X);
-                BW.AppendFloat(ListAttackChoice[A].InternalPosition.Y);
+                BW.AppendFloat(ListAttackChoice[A].GridPosition.X);
+                BW.AppendFloat(ListAttackChoice[A].GridPosition.Y);
                 BW.AppendInt32(ListAttackChoice[A].LayerIndex);
             }
         }

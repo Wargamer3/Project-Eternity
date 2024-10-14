@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.CursorPositionVisible = Map.CursorPosition;
 
-                Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+                Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad.Position).MovementCost, ListMVHoverPoints);
 
                 ActiveSquad.EndTurn();
 

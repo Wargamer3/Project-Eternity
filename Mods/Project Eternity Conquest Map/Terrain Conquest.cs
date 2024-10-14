@@ -35,21 +35,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public TerrainConquest(int XPos, int YPos, int LayerIndex, float LayerDepth)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = 0;
             CapturedPlayerIndex = -1;
         }
 
-        public TerrainConquest(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
         }
 
-        public TerrainConquest(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainConquest(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = BR.ReadByte();
 

@@ -1095,13 +1095,23 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             MapEnvironment.Reset();
         }
 
+        public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)
+        {
+            Vector3 TopFrontLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopFrontRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopBackLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z));
+            Vector3 TopBackRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y, WorldPosition.Z));
+
+            return Terrain3D.CreateTile3D(TilesetIndex, TopFrontLeft, TopFrontRight, TopBackLeft, TopBackRight, TileSize, Origin, TextureSize.X, TextureSize.Y, PositionOffset);
+        }
+
         public override void RemoveUnit(int PlayerIndex, object UnitToRemove)
         {
             ListPlayer[ActivePlayerIndex].ListUnit.Remove((UnitConquest)UnitToRemove);
             ListPlayer[ActivePlayerIndex].UpdateAliveStatus();
         }
 
-        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
+        public override void AddUnit(int PlayerIndex, object UnitToAdd, Vector3 NewPosition)
         {
             UnitConquest ActiveUnit = (UnitConquest)UnitToAdd;
             ActiveUnit.ReinitializeMembers(GlobalBattleParams.DicUnitType[ActiveUnit.UnitTypeName]);
@@ -1109,9 +1119,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveUnit.ReloadSkills(GlobalBattleParams.DicUnitType[ActiveUnit.UnitTypeName], GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
             ListPlayer[PlayerIndex].ListUnit.Add(ActiveUnit);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
-            ActiveUnit.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
+            ActiveUnit.SetPosition(new Vector3(NewPosition.X, NewPosition.Y, NewPosition.Z));
 
-            ActiveUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+            ActiveUnit.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
         public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
@@ -1210,7 +1220,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     ++S;
                     continue;
                 }
-                if (ListPlayer[PlayerIndex].ListUnit[S].IsUnitAtPosition(FinalPosition))
+                if (ListPlayer[PlayerIndex].ListUnit[S].IsUnitAtPosition(FinalPosition, TileSize))
                     SquadFound = true;
                 else
                     ++S;
@@ -1477,11 +1487,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.InternalPosition.X + OffsetX;
-            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
+            int NextX = StartingPosition.GridPosition.X + OffsetX;
+            int NextY = StartingPosition.GridPosition.Y + OffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
@@ -1587,7 +1597,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
-                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
+                    MovementAlgorithmTile FoundTile = ((ConquestMap)ActivePlatform.Map).LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[StartingPosition.GridPosition.X + OffsetX, StartingPosition.GridPosition.Y + OffsetY];
 
                     if (FoundTile != null)
                     {
@@ -1619,7 +1629,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return true;
         }
 
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
+        public MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
         {
             if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
             {
@@ -1629,21 +1639,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
-        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
+        public void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
         {
             DrawableTile NewTile = new DrawableTile(ActiveTile);
 
-            LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
+            LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y] = NewTile;
             LayerManager.LayerHolderDrawable.Reset();
         }
 
-        public override List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
+        public override List<Vector3> GetCampaignEnemySpawnLocations()
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetCampaignEnemySpawnLocations());
             }
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
@@ -1653,7 +1663,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
                     {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ListCampaignSpawns[S].Position);
                     }
                 }
             }
@@ -1661,13 +1671,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return ListPossibleSpawnPoint;
         }
 
-        public override List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
+        public override List<Vector3> GetMultiplayerSpawnLocations(int Team)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetMultiplayerSpawnLocations(Team));
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetMultiplayerSpawnLocations(Team));
             }
 
             string PlayerTag = (Team + 1).ToString();
@@ -1678,7 +1688,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                     {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ListMultiplayerSpawns[S].Position);
                     }
                 }
             }
@@ -1743,7 +1753,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return DicGameType;
         }
 
-        public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, uint ID, Vector2 Position, int LayerIndex)
+        public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, uint ID, Vector3 Position)
         {
             NewUnit.InitStat();
 
@@ -1754,10 +1764,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             if (Content != null)
             {
-                NewUnit.Components.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
+                NewUnit.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
-                NewUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
-                NewUnit.Components.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+                NewUnit.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewUnit.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
             }
 
             ListPlayer[PlayerIndex].IsAlive = true;
@@ -1767,7 +1777,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             NewUnit.StartTurn();
             ActivateAutomaticSkills(null, NewUnit, string.Empty, null, NewUnit);
             NewUnit.SpawnID = ID;
-            NewUnit.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
+            NewUnit.SetPosition(Position);
 
             ListPlayer[PlayerIndex].ListUnit.Add(NewUnit);
 

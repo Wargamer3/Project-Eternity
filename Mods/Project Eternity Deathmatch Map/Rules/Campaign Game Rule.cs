@@ -300,7 +300,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        protected override List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
+        protected override List<Vector3> GetSpawnLocations(int ActivePlayerIndex)
         {
             if (ActivePlayerIndex >= 10)
             {

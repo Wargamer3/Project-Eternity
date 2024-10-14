@@ -60,9 +60,9 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.ActiveTerrain = ActiveTerrain;
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
 
-            if (ActiveTerrain.BattleBackgroundAnimationIndex <= cboBattleAnimationBackground.Items.Count)
+            if (ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex <= cboBattleAnimationBackground.Items.Count)
             {
-                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
+                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex;
             }
             else
             {
@@ -72,11 +72,11 @@ namespace ProjectEternity.Editors.TilesetEditor
             lstTerrainBonus.Items.Clear();
 
             //Load the lstTerrainBonus.
-            for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
+            for (int i = 0; i < ActiveTerrain.BonusInfo.ListActivation.Length; i++)
             {
-                string ActiveBonus = cboTerrainBonusType.Items[(int)ActiveTerrain.ListBonus[i]].ToString();
-                string ActiveBonusValue = ActiveTerrain.ListBonusValue[i].ToString();
-                string ActiveBonusActivation = cboTerrainBonusActivation.Items[(int)ActiveTerrain.ListActivation[i]].ToString();
+                string ActiveBonus = cboTerrainBonusType.Items[(int)ActiveTerrain.BonusInfo.ListBonus[i]].ToString();
+                string ActiveBonusValue = ActiveTerrain.BonusInfo.ListBonusValue[i].ToString();
+                string ActiveBonusActivation = cboTerrainBonusActivation.Items[(int)ActiveTerrain.BonusInfo.ListActivation[i]].ToString();
 
                 lstTerrainBonus.Items.Add((i + 1) + ". " + ActiveBonus + " (" + ActiveBonusValue.ToString() + " ) - " + ActiveBonusActivation);
             }
@@ -101,15 +101,15 @@ namespace ProjectEternity.Editors.TilesetEditor
             {
                 lstTerrainBonus.Items.Add((lstTerrainBonus.Items.Count + 1) + ". HP regen (5 ) - On every turn");
 
-                int LastBonusIndex = ActiveTerrain.ListActivation.Length;
+                int LastBonusIndex = ActiveTerrain.BonusInfo.ListActivation.Length;
 
-                Array.Resize(ref ActiveTerrain.ListActivation, ActiveTerrain.ListActivation.Length + 1);
-                Array.Resize(ref ActiveTerrain.ListBonus, ActiveTerrain.ListBonus.Length + 1);
-                Array.Resize(ref ActiveTerrain.ListBonusValue, ActiveTerrain.ListBonusValue.Length + 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListActivation, ActiveTerrain.BonusInfo.ListActivation.Length + 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListBonus, ActiveTerrain.BonusInfo.ListBonus.Length + 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListBonusValue, ActiveTerrain.BonusInfo.ListBonusValue.Length + 1);
 
-                ActiveTerrain.ListActivation[LastBonusIndex] = TerrainActivation.OnEveryTurns;
-                ActiveTerrain.ListBonus[LastBonusIndex] = TerrainBonus.HPRegen;
-                ActiveTerrain.ListBonusValue[LastBonusIndex] = 5;
+                ActiveTerrain.BonusInfo.ListActivation[LastBonusIndex] = TerrainActivation.OnEveryTurns;
+                ActiveTerrain.BonusInfo.ListBonus[LastBonusIndex] = TerrainBonus.HPRegen;
+                ActiveTerrain.BonusInfo.ListBonusValue[LastBonusIndex] = 5;
             }
         }
 
@@ -118,9 +118,9 @@ namespace ProjectEternity.Editors.TilesetEditor
             if (ActiveTerrain != null && lstTerrainBonus.SelectedIndex >= 0)
             {
                 int Index = lstTerrainBonus.SelectedIndex;
-                Array.Resize(ref ActiveTerrain.ListActivation, ActiveTerrain.ListActivation.Length - 1);
-                Array.Resize(ref ActiveTerrain.ListBonus, ActiveTerrain.ListBonus.Length - 1);
-                Array.Resize(ref ActiveTerrain.ListBonusValue, ActiveTerrain.ListBonusValue.Length - 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListActivation, ActiveTerrain.BonusInfo.ListActivation.Length - 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListBonus, ActiveTerrain.BonusInfo.ListBonus.Length - 1);
+                Array.Resize(ref ActiveTerrain.BonusInfo.ListBonusValue, ActiveTerrain.BonusInfo.ListBonusValue.Length - 1);
                 lstTerrainBonus.Items.RemoveAt(lstTerrainBonus.SelectedIndex);
 
                 if (lstTerrainBonus.Items.Count > 0)
@@ -153,9 +153,9 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             if (ActiveTerrain != null && lstTerrainBonus.SelectedIndex >= 0)
             {
-                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
-                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
-                txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
+                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListActivation[lstTerrainBonus.SelectedIndex];
+                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListBonus[lstTerrainBonus.SelectedIndex];
+                txtBonusValue.Text = ActiveTerrain.BonusInfo.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
             }
         }
 
@@ -163,7 +163,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             if (ActiveTerrain != null && lstTerrainBonus.SelectedIndex >= 0)
             {
-                ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
+                ActiveTerrain.BonusInfo.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -172,7 +172,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             if (ActiveTerrain != null && lstTerrainBonus.SelectedIndex >= 0)
             {
-                ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
+                ActiveTerrain.BonusInfo.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -181,7 +181,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             if (ActiveTerrain != null && lstTerrainBonus.SelectedIndex >= 0 && txtBonusValue.Text != "")
             {
-                ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex] = (int)txtBonusValue.Value;
+                ActiveTerrain.BonusInfo.ListBonusValue[lstTerrainBonus.SelectedIndex] = (int)txtBonusValue.Value;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -190,7 +190,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             if (ActiveTerrain != null)
             {
-                ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
+                ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
             }
         }
 

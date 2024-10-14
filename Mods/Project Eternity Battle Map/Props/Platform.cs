@@ -47,21 +47,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlatformMap.AddLocalPlayer(ActivePlayer);
         }
 
-        public MovementAlgorithmTile FindTileFromLocalPosition(int X, int Y, int Z)
-        {
-            return PlatformMap.GetMovementTile(X, Y, Z);
-        }
-        
-        public List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
-        {
-            return PlatformMap.GetCampaignEnemySpawnLocations();
-        }
-
-        public List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
-        {
-            return PlatformMap.GetMultiplayerSpawnLocations(Team);
-        }
-
         public void Update(GameTime gameTime)
         {
             PlatformMap.Update(gameTime);

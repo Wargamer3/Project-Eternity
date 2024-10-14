@@ -144,7 +144,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             Map.Params.GlobalContext.ArrayAttackPosition = ListAttackTerrain.ToArray();
 
-                            Map.AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, new List<Vector3>(), ListMAPAttackTarget);
+                            Map.AttackDirectly(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, new List<Vector3>(), ListMAPAttackTarget);
 
                             //Remove Ammo if needed.
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
@@ -186,7 +186,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             continue;
 
                         ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, Map.ListPlayer[P].ListSquad[U].Position, Map.ListPlayer[P].TeamIndex,
-                                Map.ListPlayer[P].ListSquad[U].ArrayMapSize, Map.ListPlayer[P].ListSquad[U].CurrentTerrainIndex, false);
+                                Map.ListPlayer[P].ListSquad[U].ArrayMapSize, Map.TileSize, Map.ListPlayer[P].ListSquad[U].CurrentTerrainIndex, false);
 
                         if (ActiveAttack.CanAttack)
                         {
@@ -288,7 +288,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveWingman.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
                 if (ActiveWingman.PLAAttack != null)
                 {
-                    ActiveWingman.PLAAttack.UpdateAttack(ActiveWingman, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].TeamIndex, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
+                    ActiveWingman.PLAAttack.UpdateAttack(ActiveWingman, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].TeamIndex, TargetSquad.ArrayMapSize, Map.TileSize, TargetSquad.CurrentTerrainIndex, true);
 
                     if (ActiveWingman.PLAAttack.CanAttack)
                     {

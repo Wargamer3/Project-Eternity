@@ -70,7 +70,6 @@
     <Compile Include="Constructions\Power Supply.cs" />
     <Compile Include="Factions.cs" />
     <Compile Include="Init Battle.cs" />
-    <Compile Include="Map 2D.cs" />
     <Compile Include="Map Consumable.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Select Construction.cs" />

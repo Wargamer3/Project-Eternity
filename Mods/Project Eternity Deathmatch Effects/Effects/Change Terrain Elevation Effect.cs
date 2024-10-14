@@ -45,8 +45,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int Y = -_Radius; Y <= _Radius; ++Y)
                     {
-                        int FinalX = (int)ActivePosition.InternalPosition.X + X;
-                        int FinalY = (int)ActivePosition.InternalPosition.Y + Y;
+                        int FinalX = (int)ActivePosition.GridPosition.X + X;
+                        int FinalY = (int)ActivePosition.GridPosition.Y + Y;
 
                         if (Math.Abs(X) + Math.Abs(Y) > Radius || FinalX < 0 || FinalX >= Params.Map.MapSize.X || FinalY < 0 || FinalY >= Params.Map.MapSize.Y)
                             continue;

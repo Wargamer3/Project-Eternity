@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         int PosY = (int)ActiveTerrain.WorldPosition.Y;
                         DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
                         ActiveLayer.ArrayTerrain[PosX, PosY] = ActiveTerrain;
-                        ActiveLayer.LayerGrid.ReplaceTile(PosX, PosY, ActiveTile);
+                        ActiveLayer.ArrayTile[PosX, PosY] = ActiveTile;
                     }
 
                     CurrentTransformingIndex += _MinSimultaneousTiles;
@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float TileY = BR.ReadSingle();
                     int Tileset = BR.ReadInt32();
                     Rectangle Origin = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TerrainAttribute.TileSize.X, TerrainAttribute.TileSize.Y);
-                    TerrainAttribute.ListTerrainChangeLocation.Add(new Terrain(BR, (int)TileX, (int)TileY, 0, 0));
+                    TerrainAttribute.ListTerrainChangeLocation.Add(new Terrain(BR, (int)TileX, (int)TileY, TerrainAttribute.TileSize.X, TerrainAttribute.TileSize.Y, 0, 0, 0));
                     TerrainAttribute.ListTileChangeLocation.Add(new DrawableTile(Origin, Tileset));
                 }
 

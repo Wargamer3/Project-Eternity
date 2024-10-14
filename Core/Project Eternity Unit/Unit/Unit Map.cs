@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Units
@@ -20,6 +21,11 @@ namespace ProjectEternity.Core.Units
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
             g.Draw(ActiveUnit.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), UnitColor);
+        }
+
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)

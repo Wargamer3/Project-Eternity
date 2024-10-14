@@ -3,8 +3,8 @@
     //idea: global  land transfer spell arandomly changed the colors of all unoccupied lands.
     public class ShrineTerrain : TerrainSorcererStreet
     {
-        public ShrineTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
+        public ShrineTerrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth, TerrainTypeIndex)
         {
 
         }

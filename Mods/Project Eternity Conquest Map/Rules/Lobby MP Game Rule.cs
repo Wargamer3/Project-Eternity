@@ -102,11 +102,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         DicSpawnUnitIndexPerTeam.Add(SpawnTeam, 0);
                     }
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(SpawnTeam);
+                    List<Vector3> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(SpawnTeam);
 
                     int SpawnSquadIndex = DicSpawnUnitIndexPerTeam[SpawnTeam];
 
-                    foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
+                    foreach (Vector3 ActiveSpawn in ListPossibleSpawnPoint)
                     {
                         if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
                         {
@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
 
                         NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                        Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector2(ActiveSpawn.InternalPosition.X, ActiveSpawn.InternalPosition.Y), ActiveSpawn.LayerIndex);
+                        Owner.SpawnUnit(PlayerIndex, NewUnit, 0, ActiveSpawn);
                         NewUnit.PilotSP = 0;
                         NewUnit.ConsumeEN(NewUnit.MaxEN);
                         ++SpawnSquadIndex;
@@ -133,15 +133,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         if (!ActivePlayer.IsPlayerControlled || !NewUnit.IsPlayerControlled)
                         {
                             InitBot(NewUnit);
-                        }
-
-                        if (Owner != ActiveSpawn.Owner)
-                        {
-                            ActiveSpawn.Owner.AddUnit(P, NewUnit, ActiveSpawn);
-                            Owner.RemoveUnit(P, NewUnit);
-                            Owner.SelectPlatform(Owner.GetPlatform(ActiveSpawn.Owner));
-                            ActiveSpawn.Owner.CursorPosition = NewUnit.Position;
-                            ActiveSpawn.Owner.CursorPositionVisible = NewUnit.Position;
                         }
 
                         Owner.CursorPosition = NewUnit.Position;
@@ -419,14 +410,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return 50u + (uint)ActivePlayer.Level * 5u;
         }
 
-        protected virtual List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
+        protected virtual List<Vector3> GetSpawnLocations(int ActivePlayerIndex)
         {
             return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
         }
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveUnit)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
+            List<Vector3> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
             if (ListPossibleSpawnPoint.Count == 0)
             {
                 return;
@@ -440,9 +431,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveUnit.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
 
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
-            MovementAlgorithmTile RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
+            Vector3 RandomSpawnPoint = Owner.GetFinalPosition(ListPossibleSpawnPoint[RandomSapwnPointIndex]);
 
-            Owner.CursorPosition = new Vector3(RandomSpawnPoint.InternalPosition.X, RandomSpawnPoint.InternalPosition.Y, RandomSpawnPoint.LayerIndex);
+            Owner.CursorPosition = RandomSpawnPoint;
             Owner.CursorPositionVisible = Owner.CursorPosition;
 
             ActiveUnit.At(0).HealUnit(ActiveUnit.At(0).MaxHP);

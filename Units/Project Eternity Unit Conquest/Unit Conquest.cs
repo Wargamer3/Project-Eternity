@@ -38,6 +38,11 @@ namespace ProjectEternity.Core.Units.Conquest
             g.Draw(Unit.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), UnitColor);
         }
 
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
         {
             if (Unit.HP < 91)
@@ -210,9 +215,9 @@ namespace ProjectEternity.Core.Units.Conquest
             MapComponents.EndTurn();
         }
 
-        public bool IsUnitAtPosition(Vector3 PositionToCheck)
+        public bool IsUnitAtPosition(Vector3 PositionToCheck, Point TerrainSize)
         {
-            return UnitStat.IsUnitAtPosition(Position, PositionToCheck);
+            return UnitStat.IsUnitAtPosition(Position, PositionToCheck, TerrainSize);
         }
 
         public void SetPosition(Vector3 Position)

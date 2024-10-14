@@ -7,6 +7,7 @@ using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using System;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -50,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int TargetSelect = 0;
                 //Verify if the cursor is over one of the possible MV position.
-                while ((Map.CursorPosition.X != ListAttackChoice[TargetSelect].InternalPosition.X || Map.CursorPosition.Y != ListAttackChoice[TargetSelect].InternalPosition.Y)
+                while ((Math.Floor(Map.CursorPosition.X / Map.TileSize.X) != ListAttackChoice[TargetSelect].GridPosition.X || Math.Floor(Map.CursorPosition.Y / Map.TileSize.Y) != ListAttackChoice[TargetSelect].GridPosition.Y)
                     && ++TargetSelect < ListAttackChoice.Count) ;
 
                 //If nothing was found.
@@ -69,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[ActivePlayerIndex].TeamIndex != Map.ListPlayer[P].TeamIndex)//If it's an ennemy.
                         {
                             ActiveSquad.CurrentLeader.CurrentAttack.UpdateAttack(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, Map.CursorPosition, Map.ListPlayer[P].TeamIndex,
-                                ActiveSquad.ArrayMapSize, Map.ListPlayer[P].ListSquad[TargetSelect].CurrentTerrainIndex, ActiveSquad.CanMove);
+                                ActiveSquad.ArrayMapSize, Map.TileSize, Map.ListPlayer[P].ListSquad[TargetSelect].CurrentTerrainIndex, ActiveSquad.CanMove);
 
                             if (!ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                             {
@@ -96,7 +97,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                bool CursorMoved = Map.UpdateMapNavigation(ActiveInputManager);
+                bool CursorMoved = Map.CursorControl(ActiveInputManager);
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -167,8 +168,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendInt32(ListAttackChoice[A].InternalPosition.X);
-                BW.AppendInt32(ListAttackChoice[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackChoice[A].GridPosition.X);
+                BW.AppendInt32(ListAttackChoice[A].GridPosition.Y);
                 BW.AppendInt32(ListAttackChoice[A].LayerIndex);
             }
 

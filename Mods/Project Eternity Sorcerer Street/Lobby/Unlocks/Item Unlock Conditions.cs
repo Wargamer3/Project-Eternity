@@ -384,10 +384,5 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             return TotalTime;
         }
-
-        List<GameScreen> ItemUnlockConditionsEvaluator.Evaluate(ContentManager Content)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -68,6 +68,8 @@
             this.txtOrderNumber = new System.Windows.Forms.NumericUpDown();
             this.lblOrderNumber = new System.Windows.Forms.Label();
             this.btnSetDefaultGameModesConditions = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.gbCameraStartPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
@@ -140,7 +142,7 @@
             // btnAccept
             // 
             this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAccept.Location = new System.Drawing.Point(545, 226);
+            this.btnAccept.Location = new System.Drawing.Point(545, 274);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 10;
@@ -151,7 +153,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(626, 226);
+            this.btnClose.Location = new System.Drawing.Point(626, 274);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 11;
@@ -243,7 +245,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(478, 12);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(223, 208);
+            this.gbDescription.Size = new System.Drawing.Size(223, 256);
             this.gbDescription.TabIndex = 15;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -251,7 +253,7 @@
             // btnOpenTranslationFile
             // 
             this.btnOpenTranslationFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 179);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 227);
             this.btnOpenTranslationFile.Name = "btnOpenTranslationFile";
             this.btnOpenTranslationFile.Size = new System.Drawing.Size(145, 23);
             this.btnOpenTranslationFile.TabIndex = 11;
@@ -266,7 +268,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(211, 154);
+            this.txtDescription.Size = new System.Drawing.Size(211, 202);
             this.txtDescription.TabIndex = 0;
             // 
             // txtTileWidth
@@ -344,15 +346,15 @@
             this.cbCameraType.Items.AddRange(new object[] {
             "2D",
             "3D"});
-            this.cbCameraType.Location = new System.Drawing.Point(144, 121);
+            this.cbCameraType.Location = new System.Drawing.Point(179, 121);
             this.cbCameraType.Name = "cbCameraType";
-            this.cbCameraType.Size = new System.Drawing.Size(71, 21);
+            this.cbCameraType.Size = new System.Drawing.Size(92, 21);
             this.cbCameraType.TabIndex = 12;
             // 
             // lblCameraType
             // 
             this.lblCameraType.AutoSize = true;
-            this.lblCameraType.Location = new System.Drawing.Point(144, 107);
+            this.lblCameraType.Location = new System.Drawing.Point(197, 106);
             this.lblCameraType.Name = "lblCameraType";
             this.lblCameraType.Size = new System.Drawing.Size(70, 13);
             this.lblCameraType.TabIndex = 20;
@@ -526,11 +528,35 @@
             this.btnSetDefaultGameModesConditions.UseVisualStyleBackColor = true;
             this.btnSetDefaultGameModesConditions.Click += new System.EventHandler(this.btnSetDefaultGameModesConditions_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Grid",
+            "Spots",
+            "3D Model"});
+            this.comboBox1.Location = new System.Drawing.Point(32, 274);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 28;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(29, 255);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "Map Type";
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 261);
+            this.ClientSize = new System.Drawing.Size(713, 309);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.btnSetDefaultGameModesConditions);
             this.Controls.Add(this.txtOrderNumber);
             this.Controls.Add(this.lblOrderNumber);
@@ -620,5 +646,7 @@
         protected System.Windows.Forms.Button btnAccept;
         protected System.Windows.Forms.Button btnClose;
         protected System.Windows.Forms.Button btnOpenTranslationFile;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label1;
     }
 }

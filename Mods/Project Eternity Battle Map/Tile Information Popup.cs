@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (Vector2 ActivePosition in ListPosition)
             {
-                TileInformationPopup NewTilePopup = new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, Map.GetMovementTile((int)ActivePosition.X, (int)ActivePosition.Y, LayerIndex));
+                TileInformationPopup NewTilePopup = new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, LayerHolder[LayerIndex].GetTile((int)ActivePosition.X, (int)ActivePosition.Y));
                 ListTilePopup.Add(NewTilePopup);
                 CurrentOffset += OffsetBetweenPopup;
             }
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (Vector3 ActivePosition in ListPosition)
             {
-                ListTilePopup.Add(new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, Map.GetMovementTile((int)ActivePosition.X, (int)ActivePosition.Y, (int)ActivePosition.Z)));
+                ListTilePopup.Add(new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, LayerHolder[(int)ActivePosition.Z].GetTile((int)ActivePosition.X, (int)ActivePosition.Y)));
                 CurrentOffset += OffsetBetweenPopup;
             }
 

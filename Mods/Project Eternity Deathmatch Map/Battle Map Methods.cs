@@ -31,6 +31,164 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         /// <summary>
+        /// Move the cursor on the map.
+        /// </summary>
+        /// <returns>Returns true if the cursor was moved</returns>
+        public override bool CursorControl(PlayerInput ActiveInputManager)
+        {
+            Point Offset;
+            BattleMap ActiveMap;
+
+            bool CursorMoved = CursorControlGrid(ActiveInputManager, out Offset, out ActiveMap);
+
+            if (CursorMoved)
+            {
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
+
+                if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
+                {
+                    ActiveMap.CursorPosition.Z = NextTerrain.Z;
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * TileSize.X, NextTerrain.X + Offset.X * TileSize.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * TileSize.Y, NextTerrain.Y + Offset.Y * TileSize.Y));
+                }
+                else
+                {
+                    ActiveMap.CursorPosition = NextTerrain;
+                }
+
+                ActiveMap.CursorPosition += new Vector3(TileSize.X / 2, TileSize.Y / 2, 0);
+
+                foreach (TeleportPoint ActiveTeleport in LayerManager.ListLayer[(int)CursorPosition.Z].ListTeleportPoint)
+                {
+                    if (ActiveTeleport.Position.X == CursorPosition.X && ActiveTeleport.Position.Y == CursorPosition.Y)
+                    {
+                        CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X * TileSize.X;
+                        CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y * TileSize.X;
+                        CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer * LayerHeight;
+                        break;
+                    }
+                }
+            }
+
+            if (ActiveInputManager.InputLButtonPressed())
+            {
+                if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)
+                    return CursorMoved;
+
+                int UnitIndex = 0;
+                if (ActiveSquad != null)
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
+
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
+
+                do
+                {
+                    ++UnitIndex;
+
+                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
+                        UnitIndex = 0;
+
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    do
+                    {
+                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
+                            UnitIndex = 0;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
+                }
+
+                ActiveSquadIndex = UnitIndex;
+                CursorPosition = ActiveSquad.Position;
+                CursorPositionVisible = CursorPosition;
+
+                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
+                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                {
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
+                }
+            }
+            else if (ActiveInputManager.InputRButtonPressed())
+            {
+                if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)
+                    return CursorMoved;
+
+                int UnitIndex = 0;
+                if (ActiveSquad != null)
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
+
+                do
+                {
+                    --UnitIndex;
+
+                    if (UnitIndex < 0)
+                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    do
+                    {
+                        if (--UnitIndex < 0)
+                            UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
+                }
+
+                ActiveSquadIndex = UnitIndex;
+                CursorPosition = ActiveSquad.Position;
+                CursorPositionVisible = CursorPosition;
+
+                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
+                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                {
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
+                }
+            }
+            return CursorMoved;
+        }
+
+        public override Vector3 GetFinalPosition(Vector3 WorldPosition)
+        {
+            int GridX = (int)WorldPosition.X / TileSize.X;
+            int GridY = (int)WorldPosition.X / TileSize.Y;
+            int LayerIndex = (int)WorldPosition.Z / LayerHeight;
+
+            Terrain ActiveTerrain = LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];
+            DrawableTile ActiveTile = LayerManager.ListLayer[LayerIndex].ArrayTile[GridX, GridY];
+
+            Vector2 PositionInTile = new Vector2(WorldPosition.X - ActiveTerrain.WorldPosition.X, WorldPosition.Y - ActiveTerrain.WorldPosition.Y);
+
+            return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+        }
+
+        public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)
+        {
+            Vector3 TopFrontLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopFrontRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopBackLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z));
+            Vector3 TopBackRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y, WorldPosition.Z));
+
+            return Terrain3D.CreateTile3D(TilesetIndex, TopFrontLeft, TopFrontRight, TopBackLeft, TopBackRight, TileSize, Origin, TextureSize.X, TextureSize.Y, PositionOffset);
+        }
+
+        /// <summary>
         /// Used by Cutscene
         /// </summary>
         public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector2 Position, int LayerIndex)
@@ -42,10 +200,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if (Content != null)
             {
-                NewSquad.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
-                NewSquad.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
-                NewSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+                NewSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
             }
 
             ListPlayer[PlayerIndex].IsAlive = true;
@@ -67,7 +225,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPlayer[ActivePlayerIndex].UpdateAliveStatus();
         }
 
-        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
+        public override void AddUnit(int PlayerIndex, object UnitToAdd, Vector3 NewPosition)
         {
             Squad ActiveSquad = (Squad)UnitToAdd;
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
@@ -78,22 +236,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.ReloadSkills(GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
             ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
-            ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
+            ActiveSquad.SetPosition(new Vector3(NewPosition.X, NewPosition.Y, NewPosition.Z));
 
-            ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+            ActiveSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
         public void AddProjectile(Projectile3D NewProjectile)
         {
         }
 
-        public override List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
+        public override List<Vector3> GetCampaignEnemySpawnLocations()
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetCampaignEnemySpawnLocations());
             }
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
@@ -103,7 +261,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
                     {
-                        ListPossibleSpawnPoint.Add(GetTerrain(new Vector3(ActiveLayer.ListCampaignSpawns[S].Position.X, ActiveLayer.ListCampaignSpawns[S].Position.Y, L)));
+                        ListPossibleSpawnPoint.Add(new Vector3(ActiveLayer.ListCampaignSpawns[S].Position.X, ActiveLayer.ListCampaignSpawns[S].Position.Y, L));
                     }
                 }
             }
@@ -111,13 +269,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPossibleSpawnPoint;
         }
 
-        public override List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
+        public override List<Vector3> GetMultiplayerSpawnLocations(int Team)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach(BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetMultiplayerSpawnLocations(Team));
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetMultiplayerSpawnLocations(Team));
             }
 
             string PlayerTag = (Team + 1).ToString();
@@ -128,7 +286,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                     {
-                        ListPossibleSpawnPoint.Add(GetTerrain(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L)));
+                        ListPossibleSpawnPoint.Add(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L));
                     }
                 }
             }
@@ -390,7 +548,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Do not spawn squads as it will trigger effect that were already activated
                         if (Content != null)
                         {
-                            NewSquad.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                            NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
                         }
 
                         if (!string.IsNullOrEmpty(ActiveSquadSquadAI))
@@ -565,17 +723,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //If the selected unit have the order to move, draw the possible positions it can go to.
                 foreach (Squad ActiveSquad in ListPlayer[P].ListSquad)
                 {
-                    ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(World);
+                    ActiveSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(World);
                 }
             }
-        }
-
-        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
-        {
-            DrawableTile NewTile = new DrawableTile(ActiveTile);
-
-            LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-            LayerManager.LayerHolderDrawable.Reset();
         }
 
         public override Dictionary<string, ActionPanel> GetOnlineActionPanel()

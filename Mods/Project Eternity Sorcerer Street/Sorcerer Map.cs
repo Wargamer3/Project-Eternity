@@ -18,7 +18,7 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public partial class SorcererStreetMap : BattleMap
+    public partial class SorcererStreetMap : BattleMap, IProjectile3DSandbox
     {
         public static readonly string MapType = "Sorcerer Street";
 
@@ -80,6 +80,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static Color TextColor = Color.FromNonPremultiplied(210, 210, 210, 255);
 
+        public List<DelayedAttack> ListDelayedAttack;
+        public List<PERAttack> ListPERAttack;
+
         public readonly Vector3 LastPosition;
         private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
@@ -102,6 +105,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly List<string> ListTerrainType = new List<string>();
         public LayerHolderSorcererStreet LayerManager;
         public List<TerrainSorcererStreet> ListPassedTerrein = new List<TerrainSorcererStreet>();
+        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;//Temporary obstacles
 
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
@@ -441,87 +445,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new SorcererStreetTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
-        public override void Init()
-        {
-            foreach (Player ActivePlayer in ListPlayer)
-            {
-                if (ActivePlayer.TeamIndex >= 0 && ActivePlayer.TeamIndex < ListMultiplayerColor.Count)
-                {
-                    ActivePlayer.Color = ListMultiplayerColor[ActivePlayer.TeamIndex];
-                }
-            }
-
-            GameRule.Init();
-
-            if (IsOnlineClient)
-            {
-                if (ListAllPlayer[0].OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
-                {
-                    ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
-                    ActionPanelDialogPhase.AddIntrodctionIfAvailable(this);
-                }
-            }
-            else if (IsClient && ListPlayer.Count > 0)
-            {
-                ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
-                ActionPanelDialogPhase.AddIntrodctionIfAvailable(this);
-            }
-
-            base.Init();
-
-            OnNewTurn();
-        }
-
         private void SendMessage(TextInput Sender, string InputMessage)
         {
             ChatInput.SetText(string.Empty);
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
-        }
-
-        public override void RemoveUnit(int PlayerIndex, object UnitToRemove)
-        {
-            /*ListPlayer[ActivePlayerIndex].ListSquad.Remove((SorcererStreetUnit)UnitToRemove);
-            ListPlayer[ActivePlayerIndex].UpdateAliveStatus();*/
-        }
-
-        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
-        {
-            /*SorcererStreetUnit ActiveSquad = (SorcererStreetUnit)UnitToAdd;
-            for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
-            {
-                ActiveSquad.At(U).ReinitializeMembers(DicUnitType[ActiveSquad.At(U).UnitTypeName]);
-            }
-
-            ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-            ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
-            ListPlayer[PlayerIndex].UpdateAliveStatus();
-            ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
-        }
-
-        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
-        {
-            DrawableTile NewTile = new DrawableTile(ActiveTile);
-
-            /*LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-            LayerManager.LayerHolderDrawable.Reset();*/
-        }
-
-        public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
-        {
-            /*Player NewPlayer = new Player(SharedPlayer);
-            ListPlayer.Add(NewPlayer);
-
-            if (IsLocal)
-            {
-                ListLocalPlayerInfo.Add(NewPlayer);
-            }*/
-        }
-
-        protected override void DoAddLocalPlayer(OnlinePlayerBase NewPlayer)
-        {
-            Player NewDeahtmatchPlayer = new Player((Player)NewPlayer, SorcererStreetParams);
-
-            AddPlayer(NewDeahtmatchPlayer);
         }
 
         public void AddPlayer(Player NewPlayer)
@@ -534,48 +461,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListPlayer.Add(NewLocalCharacter);
             ListLocalPlayerInfo.Add(NewLocalCharacter);
-        }
-
-        public override void SetMutators(List<Mutator> ListMutator)
-        {
-        }
-
-        public override void AddPlatform(BattleMapPlatform NewPlatform)
-        {
-            /*foreach (Player ActivePlayer in ListPlayer)
-            {
-                NewPlatform.AddLocalPlayer(ActivePlayer);
-            }
-            */
-            ListPlatform.Add(NewPlatform);
-        }
-
-        public override void SetWorld(Matrix World)
-        {
-            /*LayerManager.LayerHolderDrawable.SetWorld(World);
-
-            for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)
-            {
-                Vector3[] ArrayNewPosition = new Vector3[MapSize.X * MapSize.Y];
-                for (int X = 0; X < MapSize.X; ++X)
-                {
-                    for (int Y = 0; Y < MapSize.Y; ++Y)
-                    {
-                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
-                    }
-                }
-
-                Vector3.Transform(ArrayNewPosition, ref World, ArrayNewPosition);
-
-                for (int X = 0; X < MapSize.X; ++X)
-                {
-                    for (int Y = 0; Y < MapSize.Y; ++Y)
-                    {
-                        LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Position
-                            = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / 32), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / 32), ArrayNewPosition[X + Y * MapSize.X].Y / 32);
-                    }
-                }
-            }*/
         }
 
         public void EndPlayerPhase()
@@ -997,21 +882,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
-        {
-            if (X < 0 || X >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
-            {
-                return null;
-            }
-
-            return GetTerrain(new Vector3(X, Y, LayerIndex));
-        }
-
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.InternalPosition.X + OffsetX;
-            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
+            int NextX = StartingPosition.GridPosition.X + OffsetX;
+            int NextY = StartingPosition.GridPosition.Y + OffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
@@ -1120,7 +995,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
-                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
+                    MovementAlgorithmTile FoundTile = ((SorcererStreetMap)ActivePlatform.Map).LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[StartingPosition.GridPosition.X + OffsetX, StartingPosition.GridPosition.Y + OffsetY];
 
                     if (FoundTile != null)
                     {
@@ -1150,164 +1025,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return true;
-        }
-
-        public override List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
-        {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
-
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
-            }
-
-            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = LayerManager.ListLayer[L];
-                for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
-                {
-                    if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
-                    {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
-                    }
-                }
-            }
-
-            return ListPossibleSpawnPoint;
-        }
-
-        public override List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
-        {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
-
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetMultiplayerSpawnLocations(Team));
-            }
-
-            string PlayerTag = (Team + 1).ToString();
-            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = LayerManager.ListLayer[L];
-                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
-                {
-                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
-                    {
-                        ListPossibleSpawnPoint.Add(GetTerrain(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L)));
-                    }
-                }
-            }
-
-            return ListPossibleSpawnPoint;
-        }
-
-        public override BattleMap LoadTemporaryMap(BinaryReader BR)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SaveTemporaryMap()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override GameScreen GetMultiplayerScreen()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
-        {
-            SorcererStreetBattleParams Params;
-            SorcererStreetMap NewMap;
-
-            if (!SorcererStreetBattleParams.DicParams.TryGetValue(ParamsID, out Params))
-            {
-                Params = new SorcererStreetBattleParams();
-                SorcererStreetBattleParams.DicParams.TryAdd(ParamsID, Params);
-                Params.Reload(this.Params, ParamsID);
-            }
-
-            NewMap = new SorcererStreetMap(GameInfo, Params);
-            Params.Map = NewMap;
-            return NewMap;
-        }
-
-        public override string GetMapType()
-        {
-            return "Sorcerer Street";
-        }
-
-        public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
-        {
-            Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
-
-            DicGameType.Add(DeathmatchGameInfo.ModeName, new DeathmatchGameInfo(true, null));
-
-            return DicGameType;
-        }
-
-        public override byte[] GetSnapshotData()
-        {
-            ByteWriter BW = new ByteWriter();
-
-            BW.AppendInt32(ListAllPlayer.Count);
-            foreach (Player ActivePlayer in ListAllPlayer)
-            {
-                BW.AppendString(ActivePlayer.ConnectionID);
-                BW.AppendString(ActivePlayer.Name);
-                BW.AppendInt32(ActivePlayer.TeamIndex);
-                BW.AppendBoolean(ActivePlayer.IsPlayerControlled);
-                BW.AppendByte(ActivePlayer.Color.R);
-                BW.AppendByte(ActivePlayer.Color.G);
-                BW.AppendByte(ActivePlayer.Color.B);
-
-                BW.AppendInt32(ActivePlayer.Gold);
-
-                BW.AppendByte((byte)ActivePlayer.ListRemainingCardInDeck.Count);
-                foreach (Card ActiveCard in ActivePlayer.ListRemainingCardInDeck)
-                {
-                    BW.AppendString(ActiveCard.CardType);
-                    BW.AppendString(ActiveCard.Path);
-                }
-
-                BW.AppendByte((byte)ActivePlayer.ListCardInHand.Count);
-                foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
-                {
-                    BW.AppendString(ActiveCard.CardType);
-                    BW.AppendString(ActiveCard.Path);
-                }
-            }
-
-            BW.AppendString(BattleMapPath);
-
-            byte[] Data = BW.GetBytes();
-            BW.ClearWriteBuffer();
-            return Data;
-        }
-
-        public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)
-        {
-
-        }
-
-        public override Dictionary<string, ActionPanel> GetOnlineActionPanel()
-        {
-            Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
-
-            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Sorcerer Street.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelSorcererStreet), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
-            {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
-            }
-            DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelCardSelectionPhase), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
-            {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
-            }
-
-            return DicActionPanel;
         }
     }
 }

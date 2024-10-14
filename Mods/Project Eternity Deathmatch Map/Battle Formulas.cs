@@ -44,7 +44,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return DefenseFormula;
         }
 
-        public int DefenseFormula(Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain)
+        public int DefenseFormula(Unit Defender, byte DefenderTerrainType, DeathmatchTerrainBonusInfo DefenderTerrain)
         {
             int Armor = Defender.Armor + GetTerrainBonus(DefenderTerrain, TerrainActivation.OnEveryTurns, TerrainBonus.Armor);
             int DefenderTerrainRate = Defender.TerrainArmorAttribute(DefenderTerrainType);
@@ -61,12 +61,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             byte AttackerTerrainType;
             byte DefenderTerrainType;
-            Terrain DefenderTerrain;
+            DeathmatchTerrainBonusInfo DefenderTerrain;
 
-            AttackerTerrainType = GetTerrain(AttackerSquad).TerrainTypeIndex;
+            AttackerTerrainType = GetTerrainType(AttackerSquad.Position);
 
-            DefenderTerrainType = GetTerrain(DefenderSquad).TerrainTypeIndex;
-            DefenderTerrain = GetTerrain(DefenderSquad);
+            DefenderTerrainType = GetTerrainType(DefenderSquad.Position);
+            DefenderTerrain = GetTerrainInfo(DefenderSquad.Position);
 
             //Check if the Unit can counter the attack.
             bool NullifyAttack = CanNullifyAttack(CurrentAttack, AttackerTerrainType, DefenderSquad.CurrentTerrainIndex, DefenderSquad, Defender.Boosts);
@@ -178,7 +178,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return (int)((Defender.PilotEVA / 2 + Defender.Mobility) * ((100 + FinalDefenderTerrainMultiplier) / 100.0)) + other;
         }
 
-        public int Evasion(Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain)
+        public int Evasion(Unit Defender, byte DefenderTerrainType, DeathmatchTerrainBonusInfo DefenderTerrain)
         {
             int DefenderTerrainRate = 0;
             int DefenderPilotTerrain = 0;
@@ -264,7 +264,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         }
 
         //(((Attacker Hit Rate + Defender Evasion) * Size Difference Multiplier) + Additive final hit rate effect) * Multiplying final hit rate effect
-        public int CalculateHitRate(Unit Attacker, Attack CurrentAttack, byte AttackerTerrainType, Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain, Unit.BattleDefenseChoices DefenseChoice)
+        public int CalculateHitRate(Unit Attacker, Attack CurrentAttack, byte AttackerTerrainType, Unit Defender, byte DefenderTerrainType, DeathmatchTerrainBonusInfo DefenderTerrain, Unit.BattleDefenseChoices DefenseChoice)
         {
             int SizeCompare = Attacker.SizeValue - Defender.SizeValue;
 
@@ -296,17 +296,17 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             byte AttackerTerrainType;
             byte DefenderTerrainType;
-            Terrain DefenderTerrain;
+            DeathmatchTerrainBonusInfo DefenderTerrain;
 
-            AttackerTerrainType = GetTerrain(AttackerSquad).TerrainTypeIndex;
+            AttackerTerrainType = GetTerrainType(AttackerSquad.Position);
 
-            DefenderTerrainType = GetTerrain(DefenderSquad).TerrainTypeIndex;
-            DefenderTerrain = GetTerrain(DefenderSquad);
+            DefenderTerrainType = GetTerrainType(DefenderSquad.Position);
+            DefenderTerrain = GetTerrainInfo(DefenderSquad.Position);
 
             return CalculateHitRate(Attacker, CurrentAttack, AttackerTerrainType, Defender, DefenderTerrainType, DefenderTerrain, DefenseChoice);
         }
 
-        private static int GetTerrainBonus(Terrain ActiveTerrain, TerrainActivation TerrainActivationType, TerrainBonus TerrainBonusType)
+        private static int GetTerrainBonus(DeathmatchTerrainBonusInfo ActiveTerrain, TerrainActivation TerrainActivationType, TerrainBonus TerrainBonusType)
         {
             if (ActiveTerrain == null)
             {

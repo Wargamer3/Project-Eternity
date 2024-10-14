@@ -50,10 +50,12 @@ namespace ProjectEternity.Core.Units
         public string UnitTags;//Used to categorize units
         public string ID;//Unique ID
 
-        public string SpriteMapPath;
-        public Texture2D SpriteMap;
         public string SpriteUnitPath;
         public Texture2D SpriteUnit;
+
+        public string SpriteMapPath;
+        public Texture2D SpriteMap;
+        public UnitMap3D Unit3DSprite;
         public string Model3DPath;
         public AnimatedModel Unit3DModel;
 
@@ -603,7 +605,7 @@ namespace ProjectEternity.Core.Units
             return AttackToDrop;
         }
 
-        public void UpdateAllAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
+        public void UpdateAllAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, Point TerrainSize, byte TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
@@ -613,18 +615,18 @@ namespace ProjectEternity.Core.Units
                 }
                 else if (!ActiveAttack.CanAttack)
                 {
-                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TerrainSize, TargetMovementType, CanMove);
                 }
             }
         }
 
-        public void UpdateNonMAPAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
+        public void UpdateNonMAPAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, Point TerrainSize, byte TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
                 if (ActiveAttack.Pri != WeaponPrimaryProperty.MAP)
                 {
-                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TerrainSize, TargetMovementType, CanMove);
                 }
                 else
                 {

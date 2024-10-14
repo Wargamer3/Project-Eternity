@@ -197,7 +197,6 @@
     <Compile Include="Terrain\Map Zone.cs" />
     <Compile Include="Terrain\Environment Manager.cs" />
     <Compile Include="Terrain\Map 2D Drawable.cs" />
-    <Compile Include="Terrain\Map 2D.cs" />
     <Compile Include="Map Interaction.cs" />
     <Compile Include="Terrain\Layer Holder.cs" />
     <Compile Include="Terrain\Map 3D Drawable.cs" />

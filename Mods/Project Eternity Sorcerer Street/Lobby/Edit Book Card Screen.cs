@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveCard is CreatureCard)
             {
-                Map3DModel = ((CreatureCard)ActiveCard).Map3DModel;
+                Map3DModel = ((CreatureCard)ActiveCard).GamePiece.Unit3DModel;
             }
         }
 

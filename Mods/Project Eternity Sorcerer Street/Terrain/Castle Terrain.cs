@@ -2,8 +2,8 @@
 {
     public class CastleTerrain : TerrainSorcererStreet
     {
-        public CastleTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
+        public CastleTerrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth, TerrainTypeIndex)
         {
 
         }

@@ -11,6 +11,61 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 {
     public partial class WorldMap
     {
+        /// <summary>
+        /// Move the cursor on the map.
+        /// </summary>
+        /// <returns>Returns true if the cursor was moved</returns>
+        public override bool CursorControl(PlayerInput ActiveInputManager)
+        {
+            Point Offset;
+            BattleMap ActiveMap;
+
+            bool CursorMoved = CursorControlGrid(ActiveInputManager, out Offset, out ActiveMap);
+
+            if (CursorMoved)
+            {
+                MovementAlgorithmTile NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
+                if (NextTerrain == ActiveMap.CursorTerrain)//Force movement
+                {
+                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, NextTerrain.GridPosition.X + Offset.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, NextTerrain.GridPosition.Y + Offset.Y));
+                }
+                else
+                {
+                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
+                    ActiveMap.CursorPosition.X = NextTerrain.GridPosition.X;
+                    ActiveMap.CursorPosition.Y = NextTerrain.GridPosition.Y;
+                }
+            }
+
+            return CursorMoved;
+        }
+
+        public override Vector3 GetFinalPosition(Vector3 WorldPosition)
+        {
+            int GridX = (int)WorldPosition.X / TileSize.X;
+            int GridY = (int)WorldPosition.X / TileSize.Y;
+            int LayerIndex = (int)WorldPosition.Z / LayerHeight;
+
+            Terrain ActiveTerrain = ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];
+            DrawableTile ActiveTile = ListLayer[LayerIndex].ArrayTile[GridX, GridY];
+
+            Vector2 PositionInTile = new Vector2(WorldPosition.X - ActiveTerrain.WorldPosition.X, WorldPosition.Y - ActiveTerrain.WorldPosition.Y);
+
+            return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+        }
+
+        public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)
+        {
+            Vector3 TopFrontLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopFrontRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
+            Vector3 TopBackLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z));
+            Vector3 TopBackRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y, WorldPosition.Z));
+
+            return Terrain3D.CreateTile3D(TilesetIndex, TopFrontLeft, TopFrontRight, TopBackLeft, TopBackRight, TileSize, Origin, TextureSize.X, TextureSize.Y, PositionOffset);
+        }
+
         public Terrain GetTerrain(int X, int Y, int LayerIndex)
         {
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
@@ -22,7 +77,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListPlayer[ActivePlayerIndex].UpdateAliveStatus();*/
         }
 
-        public override void AddUnit(int PlayerIndex, object UnitToAdd, MovementAlgorithmTile NewPosition)
+        public override void AddUnit(int PlayerIndex, object UnitToAdd, Vector3 NewPosition)
         {
             /*Squad ActiveSquad = (Squad)UnitToAdd;
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
@@ -34,14 +89,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
-        }
-
-        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
-        {
-            /*DrawableTile NewTile = new DrawableTile(ActiveTile);
-
-            LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-            LayerManager.LayerHolderDrawable.Reset();*/
         }
 
         public override void AddPlatform(BattleMapPlatform NewPlatform)
@@ -82,7 +129,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }*/
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
 
@@ -161,23 +208,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
         }
 
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
+        public override List<Vector3> GetCampaignEnemySpawnLocations()
         {
-            if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= ListLayer.Count)
-            {
-                return null;
-            }
-
-            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
-        }
-
-        public override List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
-        {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetCampaignEnemySpawnLocations());
             }
 
             for (int L = 0; L < ListLayer.Count; L++)
@@ -187,7 +224,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 {
                     if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
                     {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y].WorldPosition);
                     }
                 }
             }
@@ -195,13 +232,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return ListPossibleSpawnPoint;
         }
 
-        public override List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
+        public override List<Vector3> GetMultiplayerSpawnLocations(int Team)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetMultiplayerSpawnLocations(Team));
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.Map.GetMultiplayerSpawnLocations(Team));
             }
 
             string PlayerTag = (Team + 1).ToString();
@@ -212,7 +249,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                     {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y].WorldPosition);
                     }
                 }
             }

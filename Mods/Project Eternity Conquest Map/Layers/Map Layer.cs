@@ -9,10 +9,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public float Depth { get { return _Depth; } set { _Depth = value; if (LayerGrid != null) LayerGrid.Depth = value; } }
+        public float Depth { get { return _Depth; } set { _Depth = value; } }
         private float _Depth;
 
-        public readonly ConquestMap2D LayerGrid;
         public TerrainConquest[,] ArrayTerrain;//Array of every tile on the map.
 
         public bool IsVisible;
@@ -42,14 +41,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, LayerIndex, _Depth, 1);
+                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, _Depth, 1);
                     ArrayTerrain[X, Y].Owner = Map;
                     ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, this);
-            _Depth = LayerGrid.Depth;
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y), 0);
+                }
+            }
         }
 
         public MapLayer(ConquestMap Map, BinaryReader BR, int LayerIndex)
@@ -88,26 +94,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y, LayerIndex, _Depth);
+                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, _Depth);
                     ArrayTerrain[X, Y].Owner = Map;
                     ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, this, BR);
+
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(BR, Map.TileSize.X, Map.TileSize.Y);
+                }
+            }
+
             int ListSubLayerCount = BR.ReadInt32();
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
             for (int L = 0; L < ListSubLayerCount; L++)
             {
                 ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
-            }
-
-            for (int Y = 0; Y < Map.MapSize.Y; Y++)
-            {
-                for (int X = 0; X < Map.MapSize.X; X++)
-                {
-                    ArrayTerrain[X, Y].DrawableTile = LayerGrid.ArrayTile[X, Y];
-                }
             }
 
             int ListSingleplayerSpawnsCount = BR.ReadInt32();
@@ -186,8 +193,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR, LayerIndex));
             }
-
-            LayerGrid.Depth = Depth;
         }
 
         public void Save(BinaryWriter BW)
@@ -205,7 +210,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            LayerGrid.Save(BW);
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y].Save(BW);
+                }
+            }
+
             BW.Write(ListSubLayer.Count);
             for (int L = 0; L < ListSubLayer.Count; L++)
             {
@@ -279,6 +291,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override string ToString()
         {
             return "Layer";
+        }
+
+        public override MovementAlgorithmTile GetTile(int X, int Y)
+        {
+            return ArrayTerrain[X, Y];
         }
     }
 }

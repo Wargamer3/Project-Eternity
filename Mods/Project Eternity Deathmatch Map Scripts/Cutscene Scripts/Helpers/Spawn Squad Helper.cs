@@ -269,17 +269,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (LeaderToSpawn != null)
                 {
-                    int SpawnPositionX = SpawnPosition.X;
-                    int SpawnPositionY = SpawnPosition.Y;
+                    Microsoft.Xna.Framework.Vector3 SpawnPositionReal = new Microsoft.Xna.Framework.Vector3(SpawnPosition.X * Map.TileSize.X + Map.TileSize.X / 2, SpawnPosition.Y * Map.TileSize.Y + Map.TileSize.Y / 2, SpawnLayer * Map.LayerHeight);
+
                     Microsoft.Xna.Framework.Vector3 FinalPosition;
 
-                    if (SpawnPositionX >= Map.MapSize.X || SpawnPositionX < 0 || SpawnPositionY >= Map.MapSize.Y || SpawnPositionY >= Map.MapSize.Y)
+                    if (Map.IsInsideMap(SpawnPositionReal))
                     {
-                        FinalPosition = new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, SpawnLayer);
+                        FinalPosition = SpawnPositionReal;
                     }
                     else
                     {
-                        Map.GetEmptyPosition(new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, SpawnLayer), out FinalPosition);
+                        Map.GetEmptyPosition(SpawnPositionReal, out FinalPosition);
                     }
 
                     LeaderToSpawn.Init();

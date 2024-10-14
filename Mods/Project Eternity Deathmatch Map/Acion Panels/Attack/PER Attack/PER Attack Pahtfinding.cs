@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListRefusedAttackTerrain.Clear();
             ListUsableAttackTerrain.Clear();
 
-            MovementAlgorithmTile ActiveTerrain = Map.GetTerrain(ActiveSquad);
+            MovementAlgorithmTile ActiveTerrain = Map.GetTerrain(ActiveSquad.Position);
             Vector3 StartPosition = ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0.5f);
             ListAllAttackTerrain.Add(ActiveTerrain);
 

@@ -62,12 +62,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (MovementAlgorithmTile ActivePosition in LocalContext.ArrayAttackPosition)
             {
-                int X = ActivePosition.InternalPosition.X;
-                int Y = ActivePosition.InternalPosition.Y;
-                DrawableTile ActiveTile = ActivePosition.Owner.GetMovementTile(X, Y, ActivePosition.LayerIndex).DrawableTile;
+                DeathmatchMap OwnerMap = (DeathmatchMap)ActivePosition.Owner;
+                int X = ActivePosition.GridPosition.X;
+                int Y = ActivePosition.GridPosition.Y;
+                DrawableTile ActiveTile = OwnerMap.LayerManager.ListLayer[ActivePosition.LayerIndex].ArrayTile[X, Y];
                 ActiveTile.Origin = TerrainAttribute.Origin;
                 ActiveTile.TilesetIndex = TilesetIndex;
-                ActivePosition.Owner.ReplaceTile(X, Y, ActivePosition.LayerIndex, ActiveTile);
+                OwnerMap.LayerManager.ListLayer[ActivePosition.LayerIndex].ArrayTile[X, Y] =  ActiveTile;
             }
 
             Params.Map.LayerManager.LayerHolderDrawable.Reset();

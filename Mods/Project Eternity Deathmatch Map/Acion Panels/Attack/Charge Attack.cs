@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             ActiveSquad.CurrentLeader.ChargeAttack();
-            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad.Position).MovementCost, ListMVHoverPoints);
             ActiveSquad.EndTurn();
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
             RemoveAllSubActionPanels();

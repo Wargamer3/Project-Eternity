@@ -8,6 +8,12 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 {
     public class SubMapLayer : BaseMapLayer, ISubMapLayer
     {
+        //Only used to display a grid, should never have movement logic in it.
+        public override MovementAlgorithmTile GetTile(int X, int Y)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override string ToString()
         {
             return " - Sub Layer";
@@ -19,8 +25,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public List<SubMapLayer> ListSubLayer;
         public float Depth;
 
-        public DrawableGrid LayerGrid;
-        public readonly WorldMap2D OriginalLayerGrid;
         public Terrain[,] ArrayTerrain;//Array of every tile on the map.
 
         private bool IsVisible;
@@ -41,11 +45,19 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex, Depth);
+                    ArrayTerrain[X, Y] = new Terrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth);
                 }
             }
 
-            LayerGrid = new WorldMap2D(Map);
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y), 0);
+                }
+            }
         }
 
         public MapLayer(WorldMap Map, BinaryReader BR, int LayerIndex)
@@ -75,11 +87,18 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex, Depth);
+                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth);
                 }
             }
-            
-            LayerGrid = OriginalLayerGrid = new WorldMap2D(Map, BR);
+
+            ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y] = new DrawableTile(BR, Map.TileSize.X, Map.TileSize.Y);
+                }
+            }
         }
 
         public void Save(BinaryWriter BW)
@@ -97,7 +116,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 }
             }
 
-            LayerGrid.Save(BW);
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    ArrayTile[X, Y].Save(BW);
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -119,6 +144,11 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                     }
                 }
             }
+        }
+
+        public override MovementAlgorithmTile GetTile(int X, int Y)
+        {
+            return ArrayTerrain[X, Y];
         }
 
         public void BeginDraw(CustomSpriteBatch g)

@@ -183,8 +183,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CreateMap(Map, ActiveSubLayer, LayerIndex);
             }
 
-            Map2D GroundLayer = Owner.LayerGrid;
-
             if (!DicTile3DByLayerByTileset.ContainsKey(LayerIndex))
             {
                 DicTile3DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile3DHolder>());
@@ -194,7 +192,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                    DrawableTile ActiveTerrain = Owner.ArrayTile[X, Y];
                     Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                     if (ActiveTerrain3D.TerrainStyle == Terrain3D.TerrainStyles.Invisible)
                     {
@@ -207,19 +205,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     float ZBack = MinZ;
                     float ZRight = MinZ;
                     float ZLeft = MinZ;
-                    if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTerrain[X, Y + 1].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTile[X, Y + 1].Terrain3DInfo.TerrainStyle))
                     {
                         ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X, Y - 1].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X, Y - 1].Terrain3DInfo.TerrainStyle))
                     {
                         ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X - 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X - 1, Y].Terrain3DInfo.TerrainStyle))
                     {
                         ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z * Map.LayerHeight;
                     }
-                    if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTerrain[X + 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
+                    if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTile[X + 1, Y].Terrain3DInfo.TerrainStyle))
                     {
                         ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * Map.LayerHeight;
                     }
@@ -605,15 +603,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (MovementAlgorithmTile ActivePoint in ListPoint)
             {
-                int X = (int)ActivePoint.WorldPosition.X;
-                int Y = (int)ActivePoint.WorldPosition.Y;
-                float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.1f;
-                float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-
-                ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                ListDrawableArrowPerColor.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, Point.Zero, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
             }
 
             DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
@@ -631,15 +621,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Next = ListPoint[P + 1];
                 }
 
-                int X = (int)ActivePoint.WorldPosition.X;
-                int Y = (int)ActivePoint.WorldPosition.Y;
-                float Z = ActivePoint.WorldPosition.Z * Map.LayerHeight + 0.15f;
-                float MinZ = Z - ActivePoint.Height * Map.LayerHeight;
-                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-
-                ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
+                ListDrawableArrowPerColor.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, GetCursorTextureOffset(Previous, ActivePoint, Next), ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
             }
         }
 
@@ -766,16 +748,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (Player ActivePlayer in Map.ListPlayer)
             {
-                if (ActivePlayer.GamePiece.Z + 1 < Map.LayerManager.ListLayer.Count)
+                foreach (SorcererStreetUnit ActiveSquad in ActivePlayer.ListCreatureOnBoard)
                 {
-                    Terrain UpperTerrain = Map.GetTerrain(new Vector3(ActivePlayer.GamePiece.X, ActivePlayer.GamePiece.Z, ActivePlayer.GamePiece.Z + 1));
-                    TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
-
-                    if (UpperTerrainType.ListRestriction.Count > 0 || UpperTerrain.DrawableTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
-                        && !ListIgnoredTerrain.Contains(UpperTerrain.DrawableTile))
+                    if (ActiveSquad.Z + 1 < Map.LayerManager.ListLayer.Count)
                     {
-                        ListIgnoredTerrain.Add(UpperTerrain.DrawableTile);
-                        FloodFill(new Vector3(UpperTerrain.InternalPosition.X, UpperTerrain.InternalPosition.Y, UpperTerrain.LayerIndex), UpperTerrain.TerrainTypeIndex);
+                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)ActiveSquad.Z + 1];
+                        int PosX = (int)ActiveSquad.X;
+                        int PosY = (int)ActiveSquad.Y;
+                        Terrain UpperTerrain = ActiveLayer.ArrayTerrain[PosX, PosY];
+                        DrawableTile UpperTile = ActiveLayer.ArrayTile[PosX, PosY];
+                        TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
+
+                        if (UpperTerrainType.ListRestriction.Count > 0 || UpperTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
+                            && !ListIgnoredTerrain.Contains(UpperTile))
+                        {
+                            ListIgnoredTerrain.Add(UpperTile);
+                            FloodFill(new Vector3(UpperTerrain.GridPosition.X, UpperTerrain.GridPosition.Y, UpperTerrain.LayerIndex), UpperTerrain.TerrainTypeIndex);
+                        }
                     }
                 }
             }
@@ -793,14 +782,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             while (ListTerrainPositionToHide.Count != 0)
             {
                 Vector3 ActivePosition = ListTerrainPositionToHide.Pop();
-                float ActiveY = ActivePosition.Y;
-                Terrain ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
+                int PosX = (int)ActivePosition.X;
+                int PosY = (int)ActivePosition.Y;
 
-                while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                int ActiveY = PosY;
+                MapLayer ActiveLayer = Map.LayerManager.ListLayer[Z];
+                Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[PosX, PosY];
+                DrawableTile ActiveTile = ActiveLayer.ArrayTile[PosX, PosY];
+
+                while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                 {
                     if (--ActiveY >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
+                        ActiveTerrain = Map.LayerManager.ListLayer[Z].ArrayTerrain[PosX, ActiveY];
                     }
                 }
 
@@ -810,34 +804,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 while (ActiveY < Map.MapSize.Y && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex)
                 {
-                    ListIgnoredTerrain.Add(Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z)).DrawableTile);
+                    ActiveTile = ActiveLayer.ArrayTile[PosX, ActiveY];
+                    ListIgnoredTerrain.Add(ActiveTile);
 
-                    if (ActivePosition.X - 1 >= 0)
+                    if (PosX - 1 >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X - 1, ActiveY, Z));
+                        ActiveTerrain = ActiveLayer.ArrayTerrain[PosX - 1, PosY];
+                        ActiveTile = ActiveLayer.ArrayTile[PosX - 1, PosY];
 
-                        if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
-                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X - 1, ActiveY, Z));
+                            ListTerrainPositionToHide.Push(new Vector3(PosX - 1, ActiveY, Z));
                             spanLeft = true;
                         }
-                        else if (spanLeft && ActivePosition.X - 1 == 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        else if (spanLeft && PosX - 1 == 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
                             spanLeft = false;
 
                         }
                     }
 
-                    if (ActivePosition.X + 1 < Map.MapSize.X)
+                    if (PosX + 1 < Map.MapSize.X)
                     {
-                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X + 1, ActiveY, Z));
+                        ActiveTerrain = ActiveLayer.ArrayTerrain[PosX + 1, PosY];
+                        ActiveTile = ActiveLayer.ArrayTile[PosX + 1, PosY];
 
-                        if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
-                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X + 1, ActiveY, Z));
+                            ListTerrainPositionToHide.Push(new Vector3(PosX + 1, ActiveY, Z));
                             spanRight = true;
                         }
-                        else if (spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        else if (spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTile))
                         {
                             spanRight = false;
                         }
@@ -1005,8 +1002,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     for (int Y = 0; Y < Map.MapSize.Y; ++Y)
                     {
                         float Z = ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Z * Map.LayerHeight + 0.3f;
-                        Map2D GroundLayer = ActiveLayer.LayerGrid;
-                        DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+
+                        DrawableTile ActiveTerrain = ActiveLayer.ArrayTile[X, Y];
                         Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                         if (ActiveTerrain3D.TerrainStyle != Terrain3D.TerrainStyles.Invisible)
@@ -1016,8 +1013,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                 PolygonEffect.Texture = Map.sprActiveCreatureCursor;
                                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                                Tile3D PassedCreatureTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { PolygonEffect.Texture }, Z, Z, Z, Z, 0)[0];
+                                Tile3D PassedCreatureTile = Map.CreateTile3D(0, ActiveLayer.ArrayTerrain[X, Y].WorldPosition + new Vector3(0, 0, 0.3f), Point.Zero, Map.TileSize, Map.TileSize, 0);
                                 PassedCreatureTile.Draw(g.GraphicsDevice);
                             }
                         }
@@ -1091,11 +1087,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActivePlayer.GamePiece);
 
-                    if (ActivePlayer.GamePiece.Speed == Vector3.Zero)
-                    {
-                        CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
-                    }
-
                     if (ActivePlayer.GamePiece.ItemHeld != null)
                     {
                         ActivePlayer.GamePiece.ItemHeld.Item3D.SetViewMatrix(View);
@@ -1151,11 +1142,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         UnitColor = Color.White;
 
                     Vector3 CurrentPosition = ActivePlayer.GamePiece.Position;
-
-                    if (ActivePlayer.GamePiece.Speed == Vector3.Zero)
-                    {
-                        CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
-                    }
 
                     if (ActivePlayer.GamePiece.ItemHeld != null)
                     {
@@ -1219,7 +1205,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard DefendingCreature = ActiveTerrain.DefendingCreature;
                         if (DefendingCreature != null)
                         {
-                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f) * Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * Map.LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
+                            DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f) * Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * Map.LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
 
                             Vector3 Visible3DPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.7f, ActiveTerrain.WorldPosition.Z * Map.LayerHeight, ActiveTerrain.WorldPosition.Y + 0.9f);
                             Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
@@ -1285,31 +1271,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 PolygonEffect.Texture = ActiveVehicle.sprVehicle;
                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                ActiveVehicle.Draw3D(g.GraphicsDevice);
-
-                foreach (VehicleSeat ActiveSeat in ActiveVehicle.ListSeat)
-                {
-                    if (ActiveSeat.User != null)
-                    {
-                        ActiveSeat.User.Unit3DSprite.SetViewMatrix(View);
-
-                        Vector3 UserPositon = new Vector3(ActiveVehicle.Position.X - ActiveVehicle.sprVehicle.Width / 2 + ActiveSeat.SeatOffset.X,
-                            ActiveVehicle.Position.Y, ActiveVehicle.Position.Z - ActiveVehicle.sprVehicle.Height / 2 + ActiveSeat.SeatOffset.Y);
-                        var a = Matrix.CreateTranslation(
-                            new Vector3(
-                                -ActiveVehicle.Position.X,
-                                -ActiveVehicle.Position.Y,
-                                -ActiveVehicle.Position.Z))
-                            * Matrix.CreateRotationY(ActiveVehicle.Yaw) * Matrix.CreateTranslation(ActiveVehicle.Position);
-                        Vector3 UserPos2 = Vector3.Transform(UserPositon, a);
-                        ActiveSeat.User.Unit3DSprite.SetPosition(
-                            UserPos2.X,
-                            UserPos2.Y + 8,
-                            UserPos2.Z);
-
-                        ActiveSeat.User.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                    }
-                }
+                ActiveVehicle.DrawVehicle(g.GraphicsDevice, View, PolygonEffect.Projection);
             }
 
             PolygonEffect.World = Map.World;

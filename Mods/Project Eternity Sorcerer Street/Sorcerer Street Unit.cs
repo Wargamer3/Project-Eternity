@@ -1,13 +1,22 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetUnit : UnitMapComponent
     {
+        public string SpriteMapPath;
+        public Texture2D SpriteMap;
+        public UnitMap3D Unit3DSprite;
+        public string Model3DPath;
+        public AnimatedModel Unit3DModel;
+        public EffectHolder Effects;
+        internal UnitStats UnitStat;
+
         public override int Width => 32;
 
         public override int Height => 32;
@@ -39,6 +48,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DrawTimeOfDayOverlayOnMap(CustomSpriteBatch g, Vector3 Position, int TimeOfDay)
         {
             throw new System.NotImplementedException();
+        }
+
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void KillUnit()
+        {
+            throw new NotImplementedException();
         }
     }
 }

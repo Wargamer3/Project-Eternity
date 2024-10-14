@@ -185,15 +185,15 @@ namespace ProjectEternity.Editors.MapEditor
         {
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                HandleProps(MouseX, MouseY);
+                HandleProps(e.X, e.Y);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                RemoveProps(MouseX, MouseY);
+                RemoveProps(e.X, e.Y);
             }
         }
 
@@ -245,7 +245,7 @@ namespace ProjectEternity.Editors.MapEditor
                     return;
                 }
 
-                ActiveProp = ActiveProp.Copy(new Vector3(X, Y, 0), TopLayerIndex);
+                ActiveProp = ActiveProp.Copy(new Vector3(X * ActiveMap.TileSize.X + ActiveMap.TileSize.X / 2, Y * ActiveMap.TileSize.Y + ActiveMap.TileSize.Y / 2, 0), TopLayerIndex);
                 pgPropProperties.SelectedObject = ActiveProp;
 
                 TopLayer.ListProp.Add(ActiveProp);
@@ -262,7 +262,7 @@ namespace ProjectEternity.Editors.MapEditor
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)
                 {
-                    if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
+                    if (Math.Floor(TopLayer.ListProp[P].Position.X) == X && Math.Floor(TopLayer.ListProp[P].Position.Y) == Y)
                     {
                         TopLayer.ListProp.RemoveAt(P);
                         break;

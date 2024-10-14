@@ -392,10 +392,10 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public bool IsUnitAtPosition(Vector3 Position, Vector3 PositionToCheck)
+        public bool IsUnitAtPosition(Vector3 Position, Vector3 PositionToCheck, Point TerrainSize)
         {
-            int FinalX = (int)Math.Round(PositionToCheck.X - Position.X);
-            int FinalY = (int)Math.Round(PositionToCheck.Y - Position.Y);
+            int FinalX = (int)Math.Ceiling((PositionToCheck.X - Position.X) / TerrainSize.X);
+            int FinalY = (int)Math.Ceiling((PositionToCheck.Y - Position.Y) / TerrainSize.Y);
 
             if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayMapSize.GetLength(0) || FinalY >= ArrayMapSize.GetLength(1) || (int)Position.Z != (int)PositionToCheck.Z)
                 return false;

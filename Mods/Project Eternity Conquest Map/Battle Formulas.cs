@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     ++S;
                     continue;
                 }
-                if (ListPlayer[PlayerIndex].ListUnit[S].IsUnitAtPosition(FinalPosition))
+                if (ListPlayer[PlayerIndex].ListUnit[S].IsUnitAtPosition(FinalPosition, TileSize))
                     SquadFound = true;
                 else
                     ++S;

@@ -207,7 +207,7 @@ namespace ProjectEternity.Editors.MapEditor
             return false;
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
             int MaxX, MaxY;
             BattleMapViewer.ScriptHelper.MoveScript(e.Location, out MaxX, out MaxY);

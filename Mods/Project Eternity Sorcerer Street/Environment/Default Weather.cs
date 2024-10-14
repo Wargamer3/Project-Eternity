@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
 				{
 					Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
-					DrawableTile ActiveTile = Owner.ArrayTerrain[X, Y].DrawableTile;
+					DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
 
 					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
 					{

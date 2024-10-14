@@ -11,6 +11,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public enum TerrainActivation { OnEveryTurns, OnThisTurn, OnNextTurn, OnEnter, OnLeaved, OnAttack, OnHit, OnMiss, OnDefend, OnHited, OnMissed };
 
+    public class DeathmatchTerrainBonusInfo
+    {
+        public TerrainActivation[] ListActivation;//Activation type of the bonuses.
+        public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
+        public int[] ListBonusValue;//Value of the bonuses.
+        public byte BattleBackgroundAnimationIndex;
+        public byte BattleForegroundAnimationIndex;
+
+        public DeathmatchTerrainBonusInfo()
+        {
+            ListActivation = new TerrainActivation[0];
+            ListBonus = ListBonus = new TerrainBonus[0];
+            ListBonusValue = ListBonusValue = new int[0];
+            BattleBackgroundAnimationIndex = 0;
+            BattleForegroundAnimationIndex = 0;
+        }
+
+        public DeathmatchTerrainBonusInfo(DeathmatchTerrainBonusInfo Other)
+        {
+            ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
+            ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
+            ListBonusValue = (int[])Other.ListBonusValue.Clone();
+            BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
+            BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
+        }
+    }
+
     public class Terrain : MovementAlgorithmTile
     {
         public class TilesetPreset
@@ -36,14 +63,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(X, Y, 0, 0);
+                        Terrain NewTerrain = new Terrain(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), TilesetIndex);
                         
                         NewTerrain.TerrainTypeIndex = 0;
-
-                        NewTerrain.ListBonus = new TerrainBonus[0];
-                        NewTerrain.ListActivation = new TerrainActivation[0];
-                        NewTerrain.ListBonusValue = new int[0];
 
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTiles[X, Y] = NewTile;
@@ -84,7 +107,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             protected virtual Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
             {
-                return new Terrain(BR, X, Y, LayerIndex, LayerDepth);
+                return new Terrain(BR, X, Y, 1, 1, LayerIndex, 0, LayerDepth);
             }
 
             public void Write(BinaryWriter BW)
@@ -578,11 +601,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public TerrainActivation[] ListActivation;//Activation type of the bonuses.
-        public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
-        public int[] ListBonusValue;//Value of the bonuses.
-        public byte BattleBackgroundAnimationIndex;
-        public byte BattleForegroundAnimationIndex;
+        public DeathmatchTerrainBonusInfo BonusInfo;
 
         /// <summary>
         /// Used to create the empty array of the map.
@@ -597,26 +616,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.PreventLeavingDownward = Other.PreventLeavingDownward;
             this.PreventLeavingLeft = Other.PreventLeavingLeft;
             this.PreventLeavingRight = Other.PreventLeavingRight;
-            this.ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
-            this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
-            this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
-            this.BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
-            this.BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
+            BonusInfo = new DeathmatchTerrainBonusInfo(Other.BonusInfo);
         }
 
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(int XPos, int YPos, int LayerIndex, float LayerDepth)
+        public Terrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
-            this.WorldPosition = new Vector3(XPos, YPos, 0);
+            this.WorldPosition = new Vector3(XPos * TileSizeX, YPos * TileSizeY, LayerIndex * LayerHeight);
             this.TerrainTypeIndex = 0;
-            this.ListActivation = new TerrainActivation[0];
-            this.ListBonus = ListBonus = new TerrainBonus[0];
-            this.ListBonusValue = ListBonusValue = new int[0];
-            this.BattleBackgroundAnimationIndex = 0;
-            this.BattleForegroundAnimationIndex = 0;
+            BonusInfo = new DeathmatchTerrainBonusInfo();
         }
 
         /// <summary>
@@ -630,18 +641,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListActivation">Activation type of the bonuses.</param>
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
-        public Terrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex,
+        public Terrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex,
             TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
-            : this(XPos, YPos, LayerIndex, LayerDepth)
+            : this(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
-            this.ListActivation = ListActivation;
-            this.ListBonus = ListBonus;
-            this.ListBonusValue = ListBonusValue;
+            BonusInfo.ListActivation = ListActivation;
+            BonusInfo.ListBonus = ListBonus;
+            BonusInfo.ListBonusValue = ListBonusValue;
         }
 
-        public Terrain(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
-            : this(XPos, YPos, LayerIndex, LayerDepth)
+        public Terrain(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : this(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = BR.ReadByte();
             Height = BR.ReadSingle();
@@ -653,19 +664,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
 
             int ArrayBonusLength = BR.ReadInt32();
-            ListBonus = new TerrainBonus[ArrayBonusLength];
-            ListActivation = new TerrainActivation[ArrayBonusLength];
-            ListBonusValue = new int[ArrayBonusLength];
+            BonusInfo.ListBonus = new TerrainBonus[ArrayBonusLength];
+            BonusInfo.ListActivation = new TerrainActivation[ArrayBonusLength];
+            BonusInfo.ListBonusValue = new int[ArrayBonusLength];
 
             for (int i = 0; i < ArrayBonusLength; i++)
             {
-                ListBonus[i] = (TerrainBonus)BR.ReadInt32();
-                ListActivation[i] = (TerrainActivation)BR.ReadInt32();
-                ListBonusValue[i] = BR.ReadInt32();
+                BonusInfo.ListBonus[i] = (TerrainBonus)BR.ReadInt32();
+                BonusInfo.ListActivation[i] = (TerrainActivation)BR.ReadInt32();
+                BonusInfo.ListBonusValue[i] = BR.ReadInt32();
             }
 
-            BattleBackgroundAnimationIndex = BR.ReadByte();
-            BattleForegroundAnimationIndex = BR.ReadByte();
+            BonusInfo.BattleBackgroundAnimationIndex = BR.ReadByte();
+            BonusInfo.BattleForegroundAnimationIndex = BR.ReadByte();
         }
 
         public virtual void Save(BinaryWriter BW)
@@ -678,16 +689,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(PreventLeavingLeft);
             BW.Write(PreventLeavingRight);
 
-            BW.Write(ListBonus.Length);
-            for (int i = 0; i < ListBonus.Length; i++)
+            BW.Write(BonusInfo.ListBonus.Length);
+            for (int i = 0; i < BonusInfo.ListBonus.Length; i++)
             {
-                BW.Write((int)ListBonus[i]);
-                BW.Write((int)ListActivation[i]);
-                BW.Write(ListBonusValue[i]);
+                BW.Write((int)BonusInfo.ListBonus[i]);
+                BW.Write((int)BonusInfo.ListActivation[i]);
+                BW.Write(BonusInfo.ListBonusValue[i]);
             }
 
-            BW.Write(BattleBackgroundAnimationIndex);
-            BW.Write(BattleForegroundAnimationIndex);
+            BW.Write(BonusInfo.BattleBackgroundAnimationIndex);
+            BW.Write(BonusInfo.BattleForegroundAnimationIndex);
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -29,16 +32,118 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.sndBattleTheme.PlayAsBGM();
                 GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemeName;
             }
-            
-            Map.ActivePlayerIndex++;
 
-            if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
+            do
             {
-                Map.OnNewTurn();
+                Map.ActivePlayerIndex++;
+
+                if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
+                {
+                    OnNewTurn(Map);
+                }
+
+                Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
+
+                UpdateProps(Map, Map.ActivePlayerIndex);
+                UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
+                UpdatePERAttacks(Map, Map.ActivePlayerIndex);
+                UpdateSquadMovement(Map, Map.ActivePlayerIndex);
+
+                foreach (Player ActivePlayer in Map.ListPlayer)
+                {
+                    ActivePlayer.GamePiece.Effects.UpdateAllEffectsLifetime(SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
+                }
             }
+            while (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex < 0);
 
             Map.ListPassedTerrein.Clear();
             DeleteBattleInformation();
+        }
+
+        public static void OnNewTurn(SorcererStreetMap Map)
+        {
+            Map.ActivePlayerIndex = 0;
+            Map.GameTurn++;
+
+            Map.UpdateMapEvent(SorcererStreetMap.EventTypeTurn, 0);
+
+            foreach (Player ActivePlayer in Map.ListPlayer)
+            {
+                ActivePlayer.GamePiece.StartTurn();
+                ActivePlayer.GamePiece.EndTurn();
+            }
+        }
+
+        public static void UpdateDelayedAttacks(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            for (int A = Map.ListDelayedAttack.Count - 1; A >= 0; --A)
+            {
+                DelayedAttack ActiveDelayedAttack = Map.ListDelayedAttack[A];
+
+                if (ActiveDelayedAttack.PlayerIndex == ActivePlayerIndex)
+                {
+                    if (--ActiveDelayedAttack.TurnsRemaining == 0)
+                    {
+                        Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelInitDelayedAttackMAP(Map, ActivePlayerIndex, ActiveDelayedAttack));
+
+                        Map.ListDelayedAttack.RemoveAt(A);
+                    }
+                }
+            }
+        }
+
+        public static void UpdatePERAttacks(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            for (int A = Map.ListPERAttack.Count - 1; A >= 0; --A)
+            {
+                PERAttack ActivePERAttack = Map.ListPERAttack[A];
+
+                if (ActivePERAttack.PlayerIndex == ActivePlayerIndex)
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelUpdatePERAttacks(Map));
+                    return;
+                }
+            }
+        }
+
+        public static void UpdateSquadMovement(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            if (Map.ListPlayer[ActivePlayerIndex].GamePiece.Speed != Vector3.Zero)
+            {
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
+                return;
+            }
+
+            for (int S = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count - 1; S >= 0; --S)
+            {
+                if (Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[S].Speed != Vector3.Zero)
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
+                    return;
+                }
+            }
+        }
+
+        public static void UpdateProps(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            foreach (MapLayer ActiveLayer in Map.LayerManager.ListLayer)
+            {
+                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
+                {
+                    ActiveProp.OnTurnEnd(ActivePlayerIndex);
+                }
+            }
+        }
+
+        public static void UpdateHoldableItems(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            foreach (MapLayer ActiveLayer in Map.LayerManager.ListLayer)
+            {
+                foreach (HoldableItem ActiveProp in ActiveLayer.ListHoldableItem)
+                {
+                    ActiveProp.OnTurnEnd(null, ActivePlayerIndex);
+                }
+            }
         }
 
         private void DeleteBattleInformation()

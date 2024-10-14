@@ -20,8 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)OffsetX, (int)OffsetY,
-                1f, 1, out ListLayerPossibility);
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, (int)OffsetX, (int)OffsetY, 1f, 1, out ListLayerPossibility));
 
             if (NextRegularMovementDestination == null)
             {
@@ -76,7 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
 
-            return Map.GetMovementTile(PosX, PosY, LayerIndex);
+            return Map.LayerManager.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)

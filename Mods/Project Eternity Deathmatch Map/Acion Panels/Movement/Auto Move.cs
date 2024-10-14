@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(PanelName, Map, false)
         {
             ListSquadAutoMovement = new List<SquadAutoMovement>();
-            ListSquadAutoMovement.Add(new SquadAutoMovement(PlayerIndex, SquadIndex, SquadToMove, Map.GetTerrain(SquadToMove)));
+            ListSquadAutoMovement.Add(new SquadAutoMovement(PlayerIndex, SquadIndex, SquadToMove, Map.GetTerrain(SquadToMove.Position)));
         }
 
         public override void OnSelect()
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Squad ActiveSquad = ActivePlayer.ListSquad[S];
                     if (ActiveSquad.Speed != Vector3.Zero && !ActiveSquad.IsDead)
                     {
-                        ListSquadAutoMovement.Add(new SquadAutoMovement(P, S, ActiveSquad, Map.GetTerrain(ActiveSquad)));
+                        ListSquadAutoMovement.Add(new SquadAutoMovement(P, S, ActiveSquad, Map.GetTerrain(ActiveSquad.Position)));
                     }
                 }
             }
@@ -304,7 +304,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private bool IsOnGround(SquadAutoMovement ActiveSquad)
         {
             return ActiveSquad.Owner.CurrentTerrainIndex == UnitStats.TerrainLandIndex
-                && Map.GetTerrain(ActiveSquad.Owner).TerrainTypeIndex != UnitStats.TerrainVoidIndex;
+                && Map.GetTerrain(ActiveSquad.Owner.Position).TerrainTypeIndex != UnitStats.TerrainVoidIndex;
         }
 
         protected override void OnCancelPanel()

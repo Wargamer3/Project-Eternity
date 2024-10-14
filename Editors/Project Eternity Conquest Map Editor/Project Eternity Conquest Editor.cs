@@ -54,7 +54,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public DrawableTile GetTile(int X, int Y, int LayerIndex)
             {
-                return ActiveMap.LayerManager.ListLayer[LayerIndex].LayerGrid.ArrayTile[X, Y];
+                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -71,7 +71,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                             if (X < ActiveMap.MapSize.X && Y < ActiveMap.MapSize.Y)
                             {
                                 ArrayTerrain[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTerrain[X, Y];
-                                ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
+                                ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTile[X, Y];
                             }
                             else
                             {
@@ -79,24 +79,23 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                                 {
                                     TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(X, Y), L);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
-                                    NewTerrain.DrawableTile = NewTile;
                                     NewTerrain.Owner = ActiveMap;
-                                    NewTerrain.WorldPosition = new Vector3(X, Y, 0);
+                                    NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (L + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                                     ArrayTerrain[X, Y] = NewTerrain;
                                     ArrayTile2D[X, Y] = NewTile;
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, L, ActiveMap.LayerManager.ListLayer[L].Depth);
-                                    ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
+                                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, L, ActiveMap.LayerHeight, ActiveMap.LayerManager.ListLayer[L].Depth);
+                                    ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTile[X, Y];
                                 }
                             }
                         }
                     }
 
                     ActiveMap.LayerManager.ListLayer[L].ArrayTerrain = ArrayTerrain;
-                    ActiveMap.LayerManager.ListLayer[L].LayerGrid.ReplaceGrid(ArrayTile2D);
+                    ActiveMap.LayerManager.ListLayer[L].ArrayTile = ArrayTile2D;
                 }
 
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
@@ -106,7 +105,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             {
                 TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(X, Y), LayerIndex);
                 NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(X, Y, LayerIndex + TerrainPreset.Height);
+                NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                 if (ConsiderSubLayers)
                 {
@@ -133,11 +132,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
                 }
 
-                ActiveLayer.LayerGrid.ReplaceTile(X, Y, NewTile);
+                ActiveLayer.ArrayTile[X, Y] = NewTile;
 
-                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateSmartTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.LayerGrid.ArrayTile);
-
-                ActiveLayer.ArrayTerrain[X, Y].DrawableTile = ActiveLayer.LayerGrid.GetTile(X, Y);
+                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateSmartTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
 
                 ActiveMap.Reset();
             }
@@ -149,7 +146,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
                 foreach (MapLayer ActiveLayer in ActiveMap.LayerManager.ListLayer)
                 {
-                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                    ActiveLayer.RemoveTileset(TilesetIndex);
                 }
             }
 
@@ -192,9 +189,8 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     {
                         TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(X, Y), ActiveMap.LayerManager.ListLayer.Count - 1);
                         DrawableTile NewTile = new DrawableTile(TilePreset);
-                        NewTerrain.DrawableTile = NewTile;
                         NewTerrain.Owner = ActiveMap;
-                        NewTerrain.WorldPosition = new Vector3(X, Y, ActiveMap.LayerManager.ListLayer.Count - 1);
+                        NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (ActiveMap.LayerManager.ListLayer.Count - 1 + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTile2D[X, Y] = NewTile;
@@ -202,7 +198,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 }
 
                 NewLayer.ArrayTerrain = ArrayTerrain;
-                NewLayer.LayerGrid.ReplaceGrid(ArrayTile2D);
+                NewLayer.ArrayTile = ArrayTile2D;
 
                 ActiveMap.LayerManager.ListLayer.Add(NewLayer);
                 ActiveMap.Reset();

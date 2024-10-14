@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.ProjectileSpeed == 0)
             {
                 ListAttackTerrain = new List<MovementAlgorithmTile>();
-                ListAttackTerrain.Add(Map.GetMovementTile((int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+                ListAttackTerrain.Add(Map.GetTerrain(ActiveSquad.Position));
             }
             else
             {
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveInputManager.InputConfirmPressed())
             {
-                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
+                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad.Position);
                 Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
 
                 Terrain TargetTerrain = Map.GetTerrain(Map.CursorPosition);
@@ -110,7 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                bool CursorMoved = Map.UpdateMapNavigation(ActiveInputManager);
+                bool CursorMoved = Map.CursorControl(ActiveInputManager);
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -220,8 +220,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackTerrain.Count; ++A)
             {
-                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.X);
-                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackTerrain[A].GridPosition.X);
+                BW.AppendInt32(ListAttackTerrain[A].GridPosition.Y);
                 BW.AppendInt32(ListAttackTerrain[A].LayerIndex);
             }
 

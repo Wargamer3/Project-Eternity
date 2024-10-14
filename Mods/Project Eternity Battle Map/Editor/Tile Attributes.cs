@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void Init(Terrain ActiveTerrain, BattleMap Map)
         {
-            ActiveTerrain = new Terrain(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
+            ActiveTerrain = new Terrain(ActiveTerrain, ActiveTerrain.GridPosition, ActiveTerrain.LayerIndex);
             this.ActiveTerrain = ActiveTerrain;
             this.Map = Map;
             cboBattleAnimationBackground.Items.Clear();
@@ -70,17 +70,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             txtHeight.Value = (decimal)ActiveTerrain.Height;
 
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-            if (ActiveTerrain.BattleBackgroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            if (ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
             {
-                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
+                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex;
             }
             else
             {
                 cboBattleAnimationBackground.SelectedIndex = 0;
             }
-            if (ActiveTerrain.BattleForegroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            if (ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
             {
-                cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex;
+                cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex;
             }
             else
             {
@@ -89,12 +89,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             lstTerrainBonus.Items.Clear();
             //Load the lstTerrainBonus.
-            for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
+            for (int i = 0; i < ActiveTerrain.BonusInfo.ListActivation.Length; i++)
             {
-                lstTerrainBonus.Items.Add((i + 1) + ". " + cboTerrainBonusType.Items[(int)ActiveTerrain.ListBonus[i]].ToString() + " (" + ActiveTerrain.ListBonusValue[i].ToString() + " ) - " + cboTerrainBonusActivation.Items[(int)ActiveTerrain.ListActivation[i]].ToString());
+                lstTerrainBonus.Items.Add((i + 1) + ". " + cboTerrainBonusType.Items[(int)ActiveTerrain.BonusInfo.ListBonus[i]].ToString() + " (" + ActiveTerrain.BonusInfo.ListBonusValue[i].ToString() + " ) - " + cboTerrainBonusActivation.Items[(int)ActiveTerrain.BonusInfo.ListActivation[i]].ToString());
             }
 
-            if (ActiveTerrain.ListActivation.Length > 0)
+            if (ActiveTerrain.BonusInfo.ListActivation.Length > 0)
             {
                 cboTerrainBonusActivation.Enabled = true;
                 cboTerrainBonusType.Enabled = true;
@@ -125,9 +125,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void btnAddNewBonus_Click(object sender, EventArgs e)
         {
             lstTerrainBonus.Items.Add((lstTerrainBonus.Items.Count + 1) + ". HP regen (5 ) - On every turn");
-            ActiveTerrain.ListActivation = ActiveTerrain.ListActivation.Concat(new TerrainActivation[] { TerrainActivation.OnEveryTurns }).ToArray();
-            ActiveTerrain.ListBonus = ActiveTerrain.ListBonus.Concat(new TerrainBonus[] { TerrainBonus.HPRegen }).ToArray();
-            ActiveTerrain.ListBonusValue = ActiveTerrain.ListBonusValue.Concat(new int[] { 5 }).ToArray();
+            ActiveTerrain.BonusInfo.ListActivation = ActiveTerrain.BonusInfo.ListActivation.Concat(new TerrainActivation[] { TerrainActivation.OnEveryTurns }).ToArray();
+            ActiveTerrain.BonusInfo.ListBonus = ActiveTerrain.BonusInfo.ListBonus.Concat(new TerrainBonus[] { TerrainBonus.HPRegen }).ToArray();
+            ActiveTerrain.BonusInfo.ListBonusValue = ActiveTerrain.BonusInfo.ListBonusValue.Concat(new int[] { 5 }).ToArray();
             lstTerrainBonus.SelectedIndex = lstTerrainBonus.Items.Count - 1;
         }
 
@@ -136,9 +136,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (lstTerrainBonus.SelectedIndex >= 0)
             {
                 int Index = lstTerrainBonus.SelectedIndex;
-                ActiveTerrain.ListActivation = ActiveTerrain.ListActivation.Where((source, index) => index != Index).ToArray();
-                ActiveTerrain.ListBonus = ActiveTerrain.ListBonus.Where((source, index) => index != Index).ToArray();
-                ActiveTerrain.ListBonusValue = ActiveTerrain.ListBonusValue.Where((source, index) => index != Index).ToArray();
+                ActiveTerrain.BonusInfo.ListActivation = ActiveTerrain.BonusInfo.ListActivation.Where((source, index) => index != Index).ToArray();
+                ActiveTerrain.BonusInfo.ListBonus = ActiveTerrain.BonusInfo.ListBonus.Where((source, index) => index != Index).ToArray();
+                ActiveTerrain.BonusInfo.ListBonusValue = ActiveTerrain.BonusInfo.ListBonusValue.Where((source, index) => index != Index).ToArray();
 
                 lstTerrainBonus.Items.RemoveAt(lstTerrainBonus.SelectedIndex);
                 if (lstTerrainBonus.Items.Count > 0)
@@ -147,9 +147,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         lstTerrainBonus.SelectedIndex = lstTerrainBonus.Items.Count - 1;
                     else
                         lstTerrainBonus.SelectedIndex = Index;
-                    cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
-                    cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
-                    txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
+                    cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListActivation[lstTerrainBonus.SelectedIndex];
+                    cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListBonus[lstTerrainBonus.SelectedIndex];
+                    txtBonusValue.Text = ActiveTerrain.BonusInfo.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
                 }
                 else
                 {
@@ -174,9 +174,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
-                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
-                txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
+                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListActivation[lstTerrainBonus.SelectedIndex];
+                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.BonusInfo.ListBonus[lstTerrainBonus.SelectedIndex];
+                txtBonusValue.Text = ActiveTerrain.BonusInfo.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
 
                 cboTerrainBonusActivation.Enabled = true;
                 cboTerrainBonusType.Enabled = true;
@@ -188,7 +188,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
+                ActiveTerrain.BonusInfo.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -197,7 +197,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
+                ActiveTerrain.BonusInfo.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -206,19 +206,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (lstTerrainBonus.SelectedIndex != -1 && txtBonusValue.Text != "")
             {
-                ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex] = Convert.ToInt32(txtBonusValue.Text);
+                ActiveTerrain.BonusInfo.ListBonusValue[lstTerrainBonus.SelectedIndex] = Convert.ToInt32(txtBonusValue.Text);
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
+            ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
         }
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
+            ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
         }
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)

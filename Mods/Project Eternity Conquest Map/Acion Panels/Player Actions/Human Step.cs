@@ -2,7 +2,6 @@
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -20,8 +19,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.CursorControl();
-            if (MouseHelper.InputLeftButtonReleased())
+            Map.CursorControl(ActiveInputManager);
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 UnitConquest ActiveUnit = null;
                 //Loop through the players to find a Unit to control.

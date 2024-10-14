@@ -102,11 +102,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         DicSpawnSquadIndexPerTeam.Add(SpawnTeam, 0);
                     }
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(SpawnTeam);
+                    List<Vector3> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(SpawnTeam);
 
                     int SpawnSquadIndex = DicSpawnSquadIndexPerTeam[SpawnTeam];
 
-                    foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
+                    foreach (Vector3 ActiveSpawn in ListPossibleSpawnPoint)
                     {
                         if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
                         {
@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
 
                         NewSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                        Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveSpawn.InternalPosition.X, ActiveSpawn.InternalPosition.Y), ActiveSpawn.LayerIndex);
+                        Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveSpawn.X, ActiveSpawn.Y), (int)ActiveSpawn.Z);
                         NewSquad.CurrentLeader.PilotSP = 0;
                         NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
                         ++SpawnSquadIndex;
@@ -136,15 +136,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
                         {
                             InitBot(NewSquad);
-                        }
-
-                        if (Owner != ActiveSpawn.Owner)
-                        {
-                            ActiveSpawn.Owner.AddUnit(P, NewSquad, ActiveSpawn);
-                            Owner.RemoveUnit(P, NewSquad);
-                            Owner.SelectPlatform(Owner.GetPlatform(ActiveSpawn.Owner));
-                            ActiveSpawn.Owner.CursorPosition = NewSquad.Position;
-                            ActiveSpawn.Owner.CursorPositionVisible = NewSquad.Position;
                         }
 
                         Owner.CursorPosition = NewSquad.Position;
@@ -431,14 +422,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return 50u + (uint)ActivePlayer.Level * 5u;
         }
 
-        protected virtual List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
+        protected virtual List<Vector3> GetSpawnLocations(int ActivePlayerIndex)
         {
             return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
         }
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
+            List<Vector3> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].TeamIndex);
             if (ListPossibleSpawnPoint.Count == 0)
             {
                 return;
@@ -452,9 +443,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
 
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
-            MovementAlgorithmTile RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
+            Vector3 RandomSpawnPoint = Owner.GetFinalPosition(ListPossibleSpawnPoint[RandomSapwnPointIndex]);
 
-            Owner.CursorPosition = new Vector3(RandomSpawnPoint.InternalPosition.X, RandomSpawnPoint.InternalPosition.Y, RandomSpawnPoint.LayerIndex);
+            Owner.CursorPosition = new Vector3(RandomSpawnPoint.X, RandomSpawnPoint.Y, RandomSpawnPoint.Z);
             Owner.CursorPositionVisible = Owner.CursorPosition;
 
             ActiveSquad.At(0).HealUnit(ActiveSquad.At(0).MaxHP);
@@ -465,7 +456,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.ActivateAutomaticSkills(ActiveSquad, string.Empty);
             ActiveSquad.SetPosition(Owner.CursorPosition);
 
-            ActiveSquad.CurrentTerrainIndex = Owner.GetTerrain(ActiveSquad).TerrainTypeIndex;
+            ActiveSquad.CurrentTerrainIndex = Owner.GetTerrain(ActiveSquad.Position).TerrainTypeIndex;
         }
 
         public virtual void Update(GameTime gameTime)

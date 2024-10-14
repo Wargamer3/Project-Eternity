@@ -47,12 +47,12 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
             {
-                return ActiveMap.GetTerrain(X, Y, LayerIndex);
+                return ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y];
             }
 
             public DrawableTile GetTile(int X, int Y, int LayerIndex)
             {
-                return ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.GetTile(X, Y);
+                return ActiveMap.ListLayer[LayerIndex].ArrayTile[X, Y];
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -69,7 +69,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                             if (X < ActiveMap.MapSize.X && Y < ActiveMap.MapSize.Y)
                             {
                                 ArrayTerrain[X, Y] = ActiveMap.ListLayer[L].ArrayTerrain[X, Y];
-                                ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
+                                ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].ArrayTile[X, Y];
                             }
                             else
                             {
@@ -77,22 +77,22 @@ namespace ProjectEternity.Editors.WorldMapEditor
                                 {
                                     Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), L);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
-                                    NewTerrain.WorldPosition = new Vector3(X, Y, 0);
+                                    NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (L + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                                     ArrayTerrain[X, Y] = NewTerrain;
                                     ArrayTile2D[X, Y] = NewTile;
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y, L, ActiveMap.ListLayer[L].Depth);
-                                    ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
+                                    ArrayTerrain[X, Y] = new Terrain(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, L, ActiveMap.LayerHeight, ActiveMap.ListLayer[L].Depth);
+                                    ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].ArrayTile[X, Y];
                                 }
                             }
                         }
                     }
 
                     ActiveMap.ListLayer[L].ArrayTerrain = ArrayTerrain;
-                    ActiveMap.ListLayer[L].OriginalLayerGrid.ReplaceGrid(ArrayTile2D);
+                    ActiveMap.ListLayer[L].ArrayTile = ArrayTile2D;
                 }
 
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
@@ -101,7 +101,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
             public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
                 Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), LayerIndex);
-                NewTerrain.WorldPosition = new Vector3(X, Y, 0);
+                NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
             }
@@ -110,7 +110,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
                 
-                ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.ReplaceTile(X, Y, NewTile);
+                ActiveMap.ListLayer[LayerIndex].ArrayTile[X, Y] = NewTile;
             }
 
             public void RemoveTileset(int TilesetIndex)
@@ -120,14 +120,37 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
                 foreach (MapLayer ActiveLayer in ActiveMap.ListLayer)
                 {
-                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                    ActiveLayer.RemoveTileset(TilesetIndex);
                 }
             }
 
             public BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset)
             {
                 MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.ListLayer.Count);
+
+                Terrain[,] ArrayTerrain = new Terrain[ActiveMap.MapSize.X, ActiveMap.MapSize.Y];
+                DrawableTile[,] ArrayTile2D = new DrawableTile[ActiveMap.MapSize.X, ActiveMap.MapSize.Y];
+
+                for (int X = 0; X < ActiveMap.MapSize.X; X++)
+                {
+                    for (int Y = 0; Y < ActiveMap.MapSize.Y; Y++)
+                    {
+                        Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), ActiveMap.ListLayer.Count - 1);
+                        DrawableTile NewTile = new DrawableTile(TilePreset);
+                        NewTerrain.Owner = ActiveMap;
+                        NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (ActiveMap.ListLayer.Count - 1 + NewTerrain.Height) * ActiveMap.LayerHeight);
+
+                        ArrayTerrain[X, Y] = NewTerrain;
+                        ArrayTile2D[X, Y] = NewTile;
+                    }
+                }
+
+                NewLayer.ArrayTerrain = ArrayTerrain;
+                NewLayer.ArrayTile = ArrayTile2D;
+
                 ActiveMap.ListLayer.Add(NewLayer);
+                ActiveMap.Reset();
+
                 return NewLayer;
             }
 

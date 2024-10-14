@@ -140,7 +140,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
         }
 
-        public void OnMouseMove(MouseEventArgs e, int MouseX, int MouseY)
+        public void OnMouseMove(MouseEventArgs e)
         {
         }
 

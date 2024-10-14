@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                     {
                         Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
-                        DrawableTile ActiveTile = Owner.LayerGrid.ArrayTile[X, Y];
+                        DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
 
                         if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                         {

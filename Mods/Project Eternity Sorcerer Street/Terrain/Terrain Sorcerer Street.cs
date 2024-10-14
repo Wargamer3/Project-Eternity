@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
         {
-            return new TerrainSorcererStreet(BR, X, Y, LayerIndex, LayerDepth);
+            return new TerrainSorcererStreet(BR, X, Y, 0, 0, LayerIndex, 0, LayerDepth);
         }
     }
 
@@ -60,8 +60,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public TerrainSorcererStreet(int XPos, int YPos, int LayerIndex, float LayerDepth)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainSorcererStreet(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = 0;
             TollMultiplier = 1;
@@ -69,8 +69,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LandLevel = 1;
         }
         
-        public TerrainSorcererStreet(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainSorcererStreet(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
             TollMultiplier = 1;
@@ -78,8 +78,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LandLevel = 1;
         }
 
-        public TerrainSorcererStreet(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public TerrainSorcererStreet(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = BR.ReadByte();
             Height = BR.ReadSingle();

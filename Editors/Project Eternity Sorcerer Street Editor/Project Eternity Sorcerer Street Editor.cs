@@ -53,7 +53,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
             public DrawableTile GetTile(int X, int Y, int LayerIndex)
             {
-                return ActiveMap.GetTerrain(new Vector3(X, Y, LayerIndex)).DrawableTile;
+                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                             if (X < ActiveMap.MapSize.X && Y < ActiveMap.MapSize.Y)
                             {
                                 ArrayTerrain[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTerrain[X, Y];
-                                ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
+                                ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTile[X, Y];
                             }
                             else
                             {
@@ -78,24 +78,23 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                                 {
                                     TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), L);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
-                                    NewTerrain.DrawableTile = NewTile;
                                     NewTerrain.Owner = ActiveMap;
-                                    NewTerrain.WorldPosition = new Vector3(X, Y, 0);
+                                    NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (L + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                                     ArrayTerrain[X, Y] = NewTerrain;
                                     ArrayTile2D[X, Y] = NewTile;
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, L, ActiveMap.LayerManager.ListLayer[L].Depth);
-                                    ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
+                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, L, ActiveMap.LayerHeight, ActiveMap.LayerManager.ListLayer[L].Depth);
+                                    ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTile[X, Y];
                                 }
                             }
                         }
                     }
 
                     ActiveMap.LayerManager.ListLayer[L].ArrayTerrain = ArrayTerrain;
-                    ActiveMap.LayerManager.ListLayer[L].LayerGrid.ReplaceGrid(ArrayTile2D);
+                    ActiveMap.LayerManager.ListLayer[L].ArrayTile = ArrayTile2D;
                 }
 
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
@@ -105,7 +104,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             {
                 TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), LayerIndex);
                 NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(X, Y, TerrainPreset.Height);
+                NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                 if (ConsiderSubLayers)
                 {
@@ -123,13 +122,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
                 if (ConsiderSubLayers)
                 {
-                    GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
-                    GetRealLayer(LayerIndex).ArrayTerrain[X, Y].DrawableTile = NewTile;
+                    GetRealLayer(LayerIndex).ArrayTile[X, Y] = NewTile;
                 }
                 else
                 {
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y].DrawableTile = NewTile;
+                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y] = NewTile;
                 }
 
                 ActiveMap.Reset();
@@ -142,7 +139,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
                 foreach (MapLayer ActiveLayer in ActiveMap.LayerManager.ListLayer)
                 {
-                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                    ActiveLayer.RemoveTileset(TilesetIndex);
                 }
             }
 
@@ -185,8 +182,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                     {
                         TerrainSorcererStreet NewTerrain = NewLayer.ArrayTerrain[X, Y];
                         DrawableTile NewTile = new DrawableTile(TilePreset);
-                        NewTerrain.DrawableTile = NewTile;
-                        NewTerrain.WorldPosition = new Vector3(X, Y, TerrainPreset.Height + 1);
+                        NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (ActiveMap.LayerManager.ListLayer.Count - 1 + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTile2D[X, Y] = NewTile;
@@ -194,7 +190,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 }
 
                 NewLayer.ArrayTerrain = ArrayTerrain;
-                NewLayer.LayerGrid.ReplaceGrid(ArrayTile2D);
+                NewLayer.ArrayTile = ArrayTile2D;
 
                 ActiveMap.LayerManager.ListLayer.Add(NewLayer);
                 ActiveMap.Reset();

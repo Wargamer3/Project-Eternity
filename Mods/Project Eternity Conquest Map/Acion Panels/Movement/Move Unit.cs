@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -48,9 +47,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.White);
 
-            Map.CursorControl();
+            Map.CursorControl(ActiveInputManager);
 
-            if (MouseHelper.InputLeftButtonReleased() &&
+            if (ActiveInputManager.InputConfirmPressed() &&
                 ListMVPoints.Contains(Map.CursorPosition))//If the cursor is in the possible move list.
             {
                 //Movement initialisation.

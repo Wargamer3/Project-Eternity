@@ -50,19 +50,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             Terrain ActiveTerrain = Map.GetTerrain(Map.CursorPosition);
-            DrawableTile ActiveTile = ActiveTerrain.DrawableTile;
+            DrawableTile ActiveTile = Map.LayerManager.ListLayer[ActiveTerrain.LayerIndex].ArrayTile[ActiveTerrain.GridPosition.X, ActiveTerrain.GridPosition.Y];
             g.Draw(Map.sprCursorTerrainSelection, new Vector2(FinalMenuX, FinalMenuY), Color.White);
             g.Draw(Map.ListTileSet[ActiveTile.TilesetIndex], new Vector2(FinalMenuX + 6, FinalMenuY + 22), ActiveTile.Origin, Color.White);
             string BonusValue;
 
             //Draw the bonuses.
-            for (int i = 0; i < ActiveTerrain.ListBonus.Length; i++)
+            for (int i = 0; i < ActiveTerrain.BonusInfo.ListBonus.Length; i++)
             {
-                if (ActiveTerrain.ListBonusValue[i] > 0)
-                    BonusValue = "+" + ActiveTerrain.ListBonusValue[i];
+                if (ActiveTerrain.BonusInfo.ListBonusValue[i] > 0)
+                    BonusValue = "+" + ActiveTerrain.BonusInfo.ListBonusValue[i];
                 else
-                    BonusValue = "-" + ActiveTerrain.ListBonusValue[i];
-                switch (ActiveTerrain.ListBonus[i])
+                    BonusValue = "-" + ActiveTerrain.BonusInfo.ListBonusValue[i];
+                switch (ActiveTerrain.BonusInfo.ListBonus[i])
                 {
                     case TerrainBonus.Accuracy://not used
                                                //g.DrawString(fntArial10, ArrayGround[TileX, TileY].ListBonusValue[i] + "%", new Vector2(DrawX + 63, DrawY - 2), Color.White);

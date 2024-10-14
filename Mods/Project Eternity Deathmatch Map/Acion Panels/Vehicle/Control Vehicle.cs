@@ -72,20 +72,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void GetTerrainUnderVehicle()
         {
-            MovementAlgorithmTile SpawnTerrain = Map.GetMovementTile((int)ActiveVehicle.Position.X / Map.TileSize.X, (int)ActiveVehicle.Position.Z / Map.TileSize.Y, (int)ActiveVehicle.Position.Y / 32);
-            Terrain3D ActiveTerrain3D = SpawnTerrain.DrawableTile.Terrain3DInfo;
+            MovementAlgorithmTile SpawnTerrain = Map.LayerManager.ListLayer[(int)ActiveVehicle.Position.Y / 32].ArrayTerrain[(int)ActiveVehicle.Position.X / Map.TileSize.X, (int)ActiveVehicle.Position.Z / Map.TileSize.Y];
+            Terrain3D ActiveTerrain3D = Map.LayerManager.ListLayer[(int)ActiveVehicle.Position.Y / 32].ArrayTile[(int)ActiveVehicle.Position.X / Map.TileSize.X, (int)ActiveVehicle.Position.Z / Map.TileSize.Y].Terrain3DInfo;
 
-            int X = SpawnTerrain.InternalPosition.X;
-            int Y = SpawnTerrain.InternalPosition.Y;
+            int X = SpawnTerrain.GridPosition.X;
+            int Y = SpawnTerrain.GridPosition.Y;
             float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
-            Tile3D TerrainToSpawnOn = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X,
-                Y * Map.TileSize.Y,
-                Z,
-                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
+            Tile3D TerrainToSpawnOn = Map.CreateTile3D(0, SpawnTerrain.WorldPosition, Point.Zero,
                 new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
                 new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
-                new List<Texture2D>() { ActiveVehicle.sprVehicle }, Z, Z, Z, Z, 0)[0];
+                0);
 
             ActiveVehicle.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * Map.LayerHeight, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
 

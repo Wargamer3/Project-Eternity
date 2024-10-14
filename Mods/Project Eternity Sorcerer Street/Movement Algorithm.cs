@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)OffsetX, (int)OffsetY,
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerTile(StartingNode, (int)OffsetX, (int)OffsetY,
                 1f, 1, out ListLayerPossibility);
 
             if (NextRegularMovementDestination == null)
@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return null;
             }
 
-            return Map.GetMovementTile(PosX, PosY, LayerIndex);
+            return Map.LayerManager.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
