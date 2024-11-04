@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
             if (Content != null)
             {
@@ -40,11 +40,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void DoSave(BinaryWriter BW)
         {
-        }
-
-        public void HealSquad(Squad SquadToHeal)
-        {
-            SquadToHeal.CurrentLeader.HealUnit(SquadToHeal.CurrentLeader.MaxHP / 2);
         }
 
         public override void Update(GameTime gameTime)

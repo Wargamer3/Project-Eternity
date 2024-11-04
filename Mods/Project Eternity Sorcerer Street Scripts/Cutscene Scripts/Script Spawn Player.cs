@@ -47,8 +47,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
 
                 Player NewPlayer = new Player("", PlayerName, "", false, _PlayerTeam, true, Color.White, ListCardInDeck);
-                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(_SpawnPosition.X, _SpawnPosition.Y, 0);
-                NewPlayer.GamePiece.SetPosition(new Vector3(ActiveTerrain.GridPosition.X, ActiveTerrain.GridPosition.Y, ActiveTerrain.LayerIndex));
+                TerrainSorcererStreet ActiveTerrain = Map.LayerManager.ListLayer[0].ArrayTerrain[_SpawnPosition.X, _SpawnPosition.Y];
+                NewPlayer.GamePiece.SetPosition(new Vector3(ActiveTerrain.WorldPosition.X + Map.TileSize.X / 2, ActiveTerrain.WorldPosition.Y + Map.TileSize.Y / 2, ActiveTerrain.WorldPosition.Z));
 
                 if (_PlayerTeam == 0)
                 {

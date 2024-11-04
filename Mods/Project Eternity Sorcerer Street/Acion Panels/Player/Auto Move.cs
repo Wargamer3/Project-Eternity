@@ -51,11 +51,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListSquadAutoMovement = new List<UnitAutoMovement>();
         }
 
-        public ActionPanelAutoMove(SorcererStreetMap Map, int PlayerIndex, int SquadIndex, SorcererStreetUnit SquadToMove)
+        public ActionPanelAutoMove(SorcererStreetMap Map, int PlayerIndex, int UnitIndex, SorcererStreetUnit UnitToMove)
             : base(PanelName, Map, false)
         {
             ListSquadAutoMovement = new List<UnitAutoMovement>();
-            ListSquadAutoMovement.Add(new UnitAutoMovement(PlayerIndex, SquadIndex, SquadToMove, Map.GetTerrain(SquadToMove)));
+            ListSquadAutoMovement.Add(new UnitAutoMovement(PlayerIndex, UnitIndex, UnitToMove, Map.GetTerrain(UnitToMove.Position)));
         }
 
         public override void OnSelect()
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     SorcererStreetUnit ActiveUnit = ActivePlayer.ListCreatureOnBoard[S];
                     if (ActiveUnit.Speed != Vector3.Zero)
                     {
-                        ListSquadAutoMovement.Add(new UnitAutoMovement(P, S, ActiveUnit, Map.GetTerrain(ActiveUnit)));
+                        ListSquadAutoMovement.Add(new UnitAutoMovement(P, S, ActiveUnit, Map.GetTerrain(ActiveUnit.Position)));
                     }
                 }
             }
@@ -299,7 +299,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private bool IsOnGround(UnitAutoMovement ActiveSquad)
         {
             return ActiveSquad.Owner.CurrentTerrainIndex == UnitStats.TerrainLandIndex
-                && Map.GetTerrain(ActiveSquad.Owner).TerrainTypeIndex != UnitStats.TerrainVoidIndex;
+                && Map.GetTerrain(ActiveSquad.Owner.Position).TerrainTypeIndex != UnitStats.TerrainVoidIndex;
         }
 
         protected override void OnCancelPanel()

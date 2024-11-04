@@ -80,6 +80,11 @@ namespace ProjectEternity.Core.Editor
             base.OnCreateControl();
         }
 
+        public void Reset()
+        {
+            graphicsDeviceService.ResetDevice(ClientSize.Width, ClientSize.Height);
+        }
+
         /// <summary>
         /// Disposes the control.
         /// </summary>

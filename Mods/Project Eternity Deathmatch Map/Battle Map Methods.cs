@@ -16,6 +16,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public partial class DeathmatchMap : BattleMap
     {
+        public override void Resize(int Width, int Height)
+        {
+            base.Resize(Width, Height);
+            Reset();
+        }
+
         public override void Init()
         {
             base.Init();

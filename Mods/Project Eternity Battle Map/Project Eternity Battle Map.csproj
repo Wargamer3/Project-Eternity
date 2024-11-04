@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI Light.cs" />
     <Compile Include="Battle Map Cutscene Script Holder.cs" />
     <Compile Include="Battle Context.cs" />
     <Compile Include="Battle Params.cs" />

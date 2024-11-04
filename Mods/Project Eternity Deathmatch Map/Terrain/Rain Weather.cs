@@ -100,31 +100,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             shadowOverlay = new ShadowOverlay(Map);
             sprRain = Map.Content.Load<Texture2D>("Rain Line");
             DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
-            // Look up the resolution and format of our main backbuffer.
-            PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
-
-            int width = pp.BackBufferWidth;
-            int height = pp.BackBufferHeight;
-
-            SurfaceFormat format = pp.BackBufferFormat;
-
-            RainRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, width, height, false,
-                                                   format, pp.DepthStencilFormat, pp.MultiSampleCount,
-                                                   RenderTargetUsage.DiscardContents);
-
-            Matrix View = Matrix.Identity;
-
-            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-            Projection = HalfPixelOffset * Projection;
-
-            LightningManager = new WeatherLightningManager(Map.Content, Projection);
-
-            DisplacementEffect.Parameters["View"].SetValue(View);
-            DisplacementEffect.Parameters["Projection"].SetValue(Projection);
-            DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
-            DisplacementEffect.Parameters["TextureSize"].SetValue(new Vector2(1f / width, 1f / height));
 
             SpawnOffset = new Vector2(-100, -100);
             SpawnOffsetRandom = new Vector2(Constants.Width + 100, 50);
@@ -143,11 +118,42 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SkyBones = new Matrix[this.SkyModel.Bones.Count];
             SkyModel.CopyAbsoluteBoneTransformsTo(SkyBones);
 
-            RippleRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, Constants.Width, Constants.Height, false, SurfaceFormat.Color, DepthFormat.None);
-
             WetEffect = Map.Content.Load<Effect>("Shaders/Water");
             RippleEffect = Map.Content.Load<Effect>("Shaders/Ripple");
 
+            Reset();
+
+        }
+
+        public override void Reset()
+        {
+            GameScreen.GraphicsDevice.SetRenderTarget(null);
+            PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
+
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+
+            SurfaceFormat format = pp.BackBufferFormat;
+
+            RainRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, width, height, false,
+                                                   format, pp.DepthStencilFormat, pp.MultiSampleCount,
+                                                   RenderTargetUsage.DiscardContents);
+
+            RippleRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None);
+
+            Matrix View = Matrix.Identity;
+
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, -1);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+            LightningManager = new WeatherLightningManager(Map.Content, Projection);
+
+            DisplacementEffect.Parameters["View"].SetValue(View);
+            DisplacementEffect.Parameters["Projection"].SetValue(Projection);
+            DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
+            DisplacementEffect.Parameters["TextureSize"].SetValue(new Vector2(1f / width, 1f / height));
+
+            Projection = HalfPixelOffset * Projection;
             RippleEffect.Parameters["View"].SetValue(View);
             RippleEffect.Parameters["Projection"].SetValue(Projection);
             RippleEffect.Parameters["World"].SetValue(Matrix.Identity);
@@ -179,6 +185,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 CreateMap(Map, Map.LayerManager.ListLayer[L], L, WetEffect);
             }
+
+            shadowOverlay.Reset();
         }
 
         public override void Update(GameTime gameTime)
@@ -240,6 +248,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         void DrawSky(Matrix ViewMatrix)
         {
+            PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
+
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+
             foreach (ModelMesh mesh in SkyModel.Meshes)
             {
                 // This is where the mesh orientation is set, as well as our camera and projection.  
@@ -257,7 +270,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     effectB.Texture = sprSkyTexture;
                     effectB.World = SkyBones[mesh.ParentBone.Index] * Matrix.CreateRotationX((float)Time / 10) * Matrix.CreateRotationY((float)Time / 7) * Matrix.CreateScale(30);
                     effectB.View = ViewMatrix;
-                    effectB.Projection = Matrix.CreateOrthographicOffCenter(-Constants.Width / 2, Constants.Width / 2, Constants.Height / 2, -Constants.Height / 2, 5000, -5000f);
+                    effectB.Projection = Matrix.CreateOrthographicOffCenter(-width / 2, width / 2, height / 2, -height / 2, 5000, -5000f);
                 }
                 mesh.Draw();
             }
@@ -321,11 +334,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void DrawRipples(CustomSpriteBatch g)
         {
+            PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
+
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+
             RippleEffect.Parameters["Time"].SetValue((float)Time);
             g.GraphicsDevice.SetRenderTarget(RippleRenderTarget);
             g.GraphicsDevice.Clear(Color.Transparent);
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, RippleEffect);
-            g.Draw(RippleTexture, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.White);
+            g.Draw(RippleTexture, new Rectangle(0, 0, width, height), Color.White);
             g.End();
             g.GraphicsDevice.SetRenderTarget(null);
         }

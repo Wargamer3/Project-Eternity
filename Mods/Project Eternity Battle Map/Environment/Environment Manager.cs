@@ -107,7 +107,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void BeginDraw(CustomSpriteBatch g)
         {
-            GlobalZone.BeginDraw(g);
+            if (ListMapZone.Count == 0 || ListMapZone[0].Shape.ZoneShapeType != ZoneShape.ZoneShapeTypes.Full)
+            {
+                GlobalZone.BeginDraw(g);
+            }
 
             foreach (MapZone ActiveZone in ListMapZone)
             {
@@ -117,7 +120,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            GlobalZone.Draw(g);
+            if (ListMapZone.Count == 0 || ListMapZone[0].Shape.ZoneShapeType != ZoneShape.ZoneShapeTypes.Full)
+            {
+                GlobalZone.Draw(g);
+            }
 
             foreach (MapZone ActiveZone in ListMapZone)
             {

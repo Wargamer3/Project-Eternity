@@ -31,50 +31,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static List<TerrainSorcererStreet> GetListBoostCreatures(SorcererStreetMap Map)
+        public static List<CreatureCard> GetListBoostCreatures(SorcererStreetMap Map)
         {
-            List<TerrainSorcererStreet> ListBoostCreature = new List<TerrainSorcererStreet>();
+            List<CreatureCard> ListBoostCreature = new List<CreatureCard>();
 
-            for (int X = 0; X < Map.MapSize.X; ++X)
+            foreach (CreatureCard DefendingCreature in Map.ListSummonedCreature)
             {
-                for (int Y = 0; Y < Map.MapSize.Y; ++Y)
+                bool BoostSkillFound = false;
+                foreach (BaseAutomaticSkill ActiveSkill in DefendingCreature.ListActiveSkill)
                 {
-                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
+                    if (BoostSkillFound)
                     {
-                        TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(X, Y, L);
+                        break;
+                    }
 
-                        if (ActiveTerrain.TerrainTypeIndex == 0)
+                    foreach (BaseSkillActivation ActiveActivation in ActiveSkill.CurrentSkillLevel.ListActivation)
+                    {
+                        if (BoostSkillFound)
                         {
-                            continue;
+                            break;
                         }
 
-                        if (ActiveTerrain.DefendingCreature != null)
+                        foreach (BaseSkillRequirement ActiveRequirement in ActiveActivation.ListRequirement)
                         {
-                            bool BoostSkillFound = false;
-                            foreach (BaseAutomaticSkill ActiveSkill in ActiveTerrain.DefendingCreature.ListActiveSkill)
+                            if (ActiveRequirement.SkillRequirementName == RequirementName)
                             {
-                                if (BoostSkillFound)
-                                {
-                                    break;
-                                }
-
-                                foreach (BaseSkillActivation ActiveActivation in ActiveSkill.CurrentSkillLevel.ListActivation)
-                                {
-                                    if (BoostSkillFound)
-                                    {
-                                        break;
-                                    }
-
-                                    foreach (BaseSkillRequirement ActiveRequirement in ActiveActivation.ListRequirement)
-                                    {
-                                        if (ActiveRequirement.SkillRequirementName == RequirementName)
-                                        {
-                                            ListBoostCreature.Add(ActiveTerrain);
-                                            BoostSkillFound = true;
-                                            break;
-                                        }
-                                    }
-                                }
+                                ListBoostCreature.Add(DefendingCreature);
+                                BoostSkillFound = true;
+                                break;
                             }
                         }
                     }

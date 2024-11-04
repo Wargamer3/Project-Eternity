@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
 			quadRender = new QuadRenderComponent(GameScreen.GraphicsDevice);
 			quadRender.LoadContent();
-			shadowmapResolver = new ShadowmapResolver(GameScreen.GraphicsDevice, quadRender, ShadowmapSize.Size256, ShadowmapSize.Size1024);
+			shadowmapResolver = new ShadowmapResolver(GameScreen.GraphicsDevice, quadRender, ShadowmapSizes.Size256, ShadowmapSizes.Size1024);
 			shadowmapResolver.LoadContent(Map.Content);
 
 			for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
@@ -50,6 +50,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
 					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
 				}
+			}
+		}
+
+		public void Reset()
+		{
+			PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
+
+			int width = pp.BackBufferWidth;
+			int height = pp.BackBufferHeight;
+
+			DicTile2DByTileset.Clear();
+			screenShadows = new RenderTarget2D(GameScreen.GraphicsDevice, width, height);
+
+			quadRender = new QuadRenderComponent(GameScreen.GraphicsDevice);
+			quadRender.LoadContent();
+			shadowmapResolver = new ShadowmapResolver(GameScreen.GraphicsDevice, quadRender, ShadowmapSizes.Size256, ShadowmapSizes.Size1024);
+			shadowmapResolver.LoadContent(Map.Content);
+
+			for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+			{
+				CreateMap(Map, Map.LayerManager.ListLayer[L], null);
 			}
 		}
 
@@ -90,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 			g.Begin(SpriteSortMode.Immediate, BlendState.Additive);
 			foreach (BattleMapLight ActiveLight in Map.ListLight)
 			{
-				g.Draw(screenShadows, new Vector2(), Color.FromNonPremultiplied(255, 255, 255, 127));
+				g.Draw(screenShadows, new Vector2(), Color.FromNonPremultiplied(255, 255, 255, 255));
 			}
 			g.End();
 		}

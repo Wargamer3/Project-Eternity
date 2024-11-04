@@ -65,6 +65,11 @@ namespace ProjectEternity.Editors.AdventureEditor
             OnCreateControl();
         }
 
+        public void Reset()
+        {
+
+        }
+
         private void Update(GameTime gameTime)
         {
             Matrix Projection = Matrix.CreateOrthographicOffCenter(

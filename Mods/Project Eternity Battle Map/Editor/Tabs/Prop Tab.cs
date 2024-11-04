@@ -183,17 +183,31 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void TabOnMouseUp(MouseEventArgs e)
         {
+            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+
+            if (e.Button == MouseButtons.Left)
+            {
+                HandleProps(GridX, GridY);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                RemoveProps(GridX, GridY);
+            }
         }
 
         public void OnMouseMove(MouseEventArgs e)
         {
+            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+
             if (e.Button == MouseButtons.Left)
             {
-                HandleProps(e.X, e.Y);
+                HandleProps(GridX, GridY);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                RemoveProps(e.X, e.Y);
+                RemoveProps(GridX, GridY);
             }
         }
 

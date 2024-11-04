@@ -175,22 +175,12 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.IsEditor = true;
             NewMap.ListGameScreen = new List<GameScreens.GameScreen>();
             NewMap.Content = BattleMapViewer.content;
-            Helper.InitMap();
             ListTab = Helper.GetEditorTabs();
 
             foreach (IMapEditorTab ActiveTab in ListTab)
             {
                 ActiveTab.BattleMapViewer = BattleMapViewer;
                 tabToolBox.TabPages.Add(ActiveTab.InitTab(mnuToolBar));
-            }
-
-            ActiveMap.TogglePreview(true);
-
-            BattleMapViewer.Helper = Helper;
-
-            foreach (IMapEditorTab ActiveTab in ListTab)
-            {
-                ActiveTab.Helper = Helper;
             }
         }
 
@@ -346,9 +336,9 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.Camera2DPosition.Z);
 
             ActiveMap.CursorPosition.X = (int)Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * ActiveMap.TileSize.X, (e.X + MapPreviewStartingPos.X)));
-            ActiveMap.CursorPosition.Y = (int)Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * ActiveMap.TileSize.Y, (e.Y + MapPreviewStartingPos.Y)));
-            ActiveMap.CursorPosition.X = (int)Math.Floor(ActiveMap.CursorPosition.X / ActiveMap.TileSize.X) * ActiveMap.TileSize.X;
-            ActiveMap.CursorPosition.Y = (int)Math.Floor(ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y;
+            ActiveMap.CursorPosition.Y = (int)Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * ActiveMap.TileSize.Y, (e.Y +  MapPreviewStartingPos.Y)));
+            ActiveMap.CursorPosition.X = (int)Math.Floor(ActiveMap.CursorPosition.X / ActiveMap.TileSize.X) * ActiveMap.TileSize.X + ActiveMap.TileSize.X / 2;
+            ActiveMap.CursorPosition.Y = (int)Math.Floor(ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y + ActiveMap.TileSize.Y / 2;
 
             DrawInfo();
 
@@ -520,6 +510,18 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (BattleMapViewer.ActiveMap == null)
                 return;
+
+            BattleMapViewer.Reset();
+            Helper.InitMap();
+
+            ActiveMap.TogglePreview(true);
+
+            BattleMapViewer.Helper = Helper;
+
+            foreach (IMapEditorTab ActiveTab in ListTab)
+            {
+                ActiveTab.Helper = Helper;
+            }
 
             BattleMapViewer.RefreshScrollbars();
 

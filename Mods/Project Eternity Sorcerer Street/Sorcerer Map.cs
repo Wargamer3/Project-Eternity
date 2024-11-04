@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly List<string> ListTerrainType = new List<string>();
         public LayerHolderSorcererStreet LayerManager;
         public List<TerrainSorcererStreet> ListPassedTerrein = new List<TerrainSorcererStreet>();
-        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;//Temporary obstacles
+        public Dictionary<Vector3, TerrainSorcererStreet> DicTemporaryTerrain;//Temporary obstacles
 
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
@@ -119,6 +119,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Params = SorcererStreetParams = Params;
 
             GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
+
+            DicTemporaryTerrain = new Dictionary<Vector3, TerrainSorcererStreet>();
 
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolderSorcererStreet(this);
@@ -484,16 +486,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ActiveTeam.TotalMagic = ActivePlayer.Gold;
 
-                for (int X = MapSize.X - 1; X >= 0; --X)
+                foreach (CreatureCard DefendingCreature in ListSummonedCreature)
                 {
-                    for (int Y = MapSize.Y - 1; Y >= 0; --Y)
+                    TerrainSorcererStreet ActiveTerrain = GetTerrain(DefendingCreature.GamePiece.Position);
+                    if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature == DefendingCreature)
                     {
-                        TerrainSorcererStreet ActiveTerrain = GetTerrain(X, Y, 0);
-                        if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature != null)
-                        {
-                            ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
-                            ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
-                        }
+                        ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                        ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
                     }
                 }
 
@@ -869,17 +868,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public TerrainSorcererStreet GetTerrain(Vector3 Position)
         {
+            Position = new Vector3((float)Math.Floor(Position.X / TileSize.X), (float)Math.Floor(Position.Y / TileSize.Y), (float)Math.Floor(Position.Z / LayerHeight));
+
+            if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
+            {
+                return null;
+            }
+
+            TerrainSorcererStreet TemporaryTerrain;
+            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            {
+                return TemporaryTerrain;
+            }
+
             return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
-        }
-
-        public TerrainSorcererStreet GetTerrain(int X, int Y, int LayerIndex)
-        {
-            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
-        }
-
-        public TerrainSorcererStreet GetTerrain(UnitMapComponent ActiveUnit)
-        {
-            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
         public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)

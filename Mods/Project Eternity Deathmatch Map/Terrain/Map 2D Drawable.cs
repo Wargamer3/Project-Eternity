@@ -143,6 +143,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Reset()
         {
             CreateMap(Map, Map.LayerManager);
+            Map.MapEnvironment.Reset();
         }
 
         public void CursorMoved()
@@ -265,15 +266,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            //Map.MapEnvironment.Draw(g);
+            Map.MapEnvironment.Draw(g);
 
             g.End();
 
-            DrawMap(g);
+            //DrawMap(g);
 
             g.Begin();
 
-            //Map.MapEnvironment.EndDraw(g);
+            Map.MapEnvironment.EndDraw(g);
 
             DrawItems(g);
 

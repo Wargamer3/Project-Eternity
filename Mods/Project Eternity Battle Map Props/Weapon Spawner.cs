@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsUsed = false;
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
         }
 

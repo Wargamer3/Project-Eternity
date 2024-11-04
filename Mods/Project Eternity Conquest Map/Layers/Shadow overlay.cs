@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
 			quadRender = new QuadRenderComponent(GameScreen.GraphicsDevice);
 			quadRender.LoadContent();
-			shadowmapResolver = new ShadowmapResolver(GameScreen.GraphicsDevice, quadRender, ShadowmapSize.Size256, ShadowmapSize.Size1024);
+			shadowmapResolver = new ShadowmapResolver(GameScreen.GraphicsDevice, quadRender, ShadowmapSizes.Size256, ShadowmapSizes.Size1024);
 			shadowmapResolver.LoadContent(Map.Content);
 
 			for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)

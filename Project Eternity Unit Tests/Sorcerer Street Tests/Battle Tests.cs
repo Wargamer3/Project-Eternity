@@ -31,7 +31,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.AddPlayer(DummyPlayer1);
             DummyMap.AddPlayer(DummyPlayer2);
 
-            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece);
+            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece.Position);
             DummyTerrain.DefendingCreature = DummyDefenderCard;
             DummyTerrain.PlayerOwner = DummyPlayer2;
 
@@ -60,7 +60,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.AddPlayer(DummyPlayer1);
             DummyMap.AddPlayer(DummyPlayer2);
 
-            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece);
+            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece.Position);
             DummyTerrain.DefendingCreature = DummyDefenderCard;
             DummyTerrain.PlayerOwner = DummyPlayer2;
 

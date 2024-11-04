@@ -58,6 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Name = string.Empty;
             Description = string.Empty;
             AttackAnimationPath = "Sorcerer Street/New Item";
+            GamePiece = new SorcererStreetUnit();
         }
 
         public CreatureCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
@@ -217,6 +218,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListActiveSkill = new List<BaseAutomaticSkill>();
             }
 
+            GamePiece = new SorcererStreetUnit();
             sprCard = Clone.sprCard;
             if (Clone.GamePiece.Unit3DModel != null)
             {

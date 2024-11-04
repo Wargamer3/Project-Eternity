@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _ReplacementTerrain = null;
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
         }
 

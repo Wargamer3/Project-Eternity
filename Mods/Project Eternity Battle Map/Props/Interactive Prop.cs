@@ -42,9 +42,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public abstract void Load(ContentManager Content);
+        public abstract void LoadPreset(ContentManager Content);
 
-        public InteractiveProp LoadCopy(BinaryReader BR, int LayerIndex)
+        public InteractiveProp LoadCopy(BinaryReader BR, int LayerIndex) //Load In Game
         {
             InteractiveProp NewProp = Copy();
 

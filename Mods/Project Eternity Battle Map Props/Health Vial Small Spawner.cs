@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
             if (Content != null)
             {

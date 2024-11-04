@@ -249,19 +249,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawString(Map.fntMenuText, "P", new Vector2(Map.ListPlayer[P].GamePiece.X * Map.TileSize.X + 2, Map.ListPlayer[P].GamePiece.Y * Map.TileSize.Y), Color.Red);
             }
 
-            for (int X = MapSize.X - 1; X >= 0; --X)
+            foreach (CreatureCard DefendingCreature in Map.ListSummonedCreature)
             {
-                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
-                {
-                    if (Map.GetTerrain(X, Y, 0).DefendingCreature != null)
-                    {
-                        g.Draw(GameScreen.sprPixel,
-                            new Rectangle((int)X * Map.TileSize.X + 16, (int)Y * Map.TileSize.Y,
-                            Map.TileSize.X / 2, Map.TileSize.Y / 2), Color.FromNonPremultiplied(127, 127, 127, 127));
+                g.Draw(GameScreen.sprPixel,
+                    new Rectangle((int)DefendingCreature.GamePiece.X, (int)DefendingCreature.GamePiece.Y,
+                    Map.TileSize.X / 2, Map.TileSize.Y / 2), Color.FromNonPremultiplied(127, 127, 127, 127));
 
-                        g.DrawString(Map.fntMenuText, "C", new Vector2(X * Map.TileSize.X + 2 + 16, Y * Map.TileSize.Y), Color.Red);
-                    }
-                }
+                g.DrawString(Map.fntMenuText, "C", new Vector2(DefendingCreature.GamePiece.X + 2 + 16, DefendingCreature.GamePiece.Y), Color.Red);
             }
         }
 

@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 			}
 		}
 
-        public void Reset()
+        public virtual void Reset()
         {
             DicTile2DByTileset.Clear();
             DicTile2DByLayerByTileset.Clear();

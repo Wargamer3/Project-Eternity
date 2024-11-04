@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override void Draw()
         {
             Thread.Sleep(33);
-            if (ActiveMap != null)
+            if (ActiveMap != null && ActiveMap.IsInit)
             {
                 double elapsed = Timer.Elapsed.TotalSeconds;
                 Timer.Restart();

@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Platform = new BattleMapPlatform();
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
         }
 

@@ -447,6 +447,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Graphics",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Conquest Building Editor", "Editors\Project Eternity Conquest Building Editor\Project Eternity Conquest Building Editor.csproj", "{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Battle Map AI", "Mods\Project Eternity Battle Map AI\Project Eternity Battle Map AI.csproj", "{D30DF395-1510-466D-8299-BD2168A50390}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -894,6 +896,9 @@ Global
 		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Debug|x86.ActiveCfg = Debug|x86
 		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Debug|x86.Build.0 = Debug|x86
 		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8}.Release|x86.ActiveCfg = Release|x86
+		{D30DF395-1510-466D-8299-BD2168A50390}.Debug|x86.ActiveCfg = Debug|x86
+		{D30DF395-1510-466D-8299-BD2168A50390}.Debug|x86.Build.0 = Debug|x86
+		{D30DF395-1510-466D-8299-BD2168A50390}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1013,6 +1018,7 @@ Global
 		{EBCAC523-FE03-4CBA-B729-FAFBE9E22E9C} = {B7DECFC1-4C7D-41F1-B151-91C9734B5216}
 		{6F5B12C0-09A2-43F8-B564-8786ADE58E59} = {DDBEFB7A-32E0-4FF3-BE92-66E31BE553D1}
 		{0B790036-3DCB-4F54-BBE4-AE3220D33AC8} = {F774D98B-8C76-48C4-BD9A-AFB29F5E728C}
+		{D30DF395-1510-466D-8299-BD2168A50390} = {C3D7FA27-03E1-44B0-ADF9-1FE00A076CD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDDE4437-1061-4E3A-8C8F-A1F2AA9F76A8}

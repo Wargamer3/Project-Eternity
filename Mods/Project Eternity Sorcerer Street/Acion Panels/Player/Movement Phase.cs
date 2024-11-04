@@ -194,7 +194,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
-            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.GamePiece.Direction);
+            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, PlayerPosition, ActivePlayer.GamePiece.Direction);
 
             if (DicNextTerrain.Count == 1)
             {
@@ -233,25 +233,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private static Dictionary<float, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, int ActiveTerrainX, int ActiveTerrainY, int LayerIndex, float PlayerDirection)
+        private static Dictionary<float, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, Vector3 CurrentPosition, float PlayerDirection)
         {
             Dictionary<float, TerrainSorcererStreet> DicNextTerrain = new Dictionary<float, TerrainSorcererStreet>();
 
-            if (ActiveTerrainY - 1 >= 0)
+            if (CurrentPosition.Y - Map.TileSize.Y >= 0)
             {
-                DicNextTerrain.Add(DirectionUp, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY - 1, LayerIndex));
+                DicNextTerrain.Add(DirectionUp, Map.GetTerrain(new Vector3(CurrentPosition.X, CurrentPosition.Y - Map.TileSize.Y, CurrentPosition.Z)));
             }
-            if (ActiveTerrainY + 1 < Map.MapSize.Y)
+            if (CurrentPosition.Y + Map.TileSize.Y < Map.MapSize.Y)
             {
-                DicNextTerrain.Add(DirectionDown, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY + 1, LayerIndex));
+                DicNextTerrain.Add(DirectionDown, Map.GetTerrain(new Vector3(CurrentPosition.X, CurrentPosition.Y + Map.TileSize.Y, CurrentPosition.Z)));
             }
-            if (ActiveTerrainX - 1 >= 0)
+            if (CurrentPosition.X - Map.TileSize.X >= 0)
             {
-                DicNextTerrain.Add(DirectionLeft, Map.GetTerrain(ActiveTerrainX - 1, ActiveTerrainY, LayerIndex));
+                DicNextTerrain.Add(DirectionLeft, Map.GetTerrain(new Vector3(CurrentPosition.X - Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)));
             }
-            if (ActiveTerrainX + 1 < Map.MapSize.X)
+            if (CurrentPosition.X + Map.TileSize.X < Map.MapSize.X)
             {
-                DicNextTerrain.Add(DirectionRight, Map.GetTerrain(ActiveTerrainX + 1, ActiveTerrainY, LayerIndex));
+                DicNextTerrain.Add(DirectionRight, Map.GetTerrain(new Vector3(CurrentPosition.X + Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)));
             }
 
             float[] TerrainDirections = DicNextTerrain.Keys.ToArray();

@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int PosX = RandomHelper.Random.Next(Map.MapSize.X);
                 int PosY = RandomHelper.Random.Next(Map.MapSize.Y);
                 HealthCrate NewCrate = new HealthCrate(new Vector3(5, 10, 0), Map);
-                NewCrate.Load(Map.Content);
+                NewCrate.LoadPreset(Map.Content);
                 Map.LayerManager[0].ListProp.Add(NewCrate);
                 IsEnded = true;
             }
@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ForceHealOnStop = false;
                 }
 
-                public override void Load(ContentManager Content)
+                public override void LoadPreset(ContentManager Content)
                 {
                     sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
                     Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprCrate, 1);

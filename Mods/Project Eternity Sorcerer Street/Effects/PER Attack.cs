@@ -363,7 +363,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DamageTemporaryTerrain(Vector3 Position)
         {
-            Terrain TemporaryTerrain;
+            TerrainSorcererStreet TemporaryTerrain;
 
             if (Map.DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
             {

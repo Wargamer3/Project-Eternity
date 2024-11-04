@@ -80,7 +80,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             SorcererStreetBattleParams BattleParams = new SorcererStreetBattleParams(DummyMap.GlobalSorcererStreetBattleContext);
 
-            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece);
+            TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece.Position);
             DummyTerrain.DefendingCreature = DummyDefenderCard;
             DummyTerrain.PlayerOwner = DummyPlayer2;
 

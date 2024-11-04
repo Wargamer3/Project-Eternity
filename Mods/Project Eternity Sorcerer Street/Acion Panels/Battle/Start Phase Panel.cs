@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
                 Map.GlobalSorcererStreetBattleContext.CurrentTurn = Map.GameTurn;
 
-                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
+                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
 
                 Map.GlobalSorcererStreetBattleContext.Invader.Creature = Invader;
                 Map.GlobalSorcererStreetBattleContext.Defender.Creature = ActiveTerrain.DefendingCreature;

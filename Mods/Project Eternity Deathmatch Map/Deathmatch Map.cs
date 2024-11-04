@@ -409,7 +409,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (KeyValuePair<string, InteractiveProp> ActiveProp in InteractiveProp.LoadFromAssemblyFiles(Directory.GetFiles("Props/Deathmatch Map", "*.dll"), this))
             {
-                ActiveProp.Value.Load(Content);
+                ActiveProp.Value.LoadPreset(Content);
                 DicInteractiveProp.Add(ActiveProp.Value.PropName, ActiveProp.Value);
             }
         }

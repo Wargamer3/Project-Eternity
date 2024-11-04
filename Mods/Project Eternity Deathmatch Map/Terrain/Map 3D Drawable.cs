@@ -333,7 +333,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else
                 {
-                    SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * Map.LayerHeight, Map.TileSize.Y * Map.CursorPositionVisible.Y));
+                    SetTarget(new Vector3(Map.CursorPositionVisible.X, Map.CursorPosition.Z, Map.CursorPositionVisible.Y));
                 }
 
                 Camera.Update(gameTime);

@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActivePlayerIndex = ActivePlayerIndex;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
-            ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
+            ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
         }
 
         public override void OnSelect()

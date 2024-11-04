@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Acion_Panels
         {
             int BoardX = 0;
             int BoardY = 0;
-            Map.GetTerrain(BoardX, BoardY, 0);
+            Map.GetTerrain(Map.CursorPosition);
         }
 
         protected override void OnCancelPanel()

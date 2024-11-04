@@ -183,6 +183,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DrawPlayers(CustomSpriteBatch g)
         {
+            DrawY = 120;
             Matrix View = Matrix.Identity;
             for (int P = 0; P < Math.Max(Room.ListRoomPlayer.Count, Room.MaxNumberOfPlayer); P++)
             {

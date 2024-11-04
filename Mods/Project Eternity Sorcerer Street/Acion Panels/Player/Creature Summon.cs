@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void PlaceCreature()
         {
-            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
+            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
 
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
             ActiveTerrain.DefendingCreature = SelectedCard;

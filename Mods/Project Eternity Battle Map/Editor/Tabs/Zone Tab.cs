@@ -125,6 +125,10 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void OnMapLoaded()
         {
+            for (int Z = 0; Z < ActiveMap.MapEnvironment.ListMapZone.Count; Z++)
+            {
+                lsZones.Items.Add("Zone");
+            }
         }
 
         public bool TabProcessCmdKey(ref Message msg, Keys keyData)

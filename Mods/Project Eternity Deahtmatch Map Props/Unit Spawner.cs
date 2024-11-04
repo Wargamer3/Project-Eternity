@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _SpawnCharacter = new string[0];
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
             if (Content != null)
             {

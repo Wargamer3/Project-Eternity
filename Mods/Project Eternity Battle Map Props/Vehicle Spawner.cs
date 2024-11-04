@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _VehiclePath = string.Empty;
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
             if (Content != null)
             {
@@ -204,6 +204,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return NewProp;
         }
 
+        #region Properties
+
         [Editor(typeof(VehicleSelector), typeof(UITypeEditor)),
         CategoryAttribute("Platform"),
         DescriptionAttribute("The vehicle path."),
@@ -296,5 +298,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 _Roll = MathHelper.ToRadians(value);
             }
         }
+
+        #endregion
     }
 }

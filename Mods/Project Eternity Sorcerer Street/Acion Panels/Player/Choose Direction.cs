@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (TerrainSorcererStreet ActiveTerrain in DicNextTerrain.Values)
             {
                 List<MovementAlgorithmTile> ListArrow = new List<MovementAlgorithmTile>();
-                ListArrow.Add(Map.GetTerrain(ActivePlayer.GamePiece));
+                ListArrow.Add(Map.GetTerrain(ActivePlayer.GamePiece.Position));
 
                 ListArrow.Add(ActiveTerrain);
                 ListPath.Add(ListArrow);
@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (TerrainSorcererStreet ActiveTerrain in DicNextTerrain.Values)
             {
                 List<MovementAlgorithmTile> ListArrow = new List<MovementAlgorithmTile>();
-                ListArrow.Add(Map.GetTerrain(ActivePlayer.GamePiece));
+                ListArrow.Add(Map.GetTerrain(ActivePlayer.GamePiece.Position));
 
                 ListArrow.Add(ActiveTerrain);
                 ListPath.Add(ListArrow);

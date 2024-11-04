@@ -19,20 +19,23 @@ seconds(Switch) or transition smoothly from one color to the next(Pulse).*/
         public Vector3 Position;
         public Color PrimaryColor;
         public Color SecondaryColor;
-        public float Speed;//Select the speed of the light transitions.
-        public float Phase;//Select the cycle speed of the transitions.
+        public float TransitionsSpeed;//Select the speed of the light transitions.
+        public float TransitionsPhase;//Select the cycle speed of the transitions.
 
-        public float Angle;
         public float Size;
+        public bool CastShadows;
+
+        public string AIPath;
         public AIContainer AI;
 
-        public bool CastShadows;
         public RenderTarget2D RenderTarget;
 
-        public BattleMapLight(GraphicsDevice graphicsDevice, ShadowmapSize size, Vector3 Position, Color PrimaryColor)
+        public BattleMapLight(GraphicsDevice graphicsDevice, ShadowmapSizes size, Vector3 Position, Color PrimaryColor)
         {
             this.Position = Position;
             this.PrimaryColor = PrimaryColor;
+
+            AIPath = string.Empty;
 
             int baseSize = 2 << (int)size;
             Size = baseSize;
@@ -68,7 +71,7 @@ seconds(Switch) or transition smoothly from one color to the next(Pulse).*/
 
         }
     }
-    public enum ShadowmapSize
+    public enum ShadowmapSizes
     {
         Size128 = 6,
         Size256 = 7,
@@ -103,7 +106,7 @@ seconds(Switch) or transition smoothly from one color to the next(Pulse).*/
         /// <param name="graphicsDevice">The Graphics Device used by the XNA game</param>
         /// <param name="quadRender"></param>
         /// <param name="baseSize">The size of the light regions </param>
-        public ShadowmapResolver(GraphicsDevice graphicsDevice, QuadRenderComponent quadRender, ShadowmapSize maxShadowmapSize, ShadowmapSize maxDepthBufferSize)
+        public ShadowmapResolver(GraphicsDevice graphicsDevice, QuadRenderComponent quadRender, ShadowmapSizes maxShadowmapSize, ShadowmapSizes maxDepthBufferSize)
         {
             this.graphicsDevice = graphicsDevice;
             this.quadRender = quadRender;

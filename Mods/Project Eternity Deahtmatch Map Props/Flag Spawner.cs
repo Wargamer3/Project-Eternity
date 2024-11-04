@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
         }
 

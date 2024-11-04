@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Owner.TimeOfDayColor);
+            g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, g.GraphicsDevice.PresentationParameters.BackBufferWidth, g.GraphicsDevice.PresentationParameters.BackBufferHeight), Owner.TimeOfDayColor);
         }
 
         public void EndDraw(CustomSpriteBatch g)

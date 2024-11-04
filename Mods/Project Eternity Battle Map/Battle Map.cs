@@ -632,7 +632,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, InteractiveProp> BattleMapInteractiveProp = InteractiveProp.LoadProps(this);
             foreach (InteractiveProp ActiveProp in BattleMapInteractiveProp.Values)
             {
-                ActiveProp.Load(Content);
+                ActiveProp.LoadPreset(Content);
                 DicInteractiveProp.Add(ActiveProp.PropName, ActiveProp);
             }
         }

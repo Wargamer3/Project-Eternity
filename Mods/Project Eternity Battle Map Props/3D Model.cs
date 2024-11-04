@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Scale = Vector3.One;
         }
 
-        public override void Load(ContentManager Content)
+        public override void LoadPreset(ContentManager Content)
         {
         }
 

@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.Defender.Owner.Gold -= Map.GlobalSorcererStreetBattleContext.Defender.Item.MagicCost;
             }
 
-            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.Invader.Owner.GamePiece);
+            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.Invader.Owner.GamePiece.Position);
 
             ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader.Creature;
             ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.Invader.Owner;

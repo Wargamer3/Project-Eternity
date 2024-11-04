@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public override void Update(GameTime gameTime)
             {
                 WeaponPickup NewWeapon = new WeaponPickup(Map, WeaponName, SpritePath, RespawnTime, _Ammo, _Position);
-                NewWeapon.Load(Map.Content);
+                NewWeapon.LoadPreset(Map.Content);
                 Map.LayerManager[0].ListProp.Add(NewWeapon);
                 IsEnded = true;
             }
@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     IsUsed = false;
                 }
 
-                public override void Load(ContentManager Content)
+                public override void LoadPreset(ContentManager Content)
                 {
                     if (!string.IsNullOrEmpty(SpritePath))
                     {
