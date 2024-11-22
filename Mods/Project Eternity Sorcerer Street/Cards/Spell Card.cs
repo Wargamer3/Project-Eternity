@@ -123,6 +123,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override ActionPanelSorcererStreet ActivateOnMap(SorcererStreetMap Map, int ActivePlayerIndex)
+        {
+            Spell.ActiveSkillFromMenu();
+            return null;
+        }
+
         public override List<Texture2D> GetIcons(CardSymbols Symbols)
         {
             switch (SpellType)

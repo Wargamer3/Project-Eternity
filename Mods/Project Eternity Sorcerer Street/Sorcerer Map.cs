@@ -49,6 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprEndTurn;
         public Texture2D sprReturn;
         public Texture2D sprSuspend;
+        public Texture2D sprCheat;
 
         public Texture2D sprVS;
 
@@ -128,6 +129,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicTeam = new Dictionary<int, Team>();
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
+            ListDelayedAttack = new List<DelayedAttack>();
+            ListPERAttack = new List<PERAttack>();
 
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
@@ -258,6 +261,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
                 sprReturn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Return");
                 sprSuspend = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Suspend");
+                sprCheat = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Cheat");
 
                 sprPortraitStart = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Portrait Start");
                 sprPortraitMiddle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Portrait Middle");

@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Card.Init();
             MenuHelper.Init(Content);
             CardSymbols.Load(Content);
+            IconHolder.Load(Content);
         }
 
         protected override void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)

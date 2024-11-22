@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class EditBookCardListFilterScreen : GameScreen
     {
-        public enum Filters { Creatures, Neutral, Fire, Water, Earth, Air, Dual, Item, EnchantPlayer, EnchantCreature, }
+        public enum Filters { All, Creatures, Neutral, Fire, Water, Earth, Air, Dual, Item, EnchantPlayer, EnchantCreature, }
 
         #region Ressources
 
@@ -70,6 +70,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             switch (Filter)
             {
+                case Filters.All:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    {
+                        if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                        {
+                            CursorIndex = ListFilteredCard.Count;
+                        }
+
+                        ListFilteredCard.Add(ActiveCard);
+                    }
+                    break;
+
                 #region Creatures
 
                 case Filters.Creatures:
@@ -361,6 +373,59 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputUpPressed())
             {
                 CursorIndex -= CardsPerLine;
+                if (CursorIndex < 0)
+                {
+                    if ((CursorIndex + CardsPerLine) % CardsPerLine >= ListFilteredCard.Count % CardsPerLine)
+                    {
+                        CursorIndex = (ListFilteredCard.Count / CardsPerLine - 1) * CardsPerLine + (CursorIndex + CardsPerLine) % CardsPerLine;
+                    }
+                    else
+                    {
+                        CursorIndex = (ListFilteredCard.Count / CardsPerLine) * CardsPerLine + (CursorIndex + CardsPerLine) % CardsPerLine;
+                    }
+                }
+
+                int CursorY = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+
+                if (CursorY < ScrollbarIndex)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+                }
+                else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
+                }
+            }
+            else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+            {
+                if (CursorIndex + CardsPerLine >= ListFilteredCard.Count)
+                {
+                    CursorIndex = CursorIndex % CardsPerLine;
+                }
+                else
+                {
+                    CursorIndex += CardsPerLine * 7;
+
+                    if (CursorIndex > ListFilteredCard.Count)
+                    {
+                        CursorIndex -= CardsPerLine;
+                    }
+                }
+
+                int CursorY = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+
+                if (CursorY < ScrollbarIndex)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+                }
+                else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
+                }
+            }
+            else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Q))
+            {
+                CursorIndex -= CardsPerLine * 7;
                 if (CursorIndex < 0)
                 {
                     if ((CursorIndex + CardsPerLine) % CardsPerLine >= ListFilteredCard.Count % CardsPerLine)

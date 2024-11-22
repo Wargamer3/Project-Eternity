@@ -95,6 +95,11 @@ namespace ProjectEternity.Core.Units
             effectViewParameter.SetValue(View);
         }
 
+        public void SetScale(Vector2 Scale)
+        {
+            parameters["Size"].SetValue(Scale);
+        }
+
         public void SetPosition(float X, float Y, float Z)
         {
             Vector3 Position = new Vector3(X, Y, Z);

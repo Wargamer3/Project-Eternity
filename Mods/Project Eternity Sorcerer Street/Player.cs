@@ -17,11 +17,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             public bool Backward;
             public bool Blackout;
+            public int DiceValue;
+            public PlayerAbilities()
+            {
+                Backward = false;
+                Blackout = false;
+                DiceValue = -1;
+            }
 
             public PlayerAbilities(PlayerAbilities Other)
             {
                 Backward = Other.Backward;
                 Blackout = Other.Blackout;
+                DiceValue = Other.DiceValue;
             }
         }
 
@@ -34,12 +42,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int Gold;
         public int CompletedLaps;
 
-        private PlayerAbilities Abilities;
+        private PlayerAbilities Abilities;//Base abilities that cannot be modified.
         private PlayerAbilities EnchantAbilities;//Based on Abilities
 
         private PlayerAbilities BattleAbilities;//Based on EnchantAbilities
 
-        public BaseAutomaticSkill Enchant;
+        public Enchant Enchant;
 
         public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
         public Dictionary<ElementalAffinity, int> DicOwnedSymbols;
@@ -63,6 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
             ListCreatureOnBoard = new List<SorcererStreetUnit>();
+
             Init();
         }
 
@@ -123,6 +132,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
             ListCreatureOnBoard = new List<SorcererStreetUnit>();
+
             Init();
         }
 
@@ -145,6 +155,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
             ListCreatureOnBoard = new List<SorcererStreetUnit>();
+
             Init();
             FillDeck(Params);
             Refill();
@@ -152,6 +163,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void Init()
         {
+            Abilities = new PlayerAbilities();
+            EnchantAbilities = new PlayerAbilities();
+            BattleAbilities = new PlayerAbilities();
+
             DicOwnedSymbols = new Dictionary<ElementalAffinity, int>();
             DicOwnedSymbols.Add(ElementalAffinity.Air, 0);
             DicOwnedSymbols.Add(ElementalAffinity.Earth, 0);
@@ -311,15 +326,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public void ClearAbilities()
+        {
+            EnchantAbilities = null;
+            BattleAbilities = null;
+        }
+
         public PlayerAbilities GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases EffectActivationPhase)
         {
             if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Enchant)
             {
+                if (EnchantAbilities == null)
+                {
+                    EnchantAbilities = new PlayerAbilities(Abilities);
+                }
                 return EnchantAbilities;
             }
             else if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Battle)
             {
-                return EnchantAbilities;
+                if (BattleAbilities == null)
+                {
+                    BattleAbilities = new PlayerAbilities(Abilities);
+                }
+                return BattleAbilities;
             }
 
             return Abilities;

@@ -427,9 +427,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.ActivePlatform !=null)
             {
-                Visible3DPosition = new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X * Map.ActivePlatform.Map.TileSize.X,
-                    Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z * Map.LayerHeight,
-                    Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y * Map.ActivePlatform.Map.TileSize.Y);
+                Visible3DPosition = new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
+                    Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z,
+                    Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y);
             }
 
             Vector3 Position2D = GameScreen.GraphicsDevice.Viewport.Project(Visible3DPosition, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);

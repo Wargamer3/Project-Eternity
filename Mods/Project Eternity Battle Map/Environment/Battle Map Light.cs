@@ -71,6 +71,7 @@ seconds(Switch) or transition smoothly from one color to the next(Pulse).*/
 
         }
     }
+
     public enum ShadowmapSizes
     {
         Size128 = 6,

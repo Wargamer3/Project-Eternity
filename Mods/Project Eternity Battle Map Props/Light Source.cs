@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsUsed = false;
 
             sprFlag = Clone.sprFlag;
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, Clone.sprFlag, 1);
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Clone.Unit3D.UnitEffect3D, Clone.sprFlag, 1);
 
             Light = new BattleMapLight(GameScreen.GraphicsDevice, ShadowmapSizes.Size256, new Vector3(200, 200, 0), Color.Red);
             Map.ListLight.Add(Light);

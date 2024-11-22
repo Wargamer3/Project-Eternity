@@ -1,4 +1,5 @@
 ﻿using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -22,6 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
+            ActiveSkill.ListEffect[0].ExecuteEffect();
         }
 
         public override ManualSkillTarget Copy()

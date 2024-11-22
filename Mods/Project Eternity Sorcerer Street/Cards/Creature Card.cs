@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private CardAbilities BattleAbilities;//Based on EnchantAbilities
 
-        public BaseAutomaticSkill Enchant;
+        public Enchant Enchant;
 
         public CreatureCard(string Path)
             : base(Path, CreatureCardType)

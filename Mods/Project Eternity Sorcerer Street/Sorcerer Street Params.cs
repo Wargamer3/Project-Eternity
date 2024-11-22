@@ -185,12 +185,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Invader.Owner.Enchant != null)
             {
-                List<BaseSkillActivation> ListEnchantActivation = Invader.Owner.Enchant.GetAvailableActivation(RequirementName);
+                List<BaseSkillActivation> ListEnchantActivation = Invader.Owner.Enchant.Skill.GetAvailableActivation(RequirementName);
                 if (ListEnchantActivation.Count > 0)
                 {
                     if (ListEnchantActivation != null && ListEnchantActivation.Count > 0)
                     {
-                        DicSkillActivation.Add(Invader.Owner.Enchant, ListEnchantActivation);
+                        DicSkillActivation.Add(Invader.Owner.Enchant.Skill, ListEnchantActivation);
                     }
                 }
             }

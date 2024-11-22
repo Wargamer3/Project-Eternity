@@ -28,6 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetUnit()
         {
             Direction = DirectionDown;
+            Effects = new EffectHolder();
         }
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)

@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new BackwardEffect(Params));
+            Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].Enchant = EnchantHelper.CreateEnchant(Name, new BackwardEffect(Params));
             return "Backward";
         }
 

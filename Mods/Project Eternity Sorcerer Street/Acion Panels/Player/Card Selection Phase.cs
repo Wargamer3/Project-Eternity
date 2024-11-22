@@ -146,10 +146,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Spin card to card view screen
                 AddToPanelListAndSelect(NextPanel);
             }
-            else
-            {
-                RemoveFromPanelList(this);
-            }
         }
 
         public virtual void OnEndCardSelected()

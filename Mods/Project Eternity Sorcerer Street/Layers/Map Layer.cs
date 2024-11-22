@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, _Depth);
                     ArrayTerrain[X, Y].Owner = Map;
-                    ArrayTerrain[X, Y].WorldPosition.Z = LayerIndex;
+                    ArrayTerrain[X, Y].WorldPosition.Z = (ArrayTerrain[X, Y].Height + LayerIndex) * Map.LayerHeight;
                 }
             }
 
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     ArrayTerrain[X, Y].Owner = Map;
                     ArrayTerrain[X, Y].Height = Height;
-                    ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
+                    ArrayTerrain[X, Y].WorldPosition.Z = (ArrayTerrain[X, Y].Height + LayerIndex) * Map.LayerHeight;
                 }
             }
 

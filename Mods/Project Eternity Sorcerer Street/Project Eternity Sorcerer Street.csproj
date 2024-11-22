@@ -77,6 +77,7 @@
     <Compile Include="Acion Panels\PER Attack\PER Attack Pahtfinding.cs" />
     <Compile Include="Acion Panels\PER Attack\Update PER Attacks.cs" />
     <Compile Include="Acion Panels\Player\Auto Move.cs" />
+    <Compile Include="Acion Panels\Player\Draw Any Card Phase.cs" />
     <Compile Include="Acion Panels\Player\Fall To Death.cs" />
     <Compile Include="Acion Panels\Player\Init Delayed MAP Attack.cs" />
     <Compile Include="Acion Panels\Player\Land Info.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Animation Damage Timeline.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Battle.cs" />
+    <Compile Include="Icon Holder.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Effects\Attack PER Context.cs" />
     <Compile Include="Effects\Attack PER Params.cs" />

@@ -174,7 +174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void MoveToNextTerrain()
         {
-            Vector3 FinalPosition = new Vector3(NextTerrain.GridPosition.X, NextTerrain.GridPosition.Y, NextTerrain.LayerIndex);
+            Vector3 FinalPosition = NextTerrain.WorldPosition + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0);
             Map.MovementAnimation.Add(ActivePlayer.GamePiece, ActivePlayer.GamePiece.Position, FinalPosition);
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
 
@@ -237,19 +237,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Dictionary<float, TerrainSorcererStreet> DicNextTerrain = new Dictionary<float, TerrainSorcererStreet>();
 
-            if (CurrentPosition.Y - Map.TileSize.Y >= 0)
+            if (Map.IsInsideMap(new Vector3(CurrentPosition.X, CurrentPosition.Y - Map.TileSize.Y, CurrentPosition.Z)))
             {
                 DicNextTerrain.Add(DirectionUp, Map.GetTerrain(new Vector3(CurrentPosition.X, CurrentPosition.Y - Map.TileSize.Y, CurrentPosition.Z)));
             }
-            if (CurrentPosition.Y + Map.TileSize.Y < Map.MapSize.Y)
+            if (Map.IsInsideMap(new Vector3(CurrentPosition.X, CurrentPosition.Y + Map.TileSize.Y, CurrentPosition.Z)))
             {
                 DicNextTerrain.Add(DirectionDown, Map.GetTerrain(new Vector3(CurrentPosition.X, CurrentPosition.Y + Map.TileSize.Y, CurrentPosition.Z)));
             }
-            if (CurrentPosition.X - Map.TileSize.X >= 0)
+            if (Map.IsInsideMap(new Vector3(CurrentPosition.X - Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)))
             {
                 DicNextTerrain.Add(DirectionLeft, Map.GetTerrain(new Vector3(CurrentPosition.X - Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)));
             }
-            if (CurrentPosition.X + Map.TileSize.X < Map.MapSize.X)
+            if (Map.IsInsideMap(new Vector3(CurrentPosition.X + Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)))
             {
                 DicNextTerrain.Add(DirectionRight, Map.GetTerrain(new Vector3(CurrentPosition.X + Map.TileSize.X, CurrentPosition.Y, CurrentPosition.Z)));
             }

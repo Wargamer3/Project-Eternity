@@ -11,6 +11,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class CardBook
     {
+        private static CardBook AllCardsBook;
+
         public string BookName;
         public string BookModel;
         public DateTime LastModification;
@@ -25,6 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int UniqueCreaturesNeutral;
         public int UniqueCreaturesFire;
         public int UniqueCreaturesWater;
+
         public int UniqueCreaturesEarth;
         public int UniqueCreaturesAir;
         public int UniqueCreaturesMulti;
@@ -184,6 +187,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             FS.Close();
 
             return NewBook;
+        }
+
+        internal static CardBook LoadGlobalBook()
+        {
+            if (AllCardsBook == null)
+            {
+                AllCardsBook = new CardBook("Global Book");
+
+                foreach (string ActiveCardsFolder in Directory.EnumerateDirectories(GameScreen.ContentFallback.RootDirectory + "/Sorcerer Street/", "* Cards"))
+                {
+                    foreach (string ActiveRootFolder in Directory.EnumerateDirectories(ActiveCardsFolder, "*", SearchOption.AllDirectories))
+                    {
+                        foreach (string ActiveGameFolder in Directory.EnumerateDirectories(ActiveRootFolder, "*", SearchOption.AllDirectories))
+                        {
+                            foreach (string ActiveFile in Directory.EnumerateFiles(ActiveGameFolder, "*.pec", SearchOption.AllDirectories))
+                            {
+                                Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
+                                    SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[string.Empty].DicManualSkillTarget);
+                                LoadedCard.QuantityOwned = 1;
+
+                                AllCardsBook.AddCard(LoadedCard);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return AllCardsBook;
         }
 
         public void Save(BinaryWriter BW)

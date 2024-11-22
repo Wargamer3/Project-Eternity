@@ -35,6 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AddChoiceToCurrentPanel(new ActionPanelOptions(Map));
             AddChoiceToCurrentPanel(new ActionPanelHelp(Map));
             AddChoiceToCurrentPanel(new ActionPanelSuspend(Map));
+            AddChoiceToCurrentPanel(new ActionPanelDrawAnyCardPhase(Map, ActivePlayerIndex));
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -99,6 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawCardMiniature(g, Map.sprOptions, CardColor, ActionMenuCursor == 2, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprHelp, CardColor, ActionMenuCursor == 3, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprSuspend, CardColor, ActionMenuCursor == 4, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprCheat, CardColor, ActionMenuCursor == 5, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
 
             MenuHelper.DrawFingerIcon(g, new Vector2(DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor, Constants.Height - Constants.Height / 6));
 

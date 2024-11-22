@@ -13,10 +13,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "Roll Dice";
 
         private int ActivePlayerIndex;
+        private Player ActivePlayer;
 
         private readonly Random Random;
         private readonly Vector2 DicePosition;
         private int VisibleDiceValue;
+        private int MaximumDiceValue;
+        private int ForcedDiceValue;
 
         public ActionPanelRollDicePhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -29,6 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
 
             Random = new Random();
             DicePosition = new Vector2(Constants.Width / 2, Constants.Height / 2);
@@ -37,11 +41,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             VisibleDiceValue = 0;
+            MaximumDiceValue = Map.HighestDieRoll;
+
+            EnchantHelper.ActivateOnPlayer(Map.GlobalSorcererStreetBattleContext, ActivePlayer, null, null);
+            ForcedDiceValue = ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValue;
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
+            if (ForcedDiceValue >= 0)
+            {
+                VisibleDiceValue = ForcedDiceValue;
+            }
+            else
+            {
+                VisibleDiceValue = Random.Next(0, MaximumDiceValue) + 1;
+            }
 
             if (InputHelper.InputConfirmPressed())
             {
@@ -56,13 +71,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void UpdatePassive(GameTime gameTime)
         {
-            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
+            if (ForcedDiceValue >= 0)
+            {
+                VisibleDiceValue = ForcedDiceValue;
+            }
+            else
+            {
+                VisibleDiceValue = Random.Next(0, MaximumDiceValue) + 1;
+            }
         }
 
         public void RollDice()
         {
-            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
-
             RemoveFromPanelList(this);
             AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
         }

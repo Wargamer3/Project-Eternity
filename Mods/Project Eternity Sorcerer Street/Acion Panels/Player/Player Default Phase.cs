@@ -42,6 +42,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     OnNewTurn(Map);
                 }
 
+                if (Map.ListPlayer[Map.ActivePlayerIndex].OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                {
+                    continue;
+                }
+
                 Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
                 UpdateProps(Map, Map.ActivePlayerIndex);
@@ -51,6 +56,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 foreach (Player ActivePlayer in Map.ListPlayer)
                 {
+                    if (ActivePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                    {
+                        continue;
+                    }
+
                     ActivePlayer.GamePiece.Effects.UpdateAllEffectsLifetime(SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
                 }
             }
@@ -69,6 +79,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (Player ActivePlayer in Map.ListPlayer)
             {
+                if (ActivePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                {
+                    continue;
+                }
+
                 ActivePlayer.GamePiece.StartTurn();
                 ActivePlayer.GamePiece.EndTurn();
             }

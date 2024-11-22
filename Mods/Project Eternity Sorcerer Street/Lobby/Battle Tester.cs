@@ -281,27 +281,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 BoostModifierPhaseButton, AttackPhaseButton, CounterPhaseButton, ResultPhaseButton,
             };
 
-            if (AllCardsBook == null)
-            {
-                ActiveBook = AllCardsBook = new CardBook();
-                foreach (string ActiveCardsFolder in Directory.EnumerateDirectories(GameScreen.ContentFallback.RootDirectory + "/Sorcerer Street/", "* Cards"))
-                {
-                    foreach (string ActiveRootFolder in Directory.EnumerateDirectories(ActiveCardsFolder, "*", SearchOption.AllDirectories))
-                    {
-                        foreach (string ActiveGameFolder in Directory.EnumerateDirectories(ActiveRootFolder, "*", SearchOption.AllDirectories))
-                        {
-                            foreach (string ActiveFile in Directory.EnumerateFiles(ActiveGameFolder, "*.pec", SearchOption.AllDirectories))
-                            {
-                                Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
-                                    SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[string.Empty].DicManualSkillTarget);
-                                LoadedCard.QuantityOwned = 1;
-
-                                ActiveBook.AddCard(LoadedCard);
-                            }
-                        }
-                    }
-                }
-            }
+            AllCardsBook = CardBook.LoadGlobalBook();
 
             Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value;
 

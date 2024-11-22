@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -42,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     ArrayTerrain[X, Y] = new Terrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, _Depth, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
                     ArrayTerrain[X, Y].Owner = Map;
-                    ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
+                    ArrayTerrain[X, Y].WorldPosition.Z = (ArrayTerrain[X, Y].Height + LayerIndex) * Map.LayerHeight;
                 }
             }
 

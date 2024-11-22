@@ -181,11 +181,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             return CursorMoved;
         }
-
+        
         public override Vector3 GetFinalPosition(Vector3 WorldPosition)
         {
             int GridX = (int)WorldPosition.X / TileSize.X;
-            int GridY = (int)WorldPosition.X / TileSize.Y;
+            int GridY = (int)WorldPosition.Y / TileSize.Y;
             int LayerIndex = (int)WorldPosition.Z / LayerHeight;
 
             Terrain ActiveTerrain = LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];

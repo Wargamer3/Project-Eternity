@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);
             Map.Camera3DOverride = Camera;
 
-            CursorPosition = new Vector3(Map.TileSize.X * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z * Map.LayerHeight, Map.TileSize.Y * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y);
+            CursorPosition = new Vector3(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y);
             CameraPosition = CursorPosition;
         }
 
