@@ -1,4 +1,5 @@
-﻿using ProjectEternity.Core.Skill;
+﻿using System;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {

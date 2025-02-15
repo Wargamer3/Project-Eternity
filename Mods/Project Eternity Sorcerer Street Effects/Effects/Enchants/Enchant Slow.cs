@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            SetDiceMinMaxEffect NewHasteEffect = new SetDiceMinMaxEffect(Params, 1, 3);
+            NewHasteEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewHasteEffect.Lifetime[0].LifetimeTypeValue = 2;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewHasteEffect, IconHolder.Icons.sprPlayerMovement);
             return "Slow";
         }
 

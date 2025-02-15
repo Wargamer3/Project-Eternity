@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ChangeDamageEffect NewChangeDamageEffect = new ChangeDamageEffect(Params);
+            NewChangeDamageEffect.Target = ChangeDamageEffect.Targets.Opponent;
+            NewChangeDamageEffect.Value = "0.5";
+            NewChangeDamageEffect.SignOperator = Core.Operators.NumberTypes.Relative;
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, NewChangeDamageEffect, IconHolder.Icons.sprPlayerSinkingSong);
             return "Sinking Song";
         }
 

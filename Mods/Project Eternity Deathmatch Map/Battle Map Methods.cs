@@ -42,20 +42,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public override bool CursorControl(PlayerInput ActiveInputManager)
         {
-            Point Offset;
+            Point GridOffset;
             BattleMap ActiveMap;
 
-            bool CursorMoved = CursorControlGrid(ActiveInputManager, out Offset, out ActiveMap);
+            bool CursorMoved = CursorControlGrid(ActiveInputManager, out GridOffset, out ActiveMap);
 
             if (CursorMoved)
             {
-                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X, GridOffset.Y, 1f, 15f, out _);
 
                 if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
                 {
                     ActiveMap.CursorPosition.Z = NextTerrain.Z;
-                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * TileSize.X, NextTerrain.X + Offset.X * TileSize.X));
-                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * TileSize.Y, NextTerrain.Y + Offset.Y * TileSize.Y));
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * TileSize.X, NextTerrain.X + GridOffset.X * TileSize.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * TileSize.Y, NextTerrain.Y + GridOffset.Y * TileSize.Y));
                 }
                 else
                 {
@@ -182,6 +182,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Vector2 PositionInTile = new Vector2(WorldPosition.X - ActiveTerrain.WorldPosition.X, WorldPosition.Y - ActiveTerrain.WorldPosition.Y);
 
             return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+        }
+
+        public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
+        {
+            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
         }
 
         public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)

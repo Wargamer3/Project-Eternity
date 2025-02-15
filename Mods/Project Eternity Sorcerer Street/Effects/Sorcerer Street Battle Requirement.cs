@@ -2,11 +2,11 @@
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public abstract class SorcererStreetRequirement : BaseSkillRequirement
+    public abstract class SorcererStreetBattleRequirement : BaseSkillRequirement
     {
         protected readonly SorcererStreetBattleContext GlobalContext;
 
-        protected SorcererStreetRequirement(string EffectTypeName, SorcererStreetBattleContext GlobalContext)
+        protected SorcererStreetBattleRequirement(string EffectTypeName, SorcererStreetBattleContext GlobalContext)
             : base(EffectTypeName)
         {
             this.GlobalContext = GlobalContext;

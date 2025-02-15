@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             protected override string DoExecuteEffect()
             {
-                Params.GlobalContext.SelfCreature.Owner.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).Blackout = true;
+                Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollLimit = true;
                 return "Blackout";
             }
 
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new BlackoutEffect(Params));
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new BlackoutEffect(Params), IconHolder.Icons.sprPlayerToll);
             return "Blackout";
         }
 

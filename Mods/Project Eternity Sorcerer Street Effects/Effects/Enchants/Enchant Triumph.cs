@@ -33,6 +33,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            SetCastleValueEffect NewSetCastleValueEffect = new SetCastleValueEffect(Params, 1.5f);
+            NewSetCastleValueEffect.Lifetime[0].LifetimeType = CastleTerrain.CastleReachedLifetimeType;
+            NewSetCastleValueEffect.Lifetime[0].LifetimeTypeValue = 1;
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewSetCastleValueEffect, IconHolder.Icons.sprPlayerTriumph);
             return "Triumph";
         }
 

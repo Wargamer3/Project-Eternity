@@ -171,7 +171,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //If a Unit is moving, wait until it finished moving before spawning the next unit
                     if (Map.MovementAnimation.Count > 0)
                     {
-                        Map.MovementAnimation.MoveSquad(Map);
+                        Map.MovementAnimation.MoveSquad(gameTime, Map);
 
                         if (Map.MovementAnimation.Count == 0)
                         {

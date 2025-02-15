@@ -33,6 +33,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ChangeStatsEffect IncreaseHPEffect = new ChangeStatsEffect(Params);
+            IncreaseHPEffect.Target = ChangeStatsEffect.Targets.Self;
+            IncreaseHPEffect.Stat = ChangeStatsEffect.Stats.FinalHP;
+            IncreaseHPEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
+            IncreaseHPEffect.Value = "20";
+            IncreaseHPEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            IncreaseHPEffect.Lifetime[0].LifetimeTypeValue = 4;
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, IncreaseHPEffect, IconHolder.Icons.sprPlayerToughSong);
             return "Tough Song";
         }
 

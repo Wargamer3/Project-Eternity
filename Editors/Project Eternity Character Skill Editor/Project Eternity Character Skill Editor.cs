@@ -195,7 +195,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
             {
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex];
                 BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value;
-                NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+                NewEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
 
                 ActiveSkillActivation.ListEffect.Add(NewEffect);
                 ActiveSkillActivation.ListEffectTarget.Add(new List<string>());
@@ -340,21 +340,21 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
                     txtRangeValue.Value = ActiveEffect.Range;
 
                 //Lifetime types.
-                if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypePermanent)
+                if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypePermanent)
                 {
                     rbLifetimePermanent.Checked = true;
                     txtMaximumLifetime.Enabled = false;
                 }
-                else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeTurns)
                 {
                     rbLifetimeTurns.Checked = true;
-                    txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                    txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                     txtMaximumLifetime.Enabled = true;
                 }
-                else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeBattle)
+                else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeBattle)
                 {
                     rbLifetimeBattle.Checked = true;
-                    txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                    txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                     txtMaximumLifetime.Enabled = true;
                 }
 
@@ -416,19 +416,19 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
 
                 if (rbLifetimePermanent.Checked)
                 {
-                    ActiveEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+                    ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
                     txtMaximumLifetime.Enabled = false;
                 }
                 else if (rbLifetimeTurns.Checked)
                 {
-                    ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeTurns;
-                    ActiveEffect.LifetimeTypeValue = (int)txtMaximumLifetime.Value;
+                    ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
+                    ActiveEffect.Lifetime[0].LifetimeTypeValue = (int)txtMaximumLifetime.Value;
                     txtMaximumLifetime.Enabled = true;
                 }
                 else if (rbLifetimeBattle.Checked)
                 {
-                    ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeBattle;
-                    ActiveEffect.LifetimeTypeValue = (int)txtMaximumLifetime.Value;
+                    ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeBattle;
+                    ActiveEffect.Lifetime[0].LifetimeTypeValue = (int)txtMaximumLifetime.Value;
                     txtMaximumLifetime.Enabled = true;
                 }
 

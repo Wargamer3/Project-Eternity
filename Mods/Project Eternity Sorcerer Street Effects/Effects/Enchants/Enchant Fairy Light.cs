@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            GainGoldEffect NewGainGoldEffect = new GainGoldEffect(Params);
+            NewGainGoldEffect.Lifetime[0].LifetimeType = CastleTerrain.CastleReachedLifetimeType;
+            NewGainGoldEffect.Lifetime[0].LifetimeTypeValue = 1;
+            NewGainGoldEffect.Value = "selfplayer.cardsinhand*10";
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetOnLapBonusRequirement(), NewGainGoldEffect, IconHolder.Icons.sprPlayerFairyLight);
             return "Fairy Light";
         }
 

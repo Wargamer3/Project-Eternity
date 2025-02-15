@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.Gold -= SelectedCard.MagicCost;
 
             Map.DicTeam[ActivePlayer.TeamIndex].IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.SummonCreature(SelectedCard);
+            Map.SummonCreature(SelectedCard, ActiveTerrain);
 
             Map.UpdateTolls(ActivePlayer);
             Map.LayerManager.TogglePreview(true);

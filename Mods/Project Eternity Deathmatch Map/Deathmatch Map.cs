@@ -490,7 +490,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Terrain GetTerrain(Vector3 Position)
         {
-            Position = new Vector3((float)Math.Floor(Position.X / TileSize.X), (float)Math.Floor(Position.Y / TileSize.Y), (float)Math.Floor(Position.Z / LayerHeight));
+            Position = ConvertToGridPosition(Position);
 
             if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
             {
@@ -562,7 +562,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 if (MovementAnimation.Count > 0)
                 {
-                    MovementAnimation.MoveSquad(this);
+                    MovementAnimation.MoveSquad(gameTime, this);
                 }
                 if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
                 {
@@ -978,11 +978,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPathNode;
         }
 
-        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int GridOffsetX, int GridOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.GridPosition.X + OffsetX;
-            int NextY = StartingPosition.GridPosition.Y + OffsetY;
+            int NextX = StartingPosition.GridPosition.X + GridOffsetX;
+            int NextY = StartingPosition.GridPosition.Y + GridOffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
@@ -1004,7 +1004,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + OffsetX * TileSize.X, StartingPosition.WorldPosition.Y + OffsetY * TileSize.Y, L * LayerHeight));
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + GridOffsetX * TileSize.X, StartingPosition.WorldPosition.Y + GridOffsetY * TileSize.Y, L * LayerHeight));
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
                 TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;

@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ForceStopEffect NewForceStopEffect = new ForceStopEffect(Params);
+            NewForceStopEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewForceStopEffect.Lifetime[0].LifetimeTypeValue = 3;
+            NewForceStopEffect.Lifetime.Add(new BaseEffectLifetime(BattleMapScreen.BattleMap.EventTypeTurn, 2));
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetOnCreateRequirement(), NewForceStopEffect, IconHolder.Icons.sprCreatureQuicksand);
             return null;
         }
 

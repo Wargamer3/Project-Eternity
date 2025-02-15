@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class HPProtectionEffect : SorcererStreetEffect
+{//Territory level cannot be lowered.
+    public sealed class LandLevelDowngradeLockEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street HP Protection";
+        public static string Name = "Sorcerer Street Land Level Downgrade Lock";
 
-        public HPProtectionEffect()
+        public LandLevelDowngradeLockEffect()
             : base(Name, false)
         {
         }
 
-        public HPProtectionEffect(SorcererStreetBattleParams Params)
+        public LandLevelDowngradeLockEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,13 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).HPProtection = true;
-            return "HP & MHP cannot be altered by spells or territory abilities.";
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LandLevelDowngradeLock = true;
+            return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            HPProtectionEffect NewEffect = new HPProtectionEffect(Params);
+            LandLevelDowngradeLockEffect NewEffect = new LandLevelDowngradeLockEffect(Params);
 
             return NewEffect;
         }

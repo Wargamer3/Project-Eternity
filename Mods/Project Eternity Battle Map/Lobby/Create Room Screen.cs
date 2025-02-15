@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.RoomType = RoomType;
             MinNumberOfPlayer = 1;
-            MaxNumberOfPlayer = 8;
+            MaxNumberOfPlayer = 1;
         }
 
         public override void Load()

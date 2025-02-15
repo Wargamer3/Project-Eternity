@@ -71,6 +71,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return ListTerrainFound;
         }
 
+        public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
+        {
+            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).WorldPosition.Z));
+        }
+
         public List<Vector3> GetPathToTerrain(MovementAlgorithmTile ActiveTerrain, Vector3 Position)
         {
             List<MovementAlgorithmTile> ListMovement = new List<MovementAlgorithmTile>();

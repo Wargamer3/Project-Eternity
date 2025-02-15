@@ -15,14 +15,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
         }
 
-        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float GridOffsetX, float GridOffsetY,
             UnitMapComponent MapComponent, UnitStats UnitStat, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, (int)OffsetX, (int)OffsetY, 1f, 1, out ListLayerPossibility));
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, (int)GridOffsetX, (int)GridOffsetY, 1f, 1, out ListLayerPossibility));
 
-            if (NextRegularMovementDestination == null)
+            if (NextRegularMovementDestination == StartingNode)
             {
                 return ListTerrainSuccessor;
             }

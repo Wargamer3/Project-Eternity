@@ -43,9 +43,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return DicMovingMapUnitByPosition[MovingMapUnit];
         }
 
-        public void MoveSquad(BattleMap Map)
+        public void MoveSquad(GameTime gameTime, BattleMap Map, float MovementSpeed = 2f)
         {
-            float MovementSpeed = 0.2f;
+            MovementSpeed = (float)(MovementSpeed * gameTime.ElapsedGameTime.TotalSeconds);
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 
             foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
@@ -87,10 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UpdatedPosition.Y = NextPosition.Y;
                 }
 
-                if (UpdatedPosition.X % 1 > 0.5f)
-                {
-                    UpdatedPosition.Z = NextPosition.Z;
-                }
+                UpdatedPosition = Map.GetNextPosition(DicMovingMapUnitByPosition[ActiveUnitMap.Key], UpdatedPosition);
 
                 DicMovingMapUnitByPosition[ActiveUnitMap.Key] = UpdatedPosition;
 

@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalPlayerMovementContext.StopPlayer();
+            Params.GlobalPlayerContext.StopPlayer();
             return "Scroll";
         }
 

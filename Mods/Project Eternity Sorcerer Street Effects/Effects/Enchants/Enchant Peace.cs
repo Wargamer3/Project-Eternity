@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ChangeTollEffect NewChangeTollEffect = new ChangeTollEffect(Params);
+            NewChangeTollEffect.SignOperator = Core.Operators.SignOperators.Equal;
+            NewChangeTollEffect.Value = "0";
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new List<BaseEffect>() { NewChangeTollEffect, new InvasionProtectionEffect() }, IconHolder.Icons.sprCreaturePeace);
             return "Peace";
         }
 

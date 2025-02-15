@@ -46,7 +46,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            NeutralizeNextSpellEffect NewEffect = (NeutralizeNextSpellEffect)Copy;
         }
     }
 }

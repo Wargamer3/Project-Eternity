@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private static Texture2D sprBottomRight;
 
         private static Texture2D sprPlayerInformation;
+        private static Texture2D sprBookInformation;
         private static Texture2D sprCommand;
         private static Texture2D sprCreatureCard;
         private static Texture2D sprInformation;
@@ -29,6 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private static Texture2D sprMapInformation;
         private static Texture2D sprMenu;
         private static Texture2D sprSpellCard;
+        private static Texture2D sprSupport;
 
         private static Texture2D sprConfirm1;
         private static Texture2D sprConfirm2;
@@ -70,6 +72,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprBottomRight = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Bottom Right");
 
             sprPlayerInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Player Information");
+            sprBookInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Book Information");
             sprCommand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Command");
             sprCreatureCard = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Creature Card");
             sprInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Information");
@@ -78,6 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprMapInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Map Information");
             sprMenu = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Menu");
             sprSpellCard = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Spell Card");
+            sprSupport = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Support");
 
             sprConfirm1 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand down 1");
             sprConfirm2 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand down 2");
@@ -143,6 +147,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     TopLeftWidth = sprPlayerInformation.Width;
                     break;
 
+                case "Book Information":
+                    g.Draw(sprBookInformation, new Rectangle((int)Position.X + 1, (int)Position.Y - sprCommand.Height, sprCommand.Width, sprCommand.Height), Color.White);
+                    TopLeftWidth = sprCommand.Width;
+                    break;
+
                 case "Command":
                     g.Draw(sprCommand, new Rectangle((int)Position.X + 1, (int)Position.Y - sprCommand.Height, sprCommand.Width, sprCommand.Height), Color.White);
                     TopLeftWidth = sprCommand.Width;
@@ -180,6 +189,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case "Spell Card":
                     g.Draw(sprSpellCard, new Rectangle((int)Position.X + 1, (int)Position.Y - sprSpellCard.Height, sprSpellCard.Width, sprSpellCard.Height), Color.White);
+                    TopLeftWidth = sprSpellCard.Width;
+                    break;
+
+                case "Support":
+                    g.Draw(sprSupport, new Rectangle((int)Position.X + 1, (int)Position.Y - sprSpellCard.Height, sprSpellCard.Width, sprSpellCard.Height), Color.White);
                     TopLeftWidth = sprSpellCard.Width;
                     break;
 
@@ -299,7 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawConfirmIcon(CustomSpriteBatch g, Vector2 Position)
         {
-            g.Draw(sprConfirm1, Position, Color.White);
+            g.Draw(sprConfirm1, Position, null, Color.White, 0f, Vector2.Zero, 1.5f, SpriteEffects.None, 0f);
         }
 
         public static void DrawFingerIcon(CustomSpriteBatch g, Vector2 Position)

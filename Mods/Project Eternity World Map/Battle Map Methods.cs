@@ -56,6 +56,11 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
         }
 
+        public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
+        {
+            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).WorldPosition.Z));
+        }
+
         public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)
         {
             Vector3 TopFrontLeft = GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y + TileSize.Y, WorldPosition.Z));
@@ -64,6 +69,18 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             Vector3 TopBackRight = GetFinalPosition(new Vector3(WorldPosition.X + TileSize.X, WorldPosition.Y, WorldPosition.Z));
 
             return Terrain3D.CreateTile3D(TilesetIndex, TopFrontLeft, TopFrontRight, TopBackLeft, TopBackRight, TileSize, Origin, TextureSize.X, TextureSize.Y, PositionOffset);
+        }
+
+        public Terrain GetTerrain(Vector3 Position)
+        {
+            Position = new Vector3((float)Math.Floor(Position.X / TileSize.X), (float)Math.Floor(Position.Y / TileSize.Y), (float)Math.Floor(Position.Z / LayerHeight));
+
+            if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= ListLayer.Count)
+            {
+                return null;
+            }
+
+            return ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
         public Terrain GetTerrain(int X, int Y, int LayerIndex)

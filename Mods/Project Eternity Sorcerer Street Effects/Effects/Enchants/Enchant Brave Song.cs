@@ -38,9 +38,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             IncreaseSTEffect.Stat = ChangeStatsEffect.Stats.FinalST;
             IncreaseSTEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
             IncreaseSTEffect.Value = "20";
-            IncreaseSTEffect.LifetimeType = "Rounds";
+            IncreaseSTEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            IncreaseSTEffect.Lifetime[0].LifetimeTypeValue = 4;
 
-            Params.GlobalContext.SelfCreature.Owner.Enchant = EnchantHelper.CreateEnchant(Name, IncreaseSTEffect);
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateBattleEnchant(Name, IncreaseSTEffect, IconHolder.Icons.sprPlayerBraveSong);
             return "Brave Song";
         }
 

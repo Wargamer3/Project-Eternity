@@ -15,21 +15,71 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public class PlayerAbilities
         {
+
             public bool Backward;
-            public bool Blackout;
             public int DiceValue;
+            public int DiceValueMin;
+            public int DiceValueMax;
+
+            public float ItemCostMultiplier;
+            public float SpellCostMultiplier;
+            public float CreatureCostMultiplier;
+
+            public bool CreatureLimit;//Cannont use creatures
+            public bool InvasionLimit;//Cannot invade.
+            public bool CreatureEnchantProtection;//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory abilities for 8 rounds.
+
+            public float TollStealMultiplier;//User gains X% of tolls collected by other Players until user reaches the castle.
+            public bool TollProtection;//Target Player is exempt from tolls.
+            public bool TollLimit;//Target enemy Player cannot claim tolls.
+
+            public float CastleValueMultiplier;//% gold gained by castles
+            public bool AllowTerrainCommands;//Can use Territory commands on any of his/her creatures. This is the same effect as landing on a fort or castle.
+
             public PlayerAbilities()
             {
                 Backward = false;
-                Blackout = false;
                 DiceValue = -1;
+                DiceValueMin = -1;
+                DiceValueMax = -1;
+
+                ItemCostMultiplier = 1;
+                SpellCostMultiplier = 1;
+                CreatureCostMultiplier = 1;
+
+                CreatureLimit = false;
+                InvasionLimit = false;
+                CreatureEnchantProtection = false;
+
+                TollStealMultiplier = 0;
+                TollProtection = false;
+                TollLimit = false;
+
+                CastleValueMultiplier = 1;
+                AllowTerrainCommands = false;
             }
 
             public PlayerAbilities(PlayerAbilities Other)
             {
                 Backward = Other.Backward;
-                Blackout = Other.Blackout;
                 DiceValue = Other.DiceValue;
+                DiceValueMin = Other.DiceValueMin;
+                DiceValueMax = Other.DiceValueMax;
+
+                ItemCostMultiplier = Other.ItemCostMultiplier;
+                SpellCostMultiplier = Other.SpellCostMultiplier;
+                CreatureCostMultiplier = Other.CreatureCostMultiplier;
+
+                CreatureLimit = Other.CreatureLimit;
+                InvasionLimit = Other.InvasionLimit;
+                CreatureEnchantProtection = Other.CreatureEnchantProtection;
+
+                TollLimit = Other.TollLimit;
+                TollProtection = Other.TollProtection;
+                TollStealMultiplier = Other.TollStealMultiplier;
+
+                CastleValueMultiplier = Other.CastleValueMultiplier;
+                AllowTerrainCommands = Other.AllowTerrainCommands;
             }
         }
 

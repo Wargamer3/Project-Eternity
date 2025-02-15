@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new NeutralizeNextSpellEffect(Params));
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateBattleEnchant(Name, new NeutralizeNextSpellEffect(Params), IconHolder.Icons.sprPlayerAntiMagic);
             return "Anti-Magic";
         }
 

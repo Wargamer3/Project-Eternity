@@ -33,6 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            //Play Activation Animation
+
+            //Enchant Player
+            SetDiceValueEffect NewFloatEffect = new SetDiceValueEffect(Params, 5);
+            NewFloatEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewFloatEffect.Lifetime[0].LifetimeTypeValue = 2;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewFloatEffect, IconHolder.Icons.sprPlayerMovement);
             return "Float";
         }
 

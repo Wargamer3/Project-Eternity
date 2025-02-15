@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 float X = (Constants.Width - BoxWidth) / 2;
                 float Y = 830 - BoxHeight / 2;
                 MenuHelper.DrawBorderlessBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
-                MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 50, Y + BoxHeight - 55));
+                MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 70, Y + BoxHeight - 80));
 
                 X += 90;
                 Y += 26;

@@ -33,6 +33,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            DestroyCreatureEffect NewDestroyCreatureEffect = new DestroyCreatureEffect(Params);
+            NewDestroyCreatureEffect.Target = DestroyCreatureEffect.Targets.Opponent;
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, NewDestroyCreatureEffect, IconHolder.Icons.sprCreatureSenility);
             return null;
         }
 

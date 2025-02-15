@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Prevents changing of levels in any territories in the target area for 2 rounds.
@@ -33,6 +34,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            foreach (var ActiveCreature in Params.Map.ListSummonedCreature)
+            {
+                LandLevelLockEffect NewLandLevelLock = new LandLevelLockEffect(Params);
+                NewLandLevelLock.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
+                NewLandLevelLock.Lifetime[0].LifetimeTypeValue = 2;
+                ActiveCreature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewLandLevelLock, IconHolder.Icons.sprCreatureDrought);
+            }
+
             return "Desert Storm";
         }
 

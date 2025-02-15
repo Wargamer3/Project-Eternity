@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class LandLevelLockEffect : SorcererStreetEffect
+{//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory 
+    public sealed class EnchantProtectionPlayerEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Land Level Lock";
+        public static string Name = "Sorcerer Street Enchant Protection Player";
 
-        public LandLevelLockEffect()
+        public EnchantProtectionPlayerEffect()
             : base(Name, false)
         {
         }
 
-        public LandLevelLockEffect(SorcererStreetBattleParams Params)
+        public EnchantProtectionPlayerEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,13 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.LandLevelLock = true;
+            Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).CreatureEnchantProtection = true;
             return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            LandLevelLockEffect NewEffect = new LandLevelLockEffect(Params);
+            EnchantProtectionPlayerEffect NewEffect = new EnchantProtectionPlayerEffect(Params);
 
             return NewEffect;
         }

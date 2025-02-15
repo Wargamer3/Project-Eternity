@@ -46,6 +46,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 this.OwnerTeam = OwnerTeam;
             }
 
+            public void Reset()
+            {
+                Creature = null;
+                Animation = null;
+                PlayerIndex = -1;
+                Owner = null;
+                OwnerTeam = null;
+                Item = null;
+                DamageReceivedIgnoreLandBonus = false;
+                DamageReceived = -1;
+                DamageNeutralizedByOpponent = -1;
+                DamageReflectedByOpponent = -1;
+                LandHP = 0;
+                BonusHP = 0;
+                BonusST = 0;
+            }
+
             public void ReceiveDamage(int Damage)
             {
                 if (DamageReceivedIgnoreLandBonus)
@@ -151,6 +168,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Invader = new BattleCreatureInfo();
             Defender = new BattleCreatureInfo();
+            SelfCreature = Invader;
+            OpponentCreature = Defender;
             ListBoostCreature = new List<TerrainSorcererStreet>();
             ListActivatedEffect = new List<BaseEffect>();
         }
@@ -158,6 +177,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetBattleContext(SorcererStreetBattleContext GlobalContext)
             :this()
         {
+        }
+
+        public void Reset()
+        {
+            CanUseEffectsOrAbilities = true;
+
+            Invader.Reset();
+            Defender.Reset();
+            ListBoostCreature.Clear();
+            ListActivatedEffect.Clear();
         }
 
         public void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
@@ -240,17 +269,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
-    public class SorcererStreetPlayerMovementContext
+    public class SorcererStreetPlayerContext
     {
         public FormulaParser ActiveParser;
+        public Player ActivePlayer => _ActivePlayer;
+        public int ActivePlayerIndex => _ActivePlayerIndex;
 
-        public SorcererStreetPlayerMovementContext()
+        private Player _ActivePlayer;
+        private int _ActivePlayerIndex;
+
+        public SorcererStreetPlayerContext()
         {
         }
 
-        public SorcererStreetPlayerMovementContext(SorcererStreetBattleContext GlobalContext)
+        public SorcererStreetPlayerContext(SorcererStreetBattleContext GlobalContext)
             : this()
         {
+        }
+
+        public void Reset()
+        {
+            _ActivePlayer = null;
+            _ActivePlayerIndex = -1;
+        }
+
+        public void SetPlayer(int ActivePlayerIndex, Player ActivePlayer)
+        {
+            _ActivePlayerIndex = ActivePlayerIndex;
+            _ActivePlayer = ActivePlayer;
         }
 
         public void StopPlayer()
@@ -267,7 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
         // There should never be more than one instance of the global context.
         public readonly new SorcererStreetBattleContext GlobalContext;
-        public readonly SorcererStreetPlayerMovementContext GlobalPlayerMovementContext;
+        public readonly SorcererStreetPlayerContext GlobalPlayerContext;
         public SquadPERContext GlobalSquadContext;
         public SquadPERParams SquadParams;
         public AttackPERContext GlobalAttackContext;
@@ -283,7 +329,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             RememberEffects = true;
             GlobalContext = new SorcererStreetBattleContext();
-            GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
+            GlobalPlayerContext = new SorcererStreetPlayerContext();
         }
 
         public SorcererStreetBattleParams(SorcererStreetBattleContext GlobalContext)
@@ -291,13 +337,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             RememberEffects = true;
             this.GlobalContext = GlobalContext;
-            GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
+            GlobalPlayerContext = new SorcererStreetPlayerContext();
 
             LoadEffects();
             LoadSkillRequirements();
             LoadAutomaticSkillActivation();
             LoadManualSkillActivation();
             LoadMutators();
+        }
+
+        public void Reset()
+        {
+            GlobalContext.Reset();
+            GlobalPlayerContext.Reset();
         }
 
         public void ReplaceSelfCreature(CreatureCard TransformationCreature, bool IsTemporary)
@@ -359,7 +411,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadSkillRequirements()
         {
-            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetRequirement), GlobalContext);
+            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetBattleRequirement), GlobalContext);
             foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCore)
             {
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
@@ -368,7 +420,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetRequirement), GlobalContext);
+                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetBattleRequirement), GlobalContext);
                 foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCoreAssembly)
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);

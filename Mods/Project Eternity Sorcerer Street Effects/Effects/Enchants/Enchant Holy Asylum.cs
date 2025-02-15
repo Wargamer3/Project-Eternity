@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            HPProtectionEffect NewChangeTollEffect = new HPProtectionEffect();
+            LandLevelDowngradeLockEffect NewLandProtection = new LandLevelDowngradeLockEffect();
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new List<BaseEffect>() { NewChangeTollEffect , NewLandProtection }, IconHolder.Icons.sprCreatureHolyAsylum);
             return "Holy Asylum";
         }
 

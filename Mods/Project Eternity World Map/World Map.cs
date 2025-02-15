@@ -255,7 +255,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
             else if (MovementAnimation.Count > 0)
             {
-                MovementAnimation.MoveSquad(this);
+                MovementAnimation.MoveSquad(gameTime, this);
             }
             else
             {

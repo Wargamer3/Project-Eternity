@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class DisableLapRegenerationEffect : SorcererStreetEffect
+    public sealed class TerritoryCommandEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Disable Lap Regeneration";
+        public static string Name = "Sorcerer Street Territory Command";
 
-        public DisableLapRegenerationEffect()
+        public TerritoryCommandEffect()
             : base(Name, false)
         {
         }
 
-        public DisableLapRegenerationEffect(SorcererStreetBattleParams Params)
+        public TerritoryCommandEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).AllowTerrainCommands = true;
+
+            return "Immune to tolls";
         }
 
         protected override BaseEffect DoCopy()
         {
-            DisableLapRegenerationEffect NewEffect = new DisableLapRegenerationEffect(Params);
+            TerritoryCommandEffect NewEffect = new TerritoryCommandEffect(Params);
 
             return NewEffect;
         }
@@ -46,5 +48,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void DoCopyMembers(BaseEffect Copy)
         {
         }
+
+        #region Properties
+
+
+        #endregion
     }
 }

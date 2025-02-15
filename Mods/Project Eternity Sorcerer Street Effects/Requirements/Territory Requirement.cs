@@ -5,7 +5,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetTerriotryRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetTerriotryRequirement : SorcererStreetBattleRequirement
     {
         private string _Price;
 

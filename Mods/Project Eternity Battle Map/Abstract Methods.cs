@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public abstract bool CursorControl(PlayerInput ActiveInputManager);
         public abstract Vector3 GetFinalPosition(Vector3 WorldPosition);
+        public abstract Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement);
         public abstract Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset);
         public abstract byte[] GetSnapshotData();
         public abstract void Update(double ElapsedSeconds);

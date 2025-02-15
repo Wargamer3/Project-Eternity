@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, new DisableLandBonusRestrictionsEffect(Params), IconHolder.Icons.sprCreatureMimicry);
             return null;
         }
 

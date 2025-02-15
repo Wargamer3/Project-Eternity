@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             protected override string DoExecuteEffect()
             {
-                Params.GlobalContext.SelfCreature.Owner.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).Backward = true;
+                Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward = true;
                 return "Backward";
             }
 
@@ -71,7 +71,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].Enchant = EnchantHelper.CreateEnchant(Name, new BackwardEffect(Params));
+            BackwardEffect NewBackwardEffect = new BackwardEffect(Params);
+            NewBackwardEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewBackwardEffect.Lifetime[0].LifetimeTypeValue = 1;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewBackwardEffect, IconHolder.Icons.sprPlayerMovement);
             return "Backward";
         }
 

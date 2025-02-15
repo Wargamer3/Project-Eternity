@@ -10,7 +10,7 @@ using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetCreaturesInPlayrRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetCreaturesInPlayrRequirement : SorcererStreetBattleRequirement
     {
         public class CreatureSelector : UITypeEditor
         {

@@ -21,9 +21,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
-        private readonly Card ActiveCard;
-        private readonly Card GlobalBookActiveCard;
-        private readonly AnimatedModel Map3DModel;
+        private Card ActiveCard;
+        private Card GlobalBookActiveCard;
+        private AnimatedModel Map3DModel;
 
         int OriginalCardQuantityOwned;
         int OriginalTotalCardQuantityOwned;
@@ -31,17 +31,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public EditBookCardScreen(Player ActivePlayer, CardBook ActiveBook, Card ActiveCard)
         {
             this.ActivePlayer = ActivePlayer;
-            this.ActiveBook = ActiveBook;
-            this.ActiveCard = ActiveCard;
-            GlobalBookActiveCard = ActivePlayer.Inventory.GlobalBook.DicCardsByType[ActiveCard.CardType][ActiveCard.Path];
-
-            OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
-            OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
-
-            if (ActiveCard is CreatureCard)
-            {
-                Map3DModel = ((CreatureCard)ActiveCard).GamePiece.Unit3DModel;
-            }
+            this.ActiveBook = CardBook.LoadGlobalBook();
+            InitCard(ActiveCard);
         }
 
         public override void Load()
@@ -51,6 +42,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntArial26 = Content.Load<SpriteFont>("Fonts/Arial26");
 
             Symbols = CardSymbols.Symbols;
+        }
+
+        private void InitCard(Card ActiveCard)
+        {
+            this.ActiveCard = ActiveCard;
+            GlobalBookActiveCard = ActiveBook.DicCardsByType[ActiveCard.CardType][ActiveCard.Path];
+            //GlobalBookActiveCard = ActiveCard;
+            OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
+            OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
+
+            if (ActiveCard is CreatureCard)
+            {
+                Map3DModel = ((CreatureCard)ActiveCard).GamePiece.Unit3DModel;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -75,6 +80,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActiveBook.TotalCards = OriginalTotalCardQuantityOwned;
 
                 RemoveScreen(this);
+            }
+            else if (InputHelper.InputLeftPressed())
+            {
+                int CardIndex = ActiveBook.ListCard.IndexOf(ActiveCard) - 1;
+
+                if (CardIndex < 0)
+                {
+                    CardIndex = ActiveBook.ListCard.Count - 1;
+                }
+
+                InitCard(ActiveBook.ListCard[CardIndex]);
+            }
+            else if (InputHelper.InputRightPressed())
+            {
+                int CardIndex = ActiveBook.ListCard.IndexOf(ActiveCard) + 1;
+
+                if (CardIndex >= ActiveBook.ListCard.Count)
+                {
+                    CardIndex = 0;
+                }
+
+                InitCard(ActiveBook.ListCard[CardIndex]);
             }
         }
 
@@ -111,7 +138,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 + " [Z] Return", new Vector2(X, Y), Color.White);
 
             DrawModel(Map3DModel, Matrix.CreateRotationX(MathHelper.ToRadians(180))
-                * Matrix.CreateScale(0.2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2, 0), Matrix.Identity);
+                * Matrix.CreateScale(2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2 + 140, 0), Matrix.Identity);
         }
 
         private void DrawModel(AnimatedModel Model, Matrix World, Matrix View)
@@ -120,7 +147,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
             Projection = HalfPixelOffset * Projection;
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-            GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
 

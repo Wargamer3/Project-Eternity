@@ -48,37 +48,45 @@ namespace ProjectEternity.Core.Item
         /// <summary>
         /// Add an effect into the holder then execute it, a copy will be made internaly to avoid references issues.
         /// </summary>
-        /// <param name="ActiveSkillEffect"></param>
+        /// <param name="ActiveEffect"></param>
         /// <param name="ActiveSkillName"></param>
-        public void AddAndExecuteEffect(BaseEffect ActiveSkillEffect, string ActiveSkillName, string NewLifetimeType = "")
+        public void AddAndExecuteEffect(BaseEffect ActiveEffect, string ActiveSkillName, string NewLifetimeType = "")
         {
-            ActiveSkillEffect = ActiveSkillEffect.Copy();
+            ActiveEffect = ActiveEffect.Copy();
             
-            if (CanAddEffect(ActiveSkillEffect, ActiveSkillName))
+            if (CanAddEffect(ActiveEffect, ActiveSkillName))
             {
                 if (NewLifetimeType != string.Empty)
                 {
-                    ActiveSkillEffect.LifetimeType = NewLifetimeType;
+                    ActiveEffect.Lifetime[0].LifetimeType = NewLifetimeType;
                 }
 
-                ActiveSkillEffect.Lifetime = ActiveSkillEffect.LifetimeTypeValue;
-                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveSkillEffect);
-                ActiveSkillEffect.ExecuteEffect();
+                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                {
+                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                }
+
+                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveEffect);
+                ActiveEffect.ExecuteEffect();
             }
         }
 
         /// <summary>
         /// Add an effect into the holder then execute it.
         /// </summary>
-        /// <param name="ActiveSkillEffect"></param>
+        /// <param name="ActiveEffect"></param>
         /// <param name="ActiveSkillName"></param>
-        public void AddAndExecuteEffectWithoutCopy(BaseEffect ActiveSkillEffect, string ActiveSkillName)
+        public void AddAndExecuteEffectWithoutCopy(BaseEffect ActiveEffect, string ActiveSkillName)
         {
-            if (CanAddEffect(ActiveSkillEffect, ActiveSkillName))
+            if (CanAddEffect(ActiveEffect, ActiveSkillName))
             {
-                ActiveSkillEffect.Lifetime = ActiveSkillEffect.LifetimeTypeValue;
-                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveSkillEffect);
-                ActiveSkillEffect.ExecuteEffect();
+                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                {
+                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                }
+
+                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveEffect);
+                ActiveEffect.ExecuteEffect();
             }
         }
 
@@ -134,14 +142,18 @@ namespace ProjectEternity.Core.Item
                 {
                     BaseEffect ActiveEffect = ActiveListEffect.Value[E];
 
-                    if (ActiveEffect.LifetimeType == LifetimeType)
+                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
                     {
-                        --ActiveEffect.Lifetime;
-                        ActiveEffect.ResetState();
-
-                        if (ActiveEffect.Lifetime == 0)
+                        if (ActiveLifetime.LifetimeType == LifetimeType)
                         {
-                            ActiveListEffect.Value.RemoveAt(E);
+                            --ActiveLifetime.Lifetime;
+                            ActiveEffect.ResetState();
+
+                            if (ActiveLifetime.Lifetime == 0)
+                            {
+                                ActiveListEffect.Value.RemoveAt(E);
+                                break;
+                            }
                         }
                     }
                 }

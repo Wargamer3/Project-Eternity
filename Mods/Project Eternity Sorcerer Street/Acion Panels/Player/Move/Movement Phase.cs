@@ -175,7 +175,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void MoveToNextTerrain()
         {
             Vector3 FinalPosition = NextTerrain.WorldPosition + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0);
+
             Map.MovementAnimation.Add(ActivePlayer.GamePiece, ActivePlayer.GamePiece.Position, FinalPosition);
+
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
 
             if (NextTerrain.PlayerOwner == ActivePlayer)

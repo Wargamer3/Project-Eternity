@@ -3,7 +3,7 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
+{//Creature is unable to use items and abilities. Note: Creature does still receive Boost and Global Ability effects from other creatures.
     public sealed class EnchantParalysisEffect : SorcererStreetEffect
     {
         public static string Name = "Sorcerer Street Enchant Paralysis";
@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, new ParalysisEffect(Params), IconHolder.Icons.sprCreatureParalysis);
             return "Paralysis";
         }
 

@@ -38,6 +38,9 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
       <Private>False</Private>
     </Reference>
@@ -54,6 +57,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Automatic Skills\Self Target Type.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Force Stop.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Free Travel.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Enchant Protection Player.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Invasion Protection.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Invasion Limit.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Land Level Downgrade Lock.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Paralysis.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Set Item Cost.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Set Dice Min Max.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Set Castle Value.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Set Creature Cost.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Set Dice Value.cs" />
+    <Compile Include="Effects\Territory Command.cs" />
+    <Compile Include="Effects\Player Enchant Effect\Toll Immunity.cs" />
+    <Compile Include="Effects\Toll Steal.cs" />
+    <Compile Include="Effects\Deal Damage Self.cs" />
     <Compile Include="Effects\Enchants\Enchant Conspiracy.cs" />
     <Compile Include="Effects\Enchants\Enchant Bulimia.cs" />
     <Compile Include="Effects\Enchants\Enchant Blackout.cs" />
@@ -81,7 +100,6 @@
     <Compile Include="Effects\Enchants\Enchant Innocence.cs" />
     <Compile Include="Effects\Enchants\Enchant Illness.cs" />
     <Compile Include="Effects\Enchants\Enchant Mesozoic Song.cs" />
-    <Compile Include="Effects\Enchants\Enchant Mutation.cs" />
     <Compile Include="Effects\Enchants\Enchant Peace.cs" />
     <Compile Include="Effects\Enchants\Enchant Revelation.cs" />
     <Compile Include="Effects\Enchants\Enchant Reflection.cs" />
@@ -97,9 +115,10 @@
     <Compile Include="Effects\Enchants\Enchant Telegnosis.cs" />
     <Compile Include="Effects\Enchants\Enchant Soul Hunt.cs" />
     <Compile Include="Effects\Enchants\Enchant Slow.cs" />
-    <Compile Include="Effects\Land Bonus Limit.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Land Bonus Limit.cs" />
     <Compile Include="Effects\Neutralize Next Spell.cs" />
     <Compile Include="Manual Skills\Area Target Type.cs" />
+    <Compile Include="Manual Skills\Enemy Creature Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Cepter Target Type.cs" />
     <Compile Include="Manual Skills\Player Movement Target Type.cs" />
     <Compile Include="Manual Skills\Player Target Type.cs" />
@@ -108,8 +127,7 @@
     <Compile Include="Manual Skills\No Target Target Type.cs" />
     <Compile Include="Effects\Add Card.cs" />
     <Compile Include="Effects\Change Creature Movement.cs" />
-    <Compile Include="Effects\Disable Toll.cs" />
-    <Compile Include="Effects\Disable Lap Regeneration.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Disable Lap Regeneration.cs" />
     <Compile Include="Effects\Disable Effects.cs" />
     <Compile Include="Effects\Enchants\Enchant Mimicry.cs" />
     <Compile Include="Effects\Global Abilities\Global Ability Ability Damage Reduced.cs" />
@@ -129,17 +147,18 @@
     <Compile Include="Effects\Enchants\Enchant Land Protection.cs" />
     <Compile Include="Effects\Enchants\Enchant Greed.cs" />
     <Compile Include="Effects\Enchants\Enchant Spirit Walk.cs" />
-    <Compile Include="Effects\Disable Land Bonus Restrictions.cs" />
-    <Compile Include="Effects\Item Creature.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Disable Land Bonus Restrictions.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Item Creature.cs" />
     <Compile Include="Effects\Swap HP and ST.cs" />
     <Compile Include="Effects\Stop Player.cs" />
     <Compile Include="Effects\Target Enchant Protection.cs" />
     <Compile Include="Requirements\Creature Name.cs" />
     <Compile Include="Requirements\Creature In Play Requirement.cs" />
+    <Compile Include="Requirements\Destroyed Requirement.cs" />
     <Compile Include="Requirements\Element Anti Requirement.cs" />
     <Compile Include="Requirements\Gold Possessed Requirement.cs" />
     <Compile Include="Requirements\Cards Remaining Requirement.cs" />
-    <Compile Include="Effects\Change Toll.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Change Toll.cs" />
     <Compile Include="Effects\Enchants\Enchant Fog.cs" />
     <Compile Include="Effects\Enchants\Enchant Paralysis.cs" />
     <Compile Include="Effects\Enchants\Enchant Confusion.cs" />
@@ -147,46 +166,46 @@
     <Compile Include="Effects\Enchants\Enchant Phantasm.cs" />
     <Compile Include="Effects\Activate Spell.cs" />
     <Compile Include="Effects\Gain Gold.cs" />
-    <Compile Include="Effects\Change Damage.cs" />
-    <Compile Include="Effects\Support.cs" />
-    <Compile Include="Effects\Land Level Lock.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Change Damage.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Support.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Land Level Lock.cs" />
     <Compile Include="Effects\Move Targetted.cs" />
     <Compile Include="Effects\Move Opponent.cs" />
-    <Compile Include="Effects\Attack Last.cs" />
-    <Compile Include="Effects\Attack Twice.cs" />
-    <Compile Include="Effects\Effect Immunity.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Attack Last.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Attack Twice.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Effect Immunity.cs" />
     <Compile Include="Effects\Change Symbols Value.cs" />
     <Compile Include="Effects\Destroy Opponent Item.cs" />
     <Compile Include="Effects\Change Terrain Level.cs" />
-    <Compile Include="Effects\Critical Hit.cs" />
-    <Compile Include="Effects\Change Element.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Critical Hit.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Change Element.cs" />
     <Compile Include="Effects\Enchants\Enchant Quicksand.cs" />
-    <Compile Include="Effects\Defensive.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Defensive.cs" />
     <Compile Include="Effects\Steal Gold.cs" />
     <Compile Include="Effects\Summon Creature.cs" />
-    <Compile Include="Effects\HP Protection.cs" />
-    <Compile Include="Effects\Target Protection.cs" />
-    <Compile Include="Effects\Regenerate.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\HP Protection.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Target Protection.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Regenerate.cs" />
     <Compile Include="Effects\Return To Hand.cs" />
     <Compile Include="Effects\Enchants\Enchant Senility.cs" />
     <Compile Include="Effects\Enchants\Enchant Sleep.cs" />
     <Compile Include="Effects\Scroll Critical Hit.cs" />
-    <Compile Include="Effects\Scroll Attack.cs" />
-    <Compile Include="Effects\Recycle.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Scroll Attack.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Recycle.cs" />
     <Compile Include="Effects\Replace Item.cs" />
     <Compile Include="Effects\Steal Item.cs" />
-    <Compile Include="Effects\Neutralize Damage.cs" />
-    <Compile Include="Effects\Reflect Damage.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Neutralize Damage.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Reflect Damage.cs" />
     <Compile Include="Effects\Change Symbol.cs" />
     <Compile Include="Effects\Draw Cards.cs" />
-    <Compile Include="Effects\Immediate.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Immediate.cs" />
     <Compile Include="Effects\Deal Damage.cs" />
     <Compile Include="Effects\Destroy Creature.cs" />
     <Compile Include="Effects\Instant Death.cs" />
-    <Compile Include="Effects\Penetrate.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Penetrate.cs" />
     <Compile Include="Effects\Transform Creature.cs" />
     <Compile Include="Effects\Destroy Cards.cs" />
-    <Compile Include="Effects\Attack First.cs" />
+    <Compile Include="Effects\Creature Enchant Effect\Attack First.cs" />
     <Compile Include="Effects\Increase ST Invasion.cs" />
     <Compile Include="Effects\Play Battle Animation.cs" />
     <Compile Include="Effects\Change Stats.cs" />
@@ -223,12 +242,12 @@
     <Compile Include="Requirements\Upon Victory Requirement.cs" />
     <Compile Include="Requirements\On Load Requirement.cs" />
     <Compile Include="Requirements\Territory Requirement.cs" />
-    <Compile Include="Requirements\Creatures Phase Requirement.cs" />
+    <Compile Include="Requirements\Battle Phases\Creatures Phase Requirement.cs" />
     <Compile Include="Requirements\Before Attack Requirement.cs" />
     <Compile Include="Requirements\Before Defense Requirement.cs" />
-    <Compile Include="Requirements\Boosts Phase Requirement.cs" />
+    <Compile Include="Requirements\Battle Phases\Boosts Phase Requirement.cs" />
     <Compile Include="Requirements\Battle End Requirement.cs" />
-    <Compile Include="Requirements\Item Phase Requirement.cs" />
+    <Compile Include="Requirements\Battle Phases\Item Phase Requirement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
@@ -239,6 +258,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
+      <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
@@ -262,5 +286,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -111,7 +111,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
             {
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[0];
                 BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value;
-                NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+                NewEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
 
                 ActiveSkillActivation.ListEffect.Add(NewEffect);
                 ActiveSkillActivation.ListEffectTarget.Add(new List<string>());

@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class DisableLandBonusRestrictionsEffect : SorcererStreetEffect
+    public sealed class ParalysisEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Disable Land Bonus Restrictions";
+        public static string Name = "Sorcerer Street Paralysis";
 
-        public DisableLandBonusRestrictionsEffect()
+        public ParalysisEffect()
             : base(Name, false)
         {
         }
 
-        public DisableLandBonusRestrictionsEffect(SorcererStreetBattleParams Params)
+        public ParalysisEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,13 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.LandLevelLock = true;
-            return null;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).Paralysis = true;
+            return "Paralysis";
         }
 
         protected override BaseEffect DoCopy()
         {
-            DisableLandBonusRestrictionsEffect NewEffect = new DisableLandBonusRestrictionsEffect(Params);
+            ParalysisEffect NewEffect = new ParalysisEffect(Params);
 
             return NewEffect;
         }

@@ -49,25 +49,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public override bool CursorControl(PlayerInput ActiveInputManager)
         {
-            Point Offset;
+            Point GridOffset;
             BattleMap ActiveMap;
 
-            bool CursorMoved = CursorControlGrid(ActiveInputManager, out Offset, out ActiveMap);
+            bool CursorMoved = CursorControlGrid(ActiveInputManager, out GridOffset, out ActiveMap);
 
             if (CursorMoved)
             {
-                MovementAlgorithmTile NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
-                if (NextTerrain == ActiveMap.CursorTerrain)//Force movement
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X, GridOffset.Y, 1f, 15f, out _);
+                if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
                 {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, NextTerrain.GridPosition.X + Offset.X));
-                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, NextTerrain.GridPosition.Y + Offset.Y));
+                    ActiveMap.CursorPosition.Z = NextTerrain.Z;
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * TileSize.X, NextTerrain.X + GridOffset.X * TileSize.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * TileSize.Y, NextTerrain.Y + GridOffset.Y * TileSize.Y));
                 }
                 else
                 {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = NextTerrain.GridPosition.X;
-                    ActiveMap.CursorPosition.Y = NextTerrain.GridPosition.Y;
+                    ActiveMap.CursorPosition = NextTerrain;
                 }
 
                 foreach (TeleportPoint ActiveTeleport in LayerManager.ListLayer[(int)CursorPosition.Z].ListTeleportPoint)
@@ -193,7 +191,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Vector2 PositionInTile = new Vector2(WorldPosition.X - ActiveTerrain.WorldPosition.X, WorldPosition.Y - ActiveTerrain.WorldPosition.Y);
 
-            return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+            return WorldPosition + new Vector3(0, 0, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+        }
+
+        public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
+        {
+            return GetFinalPosition(new Vector3(Movement.X, Movement.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
         }
 
         public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)

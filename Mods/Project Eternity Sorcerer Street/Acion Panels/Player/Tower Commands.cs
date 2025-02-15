@@ -121,30 +121,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (ItemAnimationTime < 5)
             {
                 ItemAnimationTime = 2f;
-                int BoxX = (int)(Constants.Width / 3.2);
-                int BoxY = Constants.Height - Constants.Height / 2;
-                int BoxWidth = Constants.Width - (int)(Constants.Width / 1.6);
+                int IconWidth = (int)(32 * 1.5);
+                int IconHeight = (int)(32 * 1.5);
+                int BoxWidth = 650;
+                int BoxHeight = 150;
+                int BoxX = (Constants.Width - BoxWidth) / 2;
+                int BoxY = Constants.Height / 2 - BoxHeight / 2;
+                MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
-                MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, Constants.Height / 15);
-                g.DrawString(Map.fntMenuText, "Passed checkpoint", new Vector2(BoxX + 35, BoxY + 5), Color.White);
+                g.DrawString(Map.fntMenuText, "Passed checkpoint", new Vector2(BoxX + 60, BoxY + 30), Color.White);
                 switch (Map.ListTerrainType[TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.EastTower:
-                        g.Draw(Map.sprDirectionEastFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionEastFilled, new Rectangle(BoxX + 380, BoxY + 28, IconWidth, IconHeight), Color.White);
                         break;
                     case TerrainSorcererStreet.WestTower:
-                        g.Draw(Map.sprDirectionWestFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionWestFilled, new Rectangle(BoxX + 380, BoxY + 28, IconWidth, IconHeight), Color.White);
                         break;
                     case TerrainSorcererStreet.SouthTower:
-                        g.Draw(Map.sprDirectionSouthFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionSouthFilled, new Rectangle(BoxX + 380, BoxY + 28, IconWidth, IconHeight), Color.White);
                         break;
                     case TerrainSorcererStreet.NorthTower:
-                        g.Draw(Map.sprDirectionNorthFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionNorthFilled, new Rectangle(BoxX + 380, BoxY + 28, IconWidth, IconHeight), Color.White);
                         break;
                 }
 
-                g.DrawString(Map.fntMenuText, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 35, BoxY + 25), Color.White);
-                MenuHelper.DrawConfirmIcon(g, new Vector2(BoxX + BoxWidth - 50, BoxY + 20));
+                g.DrawString(Map.fntMenuText, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 60, BoxY + Map.fntMenuText.LineSpacing + 40), Color.White);
+
+                MenuHelper.DrawConfirmIcon(g, new Vector2(BoxX + BoxWidth - 70, BoxY + BoxHeight - 80));
             }
             else
             {

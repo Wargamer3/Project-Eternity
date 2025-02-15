@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            LandLevelLockEffect NewLandLevelLock = new LandLevelLockEffect(Params);
+            NewLandLevelLock.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewLandLevelLock.Lifetime[0].LifetimeTypeValue = 3;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewLandLevelLock, IconHolder.Icons.sprCreatureDrought);
             return "Drought";
         }
 

@@ -33,7 +33,8 @@ namespace ProjectEternity.Core.Skill
             {
                 string LifeType = "";
 
-                if (ActiveSkill.ListEffect[E].LifetimeType == SkillEffect.LifetimeTypeTurns)
+                //Assign lifetype
+                if (ActiveSkill.ListEffect[E].Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeTurns)
                 {
                     LifeType = LifetimeTurnValue;
                 }

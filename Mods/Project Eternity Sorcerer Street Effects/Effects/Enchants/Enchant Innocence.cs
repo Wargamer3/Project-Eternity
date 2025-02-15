@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ProjectEternity.Core.Item;
 
@@ -33,6 +34,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            TollImmunityEffect NewTollImmunityEffect = new TollImmunityEffect(Params);
+            NewTollImmunityEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTollImmunityEffect.Lifetime[0].LifetimeTypeValue = 4;
+
+            InvasionLimitEffect NewInvasionLimitEffect = new InvasionLimitEffect(Params);
+            NewInvasionLimitEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewInvasionLimitEffect.Lifetime[0].LifetimeTypeValue = 4;
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new List<BaseEffect>() { NewTollImmunityEffect, NewInvasionLimitEffect }, IconHolder.Icons.sprPlayerInnocence);
             return "Innocence";
         }
 

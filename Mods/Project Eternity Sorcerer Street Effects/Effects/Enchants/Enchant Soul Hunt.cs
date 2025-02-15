@@ -33,6 +33,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            GainGoldEffect NewGainGoldEffect = new GainGoldEffect(Params);
+            NewGainGoldEffect.Value = "opponent.MHP*5";
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetDestroyedOutsideBattleRequirement(), NewGainGoldEffect, IconHolder.Icons.sprPlayerFairyLight);
+
             return "Soul Hunt";
         }
 

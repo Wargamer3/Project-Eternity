@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            SetCreatureCostEffect NewSetCreatureCostEffect = new SetCreatureCostEffect(Params, 0f);
+            NewSetCreatureCostEffect.Lifetime[0].LifetimeType = CastleTerrain.CastleReachedLifetimeType;
+            NewSetCreatureCostEffect.Lifetime[0].LifetimeTypeValue = 1;
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewSetCreatureCostEffect, IconHolder.Icons.sprPlayerConspiracy);
+
             return "Conspiracy";
         }
 

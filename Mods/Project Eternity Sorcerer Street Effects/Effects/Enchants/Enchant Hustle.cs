@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ChangeStatsEffect IncreaseSTEffect = new ChangeStatsEffect(Params);
+            IncreaseSTEffect.Target = ChangeStatsEffect.Targets.Self;
+            IncreaseSTEffect.Stat = ChangeStatsEffect.Stats.FinalST;
+            IncreaseSTEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
+            IncreaseSTEffect.Value = "30";
+
+            ChangeStatsEffect IncreaseHPEffect = new ChangeStatsEffect(Params);
+            IncreaseHPEffect.Target = ChangeStatsEffect.Targets.Self;
+            IncreaseHPEffect.Stat = ChangeStatsEffect.Stats.FinalHP;
+            IncreaseHPEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
+            IncreaseHPEffect.Value = "30";
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateBattleEnchant(Name, new List<BaseEffect>() { IncreaseSTEffect, IncreaseHPEffect }, IconHolder.Icons.sprCreatureHustle);
             return "Hustle";
         }
 

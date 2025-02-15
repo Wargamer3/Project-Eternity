@@ -355,6 +355,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                 {
                                     DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderBlue));
                                 }
+                                else
+                                {
+                                    DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderRed));
+                                }
                             }
 
                             DicTileBorderPerPlayer[OwnerIndex].AddTile(BorderTile);
@@ -426,16 +430,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!Map.IsAPlatform && !Map.IsServer)
             {
+                Vector3 ActivePlayerPosition;
+
                 if (Map.ActivePlatform != null)
                 {
-                    SetTarget(new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
-                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z,
-                         Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y));
+                    ActivePlayerPosition = ((SorcererStreetMap)Map.ActivePlatform.Map).ListPlayer[Map.ActivePlayerIndex].GamePiece.Position;
                 }
                 else
                 {
-                    SetTarget(new Vector3(Map.CursorPositionVisible.X, Map.CursorPosition.Z, Map.CursorPositionVisible.Y));
+                    if (Map.MovementAnimation.Contains(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece))
+                    {
+                        ActivePlayerPosition = Map.MovementAnimation.GetPosition(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece);
+                    }
+                    else
+                    {
+                        ActivePlayerPosition = Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Position;
+                    }
                 }
+
+                SetTarget(new Vector3(ActivePlayerPosition.X, ActivePlayerPosition.Z, ActivePlayerPosition.Y));
 
                 Camera.Update(gameTime);
             }
@@ -843,6 +856,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        private List<Player> FindPlayersOnGrid(Vector3 WorldPosition)
+        {
+            Vector3 GridPosition = Map.ConvertToGridPosition(WorldPosition);
+            int GridX = (int)GridPosition.X;
+            int GridY = (int)GridPosition.Y;
+            int LayerIndex = (int)GridPosition.Z;
+            List<Player> ListPlayerFound = new List<Player>();
+
+            foreach (Player ActivePlayer in Map.ListPlayer)
+            {
+                if (ActivePlayer.TeamIndex < 0)
+                {
+                    continue;
+                }
+                Vector3 PlayerGridPosition = Map.ConvertToGridPosition(ActivePlayer.GamePiece.Position);
+                if (PlayerGridPosition.X == GridX && PlayerGridPosition.Y == GridY && PlayerGridPosition.Z == LayerIndex)
+                {
+                    ListPlayerFound.Add(ActivePlayer);
+                }
+            }
+
+            return ListPlayerFound;
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
         }
@@ -1127,8 +1164,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
+                        ActivePlayer.Inventory.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
                         ActivePlayer.Inventory.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
-                            * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * Map.LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                            * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
                     }
                 }
                 else
@@ -1207,15 +1245,42 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             foreach (CreatureCard DefendingCreature in Map.ListSummonedCreature)
             {
+                Vector3 CurrentPosition = DefendingCreature.GamePiece.Position;
+                float Scale = 0.2f;
+
+                List<Player> ListPlayerOnTerrain = FindPlayersOnGrid(DefendingCreature.GamePiece.Position);
+                if (ListPlayerOnTerrain.Count > 0)
+                {
+                    CurrentPosition.X += Map.TileSize.X / 2;
+                    CurrentPosition.Y += Map.TileSize.Y / 2;
+                    Scale = 0.1f;
+                }
                 TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(DefendingCreature.GamePiece.Position);
 
-                DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f) * Matrix.CreateTranslation((DefendingCreature.GamePiece.X + 0.9f) * Map.TileSize.X, DefendingCreature.GamePiece.Z * Map.LayerHeight, (DefendingCreature.GamePiece.Y + 0.9f) * Map.TileSize.Y));
+                Matrix RotationMatrix = Matrix.Identity;
+
+                DefendingCreature.GamePiece.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+
+                DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(Scale) * RotationMatrix
+                    * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
 
                 Vector3 Visible3DPosition = new Vector3(DefendingCreature.GamePiece.X + 0.7f, DefendingCreature.GamePiece.Z * Map.LayerHeight, DefendingCreature.GamePiece.Y + 0.9f);
                 Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
 
                 Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
                 g.DrawString(Map.fntNonDemoDamage, ActiveTerrain.CurrentToll.ToString(), new Vector2(Position2D.X, Position2D.Y), Color.White);
+
+                if (DefendingCreature.Enchant != null && DefendingCreature.Enchant.sprIcon != null)
+                {
+                    DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
+
+                    DefendingCreature.Enchant.Unit3DSprite.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 1.5f * Map.LayerHeight,
+                        CurrentPosition.Y);
+
+                    DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                }
             }
         }
 

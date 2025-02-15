@@ -3,15 +3,15 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetCreaturePhaseRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetItemPhaseRequirement : SorcererStreetBattleRequirement
     {
-        public SorcererStreetCreaturePhaseRequirement()
+        public SorcererStreetItemPhaseRequirement()
             : this(null)
         {
         }
 
-        public SorcererStreetCreaturePhaseRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleCreatureModifierPhase.RequirementName, GlobalContext)
+        public SorcererStreetItemPhaseRequirement(SorcererStreetBattleContext GlobalContext)
+            : base(ActionPanelBattleItemModifierPhase.RequirementName, GlobalContext)
         {
         }
 
@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void Load(BinaryReader BR)
         {
         }
-        
+
         public override bool CanActivatePassive()
         {
             return false;
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetCreaturePhaseRequirement(GlobalContext);
+            return new SorcererStreetItemPhaseRequirement(GlobalContext);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

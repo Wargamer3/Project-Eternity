@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class DisableTollEffect : SorcererStreetEffect
+    public sealed class ForceStopEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Disable Toll";
+        public static string Name = "Sorcerer Street Force Stop";
 
-        public DisableTollEffect()
+        public ForceStopEffect()
             : base(Name, false)
         {
         }
 
-        public DisableTollEffect(SorcererStreetBattleParams Params)
+        public ForceStopEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).ForceStop = true;
             return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            DisableTollEffect NewEffect = new DisableTollEffect(Params);
+            ForceStopEffect NewEffect = new ForceStopEffect(Params);
 
             return NewEffect;
         }

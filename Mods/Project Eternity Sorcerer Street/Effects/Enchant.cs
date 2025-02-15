@@ -40,6 +40,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return Spell.CanActivate;
         }
 
+        public static void ActivateOnPlayer(SorcererStreetBattleContext Context, ManualSkill Spell)
+        {
+            for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
+            {
+                BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
+
+                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                {
+                    if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                    {
+                        ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
+                    }
+
+                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                }
+
+                ActiveEffect.ExecuteEffect();
+            }
+        }
+
         /// <summary>
         /// Bypass skill activation to not store any effect.
         /// </summary>
@@ -54,15 +74,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
-                BaseEffect ActiveSkillEffect = Spell.ListEffect[E].Copy();
+                BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
 
-                if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
                 {
-                    ActiveSkillEffect.LifetimeType =  SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
+                    if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                    {
+                        ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
+                    }
+
+                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
                 }
 
-                ActiveSkillEffect.Lifetime = ActiveSkillEffect.LifetimeTypeValue;
-                ActiveSkillEffect.ExecuteEffect();
+                ActiveEffect.ExecuteEffect();
             }
         }
 
@@ -92,14 +116,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     BaseEffect ActiveEffect = Activation.ListEffect[E];
 
-                    if (ActiveEffect.LifetimeType == LifetimeType)
+                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
                     {
-                        --ActiveEffect.Lifetime;
-                        ActiveEffect.ResetState();
-
-                        if (ActiveEffect.Lifetime == 0)
+                        if (ActiveLifetime.LifetimeType == LifetimeType)
                         {
-                            Activation.ListEffect.RemoveAt(E);
+                            --ActiveLifetime.Lifetime;
+                            ActiveEffect.ResetState();
+
+                            if (ActiveLifetime.Lifetime == 0)
+                            {
+                                Activation.ListEffect.RemoveAt(E);
+                            }
                         }
                     }
                 }
@@ -127,7 +154,49 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new Enchant(NewEnchant);
         }
 
-        public static Enchant CreateEnchant(string EnchantName, BaseEffect EffectToUse, Texture2D sprIcon = null)
+        public static Enchant CreatePassiveEnchant(string EnchantName, BaseEffect EffectToUse, Texture2D sprIcon = null)
+        {
+            BaseAutomaticSkill NewEnchant = new BaseAutomaticSkill();
+
+            NewEnchant.CurrentLevel = 1;
+            NewEnchant.Name = EnchantName;
+
+            BaseSkillLevel DefaultSkillLevel = new BaseSkillLevel();
+            NewEnchant.ListSkillLevel.Add(DefaultSkillLevel);
+            BaseSkillActivation DefaultActivation = new BaseSkillActivation();
+            DefaultSkillLevel.ListActivation.Add(DefaultActivation);
+
+            DefaultActivation.ListRequirement.Add(new SorcererStreetOnCreateRequirement());
+            DefaultActivation.ListEffect.Add(EffectToUse);
+
+            DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
+            DefaultActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { new EffectActivationExecuteOnly() });
+
+            return new Enchant(NewEnchant, sprIcon);
+        }
+
+        public static Enchant CreatePassiveEnchant(string EnchantName, List<BaseEffect> ListEffectToUse, Texture2D sprIcon = null)
+        {
+            BaseAutomaticSkill NewEnchant = new BaseAutomaticSkill();
+
+            NewEnchant.CurrentLevel = 1;
+            NewEnchant.Name = EnchantName;
+
+            BaseSkillLevel DefaultSkillLevel = new BaseSkillLevel();
+            NewEnchant.ListSkillLevel.Add(DefaultSkillLevel);
+            BaseSkillActivation DefaultActivation = new BaseSkillActivation();
+            DefaultSkillLevel.ListActivation.Add(DefaultActivation);
+
+            DefaultActivation.ListRequirement.Add(new SorcererStreetOnCreateRequirement());
+            DefaultActivation.ListEffect.AddRange(ListEffectToUse);
+
+            DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
+            DefaultActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { new EffectActivationExecuteOnly() });
+
+            return new Enchant(NewEnchant, sprIcon);
+        }
+
+        public static Enchant CreateBattleEnchant(string EnchantName, BaseEffect EffectToUse, Texture2D sprIcon = null)
         {
             BaseAutomaticSkill NewEnchant = new BaseAutomaticSkill();
 
@@ -148,7 +217,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new Enchant(NewEnchant, sprIcon);
         }
 
-        public static Enchant CreateEnchant(string EnchantName, List<BaseEffect> ListEffect)
+        public static Enchant CreateBattleEnchant(string EnchantName, List<BaseEffect> ListEffect, Texture2D sprIcon = null)
         {
             BaseAutomaticSkill NewEnchant = new BaseAutomaticSkill();
 
@@ -166,10 +235,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
             DefaultActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { new EffectActivationExecuteOnly() });
 
-            return new Enchant(NewEnchant);
+            return new Enchant(NewEnchant, sprIcon);
         }
 
-        public static Enchant CreateEnchant(string EnchantName, List<BaseSkillRequirement> ListRequirement, List<BaseEffect> ListEffect)
+        public static Enchant CreateEnchant(string EnchantName, BaseSkillRequirement Requirement, BaseEffect ListEffect, Texture2D sprIcon = null)
         {
             BaseAutomaticSkill NewEnchant = new BaseAutomaticSkill();
 
@@ -181,17 +250,53 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BaseSkillActivation DefaultActivation = new BaseSkillActivation();
             DefaultSkillLevel.ListActivation.Add(DefaultActivation);
 
-            DefaultActivation.ListRequirement.AddRange(ListRequirement);
-            DefaultActivation.ListEffect.AddRange(ListEffect);
+            DefaultActivation.ListRequirement.Add(Requirement);
+            DefaultActivation.ListEffect.Add(ListEffect);
 
             DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
+
             DefaultActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { new EffectActivationExecuteOnly() });
 
             return new Enchant(NewEnchant);
         }
     }
 
-    public sealed class SorcererStreetEnchantPhaseRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetOnCreateRequirement : SorcererStreetBattleRequirement
+    {
+        public SorcererStreetOnCreateRequirement()
+            : this(null)
+        {
+        }
+
+        public SorcererStreetOnCreateRequirement(SorcererStreetBattleContext GlobalContext)
+            : base("Sorcerer Street On Load", GlobalContext)
+        {
+        }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+        }
+
+        public override bool CanActivatePassive()
+        {
+            return false;
+        }
+
+        public override BaseSkillRequirement Copy()
+        {
+            return new SorcererStreetOnCreateRequirement(GlobalContext);
+        }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
+    }
+
+    public sealed class SorcererStreetEnchantPhaseRequirement : SorcererStreetBattleRequirement
     {
         public SorcererStreetEnchantPhaseRequirement()
             : this(null)

@@ -73,15 +73,17 @@
     <Compile Include="Acion Panels\MAP Attack\MAP Targeted.cs" />
     <Compile Include="Acion Panels\MAP Attack\Use MAP Attack.cs" />
     <Compile Include="Acion Panels\Options\Suspend.cs" />
+    <Compile Include="Acion Panels\Player\Select Player Spell.cs" />
+    <Compile Include="Acion Panels\Player\Confirm Spell.cs" />
     <Compile Include="Acion Panels\PER Attack\Attack PER Panel.cs" />
     <Compile Include="Acion Panels\PER Attack\PER Attack Pahtfinding.cs" />
     <Compile Include="Acion Panels\PER Attack\Update PER Attacks.cs" />
-    <Compile Include="Acion Panels\Player\Auto Move.cs" />
+    <Compile Include="Acion Panels\Player\Move\Auto Move.cs" />
     <Compile Include="Acion Panels\Player\Draw Any Card Phase.cs" />
     <Compile Include="Acion Panels\Player\Fall To Death.cs" />
     <Compile Include="Acion Panels\Player\Init Delayed MAP Attack.cs" />
     <Compile Include="Acion Panels\Player\Land Info.cs" />
-    <Compile Include="Acion Panels\Player\Choose Direction.cs" />
+    <Compile Include="Acion Panels\Player\Move\Choose Direction.cs" />
     <Compile Include="Acion Panels\Player\Creature Summon.cs" />
     <Compile Include="Acion Panels\Player\Confirm Creature Summon Battle.cs" />
     <Compile Include="Acion Panels\Player\Command Selection Phase.cs" />
@@ -97,7 +99,7 @@
     <Compile Include="Acion Panels\Player\Refill Deck Phase.cs" />
     <Compile Include="Acion Panels\Player\Roll Dice Phase.cs" />
     <Compile Include="Acion Panels\Player\Spell Card Selection Phase.cs" />
-    <Compile Include="Acion Panels\Player\Movement Phase.cs" />
+    <Compile Include="Acion Panels\Player\Move\Movement Phase.cs" />
     <Compile Include="Acion Panels\Spells\Select Single Target.cs" />
     <Compile Include="Acion Panels\Options\Territory Actions.cs" />
     <Compile Include="Acion Panels\Options\Choose Territory.cs" />
@@ -169,7 +171,7 @@
     <Compile Include="Online\Send Room ID Script Client.cs" />
     <Compile Include="Sorcerer Street Params.cs" />
     <Compile Include="Effects\Sorcerer Street Effect.cs" />
-    <Compile Include="Effects\Sorcerer Street Requirement.cs" />
+    <Compile Include="Effects\Sorcerer Street Battle Requirement.cs" />
     <Compile Include="Effects\Sorceret Street Automatic Skill Target.cs" />
     <Compile Include="Rules\Deathmatch Game Rule.cs" />
     <Compile Include="Environment\Default Weather.cs" />

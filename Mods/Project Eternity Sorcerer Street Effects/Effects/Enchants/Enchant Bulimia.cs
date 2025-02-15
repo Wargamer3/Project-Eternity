@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            DestroyCardsEffect NewDestroyCardEffect = new DestroyCardsEffect(Params);
+            NewDestroyCardEffect.CardDestroyType = DestroyCardsEffect.CardDestroyTypes.Random;
+            NewDestroyCardEffect.NumberOfCards = 1;
+            NewDestroyCardEffect.Target = DestroyCardsEffect.Targets.Self;
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetBattleEndRequirement(), NewDestroyCardEffect, IconHolder.Icons.sprCreatureBulimia);
             return "Bulimia";
         }
 

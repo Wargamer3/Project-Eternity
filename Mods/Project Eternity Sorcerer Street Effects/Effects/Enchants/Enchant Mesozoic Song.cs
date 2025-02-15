@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            TransformCreatureEffect NewTransformCreatureEffect = new TransformCreatureEffect(Params);
+            NewTransformCreatureEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTransformCreatureEffect.Lifetime[0].LifetimeTypeValue = 3;
+            NewTransformCreatureEffect.CreatureName = "Tyrannosaurus";
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateBattleEnchant(Name, NewTransformCreatureEffect, IconHolder.Icons.sprPlayerMesozoicSong);
             return "Mesozoic Song";
         }
 

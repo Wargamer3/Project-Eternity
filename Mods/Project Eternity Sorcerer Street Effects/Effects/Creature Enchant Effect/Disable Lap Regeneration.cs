@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{//MHP+20 to target creature (up to a maximum of 100).
-    public sealed class EnchantMutationEffect : SorcererStreetEffect
+{
+    public sealed class DisableLapRegenerationEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Mutation";
+        public static string Name = "Sorcerer Street Disable Lap Regeneration";
 
-        public EnchantMutationEffect()
+        public DisableLapRegenerationEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantMutationEffect(SorcererStreetBattleParams Params)
+        public DisableLapRegenerationEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Mutation";
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LapRegenerationLimit = true;
+            return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantMutationEffect NewEffect = new EnchantMutationEffect(Params);
+            DisableLapRegenerationEffect NewEffect = new DisableLapRegenerationEffect(Params);
 
             return NewEffect;
         }

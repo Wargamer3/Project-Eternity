@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            TerritoryCommandEffect NewTerritoryCommandEffect = new TerritoryCommandEffect();
+            NewTerritoryCommandEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTerritoryCommandEffect.Lifetime[0].LifetimeTypeValue = 1;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetOnCreateRequirement(), NewTerritoryCommandEffect, IconHolder.Icons.sprPlayerTerritory);
             return "Telegnosis";
         }
 

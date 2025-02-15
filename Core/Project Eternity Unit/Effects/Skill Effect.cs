@@ -67,8 +67,8 @@ namespace ProjectEternity.Core.Effects
 
         protected override void Load(BinaryReader BR)
         {
-            if (LifetimeType == LifetimeTypePermanent)
-                LifetimeTypeValue = -1;
+            if (Lifetime[0].LifetimeType == LifetimeTypePermanent)
+                Lifetime[0].LifetimeTypeValue = -1;
         }
 
         protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)

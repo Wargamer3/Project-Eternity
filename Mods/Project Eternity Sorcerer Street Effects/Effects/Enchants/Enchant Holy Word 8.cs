@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(Name, false, Params)
         {
         }
-        
+
         protected override void Load(BinaryReader BR)
         {
         }
@@ -33,6 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            //Play Activation Animation
+
+            //Enchant Player
+            SetDiceValueEffect NewHolyWord8Effect = new SetDiceValueEffect(Params, 8);
+            NewHolyWord8Effect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewHolyWord8Effect.Lifetime[0].LifetimeTypeValue = 1;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewHolyWord8Effect, IconHolder.Icons.sprPlayerMovement);
             return "Holy Word 8";
         }
 

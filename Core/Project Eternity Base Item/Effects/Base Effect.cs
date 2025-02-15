@@ -6,6 +6,26 @@ using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Item
 {
+    public class BaseEffectLifetime
+    {
+        public string LifetimeType;
+        public int LifetimeTypeValue;//Not used if Permanent, define how long it last for turn and battle.
+        public int Lifetime;//Time left alive, set by LifetimeTypeValue on creation
+
+        public BaseEffectLifetime(string LifetimeType)
+        {
+            this.LifetimeType = LifetimeType;
+            LifetimeTypeValue = 0;
+            Lifetime = 0;
+        }
+        public BaseEffectLifetime(string LifetimeType, int LifetimeTypeValue)
+        {
+            this.LifetimeType = LifetimeType;
+            this.LifetimeTypeValue = LifetimeTypeValue;
+            Lifetime = 0;
+        }
+    }
+
     /// <summary>
     /// An Effect can only affect its user.
     /// To affect multiple users it need to be indivually assigned to multiple users.
@@ -14,11 +34,9 @@ namespace ProjectEternity.Core.Item
     {
         public static readonly Dictionary<string, BaseEffect> DicDefaultEffect = new Dictionary<string, BaseEffect>();//When you just need a placeholder outside of a game.
 
-        public string LifetimeType;
-        public int LifetimeTypeValue;//Not used if Permanent, limit the number of stacks for Stacking, define how long it last for turn and battle.
+        public List<BaseEffectLifetime> Lifetime;
         public bool IsStacking;
-        public int MaximumStack;
-        public int Lifetime;
+        public int MaximumStack;//Limit the number of stacks for Stacking
         private bool IsUsed;//Used to not activate the same effect multiple times after a reset.
         protected readonly bool IsPassive;//If true, the skill will activate even if IsUsed is true.
         public int Range;//Range of the skill, 0 for infinite.
@@ -31,7 +49,7 @@ namespace ProjectEternity.Core.Item
         public BaseEffect(string EffectTypeName, bool IsPassive)
         {
             IsUsed = false;
-            LifetimeType = string.Empty;
+            Lifetime = new List<BaseEffectLifetime>() { new BaseEffectLifetime(string.Empty) };
             this.EffectTypeName = EffectTypeName;
             this.IsPassive = IsPassive;
             ListFollowingSkill = new List<BaseAutomaticSkill>();
@@ -42,21 +60,26 @@ namespace ProjectEternity.Core.Item
         {
             string EffectName = BR.ReadString();
 
-            string LifetimeType = BR.ReadString();
-            int LifetimeTypeValue = BR.ReadInt32();
-
             bool IsStacking = BR.ReadBoolean();
             int MaximumStack = BR.ReadInt32();
             int Range = BR.ReadInt32();
 
             BaseEffect NewSkillEffect = DicEffect[EffectName].Copy();
-            NewSkillEffect.LifetimeType = LifetimeType;
-            NewSkillEffect.LifetimeTypeValue = LifetimeTypeValue;
+
+            NewSkillEffect.Lifetime.Clear();
+            int LifetimeCount = BR.ReadByte();
+            for (int L = 0; L < LifetimeCount; ++L)
+            {
+                string LifetimeType = BR.ReadString();
+                int LifetimeTypeValue = BR.ReadInt32();
+
+                BaseEffectLifetime NewLifetime = new BaseEffectLifetime(LifetimeType, LifetimeTypeValue);
+                NewLifetime.Lifetime = 0;
+                NewSkillEffect.Lifetime.Add(NewLifetime);
+            }
 
             NewSkillEffect.Load(BR);
             
-            NewSkillEffect.Lifetime = 0;
-
             NewSkillEffect.IsStacking = IsStacking;
             NewSkillEffect.MaximumStack = MaximumStack;
             NewSkillEffect.Range = Range;
@@ -87,15 +110,21 @@ namespace ProjectEternity.Core.Item
         protected void QuickLoad(BinaryReader BR, FormulaParser ActiveParser, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            string LifetimeType = BR.ReadString();
-            int LifetimeTypeValue = BR.ReadInt32();
-
+            //Regular Load
             bool IsStacking = BR.ReadBoolean();
             int MaximumStack = BR.ReadInt32();
             int Range = BR.ReadInt32();
 
-            this.LifetimeType = LifetimeType;
-            this.LifetimeTypeValue = LifetimeTypeValue;
+            this.Lifetime.Clear();
+            int LifetimeCount = BR.ReadByte();
+            for (int L = 0; L < LifetimeCount; ++L)
+            {
+
+                string LifetimeType = BR.ReadString();
+                int LifetimeTypeValue = BR.ReadInt32();
+                BaseEffectLifetime NewLifetime = new BaseEffectLifetime(LifetimeType, LifetimeTypeValue);
+                this.Lifetime.Add(NewLifetime);
+            }
 
             Load(BR);
 
@@ -105,12 +134,17 @@ namespace ProjectEternity.Core.Item
                 ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
 
-            int Lifetime = BR.ReadInt32();
-
-            this.Lifetime = Lifetime;
             this.IsStacking = IsStacking;
             this.MaximumStack = MaximumStack;
             this.Range = Range;
+
+            //Quick Load data
+            int LifetimeCount2 = BR.ReadByte();
+            for (int L = 0; L < LifetimeCount2; ++L)
+            {
+                int Lifetime = BR.ReadInt32();
+                this.Lifetime[L].Lifetime = Lifetime;
+            }
 
             DoQuickLoad(BR, ActiveParser);
         }
@@ -123,7 +157,11 @@ namespace ProjectEternity.Core.Item
         {
             WriteEffect(BW);
 
-            BW.Write(Lifetime);
+            BW.Write((byte)Lifetime.Count);
+            for (int L = 0; L < Lifetime.Count; ++L)
+            {
+                BW.Write(Lifetime[L].Lifetime);
+            }
 
             DoQuickSave(BW);
         }
@@ -134,12 +172,16 @@ namespace ProjectEternity.Core.Item
         {
             BW.Write(EffectTypeName);
 
-            BW.Write(LifetimeType);
-            BW.Write(LifetimeTypeValue);
-
             BW.Write(IsStacking);
             BW.Write(MaximumStack);
             BW.Write(Range);
+
+            BW.Write((byte)Lifetime.Count);
+            for (int L = 0; L < Lifetime.Count; ++L)
+            {
+                BW.Write(this.Lifetime[L].LifetimeType);
+                BW.Write(this.Lifetime[L].LifetimeTypeValue);
+            }
 
             Save(BW);
 
@@ -207,11 +249,16 @@ namespace ProjectEternity.Core.Item
         {
             BaseEffect NewCopy = DoCopy();
 
-            NewCopy.Lifetime = 0;
             NewCopy.IsStacking = IsStacking;
             NewCopy.MaximumStack = MaximumStack;
-            NewCopy.LifetimeType = LifetimeType;
-            NewCopy.LifetimeTypeValue = LifetimeTypeValue;
+
+            for (int L = 0; L < 0; L++)
+            {
+                NewCopy.Lifetime[L].Lifetime = 0;
+                NewCopy.Lifetime[L].LifetimeType = Lifetime[L].LifetimeType;
+                NewCopy.Lifetime[L].LifetimeTypeValue = Lifetime[L].LifetimeTypeValue;
+            }
+
             NewCopy.ListFollowingSkill = new List<BaseAutomaticSkill>(ListFollowingSkill.Count);
 
             foreach (BaseAutomaticSkill ActiveFollowingSkill in ListFollowingSkill)
@@ -231,8 +278,12 @@ namespace ProjectEternity.Core.Item
             Lifetime = Copy.Lifetime;
             IsStacking = Copy.IsStacking;
             MaximumStack = Copy.MaximumStack;
-            LifetimeType = Copy.LifetimeType;
-            LifetimeTypeValue = Copy.LifetimeTypeValue;
+
+            for (int L = 0; L < 0; L++)
+            {
+                Lifetime[L].LifetimeType = Copy.Lifetime[L].LifetimeType;
+                Lifetime[L].LifetimeTypeValue = Copy.Lifetime[L].LifetimeTypeValue;
+            }
 
             if (Copy.GetType() == GetType())
             {

@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetEnchantPhaseRequirement(), new FreeTravelEffect(), IconHolder.Icons.sprCreatureSpiritWalk);
             return null;
         }
 

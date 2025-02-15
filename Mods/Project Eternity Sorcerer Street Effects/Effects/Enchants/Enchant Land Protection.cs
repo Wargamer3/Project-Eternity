@@ -33,7 +33,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new TargetProtectionEffect(Params), IconHolder.Icons.sprCreatureLandProtection);
+            return "Land Protection";
         }
 
         protected override BaseEffect DoCopy()

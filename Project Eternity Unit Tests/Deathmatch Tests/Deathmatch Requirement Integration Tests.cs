@@ -52,7 +52,7 @@ namespace ProjectEternity.UnitTests
             FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "100";
             NewEffect.NumberType = Core.Operators.NumberTypes.Absolute;
-            NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+            NewEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
 
             TestSkillActivation.ListEffect.Add(NewEffect);
             TestSkillLevel.ListActivation.Add(TestSkillActivation);

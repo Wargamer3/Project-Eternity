@@ -3,7 +3,7 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
+{//Creature takes additional damage at the end of battle. (50% MHP)
     public sealed class EnchantPoisonEffect : SorcererStreetEffect
     {
         public static string Name = "Sorcerer Street Enchant Poison";
@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            DealDamageEffect NewDealDamageEffect = new DealDamageEffect(Params);
+            NewDealDamageEffect.DamageToDeal = "opponent.maxhp/2";
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetBattleEndRequirement(), NewDealDamageEffect, IconHolder.Icons.sprCreaturePoison);
             return "Poison";
         }
 

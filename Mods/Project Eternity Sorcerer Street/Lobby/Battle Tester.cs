@@ -133,7 +133,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Symbols = Symbols;
 
             ActiveBook = ActivePlayer.Inventory.ActiveBook;
-            ActiveBook = AllCardsBook;
+            AllCardsBook = CardBook.LoadGlobalBook();
 
             ListAttackAnimation = new List<SimpleAnimation>();
             DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();

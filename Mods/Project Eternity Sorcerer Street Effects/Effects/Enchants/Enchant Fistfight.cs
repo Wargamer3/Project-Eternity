@@ -8,6 +8,44 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Enchant Fistfight";
 
+        private sealed class FistfightEffect : SorcererStreetEffect
+        {
+            public FistfightEffect(SorcererStreetBattleParams Params)
+                : base("Sorcerer Street Holy Word 0", false, Params)
+            {
+            }
+
+            protected override void Load(BinaryReader BR)
+            {
+            }
+
+            protected override void Save(BinaryWriter BW)
+            {
+            }
+
+            public override bool CanActivate()
+            {
+                return true;
+            }
+
+            protected override string DoExecuteEffect()
+            {
+                Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).EffectLimit = true;
+                return "Fistfight";
+            }
+
+            protected override BaseEffect DoCopy()
+            {
+                FistfightEffect NewEffect = new FistfightEffect(Params);
+
+                return NewEffect;
+            }
+
+            protected override void DoCopyMembers(BaseEffect Copy)
+            {
+            }
+        }
+
         public EnchantFistfightEffect()
             : base(Name, false)
         {
@@ -33,6 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, new FistfightEffect(Params), IconHolder.Icons.sprCreatureFistfight);
             return "Fistfight";
         }
 

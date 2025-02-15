@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ReflectDamageEffect NewReflectDamageEffect = new ReflectDamageEffect(Params);
+            NewReflectDamageEffect.ReflectionTypes = new ActionPanelBattleAttackPhase.AttackTypes[] {ActionPanelBattleAttackPhase.AttackTypes.NonScrolls };
+            NewReflectDamageEffect.SignOperator = Core.Operators.NumberTypes.Relative;
+            NewReflectDamageEffect.Value = "100";
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, NewReflectDamageEffect, IconHolder.Icons.sprCreatureReflect);
             return "Reflection";
         }
 

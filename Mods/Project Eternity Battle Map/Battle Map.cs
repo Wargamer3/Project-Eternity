@@ -759,7 +759,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool IsInsideMap(Vector3 WorldPosition)
         {
-            return WorldPosition.X >= MapSize.X * TileSize.X || WorldPosition.X < 0 || WorldPosition.Y >= MapSize.Y || WorldPosition.Y >= MapSize.Y * TileSize.Y;
+            return WorldPosition.X < MapSize.X * TileSize.X && WorldPosition.X >= 0 && WorldPosition.Y >= 0 && WorldPosition.Y < MapSize.Y * TileSize.Y;
+        }
+
+        public Vector3 ConvertToGridPosition(Vector3 WorldPosition)
+        {
+            return new Vector3((float)Math.Floor(WorldPosition.X / TileSize.X), (float)Math.Floor(WorldPosition.Y / TileSize.Y), (float)Math.Floor(WorldPosition.Z / LayerHeight));
         }
 
         public void GetEmptyPosition(Vector3 TargetPosition, out Vector3 FinalPosition)
@@ -846,9 +851,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Move the cursor on the map.
         /// </summary>
         /// <returns>Returns true if the cursor was moved</returns>
-        public bool CursorControlGrid(PlayerInput ActiveInputManager, out Point Offset, out BattleMap ActiveMap)
+        public bool CursorControlGrid(PlayerInput ActiveInputManager, out Point GridOffset, out BattleMap ActiveMap)
         {
-            Offset = Point.Zero;
+            GridOffset = Point.Zero;
             bool CursorMoved = false;
 
             bool CanKeyboardMove = false;
@@ -918,7 +923,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.X - Camera2DPosition.X - 3 * TileSize.X < 0 && Camera2DPosition.X > -3 * TileSize.X)
                     Camera2DPosition.X -= CameraSpeed;
 
-                Offset.X -= (CursorPosition.X > 0) ? 1 : 0;
+                GridOffset.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (IsMovingRight && CanKeyboardMove)
@@ -927,7 +932,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.X - Camera2DPosition.X + 3 * TileSize.X >= ScreenSize.X * TileSize.X && Camera2DPosition.X + ScreenSize.X * TileSize.X < (MapSize.X + 3) * TileSize.X)
                     Camera2DPosition.X += CameraSpeed;
 
-                Offset.X += (CursorPosition.X < (MapSize.X - 1) * TileSize.X) ? 1 : 0;
+                GridOffset.X += (CursorPosition.X < (MapSize.X - 1) * TileSize.X) ? 1 : 0;
                 CursorMoved = true;
             }
             //Y
@@ -937,7 +942,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
                     Camera2DPosition.Y -= CameraSpeed;
 
-                Offset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
+                GridOffset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (IsMovingDown && CanKeyboardMove)
@@ -946,7 +951,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.Y - Camera2DPosition.Y + 3 * TileSize.Y >= ScreenSize.Y * TileSize.Y && Camera2DPosition.Y + ScreenSize.Y * TileSize.Y < (MapSize.Y + 3) * TileSize.Y)
                     Camera2DPosition.Y += CameraSpeed;
 
-                Offset.Y += (CursorPosition.Y < (MapSize.Y - 1) * TileSize.Y) ? 1 : 0;
+                GridOffset.Y += (CursorPosition.Y < (MapSize.Y - 1) * TileSize.Y) ? 1 : 0;
                 CursorMoved = true;
             }
 

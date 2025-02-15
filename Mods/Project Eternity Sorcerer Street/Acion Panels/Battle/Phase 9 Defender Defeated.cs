@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.Defender.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
 
             Map.RemoveCreature(Map.GlobalSorcererStreetBattleContext.Defender.Creature);
-            Map.SummonCreature(Map.GlobalSorcererStreetBattleContext.Invader.Creature);
+            Map.SummonCreature(Map.GlobalSorcererStreetBattleContext.Invader.Creature, ActiveTerrain);
 
             Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.Invader.Owner);
             Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.Defender.Owner);

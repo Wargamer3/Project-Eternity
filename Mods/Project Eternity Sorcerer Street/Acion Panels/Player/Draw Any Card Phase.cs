@@ -31,25 +31,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            CardSelectionScreen = new EditBookCardListFilterScreen(AllCardsBook, EditBookCardListFilterScreen.Filters.All, null, true);
+            CardSelectionScreen = new EditBookCardListFilterScreen(AllCardsBook, EditBookCardListFilterScreen.Filters.All, null, true, false);
             Map.PushScreen(CardSelectionScreen);
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (CardSelectionScreen == null || CardSelectionScreen.ListSelectedCard.Count == 0)
+            if (CardSelectionScreen == null || (CardSelectionScreen.ListSelectedCard != null && CardSelectionScreen.ListSelectedCard.Count == 0))
             {
                 return;
             }
 
-            foreach (Card ActiveCard in CardSelectionScreen.ListSelectedCard)
+            if (CardSelectionScreen.ListSelectedCard != null)
             {
-                ActivePlayer.ListCardInHand.Add(ActiveCard);
-            }
+                foreach (Card ActiveCard in CardSelectionScreen.ListSelectedCard)
+                {
+                    ActivePlayer.ListCardInHand.Add(ActiveCard);
+                }
 
-            if (ActivePlayer.ListCardInHand.Count > 6)
-            {
-                AddToPanelListAndSelect(new ActionPanelDiscardCardPhase(Map, ActivePlayerIndex, 6));
+                if (ActivePlayer.ListCardInHand.Count > 6)
+                {
+                    AddToPanelListAndSelect(new ActionPanelDiscardCardPhase(Map, ActivePlayerIndex, 6));
+                }
             }
 
             CardSelectionScreen = null;

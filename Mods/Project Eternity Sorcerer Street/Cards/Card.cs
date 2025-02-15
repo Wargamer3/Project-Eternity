@@ -21,17 +21,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool CriticalHit;
         public float DamageMultiplier;
         public int DamageModifier;
+
         public bool IsDefensive;//Can't move
+        public bool FreeTravel;//Target creature can travel to any vacant land within the area when moving.
+
         public bool SupportCreature;//Can use other creatures as items
         public bool ItemCreature;//Can be used as an item
         public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
+        public bool ForceStop;//Forces any Player that steps onto target territory to stop.
         public bool Regenerate;//Regain max HP after battle
+
         public bool ItemProtection;//Immune to Destroy Item and Steal Item effects.
         public bool TargetProtection;//Cannot be targeted by spells or territory abilities.
-        public bool HPProtection;//HP & MHP cannot be altered by spells or territory abilities.
-        public bool Recycle;
+        public bool InvasionProtection;//Target territory cannot be invaded.
 
+        public bool HPProtection;//HP & MHP cannot be altered by spells or territory abilities.
+        public bool Recycle;//Return to hand.
+        public bool LapRegenerationLimit;//Disable Lap Regeneration
+
+        public int TollOverride;
+
+        public bool Paralysis;//Creature is unable to use items and abilities. Note: Creature does still receive Boost and Global Ability effects from other creatures.
+        public bool EffectLimit;//No effects or abilities can be used during battle
         public bool LandEffectLimit;//Target creature cannot receive land effect.
+        public bool LandEffectNoLimit;//Target creature always receive land effect.
+        public bool LandLevelLock;//Cannot change the level of a land.
+        public bool LandLevelDowngradeLock;//Territory level cannot be lowered.
 
         public ElementalAffinity[] ArrayElementAffinity;
 
@@ -62,17 +77,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CriticalHit = Other.CriticalHit;
             DamageMultiplier = Other.DamageMultiplier;
             DamageModifier = Other.DamageModifier;
+
             IsDefensive = Other.IsDefensive;
+            FreeTravel = Other.FreeTravel;
             SupportCreature = Other.SupportCreature;
             ItemCreature = Other.ItemCreature;
             Immediate = Other.Immediate;
+            ForceStop = Other.ForceStop;
             Regenerate = Other.Regenerate;
             ItemProtection = Other.ItemProtection;
             TargetProtection = Other.TargetProtection;
+            InvasionProtection = Other.InvasionProtection;
             HPProtection = Other.HPProtection;
             Recycle = Other.Recycle;
+            LapRegenerationLimit = Other.LapRegenerationLimit;
 
+            TollOverride = Other.TollOverride;
+
+            Paralysis = Other.Paralysis;
+            EffectLimit = Other.EffectLimit;
             LandEffectLimit = Other.LandEffectLimit;
+            LandEffectNoLimit = Other.LandEffectNoLimit;
+            LandLevelLock = Other.LandLevelLock;
+            LandLevelDowngradeLock = Other.LandLevelDowngradeLock;
 
             ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
 
@@ -123,6 +150,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprEnchantSingle;
         public Texture2D sprEnchantMultiple;
 
+        public Texture2D sprCreature;
+
         public static CardSymbols Symbols;
 
         public static void Load(ContentManager Content)
@@ -157,6 +186,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Symbols.sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Single");
             Symbols.sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Multiple");
+
+            Symbols.sprCreature = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Creature");
         }
     }
 
@@ -310,9 +341,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void DrawCard(CustomSpriteBatch g)
         {
+            float Ratio = Constants.Height / 720f;
             //Draw Card on left
-            g.Draw(sprCard, new Vector2(Constants.Width / 4, Constants.Height / 10), new Rectangle(0, 0, sprCard.Width, sprCard.Height), Color.White,
-                0f, new Vector2(sprCard.Width / 2, 0), new Vector2(1f, 1f), SpriteEffects.None, 0f);
+            g.Draw(sprCard, new Vector2(450, 70), new Rectangle(0, 0, sprCard.Width, sprCard.Height), Color.White,
+                0f, new Vector2(sprCard.Width / 2, 0), Ratio, SpriteEffects.None, 0f);
         }
 
         public abstract List<Texture2D> GetIcons(CardSymbols Symbols);

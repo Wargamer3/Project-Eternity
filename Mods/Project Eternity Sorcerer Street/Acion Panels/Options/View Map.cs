@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Vector3 CursorPosition;
         private Vector3 CameraPosition;
         private Camera3D Camera;
-        private TerrainSorcererStreet ActiveTerrain;
+        protected TerrainSorcererStreet ActiveTerrain;
 
         public ActionPanelViewMap(SorcererStreetMap Map)
             : base("View Map", Map, true)
@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (ActiveLayer.ArrayTerrain[X, Y].TerrainTypeIndex != 0)
                             {
-                                Vector3 TilePosition = new Vector3(ActiveLayer.ArrayTerrain[X, Y].WorldPosition.X * Map.TileSize.X, ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Z * Map.LayerHeight, ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Y * Map.TileSize.Y);
+                                Vector3 TilePosition = new Vector3(ActiveLayer.ArrayTerrain[X, Y].WorldPosition.X, ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Z, ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Y);
 
                                 Vector3 Tile3DPositionIn2DTopLeft = GameScreen.GraphicsDevice.Viewport.Project(TilePosition, Camera.Projection, Camera.View, Matrix.Identity);
                                 Vector3 Tile3DPositionIn2DBottomRight = GameScreen.GraphicsDevice.Viewport.Project(TilePosition + new Vector3(Map.TileSize.X, 0, Map.TileSize.Y), Camera.Projection, Camera.View, Matrix.Identity);

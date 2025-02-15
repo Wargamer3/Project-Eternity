@@ -160,7 +160,7 @@ namespace ProjectEternity.Editors.PartsEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value.Copy();
-            NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+            NewEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
             ListViewItem NewListViewItem = new ListViewItem(NewEffect.EffectTypeName);
             NewListViewItem.Tag = NewEffect;
             lvEffects.Items.Add(NewListViewItem);
@@ -197,51 +197,51 @@ namespace ProjectEternity.Editors.PartsEditor
             SkillEffect ActiveEffect = (SkillEffect)lvEffects.SelectedItems[0].Tag;
 
             //Lifetime types.
-            if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypePermanent)
+            if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypePermanent)
             {
                 rbLifetimePermanent.Checked = true;
                 txtMaximumLifetime.Enabled = false;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
                 rbLifetimeTurns.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeBattle)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeBattle)
             {
                 rbLifetimeBattle.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeOnHit)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeOnHit)
             {
                 rbLifetimeOnHit.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeOnEnemyHit)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeOnEnemyHit)
             {
                 rbLifetimeOnEnemyHit.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeOnAttack)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeOnAttack)
             {
                 rbLifetimeOnAttack.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeOnEnemyAttack)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeOnEnemyAttack)
             {
                 rbLifetimeOnEnemyAttack.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeOnAction)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeOnAction)
             {
                 rbLifetimeOnAction.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
 
@@ -288,7 +288,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimePermanent.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
                 txtMaximumLifetime.Enabled = false;
             }
         }
@@ -302,7 +302,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeTurns.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeTurns;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -316,7 +316,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeBattle.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeBattle;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeBattle;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -330,7 +330,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeOnHit.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeOnHit;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeOnHit;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -344,7 +344,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeOnEnemyHit.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeOnEnemyHit;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeOnEnemyHit;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -358,7 +358,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeOnAttack.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeOnAttack;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeOnAttack;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -372,7 +372,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeOnEnemyAttack.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeOnEnemyAttack;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeOnEnemyAttack;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -386,7 +386,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             if (rbLifetimeOnAction.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeOnAction;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeOnAction;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -418,7 +418,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
             SkillEffect ActiveEffect = (SkillEffect)lvEffects.SelectedItems[0].Tag;
 
-            ActiveEffect.LifetimeTypeValue = (int)txtMaximumLifetime.Value;
+            ActiveEffect.Lifetime[0].LifetimeTypeValue = (int)txtMaximumLifetime.Value;
         }
 
         private void txtMaximumStack_ValueChanged(object sender, EventArgs e)

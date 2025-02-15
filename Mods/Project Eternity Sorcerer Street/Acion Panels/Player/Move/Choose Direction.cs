@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.LayerManager.AddDrawablePath(ListArrow);
             }
 
-            if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(DirectionUp))
+            if (ActiveInputManager.InputUpPressed() && DicNextTerrain.ContainsKey(DirectionUp))
             {
                 ActivePlayer.GamePiece.Direction = DirectionUp;
 
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputDownPressed() && DicNextTerrain.ContainsKey(DirectionDown))
+            else if (ActiveInputManager.InputDownPressed() && DicNextTerrain.ContainsKey(DirectionDown))
             {
                 ActivePlayer.GamePiece.Direction = DirectionDown;
 
@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputLeftPressed() && DicNextTerrain.ContainsKey(DirectionLeft))
+            else if (ActiveInputManager.InputLeftPressed() && DicNextTerrain.ContainsKey(DirectionLeft))
             {
                 ActivePlayer.GamePiece.Direction = DirectionLeft;
 
@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputRightPressed() && DicNextTerrain.ContainsKey(DirectionRight))
+            else if (ActiveInputManager.InputRightPressed() && DicNextTerrain.ContainsKey(DirectionRight))
             {
                 ActivePlayer.GamePiece.Direction = DirectionRight;
 
@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != DirectionNone)
+            else if (ActiveInputManager.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != DirectionNone)
             {
                 FinalizeChoice();
             }

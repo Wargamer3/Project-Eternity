@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetMaxHPRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetMaxHPRequirement : SorcererStreetBattleRequirement
     {
         public enum Targets { Self, Opponent }
 

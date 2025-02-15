@@ -33,6 +33,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            ChangeTollEffect NewChangeTollEffect = new ChangeTollEffect(Params);
+            NewChangeTollEffect.SignOperator = Core.Operators.SignOperators.DividedEqual;
+            NewChangeTollEffect.Value = "2";
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewChangeTollEffect, IconHolder.Icons.sprCreatureFog);
             return "Fog";
         }
 

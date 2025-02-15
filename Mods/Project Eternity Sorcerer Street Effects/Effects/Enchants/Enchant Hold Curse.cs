@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            EnchantProtectionPlayerEffect NewEnchantProtectionEffect = new EnchantProtectionPlayerEffect(Params);
+            NewEnchantProtectionEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewEnchantProtectionEffect.Lifetime[0].LifetimeTypeValue = 8;
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewEnchantProtectionEffect, IconHolder.Icons.sprPlayerHoldCurse);
             return "Hold Curse";
         }
 

@@ -33,6 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            GainGoldEffect NewGainGoldEffect = new GainGoldEffect(Params);
+            NewGainGoldEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewGainGoldEffect.Lifetime[0].LifetimeTypeValue = 4;
+            NewGainGoldEffect.Target = GainGoldEffect.Targets.Self;
+            NewGainGoldEffect.Value = "200";
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewGainGoldEffect, IconHolder.Icons.sprPlayerFairyLight);
             return "Hunter's Song";
         }
 

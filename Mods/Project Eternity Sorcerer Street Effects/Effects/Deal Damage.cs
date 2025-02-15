@@ -34,7 +34,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BW.Write(_DamageToDeal);
         }
 
-
         public override bool CanActivate()
         {
             return true;

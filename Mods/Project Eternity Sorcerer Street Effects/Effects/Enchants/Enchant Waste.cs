@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            SetItemCostEffect NewSetItemCostEffect = new SetItemCostEffect(Params, 2f);
+            NewSetItemCostEffect.Lifetime[0].LifetimeType = CastleTerrain.CastleReachedLifetimeType;
+            NewSetItemCostEffect.Lifetime[0].LifetimeTypeValue = 1;
+
+            SetCreatureCostEffect NewSetCreatureCostEffect = new SetCreatureCostEffect(Params, 2f);
+            NewSetCreatureCostEffect.Lifetime[0].LifetimeType = CastleTerrain.CastleReachedLifetimeType;
+            NewSetCreatureCostEffect.Lifetime[0].LifetimeTypeValue = 1;
+
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new List<BaseEffect>() { NewSetItemCostEffect, NewSetCreatureCostEffect }, IconHolder.Icons.sprPlayerWaste);
             return "Waste";
         }
 

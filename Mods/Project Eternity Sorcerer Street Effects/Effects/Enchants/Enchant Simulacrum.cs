@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            NeutralizeDamageEffect NewNeutralizeDamageEffect = new NeutralizeDamageEffect(Params);
+            NewNeutralizeDamageEffect.ArrayNeutralizeType = new ActionPanelBattleAttackPhase.AttackTypes[] { ActionPanelBattleAttackPhase.AttackTypes.NonScrolls };
+            NewNeutralizeDamageEffect.SignOperator = Core.Operators.NumberTypes.Relative;
+            NewNeutralizeDamageEffect.Value = "100";
+
+            GainGoldEffect NewLoseMoneyEffect = new GainGoldEffect();
+            NewLoseMoneyEffect.Value = "-opponent.damagereceived*3";
+
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, new List<BaseEffect>() { NewNeutralizeDamageEffect, NewLoseMoneyEffect }, IconHolder.Icons.sprCreatureSimulacrum);
             return "Simulacrum";
         }
 

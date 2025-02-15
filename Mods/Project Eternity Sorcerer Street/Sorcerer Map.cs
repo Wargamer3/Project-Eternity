@@ -101,6 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public int TotalCreaturesDestroyed;
         public readonly MovementAlgorithm Pathfinder;
+        public readonly SorcererStreetPlayerContext GlobalPlayerContext;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
         public readonly SorcererStreetBattleParams SorcererStreetParams;
         public readonly List<string> ListTerrainType = new List<string>();
@@ -120,6 +121,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Params = SorcererStreetParams = Params;
 
             GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
+            GlobalPlayerContext = SorcererStreetParams.GlobalPlayerContext;
 
             DicTemporaryTerrain = new Dictionary<Vector3, TerrainSorcererStreet>();
 
@@ -247,7 +249,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ChatInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
-                fntMenuText = Content.Load<SpriteFont>("Fonts/Arial16");
                 fntMenuText = Content.Load<SpriteFont>("Fonts/Arial30");
                 fntDefaultText = Content.Load<SpriteFont>("Fonts/Oxanium Bold Bigger");
 
@@ -514,8 +515,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void SummonCreature(CreatureCard SummonedCreature)
+        public void SummonCreature(CreatureCard SummonedCreature, TerrainSorcererStreet ActiveTerrain)
         {
+            SummonedCreature.GamePiece.SetPosition(ActiveTerrain.WorldPosition + new Vector3(TileSize.X / 2, TileSize.Y / 2, 0));
+
             ListSummonedCreature.Add(SummonedCreature);
 
             foreach (CreatureCard.ElementalAffinity ActiveElement in SummonedCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity)
@@ -656,7 +659,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 if (MovementAnimation.Count > 0)
                 {
-                    MovementAnimation.MoveSquad(this);
+                    MovementAnimation.MoveSquad(gameTime, this, 100);
                 }
                 if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
                 {
@@ -872,7 +875,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public TerrainSorcererStreet GetTerrain(Vector3 Position)
         {
-            Position = new Vector3((float)Math.Floor(Position.X / TileSize.X), (float)Math.Floor(Position.Y / TileSize.Y), (float)Math.Floor(Position.Z / LayerHeight));
+            Position = ConvertToGridPosition(Position);
 
             if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
             {
@@ -888,15 +891,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
-        public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int GridOffsetX, int GridOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.GridPosition.X + OffsetX;
-            int NextY = StartingPosition.GridPosition.Y + OffsetY;
+            int NextX = StartingPosition.GridPosition.X + GridOffsetX;
+            int NextY = StartingPosition.GridPosition.Y + GridOffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
-                return null;
+                return StartingPosition.WorldPosition;
             }
 
             byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
@@ -913,7 +916,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, GridOffsetX, GridOffsetY, L);
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
                 TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
@@ -965,7 +968,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
-                        return NextTerrain;
+                        return NextTerrain.WorldPosition;
                     }
                     //Prioritize going upward
                     else if (NextTerrainZ > StartingPosition.LayerIndex)
@@ -983,15 +986,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ClosestLayerIndexDown != null)
             {
-                return ClosestLayerIndexDown;
-            }
-            else if (ListLayerPossibility.Count == 0)
-            {
-                return GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, (int)CurrentZ);
+                return ClosestLayerIndexDown.WorldPosition;
             }
             else
             {
-                return ClosestLayerIndexUp;
+                return ClosestLayerIndexUp.WorldPosition;
             }
         }
 

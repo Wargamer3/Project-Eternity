@@ -160,7 +160,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
         private void btnAddEffect_Click(object sender, EventArgs e)
         {
             BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value.Copy();
-            NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+            NewEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
             ListViewItem NewListViewItem = new ListViewItem(NewEffect.EffectTypeName);
             NewListViewItem.Tag = NewEffect;
             lvEffects.Items.Add(NewListViewItem);
@@ -197,24 +197,24 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
             BaseEffect ActiveEffect = (BaseEffect)lvEffects.SelectedItems[0].Tag;
 
             //Lifetime types.
-            if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypePermanent)
+            if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypePermanent)
             {
                 rbLifetimePermanent.Checked = true;
                 txtMaximumLifetime.Enabled = false;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
                 rbLifetimeTurns.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == SkillEffect.LifetimeTypeBattle)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeBattle)
             {
                 rbLifetimeBattle.Checked = true;
-                txtMaximumLifetime.Value = ActiveEffect.LifetimeTypeValue;
+                txtMaximumLifetime.Value = ActiveEffect.Lifetime[0].LifetimeTypeValue;
                 txtMaximumLifetime.Enabled = true;
             }
-            else if (ActiveEffect.LifetimeType == ActionPanelCastlePhase.CastleReached)
+            else if (ActiveEffect.Lifetime[0].LifetimeType == ActionPanelCastlePhase.CastleReached)
             {
                 rbCastleReached.Checked = true;
                 txtMaximumLifetime.Enabled = false;
@@ -258,7 +258,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
             if (rbLifetimePermanent.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypePermanent;
                 txtMaximumLifetime.Enabled = false;
             }
         }
@@ -272,7 +272,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
             if (rbLifetimeTurns.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeTurns;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -286,7 +286,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
             if (rbLifetimeBattle.Checked)
             {
-                ActiveEffect.LifetimeType = SkillEffect.LifetimeTypeBattle;
+                ActiveEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeBattle;
                 txtMaximumLifetime.Enabled = true;
             }
         }
@@ -300,7 +300,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
             if (rbCastleReached.Checked)
             {
-                ActiveEffect.LifetimeType = ActionPanelCastlePhase.CastleReached;
+                ActiveEffect.Lifetime[0].LifetimeType = ActionPanelCastlePhase.CastleReached;
                 txtMaximumLifetime.Enabled = false;
             }
         }
@@ -332,7 +332,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
             BaseEffect ActiveEffect = (BaseEffect)lvEffects.SelectedItems[0].Tag;
 
-            ActiveEffect.LifetimeTypeValue = (int)txtMaximumLifetime.Value;
+            ActiveEffect.Lifetime[0].LifetimeTypeValue = (int)txtMaximumLifetime.Value;
         }
 
         private void txtMaximumStack_ValueChanged(object sender, EventArgs e)

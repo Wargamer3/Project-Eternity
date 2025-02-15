@@ -40,8 +40,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void Load(BinaryReader BR)
         {
-            if (LifetimeType == Core.Effects.SkillEffect.LifetimeTypePermanent)
-                LifetimeTypeValue = -1;
+            if (Lifetime[0].LifetimeType == Core.Effects.SkillEffect.LifetimeTypePermanent)
+                Lifetime[0].LifetimeTypeValue = -1;
         }
 
         protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)

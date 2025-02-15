@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             string LifeType = "";
 
-            if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+            if (ActiveSkillEffect.Lifetime[0].LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
                 LifeType = SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex;
             }

@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return NewBook;
         }
 
-        internal static CardBook LoadGlobalBook()
+        public static CardBook LoadGlobalBook()
         {
             if (AllCardsBook == null)
             {
@@ -203,7 +203,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             foreach (string ActiveFile in Directory.EnumerateFiles(ActiveGameFolder, "*.pec", SearchOption.AllDirectories))
                             {
-                                Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
+                                Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24).Replace('\\', '/'), GameScreen.ContentFallback,
                                     SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[string.Empty].DicManualSkillTarget);
                                 LoadedCard.QuantityOwned = 1;
 
@@ -245,6 +245,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCardsByType[CardToAdd.CardType].Add(CardToAdd.Path, CardToAdd);
 
             CreatureCard CreatureCardToAdd = CardToAdd as CreatureCard;
+            ItemCard ItemCardToAdd = CardToAdd as ItemCard;
+            SpellCard SpellCardToAdd = CardToAdd as SpellCard;
             if (CreatureCardToAdd != null)
             {
                 CardAbilities Abilities = CreatureCardToAdd.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None);
@@ -278,32 +280,60 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ++UniqueCreaturesAir;
                     TotalCreaturesAir += CardToAdd.QuantityOwned;
                 }
+                else
+                {
+                }
+            }
+            else if (ItemCardToAdd != null)
+            {
+                if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Weapon)
+                {
+                    ++UniqueItemsWeapon;
+                    TotalItemsWeapon += CardToAdd.QuantityOwned;
+                }
+                else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Armor)
+                {
+                    ++UniqueItemsArmor;
+                    TotalItemsArmor += CardToAdd.QuantityOwned;
+                }
+                else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Tools)
+                {
+                    ++UniqueItemsTool;
+                    TotalItemsTool += CardToAdd.QuantityOwned;
+                }
+                else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Scrolls)
+                {
+                    ++UniqueItemsScroll;
+                    TotalItemsScroll += CardToAdd.QuantityOwned;
+                }
+                else
+                {
+                }
             }
             else
             {
-                ItemCard ItemCardToAdd = CardToAdd as ItemCard;
-                if (ItemCardToAdd != null)
+                if (SpellCardToAdd.SpellType == SpellCard.SpellTypes.SingleFlash)
                 {
-                    if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Weapon)
-                    {
-                        ++UniqueItemsWeapon;
-                        TotalItemsWeapon += CardToAdd.QuantityOwned;
-                    }
-                    else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Armor)
-                    {
-                        ++UniqueItemsArmor;
-                        TotalItemsArmor += CardToAdd.QuantityOwned;
-                    }
-                    else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Tools)
-                    {
-                        ++UniqueItemsTool;
-                        TotalCreaturesNeutral += CardToAdd.QuantityOwned;
-                    }
-                    else if (ItemCardToAdd.ItemType == ItemCard.ItemTypes.Scrolls)
-                    {
-                        ++UniqueItemsScroll;
-                        TotalItemsScroll += CardToAdd.QuantityOwned;
-                    }
+                    ++UniqueSpellsSingle;
+                    TotalSpellsSingle += CardToAdd.QuantityOwned;
+                }
+                else if (SpellCardToAdd.SpellType == SpellCard.SpellTypes.MultiFlash)
+                {
+                    ++UniqueSpellsMultiple;
+                    TotalSpellsMultiple += CardToAdd.QuantityOwned;
+                }
+                else if (SpellCardToAdd.SpellType == SpellCard.SpellTypes.SingleEnchant)
+                {
+                    ++UniqueEnchantSingle;
+                    TotalEnchantSingle += CardToAdd.QuantityOwned;
+                }
+                else if (SpellCardToAdd.SpellType == SpellCard.SpellTypes.MultiEnchant)
+                {
+                    ++UniqueEnchantMultiple;
+                    TotalEnchantMultiple += CardToAdd.QuantityOwned;
+                }
+                else
+                {
                 }
             }
         }

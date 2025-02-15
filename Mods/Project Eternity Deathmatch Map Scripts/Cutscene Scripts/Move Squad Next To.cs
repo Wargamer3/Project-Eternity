@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
                 if (HasMovementFocus)
-                    Map.MovementAnimation.MoveSquad(Map);
+                    Map.MovementAnimation.MoveSquad(gameTime, Map);
 
                 if (Map.MovementAnimation.Count == 0)
                 {

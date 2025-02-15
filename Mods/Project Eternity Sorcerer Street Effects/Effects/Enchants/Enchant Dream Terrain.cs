@@ -33,6 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            TollStealEffect NewStealEffect = new TollStealEffect(Params);
+            NewStealEffect.SignOperator = Core.Operators.SignOperators.Equal;
+            NewStealEffect.Value = "50";
+            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewStealEffect, IconHolder.Icons.sprPlayerMovement);
             return "Dream Terrain";
         }
 
