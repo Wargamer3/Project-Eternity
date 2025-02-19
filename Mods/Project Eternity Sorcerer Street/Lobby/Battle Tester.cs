@@ -150,7 +150,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
             Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
-            Context.ListSummonedCreature = new List<CreatureCard>();
+            Context.ListSummonedCreature = new List<TerrainSorcererStreet>();
             Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
             Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);
             Context.DefenderTerrain.LandLevel = 1;

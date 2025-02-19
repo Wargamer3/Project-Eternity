@@ -6,7 +6,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class SetDiceMinMaxEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Set Dice Value";
+        public static string Name = "Sorcerer Street Set Dice Min Max Value";
 
         private int DiceMin;
         private int DiceMax;
@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValueMin = DiceMin;
             Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValueMax = DiceMax;
-            return "Set Dice Value";
+            return "Set Dice Min Max Value";
         }
 
         protected override BaseEffect DoCopy()

@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetRoundRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetRoundRequirement : SorcererStreetRequirement
     {
         private Operators.LogicOperators _LogicOperator;
         private string _RoundLeft;

@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             g.Draw(ActiveCard.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.sprCard.Width / 2, ActiveCard.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
             g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 16 - HeaderHeight - 30), Color.White);
-            ActiveCard.DrawCardInfo(g, Symbols, fntMenuTextBigger, 0,  70);
+            ActiveCard.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0,  70);
 
             X = -10;
             Y = Constants.Height - Constants.Height / 16 - HeaderHeight;

@@ -149,7 +149,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public bool CanUseEffectsOrAbilities;
         public UnitAndTerrainValues TerrainRestrictions;
-        public List<CreatureCard> ListSummonedCreature;
+        public List<TerrainSorcererStreet> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public List<TerrainSorcererStreet> ListBoostCreature;
         public int TotalCreaturesDestroyed;
@@ -245,9 +245,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int CreatureCount = 0;
 
-            foreach (CreatureCard ActiveCreature in ListSummonedCreature)
+            foreach (TerrainSorcererStreet ActiveCreature in ListSummonedCreature)
             {
-                if (ActiveCreature.Name.ToLower() == CreatureName)
+                if (ActiveCreature.DefendingCreature.Name.ToLower() == CreatureName)
                 {
                     CreatureCount++;
                 }
@@ -411,7 +411,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadSkillRequirements()
         {
-            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetBattleRequirement), GlobalContext);
+            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetRequirement), GlobalContext);
             foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCore)
             {
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
@@ -420,7 +420,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetBattleRequirement), GlobalContext);
+                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetRequirement), GlobalContext);
                 foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCoreAssembly)
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);

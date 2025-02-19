@@ -287,7 +287,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new ActionPanelConfirmCreatureSummon(Map, ActivePlayerIndex, this);
         }
 
-        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
+        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
             int BoxWidth = 620;
             int BoxHeight = 540;
@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int IconWidth = 17;
             int IconHeight = 32;
 
-            base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
+            base.DrawCardInfo(g, Symbols, fntCardInfo, ActivePlayer, OffsetX, OffsetY);
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY + 50;

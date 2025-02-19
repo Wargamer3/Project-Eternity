@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             float Ratio = Constants.Height / 720f;
             SelectedCard.DrawCard(g);
-            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
+            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, ActivePlayer, 0, 0);
             int BoxWidth = (int)(400 * Ratio);
             int BoxHeight = (int)(134 * Ratio);
             int BoxX = (Constants.Width - BoxWidth) / 2;

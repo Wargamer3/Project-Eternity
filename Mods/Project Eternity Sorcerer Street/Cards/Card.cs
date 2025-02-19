@@ -349,7 +349,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public abstract List<Texture2D> GetIcons(CardSymbols Symbols);
 
-        public virtual void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
+        public virtual void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
             int BoxWidth = 620;
             int BoxHeight = 610;
@@ -392,7 +392,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += 40;
             
             g.Draw(Symbols.sprMenuG, new Rectangle((int)CurrentX, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawStringVerticallyAligned(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
+            g.DrawStringVerticallyAligned(fntCardInfo, ActivePlayer.GetFinalCardCost(this).ToString(), new Vector2(CurrentX + 20, CurrentY + IconHeight / 2 + 2), SorcererStreetMap.TextColor);
 
             CurrentY += Constants.Height / 24;
 

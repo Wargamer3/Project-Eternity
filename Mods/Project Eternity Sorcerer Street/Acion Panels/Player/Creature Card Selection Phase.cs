@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputDownPressed())
             {
                 RemoveFromPanelList(this);
-                AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AllowTerrainCommands));
             }
         }
 

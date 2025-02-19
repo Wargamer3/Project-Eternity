@@ -8,7 +8,7 @@ using static ProjectEternity.Core.Operators;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetGoldPossessedRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetGoldPossessedRequirement : SorcererStreetRequirement
     {
         public enum Targets { Self, Opponent }
 

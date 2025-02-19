@@ -95,9 +95,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int MagicGainPerLap;
         public int TowerMagicGain;
         public int MagicGoal;
+        public int LowestDieRoll;
         public int HighestDieRoll;
         public List<Checkpoints> ListCheckpoint;
-        public List<CreatureCard> ListSummonedCreature;
+        public List<TerrainSorcererStreet> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public int TotalCreaturesDestroyed;
         public readonly MovementAlgorithm Pathfinder;
@@ -123,6 +124,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
             GlobalPlayerContext = SorcererStreetParams.GlobalPlayerContext;
 
+            LowestDieRoll = 1;
+            HighestDieRoll = 6;
+
             DicTemporaryTerrain = new Dictionary<Vector3, TerrainSorcererStreet>();
 
             RequireDrawFocus = false;
@@ -139,7 +143,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             Params.ActiveParser = new SorcererStreetFormulaParser(Params);
             ListCheckpoint = new List<Checkpoints>();
-            ListSummonedCreature = new List<CreatureCard>();
+            ListSummonedCreature = new List<TerrainSorcererStreet>();
             DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();
             DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Air, 0);
             DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Earth, 0);
@@ -227,7 +231,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BW.Write(MagicGainPerLap);
             BW.Write(TowerMagicGain);
             BW.Write(MagicGoal);
-            BW.Write(HighestDieRoll);
+            BW.Write((byte)LowestDieRoll);
+            BW.Write((byte)HighestDieRoll);
 
             MapScript.SaveMapScripts(BW, ListMapScript);
 
@@ -431,7 +436,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MagicGainPerLap = BR.ReadInt32();
             TowerMagicGain = BR.ReadInt32();
             MagicGoal = BR.ReadInt32();
-            HighestDieRoll = BR.ReadInt32();
+            LowestDieRoll = BR.ReadByte();
+            HighestDieRoll = BR.ReadByte();
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 
@@ -485,16 +491,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UpdateMapEvent(EventTypeTurn, 0);
         }
 
-        public void UpdateTolls(Player ActivePlayer)
+        public void UpdateTotalMagic(Player ActivePlayer)
         {
             foreach (Team ActiveTeam in DicTeam.Values)
             {
                 ActiveTeam.TotalMagic = ActivePlayer.Gold;
 
-                foreach (CreatureCard DefendingCreature in ListSummonedCreature)
+                foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
                 {
-                    TerrainSorcererStreet ActiveTerrain = GetTerrain(DefendingCreature.GamePiece.Position);
-                    if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature == DefendingCreature)
+                    if (ActiveTerrain.PlayerOwner == ActivePlayer)
                     {
                         ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
                         ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
@@ -515,11 +520,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void SummonCreature(CreatureCard SummonedCreature, TerrainSorcererStreet ActiveTerrain)
+        public void OnCreatureSummon(CreatureCard SummonedCreature, TerrainSorcererStreet ActiveTerrain)
         {
             SummonedCreature.GamePiece.SetPosition(ActiveTerrain.WorldPosition + new Vector3(TileSize.X / 2, TileSize.Y / 2, 0));
-
-            ListSummonedCreature.Add(SummonedCreature);
 
             foreach (CreatureCard.ElementalAffinity ActiveElement in SummonedCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity)
             {
@@ -536,10 +539,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void RemoveCreature(CreatureCard KilledCreature)
+        public void OnCreatureDeath(CreatureCard KilledCreature)
         {
-            ListSummonedCreature.Remove(KilledCreature);
-
             foreach (CreatureCard.ElementalAffinity ActiveElement in KilledCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity)
             {
                 byte ChainValue;

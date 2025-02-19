@@ -3,7 +3,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreesAfterEnemySurvivedRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreesAfterEnemySurvivedRequirement : SorcererStreetRequirement
     {
         public SorcererStreesAfterEnemySurvivedRequirement()
             : this(null)

@@ -6,21 +6,21 @@ using static ProjectEternity.Core.Operators;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class TollStealEffect : SorcererStreetEffect
+    public sealed class TollGainShareEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Toll Steal";
+        public static string Name = "Sorcerer Street Toll Gain Share";
 
         private SignOperators _SignOperator;
         private string _Value;
 
-        public TollStealEffect()
+        public TollGainShareEffect()
             : base(Name, false)
         {
             _SignOperator = SignOperators.PlusEqual;
             _Value = string.Empty;
         }
 
-        public TollStealEffect(SorcererStreetBattleParams Params)
+        public TollGainShareEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
             _SignOperator = SignOperators.PlusEqual;
@@ -48,14 +48,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
 
-            Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).TollStealMultiplier = float.Parse(EvaluationResult) / 100f;
+            Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).TollGainShareMultiplier = float.Parse(EvaluationResult) / 100f;
 
-            return "Toll Steal: " + EvaluationResult + "%";
+            return "Toll gain: " + EvaluationResult + "%";
         }
 
         protected override BaseEffect DoCopy()
         {
-            TollStealEffect NewEffect = new TollStealEffect(Params);
+            TollGainShareEffect NewEffect = new TollGainShareEffect(Params);
 
             NewEffect._SignOperator = _SignOperator;
             NewEffect._Value = _Value;
@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            TollStealEffect NewEffect = (TollStealEffect)Copy;
+            TollGainShareEffect NewEffect = (TollGainShareEffect)Copy;
 
             _SignOperator = NewEffect._SignOperator;
             _Value = NewEffect._Value;

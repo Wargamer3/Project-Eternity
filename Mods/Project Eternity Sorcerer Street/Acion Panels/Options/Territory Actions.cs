@@ -14,23 +14,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private TerrainSorcererStreet ActiveTerrain;
+        private bool AllTerritory;
+
 
         public ActionPanelTerritoryActions(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelTerritoryActions(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain)
+        public ActionPanelTerritoryActions(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain, bool AllTerritory)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             this.ActiveTerrain = ActiveTerrain;
+            this.AllTerritory = AllTerritory;
         }
 
         public override void OnSelect()
         {
-            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex));
+            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex, AllTerritory));
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -57,10 +60,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map, ActivePlayerIndex, ActiveTerrain));
                         break;
                     case 1:
-                        AddToPanelListAndSelect(new ActionPanelTerrainChange(Map, ActivePlayerIndex, ActiveTerrain));
+                        if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
+                        {
+                        }
+                        else
+                        {
+                            AddToPanelListAndSelect(new ActionPanelTerrainChange(Map, ActivePlayerIndex, ActiveTerrain));
+                        }
                         break;
                     case 2:
-                        AddToPanelListAndSelect(new ActionPanelCreatureMovement(Map));
+                        AddToPanelListAndSelect(new ActionPanelCreatureMovement(Map, ActivePlayerIndex, ActiveTerrain));
                         break;
                     case 3:
                         AddToPanelListAndSelect(new ActionPanelCreatureExchange(Map));
@@ -114,6 +123,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;
             g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
+            {
+                g.DrawString(Map.fntMenuText, "X", new Vector2(CurrentX + 150, CurrentY), Color.White);
+            }
             CurrentY += 20;
             g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
             CurrentY += 20;

@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
 
-            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollOverride = int.Parse(EvaluationResult);
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).TollOverride = int.Parse(EvaluationResult);
 
             return "ST+" + EvaluationResult;
         }

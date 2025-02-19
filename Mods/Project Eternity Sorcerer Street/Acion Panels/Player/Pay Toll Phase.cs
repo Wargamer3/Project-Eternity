@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
+﻿using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -29,8 +27,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnEndCardSelected()
         {
-            ActivePlayer.Gold -= ActiveTerrain.CurrentToll;
-            Map.UpdateTolls(ActivePlayer);
+            int Toll = ActiveTerrain.CurrentToll;
+
+            int TollOverride = ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollOverride;
+
+            if (TollOverride >= 0)
+            {
+                Toll = TollOverride;
+            }
+
+            if (!ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).TollProtection
+                && !ActiveTerrain.PlayerOwner.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).TollLimit)
+            {
+                ActivePlayer.Gold -= Toll;
+                ActiveTerrain.PlayerOwner.Gold += Toll;
+                Map.UpdateTotalMagic(ActivePlayer);
+                Map.UpdateTotalMagic(ActiveTerrain.PlayerOwner);
+            }
+
+            foreach (Player TollSharePlayer in Map.ListPlayer)
+            {
+                if (TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier > 0)
+                {
+                    TollSharePlayer.Gold += (int)(ActiveTerrain.CurrentToll * TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier);
+                    Map.UpdateTotalMagic(TollSharePlayer);
+                }
+            }
+
             Map.EndPlayerPhase();
         }
 

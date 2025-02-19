@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new ItemCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
         }
 
-        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
+        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
             int BoxWidth = 620;
             int BoxHeight = 540;
@@ -117,7 +117,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY + Constants.Height / 24;
 
-            base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
+            base.DrawCardInfo(g, Symbols, fntCardInfo, ActivePlayer, OffsetX, OffsetY);
 
             switch (ItemType)
             {

@@ -59,6 +59,7 @@
     <Compile Include="Automatic Skills\Self Target Type.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Force Stop.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Free Travel.cs" />
+    <Compile Include="Effects\Enchants\Enchant Mutation.cs" />
     <Compile Include="Effects\Player Enchant Effect\Enchant Protection Player.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Invasion Protection.cs" />
     <Compile Include="Effects\Player Enchant Effect\Invasion Limit.cs" />

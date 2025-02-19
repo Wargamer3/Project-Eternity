@@ -44,7 +44,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             ++ActivePlayer.CompletedLaps;
+
             BasicBonus = Map.MagicGainPerLap + Map.MagicGainPerLap / 10 * ActivePlayer.CompletedLaps;
+
             int NumberOfLandPossessed = 0;
             foreach (byte NumberOfLand in Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType.Values)
             {
@@ -54,9 +56,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SymbolBonus = 0;
             Fluctuation = 0;
             Total = BasicBonus + TerritoryBonus + SymbolBonus + Fluctuation;
+
+            Total = (int)(Total * ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).CastleValueMultiplier);
+
             ActivePlayer.Gold += Total;
             Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic += Total;
             Map.UpdatePlayersRank();
+
+            foreach (TerrainSorcererStreet CreatureToHeal in Map.ListSummonedCreature)
+            {
+                if (!CreatureToHeal.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LapRegenerationLimit && CreatureToHeal.PlayerOwner == ActivePlayer)
+                {
+                    CreatureToHeal.DefendingCreature.CurrentHP = Math.Min(CreatureToHeal.DefendingCreature.MaxHP, (int)(CreatureToHeal.DefendingCreature.CurrentHP + CreatureToHeal.DefendingCreature.MaxHP * 0.10f));
+                }
+            }
             /*Symbol Bonus = Value of symbols owned / 10G
             (One is only awarded the symbol bonus if they own the most symbols of a particular color in an area)*/
         }
@@ -77,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (MovementRemaining == 0)
                 {
-                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
                 }
             }
 
@@ -87,7 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (MovementRemaining == 0)
                 {
-                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
                 }
             }
         }

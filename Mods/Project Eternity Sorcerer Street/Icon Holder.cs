@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Icons.sprPlayerImprisonment = null;
             Icons.sprPlayerTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Territory");
             Icons.sprPlayerMesozoicSong = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Mesozoic Song");
-            Icons.sprPlayerMovement = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Haste");
+            Icons.sprPlayerMovement = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Movement");
             Icons.sprPlayerSilence = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Silence");
             Icons.sprPlayerToll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Toll");
             Icons.sprPlayerTriumph = Content.Load<Texture2D>("Sorcerer Street/Ressources/Player Effects Icons/Player Triumph");

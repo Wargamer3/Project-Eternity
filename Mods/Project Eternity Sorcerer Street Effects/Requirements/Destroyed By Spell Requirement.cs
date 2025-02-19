@@ -3,7 +3,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetDestroyedBySpellRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetDestroyedBySpellRequirement : SorcererStreetRequirement
     {
         public SorcererStreetDestroyedBySpellRequirement()
             : this(null)

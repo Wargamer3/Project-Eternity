@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case TerrainSorcererStreet.SouthTower:
                     case TerrainSorcererStreet.EastTower:
                     case TerrainSorcererStreet.WestTower:
-                        AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                        AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AllowTerrainCommands));
                         break;
 
                     default:

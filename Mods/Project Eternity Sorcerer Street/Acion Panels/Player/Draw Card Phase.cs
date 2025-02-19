@@ -233,7 +233,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 DrawnCard.DrawCard(g);
-                DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
+                DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, ActivePlayer, 0, 0);
 
                 int BoxWidth = 400;
                 int BoxHeight = 2 + Map.fntMenuText.LineSpacing + Map.fntMenuText.LineSpacing;

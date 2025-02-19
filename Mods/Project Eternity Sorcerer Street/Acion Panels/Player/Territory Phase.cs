@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private TerrainSorcererStreet ActiveTerrain;
+        private bool AllTerritory;
 
         private double AnimationTime;
 
@@ -24,10 +25,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelTerritoryMenuPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+        public ActionPanelTerritoryMenuPhase(SorcererStreetMap Map, int ActivePlayerIndex, bool AllTerritory)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.AllTerritory = AllTerritory;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
@@ -35,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex));
+            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex, AllTerritory));
             AddChoiceToCurrentPanel(new ActionPanelViewMap(Map));
             AddChoiceToCurrentPanel(new ActionPanelInfo(Map, ActivePlayerIndex));
             AddChoiceToCurrentPanel(new ActionPanelOptions(Map));

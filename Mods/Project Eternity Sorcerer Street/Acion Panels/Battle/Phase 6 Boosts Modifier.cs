@@ -35,10 +35,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             List<CreatureCard> ListBoostCreature = new List<CreatureCard>();
 
-            foreach (CreatureCard DefendingCreature in Map.ListSummonedCreature)
+            foreach (TerrainSorcererStreet DefendingTerrain in Map.ListSummonedCreature)
             {
                 bool BoostSkillFound = false;
-                foreach (BaseAutomaticSkill ActiveSkill in DefendingCreature.ListActiveSkill)
+                foreach (BaseAutomaticSkill ActiveSkill in DefendingTerrain.DefendingCreature.ListActiveSkill)
                 {
                     if (BoostSkillFound)
                     {
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (ActiveRequirement.SkillRequirementName == RequirementName)
                             {
-                                ListBoostCreature.Add(DefendingCreature);
+                                ListBoostCreature.Add(DefendingTerrain.DefendingCreature);
                                 BoostSkillFound = true;
                                 break;
                             }

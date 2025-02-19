@@ -116,8 +116,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (CardType == null
-                    || (ActionMenuCursor < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType && ActivePlayer.Gold >= ActivePlayer.ListCardInHand[ActionMenuCursor].MagicCost))
+                if (CanUseCard())
                 {
                     OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
                 }
@@ -126,6 +125,45 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     OnEndCardSelected();
                 }
             }
+        }
+
+        private bool CanUseCard()
+        {
+            if (ActionMenuCursor >= ActivePlayer.ListCardInHand.Count)
+            {
+                return false;
+            }
+
+            if (CardType == null || ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType)
+            {
+                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
+            }
+
+            if (CardType == "Support Creature")
+            {
+                if (ActivePlayer.ListCardInHand[ActionMenuCursor].CardType != CreatureCard.CreatureCardType && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType != ItemCard.ItemCardType)
+                {
+                    return false;
+                }
+
+                bool CanUseSupportCreature;
+                if (ActivePlayerIndex == Map.ActivePlayerIndex)
+                {
+                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
+                }
+                else
+                {
+                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
+                }
+
+                CreatureCard ActiveCard = (CreatureCard)ActivePlayer.ListCardInHand[ActionMenuCursor];
+                if (!CanUseSupportCreature && !ActiveCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).ItemCreature)
+                {
+                    return false;
+                }
+            }
+
+            return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
         }
 
         public void PrepareToRollDice()
@@ -179,7 +217,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[C])))
                 {
                     CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
@@ -199,7 +237,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[C])))
                 {
                     CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
@@ -230,7 +268,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
-                    if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
+                    if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType ||  !ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[C])))
                     {
                         CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }
@@ -241,7 +279,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (DrawDrawInfo && ActionMenuCursor < ActivePlayer.ListCardInHand.Count)
                 {
-                    ActivePlayer.ListCardInHand[ActionMenuCursor].DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
+                    ActivePlayer.ListCardInHand[ActionMenuCursor].DrawCardInfo(g, Map.Symbols, Map.fntMenuText, ActivePlayer, 0, 0);
                 }
 
                 if (EndCardText != string.Empty)

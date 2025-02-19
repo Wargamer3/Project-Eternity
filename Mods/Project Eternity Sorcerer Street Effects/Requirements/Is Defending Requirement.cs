@@ -4,7 +4,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetIsDefendingRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetIsDefendingRequirement : SorcererStreetRequirement
     {
         public SorcererStreetIsDefendingRequirement()
             : this(null)

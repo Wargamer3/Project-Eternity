@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            TollStealEffect NewStealEffect = new TollStealEffect(Params);
+            TollGainShareEffect NewStealEffect = new TollGainShareEffect(Params);
             NewStealEffect.SignOperator = Core.Operators.SignOperators.Equal;
             NewStealEffect.Value = "50";
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewStealEffect, IconHolder.Icons.sprPlayerMovement);

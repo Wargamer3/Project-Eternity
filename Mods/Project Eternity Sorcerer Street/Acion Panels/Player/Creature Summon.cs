@@ -33,7 +33,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoUpdate(GameTime gameTime)
         {
             PlaceCreature();
-            Map.EndPlayerPhase();
+
+            if (SelectedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Immediate)
+            {
+                RemoveFromPanelList(this);
+                AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AllowTerrainCommands));
+            }
+            else
+            {
+                Map.EndPlayerPhase();
+            }
         }
 
         private void PlaceCreature()
@@ -43,12 +52,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
             ActiveTerrain.DefendingCreature = SelectedCard;
             ActiveTerrain.PlayerOwner = ActivePlayer;
-            ActivePlayer.Gold -= SelectedCard.MagicCost;
+            ActivePlayer.Gold -= ActivePlayer.GetFinalCardCost(SelectedCard);
 
             Map.DicTeam[ActivePlayer.TeamIndex].IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.SummonCreature(SelectedCard, ActiveTerrain);
 
-            Map.UpdateTolls(ActivePlayer);
+            Map.ListSummonedCreature.Add(ActiveTerrain);
+
+            Map.OnCreatureSummon(SelectedCard, ActiveTerrain);
+
+            Map.UpdateTotalMagic(ActivePlayer);
             Map.LayerManager.TogglePreview(true);
         }
 

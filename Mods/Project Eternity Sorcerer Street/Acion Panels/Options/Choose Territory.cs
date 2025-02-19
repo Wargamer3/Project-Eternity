@@ -3,7 +3,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -13,6 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        private bool AllTerritory;
 
         private Vector3 CursorPosition;
         private Camera3D Camera;
@@ -23,10 +23,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelChooseTerritory(SorcererStreetMap Map, int ActivePlayerIndex)
+        public ActionPanelChooseTerritory(SorcererStreetMap Map, int ActivePlayerIndex, bool AllTerritory)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.AllTerritory = AllTerritory;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
@@ -45,33 +46,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 150, 0f));
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
 
-            if (InputHelper.InputUpHold() && CursorPosition.Y > 0)
+            if (ActiveInputManager.InputUpHold() && CursorPosition.Y > 0)
             {
                 CursorPosition.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
-            if (InputHelper.InputDownHold() && CursorPosition.Y + 1 < Map.MapSize.Y * Map.TileSize.Y)
+            if (ActiveInputManager.InputDownHold() && CursorPosition.Y + 1 < Map.MapSize.Y * Map.TileSize.Y)
             {
                 CursorPosition.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
-            if (InputHelper.InputLeftHold() && CursorPosition.X > 0)
+            if (ActiveInputManager.InputLeftHold() && CursorPosition.X > 0)
             {
                 CursorPosition.X -= (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
-            if (InputHelper.InputRightHold() && CursorPosition.X + 1 < Map.MapSize.X * Map.TileSize.X)
+            if (ActiveInputManager.InputRightHold() && CursorPosition.X + 1 < Map.MapSize.X * Map.TileSize.X)
             {
                 CursorPosition.X += (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
-            if (InputHelper.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0
-                && Map.ListPassedTerrein.Contains(HoverTerrain))
+            if (ActiveInputManager.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0
+                && (AllTerritory || Map.ListPassedTerrein.Contains(HoverTerrain)))
             {
-                AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, HoverTerrain));
+                AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, HoverTerrain, AllTerritory));
 
             }
-            else if (InputHelper.InputCancelPressed())
+            else if (ActiveInputManager.InputCancelPressed())
             {
                 RemoveFromPanelList(this);
                 Map.Camera3DOverride = null;
@@ -107,7 +108,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, HoverTerrain);
                 if (HoverTerrain.DefendingCreature != null)
                 {
-                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, 0, 0);
+                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntMenuText, ActivePlayer, 0, 0);
 
                     int BoxWidth = (int)(Constants.Width / 2.8);
                     int BoxHeight = (int)(Constants.Height / 8);

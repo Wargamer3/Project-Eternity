@@ -6,7 +6,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetAgainstActivationChanceRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetAgainstActivationChanceRequirement : SorcererStreetRequirement
     {
         private byte _ActivationChance;
 

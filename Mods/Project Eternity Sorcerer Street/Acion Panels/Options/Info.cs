@@ -163,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 g.Draw(Map.Symbols.sprMenuG, new Rectangle(X + 534, Y + 6, IconWidth, IconHeight), Color.White);
 
-                g.DrawStringRightAligned(Map.fntMenuText, ActiveCard.MagicCost.ToString(), new Vector2(X + 654, Y), Color.White);
+                g.DrawStringRightAligned(Map.fntMenuText, ActivePlayer.GetFinalCardCost(ActiveCard).ToString(), new Vector2(X + 654, Y), Color.White);
                 Y += LineHeight;
             }
         }

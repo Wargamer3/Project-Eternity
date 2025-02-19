@@ -430,13 +430,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!Map.IsAPlatform && !Map.IsServer)
             {
-                Vector3 ActivePlayerPosition;
+                Vector3 ActivePlayerPosition = Map.CursorPosition;
 
                 if (Map.ActivePlatform != null)
                 {
                     ActivePlayerPosition = ((SorcererStreetMap)Map.ActivePlatform.Map).ListPlayer[Map.ActivePlayerIndex].GamePiece.Position;
                 }
-                else
+                else if (Map.ListPlayer.Count > 0)
                 {
                     if (Map.MovementAnimation.Contains(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece))
                     {
@@ -1243,43 +1243,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawCreatures(CustomSpriteBatch g, Matrix View)
         {
-            foreach (CreatureCard DefendingCreature in Map.ListSummonedCreature)
+            foreach (TerrainSorcererStreet DefendingTerrain in Map.ListSummonedCreature)
             {
-                Vector3 CurrentPosition = DefendingCreature.GamePiece.Position;
+                Vector3 CurrentPosition = DefendingTerrain.DefendingCreature.GamePiece.Position;
                 float Scale = 0.2f;
 
-                List<Player> ListPlayerOnTerrain = FindPlayersOnGrid(DefendingCreature.GamePiece.Position);
+                List<Player> ListPlayerOnTerrain = FindPlayersOnGrid(DefendingTerrain.DefendingCreature.GamePiece.Position);
                 if (ListPlayerOnTerrain.Count > 0)
                 {
                     CurrentPosition.X += Map.TileSize.X / 2;
                     CurrentPosition.Y += Map.TileSize.Y / 2;
                     Scale = 0.1f;
                 }
-                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(DefendingCreature.GamePiece.Position);
+                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(DefendingTerrain.DefendingCreature.GamePiece.Position);
 
                 Matrix RotationMatrix = Matrix.Identity;
 
-                DefendingCreature.GamePiece.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+                DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
 
-                DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(Scale) * RotationMatrix
+                DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(Scale) * RotationMatrix
                     * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
 
-                Vector3 Visible3DPosition = new Vector3(DefendingCreature.GamePiece.X + 0.7f, DefendingCreature.GamePiece.Z * Map.LayerHeight, DefendingCreature.GamePiece.Y + 0.9f);
+                Vector3 Visible3DPosition = new Vector3(DefendingTerrain.DefendingCreature.GamePiece.X + 0.7f, DefendingTerrain.DefendingCreature.GamePiece.Z * Map.LayerHeight, DefendingTerrain.DefendingCreature.GamePiece.Y + 0.9f);
                 Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
 
                 Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
                 g.DrawString(Map.fntNonDemoDamage, ActiveTerrain.CurrentToll.ToString(), new Vector2(Position2D.X, Position2D.Y), Color.White);
 
-                if (DefendingCreature.Enchant != null && DefendingCreature.Enchant.sprIcon != null)
+                if (DefendingTerrain.DefendingCreature.Enchant != null && DefendingTerrain.DefendingCreature.Enchant.sprIcon != null)
                 {
-                    DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
 
-                    DefendingCreature.Enchant.Unit3DSprite.SetPosition(
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
                         CurrentPosition.X,
                         CurrentPosition.Z + 1.5f * Map.LayerHeight,
                         CurrentPosition.Y);
 
-                    DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                 }
             }
         }

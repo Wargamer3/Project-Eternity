@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly Random Random;
         private readonly Vector2 DicePosition;
         private int VisibleDiceValue;
+        private int MinimumDiceValue;
         private int MaximumDiceValue;
         private int ForcedDiceValue;
 
@@ -41,7 +42,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             VisibleDiceValue = 0;
+            MinimumDiceValue = Map.LowestDieRoll;
             MaximumDiceValue = Map.HighestDieRoll;
+            int EnchantMin = ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValueMin;
+            int EnchantMax = ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValueMax;
+
+            if (EnchantMin >= 0)
+            {
+                MinimumDiceValue = EnchantMin;
+            }
+
+            if (EnchantMax >= 0)
+            {
+                MaximumDiceValue = EnchantMax;
+            }
 
             EnchantHelper.ActivateOnPlayer(Map.GlobalSorcererStreetBattleContext, ActivePlayer, null, null);
             ForcedDiceValue = ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValue;
@@ -55,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                VisibleDiceValue = Random.Next(0, MaximumDiceValue) + 1;
+                VisibleDiceValue = Random.Next(MinimumDiceValue, MaximumDiceValue);
             }
 
             if (InputHelper.InputConfirmPressed())
@@ -84,7 +98,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void RollDice()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
+            if (ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward)
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, -VisibleDiceValue));
+            }
+            else
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
+            }
         }
 
         protected override void OnCancelPanel()

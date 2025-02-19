@@ -261,7 +261,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
-    public sealed class SorcererStreetOnCreateRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetOnCreateRequirement : SorcererStreetRequirement
     {
         public SorcererStreetOnCreateRequirement()
             : this(null)
@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
-    public sealed class SorcererStreetEnchantPhaseRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetEnchantPhaseRequirement : SorcererStreetRequirement
     {
         public SorcererStreetEnchantPhaseRequirement()
             : this(null)

@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new SpellCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
-        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
+        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);
@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY + Constants.Height / 24;
 
-            base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
+            base.DrawCardInfo(g, Symbols, fntCardInfo, ActivePlayer, OffsetX, OffsetY);
 
             switch (SpellType)
             {

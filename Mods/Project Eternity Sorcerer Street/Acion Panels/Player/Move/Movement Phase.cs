@@ -185,6 +185,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.ListPassedTerrein.Add(NextTerrain);
             }
 
+            if (NextTerrain.DefendingCreature != null
+                && NextTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).ForceStop)
+            {
+                Movement = 0;
+            }
+
             --Movement;
             NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);
 

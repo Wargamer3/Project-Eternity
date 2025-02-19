@@ -5,7 +5,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetHasEnchantRequirement : SorcererStreetBattleRequirement
+    public sealed class SorcererStreetHasEnchantRequirement : SorcererStreetRequirement
     {
         public enum Targets { Self, Opponent, Territory }
 

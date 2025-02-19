@@ -15,7 +15,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public class PlayerAbilities
         {
-
             public bool Backward;
             public int DiceValue;
             public int DiceValueMin;
@@ -25,11 +24,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public float SpellCostMultiplier;
             public float CreatureCostMultiplier;
 
-            public bool CreatureLimit;//Cannont use creatures
+            public bool ItemLimit;//Cannont use Items
+            public bool SpellLimit;//Cannont use Spells
+            public bool CreatureLimit;//Cannont use Creatures
             public bool InvasionLimit;//Cannot invade.
             public bool CreatureEnchantProtection;//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory abilities for 8 rounds.
 
-            public float TollStealMultiplier;//User gains X% of tolls collected by other Players until user reaches the castle.
+            public float TollGainShareMultiplier;//User gains X% of tolls collected by other Players until user reaches the castle.
             public bool TollProtection;//Target Player is exempt from tolls.
             public bool TollLimit;//Target enemy Player cannot claim tolls.
 
@@ -51,7 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 InvasionLimit = false;
                 CreatureEnchantProtection = false;
 
-                TollStealMultiplier = 0;
+                TollGainShareMultiplier = 0;
                 TollProtection = false;
                 TollLimit = false;
 
@@ -76,7 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 TollLimit = Other.TollLimit;
                 TollProtection = Other.TollProtection;
-                TollStealMultiplier = Other.TollStealMultiplier;
+                TollGainShareMultiplier = Other.TollGainShareMultiplier;
 
                 CastleValueMultiplier = Other.CastleValueMultiplier;
                 AllowTerrainCommands = Other.AllowTerrainCommands;
@@ -402,6 +403,55 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return Abilities;
+        }
+
+        public int GetFinalCardCost(Card SelectedCard)
+        {
+            int TotalCost = SelectedCard.MagicCost;
+
+            switch (SelectedCard.CardType)
+            {
+                case CreatureCardType:
+                    TotalCost = (int)(TotalCost * GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).CreatureCostMultiplier);
+                    break;
+                case SpellCard.SpellCardType:
+                    TotalCost = (int)(TotalCost * GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).SpellCostMultiplier);
+                    break;
+                case ItemCard.ItemCardType:
+                    TotalCost = (int)(TotalCost * GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).ItemCostMultiplier);
+                    break;
+            }
+
+            return TotalCost;
+        }
+
+        public bool CanUseCard(Card SelectedCard)
+        {
+            switch (SelectedCard.CardType)
+            {
+                case CreatureCardType:
+                    if (GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).CreatureLimit)
+                    {
+                        return false;
+                    }
+                    break;
+
+                case SpellCard.SpellCardType:
+                    if (GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).SpellLimit)
+                    {
+                        return false;
+                    }
+                    break;
+
+                case ItemCard.ItemCardType:
+                    if (GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).ItemLimit)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+
+            return Gold >= GetFinalCardCost(SelectedCard);
         }
 
         public override List<MissionInfo> GetUnlockedMissions()
