@@ -22,9 +22,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             public string Name;
 
-            public BookUnlockContainer(IEnumerable<UnlockableBook> ListLockedUnit)
+            public BookUnlockContainer(IEnumerable<UnlockableBook> ListLockedBook)
             {
-                this.ListLockedBook = new List<UnlockableBook>(ListLockedUnit);
+                this.ListLockedBook = new List<UnlockableBook>(ListLockedBook);
                 ListUnlockedBook = new List<UnlockableBook>();
                 DicFolder = new Dictionary<string, BookUnlockContainer>();
                 ListFolder = new List<BookUnlockContainer>();
@@ -42,6 +42,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public struct CardUnlockContainer
+        {
+            public Dictionary<string, CardUnlockContainer> DicFolder;
+            public List<CardUnlockContainer> ListFolder;//Share the same folders as the dictionnary
+            public List<UnlockableCard> ListUnlockedCard;
+            public List<UnlockableCard> ListLockedCard;
+            public UnlockableCard IconUnit { get { if (ListUnlockedCard.Count > 0) return ListUnlockedCard[0]; else return ListLockedCard[0]; } }
+
+            public string Name;
+
+            public CardUnlockContainer(IEnumerable<UnlockableCard> ListLockedCard)
+            {
+                this.ListLockedCard = new List<UnlockableCard>(ListLockedCard);
+                ListUnlockedCard = new List<UnlockableCard>();
+                DicFolder = new Dictionary<string, CardUnlockContainer>();
+                ListFolder = new List<CardUnlockContainer>();
+                Name = string.Empty;
+            }
+
+            public CardUnlockContainer(string Name)
+            {
+                this.Name = Name;
+
+                DicFolder = new Dictionary<string, CardUnlockContainer>();
+                ListFolder = new List<CardUnlockContainer>();
+                ListUnlockedCard = new List<UnlockableCard>();
+                ListLockedCard = new List<UnlockableCard>();
+            }
+        }
+
         public struct CharacterUnlockContainer
         {
             public Dictionary<string, CharacterUnlockContainer> DicFolder;
@@ -52,9 +82,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             public string Name;
 
-            public CharacterUnlockContainer(IEnumerable<UnlockablePlayerCharacter> ListLockedUnit)
+            public CharacterUnlockContainer(IEnumerable<UnlockablePlayerCharacter> ListLockedCharacter)
             {
-                this.ListLockedCharacter = new List<UnlockablePlayerCharacter>(ListLockedUnit);
+                this.ListLockedCharacter = new List<UnlockablePlayerCharacter>(ListLockedCharacter);
                 ListUnlockedCharacter = new List<UnlockablePlayerCharacter>();
                 DicFolder = new Dictionary<string, CharacterUnlockContainer>();
                 ListFolder = new List<CharacterUnlockContainer>();
@@ -73,10 +103,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public static Dictionary<string, UnlockableBook> DicBookDatabase = new Dictionary<string, UnlockableBook>();
+        public Dictionary<string, CardBookSkinInfo> DicOwnedBookSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, CardBookSkinInfo> DicOwnedBookAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public static Dictionary<string, UnlockableCard> DicCardDatabase = new Dictionary<string, UnlockableCard>();
+        public Dictionary<string, UnlockableCardSkin> DicOwnedCardSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, UnlockableCardSkin> DicOwnedCardAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public static Dictionary<string, UnlockablePlayerCharacter> DicCharacterDatabase = new Dictionary<string, UnlockablePlayerCharacter>();
+        public Dictionary<string, UnlockableCharacterSkin> DicOwnedCharacterSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, UnlockableCharacterSkin> DicOwnedCharacterAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public static Dictionary<string, UnlockableMission> DicMissionDatabase = new Dictionary<string, UnlockableMission>();
 
         public static Dictionary<string, UnlockableBook>.Enumerator DicBookDatabaseEnumerator;
+        public static Dictionary<string, UnlockableCard>.Enumerator DicCardDatabaseEnumerator;
         public static Dictionary<string, UnlockablePlayerCharacter>.Enumerator DicCharacterDatabaseEnumeretor;
         public static Dictionary<string, UnlockableMission>.Enumerator DicMissionDatabaseEnumerator;
 
@@ -86,11 +124,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static Task LoadTask;
         private static object LockObject = new object();
 
-        private static List<string> ListCharacterToPrioritiseLoadPath;//Path of characters to load in background;
         private static List<string> ListBookToPrioritiseLoadPath;//Path of units to load in background;
+        private static List<string> ListCardToPrioritiseLoadPath;//Path of units to load in background;
+        private static List<string> ListCharacterToPrioritiseLoadPath;//Path of characters to load in background;
         private static List<string> ListMissionToPrioritiseLoadPath;//Path of missions to load in background;
 
         public BookUnlockContainer RootBookContainer;
+        public CardUnlockContainer RootCardContainer;
         public CharacterUnlockContainer RootCharacterContainer;
 
         public List<UnlockableMission> ListUnlockedMission;
@@ -99,6 +139,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private FileStream PlayerUnlocksFS;
         private BinaryReader PlayerUnlocksBR;
         private int RemainingNumberOfBooksToLoad;
+        private int RemainingNumberOfCardsToLoad;
         private int RemainingNumberOfCharactersToLoad;
         private int RemainingNumberOfMissionsToLoad;
         public bool HasFinishedReadingPlayerShopItems;
@@ -106,19 +147,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetPlayerUnlockInventory()
         {
             RootBookContainer = new BookUnlockContainer("ALL");
+            RootCardContainer = new CardUnlockContainer("ALL");
             RootCharacterContainer = new CharacterUnlockContainer("ALL");
 
             ListUnlockedMission = new List<UnlockableMission>();
             ListLockedMission = new List<UnlockableMission>();
 
-            ListCharacterToPrioritiseLoadPath = new List<string>();
             ListBookToPrioritiseLoadPath = new List<string>();
+            ListCardToPrioritiseLoadPath = new List<string>();
+            ListCharacterToPrioritiseLoadPath = new List<string>();
             ListMissionToPrioritiseLoadPath = new List<string>();
         }
 
         public void LoadOnlineData(ByteReader BR)
         {
             RemainingNumberOfBooksToLoad = BR.ReadInt32();
+            RemainingNumberOfCardsToLoad = BR.ReadInt32();
             RemainingNumberOfCharactersToLoad = BR.ReadInt32();
             RemainingNumberOfMissionsToLoad = BR.ReadInt32();
 
@@ -136,6 +180,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 RootBookContainer.ListUnlockedBook.Add(FillerItem);
 
                 --RemainingNumberOfBooksToLoad;
+            }
+            while (RemainingNumberOfCardsToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableCard FillerItem;
+
+                if (!DicCardDatabase.TryGetValue(ItemPath, out FillerItem))
+                {
+                    FillerItem = new UnlockableCard(ItemPath);
+                    DicCardDatabase.Add(ItemPath, FillerItem);
+                }
+
+                RootCardContainer.ListUnlockedCard.Add(FillerItem);
+
+                --RemainingNumberOfCardsToLoad;
             }
             while (RemainingNumberOfCharactersToLoad > 0)
             {
@@ -174,12 +233,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(RootBookContainer.ListUnlockedBook.Count);
+            BW.Write(RootCardContainer.ListUnlockedCard.Count);
             BW.Write(RootCharacterContainer.ListUnlockedCharacter.Count);
             BW.Write(ListUnlockedMission.Count);
 
             foreach (UnlockableBook ActiveBook in RootBookContainer.ListUnlockedBook)
             {
                 BW.Write(ActiveBook.Path);
+            }
+
+            foreach (UnlockableCard ActiveCard in RootCardContainer.ListUnlockedCard)
+            {
+                BW.Write(ActiveCard.Path);
             }
 
             foreach (UnlockablePlayerCharacter ActiveCharacter in RootCharacterContainer.ListUnlockedCharacter)
@@ -217,6 +282,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public void LoadShopCard(int StartIndex, int EndIndex, List<UnlockableCard> ListShopPlayerCard)
+        {
+            lock (ListCardToPrioritiseLoadPath)
+            {
+                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                {
+                    ListCardToPrioritiseLoadPath.Add(ListShopPlayerCard[ActiveIndex].Path);
+                }
+            }
+        }
+
         public void LoadShopCharacter(int StartIndex, int EndIndex, List<UnlockablePlayerCharacter> ListShopPlayerCharacter)
         {
             lock (ListCharacterToPrioritiseLoadPath)
@@ -240,6 +316,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
 
             RemainingNumberOfBooksToLoad = PlayerUnlocksBR.ReadInt32();
+            RemainingNumberOfCardsToLoad = PlayerUnlocksBR.ReadInt32();
             RemainingNumberOfCharactersToLoad = PlayerUnlocksBR.ReadInt32();
             RemainingNumberOfMissionsToLoad = PlayerUnlocksBR.ReadInt32();
 
@@ -275,6 +352,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DicBookDatabase.Add(ItemPath, FillerItem);
                 RootBookContainer.ListUnlockedBook.Add(FillerItem);
                 --RemainingNumberOfBooksToLoad;
+            }
+            else if (RemainingNumberOfCardsToLoad > 0)
+            {
+                string ItemPath = PlayerUnlocksBR.ReadString();
+                UnlockableCard FillerItem = new UnlockableCard(ItemPath);
+
+                if (!DicCardDatabase.ContainsKey(ItemPath))
+                {
+                    DicCardDatabase.Add(ItemPath, FillerItem);
+                    RootCardContainer.ListUnlockedCard.Add(FillerItem);
+                }
+                --RemainingNumberOfCardsToLoad;
             }
             else if (RemainingNumberOfCharactersToLoad > 0)
             {
@@ -313,6 +402,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             DicBookDatabaseEnumerator = DicBookDatabase.GetEnumerator();
+            DicCardDatabaseEnumerator = DicCardDatabase.GetEnumerator();
             DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
             DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
 
@@ -341,6 +431,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         else
                         {
                             DicBookDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
+                        }
+                        break;
+
+                    case "Card":
+                        if (!DicCardDatabase.ContainsKey(ItemPath))
+                        {
+                            UnlockableCard NewUnitUnlock = new UnlockableCard(ItemPath, ActiveHeaderValues);
+                            DicCardDatabase.Add(ItemPath, NewUnitUnlock);
+                        }
+                        else
+                        {
+                            DicCardDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
                         }
                         break;
 
@@ -377,6 +479,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private static void LoadUnlocksContentAsyncTask()
         {
             UnlockableBook BookToLoadInfo = null;
+            UnlockableCard CardToLoadInfo = null;
             UnlockablePlayerCharacter CharacterToLoadInfo = null;
             UnlockableMission MissionToLoadInfo = null;
 
@@ -389,6 +492,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (DicBookDatabaseEnumerator.MoveNext())
             {
                 BookToLoadInfo = DicBookDatabaseEnumerator.Current.Value;
+            }
+            if (ListCardToPrioritiseLoadPath.Count > 0)
+            {
+                CardToLoadInfo = DicCardDatabase[ListCardToPrioritiseLoadPath[0]];
+
+                ListCardToPrioritiseLoadPath.RemoveAt(0);
+            }
+            else if (DicCardDatabaseEnumerator.MoveNext())
+            {
+                CardToLoadInfo = DicCardDatabaseEnumerator.Current.Value;
             }
             else if (ListCharacterToPrioritiseLoadPath.Count > 0)
             {
@@ -416,10 +529,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CardBook NewBook = CardBook.GetCardBook(BookToLoadInfo.Path, ((Player)PlayerManager.ListLocalPlayer[0]).Inventory.GlobalBook, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 BookToLoadInfo.BookToBuy = NewBook;
             }
+            else if (CardToLoadInfo != null)
+            {
+                Card NewCard = Card.LoadCard(CardToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+
+                CardToLoadInfo.CardToBuy = NewCard;
+            }
             else if (CharacterToLoadInfo != null)
             {
-                Character NewCharacter = new Character(CharacterToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
+                PlayerCharacter NewCharacter = new PlayerCharacter(CharacterToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 
                 CharacterToLoadInfo.CharacterToBuy = NewCharacter;
             }

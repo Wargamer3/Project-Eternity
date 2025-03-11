@@ -191,6 +191,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
+    public class CardInfo
+    {
+        public Card Card;
+        public byte QuantityOwned;
+        public List<CardSkinInfo> ListOwnedCardSkin;
+        public List<CardSkinInfo> ListOwnedCardAlt;
+
+        public CardInfo(Card Card, byte QuantityOwned)
+        {
+            this.Card = Card;
+            this.QuantityOwned = QuantityOwned;
+        }
+    }
+
+    public class CardSkinInfo
+    {
+        public string CardRelativePath;
+        public string SkinRelativePath;
+        public Card CardSkin;
+
+        public CardSkinInfo(string CardRelativePath, string SkinRelativePath, Card CardSkin)
+        {
+            this.CardRelativePath = CardRelativePath;
+            this.SkinRelativePath = SkinRelativePath;
+            this.CardSkin = CardSkin;
+        }
+
+        public override string ToString()
+        {
+            return SkinRelativePath;
+        }
+    }
+
     public abstract class Card
     {
         private static readonly Dictionary<string, Dictionary<string, Card>> DicCardsByType = new Dictionary<string, Dictionary<string, Card>>();
@@ -203,11 +236,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly string CardType;
         public string Name;
         public string Description;
+        public int Price;
         public CardRarities Rarity;
         public int MagicCost;
-        public int QuantityOwned;
 
-        public string Tags;
+        public string Tags;//Used to categorize Characters
         public TagSystem TeamTags;
         public EffectHolder Effects;
         public string SkillChainName;
@@ -222,7 +255,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.Path = Path;
             this.CardType = CardType;
-            QuantityOwned = 1;
             TeamTags = new TagSystem();
             Effects = new EffectHolder();
             ListActiveSkill = new List<BaseAutomaticSkill>();
@@ -316,7 +348,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             NewCopy.Description = Description;
             NewCopy.Rarity = Rarity;
             NewCopy.MagicCost = MagicCost;
-            NewCopy.QuantityOwned = QuantityOwned;
 
             return NewCopy;
         }

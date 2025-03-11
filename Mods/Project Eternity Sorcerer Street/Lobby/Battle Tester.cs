@@ -283,7 +283,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             AllCardsBook = CardBook.LoadGlobalBook();
 
-            Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value;
+            Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value.Card;
 
             Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
             Context.Defender.OwnerTeam = new Team(2);

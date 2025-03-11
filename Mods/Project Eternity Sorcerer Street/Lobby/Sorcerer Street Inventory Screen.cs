@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using System;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetInventoryScreen : GameScreen
     {
         #region Ressources
+
 
         private CardSymbols Symbols;
 
@@ -26,6 +29,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
+            BattleMapInventoryWhiteScreen.LoadBackground(Content);
+
             Symbols = CardSymbols.Symbols;
 
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -75,18 +80,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            BattleMapInventoryWhiteScreen.BeginDrawBackground(g);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
+            float Ratio = Constants.Height / 2160f;
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.FromNonPremultiplied(65, 70, 65, 255));
+
+            BattleMapInventoryWhiteScreen.DrawBackground(g);
 
             float X = -10;
             float Y = Constants.Height / 20;
             int HeaderHeight = Constants.Height / 16;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
-
-            X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "System", new Vector2(X, Y), Color.White);
 
             X = -10;
             Y = Constants.Height / 7;

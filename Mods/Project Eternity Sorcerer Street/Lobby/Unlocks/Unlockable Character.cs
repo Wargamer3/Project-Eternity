@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -8,7 +7,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public const string CharacterType = "Character";
 
-        public Character CharacterToBuy;
+        public PlayerCharacter CharacterToBuy;
+        public List<UnlockableCharacterSkin> ListUnlockedSkin = new List<UnlockableCharacterSkin>();
+        public List<UnlockableCharacterSkin> ListLockedSkin = new List<UnlockableCharacterSkin>();
+        public List<UnlockableCharacterAlt> ListUnlockedAlt = new List<UnlockableCharacterAlt>();
+        public List<UnlockableCharacterAlt> ListLockedAlt = new List<UnlockableCharacterAlt>();
+        public bool ShowSkin;
 
         public UnlockablePlayerCharacter(string Path)
             : base(CharacterType)
@@ -40,17 +44,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ConditionsOwner.UnlockInventory.RootCharacterContainer.ListLockedCharacter.Remove(this);
             ConditionsOwner.UnlockInventory.RootCharacterContainer.ListUnlockedCharacter.Add(this);
-            PlayerCharacter NewCharacter = new PlayerCharacter(Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            CharacterToBuy = new PlayerCharacter(Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 
             if (UnlockQuantity > 0)
             {
-                ConditionsOwner.Inventory.DicOwnedCharacter.Add(Path, NewCharacter);
-                ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewCharacter.Name + "!");
+                ConditionsOwner.Inventory.DicOwnedCharacter.Add(Path, new PlayerCharacterInfo(CharacterToBuy));
+                ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + CharacterToBuy.Name + "!");
             }
 
             if (IsInShop)
             {
-                ListUnlockMessage.Add(NewCharacter.Name + " is now available in the shop!");
+                ListUnlockMessage.Add(CharacterToBuy.Name + " is now available in the shop!");
             }
 
             return ListUnlockMessage;

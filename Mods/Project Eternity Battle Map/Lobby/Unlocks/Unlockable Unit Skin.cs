@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public const string UnitSkinType = "UnitSkin";
 
-        public Unit UnitSkinToBuy;
+        public Unit UnitSkinToBuy;//Used by the shop
         public string SkinTypeAndPath;
 
         public UnlockableUnitSkin(string UnitPath, string SkinPath)

@@ -12,9 +12,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
         private readonly string CharacterModelPath;
         private readonly string BookName;
         private readonly string BookModel;
-        private readonly List<Tuple<string, int>> ListCard;
+        private readonly List<Tuple<string, byte>> ListCard;
 
-        public ChangeBookScriptServer(string ID, string CharacterModelPath, string BookName, string BookModel, List<Tuple<string, int>> ListCard)
+        public ChangeBookScriptServer(string ID, string CharacterModelPath, string BookName, string BookModel, List<Tuple<string, byte>> ListCard)
             : base(ScriptName)
         {
             this.ID = ID;
@@ -39,10 +39,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
             WriteBuffer.AppendString(BookModel);
 
             WriteBuffer.AppendInt32(ListCard.Count);
-            foreach (Tuple<string, int> ActiveCard in ListCard)
+            foreach (Tuple<string, byte> ActiveCard in ListCard)
             {
                 WriteBuffer.AppendString(ActiveCard.Item1);
-                WriteBuffer.AppendInt32(ActiveCard.Item2);
+                WriteBuffer.AppendByte(ActiveCard.Item2);
             }
         }
 

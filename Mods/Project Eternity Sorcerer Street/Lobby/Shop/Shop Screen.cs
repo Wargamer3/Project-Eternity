@@ -5,11 +5,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
-using Microsoft.Xna.Framework.Content;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class BattleMapInventoryWhiteScreen : GameScreen
+    public class ShopScreen : GameScreen
     {
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
@@ -17,18 +18,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntArial12;
         private SpriteFont fntOxanimumBold;
         private SpriteFont fntOxanimumBoldBig;
-        private static SpriteFont fntOxanimumBoldTitle;
-
-        private static Texture2D sprTitleHighlight;
-        private static Texture2D sprBarLeft;
-        private static Texture2D sprBarMiddle;
-        private Texture2D sprButtonBackToLobby;
+        private SpriteFont fntOxanimumBoldTitle;
 
         private Texture2D sprButtonSmallActive;
         private Texture2D sprButtonSmallInactive;
+        private Texture2D sprButtonBackToLobby;
+        private Texture2D sprMoney;
 
-        private static RenderTarget2D CubeRenderTarget;
-        private static Model Cube;
+        private Texture2D sprTitleHighlight;
+        private Texture2D sprBarLeft;
+        private Texture2D sprBarMiddle;
+
+        private RenderTarget2D CubeRenderTarget;
+        private Model Cube;
 
         private TextButton ReturnToLobbyButton;
 
@@ -39,33 +41,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private IUIElement[] ArrayUIElement;
 
-        public static int LeftSideWidth;
-        public static int TopSectionHeight;
-        public static int HeaderSectionY;
-        public static int HeaderSectionHeight;
+        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-        public static int BottomSectionHeight;
-        public static int BottomSectionY;
+        public int LeftSideWidth;
+        public int TopSectionHeight;
+        public int HeaderSectionY;
+        public int HeaderSectionHeight;
 
-        public static int MiddleSectionY;
-        public static int MiddleSectionHeight;
+        public int BottomSectionHeight;
+        public int BottomSectionY;
 
-        public static int LoadoutX = 2220;
+        public int MiddleSectionY;
+        public int MiddleSectionHeight;
 
-        private static float RotationX;
+        private float RotationX;
 
         private GameScreen[] ArraySubScreen;
 
         private GameScreen ActiveSubScreen;
 
-        public BattleMapPlayer ActivePlayer;
+        public BattleMapOnlineClient OnlineGameClient;
+        public Player ActivePlayer;
 
-        public BattleMapInventoryWhiteScreen()
+        public ShopScreen(BattleMapOnlineClient OnlineGameClient)
         {
-            ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
+            this.OnlineGameClient = OnlineGameClient;
+            ActivePlayer = (Player)PlayerManager.ListLocalPlayer[0];
 
-            LeftSideWidth = (int)(Constants.Width * 0.5 + 20);
-            TopSectionHeight = (int)(Constants.Height * 0.1);
+            LeftSideWidth = (int)(Constants.Width * 0.5);
+            TopSectionHeight = (int)(Constants.Height * 0.15);
             HeaderSectionY = TopSectionHeight;
             HeaderSectionHeight = (int)(Constants.Height * 0.05);
 
@@ -76,14 +80,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MiddleSectionHeight = BottomSectionY - MiddleSectionY;
         }
 
-        public static void LoadBackground(ContentManager Content)
+        public override void Load()
         {
-            if (fntOxanimumBoldTitle != null)
-            {
-                return;
-            }
+            //Constants.graphics.PreferMultiSampling = true;
+            //Constants.graphics.ApplyChanges();
 
+            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
+
+            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Button Tab");
+            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Inactive");
+            sprButtonBackToLobby = Content.Load<Texture2D>("Menus/Lobby/Button Back To Lobby");
+            sprMoney = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Money");
 
             sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
             sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
@@ -94,18 +104,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int CubeTargetHeight = 900;
             CubeRenderTarget = new RenderTarget2D(GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 16, RenderTargetUsage.DiscardContents);
-        }
-
-        public override void Load()
-        {
-            LoadBackground(Content);
-
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
-            fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
+
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(Constants.Width - 502 * Ratio);
             int DrawY = (int)(100 * Ratio);
@@ -134,54 +136,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
-            int MaxLoadouts = 0;
-            int LoadoutSize = 0;
+            ShopCharacterWhiteScreen NewShopUnitScreen = new ShopCharacterWhiteScreen(this, ActivePlayer.UnlockInventory, ActivePlayer.Inventory);
+            ShopCharacterScreen NewShopEquipmentScreen = new ShopCharacterScreen();
+            ShopEquipmentScreen NewShopWeaponsScreen = new ShopEquipmentScreen();
+            ShopConsumableScreen NewShopItemsScreen = new ShopConsumableScreen();
 
-            IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Player Unlocks.ini");
-            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Slots"))
-            {
-                if (ActivePlayer.Level >= int.Parse(RequiredLevel))
-                {
-                    ++MaxLoadouts;
-                }
-            }
-
-            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Sizes"))
-            {
-                if (ActivePlayer.Level >= int.Parse(RequiredLevel))
-                {
-                    ++LoadoutSize;
-                }
-            }
-
-            for (int L = 0; L < MaxLoadouts; ++L)
-            {
-                PlayerLoadout ActiveLoadout;
-                if (L >= ActivePlayer.Inventory.ListSquadLoadout.Count)
-                {
-                    ActiveLoadout = new PlayerLoadout();
-                    ActivePlayer.Inventory.ListSquadLoadout.Add(ActiveLoadout);
-                }
-                else
-                {
-                    ActiveLoadout = ActivePlayer.Inventory.ListSquadLoadout[L];
-                }
-
-                for (int S = 0; S < LoadoutSize; S++)
-                {
-                    if (S >= ActiveLoadout.ListSpawnSquad.Count)
-                    {
-                        ActiveLoadout.ListSpawnSquad.Add(null);
-                    }
-                }
-            }
-
-            InventorySquadWhiteScreen NewShopCharacterScreen = new InventorySquadWhiteScreen(this, MaxLoadouts, LoadoutSize);
-            InventoryCharacterWhiteScreen NewShopEquipmentScreen = new InventoryCharacterWhiteScreen(this, MaxLoadouts, LoadoutSize);
-            InventoryEquipmentScreen NewShopWeaponsScreen = new InventoryEquipmentScreen();
-            InventoryConsumableScreen NewShopItemsScreen = new InventoryConsumableScreen();
-
-            ArraySubScreen = new GameScreen[] { NewShopCharacterScreen, NewShopEquipmentScreen, NewShopWeaponsScreen, NewShopItemsScreen };
+            ArraySubScreen = new GameScreen[] { NewShopUnitScreen, NewShopEquipmentScreen, NewShopWeaponsScreen, NewShopItemsScreen };
 
             foreach (GameScreen ActiveScreen in ArraySubScreen)
             {
@@ -190,18 +150,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ActiveScreen.Load();
             }
 
-            ActiveSubScreen = NewShopCharacterScreen;
+            ActiveSubScreen = NewShopUnitScreen;
         }
 
         public override void Unload()
         {
             SoundSystem.ReleaseSound(sndButtonOver);
             SoundSystem.ReleaseSound(sndButtonClick);
-
-            foreach (GameScreen ActiveScreen in ArraySubScreen)
-            {
-                ActiveScreen.Unload();
-            }
         }
 
         public override void Update(GameTime gameTime)
@@ -273,12 +228,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ActiveSubScreen.BeginDraw(g);
 
-            BeginDrawBackground(g);
-        }
-
-        public static void BeginDrawBackground(CustomSpriteBatch g)
-        {
-
             g.GraphicsDevice.SetRenderTarget(CubeRenderTarget);
             g.GraphicsDevice.Clear(Color.Transparent);
             float aspectRatio = 1f;
@@ -305,21 +254,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             float Ratio = Constants.Height / 2160f;
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.FromNonPremultiplied(65, 70, 65, 255));
+            GraphicsDevice.Clear(BackgroundColor);
 
             DrawBackground(g);
-
-            LeftSideWidth = (int)(Constants.Width * 0.5);
-            TopSectionHeight = (int)(Constants.Height * 0.15);
-            HeaderSectionY = TopSectionHeight;
-            HeaderSectionHeight = (int)(Constants.Height * 0.05);
-
-            BottomSectionHeight = (int)(Constants.Height * 0.07);
-            BottomSectionY = Constants.Height - BottomSectionHeight;
-
-            MiddleSectionY = (HeaderSectionY + HeaderSectionHeight);
-            MiddleSectionHeight = BottomSectionY - MiddleSectionY;
-
 
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
@@ -334,13 +271,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public static void DrawBackground(CustomSpriteBatch g)
+        private void DrawBackground(CustomSpriteBatch g)
         {
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
             g.GraphicsDevice.Clear(Color.FromNonPremultiplied(243, 243, 243, 255));
             float Ratio = Constants.Height / 2160f;
 
             g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 364 * Ratio), new Vector2(3000 * Ratio, -1346 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 240);
+            //
+            //g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, (1216 + offset) * Ratio), new Vector2(3000 * Ratio, (-494 + offset) * Ratio), Color.FromNonPremultiplied(243, 243, 243, 255), 200);
+            //g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 1216 * Ratio), new Vector2(3000 * Ratio, -670 * Ratio), Color.FromNonPremultiplied(243, 243, 243, 255), 600);
+
+            //g.DrawLine(sprPixel, new Vector2(2700 * Ratio, 2232 * Ratio), new Vector2(3500 * Ratio, 1825 * Ratio), Color.FromNonPremultiplied(243, 243, 243, 255), 300);
 
             g.End();
 
@@ -353,7 +295,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Begin(SpriteSortMode.Deferred, blend);
 
-            g.Draw(CubeRenderTarget, new Vector2(400, 180), Color.FromNonPremultiplied(5, 5, 5, 255));
+            g.Draw(CubeRenderTarget, new Vector2(400, 180), null, Color.FromNonPremultiplied(5, 5, 5, 255), 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
@@ -363,7 +305,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Begin(SpriteSortMode.Deferred, blend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone);
 
-            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0f);
+            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0.9f);
             g.End();
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             int LineX = 89;
@@ -371,18 +313,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
             g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(2518 * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
 
-            LineX = 514;
-            LineY = 590;
-            g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
-            g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling((LoadoutX - LineX) * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
-
             LineX = 110;
             LineY = 1907;
             g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
             g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(3592 * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
 
             g.Draw(sprTitleHighlight, new Vector2((int)(160 * Ratio), (int)(46 * Ratio)), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            g.DrawString(fntOxanimumBoldTitle, "INVENTORY", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), TextColor);
+            g.DrawString(fntOxanimumBoldTitle, "SHOP", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), TextColor);
+
+            int DrawX = (int)(Constants.Width - (sprMoney.Width + 170) * Ratio);
+            int DrawY = (int)(Constants.Height - 210 * Ratio);
+            g.Draw(sprMoney, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+            g.DrawString(fntOxanimumBold, "Money:", new Vector2(DrawX + 24 * Ratio, DrawY + 34 * Ratio), TextColor);
+            g.DrawStringRightAligned(fntOxanimumBold, "14360 cr", new Vector2(DrawX + (sprMoney.Width - 30) * Ratio, DrawY + 35 * Ratio), Color.White);
         }
     }
 }

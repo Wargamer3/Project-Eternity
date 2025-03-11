@@ -162,7 +162,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CardBook NewCardBook = new CardBook();
             foreach (Card ActiveCard in ListCardInDeck)
             {
-                NewCardBook.AddCard(ActiveCard);
+                NewCardBook.AddCard(new CardInfo(ActiveCard, 1));
             }
 
             Inventory.UseBook(NewCardBook);
@@ -255,9 +255,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string CardPath = IniDefaultCards.ReadField(ActiveKey, "Path");
                 string CardQuantity = IniDefaultCards.ReadField(ActiveKey, "Quantity");
                 Card LoadedCard = Card.LoadCard(CardPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                LoadedCard.QuantityOwned = int.Parse(CardQuantity);
 
-                Inventory.GlobalBook.AddCard(LoadedCard);
+                Inventory.GlobalBook.AddCard(new CardInfo(LoadedCard, byte.Parse(CardQuantity)));
             }
 
             CardBook DefaultBook = new CardBook("Default");
@@ -267,16 +266,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Inventory.ActiveBook = DefaultBook;
-            Inventory.DicOwnedBook.Add(DefaultBook.BookName, DefaultBook);
+            Inventory.DicOwnedBook.Add(DefaultBook.BookName, new CardBookInfo(DefaultBook));
 
             IniFile IniDefaultCharacters = IniFile.ReadFromFile("Content/Sorcerer Street Lobby Default Characters.ini");
 
-            PlayerCharacter FirstCharacter = null;
+            PlayerCharacterInfo FirstCharacter = null;
             foreach (string ActiveKey in IniDefaultCharacters.ReadAllKeys())
             {
                 string CharacterPath = IniDefaultCharacters.ReadField(ActiveKey, "Path");
-                PlayerCharacter LoadedCharacter = new PlayerCharacter(CharacterPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                Inventory.DicOwnedCharacter.Add(LoadedCharacter.CharacterPath, LoadedCharacter);
+                PlayerCharacterInfo LoadedCharacter = new PlayerCharacterInfo(new PlayerCharacter(CharacterPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget));
+                Inventory.DicOwnedCharacter.Add(LoadedCharacter.Character.CharacterPath, LoadedCharacter);
                 Inventory.AddCharacter(LoadedCharacter);
 
                 if (FirstCharacter == null)
@@ -311,7 +310,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int BookNumber = 1;
                 string CharacterName = null;
                 CardBook ActiveBook = null;
-                Card ActiveCard = null;
+                CardInfo ActiveCard = null;
                 Dictionary<string, CardBook> DicOwnedBook = new Dictionary<string, CardBook>();
 
                 foreach (Tuple<string, string> ActiveHeaderValues in DicContentByHeader[BotName])
@@ -329,12 +328,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else if (ActiveHeaderValues.Item1 == "Card")
                     {
-                        ActiveCard = Card.LoadCard(ActiveHeaderValues.Item2, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                        ActiveCard = new CardInfo(Card.LoadCard(ActiveHeaderValues.Item2, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget), 0);
                         ActiveBook.AddCard(ActiveCard);
                     }
                     else if (ActiveHeaderValues.Item1 == "Quantity")
                     {
-                        ActiveCard.QuantityOwned = int.Parse(ActiveHeaderValues.Item2);
+                        ActiveCard.QuantityOwned = byte.Parse(ActiveHeaderValues.Item2);
                     }
                 }
 
@@ -355,7 +354,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Q = 0; Q < Inventory.ActiveBook.ListCard[C].QuantityOwned; ++Q)
                 {
-                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget));
+                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Card.Copy(Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget));
                 }
             }
         }

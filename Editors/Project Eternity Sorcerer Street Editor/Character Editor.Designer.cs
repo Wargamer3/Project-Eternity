@@ -61,13 +61,6 @@
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnDeleteSkin = new System.Windows.Forms.Button();
-            this.btnSetSkin = new System.Windows.Forms.Button();
-            this.ckLockedSkin = new System.Windows.Forms.CheckBox();
-            this.txtSkinName = new System.Windows.Forms.TextBox();
-            this.btnAddSkin = new System.Windows.Forms.Button();
-            this.lsSkins = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnDeleteAIBook = new System.Windows.Forms.Button();
             this.btnSetAIBook = new System.Windows.Forms.Button();
@@ -84,7 +77,6 @@
             this.txtPassiveSkill = new System.Windows.Forms.TextBox();
             this.btnSetSkill = new System.Windows.Forms.Button();
             this.tabRestrictions = new System.Windows.Forms.TabPage();
-            this.tabSkins = new System.Windows.Forms.TabPage();
             this.tabBooks = new System.Windows.Forms.TabPage();
             this.gbWhitelist.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -93,13 +85,11 @@
             this.menuStrip1.SuspendLayout();
             this.gbItemInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrice)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabSkills.SuspendLayout();
             this.gbPassiveSkills.SuspendLayout();
             this.tabRestrictions.SuspendLayout();
-            this.tabSkins.SuspendLayout();
             this.tabBooks.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -427,79 +417,6 @@
             this.txtName.Size = new System.Drawing.Size(339, 20);
             this.txtName.TabIndex = 22;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.btnDeleteSkin);
-            this.groupBox3.Controls.Add(this.btnSetSkin);
-            this.groupBox3.Controls.Add(this.ckLockedSkin);
-            this.groupBox3.Controls.Add(this.txtSkinName);
-            this.groupBox3.Controls.Add(this.btnAddSkin);
-            this.groupBox3.Controls.Add(this.lsSkins);
-            this.groupBox3.Location = new System.Drawing.Point(6, 6);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(256, 178);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Skins";
-            // 
-            // btnDeleteSkin
-            // 
-            this.btnDeleteSkin.Location = new System.Drawing.Point(168, 120);
-            this.btnDeleteSkin.Name = "btnDeleteSkin";
-            this.btnDeleteSkin.Size = new System.Drawing.Size(82, 23);
-            this.btnDeleteSkin.TabIndex = 7;
-            this.btnDeleteSkin.Text = "Delete Skin";
-            this.btnDeleteSkin.UseVisualStyleBackColor = true;
-            this.btnDeleteSkin.Click += new System.EventHandler(this.btnDeleteSkin_Click);
-            // 
-            // btnSetSkin
-            // 
-            this.btnSetSkin.Location = new System.Drawing.Point(87, 120);
-            this.btnSetSkin.Name = "btnSetSkin";
-            this.btnSetSkin.Size = new System.Drawing.Size(75, 23);
-            this.btnSetSkin.TabIndex = 6;
-            this.btnSetSkin.Text = "Set Skin";
-            this.btnSetSkin.UseVisualStyleBackColor = true;
-            this.btnSetSkin.Click += new System.EventHandler(this.btnSetSkin_Click);
-            // 
-            // ckLockedSkin
-            // 
-            this.ckLockedSkin.AutoSize = true;
-            this.ckLockedSkin.Location = new System.Drawing.Point(181, 151);
-            this.ckLockedSkin.Name = "ckLockedSkin";
-            this.ckLockedSkin.Size = new System.Drawing.Size(62, 17);
-            this.ckLockedSkin.TabIndex = 5;
-            this.ckLockedSkin.Text = "Locked";
-            this.ckLockedSkin.UseVisualStyleBackColor = true;
-            this.ckLockedSkin.CheckedChanged += new System.EventHandler(this.ckLockedSkin_CheckedChanged);
-            // 
-            // txtSkinName
-            // 
-            this.txtSkinName.Location = new System.Drawing.Point(6, 149);
-            this.txtSkinName.Name = "txtSkinName";
-            this.txtSkinName.ReadOnly = true;
-            this.txtSkinName.Size = new System.Drawing.Size(169, 20);
-            this.txtSkinName.TabIndex = 4;
-            // 
-            // btnAddSkin
-            // 
-            this.btnAddSkin.Location = new System.Drawing.Point(6, 120);
-            this.btnAddSkin.Name = "btnAddSkin";
-            this.btnAddSkin.Size = new System.Drawing.Size(75, 23);
-            this.btnAddSkin.TabIndex = 3;
-            this.btnAddSkin.Text = "Add Skin";
-            this.btnAddSkin.UseVisualStyleBackColor = true;
-            this.btnAddSkin.Click += new System.EventHandler(this.btnAddSkin_Click);
-            // 
-            // lsSkins
-            // 
-            this.lsSkins.FormattingEnabled = true;
-            this.lsSkins.Location = new System.Drawing.Point(6, 19);
-            this.lsSkins.Name = "lsSkins";
-            this.lsSkins.Size = new System.Drawing.Size(239, 95);
-            this.lsSkins.TabIndex = 1;
-            this.lsSkins.SelectedIndexChanged += new System.EventHandler(this.lsSkins_SelectedIndexChanged);
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnDeleteAIBook);
@@ -565,7 +482,6 @@
             // 
             this.tabControl1.Controls.Add(this.tabSkills);
             this.tabControl1.Controls.Add(this.tabRestrictions);
-            this.tabControl1.Controls.Add(this.tabSkins);
             this.tabControl1.Controls.Add(this.tabBooks);
             this.tabControl1.Location = new System.Drawing.Point(413, 27);
             this.tabControl1.Name = "tabControl1";
@@ -671,16 +587,6 @@
             this.tabRestrictions.Text = "Restrictions";
             this.tabRestrictions.UseVisualStyleBackColor = true;
             // 
-            // tabSkins
-            // 
-            this.tabSkins.Controls.Add(this.groupBox3);
-            this.tabSkins.Location = new System.Drawing.Point(4, 22);
-            this.tabSkins.Name = "tabSkins";
-            this.tabSkins.Size = new System.Drawing.Size(529, 190);
-            this.tabSkins.TabIndex = 2;
-            this.tabSkins.Text = "Skins";
-            this.tabSkins.UseVisualStyleBackColor = true;
-            // 
             // tabBooks
             // 
             this.tabBooks.Controls.Add(this.groupBox4);
@@ -713,8 +619,6 @@
             this.gbItemInformation.ResumeLayout(false);
             this.gbItemInformation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPrice)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -722,7 +626,6 @@
             this.gbPassiveSkills.ResumeLayout(false);
             this.gbPassiveSkills.PerformLayout();
             this.tabRestrictions.ResumeLayout(false);
-            this.tabSkins.ResumeLayout(false);
             this.tabBooks.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -749,10 +652,6 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox txtSkinName;
-        private System.Windows.Forms.Button btnAddSkin;
-        private System.Windows.Forms.ListBox lsSkins;
         private System.Windows.Forms.Button btnSetSpell;
         private System.Windows.Forms.ListBox lsSpells;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -767,7 +666,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabSkills;
         private System.Windows.Forms.TabPage tabRestrictions;
-        private System.Windows.Forms.TabPage tabSkins;
         private System.Windows.Forms.GroupBox gbPassiveSkills;
         private System.Windows.Forms.ListBox lsPassiveSkills;
         private System.Windows.Forms.Button btnAddSkill;
@@ -780,14 +678,11 @@
         private System.Windows.Forms.TextBox txtBlacklist;
         private System.Windows.Forms.Button btnAddBlacklist;
         private System.Windows.Forms.ListBox lsBlacklist;
-        private System.Windows.Forms.CheckBox ckLockedSkin;
-        private System.Windows.Forms.Button btnSetSkin;
         private System.Windows.Forms.Button btnSetWhitelist;
         private System.Windows.Forms.Button btnSetBlacklist;
         private System.Windows.Forms.Button btnDeleteSpell;
         private System.Windows.Forms.Button btnDeleteSkill;
         private System.Windows.Forms.Button btnDeleteWhitelist;
         private System.Windows.Forms.Button btnDeleteBlacklist;
-        private System.Windows.Forms.Button btnDeleteSkin;
     }
 }

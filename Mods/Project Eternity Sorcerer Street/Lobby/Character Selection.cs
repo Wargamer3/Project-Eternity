@@ -177,11 +177,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (MouseIndex >= CurrentContainer.ListFolder.Count)
                 {
-                    foreach (PlayerCharacterSkin ActiveSkin in CurrentContainer.ListCharacter[MouseIndex - CurrentContainer.ListFolder.Count].ListSkin)
+                    foreach (PlayerCharacterSkin ActiveSkin in CurrentContainer.ListCharacter[MouseIndex - CurrentContainer.ListFolder.Count].ListOwnedUnitSkin)
                     {
-                        if (ActiveSkin.Skin == null)
+                        if (ActiveSkin.CharacterSkin == null)
                         {
-                            ActiveSkin.Skin = new PlayerCharacter(ActiveSkin.SkinPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                            ActiveSkin.CharacterSkin = new PlayerCharacter(ActiveSkin.SkinRelativePath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                         }
                     }
                 }
@@ -200,7 +200,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             int BoxPerLine = 5;
 
-            int SkinCount = ActivePlayer.Inventory.Character.ListSkin.Count;
+            int SkinCount = ActivePlayer.Inventory.Character.ListOwnedUnitSkin.Count;
             int TotalSkinSize = SkinCount * (SkinBoxWidth + 5);
 
             X -= (TotalSkinSize - SkinBoxWidth - 5 + SkinBoxWidth) / 2;
@@ -306,7 +306,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             DrawBox(g, new Vector2(FinalX + 6, DrawY + BoxHeight - 20), 15, 15, Color.White);
                         }
 
-                        g.Draw(CurrentContainer.ListCharacter[CurrentIndex].SpriteShop, new Vector2(FinalX + SpriteOffset + 3, DrawY + 7), Color.White);
+                        g.Draw(CurrentContainer.ListCharacter[CurrentIndex].Character.SpriteShop, new Vector2(FinalX + SpriteOffset + 3, DrawY + 7), Color.White);
                     }
 
                     ++XPos;
@@ -325,7 +325,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 SelectedCharacterIndex -= 1;
             }
 
-            PlayerCharacter CharacterToDraw = ActivePlayer.Inventory.Character;
+            PlayerCharacterInfo CharacterToDraw = ActivePlayer.Inventory.Character;
 
             //Hover
             if (SelectedCharacterIndex >= 0)
@@ -335,14 +335,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (SelectedCharacterIndex >= CurrentContainer.ListFolder.Count)
                 {
-                    PlayerCharacter SelectedCharacter = CurrentContainer.ListCharacter[SelectedCharacterIndex - CurrentContainer.ListFolder.Count];
+                    PlayerCharacterInfo SelectedCharacter = CurrentContainer.ListCharacter[SelectedCharacterIndex - CurrentContainer.ListFolder.Count];
 
                     CharacterToDraw = SelectedCharacter;
 
                     g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidth, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
                     DrawBox(g, new Vector2(FinalX - 10, FinalY + BoxHeight), BoxWidth + 30, 25, Color.Black);
                     g.DrawStringMiddleAligned(fntMenuText,
-                        SelectedCharacter.Name,
+                        SelectedCharacter.Character.Name,
                         new Vector2(FinalX + 5 + BoxWidth / 2, FinalY + BoxHeight), Color.White);
                 }
                 else
@@ -369,14 +369,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             g.DrawStringCentered(fntMenuText, "Select a skin", new Vector2(X, Y), Color.White);
 
-            int SkinCount = CharacterToDraw.ListSkin.Count;
+            int SkinCount = CharacterToDraw.ListOwnedUnitSkin.Count;
             int TotalSkinSize = SkinCount * (SkinBoxWidth + 5);
 
             X -= (TotalSkinSize - SkinBoxWidth - 5) / 2;
             for (int S = 0; S < SkinCount; ++S)
             {
                 DrawEmptyBox(g, new Vector2(X - SkinBoxWidth / 2 - 2, SkinSectionY), SkinBoxWidth, SkinBoxHeight);
-                g.Draw(CharacterToDraw.ListSkin[S].Skin.SpriteShop, new Rectangle(X, SkinSectionY + 37, SkinSpriteWidth, SkinSpriteHeight), null, Color.White, 0, new Vector2(CharacterToDraw.ListSkin[S].Skin.SpriteShop.Width / 2, CharacterToDraw.ListSkin[S].Skin.SpriteShop.Height / 2), SpriteEffects.None, 0);
+                g.Draw(CharacterToDraw.ListOwnedUnitSkin[S].CharacterSkin.SpriteShop, new Rectangle(X, SkinSectionY + 37, SkinSpriteWidth, SkinSpriteHeight), null, Color.White, 0, new Vector2(CharacterToDraw.ListOwnedUnitSkin[S].CharacterSkin.SpriteShop.Width / 2, CharacterToDraw.ListOwnedUnitSkin[S].CharacterSkin.SpriteShop.Height / 2), SpriteEffects.None, 0);
 
                 X += SkinBoxWidth;
             }
@@ -384,21 +384,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             X = RightSectionCenterX;
             X -= (TotalSkinSize - SkinBoxWidth - 5 + SkinBoxWidth) / 2;
 
-            PlayerCharacterSkin SkinToDraw = ActivePlayer.Inventory.Character.ListSkin[0];
+            PlayerCharacterSkin SkinToDraw = ActivePlayer.Inventory.Character.ListOwnedUnitSkin[0];
 
             int SelectedSkinIndex = GetCharacterSkinUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
             if (SelectedSkinIndex >= 0)
             {
-                SkinToDraw = CharacterToDraw.ListSkin[SelectedSkinIndex];
+                SkinToDraw = CharacterToDraw.ListOwnedUnitSkin[SelectedSkinIndex];
                 int FinalX = X + ((MouseHelper.MouseStateCurrent.X - X) / SkinBoxWidth) * SkinBoxWidth;
                 int FinalY = SkinSectionY + ((MouseHelper.MouseStateCurrent.Y - SkinSectionY) / LineHeight) * LineHeight;
 
                 g.Draw(sprPixel, new Rectangle(FinalX + 5, FinalY + 5, SkinBoxWidth - 10, SkinBoxHeight - 10), Color.FromNonPremultiplied(255, 255, 255, 127));
             }
 
-            int NameWidth = (int)fntMenuText.MeasureString(SkinToDraw.Skin.Name).X;
+            int NameWidth = (int)fntMenuText.MeasureString(SkinToDraw.CharacterSkin.Name).X;
             DrawEmptyBox(g, new Vector2(RightSectionCenterX - NameWidth / 2 - 5, 760), NameWidth + 6, 35);
-            g.DrawStringCentered(fntMenuText, SkinToDraw.Skin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
+            g.DrawStringCentered(fntMenuText, SkinToDraw.CharacterSkin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {
@@ -415,7 +415,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            CharacterToDraw.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1500, 750, 0), Projection, Matrix.Identity);
+            CharacterToDraw.Character.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1500, 750, 0), Projection, Matrix.Identity);
         }
     }
 }

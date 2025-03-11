@@ -21,14 +21,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
-        private Card ActiveCard;
-        private Card GlobalBookActiveCard;
+        private CardInfo ActiveCard;
+        private CardInfo GlobalBookActiveCard;
         private AnimatedModel Map3DModel;
 
-        int OriginalCardQuantityOwned;
+        byte OriginalCardQuantityOwned;
         int OriginalTotalCardQuantityOwned;
 
-        public EditBookCardScreen(Player ActivePlayer, CardBook ActiveBook, Card ActiveCard)
+        public EditBookCardScreen(Player ActivePlayer, CardBook ActiveBook, CardInfo ActiveCard)
         {
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = CardBook.LoadGlobalBook();
@@ -44,17 +44,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Symbols = CardSymbols.Symbols;
         }
 
-        private void InitCard(Card ActiveCard)
+        private void InitCard(CardInfo ActiveCard)
         {
             this.ActiveCard = ActiveCard;
-            GlobalBookActiveCard = ActiveBook.DicCardsByType[ActiveCard.CardType][ActiveCard.Path];
+            GlobalBookActiveCard = ActiveBook.DicCardsByType[ActiveCard.Card.CardType][ActiveCard.Card.Path];
             //GlobalBookActiveCard = ActiveCard;
             OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
             OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
 
-            if (ActiveCard is CreatureCard)
+            if (ActiveCard.Card is CreatureCard)
             {
-                Map3DModel = ((CreatureCard)ActiveCard).GamePiece.Unit3DModel;
+                Map3DModel = ((CreatureCard)ActiveCard.Card).GamePiece.Unit3DModel;
             }
         }
 
@@ -122,9 +122,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
             g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
 
-            g.Draw(ActiveCard.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.sprCard.Width / 2, ActiveCard.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
+            g.Draw(ActiveCard.Card.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.Card.sprCard.Width / 2, ActiveCard.Card.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
             g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 16 - HeaderHeight - 30), Color.White);
-            ActiveCard.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0,  70);
+            ActiveCard.Card.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0,  70);
 
             X = -10;
             Y = Constants.Height - Constants.Height / 16 - HeaderHeight;

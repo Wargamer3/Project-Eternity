@@ -110,6 +110,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void UpdateAvailableItemsTask()
         {
             UpdateAvailableBooksTask();
+            UpdateAvailableCardsTask();
             UpdateAvailableCharactersTask();
 
             lock (PopulatePlayerItemsTaskLockObject)
@@ -197,6 +198,92 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             {
                                 CurrentBookContainer.ListLockedBook.Add(NewBook);
                                 CurrentBookContainer.ListUnlockedBook.Remove(NewBook);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void UpdateAvailableCardsTask()
+        {
+            ConditionsOwner.UnlockInventory.RootCardContainer.ListLockedCard = new List<UnlockableCard>(SorcererStreetPlayerUnlockInventory.DicCardDatabase.Values);
+
+            foreach (UnlockableCard NewCard in SorcererStreetPlayerUnlockInventory.DicCardDatabase.Values)
+            {
+                SorcererStreetPlayerUnlockInventory.CardUnlockContainer CurrentCardContainer = ConditionsOwner.UnlockInventory.RootCardContainer;
+                bool IsCardValid = IsValid(NewCard.UnlockConditions, ConditionsOwner);
+
+                if (IsCardValid)
+                {
+                    if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
+                    {
+                        CurrentCardContainer.ListUnlockedCard.Add(NewCard);
+                    }
+
+                    CurrentCardContainer.ListLockedCard.Remove(NewCard);
+                }
+                else
+                {
+                    if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
+                    {
+                        CurrentCardContainer.ListLockedCard.Add(NewCard);
+                    }
+
+                    CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
+                }
+
+                string[] Tags = NewCard.CardToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string ActiveTag in Tags)
+                {
+                    CurrentCardContainer = ConditionsOwner.UnlockInventory.RootCardContainer;
+
+                    if (IsCardValid)
+                    {
+                        if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
+                        {
+                            CurrentCardContainer.ListUnlockedCard.Add(NewCard);
+                        }
+
+                        CurrentCardContainer.ListLockedCard.Remove(NewCard);
+                    }
+                    else
+                    {
+                        if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
+                        {
+                            CurrentCardContainer.ListLockedCard.Add(NewCard);
+                        }
+
+                        CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
+                    }
+
+                    string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string ActiveFolder in SubFolders)
+                    {
+                        SorcererStreetPlayerUnlockInventory.CardUnlockContainer NewContainer;
+                        if (!CurrentCardContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        {
+                            NewContainer = new SorcererStreetPlayerUnlockInventory.CardUnlockContainer(ActiveFolder);
+                            CurrentCardContainer.DicFolder.Add(ActiveFolder, NewContainer);
+                            CurrentCardContainer.ListFolder.Add(NewContainer);
+                        }
+
+                        CurrentCardContainer = NewContainer;
+
+                        if (IsCardValid)
+                        {
+                            if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
+                            {
+                                CurrentCardContainer.ListUnlockedCard.Add(NewCard);
+                                CurrentCardContainer.ListLockedCard.Remove(NewCard);
+                            }
+                        }
+                        else
+                        {
+                            if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
+                            {
+                                CurrentCardContainer.ListLockedCard.Add(NewCard);
+                                CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
                             }
                         }
                     }

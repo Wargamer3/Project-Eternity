@@ -89,11 +89,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case QuoteTypes.Introduction:
                     if (Map.DicTeam[ActivePlayer.TeamIndex].ListPlayer.Count > 1)
                     {
-                        return ActivePlayer.Inventory.Character.AllianceIntroduction;
+                        return ActivePlayer.Inventory.Character.Character.AllianceIntroduction;
                     }
                     else
                     {
-                        return ActivePlayer.Inventory.Character.Introduction;
+                        return ActivePlayer.Inventory.Character.Character.Introduction;
                     }
 
                 case QuoteTypes.Banter:
@@ -101,62 +101,62 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         if (Map.DicTeam[ActivePlayer.TeamIndex].Rank == 1)
                         {
-                            return ActivePlayer.Inventory.Character.WinningAllianceBanter;
+                            return ActivePlayer.Inventory.Character.Character.WinningAllianceBanter;
                         }
                         else if (Map.DicTeam[ActivePlayer.TeamIndex].Rank < 1)
                         {
-                            return ActivePlayer.Inventory.Character.LosingAllianceBanter;
+                            return ActivePlayer.Inventory.Character.Character.LosingAllianceBanter;
                         }
                         else if (Map.DicTeam[ActivePlayer.TeamIndex].Rank == Map.DicTeam.Count)
                         {
-                            return ActivePlayer.Inventory.Character.MajorLosingBanter;
+                            return ActivePlayer.Inventory.Character.Character.MajorLosingBanter;
                         }
-                        return ActivePlayer.Inventory.Character.AllianceBanter;
+                        return ActivePlayer.Inventory.Character.Character.AllianceBanter;
                     }
                     else
                     {
                         if (Map.DicTeam[ActivePlayer.TeamIndex].Rank == 1)
                         {
-                            return ActivePlayer.Inventory.Character.WinningBanter;
+                            return ActivePlayer.Inventory.Character.Character.WinningBanter;
                         }
                         else if (Map.DicTeam[ActivePlayer.TeamIndex].Rank < 1)
                         {
-                            return ActivePlayer.Inventory.Character.LosingBanter;
+                            return ActivePlayer.Inventory.Character.Character.LosingBanter;
                         }
-                        return ActivePlayer.Inventory.Character.Banter;
+                        return ActivePlayer.Inventory.Character.Character.Banter;
                     }
 
                 case QuoteTypes.TerritoryClaim:
-                    return ActivePlayer.Inventory.Character.TerritoryClaim;
+                    return ActivePlayer.Inventory.Character.Character.TerritoryClaim;
 
                 case QuoteTypes.Chain:
                     if (Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex] > 2)
                     {
-                        return ActivePlayer.Inventory.Character.ChainBig;
+                        return ActivePlayer.Inventory.Character.Character.ChainBig;
                     }
                     else
                     {
-                        return ActivePlayer.Inventory.Character.ChainSmall;
+                        return ActivePlayer.Inventory.Character.Character.ChainSmall;
                     }
 
                 case QuoteTypes.TerritoryLevelUp:
                     if (ActiveTerrain.LandLevel > 3)
                     {
-                        return ActivePlayer.Inventory.Character.TerritoryLevelUpBig;
+                        return ActivePlayer.Inventory.Character.Character.TerritoryLevelUpBig;
                     }
                     else
                     {
-                        return ActivePlayer.Inventory.Character.TerritoryLevelUp;
+                        return ActivePlayer.Inventory.Character.Character.TerritoryLevelUp;
                     }
 
                 case QuoteTypes.SuccessfulInvasion:
-                    return ActivePlayer.Inventory.Character.SuccessfulInvasion;
+                    return ActivePlayer.Inventory.Character.Character.SuccessfulInvasion;
 
                 case QuoteTypes.FailedInvasion:
-                    return ActivePlayer.Inventory.Character.FailedInvasion;
+                    return ActivePlayer.Inventory.Character.Character.FailedInvasion;
 
                 case QuoteTypes.MoneyGain:
-                    return ActivePlayer.Inventory.Character.SmallMoneyGains;
+                    return ActivePlayer.Inventory.Character.Character.SmallMoneyGains;
             }
 
             return null;
@@ -166,23 +166,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (MoneyChange < -1000)
             {
-                return ActivePlayer.Inventory.Character.LargeMoneyLoss;
+                return ActivePlayer.Inventory.Character.Character.LargeMoneyLoss;
             }
             else if (MoneyChange < -500)
             {
-                return ActivePlayer.Inventory.Character.MediumMoneyLoss;
+                return ActivePlayer.Inventory.Character.Character.MediumMoneyLoss;
             }
             else if (MoneyChange < -100)
             {
-                return ActivePlayer.Inventory.Character.SmallMoneyLoss;
+                return ActivePlayer.Inventory.Character.Character.SmallMoneyLoss;
             }
             else if (MoneyChange > 100)
             {
-                return ActivePlayer.Inventory.Character.BigMoneyGains;
+                return ActivePlayer.Inventory.Character.Character.BigMoneyGains;
             }
             else if (MoneyChange > 0)
             {
-                return ActivePlayer.Inventory.Character.SmallMoneyGains;
+                return ActivePlayer.Inventory.Character.Character.SmallMoneyGains;
             }
             return null;
         }
@@ -195,7 +195,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int M = 1; M < ActiveQuoteSet.ListMapQuote.Count; ++M)
             {
-                if (ActivePlayer.Inventory.Character.ListQuoteSetMapName[M - 1] == Map.MapName)
+                if (ActivePlayer.Inventory.Character.Character.ListQuoteSetMapName[M - 1] == Map.MapName)
                 {
                     ListQuoteSetVersus.Add(ActiveQuoteSet.ListMapQuote[M]);
                     break;
@@ -219,7 +219,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int P = 1; P < ActiveQuoteSet.ListQuoteVersus.Count; ++P)
                 {
-                    if (ActivePlayer.Inventory.Character.ListQuoteSetVersusName[P - 1] == Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Inventory.Character.Name)
+                    if (ActivePlayer.Inventory.Character.Character.ListQuoteSetVersusName[P - 1] == Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Inventory.Character.Character.Name)
                     {
                         ListReturnQuote.Add(ActiveQuoteSet.ListQuoteVersus[P]);
                         break;
@@ -281,7 +281,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            PlayerCharacter ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex].Inventory.Character;
+            PlayerCharacter ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex].Inventory.Character.Character;
             ActivePlayer.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(7f) * Matrix.CreateTranslation(150, 2000, 0), Projection, Matrix.Identity);
 
             g.End();

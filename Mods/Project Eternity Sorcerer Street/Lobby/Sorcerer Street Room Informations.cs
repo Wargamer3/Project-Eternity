@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         Player NewPlayer = new Player(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32(), BR.ReadBoolean(),
                             Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255), new List<Card>());
 
-                        NewPlayer.Inventory.Character = new PlayerCharacter(BR.ReadString(), GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                        NewPlayer.Inventory.Character = new PlayerCharacterInfo(new PlayerCharacter(BR.ReadString(), GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget));
 
                         CardBook NewActiveBook = new CardBook(BR.ReadString());
                         NewActiveBook.BookModel = BR.ReadString();
@@ -45,8 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         for (int C = 0; C < ListCardCount; ++C)
                         {
                             Card LoadedCard = Card.LoadCard(BR.ReadString(), GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
-                            LoadedCard.QuantityOwned = BR.ReadInt32();
-                            NewActiveBook.AddCard(LoadedCard);
+                            NewActiveBook.AddCard(new CardInfo(LoadedCard, BR.ReadByte()));
                         }
                         int ListRoleCount = BR.ReadInt32();
                         for (int R = 0; R < ListRoleCount; ++R)
@@ -90,15 +89,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         BW.Write(ActivePlayer.Color.G);
                         BW.Write(ActivePlayer.Color.B);
 
-                        BW.Write(ActivePlayer.Inventory.Character.CharacterPath);
+                        BW.Write(ActivePlayer.Inventory.Character.Character.CharacterPath);
 
                         BW.Write(ActivePlayer.Inventory.ActiveBook.BookName);
                         BW.Write(ActivePlayer.Inventory.ActiveBook.BookModel);
 
                         BW.Write(ActivePlayer.Inventory.ActiveBook.ListCard.Count);
-                        foreach (Card ActiveCard in ActivePlayer.Inventory.ActiveBook.ListCard)
+                        foreach (CardInfo ActiveCard in ActivePlayer.Inventory.ActiveBook.ListCard)
                         {
-                            BW.Write(ActiveCard.CardType + "/" + ActiveCard.Path);
+                            BW.Write(ActiveCard.Card.CardType + "/" + ActiveCard.Card.Path);
                             BW.Write(ActiveCard.QuantityOwned);
                         }
 

@@ -9,6 +9,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string UnitType = "Book";
 
         public CardBook BookToBuy;
+        public List<UnlockableBookSkin> ListUnlockedSkin = new List<UnlockableBookSkin>();
+        public List<UnlockableBookSkin> ListLockedSkin = new List<UnlockableBookSkin>();
+        public List<UnlockableBookAlt> ListUnlockedAlt = new List<UnlockableBookAlt>();
+        public List<UnlockableBookAlt> ListLockedAlt = new List<UnlockableBookAlt>();
+        public bool ShowSkin;
 
         public UnlockableBook(string Path)
             : base(UnitType)
@@ -44,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (UnlockQuantity > 0)
             {
-                ConditionsOwner.Inventory.DicOwnedBook.Add(Path, BookToBuy);
+                ConditionsOwner.Inventory.DicOwnedBook.Add(Path, new CardBookInfo(BookToBuy));
                 ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + BookToBuy.BookName + "!");
             }
 

@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public Dictionary<string, CharacterInventoryContainer> DicFolder;
         public List<CharacterInventoryContainer> ListFolder;//Share the same folders as the dictionnary
-        public List<PlayerCharacter> ListCharacter;
+        public List<PlayerCharacterInfo> ListCharacter;
         public PlayerCharacter IconUnit;
 
         public string Name;
@@ -57,20 +57,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             DicFolder = new Dictionary<string, CharacterInventoryContainer>();
             ListFolder = new List<CharacterInventoryContainer>();
-            ListCharacter = new List<PlayerCharacter>();
+            ListCharacter = new List<PlayerCharacterInfo>();
             IconUnit = null;
         }
 
-        public void AddCharacter(PlayerCharacter UnitToAdd)
+        public void AddCharacter(PlayerCharacterInfo CharacterToAdd)
         {
             if (ListCharacter.Count == 0)
             {
-                IconUnit = UnitToAdd;
+                IconUnit = CharacterToAdd.Character;
             }
 
-            if (!ListCharacter.Contains(UnitToAdd))
+            if (!ListCharacter.Contains(CharacterToAdd))
             {
-                ListCharacter.Add(UnitToAdd);
+                ListCharacter.Add(CharacterToAdd);
             }
         }
     }
@@ -78,16 +78,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class SorcererStreetInventory
     {
         public CardBook GlobalBook;//Just using a regular Book to store player owned cards;
+        public Dictionary<string, CardSkinInfo> DicOwnedCardSkin;//Skins for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, CardSkinInfo> DicOwnedCardAlt;//Alts for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
 
         public BookInventoryContainer RootBookContainer;
         public CharacterInventoryContainer RootCharacterContainer;
 
-        public Dictionary<string, CardBook> DicOwnedBook;
-        public Dictionary<string, PlayerCharacter> DicOwnedCharacter;
+        public Dictionary<string, CardBookInfo> DicOwnedBook;
+        public Dictionary<string, CardBookSkinInfo> DicOwnedBookSkin;//Skins for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, CardBookSkinInfo> DicOwnedBookAlt;//Alts for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, PlayerCharacterInfo> DicOwnedCharacter;
+        public Dictionary<string, PlayerCharacterSkin> DicOwnedCharacterSkin;//Skins for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, PlayerCharacterSkin> DicOwnedCharacterAlt;//Alts for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public Dictionary<string, MissionInfo> DicOwnedMission;
         public Dictionary<string, Bot> DicOwnedBot;
 
-        public PlayerCharacter Character;
+        public PlayerCharacterInfo Character;
         public byte ActiveSkinIndex;
         public CardBook ActiveBook;
 
@@ -98,8 +104,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             GlobalBook = ActiveBook = new CardBook("Global");
 
-            DicOwnedBook = new Dictionary<string, CardBook>();
-            DicOwnedCharacter = new Dictionary<string, PlayerCharacter>();
+            DicOwnedBook = new Dictionary<string, CardBookInfo>();
+            DicOwnedCharacter = new Dictionary<string, PlayerCharacterInfo>();
             DicOwnedMission = new Dictionary<string, MissionInfo>();
             DicOwnedBot = new Dictionary<string, Bot>();
         }
@@ -119,7 +125,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 CardBook LoadedBook = new CardBook(BR, GlobalBook, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
-                DicOwnedBook.Add(LoadedBook.BookName, LoadedBook);
+                DicOwnedBook.Add(LoadedBook.BookName, new CardBookInfo(LoadedBook));
                 AddBook(LoadedBook);
 
                 if (LoadedBook.BookName == ActiveBookName)
@@ -129,12 +135,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             int DicOwnedCharacterCount = BR.ReadInt32();
-            DicOwnedCharacter = new Dictionary<string, PlayerCharacter>(DicOwnedCharacterCount);
+            DicOwnedCharacter = new Dictionary<string, PlayerCharacterInfo>(DicOwnedCharacterCount);
             for (int C = 0; C < DicOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
 
-                PlayerCharacter LoadedCharacter = new PlayerCharacter(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                PlayerCharacterInfo LoadedCharacter = new PlayerCharacterInfo(new PlayerCharacter(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
 
                 DicOwnedCharacter.Add(CharacterFullName, LoadedCharacter);
                 AddCharacter(LoadedCharacter);
@@ -189,19 +195,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GlobalBook.Save(BW);
             BW.Write(ActiveBook.BookName);
 
-            BW.Write(Character.CharacterPath);
+            BW.Write(Character.Character.CharacterPath);
             BW.Write(ActiveSkinIndex);
 
             BW.Write(DicOwnedBook.Count);
-            foreach (CardBook ActiveBook in DicOwnedBook.Values)
+            foreach (CardBookInfo ActiveBook in DicOwnedBook.Values)
             {
-                ActiveBook.Save(BW);
+                ActiveBook.Book.Save(BW);
             }
 
             BW.Write(DicOwnedCharacter.Count);
-            foreach (PlayerCharacter ActiveCharacter in DicOwnedCharacter.Values)
+            foreach (PlayerCharacterInfo ActiveCharacter in DicOwnedCharacter.Values)
             {
-                BW.Write(ActiveCharacter.CharacterPath);
+                BW.Write(ActiveCharacter.Character.CharacterPath);
             }
 
             BW.Write(DicOwnedMission.Count);
@@ -228,7 +234,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (!DicOwnedBook.ContainsKey(NewCardBook.BookName))
             {
-                DicOwnedBook.Add(NewCardBook.BookName, NewCardBook);
+                DicOwnedBook.Add(NewCardBook.BookName, new CardBookInfo(NewCardBook));
             }
 
             ActiveBook = NewCardBook;
@@ -265,13 +271,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void AddCharacter(PlayerCharacter CharacterToAdd)
+        public void AddCharacter(PlayerCharacterInfo CharacterToAdd)
         {
             CharacterInventoryContainer CurrentCharacterContainer = RootCharacterContainer;
 
             CurrentCharacterContainer.AddCharacter(CharacterToAdd);
 
-            string[] Tags = CharacterToAdd.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] Tags = CharacterToAdd.Character.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string ActiveTag in Tags)
             {
                 CurrentCharacterContainer = RootCharacterContainer;

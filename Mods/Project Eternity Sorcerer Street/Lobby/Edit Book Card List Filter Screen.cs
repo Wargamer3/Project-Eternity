@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
         private readonly CardBook GlobalBook;
-        private readonly List<Card> ListFilteredCard;
+        private readonly List<CardInfo> ListFilteredCard;
 
         private int CursorIndex;
         private int ScrollbarIndex;
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
             GlobalBook = ActivePlayer.Inventory.GlobalBook;
-            ListFilteredCard = new List<Card>();
+            ListFilteredCard = new List<CardInfo>();
             FillCardList(Filter, null);
 
             Symbols = CardSymbols.Symbols;
@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.GlobalBook = ActiveBook = GlobalBook;
             this.DrawBackground = DrawBackground;
-            ListFilteredCard = new List<Card>();
+            ListFilteredCard = new List<CardInfo>();
             ListSelectedCard = new List<Card>();
             FillCardList(Filter, LastCard);
 
@@ -83,9 +83,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (Filter)
             {
                 case Filters.All:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                        if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                         {
                             CursorIndex = ListFilteredCard.Count;
                         }
@@ -97,147 +97,147 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 #region Creatures
 
                 case Filters.Creatures:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                             {
                                 CursorIndex = ListFilteredCard.Count;
                             }
 
-                            ListFilteredCard.Add(ActiveCreatureCard);
+                            ListFilteredCard.Add(ActiveCard);
                         }
                     }
                     break;
 
                 case Filters.Neutral:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Fire:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Water:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Earth:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Air:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Dual:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
+                        CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
                             if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length > 1)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveCreatureCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.Item:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        ItemCard ActiveItemCard = ActiveCard as ItemCard;
+                        ItemCard ActiveItemCard = ActiveCard.Card as ItemCard;
                         if (ActiveItemCard != null)
                         {
-                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                             {
                                 CursorIndex = ListFilteredCard.Count;
                             }
 
-                            ListFilteredCard.Add(ActiveItemCard);
+                            ListFilteredCard.Add(ActiveCard);
                         }
                     }
                     break;
@@ -245,54 +245,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 #endregion
 
                 case Filters.Spell:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        SpellCard ActiveSpellCard = ActiveCard as SpellCard;
+                        SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
                         {
-                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                             {
                                 CursorIndex = ListFilteredCard.Count;
                             }
 
-                            ListFilteredCard.Add(ActiveSpellCard);
+                            ListFilteredCard.Add(ActiveCard);
                         }
                     }
                     break;
 
                 case Filters.EnchantPlayer:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        SpellCard ActiveSpellCard = ActiveCard as SpellCard;
+                        SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
                         {
                             if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveSpellCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
                     break;
 
                 case Filters.EnchantCreature:
-                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
                     {
-                        SpellCard ActiveSpellCard = ActiveCard as SpellCard;
+                        SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
                         {
                             //if (ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.NoTarget || ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.Creature || ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.Area)
                             {
-                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {
                                     CursorIndex = ListFilteredCard.Count;
                                 }
 
-                                ListFilteredCard.Add(ActiveSpellCard);
+                                ListFilteredCard.Add(ActiveCard);
                             }
                         }
                     }
@@ -323,20 +323,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (ActivePlayer == null)
                 {
-                    Card SelectedCard = ListFilteredCard[CursorIndex];
-                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                    Card SelectedCard = ListFilteredCard[CursorIndex].Card;
+                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                     ListSelectedCard.Add(CopyCard);
 
                     RemoveScreen(this);
                 }
                 else
                 {
-                    Card SelectedCard = ListFilteredCard[CursorIndex];
+                    Card SelectedCard = ListFilteredCard[CursorIndex].Card;
                     if (!ActiveBook.DicCardsByType.ContainsKey(SelectedCard.CardType) || !ActiveBook.DicCardsByType[SelectedCard.CardType].ContainsKey(SelectedCard.Path))
                     {
-                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                        CopyCard.QuantityOwned = 0;
-                        ActiveBook.AddCard(CopyCard);
+                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                        ActiveBook.AddCard(new CardInfo(CopyCard, 0));
                     }
 
                     PushScreen(new EditBookCardScreen(ActivePlayer, ActiveBook, ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path]));
@@ -516,7 +515,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             X = 180;
             Y = 958;
-            g.DrawString(fntMenuText, ListFilteredCard[CursorIndex].Name, new Vector2(X, Y), Color.White);
+            g.DrawString(fntMenuText, ListFilteredCard[CursorIndex].Card.Name, new Vector2(X, Y), Color.White);
 
             DrawBookInformation(g);
 
@@ -628,7 +627,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 float X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % CardsPerLine);
                 float Y = StartY + (CardHeight + 20) * (C / CardsPerLine);
 
-                g.Draw(ListFilteredCard[C].sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ListFilteredCard[C].sprCard.Width, ListFilteredCard[C].sprCard.Height), Color.White);
+                g.Draw(ListFilteredCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ListFilteredCard[C].Card.sprCard.Width, ListFilteredCard[C].Card.sprCard.Height), Color.White);
                 DrawBox(g, new Vector2(X + CardWidth / 2 - CardNumberBoxWidth / 2, Y + CardHeight - CardNumberBoxWidth / 2), CardNumberBoxWidth, CardNumberBoxWidth, Color.White);
                 TextHelper.DrawTextMiddleAligned(g, ListFilteredCard[C].QuantityOwned.ToString(), new Vector2(X + CardWidth / 2, Y + 3 + CardHeight - CardNumberBoxWidth / 2), Color.White);
             }

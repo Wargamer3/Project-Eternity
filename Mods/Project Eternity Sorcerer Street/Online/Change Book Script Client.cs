@@ -16,14 +16,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
         private string CharacterModelPath;
         private string BookName;
         private string BookModel;
-        private List<Tuple<string, int>> ListCard;
+        private List<Tuple<string, byte>> ListCard;
 
         public ChangeBookScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
             : base(ScriptName)
         {
             this.Owner = Owner;
             this.MissionSelectScreen = MissionSelectScreen;
-            ListCard = new List<Tuple<string, int>>(50);
+            ListCard = new List<Tuple<string, byte>>(50);
         }
 
         public override OnlineScript Copy()
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             {
                 if (ActivePlayer.ConnectionID == ID)
                 {
-                    ActivePlayer.Inventory.Character = new PlayerCharacter(CharacterModelPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                    ActivePlayer.Inventory.Character = new PlayerCharacterInfo(new PlayerCharacter(CharacterModelPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget));
 
                     CardBook NewActiveBook = new CardBook(BookName);
                     NewActiveBook.BookModel = BookModel;
@@ -50,8 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
                     for (int C = 0; C < ListCard.Count; ++C)
                     {
                         Card LoadedCard = Card.LoadCard(ListCard[C].Item1, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                        LoadedCard.QuantityOwned = ListCard[C].Item2;
-                        NewActiveBook.AddCard(LoadedCard);
+                        NewActiveBook.AddCard(new CardInfo(LoadedCard, ListCard[C].Item2));
                     }
                 }
             }
@@ -69,7 +68,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             int ListCardCount = Sender.ReadInt32();
             for (int C = 0; C < ListCardCount; ++C)
             {
-                ListCard.Add(new Tuple<string, int>(Sender.ReadString(), Sender.ReadInt32()));
+                ListCard.Add(new Tuple<string, byte>(Sender.ReadString(), Sender.ReadByte()));
             }
         }
     }

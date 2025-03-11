@@ -105,34 +105,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
+    public class PlayerCharacterInfo
+    {
+        public PlayerCharacter Character;
+        public List<PlayerCharacterSkin> ListOwnedUnitSkin;
+        public List<PlayerCharacterSkin> ListOwnedUnitAlt;
+
+        public PlayerCharacterInfo(PlayerCharacter Pilot)
+        {
+            this.Character = Pilot;
+        }
+    }
+
     public class PlayerCharacterSkin
     {
-        public string SkinPath;
-        public bool Locked;
-        public PlayerCharacter Skin;
+        public string CharacterRelativePath;
+        public string SkinRelativePath;
+        public PlayerCharacter CharacterSkin;
 
-        public PlayerCharacterSkin(PlayerCharacter Clone)
+        public PlayerCharacterSkin(string CharacterRelativePath, string SkinRelativePath, PlayerCharacter CharacterSkin)
         {
-            SkinPath = Clone.CharacterPath;
-            Locked = false;
-            Skin = new PlayerCharacter(Clone);
-        }
-
-        public PlayerCharacterSkin(string SkinPath)
-        {
-            this.SkinPath = SkinPath;
-            Locked = false;
-        }
-
-        public PlayerCharacterSkin(string SkinPath, bool Locked)
-        {
-            this.SkinPath = SkinPath;
-            this.Locked = Locked;
+            this.CharacterRelativePath = CharacterRelativePath;
+            this.SkinRelativePath = SkinRelativePath;
+            this.CharacterSkin = CharacterSkin;
         }
 
         public override string ToString()
         {
-            return SkinPath;
+            return SkinRelativePath;
         }
     }
 
@@ -154,7 +154,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public List<string> ListWhitelist;
         public List<string> ListBlacklist;
-        public List<PlayerCharacterSkin> ListSkin;
         public List<string> ListAIBook;
 
         public ManualSkill[] ArraySpell;
@@ -217,7 +216,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             this.ListWhitelist = new List<string>(Clone.ListWhitelist);
             this.ListBlacklist = new List<string>(Clone.ListBlacklist);
-            this.ListSkin = new List<PlayerCharacterSkin>(Clone.ListSkin);
             this.ListAIBook = new List<string>(Clone.ListAIBook);
 
             this.ArraySpell = (ManualSkill[])Clone.ArraySpell.Clone();
@@ -277,13 +275,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int S = 0; S < ListBlacklistCount; ++S)
             {
                 ListBlacklist.Add(BR.ReadString());
-            }
-
-            byte ListLockedSkinCount = BR.ReadByte();
-            ListSkin = new List<PlayerCharacterSkin>(ListLockedSkinCount + 1);
-            for (int S = 0; S < ListLockedSkinCount; ++S)
-            {
-                ListSkin.Add(new PlayerCharacterSkin(BR.ReadString(), BR.ReadBoolean()));
             }
 
             byte ListAIBookCount = BR.ReadByte();
@@ -370,8 +361,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
                 }
             }
-
-            ListSkin.Insert(0, new PlayerCharacterSkin(this));
         }
     }
 }

@@ -31,9 +31,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             WriteBuffer.AppendString(ActiveBook.BookModel);
 
             WriteBuffer.AppendInt32(ActiveBook.ListCard.Count);
-            foreach (Card ActiveCard in ActiveBook.ListCard)
+            foreach (CardInfo ActiveCard in ActiveBook.ListCard)
             {
-                WriteBuffer.AppendString(ActiveCard.CardType + "/" + ActiveCard.Path);
+                WriteBuffer.AppendString(ActiveCard.Card.CardType + "/" + ActiveCard.Card.Path);
                 WriteBuffer.AppendInt32(ActiveCard.QuantityOwned);
             }
         }

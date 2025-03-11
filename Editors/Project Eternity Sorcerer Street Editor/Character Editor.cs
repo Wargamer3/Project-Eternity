@@ -113,14 +113,6 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 BW.Write(ActiveItem);
             }
 
-            BW.Write((byte)lsSkins.Items.Count);
-
-            foreach (PlayerCharacterSkin ActiveSkin in lsSkins.Items)
-            {
-                BW.Write(ActiveSkin.SkinPath);
-                BW.Write(ActiveSkin.Locked);
-            }
-
             BW.Write((byte)lsAIBooks.Items.Count);
 
             foreach (string ActiveBook in lsAIBooks.Items)
@@ -215,11 +207,6 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             for (int B = 0; B < LoadedCharacter.ListBlacklist.Count; ++B)
             {
                 lsBlacklist.Items.Add(LoadedCharacter.ListBlacklist[B]);
-            }
-
-            for (int S = 1; S < LoadedCharacter.ListSkin.Count; ++S)
-            {
-                lsSkins.Items.Add(LoadedCharacter.ListSkin[S]);
             }
 
             //Map names
@@ -348,66 +335,6 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
         #endregion
 
-        #region Skins
-
-        private void lsSkins_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lsSkins.SelectedIndex < 0)
-            {
-                return;
-            }
-
-            PlayerCharacterSkin SelectedSkin = (PlayerCharacterSkin)lsSkins.Items[lsSkins.SelectedIndex];
-            txtSkinName.Text = SelectedSkin.SkinPath;
-            ckLockedSkin.Checked = SelectedSkin.Locked;
-        }
-
-        private void btnAddSkin_Click(object sender, EventArgs e)
-        {
-            lsSkins.Items.Add(new PlayerCharacterSkin("Select A Skin"));
-        }
-
-        private void btnSetSkin_Click(object sender, EventArgs e)
-        {
-            if (lsSkins.SelectedIndex < 0)
-            {
-                return;
-            }
-
-            ItemSelectionChoice = ItemSelectionChoices.Skin;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSorcererStreetCharacters));
-        }
-
-        private void btnDeleteSkin_Click(object sender, EventArgs e)
-        {
-            if (lsSkins.SelectedIndex < 0)
-            {
-                return;
-            }
-
-            int SelectedIndex = lsSkins.SelectedIndex;
-            lsSkins.Items.RemoveAt(lsSkins.SelectedIndex);
-            if (lsSkins.Items.Count > 0)
-            {
-                if (SelectedIndex > 0)
-                {
-                    lsSkins.SelectedIndex = SelectedIndex - 1;
-                }
-                else
-                {
-
-                    lsSkins.SelectedIndex = 0;
-                }
-            }
-        }
-
-        private void ckLockedSkin_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        #endregion
-
         #region Books
 
         private void lsAIBooks_SelectedIndexChanged(object sender, EventArgs e)
@@ -446,17 +373,6 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                         break;
 
                     case ItemSelectionChoices.Skill:
-                        break;
-
-                    case ItemSelectionChoices.Skin:
-                        if (Items[I] != null)
-                        {
-                            Name = Items[I].Substring(0, Items[I].Length - 4).Substring(35);
-                            PlayerCharacterSkin SelectedSkin = (PlayerCharacterSkin)lsSkins.Items[lsSkins.SelectedIndex];
-                            SelectedSkin.SkinPath = Name;
-                            txtSkinName.Text = Name;
-                            lsSkins.Items[lsSkins.SelectedIndex] = SelectedSkin;
-                        }
                         break;
                 }
             }

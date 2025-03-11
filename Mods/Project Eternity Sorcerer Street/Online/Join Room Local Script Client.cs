@@ -100,7 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             //Send selected book to server
             foreach (Player ActivePlayer in PlayerManager.ListLocalPlayer)
             {
-                Host.Send(new AskChangBookScriptClient(ActivePlayer.ConnectionID, ActivePlayer.Inventory.Character.CharacterPath, ActivePlayer.Inventory.ActiveBook));
+                Host.Send(new AskChangBookScriptClient(ActivePlayer.ConnectionID, ActivePlayer.Inventory.Character.Character.CharacterPath, ActivePlayer.Inventory.ActiveBook));
             }
 
             OnlineGameClient.DelayOnlineScript(this);
