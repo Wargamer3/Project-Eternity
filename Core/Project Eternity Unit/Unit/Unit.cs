@@ -42,10 +42,6 @@ namespace ProjectEternity.Core.Units
         protected UnitStats _UnitStat;
         public UnitStats UnitStat { get { return _UnitStat; } }
 
-        public List<Unit> ListSkin;//Same stats or close
-        public List<Unit> ListAlt;//Can be anything
-        public string ActiveSkinFullPath = string.Empty;//Skin or Alt
-
         public TagSystem TeamTags;//Used to make units unavailable
         public string UnitTags;//Used to categorize units
         public string ID;//Unique ID
@@ -316,8 +312,6 @@ namespace ProjectEternity.Core.Units
             ArrayParts = new UnitPart[0];
             TeamTags = new TagSystem();
             ID = "";
-            ListSkin = new List<Unit>();
-            ListAlt = new List<Unit>();
         }
 
         public void ShareStats(Unit UnitToShareFrom, UnitStats.UnitLinkTypes UnitLinkType)
@@ -406,7 +400,6 @@ namespace ProjectEternity.Core.Units
             BW.Write(_UnitStat.ArmorUpgrades.Value);
             BW.Write(_UnitStat.MobilityUpgrades.Value);
             BW.Write(_UnitStat.AttackUpgrades.Value);
-            BW.Write(ActiveSkinFullPath);
 
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
@@ -454,7 +447,6 @@ namespace ProjectEternity.Core.Units
             _UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
             _UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
             _UnitStat.AttackUpgrades.Value = BR.ReadInt32();
-            ActiveSkinFullPath = BR.ReadString();
 
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
@@ -499,7 +491,6 @@ namespace ProjectEternity.Core.Units
             NewUnit.UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.AttackUpgrades.Value = BR.ReadInt32();
-            NewUnit.ActiveSkinFullPath = BR.ReadString();
 
             for (int P = 0; P < NewUnit.ArrayParts.Length; ++P)
             {

@@ -475,7 +475,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnlockableUnit ActiveUnit = CurrentContainer.ListUnlockedUnit[U];
                 if (ActiveUnit.UnitToBuy != null)
                 {
-                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveUnit.UnitToBuy, true);
+                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveUnit.UnitToBuy, true, ActiveUnit.UnitToBuy.Quantity < 5);
                     if (Inventory.DicOwnedUnit.ContainsKey(ActiveUnit.Path))
                     {
                         g.Draw(sprSelectAUnitToBuy, new Rectangle(DrawX + 20, DrawY, 100, 40), Color.White);
@@ -497,16 +497,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                 {
                                     g.Draw(sprListEntrySub, new Vector2(DrawX, DrawY - 11), null, Color.White, 0, Vector2.Zero, Ratio, SpriteEffects.None, 0);
                                     DrawX += 35;
-                                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveSkin.UnitSkinToBuy, false);
-                                    if (Inventory.DicOwnedUnit.ContainsKey(ActiveSkin.SkinTypeAndPath))
+                                    bool Owned = Inventory.DicOwnedUnitSkin.ContainsKey(ActiveSkin.SkinTypeAndPath);
+                                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveSkin.UnitSkinToBuy, false, !Owned);
+                                    if (Owned)
                                     {
                                         g.DrawStringRightAlignedBackground(fntArial12, "Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, TextColor);
                                     }
                                 }
                             }
-                            foreach (UnlockableUnitAlt a in ActiveUnit.ListUnlockedAlt)
+                            foreach (UnlockableUnitAlt ActiveSkin in ActiveUnit.ListUnlockedAlt)
                             {
                                 DrawY += UnitHeight;
+
+                                if (ActiveSkin.UnitAltToBuy != null)
+                                {
+                                    g.Draw(sprListEntrySub, new Vector2(DrawX, DrawY - 11), null, Color.White, 0, Vector2.Zero, Ratio, SpriteEffects.None, 0);
+                                    DrawX += 35;
+                                    bool Owned = Inventory.DicOwnedUnitSkin.ContainsKey(ActiveSkin.AltTypeAndPath);
+                                    DrawUnitDetails(g, ref DrawX, DrawY, ActiveSkin.UnitAltToBuy, false, !Owned);
+
+                                    if (Inventory.DicOwnedUnitSkin.ContainsKey(ActiveSkin.AltTypeAndPath))
+                                    {
+                                        g.DrawStringRightAlignedBackground(fntArial12, "Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, TextColor);
+                                    }
+                                }
                             }
                             foreach (UnlockableUnitSkin ActiveSkin in ActiveUnit.ListLockedSkin)
                             {
@@ -518,8 +532,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                                 DrawY += UnitHeight;
                             }
-                            foreach (UnlockableUnitAlt a in ActiveUnit.ListLockedAlt)
+                            foreach (UnlockableUnitAlt ActiveSkin in ActiveUnit.ListLockedAlt)
                             {
+                                if (ActiveSkin.UnitAltToBuy != null)
+                                {
+                                    g.Draw(ActiveSkin.UnitAltToBuy.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
+                                    g.DrawString(fntArial12, ActiveSkin.UnitAltToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
+                                }
+
+
                                 DrawY += UnitHeight;
                             }
                         }
@@ -558,9 +579,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         }
 
-        private void DrawUnitDetails(CustomSpriteBatch g, ref int DrawX, int DrawY, Unit ActiveUnit, bool DrawRank)
+        private void DrawUnitDetails(CustomSpriteBatch g, ref int DrawX, int DrawY, Unit ActiveUnit, bool DrawRank, bool CanBuy)
         {
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            if (!CanBuy)
+            {
+                TextColor = Color.DarkGray;
+            }
             float Ratio = Constants.Height / 2160f * 0.8f;
             if (DrawRank)
             {

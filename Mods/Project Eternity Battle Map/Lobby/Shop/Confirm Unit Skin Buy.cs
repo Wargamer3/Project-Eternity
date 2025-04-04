@@ -89,15 +89,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void BuySkin()
         {
             sndButtonClick.Play();
+
+            Inventory.DicOwnedUnitSkin.Add(OwnerUnitTypeAndRelativePath, new UnitSkinInfo(OwnerUnitTypeAndRelativePath, UnitSkinToBuy.SkinTypeAndPath, UnitSkinToBuy.UnitSkinToBuy));
+
             if (Inventory.DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
             {
                 Inventory.DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitSkin.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, UnitSkinToBuy.SkinTypeAndPath, UnitSkinToBuy.UnitSkinToBuy));
             }
-            else
-            {
-                Inventory.DicOwnedUnitSkin.Add(OwnerUnitTypeAndRelativePath, new UnitSkinInfo(OwnerUnitTypeAndRelativePath, UnitSkinToBuy.SkinTypeAndPath, UnitSkinToBuy.UnitSkinToBuy));
-            }
-
             RemoveScreen(this);
         }
 

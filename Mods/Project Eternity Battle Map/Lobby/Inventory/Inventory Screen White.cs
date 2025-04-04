@@ -76,20 +76,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MiddleSectionHeight = BottomSectionY - MiddleSectionY;
         }
 
-        public static void LoadBackground(ContentManager Content)
+        public static void LoadBackground()
         {
             if (fntOxanimumBoldTitle != null)
             {
                 return;
             }
 
-            fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
+            fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
-            sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
-            sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
+            sprTitleHighlight = GameScreen.ContentFallback.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
+            sprBarLeft = GameScreen.ContentFallback.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
+            sprBarMiddle = GameScreen.ContentFallback.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
 
-            Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
+            Cube = GameScreen.ContentFallback.Load<Model>("Menus/Lobby/Cube thing");
 
             int CubeTargetHeight = 900;
             CubeRenderTarget = new RenderTarget2D(GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            LoadBackground(Content);
+            LoadBackground();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");

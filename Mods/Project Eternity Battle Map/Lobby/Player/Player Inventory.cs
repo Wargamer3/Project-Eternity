@@ -87,18 +87,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.Leader = Leader;
             this.QuantityOwned = QuantityOwned;
+            ListOwnedUnitSkin = new List<UnitSkinInfo>();
+            ListOwnedUnitAlt = new List<UnitSkinInfo>();
         }
     }
 
     public class UnitSkinInfo
     {
-        public string UnitTypeAndRelativePath;
+        public string OwnerTypeAndRelativePath;
         public string SkinTypeAndRelativePath;
         public Unit Leader;
 
-        public UnitSkinInfo(string UnitTypeAndRelativePath, string SkinTypeAndRelativePath, Unit Leader)
+        public UnitSkinInfo(string OwnerTypeAndRelativePath, string SkinTypeAndRelativePath, Unit Leader)
         {
-            this.UnitTypeAndRelativePath = UnitTypeAndRelativePath;
+            this.OwnerTypeAndRelativePath = OwnerTypeAndRelativePath;
             this.SkinTypeAndRelativePath = SkinTypeAndRelativePath;
             this.Leader = Leader;
         }
@@ -185,31 +187,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
-                byte UnitSkinsQuantityOwned = BR.ReadByte();
-                byte UnitAltsQuantityOwned = BR.ReadByte();
 
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
                 UnitInfo LoadedUnitInfo = new UnitInfo(LoadedUnit, QuantityOwned);
-
-                for (int S = UnitSkinsQuantityOwned - 1; S >= 0; --S)
-                {
-                    string SkinRelativePath = BR.ReadString();
-                    string SkinUnitTypeName = BR.ReadString();
-
-                    Unit LoadedSkin = Unit.FromType(SkinUnitTypeName, SkinRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                    LoadedSkin.ID = LoadedSkin.ItemName;
-                    LoadedUnit.ListSkin.Add(LoadedSkin);
-                }
-                for (int A = UnitAltsQuantityOwned - 1; A >= 0; --A)
-                {
-                    string AltRelativePath = BR.ReadString();
-                    string AltUnitTypeName = BR.ReadString();
-
-                    Unit LoadedAlt = Unit.FromType(AltUnitTypeName, AltRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                    LoadedAlt.ID = LoadedAlt.ItemName;
-                    LoadedUnit.ListAlt.Add(LoadedAlt);
-                }
 
                 DicOwnedUnit.Add(UnitTypeName + "/" + RelativePath, LoadedUnitInfo);
                 AddUnit(LoadedUnitInfo);
@@ -299,7 +280,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     Unit LoadedSkin = Unit.FromFullName(SkinTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedSkin.ID = LoadedSkin.ItemName;
-                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].Leader.ListSkin.Add(LoadedSkin);
+                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitSkin.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, SkinTypeAndRelativePath, LoadedSkin));
                 }
                 else
                 {
@@ -309,18 +290,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int A = 0; A < AltsQuantityOwned; ++A)
             {
-                string UnitTypeAndRelativePath = BR.ReadString();
+                string OwnerUnitTypeAndRelativePath = BR.ReadString();
                 string AltTypeAndRelativePath = BR.ReadString();
 
-                if (DicOwnedUnit.ContainsKey(UnitTypeAndRelativePath))
+                if (DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
                 {
                     Unit LoadedAlt = Unit.FromFullName(AltTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedAlt.ID = LoadedAlt.ItemName;
-                    DicOwnedUnit[UnitTypeAndRelativePath].Leader.ListAlt.Add(LoadedAlt);
+                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitAlt.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, LoadedAlt));
                 }
                 else
                 {
-                    DicOwnedUnitAlt.Add(UnitTypeAndRelativePath, new UnitSkinInfo(UnitTypeAndRelativePath, AltTypeAndRelativePath, null));
+                    DicOwnedUnitAlt.Add(OwnerUnitTypeAndRelativePath, new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, null));
                 }
             }
 
@@ -343,25 +324,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
                 UnitInfo LoadedUnitInfo = new UnitInfo(LoadedUnit, QuantityOwned);
-
-                for (int S = UnitSkinsQuantityOwned - 1; S >= 0; --S)
-                {
-                    string SkinRelativePath = BR.ReadString();
-                    string SkinUnitTypeName = BR.ReadString();
-
-                    Unit LoadedSkin = Unit.FromType(SkinUnitTypeName, SkinRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                    LoadedSkin.ID = LoadedSkin.ItemName;
-                    LoadedUnit.ListSkin.Add(LoadedSkin);
-                }
-                for (int A = UnitAltsQuantityOwned - 1; A >= 0; --A)
-                {
-                    string AltRelativePath = BR.ReadString();
-                    string AltUnitTypeName = BR.ReadString();
-
-                    Unit LoadedAlt = Unit.FromType(AltUnitTypeName, AltRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                    LoadedAlt.ID = LoadedAlt.ItemName;
-                    LoadedUnit.ListAlt.Add(LoadedAlt);
-                }
 
                 DicOwnedUnit.Add(UnitTypeName + "/" + RelativePath, LoadedUnitInfo);
                 AddUnit(LoadedUnitInfo);
@@ -444,35 +406,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int S = SkinsQuantityOwned - 1; S >= 0; --S)
             {
-                string UnitTypeAndRelativePath = BR.ReadString();
+                string OwnerUnitTypeAndRelativePath = BR.ReadString();
                 string SkinTypeAndRelativePath = BR.ReadString();
 
-                if (DicOwnedUnit.ContainsKey(UnitTypeAndRelativePath))
+                if (DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
                 {
                     Unit LoadedSkin = Unit.FromFullName(SkinTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedSkin.ID = LoadedSkin.ItemName;
-                    DicOwnedUnit[UnitTypeAndRelativePath].Leader.ListSkin.Add(LoadedSkin);
+                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitSkin.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, SkinTypeAndRelativePath, LoadedSkin));
                 }
                 else
                 {
-                    DicOwnedUnitSkin.Add(UnitTypeAndRelativePath, new UnitSkinInfo(UnitTypeAndRelativePath, SkinTypeAndRelativePath, null));
+                    DicOwnedUnitSkin.Add(OwnerUnitTypeAndRelativePath, new UnitSkinInfo(OwnerUnitTypeAndRelativePath, SkinTypeAndRelativePath, null));
                 }
             }
 
             for (int A = 0; A < AltsQuantityOwned; ++A)
             {
-                string UnitTypeAndRelativePath = BR.ReadString();
+                string OwnerUnitTypeAndRelativePath = BR.ReadString();
                 string AltTypeAndRelativePath = BR.ReadString();
 
-                if (DicOwnedUnit.ContainsKey(UnitTypeAndRelativePath))
+                if (DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
                 {
                     Unit LoadedAlt = Unit.FromFullName(AltTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedAlt.ID = LoadedAlt.ItemName;
-                    DicOwnedUnit[UnitTypeAndRelativePath].Leader.ListAlt.Add(LoadedAlt);
+                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitAlt.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, LoadedAlt));
                 }
                 else
                 {
-                    DicOwnedUnitAlt.Add(UnitTypeAndRelativePath, new UnitSkinInfo(UnitTypeAndRelativePath, AltTypeAndRelativePath, null));
+                    DicOwnedUnitAlt.Add(OwnerUnitTypeAndRelativePath, new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, null));
                 }
             }
 
@@ -486,19 +448,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(ActiveSquad.Leader.RelativePath);
                 BW.Write(ActiveSquad.Leader.UnitTypeName);
-                BW.Write((byte)ActiveSquad.QuantityOwned);
-                BW.Write((byte)ActiveSquad.Leader.ListSkin.Count);
-                foreach (Unit ActiveSkin in ActiveSquad.Leader.ListSkin)
-                {
-                    BW.Write(ActiveSkin.RelativePath);
-                    BW.Write(ActiveSkin.UnitTypeName);
-                }
-                BW.Write((byte)ActiveSquad.Leader.ListAlt.Count);
-                foreach (var ActiveAlt in ActiveSquad.Leader.ListAlt)
-                {
-                    BW.Write(ActiveAlt.RelativePath);
-                    BW.Write(ActiveAlt.UnitTypeName);
-                }
+                BW.Write(ActiveSquad.QuantityOwned);
             }
 
             BW.Write(DicOwnedCharacter.Count);
@@ -546,13 +496,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(DicOwnedUnitSkin.Count);
             foreach (UnitSkinInfo ActiveSkin in DicOwnedUnitSkin.Values)
             {
-                BW.Write(ActiveSkin.UnitTypeAndRelativePath);
+                BW.Write(ActiveSkin.OwnerTypeAndRelativePath);
                 BW.Write(ActiveSkin.SkinTypeAndRelativePath);
             }
             BW.Write(DicOwnedUnitAlt.Count);
             foreach (UnitSkinInfo ActiveSkin in DicOwnedUnitAlt.Values)
             {
-                BW.Write(ActiveSkin.UnitTypeAndRelativePath);
+                BW.Write(ActiveSkin.OwnerTypeAndRelativePath);
                 BW.Write(ActiveSkin.SkinTypeAndRelativePath);
             }
         }

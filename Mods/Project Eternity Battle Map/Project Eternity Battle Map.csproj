@@ -172,9 +172,8 @@
     <Compile Include="Lobby\Records\Progression Records Tab.cs" />
     <Compile Include="Lobby\Records\Records Screen.cs" />
     <Compile Include="Lobby\Records\Unit Records Tab.cs" />
-    <Compile Include="Lobby\Shop\Confirm Unit Buy White.cs" />
-    <Compile Include="Lobby\Shop\Confirm Unit Skin Buy.cs" />
     <Compile Include="Lobby\Shop\Confirm Unit Buy.cs" />
+    <Compile Include="Lobby\Shop\Confirm Unit Skin Buy.cs" />
     <Compile Include="Lobby\Shop\Shop Unit Screen White.cs" />
     <Compile Include="Lobby\UI\Empty Numeric Up Down.cs" />
     <Compile Include="Lobby\UI\Empty Box Drop Down Button.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="Lobby\Shop\Consumable Screen.cs" />
     <Compile Include="Lobby\Shop\Equipment Screen.cs" />
     <Compile Include="Lobby\Shop\Shop Screen.cs" />
-    <Compile Include="Lobby\Shop\Shop Unit Screen.cs" />
     <Compile Include="Lobby\Inventory\Equipment Screen.cs" />
     <Compile Include="Lobby\Inventory\Consumable Screen.cs" />
     <Compile Include="Lobby\Inventory\Character Screen.cs" />

@@ -48,13 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (UnlockQuantity > 0)
             {
+                ConditionsOwner.Inventory.DicOwnedUnitSkin.Add(SkinTypeAndPath, new UnitSkinInfo(Path, SkinTypeAndPath, NewUnit));
+
                 if (ConditionsOwner.Inventory.DicOwnedUnit.ContainsKey(Path))
                 {
                     ConditionsOwner.Inventory.DicOwnedUnit[Path].ListOwnedUnitSkin.Add(new UnitSkinInfo(Path, SkinTypeAndPath, NewUnit));
-                }
-                else
-                {
-                    ConditionsOwner.Inventory.DicOwnedUnitSkin.Add(SkinTypeAndPath, new UnitSkinInfo(Path, SkinTypeAndPath, NewUnit));
                 }
 
                 ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewUnit.ItemName + "!");

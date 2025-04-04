@@ -78,14 +78,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMapInventoryWhiteScreen Owner;
         private UnitInventoryContainer CurrentContainer;
         private List<UnitInventoryContainer> ListLastContainer;
+        private List<object> ListCurrentUnit;
 
         private int MaxLoadouts;
         private int LoadoutSize;
         private int SquadScrollbarValue;
         private int InventoryScrollbarValue;
+        private bool DrawSkinsAsUnit = true;
 
-        private UnitInfo DragAndDropEquipment;
-        private UnitInfo LastSelectedEquipment;
+        private Unit DragAndDropEquipment;
+        private Unit LastSelectedUnitInfo;
 
         protected bool IsDragDropActive { get { return DragAndDropEquipment != null; } }
 
@@ -95,7 +97,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.MaxLoadouts = MaxLoadouts;
             this.LoadoutSize = LoadoutSize;
             CurrentContainer = Owner.ActivePlayer.Inventory.RootUnitContainer;
+            ListCurrentUnit = new List<object>();
             ListLastContainer = new List<UnitInventoryContainer>();
+            PopulateUnitList();
         }
 
         public override void Load()
@@ -145,7 +149,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BoxLineHeight = (int)(276 * Ratio);
 
             InventoryX = (int)(140 * Ratio);
-            InventoryWidth = (int)(LoadoutX - InventoryX - BoxWidthFinal - BoxOffset);
+            InventoryWidth = (int)(LoadoutX - InventoryX);
             BoxPerLine = InventoryWidth / BoxWithOffsetFinal;
 
             FolderBoxWidth = sprButtonFolderInactive.Width;
@@ -158,7 +162,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FolderPerLine = InventoryWidth / FolderWithOffsetFinal;
 
             LoadoutListScrollbar.ChangeMaxValue(Owner.ActivePlayer.Inventory.ListSquadLoadout.Count * LoadoutEntryHeightWithOffset - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
-            InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListUnit.Count * BoxHeight - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
+            InventoryScrollbar.ChangeMaxValue(ListCurrentUnit.Count * BoxHeight - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
         }
 
         public override void Update(GameTime gameTime)
@@ -179,7 +183,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (MouseHelper.InputLeftButtonPressed())
             {
-                int SelectedItemIndex = GetOwnedSquadUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+                int SelectedItemIndex = GetOwnedUnitUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
                 if (ListLastContainer.Count > 0)
                 {
@@ -188,7 +192,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (SelectedItemIndex >= 0)
                 {
-                    StartDragDrop(CurrentContainer.ListUnit[SelectedItemIndex]);
+                    UnitInfo CurrentUnitInfo = ListCurrentUnit[SelectedItemIndex] as UnitInfo;
+                    UnitSkinInfo CurrentUnitSkinInfo = ListCurrentUnit[SelectedItemIndex] as UnitSkinInfo;
+                    if (CurrentUnitInfo != null)
+                    {
+                        StartDragDrop(CurrentUnitInfo.Leader);
+                    }
+                    else if (CurrentUnitSkinInfo != null)
+                    {
+                        StartDragDrop(CurrentUnitSkinInfo.Leader);
+                    }
                 }
                 else
                 {
@@ -213,12 +226,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                 CurrentContainer = CurrentContainer.ListFolder[SelectedFolderIndex];
                             }
                         }
+
+                        PopulateUnitList();
                     }
                 }
             }
             else if (MouseHelper.InputRightButtonPressed())
             {
-                int SelectedItemIndex = GetOwnedSquadUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+                int SelectedItemIndex = GetOwnedUnitUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
                 if (SelectedItemIndex < 0)
                 {
@@ -232,12 +247,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (SelectedItemIndex >= CurrentContainer.DicFolder.Count)
                 {
-                    //PushScreen(new InventoryUnitInformationScreen(Owner, CurrentContainer.ListUnit[SelectedItemIndex - CurrentContainer.DicFolder.Count].Leader));
+                    //PushScreen(new InventoryUnitInformationScreen(Owner, ListCurrentUnit[SelectedItemIndex - CurrentContainer.DicFolder.Count].Leader));
                 }
             }
         }
 
-        private void StartDragDrop(UnitInfo EquipmentToDrag)
+        private void PopulateUnitList()
+        {
+            ListCurrentUnit.Clear();
+
+            if (DrawSkinsAsUnit)
+            {
+                foreach (UnitInfo ActiveUnit in CurrentContainer.ListUnit)
+                {
+                    ListCurrentUnit.Add(ActiveUnit);
+                    foreach (UnitSkinInfo ActiveSkin in ActiveUnit.ListOwnedUnitSkin)
+                    {
+                        ListCurrentUnit.Add(ActiveSkin);
+                    }
+                    foreach (UnitSkinInfo ActiveAlt in ActiveUnit.ListOwnedUnitAlt)
+                    {
+                        ListCurrentUnit.Add(ActiveAlt);
+                    }
+                }
+            }
+            else
+            {
+                ListCurrentUnit.AddRange(CurrentContainer.ListUnit);
+            }
+        }
+
+        private void StartDragDrop(Unit EquipmentToDrag)
         {
             DragAndDropEquipment = EquipmentToDrag;
         }
@@ -263,10 +303,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     && MouseYFinal >= 0 && MouseYFinal < LoadoutBoxSize)
                 {
                     Character OldPilot = Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSpawnSquad[SquadSlotIndex].At(0).Pilot;
-                    Squad ReplacementSquad = new Squad("Squad " + SquadSlotIndex, DragAndDropEquipment.Leader);
+                    Squad ReplacementSquad = new Squad("Squad " + SquadSlotIndex, DragAndDropEquipment);
                     ReplacementSquad.At(0).ArrayCharacterActive[0] = OldPilot;
 
-                    Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSpawnSquad[SquadSlotIndex] = new Squad("Squad " + SquadSlotIndex, DragAndDropEquipment.Leader);
+                    Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSpawnSquad[SquadSlotIndex] = new Squad("Squad " + SquadSlotIndex, DragAndDropEquipment);
                     Owner.ActivePlayer.SaveLocally();
                 }
 
@@ -274,21 +314,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private int GetOwnedSquadUnderMouse(int MouseX, int MouseY)
+        private int GetOwnedUnitUnderMouse(int MouseX, int MouseY)
         {
             float Ratio = Constants.Height / 2160f;
-            int X = (int)(140 * Ratio);
+            MouseX = MouseX - InventoryX;
 
             int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
 
-            int MouseIndex = (int)((MouseX - X) / BoxWithOffsetFinal + ((MouseY - DrawY) / BoxLineHeight) * BoxPerLine);
-            int MouseXFinal = (int)((MouseX - X) % BoxWithOffsetFinal);
+            int MouseIndex = (int)(MouseX / BoxWithOffsetFinal + ((MouseY - DrawY) / BoxLineHeight) * BoxPerLine);
+            int MouseXFinal = (int)(MouseX  % BoxWithOffsetFinal);
             int MouseYFinal = (MouseY - DrawY) % BoxLineHeight;
 
-            int ItemCount = CurrentContainer.ListUnit.Count;
+            int ItemCount = ListCurrentUnit.Count;
 
             if (MouseIndex >= 0 && MouseIndex < ItemCount
-                && MouseXFinal > 0 && MouseXFinal < BoxWidthFinal && MouseX < InventoryWidth
+                && MouseXFinal > 0 && MouseXFinal < BoxWidthFinal && (MouseIndex % BoxPerLine) < InventoryWidth / BoxWithOffsetFinal
                 && MouseYFinal >= 0 && MouseYFinal < BoxLineHeight)
             {
                 return MouseIndex;
@@ -348,7 +388,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (DragAndDropEquipment != null)
             {
-                g.Draw(DragAndDropEquipment.Leader.SpriteMap, new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, LoadoutBoxSize, LoadoutBoxSize), Color.White);
+                g.Draw(DragAndDropEquipment.SpriteMap, new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, LoadoutBoxSize, LoadoutBoxSize), Color.White);
             }
         }
 
@@ -464,7 +504,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
 
             int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxHeight);
-            int TotalItem = CurrentContainer.ListUnit.Count;
+            int TotalItem = ListCurrentUnit.Count;
 
             DrawFolders(g, X);
             int XPos = 0;
@@ -483,11 +523,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         DrawBox(g, new Vector2(FinalX + 6, DrawY + BoxHeight - 20), 15, 15, Color.White);
                     }
 
-                    if (CurrentIndex < CurrentContainer.ListUnit.Count)
+                    if (CurrentIndex < ListCurrentUnit.Count)
                     {
-                        g.Draw(CurrentContainer.ListUnit[CurrentIndex].Leader.SpriteMap, new Rectangle(FinalX + SpriteOffset, DrawY + SpriteOffset, SpriteSizeFinal, SpriteSizeFinal), Color.White);
+                        object CurrentUnit = ListCurrentUnit[CurrentIndex];
+                        UnitInfo CurrentUnitInfo = CurrentUnit as UnitInfo;
+                        UnitSkinInfo CurrentUnitSkinInfo = CurrentUnit as UnitSkinInfo;
+                        if (CurrentUnitInfo != null)
+                        {
+                            g.Draw(CurrentUnitInfo.Leader.SpriteMap, new Rectangle(FinalX + SpriteOffset, DrawY + SpriteOffset, SpriteSizeFinal, SpriteSizeFinal), Color.White);
 
-                        g.DrawString(fntOxanimumBoldSmall, "x" + CurrentContainer.ListUnit[CurrentIndex].QuantityOwned, new Vector2(FinalX + BoxWidthFinal - 40, DrawY + BoxHeight - 30), TextColor);
+                            g.DrawString(fntOxanimumBoldSmall, "x" + CurrentUnitInfo.QuantityOwned, new Vector2(FinalX + BoxWidthFinal - 40, DrawY + BoxHeight - 30), TextColor);
+                        }
+                        else if (CurrentUnitSkinInfo != null)
+                        {
+                            g.Draw(CurrentUnitSkinInfo.Leader.SpriteMap, new Rectangle(FinalX + SpriteOffset, DrawY + SpriteOffset, SpriteSizeFinal, SpriteSizeFinal), Color.White);
+                        }
                     }
 
                     ++XPos;
@@ -506,7 +556,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
 
-            int SelectedItemIndex = GetOwnedSquadUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+            int SelectedItemIndex = GetOwnedUnitUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
             //Hover
             if (SelectedItemIndex >= 0)
@@ -514,16 +564,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int FinalX = (int)(X + ((MouseHelper.MouseStateCurrent.X - X) / BoxWithOffsetFinal) * BoxWithOffsetFinal);
                 int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / BoxLineHeight) * BoxLineHeight;
 
-                UnitInfo SelectedEquipment = CurrentContainer.ListUnit[SelectedItemIndex];
+                UnitInfo SelectedUnitInfo = ListCurrentUnit[SelectedItemIndex] as UnitInfo;
+                if (SelectedUnitInfo != null)
+                {
+                    LastSelectedUnitInfo = SelectedUnitInfo.Leader;
 
-                LastSelectedEquipment = SelectedEquipment;
+                    g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidthFinal, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
 
-                g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidthFinal, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    DrawBox(g, new Vector2(FinalX - BoxOffsetFinal / 2, FinalY + BoxHeight), BoxWithOffsetFinal, (int)(50 * Ratio), Color.Black);
+                    g.DrawStringMiddleAligned(fntArial12,
+                        SelectedUnitInfo.Leader.ItemName,
+                        new Vector2(FinalX + BoxWidthFinal / 2, FinalY + BoxHeight + (int)(6 * Ratio)), Color.White);
+                }
 
-                DrawBox(g, new Vector2(FinalX - BoxOffsetFinal / 2, FinalY + BoxHeight), BoxWithOffsetFinal, (int)(50 * Ratio), Color.Black);
-                g.DrawStringMiddleAligned(fntArial12,
-                    SelectedEquipment.Leader.ItemName,
-                    new Vector2(FinalX + BoxWidthFinal / 2, FinalY + BoxHeight + (int)(6 * Ratio)), Color.White);
+                UnitSkinInfo SelectedUnitSkinInfo = ListCurrentUnit[SelectedItemIndex] as UnitSkinInfo;
+                if (SelectedUnitSkinInfo != null)
+                {
+                    LastSelectedUnitInfo = SelectedUnitSkinInfo.Leader;
+
+                    g.Draw(sprPixel, new Rectangle(FinalX, FinalY, BoxWidthFinal, BoxHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
+
+                    DrawBox(g, new Vector2(FinalX - BoxOffsetFinal / 2, FinalY + BoxHeight), BoxWithOffsetFinal, (int)(50 * Ratio), Color.Black);
+                    g.DrawStringMiddleAligned(fntArial12,
+                        SelectedUnitSkinInfo.Leader.ItemName,
+                        new Vector2(FinalX + BoxWidthFinal / 2, FinalY + BoxHeight + (int)(6 * Ratio)), Color.White);
+                }
             }
             else
             {
@@ -541,21 +606,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             g.Draw(sprFrameDescription, new Vector2(X * Ratio, 1938 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
-            if (LastSelectedEquipment != null)
+            if (LastSelectedUnitInfo != null)
             {
                 int SpriteSize = 128;
                 int SpriteBoxSize = SpriteSize + 22;
                 g.Draw(sprPixel, new Rectangle((int)((X + 32) * Ratio), (int)(1962 * Ratio), (int)(SpriteBoxSize * Ratio), (int)(SpriteBoxSize * Ratio)), TextColor);
                 DrawBox(g, new Vector2((int)((X + 32) * Ratio), (int)(1962 * Ratio)), (int)(SpriteBoxSize * Ratio), (int)(SpriteBoxSize * Ratio), Color.Transparent);
-                g.Draw(LastSelectedEquipment.Leader.SpriteMap, new Rectangle((int)((X + 40) * Ratio), (int)(1976 * Ratio), (int)(SpriteSize * Ratio), (int)(SpriteSize * Ratio)), Color.White);
+                g.Draw(LastSelectedUnitInfo.SpriteMap, new Rectangle((int)((X + 40) * Ratio), (int)(1976 * Ratio), (int)(SpriteSize * Ratio), (int)(SpriteSize * Ratio)), Color.White);
 
-                g.DrawString(fntOxanimumBoldSmaller, LastSelectedEquipment.Leader.ItemName, new Vector2((X + 240) * Ratio, 1976 * Ratio), TextColor);
+                g.DrawString(fntOxanimumBoldSmaller, LastSelectedUnitInfo.ItemName, new Vector2((X + 240) * Ratio, 1976 * Ratio), TextColor);
 
-                g.DrawString(fntOxanimumLightSmall, "HP: " + LastSelectedEquipment.Leader.MaxHP, new Vector2((X + 836) * Ratio, 1976 * Ratio), TextColor);
+                g.DrawString(fntOxanimumLightSmall, "HP: " + LastSelectedUnitInfo.MaxHP, new Vector2((X + 836) * Ratio, 1976 * Ratio), TextColor);
 
-                g.DrawString(fntOxanimumLightSmall, "Rank: " + LastSelectedEquipment.Leader.QualityRank, new Vector2((X + 836) * Ratio, 2058 * Ratio), TextColor);
+                g.DrawString(fntOxanimumLightSmall, "Rank: " + LastSelectedUnitInfo.QualityRank, new Vector2((X + 836) * Ratio, 2058 * Ratio), TextColor);
 
-                g.DrawString(fntOxanimumLightSmall, "Spawn Cost: " + LastSelectedEquipment.Leader.UnitStat.SpawnCost, new Vector2((X + 1412) * Ratio, 1976 * Ratio), TextColor);
+                g.DrawString(fntOxanimumLightSmall, "Spawn Cost: " + LastSelectedUnitInfo.UnitStat.SpawnCost, new Vector2((X + 1412) * Ratio, 1976 * Ratio), TextColor);
             }
         }
     }

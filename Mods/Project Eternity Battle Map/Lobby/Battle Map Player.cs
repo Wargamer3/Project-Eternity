@@ -94,7 +94,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     Inventory.DicOwnedCharacter.Add(PilotPath, new CharacterInfo(NewCharacter, 1));
                 }
 
-                Inventory.DicOwnedUnit.Add(UnitPath, new UnitInfo(NewUnit, 1));
+                UnitInfo NewUnitInfo = new UnitInfo(NewUnit, 1);
+                Inventory.DicOwnedUnit.Add(UnitPath, NewUnitInfo);
+                Inventory.RootUnitContainer.ListUnit.Add(NewUnitInfo);
 
                 if (FirstSquad == null)
                 {

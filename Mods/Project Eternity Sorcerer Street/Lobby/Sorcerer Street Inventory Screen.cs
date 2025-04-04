@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            BattleMapInventoryWhiteScreen.LoadBackground(Content);
+            BattleMapInventoryWhiteScreen.LoadBackground();
 
             Symbols = CardSymbols.Symbols;
 
