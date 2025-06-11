@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using System;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -12,10 +12,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
+        private SpriteFont fntOxanimumBoldTitle;
+        private SpriteFont fntMenuText;
+        private SpriteFont fntOxanimumRegular;
+
+        public static CubeBackgroundSmall CubeBackground;
 
         private CardSymbols Symbols;
+        private IconHolder Icons;
 
-        private SpriteFont fntMenuText;
+        private Texture2D sprExtraFrame;
+        private Texture2D sprFrameTop;
 
         #endregion
 
@@ -24,16 +31,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public SorcererStreetInventoryScreen(Player ActivePlayer)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
             this.ActivePlayer = ActivePlayer;
+
+            CubeBackground = new CubeBackgroundSmall();
         }
 
         public override void Load()
         {
-            BattleMapInventoryWhiteScreen.LoadBackground();
-
             Symbols = CardSymbols.Symbols;
+            Icons = IconHolder.Icons;
+
+            CubeBackground.Load(Content);
 
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
+
+            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
+            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top");
         }
 
         public override void Update(GameTime gameTime)
@@ -45,10 +62,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (CursorIndex)
                 {
                     case 0:
-                        PushScreen(new ChooseBookScreen(Symbols, ActivePlayer));
+                        PushScreen(new ChooseBookScreen(Symbols, Icons, ActivePlayer));
                         break;
                     case 1:
-                        PushScreen(new BattleTesterScreen(Symbols, ActivePlayer));
                         break;
                     case 2:
                         PushScreen(new CharacterSelectionScreen(Symbols, ActivePlayer));
@@ -56,6 +72,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case 3:
                         break;
                     case 4:
+                        PushScreen(new BattleTesterScreen(Symbols, ActivePlayer));
+                        break;
+                    case 5:
                         RemoveScreen(this);
                         break;
                 }
@@ -82,158 +101,286 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-            BattleMapInventoryWhiteScreen.BeginDrawBackground(g);
+            CubeBackground.BeginDraw(g);
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
             float Ratio = Constants.Height / 2160f;
-            GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.FromNonPremultiplied(65, 70, 65, 255));
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            BattleMapInventoryWhiteScreen.DrawBackground(g);
+            CubeBackground.Draw(g);
 
-            float X = -10;
-            float Y = Constants.Height / 20;
-            int HeaderHeight = Constants.Height / 16;
+            g.DrawString(fntOxanimumBoldTitle, "INVENTORY", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), ColorText);
 
-            X = -10;
-            Y = Constants.Height / 7;
-            int EntryHeight = Constants.Height / 20;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Book Edit", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Change Book", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Character Selection", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Maintenance", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Return", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
+            float DrawX = (int)(150 * Ratio);
+            float DrawY = (int)(400 * Ratio);
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            int EntryHeight = (int)(108 * Ratio);
+            int BoxHeight = (int)(994 * Ratio);
 
-            DrawBookInformation(g, fntMenuText, "Player Information", Symbols,
-                ActivePlayer.Inventory.GlobalBook);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(DrawX), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
-            X = -10;
-            Y = Constants.Height - 100;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
-            X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Open the maintenance menu", new Vector2(X, Y), Color.White);
+            DrawX =  (int)(250 * Ratio);
+            DrawY = (int)(470 * Ratio);
+            g.DrawString(fntOxanimumRegular, "Book Edit", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Change Book", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Character Selection", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Maintenance", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Battle Tester", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+
+            DrawX = (int)(40 * Ratio);
+            DrawY = (int)(450 * Ratio);
+            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+
+            DrawBookInformation(g, sprExtraFrame, fntMenuText, "Player Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
+
+            DrawX = (int)(212 * Ratio);
+            DrawY = (int)(2008 * Ratio);
+            g.DrawString(fntOxanimumRegular, "Open the maintenance menu", new Vector2(DrawX, DrawY), ColorText);
         }
 
-        public static void DrawBookInformation(CustomSpriteBatch g, SpriteFont ActiveFont, string Title, CardSymbols Symbols, CardBook ActiveBook)
+        public static void DrawBookInformation(CustomSpriteBatch g, Texture2D sprExtraFrame, SpriteFont ActiveFont, string Title, CardSymbols Symbols, IconHolder Icons, CardBook ActiveBook)
         {
-            float X = Constants.Width / 1.8f;
-            float Y = Constants.Height / 6;
-            int BookInformationWidth = (int)(Constants.Width / 2.7f);
-            DrawBox(g, new Vector2(X, Y - 20), BookInformationWidth, 20, Color.White);
-            g.DrawString(ActiveFont, Title, new Vector2(X + 10, Y - 20), Color.White);
-            DrawBox(g, new Vector2(X, Y), BookInformationWidth, 280, Color.White);
-            Y += 10;
-            g.DrawString(ActiveFont, "Updated", new Vector2(X + 15, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.DrawStringRightAligned(ActiveFont, "12/30/2022 09:32", new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f;
-            Y += 20;
-            g.DrawString(ActiveFont, "Win / Matches", new Vector2(X + 15, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.DrawStringRightAligned(ActiveFont, "0/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, "0", new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f;
-            Y += 20;
-            g.DrawLine(sprPixel, new Vector2(X + 10, Y), new Vector2(X + BookInformationWidth - 20, Y), Color.White);
-            Y += 5;
-            g.DrawString(ActiveFont, "Type / Card Count", new Vector2(X + 25, Y), Color.White);
-            Y += 20;
-            int LineSize = 22;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprElementNeutral, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesNeutral + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesNeutral.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprElementFire, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesFire + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesFire.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprElementWater, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesWater + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesWater.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprElementEarth, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesEarth + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesEarth.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprElementAir, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesAir + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesAir.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprElementMulti, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesMulti + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesMulti.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprItemsWeapon, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsWeapon + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsWeapon.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprItemsArmor, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsArmor + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsArmor.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprItemsTool, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsTool + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsTool.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprItemsScroll, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsScroll + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsScroll.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprSpellsSingle, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsSingle + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsSingle.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprSpellsMultiple, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsMultiple + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsMultiple.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 15;
-            g.Draw(Symbols.sprEnchantSingle, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantSingle + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantSingle.ToString(), new Vector2(X + 110, Y), Color.White);
-            X = Constants.Width / 1.8f + 160;
-            g.Draw(Symbols.sprEnchantMultiple, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantMultiple + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantMultiple.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += LineSize;
-            X = Constants.Width / 1.8f + 160;
-            g.DrawStringRightAligned(ActiveFont, "Total", new Vector2(X + 20, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.ListCard.Count + "/", new Vector2(X + 60, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCards.ToString(), new Vector2(X + 110, Y), Color.White);
-            Y += 20;
-            X = Constants.Width / 1.8f;
-            g.DrawLine(sprPixel, new Vector2(X + 10, Y), new Vector2(X + BookInformationWidth - 20, Y), Color.White);
-            X = Constants.Width / 1.8f + 15;
-            Y += 5;
-            g.Draw(Symbols.sprSpellsSingle, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(X + 60, Y), Color.White);
-            X = Constants.Width / 1.8f + 120;
-            g.Draw(Symbols.sprSpellsSingle, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(X + 60, Y), Color.White);
-            X = Constants.Width / 1.8f + 210;
-            g.Draw(Symbols.sprSpellsSingle, new Vector2(X, Y), Color.White);
-            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(X + 60, Y), Color.White);
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
+            float Ratio = Constants.Height / 2160f;
 
+            int OffsetX = (int)(2750 * Ratio);
+            int OffsetY = (int)(400 * Ratio);
+
+            int IconWidth = (int)(32 * 1.0f);
+            int IconHeight = (int)(32 * 1.0f);
+
+            int LineSize = (int)(60 * Ratio);
+
+            int DrawX = OffsetX;
+            int DrawY = OffsetY;
+            g.Draw(sprExtraFrame, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+
+            DrawX = OffsetX;
+            DrawY = OffsetY + (int)(50 * Ratio);
+
+            int BookInformationWidth = (int)(792 * Ratio);
+            g.DrawString(ActiveFont, Title, new Vector2(DrawX + 10, DrawY - 20), ColorText);
+            DrawY += (int)(20 * Ratio);
+            g.DrawString(ActiveFont, "Updated", new Vector2(DrawX + 15, DrawY), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.DrawStringRightAligned(ActiveFont, "12/30/2022 09:32", new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(82 * Ratio);
+            DrawY += (int)(40 * Ratio);
+            g.DrawString(ActiveFont, "Win / Matches", new Vector2(DrawX + 15, DrawY), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.DrawStringRightAligned(ActiveFont, "0/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, "0", new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(82 * Ratio);
+            DrawY += (int)(40 * Ratio);
+            g.DrawLine(sprPixel, new Vector2(DrawX + 10, DrawY), new Vector2(DrawX + BookInformationWidth - 20, DrawY), ColorText);
+            DrawY += (int)(10 * Ratio);
+            g.DrawString(ActiveFont, "Type / Card Count", new Vector2(DrawX + 25, DrawY), ColorText);
+            DrawY += (int)(40 * Ratio);
+
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementNeutral, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesNeutral + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesNeutral.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementFire, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesFire + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesFire.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementWater, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesWater + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesWater.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementEarth, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesEarth + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesEarth.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementAir, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesAir + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesAir.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementMulti, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesMulti + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesMulti.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprItemsWeapon, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsWeapon + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsWeapon.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprItemsArmor, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsArmor + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsArmor.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprItemsTool, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsTool + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsTool.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprItemsScroll, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsScroll + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsScroll.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsSingle + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsSingle.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprSpellsMultiple, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsMultiple + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsMultiple.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprEnchantSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantSingle + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantSingle.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprEnchantMultiple, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantMultiple + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantMultiple.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.DrawStringRightAligned(ActiveFont, "Total", new Vector2(DrawX + 20, DrawY), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.ListCard.Count + "/", new Vector2(DrawX + 60, DrawY), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCards.ToString(), new Vector2(DrawX + 110, DrawY), ColorText);
+            DrawY += (int)(50 * Ratio);
+            DrawX = OffsetX + (int)(82 * Ratio);
+            g.DrawLine(sprPixel, new Vector2(DrawX + 10, DrawY), new Vector2(DrawX + BookInformationWidth - 20, DrawY), ColorText);
+            DrawX = OffsetX + (int)(102 * Ratio);
+            DrawY += (int)(10 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(302 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(502 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+        }
+
+        public static void DrawBookInformationSmall(CustomSpriteBatch g, Texture2D sprExtraFrame, SpriteFont ActiveFont, string Title, CardSymbols Symbols, IconHolder Icons, CardBook ActiveBook)
+        {
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
+            float Ratio = Constants.Height / 2160f;
+
+            int OffsetX = (int)(2750 * Ratio);
+            int OffsetY = (int)(400 * Ratio);
+
+            int IconWidth = (int)(32 * 1.0f);
+            int IconHeight = (int)(32 * 1.0f);
+
+            int LineSize = (int)(60 * Ratio);
+
+            int DrawX = OffsetX;
+            int DrawY = OffsetY;
+            g.Draw(sprExtraFrame, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+
+            DrawX = OffsetX;
+            DrawY = OffsetY + (int)(50 * Ratio);
+            g.DrawString(ActiveFont, Title, new Vector2(DrawX + 10, DrawY - 20), ColorText);
+            DrawY += (int)(20 * Ratio);
+
+            int BookInformationWidth = (int)(792 * Ratio);
+
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementNeutral, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesNeutral + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesNeutral.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementFire, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesFire + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesFire.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementWater, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesWater + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesWater.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementEarth, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesEarth + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesEarth.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprElementAir, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesAir + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesAir.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprElementMulti, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueCreaturesMulti + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCreaturesMulti.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprItemsWeapon, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsWeapon + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsWeapon.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprItemsArmor, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsArmor + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsArmor.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprItemsTool, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsTool + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsTool.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprItemsScroll, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueItemsScroll + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalItemsScroll.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsSingle + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsSingle.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprSpellsMultiple, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueSpellsMultiple + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalSpellsMultiple.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(102 * Ratio);
+            g.Draw(Symbols.sprEnchantSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantSingle + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantSingle.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.Draw(Symbols.sprEnchantMultiple, new Vector2(DrawX, DrawY), Color.White);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.UniqueEnchantMultiple + "/", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalEnchantMultiple.ToString(), new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            DrawY += LineSize;
+            DrawX = OffsetX + (int)(402 * Ratio);
+            g.DrawStringRightAligned(ActiveFont, "Total", new Vector2(DrawX + 20, DrawY), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.ListCard.Count + "/", new Vector2(DrawX + 60, DrawY), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCards.ToString(), new Vector2(DrawX + 110, DrawY), ColorText);
+            DrawY += (int)(50 * Ratio);
+            DrawX = OffsetX + (int)(82 * Ratio);
+            g.DrawLine(sprPixel, new Vector2(DrawX + 10, DrawY), new Vector2(DrawX + BookInformationWidth - 20, DrawY), ColorText);
+            DrawX = OffsetX + (int)(102 * Ratio);
+            DrawY += (int)(10 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(302 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+            DrawX = OffsetX + (int)(502 * Ratio);
+            g.Draw(Symbols.sprSpellsSingle, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawStringRightAligned(ActiveFont, "0%", new Vector2(DrawX + 60, DrawY + 10 * Ratio), ColorText);
+
+            DrawX = OffsetX + (int)(102 * Ratio);
+            DrawY = (int)(1100 * Ratio);
+            g.Draw(Icons.sprOption, new Rectangle(DrawX, DrawY, IconWidth, IconHeight), Color.White);
+            g.DrawString(ActiveFont, "Information Display On/Off", new Vector2(DrawX + 50, DrawY + 10 * Ratio), ColorText);
         }
     }
 }

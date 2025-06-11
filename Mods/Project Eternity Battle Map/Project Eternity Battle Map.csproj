@@ -144,6 +144,8 @@
     <Compile Include="Intermission Screen\Records\Unit Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
+    <Compile Include="Lobby\Background\Cube Background Small.cs" />
+    <Compile Include="Lobby\Background\Cube Background Big.cs" />
     <Compile Include="Lobby\Background\Tunnel Manager.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />

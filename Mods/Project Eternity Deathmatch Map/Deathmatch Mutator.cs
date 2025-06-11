@@ -19,6 +19,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Params = Params;
         }
 
-        public abstract void OnSquadSelected(ActionPanel PanelOwner, int ActivePlayerIndex, int ActiveSquadIndex);
+        public virtual void OnSquadSelected(ActionPanel PanelOwner, int ActivePlayerIndex, int ActiveSquadIndex)
+        {
+        }
     }
 }

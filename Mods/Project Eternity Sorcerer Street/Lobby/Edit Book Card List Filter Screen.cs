@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private SpriteFont fntMenuText;
 
         private Texture2D sprInfoBand;
+        private Texture2D sprExtraFrame;
 
         #endregion
 
@@ -40,11 +41,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         int CardsPerLine = 7;
 
         public List<Card> ListSelectedCard;
-        CardSymbols Symbols;
-        IconHolder Icons;
+        private CardSymbols Symbols;
+        private IconHolder Icons;
 
         public EditBookCardListFilterScreen(Player ActivePlayer, CardBook ActiveBook, Filters Filter)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
             GlobalBook = ActivePlayer.Inventory.GlobalBook;
@@ -57,6 +60,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, Card LastCard, bool MultipleSelection, bool DrawBackground = true)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
             this.GlobalBook = ActiveBook = GlobalBook;
             this.DrawBackground = DrawBackground;
             ListFilteredCard = new List<CardInfo>();
@@ -308,6 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial30");
 
             sprInfoBand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Info Band");
+            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
         }
 
         private void OnMissionScrollbarChange(float ScrollbarValue)
@@ -343,7 +349,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputCancelPressed())
             {
-                ListSelectedCard.Clear();
+                if (ListSelectedCard != null)
+                {
+                    ListSelectedCard.Clear();
+                }
+
                 ListSelectedCard = null;
                 RemoveScreen(this);
             }
@@ -517,105 +527,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = 958;
             g.DrawString(fntMenuText, ListFilteredCard[CursorIndex].Card.Name, new Vector2(X, Y), Color.White);
 
-            DrawBookInformation(g);
+            SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
 
             MissionScrollbar.Draw(g);
-        }
-
-        private void DrawBookInformation(CustomSpriteBatch g)
-        {
-            int BoxWidth = 684;
-            int BoxHeight = 574;
-            float InfoBoxX = 1080;
-            float InfoBoxY = 264;
-
-            MenuHelper.DrawNamedBox(g, "Book Information", new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
-
-            int X = 1120;
-            int Y = 280;
-            int IconWidth = (int)(32 * 1.4f);
-            int IconHeight = (int)(32 * 1.4f);
-
-            g.Draw(Symbols.sprElementNeutral, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesNeutral + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesNeutral.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprElementWater, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesWater + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesWater.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprElementAir, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesAir + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesAir.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprItemsWeapon, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueItemsWeapon + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalItemsWeapon.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprItemsTool, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueItemsTool + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalItemsTool.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprSpellsSingle, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueSpellsSingle + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalSpellsSingle.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprEnchantSingle, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueEnchantSingle + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalEnchantSingle.ToString(), new Vector2(X + 260, Y), Color.White);
-
-            X = 1426;
-            Y = 280;
-            g.Draw(Symbols.sprElementFire, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesFire + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesFire.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprElementEarth, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesEarth + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesEarth.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprElementMulti, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueCreaturesMulti + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCreaturesMulti.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprItemsArmor, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueItemsArmor + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalItemsArmor.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprItemsScroll, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueItemsScroll + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalItemsScroll.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprSpellsMultiple, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueSpellsMultiple + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalSpellsMultiple.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.Draw(Symbols.sprEnchantMultiple, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.UniqueEnchantMultiple + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalEnchantMultiple.ToString(), new Vector2(X + 260, Y), Color.White);
-            Y += 54;
-            g.DrawStringRightAligned(fntMenuText, "Total", new Vector2(X + IconWidth, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.ListCard.Count + "/", new Vector2(X + 138, Y), Color.White);
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards.ToString(), new Vector2(X + 260, Y), Color.White);
-
-            X = 1080 + 40;
-            Y += 54;
-            g.DrawLine(sprPixel, new Vector2(X, Y), new Vector2(X + BoxWidth - 80, Y), Color.White);
-            X = 1120;
-            Y += 27;
-            g.Draw(Symbols.sprCreature, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, "0%", new Vector2(X + 150, Y), Color.White);
-            X += 206;
-            g.Draw(Symbols.sprItemsWeapon, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, "0%", new Vector2(X + 150, Y), Color.White);
-            X += 206;
-            g.Draw(Symbols.sprSpellsSingle, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawStringRightAligned(fntMenuText, "0%", new Vector2(X + 150, Y), Color.White);
-
-            X = 1120;
-            Y += 54;
-            g.Draw(Icons.sprOption, new Rectangle(X, Y, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntMenuText, "Information Display On/Off", new Vector2(X + 50, Y), Color.White);
         }
 
         private void DrawBookCards(CustomSpriteBatch g, float StartY)

@@ -12,8 +12,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         #region Ressources
 
         private CardSymbols Symbols;
+        private IconHolder Icons;
 
+        private SpriteFont fntOxanimumBoldTitle;
+        private SpriteFont fntOxanimumRegular;
         private SpriteFont fntMenuText;
+
+        private Texture2D sprExtraFrame;
+        private Texture2D sprFrameTop;
 
         #endregion
 
@@ -22,9 +28,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int CursorIndex;
 
-        public EditBookScreen(CardSymbols Symbols, Player ActivePlayer, CardBook ActiveBook)
+        public EditBookScreen(CardSymbols Symbols, IconHolder Icons, Player ActivePlayer, CardBook ActiveBook)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
             this.Symbols = Symbols;
+            this.Icons = Icons;
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
         }
@@ -32,16 +41,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Load()
         {
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
+
+            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
+            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top");
         }
 
         public override void Update(GameTime gameTime)
         {
+            SorcererStreetInventoryScreen.CubeBackground.Update(gameTime);
+
             if (InputHelper.InputConfirmPressed())
             {
                 switch (CursorIndex)
                 {
                     case 0:
-                        PushScreen(new EditBookCardListScreen(Symbols, ActivePlayer, ActiveBook));
+                        PushScreen(new EditBookCardListScreen(Symbols, Icons, ActivePlayer, ActiveBook));
                         break;
                     case 1:
                         break;
@@ -79,57 +95,65 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            SorcererStreetInventoryScreen.CubeBackground.BeginDraw(g);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
+            float Ratio = Constants.Height / 2160f;
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            float X = -10;
-            float Y = Constants.Height / 20;
-            int HeaderHeight = Constants.Height / 16;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
+            SorcererStreetInventoryScreen.CubeBackground.Draw(g);
 
-            X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
-            g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
-            X = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.ListCard.Count + " card(s)", new Vector2(X, Y), Color.White);
-            g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
+            float DrawX = (int)(210 * Ratio);
+            float DrawY = (int)(58 * Ratio);
+            g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            X = -10;
-            Y = Constants.Height / 7;
-            int EntryHeight = Constants.Height / 20;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Edit", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Change Book Cover", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Edit Profile", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Copy", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Name Change", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Reset", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
-            Y += EntryHeight + 10;
-            DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
-            g.DrawString(fntMenuText, "Return", new Vector2(X + 150, Y + EntryHeight / 2 - fntMenuText.LineSpacing / 2), Color.White);
+            DrawY = (int)(80 * Ratio);
+            g.DrawStringMiddleAligned(fntOxanimumRegular, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, DrawY), ColorText);
+            DrawX = Constants.Width - Constants.Width / 8;
+            g.DrawStringRightAligned(fntOxanimumRegular, ActiveBook.ListCard.Count + " card(s)", new Vector2(DrawX, DrawY), ColorText);
+            g.DrawString(fntOxanimumRegular, "OK", new Vector2(DrawX + 20, DrawY), ColorText);
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            DrawX = (int)(150 * Ratio);
+            DrawY = (int)(400 * Ratio);
 
-            SorcererStreetInventoryScreen.DrawBookInformation(g, fntMenuText, "Book Information", Symbols, ActivePlayer.Inventory.GlobalBook);
+            int EntryHeight = (int)(108 * Ratio);
+            int BoxHeight = (int)(994 * Ratio);
 
-            X = -10;
-            Y = Constants.Height - 100;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
-            X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Edit this Book's contents", new Vector2(X, Y), Color.White);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprPixel, new Rectangle((int)(DrawX), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), ColorBox);
+            g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
+
+            DrawX = (int)(250 * Ratio);
+            DrawY = (int)(470 * Ratio);
+
+            g.DrawString(fntOxanimumRegular, "Edit", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Change Book Cover", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Edit Profile", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Copy", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Name Change", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Reset", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+
+            DrawX = (int)(40 * Ratio);
+            DrawY = (int)(450 * Ratio);
+            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+
+            SorcererStreetInventoryScreen.DrawBookInformation(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
+
+            DrawX = (int)(212 * Ratio);
+            DrawY = (int)(2008 * Ratio);
+            g.DrawString(fntOxanimumRegular, "Edit this Book's contents", new Vector2(DrawX, DrawY), ColorText);
         }
     }
 }

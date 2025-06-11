@@ -385,7 +385,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxWidth = 620;
             int BoxHeight = 610;
             float InfoBoxX = Constants.Width - BoxWidth - 50 + OffsetX;
-            float InfoBoxY = 106;
+            float InfoBoxY = 106 + OffsetY;
             int IconWidth = 17;
             int IconHeight = 32;
 

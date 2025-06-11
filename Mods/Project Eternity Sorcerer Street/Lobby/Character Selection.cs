@@ -8,6 +8,7 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using FMOD;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -15,19 +16,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
+        private FMODSound sndButtonOver;
+        private FMODSound sndButtonClick;
+
         private CardSymbols Symbols;
 
+        private Texture2D sprSelectAUnitToBuy;
+
+        private SpriteFont fntOxanimumBold;
+        private SpriteFont fntOxanimumBoldTitle;
         private SpriteFont fntMenuText;
 
+        private TextButton ReturnToLobbyButton;
         private EmptyBoxScrollbar InventoryScrollbar;
 
-        private TunnelManager TunnelBackground;
+        private CubeBackgroundSmall CubeBackground;
 
         private IUIElement[] ArrayUIElement;
 
         #endregion
 
-        private int CharacterMenuX = 10;
+        private int CharacterMenuX = 70;
         private int CharacterMenuY = 150;
         private int BoxWidth = 160;
         private int BoxHeight = 140;
@@ -56,32 +65,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentContainer = ActivePlayer.Inventory.RootCharacterContainer;
             ListLastContainer = new List<CharacterInventoryContainer>();
+
+            CubeBackground = new CubeBackgroundSmall();
         }
 
         public override void Load()
         {
+            sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
+            sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
+
+            float Ratio = Constants.Height / 2160f;
+            CharacterMenuX = (int)(70 * Ratio);
+
+            int DrawX = (int)(Constants.Width - 502 * Ratio);
+            int DrawY = (int)(100 * Ratio);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
+
             InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
             InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListCharacter.Count * BoxHeight - BattleMapInventoryScreen.MiddleSectionHeight);
 
             ArrayUIElement = new IUIElement[]
             {
-                InventoryScrollbar,
+                ReturnToLobbyButton,
             };
 
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
+            fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            TunnelBackground = new TunnelManager();
-            TunnelBackground.Load(GraphicsDevice);
-            for (int i = 0; i < 1400; ++i)
-            {
-                TunnelBackground.Update(0.016666);
-            }
+            sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
+
+            CubeBackground.Load(Content);
         }
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBackground.Update(gameTime.ElapsedGameTime.TotalSeconds);
-
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {
                 ActiveButton.Update(gameTime);
@@ -94,6 +112,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RemoveScreen(this);
             }
+        }
+
+        private void OnButtonOver()
+        {
+            sndButtonOver.Play();
+        }
+
+        private void SelectBackToLobbyButton()
+        {
+            sndButtonClick.Play();
+            RemoveScreen(this);
         }
 
         private void UpdateCharacterSelection()
@@ -225,26 +254,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             InventoryScrollbarValue = (int)ScrollbarValue;
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            CubeBackground.BeginDraw(g);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
-            GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Lobby.BackgroundColor);
-
-            TunnelBackground.Draw(g);
-
-            g.End();
-            g.Begin();
+            CubeBackground.Draw(g);
 
             bool ShowCheckbox = false;
 
             int X = -10;
             int Y = Constants.Height / 20;
-            int HeaderHeight = Constants.Height / 16;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
 
-            X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Character Selection", new Vector2(X, Y), Color.White);
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+            float Ratio = Constants.Height / 2160f;
+            X = Constants.Width / 18;
+            g.DrawString(fntOxanimumBoldTitle, "CHARACTER", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), TextColor);
             g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name, new Vector2(Constants.Width / 2, Y), Color.White);
 
             X = CharacterMenuX;
@@ -353,18 +380,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             MenuHelper.DrawFingerIcon(g, new Vector2(-45, Constants.Height / 7 + LineHeight / 3 + SelectionIndex * (LineHeight + 10)));
 
-            X = -10;
-            Y = Constants.Height - 100;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
-            X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Select a character", new Vector2(X, Y), Color.White);
-
             //Right Side
 
             X = RightSectionCenterX;
             int CharacterModelBoxWidth = 450;
-            g.Draw(GameScreen.sprPixel, new Rectangle(X - CharacterModelBoxWidth / 2, 200, CharacterModelBoxWidth, 550), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
+            g.Draw(GameScreen.sprPixel, new Rectangle(X - CharacterModelBoxWidth / 2, 200, CharacterModelBoxWidth, 550), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 50));
             DrawEmptyBox(g, new Vector2(X - CharacterModelBoxWidth / 2, 200), CharacterModelBoxWidth, 550);
 
             g.DrawStringCentered(fntMenuText, "Select a skin", new Vector2(X, Y), Color.White);
@@ -384,21 +404,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             X = RightSectionCenterX;
             X -= (TotalSkinSize - SkinBoxWidth - 5 + SkinBoxWidth) / 2;
 
-            PlayerCharacterSkin SkinToDraw = ActivePlayer.Inventory.Character.ListOwnedUnitSkin[0];
+            string SkinToDrawName = CharacterToDraw.Character.Name;
 
             int SelectedSkinIndex = GetCharacterSkinUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
             if (SelectedSkinIndex >= 0)
             {
-                SkinToDraw = CharacterToDraw.ListOwnedUnitSkin[SelectedSkinIndex];
+                SkinToDrawName = CharacterToDraw.ListOwnedUnitSkin[SelectedSkinIndex].CharacterSkin.Name;
                 int FinalX = X + ((MouseHelper.MouseStateCurrent.X - X) / SkinBoxWidth) * SkinBoxWidth;
                 int FinalY = SkinSectionY + ((MouseHelper.MouseStateCurrent.Y - SkinSectionY) / LineHeight) * LineHeight;
 
                 g.Draw(sprPixel, new Rectangle(FinalX + 5, FinalY + 5, SkinBoxWidth - 10, SkinBoxHeight - 10), Color.FromNonPremultiplied(255, 255, 255, 127));
             }
 
-            int NameWidth = (int)fntMenuText.MeasureString(SkinToDraw.CharacterSkin.Name).X;
-            DrawEmptyBox(g, new Vector2(RightSectionCenterX - NameWidth / 2 - 5, 760), NameWidth + 6, 35);
-            g.DrawStringCentered(fntMenuText, SkinToDraw.CharacterSkin.Name, new Vector2(RightSectionCenterX - 1, 780), Color.White);
+            g.Draw(sprSelectAUnitToBuy, new Vector2(2550 * Ratio, 780), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+            g.DrawStringCentered(fntOxanimumBold, SkinToDrawName, new Vector2((2550 + sprSelectAUnitToBuy.Width / 2) * Ratio, 1640 * Ratio), TextColor);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

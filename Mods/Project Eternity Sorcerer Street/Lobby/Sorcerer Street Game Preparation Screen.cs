@@ -21,6 +21,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Texture2D sprIconBot;
 
         private Matrix Projection;
+        private CardSymbols Symbols;
+        private IconHolder Icons;
 
         private ActiveDropdownTypes ActiveDropdownType;
         private int SelectedPlayerIndex;
@@ -52,6 +54,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Load()
         {
             base.Load();
+
+            Symbols = CardSymbols.Symbols;
+            Icons = IconHolder.Icons;
 
             sprArrowDown = Content.Load<Texture2D>("Menus/Buttons/Arrow Down");
             sprIconHuman = Content.Load<Texture2D>("Menus/Buttons/Icon Human");
@@ -153,11 +158,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (I == 0)
                             {
-                                PushScreen(new CharacterSelectionScreen(CardSymbols.Symbols, ListAvailablePlayer[SelectedPlayerIndex]));
+                                PushScreen(new CharacterSelectionScreen(Symbols, ListAvailablePlayer[SelectedPlayerIndex]));
                             }
                             else if (I == 1)
                             {
-                                PushScreen(new ChooseBookScreen(CardSymbols.Symbols, ListAvailablePlayer[SelectedPlayerIndex]));
+                                PushScreen(new ChooseBookScreen(Symbols, Icons, ListAvailablePlayer[SelectedPlayerIndex]));
                             }
                             ActiveDropdownType = ActiveDropdownTypes.None;
                             return;
@@ -273,8 +278,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.End();
             g.Begin();
 
-            GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
 
             for (int P = 0; P < Math.Max(Room.ListRoomPlayer.Count, Room.MaxNumberOfPlayer); P++)

@@ -24,13 +24,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public ActionPanelDrawAnyCardPhase(SorcererStreetMap Map, int ActivePlayerIndex)
             : base(PanelName, Map, false)
         {
-            AllCardsBook = CardBook.LoadGlobalBook();
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
         {
+            AllCardsBook = CardBook.LoadGlobalBook();
             CardSelectionScreen = new EditBookCardListFilterScreen(AllCardsBook, EditBookCardListFilterScreen.Filters.All, null, true, false);
             Map.PushScreen(CardSelectionScreen);
         }

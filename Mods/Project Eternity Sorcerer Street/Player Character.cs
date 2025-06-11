@@ -114,6 +114,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public PlayerCharacterInfo(PlayerCharacter Pilot)
         {
             this.Character = Pilot;
+            ListOwnedUnitSkin = new List<PlayerCharacterSkin>();
+            ListOwnedUnitAlt = new List<PlayerCharacterSkin>();
         }
     }
 

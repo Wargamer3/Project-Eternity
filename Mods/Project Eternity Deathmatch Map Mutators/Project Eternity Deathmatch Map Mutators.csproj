@@ -54,6 +54,7 @@
     <Compile Include="Grabbable Bomb\Grab Panel.cs" />
     <Compile Include="Grabbable Bomb\Throw Panel.cs" />
     <Compile Include="Grabbable Bomb\GrabbableBombMutator.cs" />
+    <Compile Include="Limit Unit Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

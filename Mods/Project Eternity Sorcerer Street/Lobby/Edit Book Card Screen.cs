@@ -11,9 +11,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
-        private SpriteFont fntMenuText;
         private SpriteFont fntMenuTextBigger;
         private SpriteFont fntArial26;
+        private SpriteFont fntOxanimumBoldTitle;
+        private SpriteFont fntOxanimumRegular;
 
         private CardSymbols Symbols;
 
@@ -21,6 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
+        private readonly CardBook PlayerGlobalBook;
         private CardInfo ActiveCard;
         private CardInfo GlobalBookActiveCard;
         private AnimatedModel Map3DModel;
@@ -30,16 +32,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public EditBookCardScreen(Player ActivePlayer, CardBook ActiveBook, CardInfo ActiveCard)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
             this.ActivePlayer = ActivePlayer;
-            this.ActiveBook = CardBook.LoadGlobalBook();
+            this.ActiveBook = ActiveBook;
+            PlayerGlobalBook = ActivePlayer.Inventory.GlobalBook;
             InitCard(ActiveCard);
         }
 
         public override void Load()
         {
-            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial16");
             fntMenuTextBigger = Content.Load<SpriteFont>("Fonts/Arial18");
             fntArial26 = Content.Load<SpriteFont>("Fonts/Arial26");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
             Symbols = CardSymbols.Symbols;
         }
@@ -47,8 +53,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InitCard(CardInfo ActiveCard)
         {
             this.ActiveCard = ActiveCard;
-            GlobalBookActiveCard = ActiveBook.DicCardsByType[ActiveCard.Card.CardType][ActiveCard.Card.Path];
-            //GlobalBookActiveCard = ActiveCard;
+            GlobalBookActiveCard = PlayerGlobalBook.DicCardsByType[ActiveCard.Card.CardType][ActiveCard.Card.Path];
             OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
             OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
 
@@ -60,12 +65,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (InputHelper.InputRightPressed() && ActiveCard.QuantityOwned  < GlobalBookActiveCard.QuantityOwned)
+            SorcererStreetInventoryScreen.CubeBackground.Update(gameTime);
+
+            if (InputHelper.InputLeftPressed() && ActiveCard.QuantityOwned  < GlobalBookActiveCard.QuantityOwned)
             {
                 ++ActiveCard.QuantityOwned;
                 ++ActiveBook.TotalCards;
             }
-            else if (InputHelper.InputLeftPressed() && ActiveCard.QuantityOwned - 1 > 0)
+            else if (InputHelper.InputRightHold() && ActiveCard.QuantityOwned - 1 > 0)
             {
                 --ActiveCard.QuantityOwned;
                 --ActiveBook.TotalCards;
@@ -81,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 RemoveScreen(this);
             }
-            else if (InputHelper.InputLeftPressed())
+            else if (InputHelper.InputCommand1Pressed())
             {
                 int CardIndex = ActiveBook.ListCard.IndexOf(ActiveCard) - 1;
 
@@ -92,7 +99,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 InitCard(ActiveBook.ListCard[CardIndex]);
             }
-            else if (InputHelper.InputRightPressed())
+            else if (InputHelper.InputCommand2Pressed())
             {
                 int CardIndex = ActiveBook.ListCard.IndexOf(ActiveCard) + 1;
 
@@ -105,38 +112,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            SorcererStreetInventoryScreen.CubeBackground.BeginDraw(g);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
+            float Ratio = Constants.Height / 2160f;
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            float X = -10;
-            float Y = Constants.Height / 20;
-            int HeaderHeight = Constants.Height / 16;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
+            SorcererStreetInventoryScreen.CubeBackground.Draw(g);
 
-            X = Constants.Width / 20;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
-            g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
-            X = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
-            g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
+            float DrawX = (int)(210 * Ratio);
+            float DrawY = (int)(58 * Ratio);
+            g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
             g.Draw(ActiveCard.Card.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.Card.sprCard.Width / 2, ActiveCard.Card.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
-            g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 16 - HeaderHeight - 30), Color.White);
-            ActiveCard.Card.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0,  70);
+            g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, (int)(1800 * Ratio)), ColorText);
+            ActiveCard.Card.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0, (int)(300 * Ratio));
 
-            X = -10;
-            Y = Constants.Height - Constants.Height / 16 - HeaderHeight;
-            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
-            X = Constants.Width / 18;
-            Y += HeaderHeight / 2 - fntMenuText.LineSpacing / 2;
-            g.DrawString(fntMenuText, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
+            DrawX = (int)(212 * Ratio);
+            DrawY = (int)(2008 * Ratio);
+            g.DrawString(fntOxanimumRegular, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
                 + " [Arrows] Adjust Card Count"
                 + " [Q] Toggle Info"
                 + " [X] Confirm Card Count"
-                + " [Z] Return", new Vector2(X, Y), Color.White);
+                + " [Z] Return", new Vector2(DrawX, DrawY), ColorText);
 
+            g.End();
+            g.Begin();
             DrawModel(Map3DModel, Matrix.CreateRotationX(MathHelper.ToRadians(180))
                 * Matrix.CreateScale(2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2 + 140, 0), Matrix.Identity);
         }

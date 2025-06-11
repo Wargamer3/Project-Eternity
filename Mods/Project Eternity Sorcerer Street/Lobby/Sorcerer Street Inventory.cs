@@ -121,11 +121,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActiveSkinIndex = BR.ReadByte();
 
             int ListBookCount = BR.ReadInt32();
+            DicOwnedBook = new Dictionary<string, CardBookInfo>(ListBookCount);
             for (int B = 0; B < ListBookCount; ++B)
             {
                 CardBook LoadedBook = new CardBook(BR, GlobalBook, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
-                DicOwnedBook.Add(LoadedBook.BookName, new CardBookInfo(LoadedBook));
                 AddBook(LoadedBook);
 
                 if (LoadedBook.BookName == ActiveBookName)
@@ -242,6 +242,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void AddBook(CardBook BookToAdd)
         {
+            DicOwnedBook.Add(BookToAdd.BookName, new CardBookInfo(BookToAdd));
             BookInventoryContainer CurrentCharacterContainer = RootBookContainer;
 
             CurrentCharacterContainer.AddBook(BookToAdd);

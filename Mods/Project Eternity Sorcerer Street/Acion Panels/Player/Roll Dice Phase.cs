@@ -72,7 +72,48 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 VisibleDiceValue = Random.Next(MinimumDiceValue, MaximumDiceValue);
             }
 
-            if (InputHelper.InputConfirmPressed())
+
+            if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D1) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad1))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 1));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D2) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad2))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 2));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D3) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad3))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 3));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D4) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad4))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 4));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D5) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad5))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 5));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D6) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad6))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 6));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D7) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad7))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 7));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D8) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad8))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 8));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D9) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad9))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 9));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D0) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad0))
+            {
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 0));
+            }
+            else if (InputHelper.InputConfirmPressed())
             {
                 RollDice();
             }

@@ -209,6 +209,7 @@ namespace ProjectEternity
                         Constants.ScreenSize = 0;
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.PreferMultiSampling = true;
                         Constants.graphics.ApplyChanges();
                         PushScreen(new GameScreens.SorcererStreetScreen.SorcererStreetLobby(true));
                         break;

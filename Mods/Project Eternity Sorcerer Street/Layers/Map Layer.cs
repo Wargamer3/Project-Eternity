@@ -124,6 +124,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.North);
                             break;
 
+                        case TerrainSorcererStreet.Shrine:
+                            ArrayTerrain[X, Y] = new ShrineTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
+                            break;
                         default:
                             ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);
                             break;

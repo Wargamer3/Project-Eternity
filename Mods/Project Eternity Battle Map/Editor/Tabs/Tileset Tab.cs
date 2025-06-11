@@ -340,7 +340,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
                     {
-                        PlaceTile(X + GridX, Y + GridY, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
+                        PlaceTile(X, Y, BattleMapViewer.SelectedListLayerIndex, true, BrushIndex);
                     }
                 }
             }

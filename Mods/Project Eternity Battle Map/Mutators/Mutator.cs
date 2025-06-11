@@ -21,6 +21,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Description = Description;
         }
 
+        /// <summary>
+        /// When selected from the menu. Used to modify the map parameters immediately.
+        /// </summary>
+        public virtual void OnSelected()
+        {
+        }
+
         public static Dictionary<string, Mutator> LoadProps(params object[] Args)
         {
             Dictionary<string, Mutator> DicMapCondition = new Dictionary<string, Mutator>();

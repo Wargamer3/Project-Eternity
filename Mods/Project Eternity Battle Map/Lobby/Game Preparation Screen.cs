@@ -42,7 +42,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntOxanimumBoldBig;
         private SpriteFont fntOxanimumBoldTitle;
 
-        private Texture2D sprTitleHighlight;
+        private CubeBackgroundSmall CubeBackground;
+
         private Texture2D sprRoomNameFrame;
         private Texture2D sprButtonBigColor;
         private Texture2D sprButtonBigGray;
@@ -53,9 +54,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprRoomInfo;
         private Texture2D sprPlayerInfo;
         private Texture2D sprChatBox;
-
-        private RenderTarget2D CubeRenderTarget;
-        private Model Cube;
 
         private TextInput ChatInput;
 
@@ -84,8 +82,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int RoomOptionWidth;
         int RoomOptionHeight;
 
-        float RotationX;
-
         protected readonly RoomInformations Room;
         private Point MapSize;
         private List<TeamInfo> ListAllTeamInfo;
@@ -110,6 +106,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ActiveDropdownType = ActiveDropdownTypes.None;
 
             ListGameRuleError = new List<GameRuleError>();
+            CubeBackground = new CubeBackgroundSmall();
 
             if (Room.ListRoomPlayer.Count == 0)
             {
@@ -124,6 +121,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             #region Ressources
+
+            CubeBackground.Load(Content);
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Wait Room.mp3");
             sndBGM.SetLoop(true);
@@ -140,7 +139,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
             sprRoomNameFrame = Content.Load<Texture2D>("Menus/Lobby/Waiting/Room Name Frame");
             sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
             sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
@@ -151,12 +149,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprPlayerInfo = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Info");
             sprRoomInfo = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
             sprChatBox = Content.Load<Texture2D>("Menus/Lobby/Chat Box");
-
-            Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
-
-            int CubeTargetHeight = 900;
-            CubeRenderTarget = new RenderTarget2D(GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
-                GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 16, RenderTargetUsage.DiscardContents);
 
             ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
@@ -582,26 +574,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-            g.GraphicsDevice.SetRenderTarget(CubeRenderTarget);
-            g.GraphicsDevice.Clear(Color.Transparent);
-            float aspectRatio = 1f;
-
-            Vector3 position = new Vector3(0, 0, 6);
-
-            Vector3 target = new Vector3(0, 0, 3);
-
-            Vector3 up = Vector3.Up;
-            Matrix View = Matrix.CreateLookAt(position, target, up);
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(0.40f,
-                                                                    aspectRatio,
-                                                                    1000f, 18000);
-
-            ((BasicEffect)Cube.Meshes[0].Effects[0]).DiffuseColor = new Vector3(248f / 255f);
-            Cube.Draw(Matrix.CreateTranslation(0, 0, 0) * Matrix.CreateRotationX(1) * Matrix.CreateRotationY(1)
-                * Matrix.CreateRotationX(0) * Matrix.CreateRotationY(RotationX)
-                * Matrix.CreateScale(0.4f) * Matrix.CreateTranslation(0, 0, -4200), View, Projection);
-            g.GraphicsDevice.SetRenderTarget(null);
-            RotationX += 0.00625f;
+            CubeBackground.BeginDraw(g);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -614,8 +587,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(BackgroundColor);
 
-            DrawBackground(g);
-            g.Draw(sprTitleHighlight, new Vector2(90, 26), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            CubeBackground.Draw(g);
             g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(120, 28), TextColorDark);
             g.Draw(sprRoomNameFrame, new Vector2(385, 24), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
@@ -656,39 +628,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawPlayers(g);
             DrawOpenDropdown(g);
-        }
-
-        private void DrawBackground(CustomSpriteBatch g)
-        {
-            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
-            g.GraphicsDevice.Clear(Color.FromNonPremultiplied(243, 243, 243, 255));
-            float Ratio = Constants.Height / 2160f;
-
-            g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 364 * Ratio), new Vector2(3000 * Ratio, -1346 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 240);
-            g.End();
-
-            BlendState blend = new BlendState();
-            blend.AlphaSourceBlend = Blend.One;
-            blend.AlphaDestinationBlend = Blend.One;
-            blend.ColorSourceBlend = Blend.One;
-            blend.ColorDestinationBlend = Blend.One;
-            blend.AlphaBlendFunction = BlendFunction.Min;
-
-            g.Begin(SpriteSortMode.Deferred, blend);
-
-            g.Draw(CubeRenderTarget, new Vector2(400, 180), Color.FromNonPremultiplied(5, 5, 5, 255));
-            g.End();
-            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
-            g.DrawLine(sprPixel, new Vector2(-1000 * Ratio, 2544 * Ratio), new Vector2(3000 * Ratio, 658 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 600);
-            g.DrawLine(sprPixel, new Vector2(1800 * Ratio, 2238 * Ratio), new Vector2(3560 * Ratio, 1344 * Ratio), Color.FromNonPremultiplied(233, 233, 233, 255), 200);
-            g.End();
-
-            g.Begin(SpriteSortMode.Deferred, blend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone);
-
-            g.Draw(CubeRenderTarget, new Vector2(1022, 392), null, Color.FromNonPremultiplied(23, 23, 23, 255), 0f, Vector2.Zero, 0.51f, SpriteEffects.None, 0.99f);
-            g.End();
-            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
         }
 
         protected virtual void DrawPlayers(CustomSpriteBatch g)
