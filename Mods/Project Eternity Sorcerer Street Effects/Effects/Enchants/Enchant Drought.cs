@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Level of target Player's lands cannot be changed for 3 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             LandLevelLockEffect NewLandLevelLock = new LandLevelLockEffect(Params);
-            NewLandLevelLock.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewLandLevelLock.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewLandLevelLock.Lifetime[0].LifetimeTypeValue = 3;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewLandLevelLock, IconHolder.Icons.sprCreatureDrought);
             return "Drought";

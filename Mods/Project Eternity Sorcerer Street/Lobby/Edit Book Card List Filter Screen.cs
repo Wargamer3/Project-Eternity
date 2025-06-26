@@ -509,11 +509,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
             if (ActivePlayer != null)
             {
-                g.DrawStringMiddleAligned(fntMenuText, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+                SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
             }
-            X = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntMenuText, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
-            g.DrawString(fntMenuText, "OK", new Vector2(X + 20, Y), Color.White);
 
             int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7) - 50;
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);

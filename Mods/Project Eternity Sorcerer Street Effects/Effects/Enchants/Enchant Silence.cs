@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Prevents target enemy Player from using creature cards for 2 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             TerritoryCommandEffect NewTerritoryCommandEffect = new TerritoryCommandEffect(Params);
-            NewTerritoryCommandEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTerritoryCommandEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewTerritoryCommandEffect.Lifetime[0].LifetimeTypeValue = 2;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetOnCreateRequirement(), NewTerritoryCommandEffect, IconHolder.Icons.sprPlayerSilence);
             return "Silence";

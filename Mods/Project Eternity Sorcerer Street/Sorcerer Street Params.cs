@@ -274,9 +274,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public FormulaParser ActiveParser;
         public Player ActivePlayer => _ActivePlayer;
         public int ActivePlayerIndex => _ActivePlayerIndex;
+        public Card ActiveCard => _ActiveCard;
+        public int ActiveCardIndex => _ActiveCardIndex;
 
         private Player _ActivePlayer;
         private int _ActivePlayerIndex;
+        private Card _ActiveCard;
+        private int _ActiveCardIndex;
 
         public SorcererStreetPlayerContext()
         {
@@ -297,6 +301,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             _ActivePlayerIndex = ActivePlayerIndex;
             _ActivePlayer = ActivePlayer;
+        }
+
+        public void SetActiveCard(int ActiveCardIndex, Card ActiveCard)
+        {
+            _ActiveCardIndex = ActiveCardIndex;
+            _ActiveCard = ActiveCard;
         }
 
         public void StopPlayer()

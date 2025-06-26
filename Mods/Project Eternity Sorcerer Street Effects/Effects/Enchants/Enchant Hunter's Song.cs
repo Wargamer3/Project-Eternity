@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Protection: Target Player gains 200G magic for every creature they destroy in battle for 4 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             GainGoldEffect NewGainGoldEffect = new GainGoldEffect(Params);
-            NewGainGoldEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewGainGoldEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewGainGoldEffect.Lifetime[0].LifetimeTypeValue = 4;
             NewGainGoldEffect.Target = GainGoldEffect.Targets.Self;
             NewGainGoldEffect.Value = "200";

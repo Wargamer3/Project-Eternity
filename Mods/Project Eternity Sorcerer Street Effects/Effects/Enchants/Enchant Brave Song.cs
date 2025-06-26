@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Protection: ST+20 for 4 rounds.
@@ -38,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             IncreaseSTEffect.Stat = ChangeStatsEffect.Stats.FinalST;
             IncreaseSTEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
             IncreaseSTEffect.Value = "20";
-            IncreaseSTEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            IncreaseSTEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             IncreaseSTEffect.Lifetime[0].LifetimeTypeValue = 4;
 
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateBattleEnchant(Name, IncreaseSTEffect, IconHolder.Icons.sprPlayerBraveSong);

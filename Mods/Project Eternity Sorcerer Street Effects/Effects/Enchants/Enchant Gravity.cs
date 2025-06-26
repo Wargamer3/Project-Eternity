@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//All Players' next die roll yields a 1.
@@ -36,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (var ActivePlayer in Params.Map.ListPlayer)
             {
                 SetDiceValueEffect NewGravityEffect = new SetDiceValueEffect(Params, 1);
-                NewGravityEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+                NewGravityEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
                 NewGravityEffect.Lifetime[0].LifetimeTypeValue = 2;
                 ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewGravityEffect, IconHolder.Icons.sprPlayerMovement);
             }

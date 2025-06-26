@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
             float Ratio = Constants.Height / 2160f;
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, true);
             g.DrawString(fntOxanimumBoldTitle, "SHOP", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), TextColor);
 
             int DrawX = (int)(Constants.Width - (sprMoney.Width + 170) * Ratio);

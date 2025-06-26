@@ -236,7 +236,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Ratio = Constants.Height / 2160f;
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            SorcererStreetInventoryScreen.CubeBackground.Draw(g);
+            SorcererStreetInventoryScreen.CubeBackground.Draw(g, true);
 
             DrawCategoryCards(g);
             DrawBookCards(g, Constants.Height / 6 + (CardHeight + 20) * 2 - ScrollbarIndex);
@@ -245,11 +245,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float DrawY = (int)(58 * Ratio);
             g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            DrawY = (int)(80 * Ratio);
-            g.DrawStringMiddleAligned(fntOxanimumRegular, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, DrawY), ColorText);
-            DrawX = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntOxanimumRegular, ActiveBook.TotalCards + " card(s)", new Vector2(DrawX, DrawY), ColorText);
-            g.DrawString(fntOxanimumRegular, "OK", new Vector2(DrawX + 20, DrawY), ColorText);
+            SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
 
             int CursorX = (int)(1150 * Ratio) + (CardWidth + CardSpacing) * (CursorIndex % 7);
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);

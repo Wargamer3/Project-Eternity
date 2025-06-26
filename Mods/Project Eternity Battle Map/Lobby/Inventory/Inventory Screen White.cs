@@ -292,7 +292,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void DrawBackground(CustomSpriteBatch g)
         {
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, true);
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
             float Ratio = Constants.Height / 2160f;
 

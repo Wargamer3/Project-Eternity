@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Target Player is exempt from tolls but cannot invade enemy territories for 2 rounds.
@@ -35,11 +36,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             TollImmunityEffect NewTollImmunityEffect = new TollImmunityEffect(Params);
-            NewTollImmunityEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTollImmunityEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewTollImmunityEffect.Lifetime[0].LifetimeTypeValue = 4;
 
             InvasionLimitEffect NewInvasionLimitEffect = new InvasionLimitEffect(Params);
-            NewInvasionLimitEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewInvasionLimitEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewInvasionLimitEffect.Lifetime[0].LifetimeTypeValue = 4;
 
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, new List<BaseEffect>() { NewTollImmunityEffect, NewInvasionLimitEffect }, IconHolder.Icons.sprPlayerInnocence);

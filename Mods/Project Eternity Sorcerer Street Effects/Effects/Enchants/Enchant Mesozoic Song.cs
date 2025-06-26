@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Protection: Transforms into Tyrannosaurus for 3 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             TransformCreatureEffect NewTransformCreatureEffect = new TransformCreatureEffect(Params);
-            NewTransformCreatureEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewTransformCreatureEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewTransformCreatureEffect.Lifetime[0].LifetimeTypeValue = 3;
             NewTransformCreatureEffect.CreatureName = "Tyrannosaurus";
 

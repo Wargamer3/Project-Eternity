@@ -936,6 +936,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             DrawPERAttacks(g, View);
 
+            DrawEnchants(g, View);
+
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
             {
                 ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);
@@ -1225,18 +1227,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActivePlayer.Inventory.Character.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
                         ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
-
-                        if (ActivePlayer.Enchant != null && ActivePlayer.Enchant.sprIcon != null)
-                        {
-                            ActivePlayer.Enchant.Unit3DSprite.SetViewMatrix(View);
-
-                            ActivePlayer.Enchant.Unit3DSprite.SetPosition(
-                                CurrentPosition.X,
-                                CurrentPosition.Z + 1.5f * Map.LayerHeight,
-                                CurrentPosition.Y);
-
-                            ActivePlayer.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                        }
                     }
                 }
             }
@@ -1263,18 +1253,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(Scale) * RotationMatrix
                     * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
-
-                if (DefendingTerrain.DefendingCreature.Enchant != null && DefendingTerrain.DefendingCreature.Enchant.sprIcon != null)
-                {
-                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
-
-                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
-                        CurrentPosition.X,
-                        CurrentPosition.Z + 1.5f * Map.LayerHeight,
-                        CurrentPosition.Y);
-
-                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                }
             }
 
             g.End();
@@ -1325,6 +1303,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawPERAttacks(CustomSpriteBatch g, Matrix View)
         {
+        }
+
+        private void DrawEnchants(CustomSpriteBatch g, Matrix View)
+        {
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                Player ActivePlayer = Map.ListPlayer[P];
+                //If it's dead, don't draw it unless it's an event unit.
+                if (ActivePlayer.GamePiece == null)
+                    continue;
+
+                Vector3 CurrentPosition = ActivePlayer.GamePiece.Position;
+
+                if (Map.MovementAnimation.Contains(ActivePlayer.GamePiece))
+                {
+                    CurrentPosition = Map.MovementAnimation.GetPosition(ActivePlayer.GamePiece);
+
+                }
+
+                if (ActivePlayer.Enchant != null && ActivePlayer.Enchant.sprIcon != null)
+                {
+                    ActivePlayer.Enchant.Unit3DSprite.SetViewMatrix(View);
+
+                    ActivePlayer.Enchant.Unit3DSprite.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 1.5f * Map.LayerHeight,
+                        CurrentPosition.Y);
+
+                    ActivePlayer.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                }
+            }
+
+            foreach (TerrainSorcererStreet DefendingTerrain in Map.ListSummonedCreature)
+            {
+                Vector3 CurrentPosition = DefendingTerrain.DefendingCreature.GamePiece.Position;
+
+                if (DefendingTerrain.DefendingCreature.Enchant != null && DefendingTerrain.DefendingCreature.Enchant.sprIcon != null)
+                {
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
+
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 1.5f * Map.LayerHeight,
+                        CurrentPosition.Y);
+
+                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                }
+            }
         }
 
         private void DrawDamageNumbers(CustomSpriteBatch g, Matrix View)

@@ -754,7 +754,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
                     if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
                     {
-                        PushScreen(new PlayerSelectionScreen(Context, Context.Invader, Context.Defender, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.Invader, Context.Defender, ActiveSpellCard));
                     }
                     break;
 
@@ -762,7 +762,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
                     if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
                     {
-                        PushScreen(new PlayerSelectionScreen(Context, Context.Defender, Context.Invader, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.Defender, Context.Invader, ActiveSpellCard));
                     }
                     break;
             }

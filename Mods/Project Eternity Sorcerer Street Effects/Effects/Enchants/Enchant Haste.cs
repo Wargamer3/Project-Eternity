@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Locks target Player's die roll to 6-8 for 2 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             SetDiceMinMaxEffect NewHasteEffect = new SetDiceMinMaxEffect(Params, 6, 8);
-            NewHasteEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewHasteEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewHasteEffect.Lifetime[0].LifetimeTypeValue = 2;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewHasteEffect, IconHolder.Icons.sprPlayerMovement);
             return "Haste";

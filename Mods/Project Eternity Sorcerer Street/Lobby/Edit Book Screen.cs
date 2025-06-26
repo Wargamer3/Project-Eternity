@@ -106,17 +106,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            SorcererStreetInventoryScreen.CubeBackground.Draw(g);
+            SorcererStreetInventoryScreen.CubeBackground.Draw(g, true);
 
             float DrawX = (int)(210 * Ratio);
             float DrawY = (int)(58 * Ratio);
             g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            DrawY = (int)(80 * Ratio);
-            g.DrawStringMiddleAligned(fntOxanimumRegular, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, DrawY), ColorText);
-            DrawX = Constants.Width - Constants.Width / 8;
-            g.DrawStringRightAligned(fntOxanimumRegular, ActiveBook.ListCard.Count + " card(s)", new Vector2(DrawX, DrawY), ColorText);
-            g.DrawString(fntOxanimumRegular, "OK", new Vector2(DrawX + 20, DrawY), ColorText);
+            SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
 
             DrawX = (int)(150 * Ratio);
             DrawY = (int)(400 * Ratio);

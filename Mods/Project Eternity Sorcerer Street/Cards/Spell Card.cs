@@ -81,6 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!string.IsNullOrEmpty(SkillChainName))
             {
                 Spell = new ManualSkill(Clone.Spell);
+                Spell.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             sprCard = Clone.sprCard;
@@ -125,6 +126,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override ActionPanelSorcererStreet ActivateOnMap(SorcererStreetMap Map, int ActivePlayerIndex)
         {
+            Player ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            Map.GlobalPlayerContext.SetActiveCard(ActivePlayer.ListCardInHand.IndexOf(this), this);
             Spell.ActiveSkillFromMenu();
             return null;
         }

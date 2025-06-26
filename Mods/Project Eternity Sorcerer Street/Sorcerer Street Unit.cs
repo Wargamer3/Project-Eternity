@@ -14,7 +14,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public UnitMap3D Unit3DSprite;
         public string Model3DPath;
         public AnimatedModel Unit3DModel;
-        public EffectHolder Effects;
         internal UnitStats UnitStat;
 
         public override int Width => 32;
@@ -28,7 +27,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetUnit()
         {
             Direction = DirectionDown;
-            Effects = new EffectHolder();
         }
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)

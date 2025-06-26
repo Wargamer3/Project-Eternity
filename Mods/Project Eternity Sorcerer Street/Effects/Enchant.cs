@@ -40,23 +40,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return Spell.CanActivate;
         }
 
-        public static void ActivateOnPlayer(SorcererStreetBattleContext Context, ManualSkill Spell)
+        public static void ActivateEnchant( SorcererStreetPlayerContext GlobalPlayerContext, ManualSkill Spell)
         {
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
                 BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
 
-                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
-                {
-                    if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
-                    {
-                        ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
-                    }
-
-                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
-                }
-
                 ActiveEffect.ExecuteEffect();
+            }
+
+            foreach (BaseSkillActivation Activation in GlobalPlayerContext.ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            {
+                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                {
+                    BaseEffect ActiveEffect = Activation.ListEffect[E];
+
+                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                    {
+                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                        {
+                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalPlayerContext.ActivePlayerIndex;
+                        }
+
+                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                    }
+                }
             }
         }
 
@@ -76,17 +84,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
 
-                foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
-                {
-                    if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
-                    {
-                        ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
-                    }
-
-                    ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
-                }
-
                 ActiveEffect.ExecuteEffect();
+            }
+
+            foreach (BaseSkillActivation Activation in Invader.Owner.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            {
+                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                {
+                    BaseEffect ActiveEffect = Activation.ListEffect[E];
+
+                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                    {
+                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                        {
+                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
+                        }
+
+                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                    }
+                }
             }
         }
 
@@ -108,9 +124,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static void UpdateLifetime(BaseAutomaticSkill Enchant, string LifetimeType)
+        public static void UpdateLifetime(Player ActivePlayer, string LifetimeType)
         {
-            foreach (BaseSkillActivation Activation in Enchant.CurrentSkillLevel.ListActivation)
+            if (ActivePlayer.Enchant == null)
+            {
+                return;
+            }
+
+            bool EnchantHasUpdated = false;
+            bool EnchantIsAlive = false;
+            foreach (BaseSkillActivation Activation in ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
             {
                 for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
                 {
@@ -125,11 +148,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                             if (ActiveLifetime.Lifetime == 0)
                             {
+                                EnchantHasUpdated = true;
                                 Activation.ListEffect.RemoveAt(E);
+                                continue;
                             }
+
+                            EnchantIsAlive = true;
                         }
                     }
                 }
+            }
+
+            if (EnchantHasUpdated && !EnchantIsAlive)
+            {
+                ActivePlayer.Enchant = null;
             }
         }
 
@@ -283,7 +315,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return false;
+            return true;
         }
 
         public override BaseSkillRequirement Copy()

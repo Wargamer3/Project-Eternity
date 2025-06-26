@@ -234,14 +234,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawBackground(CustomSpriteBatch g)
         {
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, false);
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
             float Ratio = Constants.Height / 2160f;
-
-            int LineX = 514;
-            int LineY = 590;
-            g.Draw(sprBarLeft, new Rectangle((int)(LineX * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(sprBarLeft.Width * Ratio), (int)Math.Ceiling(sprBarLeft.Height * Ratio)), Color.White);
-            g.Draw(sprBarMiddle, new Rectangle((int)(LineX * Ratio + sprBarLeft.Width * Ratio), (int)(LineY * Ratio), (int)Math.Ceiling(2518 * Ratio), (int)Math.Ceiling(sprBarMiddle.Height * Ratio)), Color.White);
 
             g.DrawString(fntOxanimumBoldTitle, "Create Match", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), TextColor);
         }

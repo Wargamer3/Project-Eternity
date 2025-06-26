@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory abilities for 8 rounds.
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             EnchantProtectionPlayerEffect NewEnchantProtectionEffect = new EnchantProtectionPlayerEffect(Params);
-            NewEnchantProtectionEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewEnchantProtectionEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewEnchantProtectionEffect.Lifetime[0].LifetimeTypeValue = 8;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewEnchantProtectionEffect, IconHolder.Icons.sprPlayerHoldCurse);
             return "Hold Curse";

@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            SorcererStreetInventoryScreen.CubeBackground.Draw(g);
+            SorcererStreetInventoryScreen.CubeBackground.Draw(g, true);
 
             float DrawX = (int)(210 * Ratio);
             float DrawY = (int)(58 * Ratio);

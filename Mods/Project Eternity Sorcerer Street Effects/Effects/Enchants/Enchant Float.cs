@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Target Player's die roll yields a 5 for 2 rounds.
@@ -37,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             //Enchant Player
             SetDiceValueEffect NewFloatEffect = new SetDiceValueEffect(Params, 5);
-            NewFloatEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewFloatEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewFloatEffect.Lifetime[0].LifetimeTypeValue = 2;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewFloatEffect, IconHolder.Icons.sprPlayerMovement);
             return "Float";

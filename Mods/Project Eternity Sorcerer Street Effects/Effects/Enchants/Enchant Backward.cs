@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Target Player moves backward instead of forward upon rolling the die.
@@ -72,7 +73,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             BackwardEffect NewBackwardEffect = new BackwardEffect(Params);
-            NewBackwardEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewBackwardEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewBackwardEffect.Lifetime[0].LifetimeTypeValue = 1;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewBackwardEffect, IconHolder.Icons.sprPlayerMovement);
             return "Backward";

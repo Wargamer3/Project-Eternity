@@ -8,7 +8,7 @@ using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBatt
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class PlayerSelectionScreen : GameScreen
+    public class PlayerEnchantSelectionScreen : GameScreen
     {
         #region Ressources
 
@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private BattleCreatureInfo Defender;
         private SpellCard ActiveSpellCard;
 
-        public PlayerSelectionScreen(SorcererStreetBattleContext Context, BattleCreatureInfo Invader, BattleCreatureInfo Defender, SpellCard ActiveSpellCard)
+        public PlayerEnchantSelectionScreen(SorcererStreetBattleContext Context, BattleCreatureInfo Invader, BattleCreatureInfo Defender, SpellCard ActiveSpellCard)
         {
             this.Context = Context;
             this.Invader = Invader;

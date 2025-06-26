@@ -75,6 +75,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         PushScreen(new BattleTesterScreen(Symbols, ActivePlayer));
                         break;
                     case 5:
+                        ActivePlayer.SaveLocally();
+                        break;
+                    case 6:
                         RemoveScreen(this);
                         break;
                 }
@@ -87,12 +90,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (--CursorIndex < 0)
                 {
-                    CursorIndex = 4;
+                    CursorIndex = 6;
                 }
             }
             else if(InputHelper.InputDownPressed())
             {
-                if (++CursorIndex > 4)
+                if (++CursorIndex > 6)
                 {
                     CursorIndex = 0;
                 }
@@ -110,7 +113,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, true);
 
             g.DrawString(fntOxanimumBoldTitle, "INVENTORY", new Vector2((int)(210 * Ratio), (int)(58 * Ratio)), ColorText);
 
@@ -136,6 +139,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawY += EntryHeight + 10;
             g.DrawString(fntOxanimumRegular, "Battle Tester", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
             DrawY += EntryHeight + 10;
+            g.DrawString(fntOxanimumRegular, "Save", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY += EntryHeight + 10;
             g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
 
             DrawX = (int)(40 * Ratio);
@@ -147,6 +152,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawX = (int)(212 * Ratio);
             DrawY = (int)(2008 * Ratio);
             g.DrawString(fntOxanimumRegular, "Open the maintenance menu", new Vector2(DrawX, DrawY), ColorText);
+        }
+
+
+        public static void DrawBookIsReady(CustomSpriteBatch g, SpriteFont ActiveFont, string PlayerName, CardBook ActiveBook)
+        {
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
+            float Ratio = Constants.Height / 2160f;
+
+            int DrawX = Constants.Width - Constants.Width / 8;
+            int DrawY = (int)(80 * Ratio);
+            g.DrawStringMiddleAligned(ActiveFont, PlayerName + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, DrawY), ColorText);
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.ListCard.Count + " card(s)", new Vector2(DrawX, DrawY), ColorText);
+            if (ActiveBook.ListCard.Count < 50)
+            {
+                g.DrawString(ActiveFont, "Too low", new Vector2(DrawX + 20, DrawY), ColorText);
+            }
+            else if (ActiveBook.ListCard.Count > 50)
+            {
+                g.DrawString(ActiveFont, "Too high", new Vector2(DrawX + 20, DrawY), ColorText);
+            }
+            else
+            {
+                g.DrawString(ActiveFont, "OK", new Vector2(DrawX + 20, DrawY), ColorText);
+            }
         }
 
         public static void DrawBookInformation(CustomSpriteBatch g, Texture2D sprExtraFrame, SpriteFont ActiveFont, string Title, CardSymbols Symbols, IconHolder Icons, CardBook ActiveBook)

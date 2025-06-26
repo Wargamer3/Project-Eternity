@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Forces any Player that steps onto target territory to stop. Effect ends when triggered or after 2 rounds.
@@ -34,9 +35,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             ForceStopEffect NewForceStopEffect = new ForceStopEffect(Params);
-            NewForceStopEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewForceStopEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewForceStopEffect.Lifetime[0].LifetimeTypeValue = 3;
-            NewForceStopEffect.Lifetime.Add(new BaseEffectLifetime(BattleMapScreen.BattleMap.EventTypeTurn, 2));
+            NewForceStopEffect.Lifetime.Add(new BaseEffectLifetime(SkillEffect.LifetimeTypeTurns, 2));
 
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetOnCreateRequirement(), NewForceStopEffect, IconHolder.Icons.sprCreatureQuicksand);
             return null;

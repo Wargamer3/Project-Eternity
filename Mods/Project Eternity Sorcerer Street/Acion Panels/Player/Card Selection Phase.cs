@@ -161,9 +161,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     return false;
                 }
+
+                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
             }
 
-            return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
+            return false;
         }
 
         public void PrepareToRollDice()

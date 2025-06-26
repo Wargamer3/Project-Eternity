@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {//Protection: HP+20 for 4 rounds.
@@ -38,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             IncreaseHPEffect.Stat = ChangeStatsEffect.Stats.FinalHP;
             IncreaseHPEffect.SignOperator = Core.Operators.SignOperators.PlusEqual;
             IncreaseHPEffect.Value = "20";
-            IncreaseHPEffect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            IncreaseHPEffect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             IncreaseHPEffect.Lifetime[0].LifetimeTypeValue = 4;
 
             Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateBattleEnchant(Name, IncreaseHPEffect, IconHolder.Icons.sprPlayerToughSong);

@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         }
 
-        public SorcererStreetPlayerMovementTargetType(SorcererStreetBattleParams Context)
-            : base(PlayerMovementTargetType, true, Context)
+        public SorcererStreetPlayerMovementTargetType(SorcererStreetBattleParams Params)
+            : base(PlayerMovementTargetType, true, Params)
         {
         }
 

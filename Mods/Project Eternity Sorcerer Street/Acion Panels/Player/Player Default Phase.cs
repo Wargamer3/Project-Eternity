@@ -3,10 +3,10 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -61,7 +61,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         continue;
                     }
 
-                    ActivePlayer.GamePiece.Effects.UpdateAllEffectsLifetime(SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
+                    if (ActivePlayer.Enchant != null)
+                    {
+                        EnchantHelper.UpdateLifetime(ActivePlayer, SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
+                    }
                 }
             }
             while (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex < 0);

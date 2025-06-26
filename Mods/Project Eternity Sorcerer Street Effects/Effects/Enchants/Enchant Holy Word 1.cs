@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -37,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             //Enchant Player
             SetDiceValueEffect NewHolyWord1Effect = new SetDiceValueEffect(Params, 1);
-            NewHolyWord1Effect.Lifetime[0].LifetimeType = BattleMapScreen.BattleMap.EventTypeTurn;
+            NewHolyWord1Effect.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
             NewHolyWord1Effect.Lifetime[0].LifetimeTypeValue = 1;
             Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewHolyWord1Effect, IconHolder.Icons.sprPlayerMovement);
             return "Holy Word 1";

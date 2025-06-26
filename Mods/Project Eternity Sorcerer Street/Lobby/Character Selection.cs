@@ -261,7 +261,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, true);
 
             bool ShowCheckbox = false;
 

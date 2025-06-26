@@ -156,7 +156,7 @@
     <Compile Include="Effects\Enchant.cs" />
     <Compile Include="Effects\Sorceret Street Manual Skill Target.cs" />
     <Compile Include="Lobby\Battle Tester.cs" />
-    <Compile Include="Lobby\Battle Tester\Player Selection Screen.cs" />
+    <Compile Include="Lobby\Battle Tester\Player Enchant Selection Screen.cs" />
     <Compile Include="Menu Helper.cs" />
     <Compile Include="Camera 3D.cs" />
     <Compile Include="Cards\Card.cs" />

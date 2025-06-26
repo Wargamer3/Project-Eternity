@@ -587,7 +587,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(BackgroundColor);
 
-            CubeBackground.Draw(g);
+            CubeBackground.Draw(g, false);
             g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(120, 28), TextColorDark);
             g.Draw(sprRoomNameFrame, new Vector2(385, 24), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
