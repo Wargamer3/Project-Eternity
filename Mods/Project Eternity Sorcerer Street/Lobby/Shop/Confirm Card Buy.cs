@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(Constants.Width / 2 - 300 * Ratio);
             int DrawY = Constants.Height / 2 - (int)(sprFrameBuy.Height * Ratio / 2) + (int)(750 * Ratio);
-            BuyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:65,70,65,255}Buy}}", "Menus/Lobby/Button Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, BuyUnit);
+            BuyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:65,70,65,255}Buy}}", "Menus/Lobby/Button Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, BuyCard);
 
             DrawX = (int)(Constants.Width / 2 + 300 * Ratio);
             CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Menus/Lobby/Button Close", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Cancel);
@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonOver.Play();
         }
 
-        private void BuyUnit()
+        private void BuyCard()
         {
             sndButtonClick.Play();
             if (Inventory.GlobalBook.DicCardsByType[CardToBuy.CardToBuy.CardType].ContainsKey(CardToBuy.CardToBuy.Path))

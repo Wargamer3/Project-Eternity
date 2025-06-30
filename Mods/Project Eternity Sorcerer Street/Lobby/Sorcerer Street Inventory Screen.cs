@@ -57,6 +57,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             MenuHelper.UpdateAnimationTimer(gameTime);
 
+            float Ratio = Constants.Height / 2160f;
+            int EntryHeight = (int)(108 * Ratio);
+            int DrawX = (int)(250 * Ratio);
+            int DrawY = (int)(470 * Ratio);
+
+            if (MouseHelper.MouseMoved() && MouseHelper.MouseStateCurrent.X >= DrawX && MouseHelper.MouseStateCurrent.X - DrawX < (int)(sprFrameTop.Width * Ratio))
+            {
+                int MouseIndex = (int)Math.Floor((MouseHelper.MouseStateCurrent.Y - (float)DrawY) / EntryHeight);
+
+                if (MouseIndex >= 0 && MouseIndex <= 6)
+                {
+                    CursorIndex = MouseIndex;
+                }
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 switch (CursorIndex)
@@ -128,24 +143,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawX =  (int)(250 * Ratio);
-            DrawY = (int)(470 * Ratio);
-            g.DrawString(fntOxanimumRegular, "Book Edit", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Change Book", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Character Selection", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Maintenance", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Battle Tester", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Save", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            DrawY = (int)(470 * Ratio) + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2;
+
+            g.DrawString(fntOxanimumRegular, "Book Edit", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Change Book", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Character Selection", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Maintenance", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Battle Tester", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Save", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY), ColorText);
 
             DrawX = (int)(40 * Ratio);
-            DrawY = (int)(450 * Ratio);
-            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            DrawY = (int)(470 * Ratio);
+            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + CursorIndex * EntryHeight));
 
             DrawBookInformation(g, sprExtraFrame, fntMenuText, "Player Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
 
@@ -164,12 +180,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int DrawX = Constants.Width - Constants.Width / 8;
             int DrawY = (int)(80 * Ratio);
             g.DrawStringMiddleAligned(ActiveFont, PlayerName + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, DrawY), ColorText);
-            g.DrawStringRightAligned(ActiveFont, ActiveBook.ListCard.Count + " card(s)", new Vector2(DrawX, DrawY), ColorText);
-            if (ActiveBook.ListCard.Count < 50)
+            g.DrawStringRightAligned(ActiveFont, ActiveBook.TotalCards + " card(s)", new Vector2(DrawX, DrawY), ColorText);
+            if (ActiveBook.TotalCards < 50)
             {
                 g.DrawString(ActiveFont, "Too low", new Vector2(DrawX + 20, DrawY), ColorText);
             }
-            else if (ActiveBook.ListCard.Count > 50)
+            else if (ActiveBook.TotalCards > 50)
             {
                 g.DrawString(ActiveFont, "Too high", new Vector2(DrawX + 20, DrawY), ColorText);
             }
@@ -205,7 +221,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawY += (int)(20 * Ratio);
             g.DrawString(ActiveFont, "Updated", new Vector2(DrawX + 15, DrawY), ColorText);
             DrawX = OffsetX + (int)(402 * Ratio);
-            g.DrawStringRightAligned(ActiveFont, "12/30/2022 09:32", new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
+            g.DrawStringRightAligned(ActiveFont, $"{ActiveBook.LastModification:dd/MM/yyyy HH:mm}", new Vector2(DrawX + 110, DrawY + 10 * Ratio), ColorText);
             DrawX = OffsetX + (int)(82 * Ratio);
             DrawY += (int)(40 * Ratio);
             g.DrawString(ActiveFont, "Win / Matches", new Vector2(DrawX + 15, DrawY), ColorText);

@@ -42,6 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int BoxHeight = 140;
         private int SpriteBoxWidth = 148;
         private int LineHeight = 155;
+        private int BoxPerLine;
 
         private int RightSectionCenterX = 1500;
         private int SkinSpriteWidth = 75;
@@ -76,6 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             float Ratio = Constants.Height / 2160f;
             CharacterMenuX = (int)(70 * Ratio);
+            BoxPerLine = (Constants.Width - Constants.Width / 3 - CharacterMenuX) / BoxWidth;
 
             int DrawX = (int)(Constants.Width - 502 * Ratio);
             int DrawY = (int)(100 * Ratio);
@@ -183,14 +185,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int GetCharacterUnderMouse(int MouseX, int MouseY)
         {
-            int X = CharacterMenuX;
             int DrawY = CharacterMenuY - InventoryScrollbarValue % BoxHeight;
             int SpriteOffset = BoxWidth / 2 - SpriteBoxWidth / 2;
 
-            int BoxPerLine = (Constants.Width - Constants.Width / 3 - X) / BoxWidth;
-
-            int MouseIndex = (MouseX - X) / BoxWidth + ((MouseY - DrawY) / LineHeight) * BoxPerLine;
-            int MouseXFinal = (MouseX - X) % BoxWidth;
+            int MouseIndex = (MouseX - CharacterMenuX) / BoxWidth + ((MouseY - DrawY) / LineHeight) * BoxPerLine;
+            int MouseXFinal = (MouseX - CharacterMenuX) % BoxWidth;
             int MouseYFinal = (MouseY - DrawY) % LineHeight;
 
             int ItemCount = CurrentContainer.ListCharacter.Count + CurrentContainer.ListFolder.Count;
@@ -201,7 +200,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (MouseIndex >= 0 && MouseIndex < ItemCount
                 && MouseXFinal >= SpriteOffset && MouseXFinal < SpriteOffset + BoxWidth
-                && MouseX >= X && MouseX < X + BoxPerLine * BoxWidth
+                && MouseX >= CharacterMenuX && MouseX < CharacterMenuX + BoxPerLine * BoxWidth
                 && MouseYFinal >= 4 && MouseYFinal < 4 + BoxHeight)
             {
                 if (MouseIndex >= CurrentContainer.ListFolder.Count)
@@ -378,7 +377,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(-45, Constants.Height / 7 + LineHeight / 3 + SelectionIndex * (LineHeight + 10)));
+            int CursorX = SelectionIndex % BoxPerLine;
+            int CursorY = SelectionIndex / BoxPerLine;
+            MenuHelper.DrawFingerIcon(g, new Vector2(CharacterMenuX + CursorX * BoxWidth - 100 * Ratio, DrawY + CursorY * LineHeight + 160 * Ratio));
 
             //Right Side
 

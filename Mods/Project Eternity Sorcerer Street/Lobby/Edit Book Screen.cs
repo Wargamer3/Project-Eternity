@@ -52,6 +52,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetInventoryScreen.CubeBackground.Update(gameTime);
 
+            float Ratio = Constants.Height / 2160f;
+            int EntryHeight = (int)(128 * Ratio);
+            int DrawX = (int)(250 * Ratio);
+            int DrawY = (int)(470 * Ratio) + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2;
+
+            if (MouseHelper.MouseMoved() && MouseHelper.MouseStateCurrent.X >= DrawX && MouseHelper.MouseStateCurrent.X - DrawX < (int)(sprFrameTop.Width * Ratio))
+            {
+                int MouseIndex = (int)Math.Floor((MouseHelper.MouseStateCurrent.Y - (float)DrawY) / EntryHeight);
+
+                if (MouseIndex >= 0 && MouseIndex <= 6)
+                {
+                    CursorIndex = MouseIndex;
+                }
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 switch (CursorIndex)
@@ -117,7 +132,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawX = (int)(150 * Ratio);
             DrawY = (int)(400 * Ratio);
 
-            int EntryHeight = (int)(108 * Ratio);
+            int EntryHeight = (int)(128 * Ratio);
             int BoxHeight = (int)(994 * Ratio);
 
             g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
@@ -125,25 +140,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawX = (int)(250 * Ratio);
-            DrawY = (int)(470 * Ratio);
+            DrawY = (int)(470 * Ratio) + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2;
 
-            g.DrawString(fntOxanimumRegular, "Edit", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Change Book Cover", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Edit Profile", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Copy", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Name Change", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Reset", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            g.DrawString(fntOxanimumRegular, "Edit", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Change Book Cover", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Edit Profile", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Copy", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Name Change", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Reset", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY), ColorText);
 
             DrawX = (int)(40 * Ratio);
-            DrawY = (int)(450 * Ratio);
-            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            DrawY = (int)(490 * Ratio);
+            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + CursorIndex * EntryHeight));
 
             SorcererStreetInventoryScreen.DrawBookInformation(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
 

@@ -59,6 +59,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetInventoryScreen.CubeBackground.Update(gameTime);
 
+            float Ratio = Constants.Height / 2160f;
+            int EntryHeight = (int)(108 * Ratio);
+            int DrawX = (int)(250 * Ratio);
+            int DrawY = (int)(470 * Ratio);
+
+            if (MouseHelper.MouseMoved() && MouseHelper.MouseStateCurrent.X >= DrawX && MouseHelper.MouseStateCurrent.X - DrawX < (int)(sprFrameTop.Width * Ratio))
+            {
+                int MouseIndex = (int)Math.Floor((MouseHelper.MouseStateCurrent.Y - (float)DrawY) / EntryHeight);
+
+                if (MouseIndex >= 0 && MouseIndex < ActivePlayer.Inventory.DicOwnedBook.Count + 2)
+                {
+                    CursorIndex = MouseIndex;
+                }
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 if (CursorIndex < ActivePlayer.Inventory.DicOwnedBook.Count)
@@ -124,21 +139,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(sprFrameTop, new Vector2(DrawX, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawX = (int)(250 * Ratio);
-            DrawY = (int)(470 * Ratio);
+            DrawY = (int)(470 * Ratio) + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2;
 
             for (int B = 0; B < CurrentContainer.ListBook.Count; ++B)
             {
-                g.DrawString(fntOxanimumRegular, CurrentContainer.ListBook[B].BookName, new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-                DrawY += EntryHeight + 10;
+                g.DrawString(fntOxanimumRegular, CurrentContainer.ListBook[B].BookName, new Vector2(DrawX, DrawY), ColorText);
+                DrawY += EntryHeight;
             }
 
-            g.DrawString(fntOxanimumRegular, "New", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
-            DrawY += EntryHeight + 10;
-            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY + EntryHeight / 2 - fntOxanimumRegular.LineSpacing / 2), ColorText);
+            g.DrawString(fntOxanimumRegular, "New", new Vector2(DrawX, DrawY), ColorText);
+            DrawY += EntryHeight;
+            g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY), ColorText);
 
             DrawX = (int)(40 * Ratio);
-            DrawY = (int)(450 * Ratio);
-            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            DrawY = (int)(470 * Ratio);
+            MenuHelper.DrawFingerIcon(g, new Vector2(DrawX, DrawY + CursorIndex * EntryHeight));
 
             SorcererStreetInventoryScreen.DrawBookInformation(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
 

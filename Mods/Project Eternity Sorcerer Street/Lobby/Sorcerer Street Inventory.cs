@@ -113,6 +113,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            RootBookContainer = new BookInventoryContainer("ALL");
+            RootCharacterContainer = new CharacterInventoryContainer("ALL");
+
             GlobalBook = new CardBook(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             string ActiveBookName = BR.ReadString();
