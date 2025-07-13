@@ -441,7 +441,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override List<MissionInfo> GetUnlockedMissions()
         {
-            throw new NotImplementedException();
+            return new List<MissionInfo>();
         }
     }
 }

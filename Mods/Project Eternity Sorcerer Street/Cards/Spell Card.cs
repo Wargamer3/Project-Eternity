@@ -41,6 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Name = BR.ReadString();
             Description = BR.ReadString();
+            FlavorText = BR.ReadString();
             Tags = BR.ReadString();
             Doublecast = BR.ReadBoolean();
 
@@ -74,6 +75,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Name = Clone.Name;
             Description = Clone.Description;
+            FlavorText = Clone.FlavorText;
             SpellType = Clone.SpellType;
 
             SkillChainName = Clone.SkillChainName;
