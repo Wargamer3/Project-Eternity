@@ -68,6 +68,11 @@
             this.clCanTransport = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.bgSpritePreview = new System.Windows.Forms.GroupBox();
+            this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
+            this.btnImportMapSprite = new System.Windows.Forms.Button();
+            this.btnImportBattleSprite = new System.Windows.Forms.Button();
+            this.viewerBattleSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).BeginInit();
@@ -85,6 +90,7 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.bgSpritePreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -512,11 +518,61 @@
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
+            // bgSpritePreview
+            // 
+            this.bgSpritePreview.Controls.Add(this.viewerBattleSprite);
+            this.bgSpritePreview.Controls.Add(this.btnImportBattleSprite);
+            this.bgSpritePreview.Controls.Add(this.viewerMapSprite);
+            this.bgSpritePreview.Controls.Add(this.btnImportMapSprite);
+            this.bgSpritePreview.Location = new System.Drawing.Point(502, 159);
+            this.bgSpritePreview.Name = "bgSpritePreview";
+            this.bgSpritePreview.Size = new System.Drawing.Size(237, 132);
+            this.bgSpritePreview.TabIndex = 19;
+            this.bgSpritePreview.TabStop = false;
+            this.bgSpritePreview.Text = "Sprite Preview";
+            // 
+            // viewerMapSprite
+            // 
+            this.viewerMapSprite.Location = new System.Drawing.Point(7, 48);
+            this.viewerMapSprite.Name = "viewerMapSprite";
+            this.viewerMapSprite.Size = new System.Drawing.Size(111, 75);
+            this.viewerMapSprite.TabIndex = 1;
+            this.viewerMapSprite.Text = "texture2DViewerControl1";
+            // 
+            // btnImportMapSprite
+            // 
+            this.btnImportMapSprite.Location = new System.Drawing.Point(6, 19);
+            this.btnImportMapSprite.Name = "btnImportMapSprite";
+            this.btnImportMapSprite.Size = new System.Drawing.Size(112, 23);
+            this.btnImportMapSprite.TabIndex = 0;
+            this.btnImportMapSprite.Text = "Import Map Sprite";
+            this.btnImportMapSprite.UseVisualStyleBackColor = true;
+            this.btnImportMapSprite.Click += new System.EventHandler(this.btnImportMapSprite_Click);
+            // 
+            // btnImportBattleSprite
+            // 
+            this.btnImportBattleSprite.Location = new System.Drawing.Point(124, 19);
+            this.btnImportBattleSprite.Name = "btnImportBattleSprite";
+            this.btnImportBattleSprite.Size = new System.Drawing.Size(107, 23);
+            this.btnImportBattleSprite.TabIndex = 2;
+            this.btnImportBattleSprite.Text = "Import Battle Sprite";
+            this.btnImportBattleSprite.UseVisualStyleBackColor = true;
+            this.btnImportBattleSprite.Click += new System.EventHandler(this.btnImportBattleSprite_Click);
+            // 
+            // viewerBattleSprite
+            // 
+            this.viewerBattleSprite.Location = new System.Drawing.Point(124, 48);
+            this.viewerBattleSprite.Name = "viewerBattleSprite";
+            this.viewerBattleSprite.Size = new System.Drawing.Size(107, 75);
+            this.viewerBattleSprite.TabIndex = 3;
+            this.viewerBattleSprite.Text = "texture2DViewerControl2";
+            // 
             // UnitConquestEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 304);
+            this.Controls.Add(this.bgSpritePreview);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -546,6 +602,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.bgSpritePreview.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -593,5 +650,10 @@
         private System.Windows.Forms.NumericUpDown txtWeapon2MinimumRange;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
+        private System.Windows.Forms.GroupBox bgSpritePreview;
+        private Core.Editor.Texture2DViewerControl viewerMapSprite;
+        private System.Windows.Forms.Button btnImportMapSprite;
+        private Core.Editor.Texture2DViewerControl viewerBattleSprite;
+        private System.Windows.Forms.Button btnImportBattleSprite;
     }
 }

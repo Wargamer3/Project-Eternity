@@ -363,9 +363,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Draw(sprFrameDescription, new Vector2(2280 * Ratio, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
-            int BoxHeight = (DicMapInfoByPath.Values.Count * LineOffsetY);
+            int BoxHeight = (DicMapInfoByPath.Values.Count * LineOffsetY + FirstLineOffsetY);
+
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), null, ColorBox, 0f, Vector2.Zero, SpriteEffects.None, 0.8f);
+            g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), null, ColorBox, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY + sprFrameTop.Height * Ratio + BoxHeight), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.FlipVertically, 0.9f);
 
             DrawY += FirstLineOffsetY;
@@ -375,10 +376,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (CurrentIndex >= MapScrollbarValue)
                 {
-                    if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
+                    if (ActiveMapInfo == ActiveMap ||
+                        (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
+                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20))
                     {
-                        g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY - 5), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+                        g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                     }
 
                     g.DrawString(fntOxanimumRegular, ActiveMap.MapName, new Vector2(LeftPanelX + 5, DrawY), ColorText);

@@ -720,7 +720,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (CursorPositionVisible.X < CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.X += CursorSpeed;
@@ -729,7 +729,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (CursorPositionVisible.X > CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.X -= CursorSpeed;
@@ -738,7 +738,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             if (CursorPositionVisible.Y < CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
                 CursorPositionVisible.Y += CursorSpeed;
@@ -747,7 +747,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (CursorPositionVisible.Y > CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
                 if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
                     CursorSpeed *= 2;
 

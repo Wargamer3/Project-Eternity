@@ -31,6 +31,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
+            this.cbDoublecast = new System.Windows.Forms.CheckBox();
             this.txtCardSacrificed = new System.Windows.Forms.NumericUpDown();
             this.lblCardSacrificed = new System.Windows.Forms.Label();
             this.cboType = new System.Windows.Forms.ComboBox();
@@ -51,13 +52,15 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.gbTags = new System.Windows.Forms.GroupBox();
             this.txtTags = new System.Windows.Forms.TextBox();
-            this.cbDoublecast = new System.Windows.Forms.CheckBox();
+            this.gbFlavorText = new System.Windows.Forms.GroupBox();
+            this.txtFlavorText = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCardSacrificed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).BeginInit();
             this.gbDescription.SuspendLayout();
             this.gbTags.SuspendLayout();
+            this.gbFlavorText.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -66,7 +69,7 @@
             this.tsmSave});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(434, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(618, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -104,6 +107,17 @@
             this.gbCardInformation.TabIndex = 29;
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
+            // 
+            // cbDoublecast
+            // 
+            this.cbDoublecast.AutoSize = true;
+            this.cbDoublecast.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbDoublecast.Location = new System.Drawing.Point(8, 151);
+            this.cbDoublecast.Name = "cbDoublecast";
+            this.cbDoublecast.Size = new System.Drawing.Size(80, 17);
+            this.cbDoublecast.TabIndex = 56;
+            this.cbDoublecast.Text = "Doublecast";
+            this.cbDoublecast.UseVisualStyleBackColor = true;
             // 
             // txtCardSacrificed
             // 
@@ -271,7 +285,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(222, 27);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(200, 154);
+            this.gbDescription.Size = new System.Drawing.Size(384, 98);
             this.gbDescription.TabIndex = 33;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -283,7 +297,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(192, 129);
+            this.txtDescription.Size = new System.Drawing.Size(372, 73);
             this.txtDescription.TabIndex = 4;
             // 
             // gbTags
@@ -292,9 +306,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTags.Controls.Add(this.txtTags);
-            this.gbTags.Location = new System.Drawing.Point(222, 187);
+            this.gbTags.Location = new System.Drawing.Point(222, 250);
             this.gbTags.Name = "gbTags";
-            this.gbTags.Size = new System.Drawing.Size(200, 140);
+            this.gbTags.Size = new System.Drawing.Size(384, 77);
             this.gbTags.TabIndex = 34;
             this.gbTags.TabStop = false;
             this.gbTags.Text = "Tags";
@@ -305,25 +319,37 @@
             this.txtTags.Location = new System.Drawing.Point(3, 16);
             this.txtTags.Multiline = true;
             this.txtTags.Name = "txtTags";
-            this.txtTags.Size = new System.Drawing.Size(194, 121);
+            this.txtTags.Size = new System.Drawing.Size(378, 58);
             this.txtTags.TabIndex = 0;
             // 
-            // cbDoublecast
+            // gbFlavorText
             // 
-            this.cbDoublecast.AutoSize = true;
-            this.cbDoublecast.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbDoublecast.Location = new System.Drawing.Point(8, 151);
-            this.cbDoublecast.Name = "cbDoublecast";
-            this.cbDoublecast.Size = new System.Drawing.Size(80, 17);
-            this.cbDoublecast.TabIndex = 56;
-            this.cbDoublecast.Text = "Doublecast";
-            this.cbDoublecast.UseVisualStyleBackColor = true;
+            this.gbFlavorText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFlavorText.Controls.Add(this.txtFlavorText);
+            this.gbFlavorText.Location = new System.Drawing.Point(225, 131);
+            this.gbFlavorText.Name = "gbFlavorText";
+            this.gbFlavorText.Size = new System.Drawing.Size(381, 113);
+            this.gbFlavorText.TabIndex = 35;
+            this.gbFlavorText.TabStop = false;
+            this.gbFlavorText.Text = "Flavor Text";
+            // 
+            // txtFlavorText
+            // 
+            this.txtFlavorText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFlavorText.Location = new System.Drawing.Point(3, 16);
+            this.txtFlavorText.Multiline = true;
+            this.txtFlavorText.Name = "txtFlavorText";
+            this.txtFlavorText.Size = new System.Drawing.Size(375, 94);
+            this.txtFlavorText.TabIndex = 0;
             // 
             // SpellCardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 339);
+            this.ClientSize = new System.Drawing.Size(618, 339);
+            this.Controls.Add(this.gbFlavorText);
             this.Controls.Add(this.gbTags);
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.gbCardInformation);
@@ -341,6 +367,8 @@
             this.gbDescription.PerformLayout();
             this.gbTags.ResumeLayout(false);
             this.gbTags.PerformLayout();
+            this.gbFlavorText.ResumeLayout(false);
+            this.gbFlavorText.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,5 +400,7 @@
         private System.Windows.Forms.NumericUpDown txtCardSacrificed;
         private System.Windows.Forms.Label lblCardSacrificed;
         private System.Windows.Forms.CheckBox cbDoublecast;
+        private System.Windows.Forms.GroupBox gbFlavorText;
+        public System.Windows.Forms.TextBox txtFlavorText;
     }
 }

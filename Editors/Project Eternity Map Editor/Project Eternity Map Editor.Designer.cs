@@ -37,7 +37,6 @@
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
             this.tsmGlobalEnvironment = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabToolBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -146,7 +145,6 @@
             this.Controls.Add(this.mnuToolBar);
             this.Name = "ProjectEternityMapEditor";
             this.Shown += new System.EventHandler(this.ProjectEternityMapEditor_Shown);
-            this.tabToolBox.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -166,11 +164,11 @@
 
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.ToolStripMenuItem tsmMapProperties;
-        private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel tslInformation;
         private System.Windows.Forms.MenuStrip mnuToolBar;
         protected GameScreens.BattleMapScreen.BattleMapViewerControl BattleMapViewer;
         private System.Windows.Forms.ToolStripMenuItem tsmGlobalEnvironment;
+        public System.Windows.Forms.SplitContainer splitContainer;
     }
 }

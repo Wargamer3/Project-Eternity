@@ -282,7 +282,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             g.End();
 
-            DrawMap(g);
+            //DrawMap(g);
 
             g.Begin();
 
@@ -666,11 +666,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     //Draw the vertical lines for the grid.
                     for (int X = 0; X < Map.MapSize.X; X++)
-                        g.Draw(GameScreen.sprPixel, new Rectangle(X * Map.TileSize.X, 0,
+                        g.Draw(GameScreen.sprPixel, new Rectangle(X * Map.TileSize.X - (int)(Map.Camera2DPosition.X % Map.TileSize.X), 0,
                                                        1, Map.MapSize.Y * Map.TileSize.Y), Color.Black);
                     //Draw the horizontal lines for the grid.
                     for (int Y = 0; Y < Map.MapSize.Y; Y++)
-                        g.Draw(GameScreen.sprPixel, new Rectangle(0, Y * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle(0, Y * Map.TileSize.Y - (int)(Map.Camera2DPosition.Y % Map.TileSize.Y),
                                                    Map.MapSize.X * Map.TileSize.X, 1), Color.Black);
                 }
             }

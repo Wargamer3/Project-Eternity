@@ -75,6 +75,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.sclMapWidth.Size = new System.Drawing.Size(650, 17);
             this.sclMapWidth.TabIndex = 3;
             this.sclMapWidth.Scroll += new ScrollEventHandler(this.sclMapWidth_Scroll);
+            this.sclMapWidth.ValueChanged += sclMapWidth_ValueChanged;
             // 
             // sclMapHeight
             // 
@@ -83,6 +84,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.sclMapHeight.Size = new System.Drawing.Size(17, 506);
             this.sclMapHeight.TabIndex = 4;
             this.sclMapHeight.Scroll += new ScrollEventHandler(this.sclMapHeight_Scroll);
+            this.sclMapHeight.ValueChanged += sclMapHeight_ValueChanged;
             Controls.Add(this.sclMapWidth);
             Controls.Add(this.sclMapHeight);
 
@@ -92,6 +94,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             // 
             this.cmsScriptMenu.Name = "cmsScriptMenu";
             this.cmsScriptMenu.Size = new System.Drawing.Size(141, 26);
+        }
+
+        private void sclMapWidth_ValueChanged(object sender, EventArgs e)
+        {
+            ActiveMap.Camera2DPosition.X = sclMapWidth.Value;
+            this.Refresh();
+        }
+
+        private void sclMapHeight_ValueChanged(object sender, EventArgs e)
+        {
+            ActiveMap.Camera2DPosition.Y = sclMapHeight.Value;
+            this.Refresh();
         }
 
         public void SetListMapScript(List<MapScript> ListMapScript)
@@ -107,7 +121,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Initialise the scroll bars.
             if (NewMapSize.Width >= Width)
             {
-                sclMapWidth.Maximum = ActiveMap.MapSize.X;
+                sclMapWidth.Maximum = NewMapSize.Width - Width + ActiveMap.TileSize.X + 20;
+                sclMapWidth.LargeChange = ActiveMap.TileSize.X;
                 sclMapWidth.Visible = true;
             }
             else
@@ -118,7 +133,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (NewMapSize.Height >= Height)
             {
-                sclMapHeight.Maximum = ActiveMap.MapSize.Y;
+                sclMapHeight.Maximum = NewMapSize.Height - Height + ActiveMap.TileSize.Y + 20;
+                sclMapHeight.LargeChange = ActiveMap.TileSize.Y;
                 sclMapHeight.Visible = true;
             }
             else
@@ -186,10 +202,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ActiveMap.EndDraw(g);
 
-            if (TileReplacementZone.Width > 0 && TileReplacementZone.Height > 0)
+            if (ActiveMap.CameraType == "3D" && ActiveMap.ShowUnits)
             {
-                GameScreen.DrawRectangle(g, new Vector2(TileReplacementZone.X * ActiveMap.TileSize.X, TileReplacementZone.Y * ActiveMap.TileSize.Y), new Vector2(TileReplacementZone.Right * ActiveMap.TileSize.X, TileReplacementZone.Bottom * ActiveMap.TileSize.Y), Color.Red);
             }
+            else
+            {
+                g.Draw(GameScreen.sprPixel, new Rectangle((int)ActiveMap.CursorPosition.X - ActiveMap.TileSize.X / 2 - (int)ActiveMap.Camera2DPosition.X,
+                    (int)ActiveMap.CursorPosition.Y - ActiveMap.TileSize.Y / 2 - (int)ActiveMap.Camera2DPosition.Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y), Color.FromNonPremultiplied(255, 255, 255, 120));
+
+                if (TileReplacementZone.Width > 0 && TileReplacementZone.Height > 0)
+                {
+                    GameScreen.DrawRectangle(g, new Vector2(TileReplacementZone.X * ActiveMap.TileSize.X, TileReplacementZone.Y * ActiveMap.TileSize.Y), new Vector2(TileReplacementZone.Right * ActiveMap.TileSize.X, TileReplacementZone.Bottom * ActiveMap.TileSize.Y), Color.Red);
+                }
+            }
+
             g.End();
         }
 
@@ -265,7 +291,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
         
-        private void BattleMapViewerControl_SizeChanged(object sender, EventArgs e)
+        public void BattleMapViewerControl_SizeChanged(object sender, EventArgs e)
         {
             if (ActiveMap == null)
             {

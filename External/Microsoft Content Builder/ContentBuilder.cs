@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
             string outputPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
 
             // Create the build project.
-            projectRootElement = ProjectRootElement.Create(outputPath + "\\Content");
+            projectRootElement = ProjectRootElement.Create(buildDirectory + "\\Content");
 
             // Include the standard targets file that defines how to build XNA Framework content.
             /*projectRootElement.AddImport("$(MSBuildExtensionsPath)\\Microsoft\\XNA Game Studio\\" +
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
             buildProject.SetProperty("XnaProfile", "Reach");
             buildProject.SetProperty("XnaFrameworkVersion", "v4.0");
             buildProject.SetProperty("Configuration", "Release");
-            buildProject.SetProperty("OutputPath", outputPath);
+            buildProject.SetProperty("OutputPath", buildDirectory);
 
             // Register any custom importers or processors.
             foreach (string pipelineAssembly in pipelineAssemblies)
@@ -144,6 +144,18 @@ namespace Microsoft.Xna.Framework.Content.Builder
 
             buildParameters = new BuildParameters(ProjectCollection.GlobalProjectCollection);
             buildParameters.Loggers = new ILogger[] { errorLogger };
+        }
+
+        public void CopyBuildOutput(string OriginalSpriteFileName, string SpriteFileName, string FolderToCopyTo)
+        {
+            string CompleteFilePath = projectRootElement.FullPath + "\\" + OriginalSpriteFileName.Substring(0, OriginalSpriteFileName.Length - 4) + ".xnb";
+            string CompleteFilePathOutput = FolderToCopyTo + "\\" + SpriteFileName + ".xnb";
+
+            if (File.Exists(CompleteFilePathOutput))
+            {
+                File.Delete(CompleteFilePathOutput);
+            }
+            File.Move(CompleteFilePath, FolderToCopyTo + "\\" + SpriteFileName + ".xnb");
         }
 
         /// <summary>

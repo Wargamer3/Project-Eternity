@@ -195,7 +195,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
-                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
+                TilesetViewer.SelectTile(new Point(0, 0), new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
                                                      ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y), false, 0);
             }
         }

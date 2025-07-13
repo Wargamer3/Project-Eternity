@@ -112,7 +112,9 @@ namespace ProjectEternity.Core.Units.Conquest
             _UnitStat.ArrayUnitAbility = new BaseAutomaticSkill[0];
             MapComponents = new ConquestMapComponent(this, Content);
             ArrayCharacterActive = new Character[0];
-            
+            string[] ArrayFileParts = Name.Split('/', '\\');
+            ItemName = ArrayFileParts[ArrayFileParts.Length - 1];
+
             FileStream FS = new FileStream("Content/Units/Conquest/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);

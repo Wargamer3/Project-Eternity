@@ -62,6 +62,7 @@ namespace ProjectEternity.GUI
                 }
             }
 
+            SplashScreen.SetStatus("Initializing Editors");
             BaseEditor.GetItemsByRoot = GetItemsByRoot;
             BaseEditor.GetItemByKey = GetItemValueByKey;
             this.SetStyle(ControlStyles.StandardDoubleClick, false);//Disable right double click.
@@ -114,6 +115,7 @@ namespace ProjectEternity.GUI
                             try
                             {
                                 instance = Activator.CreateInstance(types[t]) as BaseEditor;
+                                SplashScreen.SetStatus($"Initializing Editors ({instance.Name})");
                             }
                             catch (Exception e)
                             {

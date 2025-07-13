@@ -40,7 +40,7 @@ namespace ProjectEternity.Editors.MapEditor
             lvUnits = SpawnControl.lvUnits;
             pgUnit = SpawnControl.pgUnit;
             imageList = new ImageList();
-            imageList.ImageSize = new Size(64, 64);
+            imageList.ImageSize = new Size(32, 32);
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             lvUnits.LargeImageList = imageList;
 
@@ -168,7 +168,8 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 if (cbMoveType.Text == "All" || ActiveUnit.MovementType == cbMoveType.Text)
                 {
-                    lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex++);
+                    lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex);
+                    lvUnits.Items[ImageIndex++].Text = ActiveUnit.ItemName;
                     imageList.Images.Add("itemImageKey", Texture2Image(ActiveUnit.SpriteMap));
                 }
             }

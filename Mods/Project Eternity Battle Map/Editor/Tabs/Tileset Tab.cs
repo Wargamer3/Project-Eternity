@@ -31,6 +31,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         protected ITileAttributes TileAttributesEditor;
 
+        private Point TileOriginPoint;
+
         public BattleMapViewerControl BattleMapViewer { get; set; }
         public IMapHelper Helper { get; set; }
         protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
@@ -91,6 +93,8 @@ namespace ProjectEternity.Editors.MapEditor
             this.BattleMapViewer.TilesetViewer.Size = new System.Drawing.Size(302, 340);
             this.BattleMapViewer.TilesetViewer.TabIndex = 7;
             this.BattleMapViewer.TilesetViewer.Click += new System.EventHandler(this.TileViewer_Click);
+            this.BattleMapViewer.TilesetViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseDown);
+            this.BattleMapViewer.TilesetViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseMove);
             // 
             // btnTileAttributes
             // 
@@ -404,8 +408,37 @@ namespace ProjectEternity.Editors.MapEditor
 
                 Point DrawOffset = BattleMapViewer.TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
-                BattleMapViewer.TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
+                BattleMapViewer.TilesetViewer.SelectTile(TileOriginPoint, new Point(((((MouseEventArgs)e).X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
                                                      ((((MouseEventArgs)e).Y + DrawOffset.Y) / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y),
+                                                     Control.ModifierKeys == Keys.Shift, BrushIndex);
+            }
+        }
+
+
+        private void TileViewer_MouseDown(object sender, MouseEventArgs e)
+        {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
+            if (ActiveMap.TileSize.X != 0 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+            {
+                Point DrawOffset = BattleMapViewer.TilesetViewer.DrawOffset;//Used to avoid warnings.
+                TileOriginPoint = new Point(((e.X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
+                                                     (((e.Y + DrawOffset.X)) / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y);
+            }
+        }
+
+        private void TileViewer_MouseMove(object sender, MouseEventArgs e)
+        {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
+            if (ActiveMap.TileSize.X != 0 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+            {
+                int BrushIndex = 0;
+                if (e.Button == MouseButtons.Right)
+                {
+                    BrushIndex = 1;
+                }
+
+                Point DrawOffset = BattleMapViewer.TilesetViewer.DrawOffset;//Used to avoid warnings.
+                //Set the ActiveTile to the mouse position.
+                BattleMapViewer.TilesetViewer.SelectTile(TileOriginPoint, new Point(((e.X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
+                                                     (((e.Y + DrawOffset.X)) / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y),
                                                      Control.ModifierKeys == Keys.Shift, BrushIndex);
             }
         }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.Core.Item;
+using System.Windows.Forms;
+using Microsoft.Xna.Framework.Content.Builder;
 
 namespace ProjectEternity.Editors.UnitConquestEditor
 {
@@ -25,6 +27,9 @@ namespace ProjectEternity.Editors.UnitConquestEditor
                 fs.Close();
                 SaveItem(FilePath, FilePath);
             }
+
+            viewerMapSprite.Preload();
+            viewerBattleSprite.Preload();
 
             LoadUnit(this.FilePath);
         }
@@ -99,11 +104,73 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             cbWeapon2PostMovement.Checked = LoadedUnit.Weapon2PostMovement;
             txtWeapon2MinimumRange.Value = LoadedUnit.Weapon2MinimumRange;
             txtWeapon2MaximumRange.Value = LoadedUnit.Weapon2MaximumRange;
+
+            if (File.Exists("Content\\Units\\Conquest\\Map Sprite\\" + LoadedUnit.RelativePath + ".xnb"))
+            {
+                viewerMapSprite.ChangeTexture("Units\\Conquest\\Map Sprite\\" + LoadedUnit.RelativePath);
+            }
+
+            if (File.Exists("Content\\Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath + ".xnb"))
+            {
+                viewerBattleSprite.ChangeTexture("Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath);
+            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
         {
             SaveItem(FilePath, null);
+        }
+
+        private void btnImportMapSprite_Click(object sender, EventArgs e)
+        {
+            var SpriteFileDialog = new OpenFileDialog()
+            {
+                FileName = "Select a sprite to import",
+                Filter = "Sprite files (*.png)|*.png",
+                Title = "Open sprite file"
+            };
+
+            if (SpriteFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = SpriteFileDialog.FileName;
+                var fileName = SpriteFileDialog.SafeFileName;
+                var Builder = new ContentBuilder();
+                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                string buildError = Builder.Build();
+
+                string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
+                string MapSpriteFolder = "Content\\Units\\Conquest\\Map Sprite";
+                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(23);
+                Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "\\" + NewSpriteFileFolder);
+
+                viewerMapSprite.ChangeTexture("Units\\Conquest\\Map Sprite\\" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
+            }
+        }
+
+        private void btnImportBattleSprite_Click(object sender, EventArgs e)
+        {
+            var SpriteFileDialog = new OpenFileDialog()
+            {
+                FileName = "Select a sprite to import",
+                Filter = "Sprite files (*.png)|*.png",
+                Title = "Open sprite file"
+            };
+
+            if (SpriteFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = SpriteFileDialog.FileName;
+                var fileName = SpriteFileDialog.SafeFileName;
+                var Builder = new ContentBuilder();
+                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                string buildError = Builder.Build();
+
+                string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
+                string MapSpriteFolder = "Content\\Units\\Conquest\\Unit Sprite";
+                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(23);
+                Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "\\" + NewSpriteFileFolder);
+
+                viewerBattleSprite.ChangeTexture("Units\\Conquest\\Unit Sprite\\" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
+            }
         }
     }
 }

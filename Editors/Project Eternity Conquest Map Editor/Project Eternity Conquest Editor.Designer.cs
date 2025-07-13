@@ -28,15 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
-            
             // 
-            // ProjectEternityWorldMapEditor
+            // tabToolBox
+            // 
+            this.tabToolBox.Size = new System.Drawing.Size(433, 801);
+            // 
+            // BattleMapViewer
+            // 
+            this.BattleMapViewer.Size = new System.Drawing.Size(1065, 801);
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Size = new System.Drawing.Size(1510, 805);
+            this.splitContainer.SplitterDistance = 1069;
+            // 
+            // ProjectEternityConquestEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(928, 573);
-            this.Name = "ProjectEternityConquestMapEditor";
+            this.ClientSize = new System.Drawing.Size(1510, 853);
+            this.Name = "ProjectEternityConquestEditor";
             this.Text = "Form1";
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

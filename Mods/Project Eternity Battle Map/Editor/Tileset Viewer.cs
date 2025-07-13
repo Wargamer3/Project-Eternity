@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTileBrush[0] = new Rectangle(0, 0, TileSize.X, TileSize.Y);
         }
 
-        public void SelectTile(Point TileToSelect, bool ExpendSelection, int BrushIndex)
+        public void SelectTile(Point OriginPoint, Point TileToSelect, bool ExpendSelection, int BrushIndex)
         {
             while (BrushIndex >= ListTileBrush.Count)
             {
@@ -86,13 +86,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ExpendSelection)
             {
-                if (TileToSelect.X > TileBrushSize.X)
+                if (TileToSelect.X >= OriginPoint.X)
                 {
-                    TileBrushSize.Width = TileToSelect.X - TileBrushSize.X + TileSize.X;
+                    TileBrushSize.X = OriginPoint.X;
+                    TileBrushSize.Width = TileToSelect.X - OriginPoint.X + TileSize.X;
                 }
-                if (TileToSelect.Y > TileBrushSize.Y)
+                else if (TileToSelect.X < TileBrushSize.X)
                 {
-                    TileBrushSize.Height = TileToSelect.Y - TileBrushSize.Y + TileSize.Y;
+                    TileBrushSize.X = TileToSelect.X;
+                    TileBrushSize.Width = OriginPoint.X - TileToSelect.X + TileSize.X;
+                }
+                if (TileToSelect.Y >= OriginPoint.Y)
+                {
+                    TileBrushSize.Y = OriginPoint.Y;
+                    TileBrushSize.Height = TileToSelect.Y - OriginPoint.Y + TileSize.Y;
+                }
+                else if (TileToSelect.Y < TileBrushSize.Y)
+                {
+                    TileBrushSize.Y = TileToSelect.Y;
+                    TileBrushSize.Height = OriginPoint.Y - TileToSelect.Y + TileSize.Y;
                 }
             }
             else

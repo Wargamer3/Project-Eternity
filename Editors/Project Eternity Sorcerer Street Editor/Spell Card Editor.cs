@@ -57,6 +57,7 @@ namespace ProjectEternity.Editors.CardEditor
 
             BW.Write(txtName.Text);
             BW.Write(txtDescription.Text);
+            BW.Write(txtFlavorText.Text);
             BW.Write(txtTags.Text);
             BW.Write(cbDoublecast.Checked);
 
@@ -81,6 +82,7 @@ namespace ProjectEternity.Editors.CardEditor
 
             txtName.Text = LoadedCard.Name;
             txtDescription.Text = LoadedCard.Description;
+            txtFlavorText.Text = LoadedCard.FlavorText;
             txtTags.Text = LoadedCard.Tags;
             cbDoublecast.Checked = LoadedCard.Doublecast;
 

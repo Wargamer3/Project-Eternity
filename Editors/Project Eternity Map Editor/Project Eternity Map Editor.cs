@@ -64,7 +64,7 @@ namespace ProjectEternity.Editors.MapEditor
             };
             //Link a CheckedChanged event to a method.
             cbPreviewMap.CheckedChanged += new EventHandler(cbPreviewMap_CheckedChanged);
-            cbPreviewMap.Checked = true;
+            cbPreviewMap.Checked = false;
             //Make it 10 pixel after the last mnuToolBar item.
             cbPreviewMap.Padding = new Padding(10, 0, 0, 0);
             mnuToolBar.Items.Add(new ToolStripControlHost(cbPreviewMap));
@@ -514,7 +514,6 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.Reset();
             Helper.InitMap();
 
-            ActiveMap.TogglePreview(true);
 
             BattleMapViewer.Helper = Helper;
 
@@ -522,8 +521,6 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 ActiveTab.Helper = Helper;
             }
-
-            BattleMapViewer.RefreshScrollbars();
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
@@ -536,6 +533,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 ActiveTab.OnMapLoaded();
             }
+            BattleMapViewer.BattleMapViewerControl_SizeChanged(this, null);
         }
     }
 }

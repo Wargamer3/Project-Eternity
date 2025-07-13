@@ -203,7 +203,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(2340 * Ratio, DescriptionY), ColorText);
                 DescriptionY += 80 * Ratio;
-
             }
 
             GametypeScrollbar.Draw(g);
@@ -218,7 +217,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringMiddleAligned(fntOxanimumBold, ActiveCategory.Category, new Vector2(LeftPanelX + PanelWidth / 2, DrawY), ColorText);
             DrawY += HeaderOffsetY;
 
-            int BoxHeight = (int)(ActiveCategory.ArrayGametype.Length * LineOffsetY);
+            int BoxHeight = (int)(ActiveCategory.ArrayGametype.Length * LineOffsetY + FirstLineOffsetY);
 
             g.Draw(sprFrameTop, new Vector2(364 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
             g.Draw(sprPixel, new Rectangle((int)(364 * Ratio), (int)(DrawY + sprFrameTop.Height * Ratio), (int)(sprFrameTop.Width * Ratio), BoxHeight), null, ColorBox, 0f, Vector2.Zero, SpriteEffects.None, 0.9f);
