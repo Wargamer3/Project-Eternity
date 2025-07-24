@@ -414,7 +414,6 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-
         private void TileViewer_MouseDown(object sender, MouseEventArgs e)
         {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
             if (ActiveMap.TileSize.X != 0 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
@@ -639,13 +638,13 @@ namespace ProjectEternity.Editors.MapEditor
                                         {
                                             for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
                                             {
-                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex = MapBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = MapBackgroundIndex;
                                                 }
-                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex = MapBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = MapBackgroundIndex;
                                                 }
                                             }
                                         }
@@ -659,13 +658,13 @@ namespace ProjectEternity.Editors.MapEditor
                                         {
                                             for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
                                             {
-                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
                                                 }
-                                                if (NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex == BackgroundIndex)
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
                                                 {
-                                                    NewTileset.ArrayTerrain[X, Y].BonusInfo.BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
+                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
                                                 }
                                             }
                                         }
@@ -687,7 +686,7 @@ namespace ProjectEternity.Editors.MapEditor
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
                                     continue;
                                 }
-                                Microsoft.Xna.Framework.Graphics.Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
+                                Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
 
                                 ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
                                 ActiveMap.ListTileSet.Add(Tile);

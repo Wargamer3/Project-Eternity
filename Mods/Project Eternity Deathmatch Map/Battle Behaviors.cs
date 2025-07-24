@@ -1008,8 +1008,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             string TargetSquadBackgroundPath = "Backgrounds 2D/Empty";
             string ActiveSquadForegroundPath = "Backgrounds 2D/Empty";
             string TargetSquadForegroundPath = "Backgrounds 2D/Empty";
-            DeathmatchTerrainBonusInfo ActiveSquadTerrain = GetTerrainInfo(AttackingSquad.Position);
-            DeathmatchTerrainBonusInfo TargetSquadTerrain = GetTerrainInfo(EnemySquad.Position);
+            Terrain ActiveSquadTerrain = GetTerrain(AttackingSquad.Position);
+            Terrain TargetSquadTerrain = GetTerrain(EnemySquad.Position);
 
             if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0 && ActiveSquadTerrain.BattleBackgroundAnimationIndex < ListBattleBackgroundAnimationPath.Count)
             {

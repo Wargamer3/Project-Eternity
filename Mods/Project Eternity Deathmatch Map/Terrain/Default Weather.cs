@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -41,27 +42,45 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DicTile2DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile2DHolder>());
             }
 
-            for (int X = Map.MapSize.X - 1; X >= 0; --X)
-			{
-				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
-				{
-					Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
-					DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
-
-					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
-					{
-						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
-                    }
-                    if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+            if (Map.ListTileSet.Count > 0)
+            {
+                for (int X = Map.MapSize.X - 1; X >= 0; --X)
+                {
+                    for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                     {
-                        DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
-                    }
+                        Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
+                        DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
 
-                    DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
-                    DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                        if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            TilesetPreset.TilesetTypes TilesetType = Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType;
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTileSet[ActiveTile.TilesetIndex], TilesetType));
+                        }
+
+                        if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile2DByTileset.Add(ActiveTile.TilesetIndex, DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex]);
+                        }
+
+                        if (ActiveTile.ArraySubTile.Length == 0)
+                        {
+                            DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                        }
+                        else
+                        {
+                            float OffsetSize = 1f / (ActiveTile.ArraySubTile.Length / 2f);
+                            for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
+                            {
+                                Vector3 TilePosition = ActiveTerrain.WorldPosition;
+                                TilePosition.X += OffsetSize * (T % (ActiveTile.ArraySubTile.Length / 2)) * Map.TileSize.X;
+                                TilePosition.Y += OffsetSize * (T / (ActiveTile.ArraySubTile.Length / 2)) * Map.TileSize.Y;
+                                DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
+                            }
+                        }
+                    }
                 }
-			}
-		}
+            }
+        }
 
         public virtual void Reset()
         {
@@ -76,7 +95,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public virtual void Update(GameTime gameTime)
         {
-
+            foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
+            {
+                ActiveTileSet.Value.Update(gameTime);
+            }
         }
 
         public virtual void BeginDraw(CustomSpriteBatch g)
@@ -104,12 +126,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     for (int L = 0; L < MaxLayerIndex; L++)
                     {
-                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[L];
-                        if (!ActiveLayer.IsVisible)
-                        {
-                            continue;
-                        }
-
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
                             ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);

@@ -16,16 +16,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TerrainActivation[] ListActivation;//Activation type of the bonuses.
         public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
         public int[] ListBonusValue;//Value of the bonuses.
-        public byte BattleBackgroundAnimationIndex;
-        public byte BattleForegroundAnimationIndex;
 
         public DeathmatchTerrainBonusInfo()
         {
             ListActivation = new TerrainActivation[0];
             ListBonus = ListBonus = new TerrainBonus[0];
             ListBonusValue = ListBonusValue = new int[0];
-            BattleBackgroundAnimationIndex = 0;
-            BattleForegroundAnimationIndex = 0;
         }
 
         public DeathmatchTerrainBonusInfo(DeathmatchTerrainBonusInfo Other)
@@ -33,8 +29,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
             ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             ListBonusValue = (int[])Other.ListBonusValue.Clone();
-            BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
-            BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
         }
     }
 
@@ -601,6 +595,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public byte BattleBackgroundAnimationIndex;
+        public byte BattleForegroundAnimationIndex;
         public DeathmatchTerrainBonusInfo BonusInfo;
 
         /// <summary>
@@ -616,7 +612,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.PreventLeavingDownward = Other.PreventLeavingDownward;
             this.PreventLeavingLeft = Other.PreventLeavingLeft;
             this.PreventLeavingRight = Other.PreventLeavingRight;
-            BonusInfo = new DeathmatchTerrainBonusInfo(Other.BonusInfo);
+            BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
+            BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
         }
 
         /// <summary>
@@ -625,8 +622,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Terrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
-            this.WorldPosition = new Vector3(XPos * TileSizeX, YPos * TileSizeY, LayerIndex * LayerHeight);
-            this.TerrainTypeIndex = 0;
+            WorldPosition = new Vector3(XPos * TileSizeX, YPos * TileSizeY, LayerIndex * LayerHeight);
+            TerrainTypeIndex = 0;
+            BattleBackgroundAnimationIndex = 0;
+            BattleForegroundAnimationIndex = 0;
             BonusInfo = new DeathmatchTerrainBonusInfo();
         }
 
@@ -675,8 +674,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BonusInfo.ListBonusValue[i] = BR.ReadInt32();
             }
 
-            BonusInfo.BattleBackgroundAnimationIndex = BR.ReadByte();
-            BonusInfo.BattleForegroundAnimationIndex = BR.ReadByte();
+            BattleBackgroundAnimationIndex = BR.ReadByte();
+            BattleForegroundAnimationIndex = BR.ReadByte();
         }
 
         public virtual void Save(BinaryWriter BW)
@@ -697,8 +696,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(BonusInfo.ListBonusValue[i]);
             }
 
-            BW.Write(BonusInfo.BattleBackgroundAnimationIndex);
-            BW.Write(BonusInfo.BattleForegroundAnimationIndex);
+            BW.Write(BattleBackgroundAnimationIndex);
+            BW.Write(BattleForegroundAnimationIndex);
         }
     }
 }

@@ -70,17 +70,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             txtHeight.Value = (decimal)ActiveTerrain.Height;
 
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-            if (ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            if (ActiveTerrain.BattleBackgroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
             {
-                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex;
+                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
             }
             else
             {
                 cboBattleAnimationBackground.SelectedIndex = 0;
             }
-            if (ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            if (ActiveTerrain.BattleForegroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
             {
-                cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex;
+                cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex;
             }
             else
             {
@@ -213,12 +213,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BonusInfo.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
+            ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
         }
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BonusInfo.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
+            ActiveTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
         }
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)

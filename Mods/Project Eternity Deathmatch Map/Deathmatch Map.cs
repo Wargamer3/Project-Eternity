@@ -488,22 +488,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return GetTerrain(WorldPosition).BonusInfo;
         }
 
-        public Terrain GetTerrain(Vector3 Position)
+        public Terrain GetTerrain(Vector3 WorldPosition)
         {
-            Position = ConvertToGridPosition(Position);
+            WorldPosition = ConvertToGridPosition(WorldPosition);
 
-            if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
+            if (WorldPosition.X < 0 || WorldPosition.X >= MapSize.X || WorldPosition.Y < 0 || WorldPosition.Y >= MapSize.Y || WorldPosition.Z < 0 || WorldPosition.Z >= LayerManager.ListLayer.Count)
             {
                 return null;
             }
 
             Terrain TemporaryTerrain;
-            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            if (DicTemporaryTerrain.TryGetValue(WorldPosition, out TemporaryTerrain))
             {
                 return TemporaryTerrain;
             }
 
-            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
+            return LayerManager.ListLayer[(int)WorldPosition.Z].ArrayTerrain[(int)WorldPosition.X, (int)WorldPosition.Y];
         }
 
         public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, DeathmatchMap ActiveMap)

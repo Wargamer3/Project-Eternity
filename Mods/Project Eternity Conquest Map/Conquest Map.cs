@@ -21,6 +21,33 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     {
         public static readonly string MapType = "Conquest";
 
+        public static string[] AllTerrains => new string[]
+                {
+                    "Plains",
+                    "Road",
+                    "Wood",
+                    "Mountains",
+                    "Wasteland",
+                    "Ruins",
+                    "Sea",
+                    "Bridge",
+                    "River",
+                    "Beach",
+                    "Rough Sea",
+                    "Mist",
+                    "Reef",
+                    "HQ",
+                    "City",
+                    "Factory",
+                    "Airport",
+                    "Port",
+                    "Com Tower",
+                    "Radar",
+                    "Temp Airport",
+                    "Temp Port",
+                    "Missile Silo",
+                };
+
         public Texture2D sprTileBorderRed;
         public Texture2D sprTileBorderBlue;
 
@@ -194,7 +221,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             this.BattleMapPath = BattleMapPath;
         }
-                
+
         public override void Save(string FilePath)
         {
             //Create the Part file.
@@ -227,7 +254,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 DicCutsceneScript.Add(ActiveListScript.Name, ActiveListScript);
             }
-            
+
             Player NewPlayer = new Player("Human", "Human", true, false, 0, Color.Red);
             ListPlayer.Add(NewPlayer);
 

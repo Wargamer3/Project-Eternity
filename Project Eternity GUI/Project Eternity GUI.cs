@@ -828,5 +828,11 @@ namespace ProjectEternity.GUI
             Editors.SystemListEditor.TerrainAndUnitTypesEditor NewTester = new Editors.SystemListEditor.TerrainAndUnitTypesEditor();
             NewTester.Show();
         }
+
+        private void tsmVariables_Click(object sender, EventArgs e)
+        {
+            Editors.SystemListEditor.VariablesListEditor NewTester = new Editors.SystemListEditor.VariablesListEditor();
+            NewTester.Show();
+        }
     }
 }

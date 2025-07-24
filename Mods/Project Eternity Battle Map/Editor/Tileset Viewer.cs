@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public ContentManager content;
         private SpriteBatch g;
         private Texture2D sprPixel;
-        private Texture2D sprTileset;
+        public Texture2D sprTileset;
         private Point TileSize;
 
         public Point DrawOffset;

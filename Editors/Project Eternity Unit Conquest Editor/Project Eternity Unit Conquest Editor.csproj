@@ -77,7 +77,7 @@
     <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
       <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
       <Name>Microsoft Content Builder</Name>
-      <Private>True</Private>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
       <Project>{ef17745e-1116-499c-94d0-5d3607ee8fa4}</Project>

@@ -86,6 +86,8 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathMapTilesets = "Maps/Tilesets";
         public const string GUIRootPathMapTilesetImages = "Maps/Tilesets Images";
         public const string GUIRootPathMapTilesetPresets = "Maps/Tileset Presets";
+        public const string GUIRootPathMapTilesetPresetsConquest = "Tileset Presets/Conquest";
+        public const string GUIRootPathMapTilesetPresetsDeathmatch = "Tileset Presets/Deathmatch";
         public const string GUIRootPathMapModels = "Maps/Models";
         public const string GUIRootPathMapBGM = "Maps/BGM";
         public const string GUIRootPathCutscenes = "Cutscenes";

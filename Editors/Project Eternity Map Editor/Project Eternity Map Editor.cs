@@ -514,7 +514,6 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.Reset();
             Helper.InitMap();
 
-
             BattleMapViewer.Helper = Helper;
 
             foreach (IMapEditorTab ActiveTab in ListTab)

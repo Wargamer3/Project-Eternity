@@ -91,6 +91,7 @@
             this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRename = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmProperties = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmVariables = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -174,7 +175,8 @@
             this.tsmUnitTester,
             this.tsmRosterEditor,
             this.tsmSystemList,
-            this.tsmTerrainAndUnitTypes});
+            this.tsmTerrainAndUnitTypes,
+            this.tsmVariables});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(758, 24);
@@ -339,6 +341,13 @@
             this.tsmProperties.Text = "Properties";
             this.tsmProperties.Click += new System.EventHandler(this.tsmProperties_Click);
             // 
+            // tsmVariables
+            // 
+            this.tsmVariables.Name = "tsmVariables";
+            this.tsmVariables.Size = new System.Drawing.Size(65, 20);
+            this.tsmVariables.Text = "Variables";
+            this.tsmVariables.Click += new System.EventHandler(this.tsmVariables_Click);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -385,6 +394,7 @@
         public System.Windows.Forms.TreeView tvItems;
         private System.Windows.Forms.ToolStripMenuItem tsmClone;
         private System.Windows.Forms.ToolStripMenuItem tsmTerrainAndUnitTypes;
+        private System.Windows.Forms.ToolStripMenuItem tsmVariables;
     }
 }
 

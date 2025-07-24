@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
         static string[] pipelineAssemblies =
         {
             //"Microsoft.Xna.Framework.Content.Pipeline.TextureImporter" + xnaVersion
-            Directory.GetCurrentDirectory() + "\\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll"
+            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll"
             // If you want to use custom importers or processors from
             // a Content Pipeline Extension Library, add them here.
             //
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
             // Include the standard targets file that defines how to build XNA Framework content.
             /*projectRootElement.AddImport("$(MSBuildExtensionsPath)\\Microsoft\\XNA Game Studio\\" +
                                          "v4.0\\Microsoft.Xna.GameStudio.ContentPipeline.targets");*/
-            projectRootElement.AddImport(CurrentDirectory + "\\Microsoft.Xna.GameStudio.ContentPipeline.targets");
+            projectRootElement.AddImport(CurrentDirectory + "\\External\\Microsoft.Xna.GameStudio.ContentPipeline.targets");
 
             buildProject = new Project(projectRootElement);
 

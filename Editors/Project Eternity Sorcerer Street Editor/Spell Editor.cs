@@ -142,17 +142,17 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
 
         private void cboRequirementType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!AllowEvents || lvEffects.SelectedItems.Count == 0)
+            if (!AllowEvents || lvRequirements.SelectedItems.Count == 0)
                 return;
 
-            BaseEffect NewSkillEffect = ((BaseEffect)cboEffectType.SelectedItem).Copy();
-            BaseEffect OldSkillEffect = (BaseEffect)lvEffects.SelectedItems[0].Tag;
+            BaseSkillRequirement NewSkillEffect = ((BaseSkillRequirement)cboEffectType.SelectedItem).Copy();
+            BaseSkillRequirement OldSkillRequirement = (BaseSkillRequirement)lvRequirements.SelectedItems[0].Tag;
 
-            NewSkillEffect.CopyMembers(OldSkillEffect);
+            NewSkillEffect.CopyMembers(OldSkillRequirement);
 
-            lvEffects.SelectedItems[0].Tag = NewSkillEffect;
-            lvEffects.SelectedItems[0].Text = cboEffectType.Text;
-            pgEffect.SelectedObject = NewSkillEffect;
+            lvRequirements.SelectedItems[0].Tag = NewSkillEffect;
+            lvRequirements.SelectedItems[0].Text = cboEffectType.Text;
+            pgRequirement.SelectedObject = NewSkillEffect;
 
             AllowEvents = true;
         }

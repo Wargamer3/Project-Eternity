@@ -81,6 +81,12 @@
     <Compile Include="Project Eternity Map Editor.Designer.cs">
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project Eternity Tileset Preset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Tileset Preset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Tileset Preset Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Default Game Modes Conditions.resx">
       <DependentUpon>Default Game Modes Conditions.cs</DependentUpon>
@@ -91,6 +97,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Map Editor.resx">
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Tileset Preset Editor.resx">
+      <DependentUpon>Project Eternity Tileset Preset Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,6 +158,11 @@
       <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
+      <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
+      <Name>Microsoft Content Builder</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
       <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
       <Name>Project Eternity Battle Map</Name>
@@ -162,6 +176,11 @@
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
       <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
+      <Project>{CCF148C7-FEC2-4CD2-BC4F-25BC6C3A102A}</Project>
+      <Name>Project Eternity Image Viewer</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Music Player\Project Eternity Music Player.csproj">

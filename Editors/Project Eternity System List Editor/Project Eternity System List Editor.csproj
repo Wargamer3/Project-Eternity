@@ -58,6 +58,12 @@
     <Compile Include="Terrain and Unit Types Editor.Designer.cs">
       <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Variables List Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Variables List Editor.Designer.cs">
+      <DependentUpon>Variables List Editor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="System List Editor.resx">
@@ -65,6 +71,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Terrain and Unit Types Editor.resx">
       <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Variables List Editor.resx">
+      <DependentUpon>Variables List Editor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
