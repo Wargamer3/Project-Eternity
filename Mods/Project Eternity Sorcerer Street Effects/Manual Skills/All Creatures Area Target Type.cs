@@ -2,17 +2,17 @@
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetAreaTargetType : ManualSkillActivationSorcererStreet
+    public sealed class SorcererStreetAllCreaturesAreaTargetType : ManualSkillActivationSorcererStreet
     {
-        public static string Name = "Sorcerer Street Area";
+        public static string Name = "Sorcerer Street All Creatures Area";
 
-        public SorcererStreetAreaTargetType()
+        public SorcererStreetAllCreaturesAreaTargetType()
             : this(null)
         {
 
         }
 
-        public SorcererStreetAreaTargetType(SorcererStreetBattleParams Context)
+        public SorcererStreetAllCreaturesAreaTargetType(SorcererStreetBattleParams Context)
             : base(Name, true, Context)
         {
         }
@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override ManualSkillTarget Copy()
         {
-            return new SorcererStreetAreaTargetType(Params);
+            return new SorcererStreetAllCreaturesAreaTargetType(Params);
         }
     }
 }

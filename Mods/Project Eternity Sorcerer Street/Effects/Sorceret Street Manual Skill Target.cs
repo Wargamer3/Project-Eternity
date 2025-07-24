@@ -5,6 +5,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class ManualSkillActivationSorcererStreet : ManualSkillTarget
     {
+        public static readonly string AllPlayerTargetType = "Sorcerer Street All Player";
         public static readonly string PlayerTargetType = "Sorcerer Street Player";
         public static readonly string PlayerMovementTargetType = "Sorcerer Street Movement Player";
         private SorcererStreetBattleParams _Params;

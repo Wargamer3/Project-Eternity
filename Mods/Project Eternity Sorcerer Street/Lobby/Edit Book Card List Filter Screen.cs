@@ -271,7 +271,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
                         {
-                            if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
+                            if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                             {
                                 if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                                 {

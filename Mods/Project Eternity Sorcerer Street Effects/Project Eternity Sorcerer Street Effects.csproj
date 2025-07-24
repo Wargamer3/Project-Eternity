@@ -118,11 +118,12 @@
     <Compile Include="Effects\Enchants\Enchant Slow.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Land Bonus Limit.cs" />
     <Compile Include="Effects\Neutralize Next Spell.cs" />
-    <Compile Include="Manual Skills\Area Target Type.cs" />
+    <Compile Include="Manual Skills\All Creatures Area Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Creature Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Cepter Target Type.cs" />
-    <Compile Include="Manual Skills\Player Movement Target Type.cs" />
     <Compile Include="Manual Skills\Player Target Type.cs" />
+    <Compile Include="Manual Skills\Player Movement Target Type.cs" />
+    <Compile Include="Manual Skills\All Player Target Type.cs" />
     <Compile Include="Manual Skills\All Creatures Target Type.cs" />
     <Compile Include="Manual Skills\Creature Target Type.cs" />
     <Compile Include="Manual Skills\No Target Target Type.cs" />

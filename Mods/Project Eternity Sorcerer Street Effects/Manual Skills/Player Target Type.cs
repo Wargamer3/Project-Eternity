@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         }
 
-        public SorcererStreetPlayerTargetType(SorcererStreetBattleParams Context)
-            : base(PlayerTargetType, true, Context)
+        public SorcererStreetPlayerTargetType(SorcererStreetBattleParams Params)
+            : base(PlayerTargetType, true, Params)
         {
         }
 
@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
+            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelSelectPlayerSpell(Params.Map, ActiveSkill, false));
         }
 
         public override ManualSkillTarget Copy()

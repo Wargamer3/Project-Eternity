@@ -34,13 +34,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            foreach (TerrainSorcererStreet ActiveTerrain in Params.Map.ListSummonedCreature)
-            {
-                LandLevelLockEffect NewLandLevelLock = new LandLevelLockEffect(Params);
-                NewLandLevelLock.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
-                NewLandLevelLock.Lifetime[0].LifetimeTypeValue = 2;
-                ActiveTerrain.DefendingCreature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewLandLevelLock, IconHolder.Icons.sprCreatureDrought);
-            }
+            LandLevelLockEffect NewLandLevelLock = new LandLevelLockEffect(Params);
+            NewLandLevelLock.Lifetime[0].LifetimeType = SkillEffect.LifetimeTypeTurns;
+            NewLandLevelLock.Lifetime[0].LifetimeTypeValue = 2;
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreatePassiveEnchant(Name, NewLandLevelLock, IconHolder.Icons.sprCreatureDrought);
 
             return "Desert Storm";
         }

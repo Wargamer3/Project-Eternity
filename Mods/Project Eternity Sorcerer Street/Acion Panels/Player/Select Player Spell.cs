@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private ManualSkill EnchantToAdd;
 
-        public ActionPanelSelectPlayerSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd)
+        public ActionPanelSelectPlayerSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelf)
             : base("Select Player Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
