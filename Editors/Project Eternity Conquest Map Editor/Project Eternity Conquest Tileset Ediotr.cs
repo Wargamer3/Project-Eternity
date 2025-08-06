@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -22,7 +23,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public string[] GetTerrainTypes()
             {
-                return ConquestMap.AllTerrains;
+                ConquestTerrainHolder TerrainHolder = new ConquestTerrainHolder();
+                TerrainHolder.LoadData();
+                return TerrainHolder.ListConquestTerrainType.Select(x => x.TerrainName).ToArray();
+            }
+
+            public Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            {
+                return new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)

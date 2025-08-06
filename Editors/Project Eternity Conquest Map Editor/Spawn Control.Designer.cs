@@ -31,6 +31,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabSpawns = new System.Windows.Forms.TabPage();
+            this.pgUnit = new System.Windows.Forms.PropertyGrid();
             this.gbUnits = new System.Windows.Forms.GroupBox();
             this.lvUnits = new System.Windows.Forms.ListView();
             this.gbFilter = new System.Windows.Forms.GroupBox();
@@ -38,16 +39,24 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cbMoveType = new System.Windows.Forms.ComboBox();
             this.lblFactions = new System.Windows.Forms.Label();
             this.cbFactions = new System.Windows.Forms.ComboBox();
-            this.pgUnit = new System.Windows.Forms.PropertyGrid();
+            this.tabBuildings = new System.Windows.Forms.TabPage();
+            this.pgBuilding = new System.Windows.Forms.PropertyGrid();
+            this.gbBuildings = new System.Windows.Forms.GroupBox();
+            this.lvBuildings = new System.Windows.Forms.ListView();
+            this.lblBuildingFaction = new System.Windows.Forms.Label();
+            this.cbBuildingFaction = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabSpawns.SuspendLayout();
             this.gbUnits.SuspendLayout();
             this.gbFilter.SuspendLayout();
+            this.tabBuildings.SuspendLayout();
+            this.gbBuildings.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabSpawns);
+            this.tabControl1.Controls.Add(this.tabBuildings);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -68,6 +77,17 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabSpawns.TabIndex = 0;
             this.tabSpawns.Text = "Spawns";
             this.tabSpawns.UseVisualStyleBackColor = true;
+            // 
+            // pgUnit
+            // 
+            this.pgUnit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgUnit.Location = new System.Drawing.Point(6, 264);
+            this.pgUnit.Name = "pgUnit";
+            this.pgUnit.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgUnit.Size = new System.Drawing.Size(313, 227);
+            this.pgUnit.TabIndex = 7;
+            this.pgUnit.ToolbarVisible = false;
             // 
             // gbUnits
             // 
@@ -144,16 +164,74 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cbFactions.Size = new System.Drawing.Size(260, 21);
             this.cbFactions.TabIndex = 1;
             // 
-            // pgUnit
+            // tabBuildings
             // 
-            this.pgUnit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabBuildings.Controls.Add(this.pgBuilding);
+            this.tabBuildings.Controls.Add(this.gbBuildings);
+            this.tabBuildings.Controls.Add(this.lblBuildingFaction);
+            this.tabBuildings.Controls.Add(this.cbBuildingFaction);
+            this.tabBuildings.Location = new System.Drawing.Point(4, 22);
+            this.tabBuildings.Name = "tabBuildings";
+            this.tabBuildings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabBuildings.Size = new System.Drawing.Size(325, 497);
+            this.tabBuildings.TabIndex = 1;
+            this.tabBuildings.Text = "Buildings";
+            this.tabBuildings.UseVisualStyleBackColor = true;
+            // 
+            // pgBuilding
+            // 
+            this.pgBuilding.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgUnit.Location = new System.Drawing.Point(6, 264);
-            this.pgUnit.Name = "pgUnit";
-            this.pgUnit.Size = new System.Drawing.Size(313, 227);
-            this.pgUnit.TabIndex = 7;
-            this.pgUnit.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgUnit.ToolbarVisible = false;
+            this.pgBuilding.Location = new System.Drawing.Point(6, 262);
+            this.pgBuilding.Name = "pgBuilding";
+            this.pgBuilding.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgBuilding.Size = new System.Drawing.Size(313, 227);
+            this.pgBuilding.TabIndex = 11;
+            this.pgBuilding.ToolbarVisible = false;
+            // 
+            // gbBuildings
+            // 
+            this.gbBuildings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbBuildings.Controls.Add(this.lvBuildings);
+            this.gbBuildings.Location = new System.Drawing.Point(6, 34);
+            this.gbBuildings.Name = "gbBuildings";
+            this.gbBuildings.Size = new System.Drawing.Size(313, 222);
+            this.gbBuildings.TabIndex = 10;
+            this.gbBuildings.TabStop = false;
+            this.gbBuildings.Text = "Buildings";
+            // 
+            // lvBuildings
+            // 
+            this.lvBuildings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvBuildings.HideSelection = false;
+            this.lvBuildings.Location = new System.Drawing.Point(6, 19);
+            this.lvBuildings.Name = "lvBuildings";
+            this.lvBuildings.Size = new System.Drawing.Size(301, 197);
+            this.lvBuildings.TabIndex = 0;
+            this.lvBuildings.UseCompatibleStateImageBehavior = false;
+            // 
+            // lblBuildingFaction
+            // 
+            this.lblBuildingFaction.AutoSize = true;
+            this.lblBuildingFaction.Location = new System.Drawing.Point(6, 15);
+            this.lblBuildingFaction.Name = "lblBuildingFaction";
+            this.lblBuildingFaction.Size = new System.Drawing.Size(42, 13);
+            this.lblBuildingFaction.TabIndex = 9;
+            this.lblBuildingFaction.Text = "Faction";
+            // 
+            // cbBuildingFaction
+            // 
+            this.cbBuildingFaction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbBuildingFaction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBuildingFaction.FormattingEnabled = true;
+            this.cbBuildingFaction.Location = new System.Drawing.Point(59, 7);
+            this.cbBuildingFaction.Name = "cbBuildingFaction";
+            this.cbBuildingFaction.Size = new System.Drawing.Size(260, 21);
+            this.cbBuildingFaction.TabIndex = 8;
             // 
             // ConquestSpawnUserControl
             // 
@@ -166,6 +244,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbUnits.ResumeLayout(false);
             this.gbFilter.ResumeLayout(false);
             this.gbFilter.PerformLayout();
+            this.tabBuildings.ResumeLayout(false);
+            this.tabBuildings.PerformLayout();
+            this.gbBuildings.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -181,5 +262,11 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         public System.Windows.Forms.ComboBox cbFactions;
         public System.Windows.Forms.ComboBox cbMoveType;
         public System.Windows.Forms.PropertyGrid pgUnit;
+        private System.Windows.Forms.TabPage tabBuildings;
+        public System.Windows.Forms.PropertyGrid pgBuilding;
+        private System.Windows.Forms.GroupBox gbBuildings;
+        public System.Windows.Forms.ListView lvBuildings;
+        private System.Windows.Forms.Label lblBuildingFaction;
+        public System.Windows.Forms.ComboBox cbBuildingFaction;
     }
 }

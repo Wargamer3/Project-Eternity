@@ -8,8 +8,8 @@ namespace ProjectEternity.Core.Units
     {
         public string Name;
 
-        public string ActivationName;
-        public string AnnulatioName;
+        public string ActivationName;//Fly, dig in, etc
+        public string AnnulatioName;//Land, rise, etc
         public byte WallHardness;
 
         public List<ITerrainRestriction> ListRestriction;

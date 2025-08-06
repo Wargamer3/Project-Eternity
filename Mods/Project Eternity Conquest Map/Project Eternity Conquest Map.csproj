@@ -119,6 +119,7 @@
     <Compile Include="Overlays.cs" />
     <Compile Include="Map Interaction.cs" />
     <Compile Include="Movement Algorithm Conquest.cs" />
+    <Compile Include="Building.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Rules\Campaign Game Rule.cs" />
     <Compile Include="Rules\Capture The Flag Game Rule.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Layers\Weather Rain Size Manager.cs" />
     <Compile Include="Unit Delegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Building Spawn.cs" />
     <Compile Include="Unit Spawn.cs" />
   </ItemGroup>
   <ItemGroup>

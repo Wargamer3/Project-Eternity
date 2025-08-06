@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         if (P == Map.ActivePlayerIndex)//Ally.
                         {
-                            AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, P, CursorSelect));
+                            AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, P, CursorSelect, Map.GetTerrainUnderCursor()));
                         }
                         else//Enemy.
                         {

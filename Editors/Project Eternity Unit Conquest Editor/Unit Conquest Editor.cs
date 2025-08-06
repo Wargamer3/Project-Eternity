@@ -54,7 +54,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             BW.Write((Int32)txtMovement.Value);
             BW.Write((Int32)txtAmmo.Value);
             BW.Write((Int32)txtGaz.Value);
-            BW.Write((Int32)txtMaterial.Value);
+            BW.Write((Int32)txtCost.Value);
             BW.Write(cbMovementType.Text);
             BW.Write(cbArmourType.Text);
             BW.Write((Int32)txtGazCostPerTurn.Value);
@@ -91,7 +91,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             txtMovement.Value = LoadedUnit.MaxMovement;
             txtAmmo.Value = LoadedUnit.Ammo;
             txtGaz.Value = LoadedUnit.Gaz;
-            txtMaterial.Value = LoadedUnit.Material;
+            txtCost.Value = LoadedUnit.Cost;
             txtGazCostPerTurn.Value = LoadedUnit.GazCostPerTurn;
             txtVisionRange.Value = LoadedUnit.VisionRange;
 

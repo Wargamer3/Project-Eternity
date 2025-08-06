@@ -68,7 +68,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 //Move to be in range.
 
                 List<Vector3> ListRealChoice = new List<Vector3>();
-                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveUnit);
+                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveUnit, Info.Map);
                 foreach (MovementAlgorithmTile ActiveTerrain in ListMVTile)
                 {
                     ListRealChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));

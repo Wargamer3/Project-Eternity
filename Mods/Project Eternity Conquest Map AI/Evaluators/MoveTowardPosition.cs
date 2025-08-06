@@ -28,7 +28,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 List<Unit> ListChoice = new List<Unit>();
 
                 float DistanceMax = 99999;
-                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit, Info.Map);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 //Remove everything that is closer then DistanceMax.

@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public Texture2D sprTileBorderRed;
         public Texture2D sprTileBorderBlue;
 
-        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        public override MovementAlgorithmTile CursorTerrain { get { return GetTerrain(CursorPosition); } }
 
         public List<Dictionary<string, int>> ListUnitMovementCost;//Terrain Type Index, Movement type, how much it cost to move.
         public Dictionary<string, List<string>> DicWeapon1EffectiveAgainst;//Unit Name, Target Name.
@@ -63,7 +63,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public List<string> ListCurrentBuildingChoice;
         public Dictionary<string, List<string>> DicBuildingChoice;//Build type, list of units.
         public Vector3 LastPosition;
-        public List<string> ListTerrainType;
 
         private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
@@ -78,6 +77,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public ConquestParams GlobalBattleParams;
         public List<ConquestMutator> ListMutator;
         public Dictionary<Vector3, TerrainConquest> DicTemporaryTerrain;//Temporary obstacles
+        public ConquestTerrainHolder TerrainHolder;
 
         public int ActiveUnitIndex
         {
@@ -159,9 +159,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<ConquestMutator>();
             DicTemporaryTerrain = new Dictionary<Vector3, TerrainConquest>();
-
-            TerrainRestrictions = new UnitAndTerrainValues();
-            TerrainRestrictions.Load();
+            TerrainHolder = new ConquestTerrainHolder();
         }
 
         public ConquestMap(GameModeInfo GameInfo, ConquestParams Params)
@@ -172,32 +170,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Camera2DPosition = Vector3.Zero;
             ActiveUnitIndex = -1;
 
-            ListTerrainType = new List<string>();
             ListCurrentBuildingChoice = new List<string>();
-
-            ListTerrainType.Add("Plains");
-            ListTerrainType.Add("Road");
-            ListTerrainType.Add("Wood");
-            ListTerrainType.Add("Mountains");
-            ListTerrainType.Add("Wasteland");
-            ListTerrainType.Add("Ruins");
-            ListTerrainType.Add("Sea");
-            ListTerrainType.Add("Bridge");
-            ListTerrainType.Add("River");
-            ListTerrainType.Add("Beach");
-            ListTerrainType.Add("Rough Sea");
-            ListTerrainType.Add("Mist");
-            ListTerrainType.Add("Reef");
-            ListTerrainType.Add("HQ");
-            ListTerrainType.Add("City");
-            ListTerrainType.Add("Factory");
-            ListTerrainType.Add("Airport");
-            ListTerrainType.Add("Port");
-            ListTerrainType.Add("Com Tower");
-            ListTerrainType.Add("Radar");
-            ListTerrainType.Add("Temp Airport");
-            ListTerrainType.Add("Temp Port");
-            ListTerrainType.Add("Missile Silo");
 
             ListTileSet = new List<Texture2D>();
             this.Camera2DPosition = Vector3.Zero;
@@ -254,6 +227,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 DicCutsceneScript.Add(ActiveListScript.Name, ActiveListScript);
             }
+
+            TerrainHolder.LoadData();
 
             Player NewPlayer = new Player("Human", "Human", true, false, 0, Color.Red);
             ListPlayer.Add(NewPlayer);
@@ -1234,7 +1209,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             Vector3 FinalPosition = Position + Displacement;
 
-            if (FinalPosition.X < 0 || FinalPosition.X > MapSize.X || FinalPosition.Y < 0 || FinalPosition.Y > MapSize.Y)
+            if (!IsInsideMap(FinalPosition))
                 return -1;
 
             int S = 0;
@@ -1259,36 +1234,37 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return -1;
         }
 
-        public List<MovementAlgorithmTile> GetMVChoice(UnitConquest CurrentUnit)
+        public List<MovementAlgorithmTile> GetMVChoice(UnitConquest CurrentUnit, ConquestMap ActiveMap)
         {
-            Vector3 Position = CurrentUnit.Position;
-
-            int MaxMVCost = CurrentUnit.MaxMovement;//Maximum distance you can reach.
-
-            MaxMVCost += CurrentUnit.Boosts.MovementModifier;
+            int StartingMV = GetSquadMaxMovement(CurrentUnit);//Maximum distance you can reach.
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost, false);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(CurrentUnit.Components, ActiveMap), CurrentUnit.Components, CurrentUnit.UnitStat, StartingMV, false);
 
-            List<MovementAlgorithmTile> ListMVChoice = new List<MovementAlgorithmTile>();
+            List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
+
             for (int i = 0; i < ListAllNode.Count; i++)
             {
+                ListAllNode[i].ParentTemp = null;//Unset parents
+                ListAllNode[i].MovementCost = 0;
+
+                if (ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainWallIndex || ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    continue;
+                }
                 bool UnitFound = false;
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
                 {
-                    //Don't check for yourself.
-                    if (ListAllNode[i].WorldPosition.X == Position.X && ListAllNode[i].WorldPosition.Y == Position.Y)
-                        continue;
-                    //Check if there's a Unit.
-                    if (CheckForObstacleAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero))
+                    int SquadIndex = CheckForSquadAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero);
+                    if (SquadIndex >= 0)
                         UnitFound = true;
                 }
                 //If there is no Unit.
                 if (!UnitFound)
-                    ListMVChoice.Add(ListAllNode[i]);
+                    MovementChoice.Add(ListAllNode[i]);
             }
 
-            return ListMVChoice;
+            return MovementChoice;
         }
 
         public int GetSquadMaxMovement(UnitConquest ActiveUnit)
@@ -1328,7 +1304,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 float TotalENCost = 0;
                 foreach (Vector3 TerrainCrossed in ListMVHoverPoints)
                 {
-                    TotalENCost += TerrainRestrictions.GetENCost(ActiveUnit.Components, ActiveUnit.UnitStat, GetTerrain(TerrainCrossed).TerrainTypeIndex);
+                    TotalENCost += 0;
                     ListLayerIndex.Add((int)TerrainCrossed.Z);
                 }
                 if (TotalENCost > 0)
@@ -1496,39 +1472,47 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public TerrainConquest GetTerrain(int X, int Y, int LayerIndex)
         {
-            return GetTerrain(new Vector3(X, Y, LayerIndex));
+            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
         public TerrainConquest GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
+            return GetTerrain(ActiveUnit.Position);
         }
 
-        public TerrainConquest GetTerrain(Vector3 Position)
+        public TerrainConquest GetTerrain(Vector3 WorldPosition)
         {
-            TerrainConquest TemporaryTerrain;
-            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
-            {
-                return TemporaryTerrain;
-            }
-            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
-        }
+            WorldPosition = ConvertToGridPosition(WorldPosition);
 
-        public MovementAlgorithmTile GetNextLayerTile(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
-        {
-            ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.GridPosition.X + OffsetX;
-            int NextY = StartingPosition.GridPosition.Y + OffsetY;
-
-            if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
+            if (WorldPosition.X < 0 || WorldPosition.X >= MapSize.X || WorldPosition.Y < 0 || WorldPosition.Y >= MapSize.Y || WorldPosition.Z < 0 || WorldPosition.Z >= LayerManager.ListLayer.Count)
             {
                 return null;
             }
 
-            byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
-            TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
+            TerrainConquest TemporaryTerrain;
+            if (DicTemporaryTerrain.TryGetValue(WorldPosition, out TemporaryTerrain))
+            {
+                return TemporaryTerrain;
+            }
 
-            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
+            return LayerManager.ListLayer[(int)WorldPosition.Z].ArrayTerrain[(int)WorldPosition.X, (int)WorldPosition.Y];
+        }
+
+        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int GridOffsetX, int GridOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        {
+            ListLayerPossibility = new List<MovementAlgorithmTile>();
+            int NextX = StartingPosition.GridPosition.X + GridOffsetX;
+            int NextY = StartingPosition.GridPosition.Y + GridOffsetY;
+
+            if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
+            {
+                return StartingPosition.WorldPosition;
+            }
+
+            byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
+            ConquestTerrainType CurrentTerrainType = TerrainHolder.ListConquestTerrainType[CurrentTerrainIndex];
+
+            bool IsOnUsableTerrain = CurrentTerrainType.DicMovementCostByMoveType.Count > 0;
 
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
@@ -1537,19 +1521,18 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + GridOffsetX * TileSize.X, StartingPosition.WorldPosition.Y + GridOffsetY * TileSize.Y, L * LayerHeight));
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
-                TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
-                bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+                ConquestTerrainType NextTerrainType = TerrainHolder.ListConquestTerrainType[NextTerrainIndex];
+                bool IsNextTerrainnUsable = NextTerrainType.DicMovementCostByMoveType.Count > 0;
 
                 Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
-                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
-                bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+                ConquestTerrainType PreviousTerrainType = TerrainHolder.ListConquestTerrainType[PreviousTerrain.TerrainTypeIndex];
+                bool IsPreviousTerrainnUsable = PreviousTerrainType.DicMovementCostByMoveType.Count > 0;
 
-                if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
+                if (L > StartingPosition.LayerIndex && PreviousTerrainType.DicMovementCostByMoveType.Count == 0)
                 {
                     break;
                 }
@@ -1592,7 +1575,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
-                        return NextTerrain;
+                        return NextTerrain.WorldPosition;
                     }
                     //Prioritize going upward
                     else if (NextTerrainZ > StartingPosition.LayerIndex)
@@ -1610,21 +1593,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (ClosestLayerIndexDown != null)
             {
-                return ClosestLayerIndexDown;
+                return ClosestLayerIndexDown.WorldPosition;
             }
             else
             {
-                return ClosestLayerIndexUp;
+                return ClosestLayerIndexUp.WorldPosition;
             }
         }
 
-        public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
+        public MovementAlgorithmTile GetTerrainIncludingPlatforms(Vector3 WorldPosition)
         {
             if (!IsAPlatform)
             {
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
-                    MovementAlgorithmTile FoundTile = ((ConquestMap)ActivePlatform.Map).LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[StartingPosition.GridPosition.X + OffsetX, StartingPosition.GridPosition.Y + OffsetY];
+                    MovementAlgorithmTile FoundTile = ((ConquestMap)ActivePlatform.Map).GetTerrain(WorldPosition);
 
                     if (FoundTile != null)
                     {
@@ -1633,8 +1616,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            return GetTerrain(new Vector3(StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY, NextLayerIndex));
+            return GetTerrain(WorldPosition);
         }
+
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
@@ -1642,18 +1626,28 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
 
-                byte NextTerrainType = ActiveTerrain.TerrainTypeIndex;
+                var NextTerrainType = TerrainHolder.ListConquestTerrainType[ActiveTerrain.TerrainTypeIndex];
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff != 0 && ZDiff < MaxClearance)
+                if (NextTerrainType.DicMovementCostByMoveType.Count > 0 && ZDiff != 0 && ZDiff < MaxClearance)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public float GetMVCost(UnitMapComponent Unit, UnitStats Stats, byte TerrainTypeIndex)
+        {
+            if (Unit.CurrentTerrainIndex != TerrainTypeIndex)
+            {
+                //return ListConquestTerrainType[TerrainTypeIndex].GetEntryCost(Unit, Stats);
+            }
+
+            return TerrainHolder.ListConquestTerrainType[TerrainTypeIndex].DicMovementCostByMoveType[Stats.UnitTypeIndex];
         }
 
         public MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
@@ -1782,6 +1776,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, uint ID, Vector3 Position)
         {
+            Position = Position + new Vector3(TileSize.X / 2, TileSize.Y / 2, 0);
+
             NewUnit.InitStat();
 
             while (ListPlayer.Count <= PlayerIndex)

@@ -51,7 +51,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
                 DistanceMax = 99999;
                 List<Vector3> ListMVChoice = new List<Vector3>();
-                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveUnit);
+                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveUnit, Info.Map);
                 foreach (MovementAlgorithmTile ActiveTerrain in ListMVTile)
                 {
                     ListMVChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));

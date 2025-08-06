@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                 NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
 
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX, ActiveLayer.ListUnitSpawn[S].SpawnPositionY, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
+                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX * Owner.TileSize.X, ActiveLayer.ListUnitSpawn[S].SpawnPositionY * Owner.TileSize.Y, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
                                 ++SpawnSquadIndex;
                             }
                         }

@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
             DistanceMax = 99999;
-            List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit);
+            List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit, Map);
             int FinalMV = 0;
 
             //If for some reason, there's no target on to move at, don't move.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -7,36 +8,57 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class MovementAlgorithmConquest : MovementAlgorithm
     {
-        ConquestMap Map;
+        private readonly ConquestMap Map;
+        private const bool AllowGoThroughGround = false;
 
         public MovementAlgorithmConquest(ConquestMap Map)
         {
             this.Map = Map;
         }
 
-        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
-            UnitMapComponent MapComponent, UnitStats Stats, bool IgnoreObstacles)
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float GridOffsetX, float GridOffsetY,
+            UnitMapComponent MapComponent, UnitStats UnitStat, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            Map.GetNextLayerTile(StartingNode, (int)OffsetX, (int)OffsetY, 1f, 15, out ListLayerPossibility);
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, (int)GridOffsetX, (int)GridOffsetY, 1f, 1, out ListLayerPossibility));
 
-            foreach (MovementAlgorithmTile ActiveDestination in ListLayerPossibility)
+            if (NextRegularMovementDestination == StartingNode)
             {
-                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.Y + OffsetY), ActiveDestination.LayerIndex);
+                return ListTerrainSuccessor;
+            }
+
+            int NextRegularMovementLayerIndex = NextRegularMovementDestination.LayerIndex;
+
+            foreach (MovementAlgorithmTile ActiveTile in ListLayerPossibility)
+            {
                 //Wall
-                if (ActiveTile == null || ActiveTile.MovementCost == -1
-                    || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                if (ActiveTile == null || ActiveTile.TerrainTypeIndex >= Map.TerrainHolder.ListConquestTerrainType.Count
+                    || !Map.TerrainHolder.ListConquestTerrainType[ActiveTile.TerrainTypeIndex].DicMovementCostByMoveType.ContainsKey(UnitStat.UnitTypeIndex)
+                    || Map.TerrainHolder.ListConquestTerrainType[ActiveTile.TerrainTypeIndex].DicMovementCostByMoveType[UnitStat.UnitTypeIndex] == 0 
+                    || ActiveTile.MovementCost == -1)
                 {
                     continue;
                 }
 
-                //If the NewNode is the parent, skip it.
-                if (StartingNode.ParentTemp == null)
+                if (!AllowGoThroughGround && ActiveTile.LayerIndex < NextRegularMovementLayerIndex && ActiveTile.LayerIndex != NextRegularMovementLayerIndex && ListLayerPossibility.Contains(StartingNode))
                 {
-                    //Used for an undefined map or if you don't need to calculate the whole map.
-                    //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
-                    ActiveTile.ParentTemp = StartingNode;
+                    continue;
+                }
+
+                foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[ActiveTile.LayerIndex].ListTeleportPoint)
+                {
+                    if (ActiveTeleport.Position.X == ActiveTile.WorldPosition.X && ActiveTeleport.Position.Y == ActiveTile.WorldPosition.Y)
+                    {
+                        ListTerrainSuccessor.Add(GetTile(ActiveTeleport.OtherMapEntryPoint.X, ActiveTeleport.OtherMapEntryPoint.Y, ActiveTeleport.OtherMapEntryLayer));
+                        break;
+                    }
+                }
+
+                if (IgnoreObstacles
+                    || (StartingNode.WorldPosition.X == MapComponent.X && StartingNode.WorldPosition.Y == MapComponent.Y && StartingNode.LayerIndex == MapComponent.Z)
+                    || !ActiveTile.Owner.CheckForObstacleAtPosition(new Vector3(ActiveTile.WorldPosition.X, ActiveTile.WorldPosition.Y, ActiveTile.LayerIndex), Vector3.Zero))
+                {
                     ListTerrainSuccessor.Add(ActiveTile);
                 }
             }
@@ -46,7 +68,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
-            return 1;
+            return Map.GetMVCost(MapComponent, UnitStat, TerrainToGo.TerrainTypeIndex);
         }
 
         public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)

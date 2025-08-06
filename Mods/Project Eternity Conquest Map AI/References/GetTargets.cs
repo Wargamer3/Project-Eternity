@@ -36,7 +36,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
                     if (_AddMovementToRange && CanAttackPostMovement)
                     {
-                        ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
+                        ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit, Info.Map);
                     }
                     else
                     {

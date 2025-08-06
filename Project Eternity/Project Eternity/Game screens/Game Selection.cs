@@ -174,7 +174,7 @@ namespace ProjectEternity
                     case MenuChoices.Conquest:
                         RemoveAllScreens();
                         BattleMap NewConquestMap = BattleMap.DicBattmeMapType[GameScreens.ConquestMapScreen.ConquestMap.MapType].GetNewMap(null, string.Empty);
-                        NewConquestMap.BattleMapPath = "Conquest Test";
+                        NewConquestMap.BattleMapPath = "New Item";
                         NewConquestMap.ListGameScreen = ListGameScreen;
                         NewConquestMap.Load();
                         NewConquestMap.Init();

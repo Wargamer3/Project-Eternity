@@ -3,15 +3,14 @@ using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
-    public class UnitSpawn
+    public class BuildingSpawn
     {
-        public UnitConquest UnitToSpawn;
+        public BuildingConquest BuildingToSpawn;
 
-        public string UnitPath;
+        public string BuildingPath;
         private uint _SpawnID;
         private Point _SpawnPosition;
         private byte _SpawnLayer;
@@ -22,9 +21,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private byte _Upgrades;
         private string _AIPath;
 
-        public UnitSpawn(BinaryReader BR)
+        public BuildingSpawn(BinaryReader BR)
         {
-            UnitPath = BR.ReadString();
+            BuildingPath = BR.ReadString();
             _SpawnID = BR.ReadUInt32();
             _SpawnPosition = new Point(BR.ReadInt32(), BR.ReadInt32());
             _SpawnLayer = BR.ReadByte();
@@ -34,13 +33,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             _StartHP = BR.ReadInt32();
             _Upgrades = BR.ReadByte();
             _AIPath = BR.ReadString();
-            UnitToSpawn = new UnitConquest(UnitPath, GameScreens.GameScreen.ContentFallback, null, null);
+            BuildingToSpawn = new BuildingConquest(BuildingPath, GameScreens.GameScreen.ContentFallback, null, null, null);
         }
 
-        public UnitSpawn(UnitConquest UnitToSpawn, Point _SpawnPosition, byte SpawnLayer)
+        public BuildingSpawn(BuildingConquest BuildingToSpawn, Point _SpawnPosition, byte SpawnLayer)
         {
-            this.UnitToSpawn = UnitToSpawn;
-            this.UnitPath = UnitToSpawn.RelativePath;
+            this.BuildingToSpawn = BuildingToSpawn;
+            this.BuildingPath = BuildingToSpawn.RelativePath;
             this._SpawnPosition = _SpawnPosition;
             this.SpawnLayer = SpawnLayer;
 
@@ -53,7 +52,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(UnitPath);
+            BW.Write(BuildingPath);
             BW.Write(_SpawnID);
             BW.Write(_SpawnPosition.X);
             BW.Write(_SpawnPosition.Y);
@@ -139,7 +138,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         [CategoryAttribute("Spawner Attributes"),
-        DescriptionAttribute("Decide if this Unit is important and shouldn't be destroyed.")]
+        DescriptionAttribute("Decide if this Building is important and shouldn't be destroyed.")]
         public bool IsEventSquad
         {
             get
@@ -153,7 +152,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         [CategoryAttribute("Spawner Attributes"),
-        DescriptionAttribute("Decide if this Unit can be controlled by a player.")]
+        DescriptionAttribute("Decide if this Building can be controlled by a player.")]
         public bool IsPlayerControlled
         {
             get

@@ -30,30 +30,30 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbArmourType = new System.Windows.Forms.ComboBox();
-            this.label16 = new System.Windows.Forms.Label();
+            this.lblArmourType = new System.Windows.Forms.Label();
             this.txtVisionRange = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
+            this.lblVisionRange = new System.Windows.Forms.Label();
             this.txtGazCostPerTurn = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.txtMaterial = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblGazCostPerTurn = new System.Windows.Forms.Label();
+            this.txtCost = new System.Windows.Forms.NumericUpDown();
+            this.lblCost = new System.Windows.Forms.Label();
             this.txtGaz = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblGaz = new System.Windows.Forms.Label();
             this.txtAmmo = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblAmmo = new System.Windows.Forms.Label();
             this.cbMovementType = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblMovementType = new System.Windows.Forms.Label();
             this.txtMovement = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblMovement = new System.Windows.Forms.Label();
             this.txtHP = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblHP = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtWeapon1MaximumRange = new System.Windows.Forms.NumericUpDown();
             this.txtWeapon1MinimumRange = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.cbWeapon1PostMovement = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lblWeaponName1 = new System.Windows.Forms.Label();
             this.txtWeapon1Name = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtWeapon2MaximumRange = new System.Windows.Forms.NumericUpDown();
@@ -61,7 +61,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.cbWeapon2PostMovement = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblWeaponName2 = new System.Windows.Forms.Label();
             this.txtWeapon2Name = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
@@ -69,14 +69,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.bgSpritePreview = new System.Windows.Forms.GroupBox();
+            this.viewerBattleSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
+            this.btnImportBattleSprite = new System.Windows.Forms.Button();
             this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.btnImportMapSprite = new System.Windows.Forms.Button();
-            this.btnImportBattleSprite = new System.Windows.Forms.Button();
-            this.viewerBattleSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaterial)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGaz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMovement)).BeginInit();
@@ -96,23 +96,23 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.cbArmourType);
-            this.groupBox1.Controls.Add(this.label16);
+            this.groupBox1.Controls.Add(this.lblArmourType);
             this.groupBox1.Controls.Add(this.txtVisionRange);
-            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.lblVisionRange);
             this.groupBox1.Controls.Add(this.txtGazCostPerTurn);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.txtMaterial);
-            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.lblGazCostPerTurn);
+            this.groupBox1.Controls.Add(this.txtCost);
+            this.groupBox1.Controls.Add(this.lblCost);
             this.groupBox1.Controls.Add(this.txtGaz);
-            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.lblGaz);
             this.groupBox1.Controls.Add(this.txtAmmo);
-            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.lblAmmo);
             this.groupBox1.Controls.Add(this.cbMovementType);
-            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.lblMovementType);
             this.groupBox1.Controls.Add(this.txtMovement);
-            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.lblMovement);
             this.groupBox1.Controls.Add(this.txtHP);
-            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.lblHP);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(239, 264);
@@ -138,14 +138,14 @@
             this.cbArmourType.Size = new System.Drawing.Size(121, 21);
             this.cbArmourType.TabIndex = 18;
             // 
-            // label16
+            // lblArmourType
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 185);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(70, 13);
-            this.label16.TabIndex = 19;
-            this.label16.Text = "Armour Type:";
+            this.lblArmourType.AutoSize = true;
+            this.lblArmourType.Location = new System.Drawing.Point(6, 185);
+            this.lblArmourType.Name = "lblArmourType";
+            this.lblArmourType.Size = new System.Drawing.Size(70, 13);
+            this.lblArmourType.TabIndex = 19;
+            this.lblArmourType.Text = "Armour Type:";
             // 
             // txtVisionRange
             // 
@@ -159,14 +159,14 @@
             this.txtVisionRange.Size = new System.Drawing.Size(64, 20);
             this.txtVisionRange.TabIndex = 15;
             // 
-            // label14
+            // lblVisionRange
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 237);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(73, 13);
-            this.label14.TabIndex = 14;
-            this.label14.Text = "Vision Range:";
+            this.lblVisionRange.AutoSize = true;
+            this.lblVisionRange.Location = new System.Drawing.Point(6, 237);
+            this.lblVisionRange.Name = "lblVisionRange";
+            this.lblVisionRange.Size = new System.Drawing.Size(73, 13);
+            this.lblVisionRange.TabIndex = 14;
+            this.lblVisionRange.Text = "Vision Range:";
             // 
             // txtGazCostPerTurn
             // 
@@ -180,35 +180,35 @@
             this.txtGazCostPerTurn.Size = new System.Drawing.Size(64, 20);
             this.txtGazCostPerTurn.TabIndex = 13;
             // 
-            // label11
+            // lblGazCostPerTurn
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 211);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(94, 13);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "Gaz cost per turn: ";
+            this.lblGazCostPerTurn.AutoSize = true;
+            this.lblGazCostPerTurn.Location = new System.Drawing.Point(6, 211);
+            this.lblGazCostPerTurn.Name = "lblGazCostPerTurn";
+            this.lblGazCostPerTurn.Size = new System.Drawing.Size(94, 13);
+            this.lblGazCostPerTurn.TabIndex = 12;
+            this.lblGazCostPerTurn.Text = "Gaz cost per turn: ";
             // 
-            // txtMaterial
+            // txtCost
             // 
-            this.txtMaterial.Location = new System.Drawing.Point(75, 126);
-            this.txtMaterial.Maximum = new decimal(new int[] {
+            this.txtCost.Location = new System.Drawing.Point(75, 126);
+            this.txtCost.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.txtMaterial.Name = "txtMaterial";
-            this.txtMaterial.Size = new System.Drawing.Size(64, 20);
-            this.txtMaterial.TabIndex = 11;
+            this.txtCost.Name = "txtCost";
+            this.txtCost.Size = new System.Drawing.Size(64, 20);
+            this.txtCost.TabIndex = 11;
             // 
-            // label6
+            // lblCost
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 128);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(47, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Material:";
+            this.lblCost.AutoSize = true;
+            this.lblCost.Location = new System.Drawing.Point(6, 128);
+            this.lblCost.Name = "lblCost";
+            this.lblCost.Size = new System.Drawing.Size(31, 13);
+            this.lblCost.TabIndex = 10;
+            this.lblCost.Text = "Cost:";
             // 
             // txtGaz
             // 
@@ -217,14 +217,14 @@
             this.txtGaz.Size = new System.Drawing.Size(64, 20);
             this.txtGaz.TabIndex = 9;
             // 
-            // label5
+            // lblGaz
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 102);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(29, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Gaz:";
+            this.lblGaz.AutoSize = true;
+            this.lblGaz.Location = new System.Drawing.Point(6, 102);
+            this.lblGaz.Name = "lblGaz";
+            this.lblGaz.Size = new System.Drawing.Size(29, 13);
+            this.lblGaz.TabIndex = 8;
+            this.lblGaz.Text = "Gaz:";
             // 
             // txtAmmo
             // 
@@ -233,14 +233,14 @@
             this.txtAmmo.Size = new System.Drawing.Size(64, 20);
             this.txtAmmo.TabIndex = 7;
             // 
-            // label4
+            // lblAmmo
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 76);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(39, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Ammo:";
+            this.lblAmmo.AutoSize = true;
+            this.lblAmmo.Location = new System.Drawing.Point(6, 76);
+            this.lblAmmo.Name = "lblAmmo";
+            this.lblAmmo.Size = new System.Drawing.Size(39, 13);
+            this.lblAmmo.TabIndex = 6;
+            this.lblAmmo.Text = "Ammo:";
             // 
             // cbMovementType
             // 
@@ -260,14 +260,14 @@
             this.cbMovementType.Size = new System.Drawing.Size(121, 21);
             this.cbMovementType.TabIndex = 1;
             // 
-            // label3
+            // lblMovementType
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 158);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Movement Type:";
+            this.lblMovementType.AutoSize = true;
+            this.lblMovementType.Location = new System.Drawing.Point(6, 158);
+            this.lblMovementType.Name = "lblMovementType";
+            this.lblMovementType.Size = new System.Drawing.Size(87, 13);
+            this.lblMovementType.TabIndex = 5;
+            this.lblMovementType.Text = "Movement Type:";
             // 
             // txtMovement
             // 
@@ -286,14 +286,14 @@
             0,
             0});
             // 
-            // label2
+            // lblMovement
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Movement: ";
+            this.lblMovement.AutoSize = true;
+            this.lblMovement.Location = new System.Drawing.Point(6, 50);
+            this.lblMovement.Name = "lblMovement";
+            this.lblMovement.Size = new System.Drawing.Size(63, 13);
+            this.lblMovement.TabIndex = 3;
+            this.lblMovement.Text = "Movement: ";
             // 
             // txtHP
             // 
@@ -312,14 +312,14 @@
             0,
             0});
             // 
-            // label1
+            // lblHP
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "HP: ";
+            this.lblHP.AutoSize = true;
+            this.lblHP.Location = new System.Drawing.Point(6, 24);
+            this.lblHP.Name = "lblHP";
+            this.lblHP.Size = new System.Drawing.Size(28, 13);
+            this.lblHP.TabIndex = 1;
+            this.lblHP.Text = "HP: ";
             // 
             // groupBox2
             // 
@@ -328,7 +328,7 @@
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.cbWeapon1PostMovement);
-            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.lblWeaponName1);
             this.groupBox2.Controls.Add(this.txtWeapon1Name);
             this.groupBox2.Location = new System.Drawing.Point(257, 30);
             this.groupBox2.Name = "groupBox2";
@@ -379,14 +379,14 @@
             this.cbWeapon1PostMovement.Text = "Post Movement:";
             this.cbWeapon1PostMovement.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // lblWeaponName1
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 22);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Name: ";
+            this.lblWeaponName1.AutoSize = true;
+            this.lblWeaponName1.Location = new System.Drawing.Point(6, 22);
+            this.lblWeaponName1.Name = "lblWeaponName1";
+            this.lblWeaponName1.Size = new System.Drawing.Size(41, 13);
+            this.lblWeaponName1.TabIndex = 12;
+            this.lblWeaponName1.Text = "Name: ";
             // 
             // txtWeapon1Name
             // 
@@ -402,7 +402,7 @@
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.cbWeapon2PostMovement);
-            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.lblWeaponName2);
             this.groupBox3.Controls.Add(this.txtWeapon2Name);
             this.groupBox3.Location = new System.Drawing.Point(501, 30);
             this.groupBox3.Name = "groupBox3";
@@ -453,14 +453,14 @@
             this.cbWeapon2PostMovement.Text = "Post Movement:";
             this.cbWeapon2PostMovement.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // lblWeaponName2
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 22);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "Name: ";
+            this.lblWeaponName2.AutoSize = true;
+            this.lblWeaponName2.Location = new System.Drawing.Point(6, 22);
+            this.lblWeaponName2.Name = "lblWeaponName2";
+            this.lblWeaponName2.Size = new System.Drawing.Size(41, 13);
+            this.lblWeaponName2.TabIndex = 12;
+            this.lblWeaponName2.Text = "Name: ";
             // 
             // txtWeapon2Name
             // 
@@ -531,6 +531,24 @@
             this.bgSpritePreview.TabStop = false;
             this.bgSpritePreview.Text = "Sprite Preview";
             // 
+            // viewerBattleSprite
+            // 
+            this.viewerBattleSprite.Location = new System.Drawing.Point(124, 48);
+            this.viewerBattleSprite.Name = "viewerBattleSprite";
+            this.viewerBattleSprite.Size = new System.Drawing.Size(107, 75);
+            this.viewerBattleSprite.TabIndex = 3;
+            this.viewerBattleSprite.Text = "texture2DViewerControl2";
+            // 
+            // btnImportBattleSprite
+            // 
+            this.btnImportBattleSprite.Location = new System.Drawing.Point(124, 19);
+            this.btnImportBattleSprite.Name = "btnImportBattleSprite";
+            this.btnImportBattleSprite.Size = new System.Drawing.Size(107, 23);
+            this.btnImportBattleSprite.TabIndex = 2;
+            this.btnImportBattleSprite.Text = "Import Battle Sprite";
+            this.btnImportBattleSprite.UseVisualStyleBackColor = true;
+            this.btnImportBattleSprite.Click += new System.EventHandler(this.btnImportBattleSprite_Click);
+            // 
             // viewerMapSprite
             // 
             this.viewerMapSprite.Location = new System.Drawing.Point(7, 48);
@@ -548,24 +566,6 @@
             this.btnImportMapSprite.Text = "Import Map Sprite";
             this.btnImportMapSprite.UseVisualStyleBackColor = true;
             this.btnImportMapSprite.Click += new System.EventHandler(this.btnImportMapSprite_Click);
-            // 
-            // btnImportBattleSprite
-            // 
-            this.btnImportBattleSprite.Location = new System.Drawing.Point(124, 19);
-            this.btnImportBattleSprite.Name = "btnImportBattleSprite";
-            this.btnImportBattleSprite.Size = new System.Drawing.Size(107, 23);
-            this.btnImportBattleSprite.TabIndex = 2;
-            this.btnImportBattleSprite.Text = "Import Battle Sprite";
-            this.btnImportBattleSprite.UseVisualStyleBackColor = true;
-            this.btnImportBattleSprite.Click += new System.EventHandler(this.btnImportBattleSprite_Click);
-            // 
-            // viewerBattleSprite
-            // 
-            this.viewerBattleSprite.Location = new System.Drawing.Point(124, 48);
-            this.viewerBattleSprite.Name = "viewerBattleSprite";
-            this.viewerBattleSprite.Size = new System.Drawing.Size(107, 75);
-            this.viewerBattleSprite.TabIndex = 3;
-            this.viewerBattleSprite.Text = "texture2DViewerControl2";
             // 
             // UnitConquestEditor
             // 
@@ -585,7 +585,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaterial)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGaz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMovement)).EndInit();
@@ -612,36 +612,36 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown txtHP;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblHP;
         private System.Windows.Forms.ComboBox cbMovementType;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblMovementType;
         private System.Windows.Forms.NumericUpDown txtMovement;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown txtMaterial;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblMovement;
+        private System.Windows.Forms.NumericUpDown txtCost;
+        private System.Windows.Forms.Label lblCost;
         private System.Windows.Forms.NumericUpDown txtGaz;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblGaz;
         private System.Windows.Forms.NumericUpDown txtAmmo;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblAmmo;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblWeaponName1;
         private System.Windows.Forms.TextBox txtWeapon1Name;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblWeaponName2;
         private System.Windows.Forms.TextBox txtWeapon2Name;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox cbWeapon1PostMovement;
         private System.Windows.Forms.NumericUpDown txtGazCostPerTurn;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lblGazCostPerTurn;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox cbWeapon2PostMovement;
         private System.Windows.Forms.NumericUpDown txtVisionRange;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label lblVisionRange;
         private System.Windows.Forms.ComboBox cbArmourType;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label lblArmourType;
         public System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewComboBoxColumn clCanTransport;
         private System.Windows.Forms.NumericUpDown txtWeapon1MinimumRange;

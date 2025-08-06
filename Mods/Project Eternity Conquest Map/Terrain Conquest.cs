@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -21,6 +24,84 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     //http://ticc.uvt.nl/~pspronck/pubs/BNAIC2008Bergsma.pdf
     //http://www.warsworldnews.com/dor/aw4-color.pdf attacks
 
+    public class ConquestTerrainHolder
+    {
+        public List<string> ListMoveType;
+        public List<ConquestTerrainType> ListConquestTerrainType;
+
+        public ConquestTerrainHolder()
+        {
+            ListMoveType = new List<string>();
+            ListConquestTerrainType = new List<ConquestTerrainType>();
+        }
+
+        public void LoadData()
+        {
+            FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+
+            int ListMoveTypeCount = BR.ReadInt32();
+            ListMoveType = new List<string>(ListMoveTypeCount);
+            for (int i = 0; i < ListMoveTypeCount; ++i)
+            {
+                ListMoveType.Add(BR.ReadString());
+            }
+
+            int ListConquestTerrainTypeCount = BR.ReadInt32();
+            ListConquestTerrainType = new List<ConquestTerrainType>(ListConquestTerrainTypeCount);
+            for (int i = 0; i < ListConquestTerrainTypeCount; ++i)
+            {
+                ListConquestTerrainType.Add(new ConquestTerrainType(BR));
+            }
+
+            BR.Close();
+            FS.Close();
+        }
+    }
+
+    public class ConquestTerrainType
+    {
+        public string TerrainName;
+        public byte DefenceValue;
+        public Dictionary<byte, byte> DicMovementCostByMoveType;
+
+        public ConquestTerrainType()
+        {
+            TerrainName = "New Terrain";
+            DefenceValue = 1;
+
+            DicMovementCostByMoveType = new Dictionary<byte, byte>();
+        }
+
+        public ConquestTerrainType(BinaryReader BR)
+        {
+            TerrainName = BR.ReadString();
+            DefenceValue = BR.ReadByte();
+
+            int ListeMovementCostByMoveTypeCount = BR.ReadInt32();
+            DicMovementCostByMoveType = new Dictionary<byte, byte>(ListeMovementCostByMoveTypeCount);
+
+            for (int i = 0; i < ListeMovementCostByMoveTypeCount; ++i)
+            {
+                DicMovementCostByMoveType.Add(BR.ReadByte(), BR.ReadByte());
+            }
+        }
+
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(TerrainName);
+            BW.Write(DefenceValue);
+
+            BW.Write(DicMovementCostByMoveType.Count);
+
+            foreach (KeyValuePair<byte, byte> MovementCostByMoveType in DicMovementCostByMoveType)
+            {
+                BW.Write(MovementCostByMoveType.Key);
+                BW.Write(MovementCostByMoveType.Value);
+            }
+        }
+    }
+
     public class TerrainConquest : Terrain
     {
         public int CapturePoints;
@@ -29,7 +110,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public TerrainConquest(Terrain Other, Point Position, int LayerIndex)
             : base(Other, Position, LayerIndex)
         {
-            TerrainTypeIndex = 0;
         }
 
         /// <summary>

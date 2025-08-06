@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         continue;
 
                     //Remove 5 EN each time the Squad spend a turn in the air.
-                    int ENUsedPerTurn = Map.TerrainRestrictions.GetENUsedPerTurnCost(ActiveUnit.Components, ActiveUnit.UnitStat, ActiveUnit.Components.CurrentTerrainIndex);
+                    int ENUsedPerTurn = 0;
                     if (ENUsedPerTurn > 0)
                         ActiveUnit.ConsumeEN(ENUsedPerTurn);
 

@@ -34,6 +34,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ListTab.Add(new ConquestTilesetTab());
                 ListTab.Add(new EventPointsTab());
                 ListTab.Add(new SpawnsTab());
+                ListTab.Add(new BuildingsTab());
                 ListTab.Add(new ScriptsTab());
                 ListTab.Add(new LayerTab());
                 ListTab.Add(new PropTab());

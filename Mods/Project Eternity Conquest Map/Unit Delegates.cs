@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     UnitConquest TargetSquad = ListPlayer[ListDefendingSquad[RandomNumber].Item1].ListUnit[ListDefendingSquad[RandomNumber].Item2];
                     float DistanceUnit = Math.Abs(PosX - TargetSquad.X) + Math.Abs(PosY - TargetSquad.Y);
                     //Move to be in range.
-                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit));
+                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit, this));
                     for (int M = 0; M < ListRealChoice.Count; M++)
                     {//Remove every MV that would make it impossible to attack.
                         Distance = Math.Abs(ListRealChoice[M].WorldPosition.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].WorldPosition.Y - TargetSquad.Y);
@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     UnitConquest TargetSquad = ListPlayer[ListDefendingSquad[RandomNumber].Item1].ListUnit[ListDefendingSquad[RandomNumber].Item2];
                     float DistanceUnit = Math.Abs(PosX - TargetSquad.X) + Math.Abs(PosY - TargetSquad.Y);
                     //Move to be in range.
-                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit));
+                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit, this));
                     for (int M = 0; M < ListRealChoice.Count; M++)
                     {//Remove every MV that would make it impossible to attack.
                         Distance = Math.Abs(ListRealChoice[M].WorldPosition.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].WorldPosition.Y - TargetSquad.Y);

@@ -19,6 +19,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             string[] GetTerrainTypes();
             void OnTerrainSelected(Terrain SelectedTerrain);
             void EditTerrainTypes();
+            Terrain.TilesetPreset LoadPreset(BinaryReader bR, int x, int y, int v);
         }
 
         public class DeathmatchTilesetPresetHelper : ITilesetPresetHelper
@@ -41,6 +42,11 @@ namespace ProjectEternity.Editors.TilesetEditor
                     "Air",
                     "Space",
                 };
+            }
+
+            public Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            {
+                return new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
@@ -144,6 +150,8 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             this.Text = Name + " - Project Eternity Tileset Preset Editor";
 
+            InitHelper();
+
             FileStream FS = new FileStream("Content/Tileset Presets/" + Name + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -151,12 +159,10 @@ namespace ProjectEternity.Editors.TilesetEditor
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
-            Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, 0);
+            Terrain.TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
 
             BR.Close();
             FS.Close();
-
-            InitHelper();
 
             cboTerrainType.Items.Clear();
             string[] ArrayTerrainType = Helper.GetTerrainTypes();

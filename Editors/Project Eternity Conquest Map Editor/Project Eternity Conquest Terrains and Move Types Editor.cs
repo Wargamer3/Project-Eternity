@@ -2,57 +2,13 @@
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using ProjectEternity.GameScreens.ConquestMapScreen;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
     public partial class ProjectEternityConquestTerrainsAndMoveTypesEditor : Form
     {
-        private class ConquestTerrainType
-        {
-            public string TerrainName;
-            public byte DefenceValue;
-            public Dictionary<byte, byte> DicMovementCostByMoveType;
-
-            public ConquestTerrainType()
-            {
-                TerrainName = "New Terrain";
-                DefenceValue = 1;
-
-                DicMovementCostByMoveType = new Dictionary<byte, byte>();
-            }
-
-            public ConquestTerrainType(BinaryReader BR)
-            {
-                TerrainName = BR.ReadString();
-                DefenceValue = BR.ReadByte();
-
-                int ListeMovementCostByMoveTypeCount = BR.ReadInt32();
-                DicMovementCostByMoveType = new Dictionary<byte, byte>(ListeMovementCostByMoveTypeCount);
-
-                for (int i = 0; i < ListeMovementCostByMoveTypeCount; ++i)
-                {
-                    DicMovementCostByMoveType.Add(BR.ReadByte(), BR.ReadByte());
-                }
-            }
-
-            public void Save(BinaryWriter BW)
-            {
-                BW.Write(TerrainName);
-                BW.Write(DefenceValue);
-
-                BW.Write(DicMovementCostByMoveType.Count);
-
-                foreach(KeyValuePair<byte, byte> MovementCostByMoveType in DicMovementCostByMoveType)
-                {
-                    BW.Write(MovementCostByMoveType.Key);
-                    BW.Write(MovementCostByMoveType.Value);
-                }
-            }
-        }
-
-        private List<string> ListMoveType;
-        private List<ConquestTerrainType> ListConquestTerrainType;
+        private ConquestTerrainHolder TerrainHolder;
 
         private bool AllowEvent;
 
@@ -61,34 +17,23 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             InitializeComponent();
 
             AllowEvent = true;
-            ListMoveType = new List<string>();
-            ListConquestTerrainType = new List<ConquestTerrainType>();
 
+            TerrainHolder = new ConquestTerrainHolder();
         }
 
         private void ProjectEternityConquestTerrainsAndMoveTypesEditor_Load(object sender, EventArgs e)
         {
-            FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+            TerrainHolder.LoadData();
 
-            int ListMoveTypeCount = BR.ReadInt32();
-            ListMoveType = new List<string>(ListMoveTypeCount);
-            for (int i = 0; i < ListMoveTypeCount; ++i)
+            for (int i = 0; i < TerrainHolder.ListMoveType.Count; ++i)
             {
-                ListMoveType.Add(BR.ReadString());
-                lsMoveTypes.Items.Add(ListMoveType[i]);
+                lsMoveTypes.Items.Add(TerrainHolder.ListMoveType[i]);
             }
 
-            int ListConquestTerrainTypeCount = BR.ReadInt32();
-            ListConquestTerrainType = new List<ConquestTerrainType>(ListConquestTerrainTypeCount);
-            for (int i = 0; i < ListMoveTypeCount; ++i)
+            for (int i = 0; i < TerrainHolder.ListConquestTerrainType.Count; ++i)
             {
-                ListConquestTerrainType.Add(new ConquestTerrainType(BR));
-                lsTerrains.Items.Add(ListConquestTerrainType[i].TerrainName);
+                lsTerrains.Items.Add(TerrainHolder.ListConquestTerrainType[i].TerrainName);
             }
-
-            BR.Close();
-            FS.Close();
         }
 
         private void Save()
@@ -96,14 +41,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Create);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.Unicode);
 
-            BW.Write(ListMoveType.Count);
-            foreach (string ActiveMoveType in ListMoveType)
+            BW.Write(TerrainHolder.ListMoveType.Count);
+            foreach (string ActiveMoveType in TerrainHolder.ListMoveType)
             {
                 BW.Write(ActiveMoveType);
             }
 
-            BW.Write(ListConquestTerrainType.Count);
-            foreach (ConquestTerrainType ActiveTerrainType in ListConquestTerrainType)
+            BW.Write(TerrainHolder.ListConquestTerrainType.Count);
+            foreach (ConquestTerrainType ActiveTerrainType in TerrainHolder.ListConquestTerrainType)
             {
                 ActiveTerrainType.Save(BW);
             }
@@ -127,15 +72,15 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             dgvMoveTypes.Enabled = true;
             dgvMoveTypes.Rows.Clear();
 
-            for (int i = 0; i < ListMoveType.Count; ++i)
+            for (int i = 0; i < TerrainHolder.ListMoveType.Count; ++i)
             {
                 dgvMoveTypes.Rows.Add();
-                dgvMoveTypes.Rows[i].Cells[0].Value = ListMoveType[i];
-                if (!ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.ContainsKey((byte)i))
+                dgvMoveTypes.Rows[i].Cells[0].Value = TerrainHolder.ListMoveType[i];
+                if (!TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.ContainsKey((byte)i))
                 {
-                    ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.Add((byte)i, 0);
+                    TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.Add((byte)i, 0);
                 }
-                dgvMoveTypes.Rows[i].Cells[1].Value = ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType[(byte)i];
+                dgvMoveTypes.Rows[i].Cells[1].Value = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType[(byte)i];
             }
 
             AllowEvent = true;
@@ -153,8 +98,8 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             AllowEvent = false;
 
-            txtTerrainName.Text = ListConquestTerrainType[lsTerrains.SelectedIndex].TerrainName.ToString();
-            ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue = (byte)txtTerrainDefenceValue.Value;
+            txtTerrainName.Text = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].TerrainName.ToString();
+            TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue = (byte)txtTerrainDefenceValue.Value;
 
             UpdateGridView();
 
@@ -171,7 +116,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             AllowEvent = false;
 
             lsTerrains.Items[lsTerrains.SelectedIndex] = txtTerrainName.Text;
-            ListConquestTerrainType[lsTerrains.SelectedIndex].TerrainName = txtTerrainName.Text;
+            TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].TerrainName = txtTerrainName.Text;
 
             AllowEvent = true;
         }
@@ -185,14 +130,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             AllowEvent = false;
 
-            txtTerrainDefenceValue.Value = ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue;
+            txtTerrainDefenceValue.Value = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue;
 
             AllowEvent = true;
         }
 
         private void btnAddNewTerrain_Click(object sender, EventArgs e)
         {
-            ListConquestTerrainType.Add(new ConquestTerrainType());
+            TerrainHolder.ListConquestTerrainType.Add(new ConquestTerrainType());
             lsTerrains.Items.Add("New Terrain");
         }
 
@@ -204,7 +149,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             }
 
             int CurrentIndex = lsTerrains.SelectedIndex;
-            ListConquestTerrainType.RemoveAt(CurrentIndex);
+            TerrainHolder.ListConquestTerrainType.RemoveAt(CurrentIndex);
             lsTerrains.Items.RemoveAt(CurrentIndex);
 
             if (CurrentIndex >= lsTerrains.Items.Count)
@@ -244,14 +189,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             }
 
             lsMoveTypes.Items[lsMoveTypes.SelectedIndex] = txtMoveTypeName.Text;
-            ListMoveType[lsMoveTypes.SelectedIndex] = txtMoveTypeName.Text;
+            TerrainHolder.ListMoveType[lsMoveTypes.SelectedIndex] = txtMoveTypeName.Text;
 
             UpdateGridView();
         }
 
         private void btnAddNewMoveType_Click(object sender, EventArgs e)
         {
-            ListMoveType.Add("New Move Type");
+            TerrainHolder.ListMoveType.Add("New Move Type");
             lsMoveTypes.Items.Add("New Move Type");
         }
 
@@ -263,7 +208,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             }
 
             int CurrentIndex = lsMoveTypes.SelectedIndex;
-            ListMoveType.RemoveAt(CurrentIndex);
+            TerrainHolder.ListMoveType.RemoveAt(CurrentIndex);
             lsMoveTypes.Items.RemoveAt(CurrentIndex);
 
             if (CurrentIndex >= lsMoveTypes.Items.Count)
@@ -281,10 +226,10 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return;
             }
 
-            for (byte i = 0; i < ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.Count; ++i)
+            for (byte i = 0; i < TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType.Count; ++i)
             {
                 DataGridViewRow ActiveRow = dgvMoveTypes.Rows[i];
-                ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType[i] = Convert.ToByte(ActiveRow.Cells[1].Value);
+                TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DicMovementCostByMoveType[i] = Convert.ToByte(ActiveRow.Cells[1].Value);
             }
         }
     }

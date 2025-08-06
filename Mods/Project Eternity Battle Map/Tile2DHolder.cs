@@ -156,5 +156,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.End();
         }
+
+        public void Clear()
+        {
+            ListTile2D.Clear();
+            ListTileWorldPosition.Clear();
+        }
     }
 }

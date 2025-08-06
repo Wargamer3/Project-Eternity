@@ -15,35 +15,138 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public override bool CursorControl(PlayerInput ActiveInputManager)
         {
-            Point Offset;
+            Point GridOffset;
             BattleMap ActiveMap;
 
-            bool CursorMoved = CursorControlGrid(ActiveInputManager, out Offset, out ActiveMap);
+            bool CursorMoved = CursorControlGrid(ActiveInputManager, out GridOffset, out ActiveMap);
 
             if (CursorMoved)
             {
-                MovementAlgorithmTile NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
-                if (NextTerrain == ActiveMap.CursorTerrain)//Force movement
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X, GridOffset.Y, 1f, 15f, out _);
+
+                if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
                 {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, NextTerrain.GridPosition.X + Offset.X));
-                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, NextTerrain.GridPosition.Y + Offset.Y));
+                    ActiveMap.CursorPosition.Z = NextTerrain.Z;
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min((ActiveMap.MapSize.X - 1) * TileSize.X, NextTerrain.X + GridOffset.X * TileSize.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min((ActiveMap.MapSize.Y - 1) * TileSize.Y, NextTerrain.Y + GridOffset.Y * TileSize.Y));
                 }
                 else
                 {
-                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                    ActiveMap.CursorPosition.X = NextTerrain.GridPosition.X;
-                    ActiveMap.CursorPosition.Y = NextTerrain.GridPosition.Y;
+                    ActiveMap.CursorPosition = NextTerrain;
+                }
+
+                ActiveMap.CursorPosition += new Vector3(TileSize.X / 2, TileSize.Y / 2, 0);
+
+                foreach (TeleportPoint ActiveTeleport in LayerManager.ListLayer[(int)CursorPosition.Z].ListTeleportPoint)
+                {
+                    if (ActiveTeleport.Position.X == CursorPosition.X && ActiveTeleport.Position.Y == CursorPosition.Y)
+                    {
+                        CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X * TileSize.X;
+                        CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y * TileSize.X;
+                        CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer * LayerHeight;
+                        break;
+                    }
                 }
             }
 
+            if (ActiveInputManager.InputLButtonPressed())
+            {
+                if (ListPlayer[ActivePlayerIndex].ListUnit.Count == 0)
+                    return CursorMoved;
+
+                int UnitIndex = 0;
+                if (ActiveUnit != null)
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListUnit.IndexOf(ActiveUnit);
+
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
+
+                do
+                {
+                    ++UnitIndex;
+
+                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListUnit.Count)
+                        UnitIndex = 0;
+
+                    if (ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].HP > 0 && ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    do
+                    {
+                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListUnit.Count)
+                            UnitIndex = 0;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].HP == 0);
+                }
+
+                ActiveUnitIndex = UnitIndex;
+                CursorPosition = ActiveUnit.Position;
+                CursorPositionVisible = CursorPosition;
+
+                if (ActiveUnit.X < Camera2DPosition.X || ActiveUnit.Y < Camera2DPosition.Y ||
+                    ActiveUnit.X >= Camera2DPosition.X + ScreenSize.X || ActiveUnit.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                {
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveUnit.Position));
+                }
+            }
+            else if (ActiveInputManager.InputRButtonPressed())
+            {
+                if (ListPlayer[ActivePlayerIndex].ListUnit.Count == 0)
+                    return CursorMoved;
+
+                int UnitIndex = 0;
+                if (ActiveUnit != null)
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListUnit.IndexOf(ActiveUnit);
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
+
+                do
+                {
+                    --UnitIndex;
+
+                    if (UnitIndex < 0)
+                        UnitIndex = ListPlayer[ActivePlayerIndex].ListUnit.Count - 1;
+
+                    if (ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].HP > 0 && ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    do
+                    {
+                        if (--UnitIndex < 0)
+                            UnitIndex = ListPlayer[ActivePlayerIndex].ListUnit.Count - 1;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListUnit[UnitIndex].HP == 0);
+                }
+
+                ActiveUnitIndex = UnitIndex;
+                CursorPosition = ActiveUnit.Position;
+                CursorPositionVisible = CursorPosition;
+
+                if (ActiveUnit.X < Camera2DPosition.X || ActiveUnit.Y < Camera2DPosition.Y ||
+                    ActiveUnit.X >= Camera2DPosition.X + ScreenSize.X || ActiveUnit.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                {
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveUnit.Position));
+                }
+            }
             return CursorMoved;
         }
 
         public override Vector3 GetFinalPosition(Vector3 WorldPosition)
         {
             int GridX = (int)WorldPosition.X / TileSize.X;
-            int GridY = (int)WorldPosition.X / TileSize.Y;
+            int GridY = (int)WorldPosition.Y / TileSize.Y;
             int LayerIndex = (int)WorldPosition.Z / LayerHeight;
 
             Terrain ActiveTerrain = LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];
@@ -63,7 +166,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     if (ActiveUnit.ArrayMapSize[X, Y])
                     {
-                        ListTerrainFound.Add(ActiveMap.LayerManager.ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y]);
+                        ListTerrainFound.Add(ActiveMap.GetTerrain(new Vector3(ActiveUnit.Position.X + X * TileSize.X, ActiveUnit.Position.Y + Y * TileSize.Y, ActiveUnit.Position.Z)));
                     }
                 }
             }
@@ -73,7 +176,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
         {
-            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).WorldPosition.Z));
+            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
         }
 
         public List<Vector3> GetPathToTerrain(MovementAlgorithmTile ActiveTerrain, Vector3 Position)

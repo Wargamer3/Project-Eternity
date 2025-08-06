@@ -7,59 +7,46 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 {
     public partial class TileAttributes : Form, ITileAttributes
     {
-        public int TerrainTypeIndex;//What kind of terrain it is.
-
-        TerrainConquest ActiveTerrain;
-
         Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
+
+        public TerrainConquest ActiveTerrain;
+
+        private ConquestTerrainHolder TerrainHolder;
+
+        private bool AllowEvents;
 
         public TileAttributes()
         {
             InitializeComponent();
-        }
-
-        public TileAttributes(int TerrainTypeIndex)
-        {
-            InitializeComponent();
-
-            cboTerrainType.SelectedIndex = TerrainTypeIndex;
+            TerrainHolder = new ConquestTerrainHolder();
         }
 
         public void Init(Terrain ActiveTerrain, BattleMap Map)
         {
+            AllowEvents = false;
+            TerrainHolder.LoadData();
+
+            cboTerrainType.Items.Clear();
+            for (int i = 0; i < TerrainHolder.ListConquestTerrainType.Count; ++i)
+            {
+                cboTerrainType.Items.Add(TerrainHolder.ListConquestTerrainType[i].TerrainName);
+            }
+
             ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain, ActiveTerrain.GridPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-        }
 
-        private void txtMVEnterCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtMVMoveCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtBonusValue_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            AllowEvents = true;
         }
 
         private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TerrainTypeIndex = cboTerrainType.SelectedIndex;
-        }
+            if (!AllowEvents)
+            {
+                return;
+            }
 
+            ActiveTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
+        }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {

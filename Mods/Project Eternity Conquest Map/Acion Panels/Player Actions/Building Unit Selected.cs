@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Map.BuildingMenuCursor = 0;
 
-            if (Map.ListTerrainType[Map.GetTerrain((int)Map.CursorPosition.X, (int)Map.CursorPosition.Y, 0).TerrainTypeIndex] == "Factory")
+            if (Map.TerrainHolder.ListConquestTerrainType[Map.GetTerrain((int)Map.CursorPosition.X, (int)Map.CursorPosition.Y, 0).TerrainTypeIndex].TerrainName == "Factory")
                 Map.ListCurrentBuildingChoice = Map.DicBuildingChoice["Vehicule"];
         }
 

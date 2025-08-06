@@ -614,6 +614,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.PreventLeavingRight = Other.PreventLeavingRight;
             BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
             BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
+            BonusInfo = new DeathmatchTerrainBonusInfo();
         }
 
         /// <summary>

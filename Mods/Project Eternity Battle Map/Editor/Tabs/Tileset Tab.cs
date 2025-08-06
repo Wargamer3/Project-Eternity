@@ -136,7 +136,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnAddNewTileSetAsBackground.UseVisualStyleBackColor = true;
             this.btnAddNewTileSetAsBackground.Click += new System.EventHandler(this.btnAddNewTileSetAsBackground_Click);
             // 
-            // label1
+            // lblActiveTileSet
             // 
             this.lblActiveTileSet.AutoSize = true;
             this.lblActiveTileSet.Location = new System.Drawing.Point(7, 7);

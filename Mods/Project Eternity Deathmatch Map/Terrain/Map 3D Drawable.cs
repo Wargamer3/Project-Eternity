@@ -464,101 +464,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Next = ListPoint[P + 1];
                 }
 
-                ListDrawableArrowPerColor.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, GetCursorTextureOffset(Previous, ActivePoint, Next), ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
+                ListDrawableArrowPerColor.Add(Map.CreateTile3D(0, ActivePoint.WorldPosition, MovementAlgorithm.GetMovementArrowTextureOffset(Previous, ActivePoint, Next), ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, 0));
             }
         }
 
         public void AddDamageNumber(string Damage, Vector3 Position)
         {
             DicDamageNumberByPosition.Add(Damage, Position);
-        }
-
-        private Point GetCursorTextureOffset(MovementAlgorithmTile Previous, MovementAlgorithmTile Current, MovementAlgorithmTile Next)
-        {
-            const int TextureSize = 32;
-
-            Point TextureOffset = Point.Zero;
-            if (Next == null)
-            {
-                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right
-                {
-                    TextureOffset.X = TextureSize * 3;
-                }
-                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left
-                {
-                    TextureOffset.X = TextureSize * 4;
-                }
-                else if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down
-                {
-                    TextureOffset.X = TextureSize * 5;
-                }
-                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up
-                {
-                    TextureOffset.X = TextureSize * 2;
-                }
-            }
-            else if (Current.WorldPosition.X < Next.WorldPosition.X)//Going Right
-            {
-                if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down Right
-                {
-                    TextureOffset.X = TextureSize * 9;
-                }
-                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up Right
-                {
-                    TextureOffset.X = TextureSize * 8;
-                }
-                else
-                {
-                    TextureOffset.X = TextureSize * 1;
-                }
-            }
-            else if (Current.WorldPosition.X > Next.WorldPosition.X)//Going Left
-            {
-                if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down Left
-                {
-                    TextureOffset.X = TextureSize * 7;
-                }
-                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up Left
-                {
-                    TextureOffset.X = TextureSize * 6;
-                }
-                else
-                {
-                    TextureOffset.X = TextureSize * 1;
-                }
-            }
-            else if (Current.WorldPosition.Y < Next.WorldPosition.Y)//Going Down
-            {
-                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right Down
-                {
-                    TextureOffset.X = TextureSize * 6;
-                }
-                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left Down
-                {
-                    TextureOffset.X = TextureSize * 8;
-                }
-                else
-                {
-                    TextureOffset.X = TextureSize * 0;
-                }
-            }
-            else if (Current.WorldPosition.Y > Next.WorldPosition.Y)//Going Up
-            {
-                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right Up
-                {
-                    TextureOffset.X = TextureSize * 7;
-                }
-                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left Up
-                {
-                    TextureOffset.X = TextureSize * 9;
-                }
-                else
-                {
-                    TextureOffset.X = TextureSize * 0;
-                }
-            }
-
-            return TextureOffset;
         }
 
         public void Reset()

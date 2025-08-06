@@ -63,6 +63,9 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathTripleThunderWeapons = "Triple Thunder/Weapons";
         public const string GUIRootPathTripleThunderProjectiles = "Triple Thunder/Projectiles";
         public const string GUIRootPathTripleThunderSkillChains = "Triple Thunder/Skill Chains";
+        public const string GUIRootPathBuildings = "Buildings";
+        public const string GUIRootPathBuildingsConquest = "Conquest/Buildings";
+        public const string GUIRootPathBuildingsWorldMap = "World Map/Buildings";
         public const string GUIRootPathCharacters = "Characters";
         public const string GUIRootPathCharacterSkills = "Character/Skills";
         public const string GUIRootPathCharacterSpirits = "Character/Spirits";

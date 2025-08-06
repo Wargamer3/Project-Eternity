@@ -23,12 +23,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
 
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
+        private Tile2DHolder ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
         public Map2DDrawable(DeathmatchMap Map, LayerHolderDeathmatch LayerManager)
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
+            ListDrawableArrowPerColor = new Tile2DHolder(Map.sprCursorPath, TilesetPreset.TilesetTypes.Regular);
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
             CreateMap(Map, LayerManager);
@@ -105,6 +107,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Update(GameTime gameTime)
         {
             DicDrawablePointPerColor.Clear();
+            ListDrawableArrowPerColor.Clear();
             DicDamageNumberByPosition.Clear();
             foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
             {
@@ -129,6 +132,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
         {
+            for (int P = 1; P < ListPoint.Count; P++)
+            {
+                MovementAlgorithmTile ActivePoint = ListPoint[P];
+                MovementAlgorithmTile Previous = ListPoint[P - 1];
+                MovementAlgorithmTile Next = null;
+                if (P + 1 < ListPoint.Count)
+                {
+                    Next = ListPoint[P + 1];
+                }
+
+                Point ArrowOffset = MovementAlgorithm.GetMovementArrowTextureOffset(Previous, ActivePoint, Next);
+                ListDrawableArrowPerColor.AddTile(new Rectangle(ArrowOffset.X, ArrowOffset.Y, ActivePoint.Owner.TileSize.X, ActivePoint.Owner.TileSize.Y), ActivePoint.WorldPosition);
+            }
         }
 
         public void AddDamageNumber(string Damage, Vector3 Position)
@@ -262,6 +278,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X), (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y), TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
+
+            ListDrawableArrowPerColor.Draw(g, Map, 0f);
         }
 
         public void Draw(CustomSpriteBatch g)

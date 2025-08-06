@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             // Can Move, try capturing a building.
             if (ActiveUnit.CanMove)
             {
-                List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit);
+                List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit, Map);
 
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {

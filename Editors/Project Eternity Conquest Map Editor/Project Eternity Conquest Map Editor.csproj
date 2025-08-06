@@ -62,6 +62,7 @@
     <Compile Include="Project Eternity Conquest Tileset Ediotr.Designer.cs">
       <DependentUpon>Project Eternity Conquest Tileset Ediotr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Buildings Tabs.cs" />
     <Compile Include="Spawns Tab.cs" />
     <Compile Include="Map Statistics.cs">
       <SubType>Form</SubType>
@@ -89,6 +90,12 @@
     <Compile Include="Spawn Control.Designer.cs">
       <DependentUpon>Spawn Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="Building Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Building Editor.Designer.cs">
+      <DependentUpon>Building Editor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project Eternity Conquest Terrains and Move Types Editor.resx">
@@ -109,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Spawn Control.resx">
       <DependentUpon>Spawn Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Building Editor.resx">
+      <DependentUpon>Building Editor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +145,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
       <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
+      <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
+      <Name>Microsoft Content Builder</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">

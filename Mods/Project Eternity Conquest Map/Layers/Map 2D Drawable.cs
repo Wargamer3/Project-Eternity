@@ -23,12 +23,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
 
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
+        private Tile2DHolder ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
         public Map2DDrawable(ConquestMap Map, LayerHolderConquest LayerManager)
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
+            ListDrawableArrowPerColor = new Tile2DHolder(Map.sprCursorPath, TilesetPreset.TilesetTypes.Regular);
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
             CreateMap(Map, LayerManager);
@@ -105,6 +107,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public void Update(GameTime gameTime)
         {
             DicDrawablePointPerColor.Clear();
+            ListDrawableArrowPerColor.Clear();
             DicDamageNumberByPosition.Clear();
             foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
             {
@@ -116,8 +119,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Point BaseMenuPosition;
 
-            BaseMenuPosition.X = (int)((Position.X - Map.Camera2DPosition.X) * Map.TileSize.X);
-            BaseMenuPosition.Y = (int)((Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y);
+            BaseMenuPosition.X = (int)(Position.X - Map.Camera2DPosition.X);
+            BaseMenuPosition.Y = (int)(Position.Y - Map.Camera2DPosition.Y);
 
             return BaseMenuPosition;
         }
@@ -129,6 +132,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
         {
+            for (int P = 1; P < ListPoint.Count; P++)
+            {
+                MovementAlgorithmTile ActivePoint = ListPoint[P];
+                MovementAlgorithmTile Previous = ListPoint[P - 1];
+                MovementAlgorithmTile Next = null;
+                if (P + 1 < ListPoint.Count)
+                {
+                    Next = ListPoint[P + 1];
+                }
+
+                Point ArrowOffset = MovementAlgorithm.GetMovementArrowTextureOffset(Previous, ActivePoint, Next);
+                ListDrawableArrowPerColor.AddTile(new Rectangle(ArrowOffset.X, ArrowOffset.Y, ActivePoint.Owner.TileSize.X, ActivePoint.Owner.TileSize.Y), ActivePoint.WorldPosition);
+            }
         }
 
         public void AddDamageNumber(string Damage, Vector3 Position)
@@ -175,30 +191,30 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-        public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveUnit, bool IsGreyed)
+        public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveSquad, bool IsGreyed)
         {
             //If it's dead, don't draw it.
-            if (!ActiveUnit.IsActive)
+            if (!ActiveSquad.IsActive)
                 return;
 
-            float PosZ = ActiveUnit.Z;
+            float PosZ = ActiveSquad.Z;
 
-            if (Map.MovementAnimation.Contains(ActiveUnit))
+            if (Map.MovementAnimation.Contains(ActiveSquad))
             {
-                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveUnit);
-                float PosX = (CurrentPosition.X - CameraPosition.X) * TileSize.X;
-                float PosY = (CurrentPosition.Y - CameraPosition.Y) * TileSize.Y;
+                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
+                float PosX = CurrentPosition.X - CameraPosition.X;
+                float PosY = CurrentPosition.Y - CameraPosition.Y;
 
-                if (ActiveUnit.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
                 {
                     g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
                     PosY -= 7;
                 }
 
-                ActiveUnit.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
                 g.End();
                 g.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                ActiveUnit.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
                 g.End();
                 g.Begin();
             }
@@ -210,17 +226,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 else
                     UnitColor = Color.White;
 
-                float PosX = (ActiveUnit.X - CameraPosition.X) * TileSize.X;
-                float PosY = (ActiveUnit.Y - CameraPosition.Y) * TileSize.Y;
+                float PosX = ActiveSquad.X - CameraPosition.X;
+                float PosY = ActiveSquad.Y - CameraPosition.Y;
 
-                if (ActiveUnit.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
                 {
                     g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
                     PosY -= 7;
                 }
                 if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColoredWithBorder)
                 {
-                    Vector2 TextureRealSize = new Vector2(ActiveUnit.Width, ActiveUnit.Height);
+                    Vector2 TextureRealSize = new Vector2(ActiveSquad.Width, ActiveSquad.Height);
                     Vector2 TextureOuputSize = new Vector2(TextureRealSize.X + 2, TextureRealSize.Y + 2);
 
                     Vector2 PixelSize = new Vector2(1 / TextureOuputSize.X, 1 / TextureOuputSize.Y);
@@ -232,7 +248,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     g.End();
                     g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxOutline);
 
-                    ActiveUnit.Draw2DOnMap(g, new Vector3(PosX - 1, PosY - 1, PosZ), (int)TextureOuputSize.X, (int)TextureOuputSize.Y, PlayerColor);
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX - 1, PosY - 1, PosZ), (int)TextureOuputSize.X, (int)TextureOuputSize.Y, PlayerColor);
                     g.End();
                     g.Begin();
                 }
@@ -242,27 +258,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     g.End();
                     g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxGrayscale);
 
-                    ActiveUnit.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
 
                     g.End();
                     g.Begin();
 
                     if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        ActiveUnit.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.FromNonPremultiplied(UnitColor.R, UnitColor.G, UnitColor.B, 140));
+                        ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.FromNonPremultiplied(UnitColor.R, UnitColor.G, UnitColor.B, 140));
                 }
                 else
                 {
-                    ActiveUnit.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), UnitColor);
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), UnitColor);
                 }
 
-                ActiveUnit.DrawExtraOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                ActiveSquad.DrawExtraOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
             }
         }
 
         private void DrawCursor(CustomSpriteBatch g)
         {
             //Draw cursor.
-            g.Draw(Map.sprCursor, new Vector2((Map.CursorPositionVisible.X - CameraPosition.X) * TileSize.X, (Map.CursorPositionVisible.Y - CameraPosition.Y) * TileSize.Y), Color.White);
+            g.Draw(Map.sprCursor, new Vector2(Map.CursorPositionVisible.X - CameraPosition.X, Map.CursorPositionVisible.Y - CameraPosition.Y), null, Color.White, 0f, new Vector2(Map.sprCursor.Width / 2, Map.sprCursor.Height / 2), 1f, SpriteEffects.None, 0.5f);
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)
@@ -271,7 +287,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 foreach (MovementAlgorithmTile DrawablePoint in DrawablePointPerColor.Value)
                 {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
+                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X), (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y), TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
         }
@@ -283,6 +299,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             g.End();
 
             //DrawMap(g);
+
+            ListDrawableArrowPerColor.Draw(g, Map, 0f);
 
             g.Begin();
 
@@ -612,52 +630,100 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                         (Owner.ListTeleportPoint[T].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
-                    for (int i = 0; i < Owner.ListUnitSpawn.Count; i++)
+                    foreach (UnitSpawn ActiveSpawn in Owner.ListUnitSpawn)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
                                         Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
-                        g.Draw(Owner.ListUnitSpawn[i].UnitToSpawn.SpriteMap, new Rectangle((int)(Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                        g.Draw(ActiveSpawn.UnitToSpawn.SpriteMap, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
                                         Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
                         int OffsetX = 18;
                         int OffsetY = 6;
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
-                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
-                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
 
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
 
-                        g.DrawString(Map.fntArial8, Owner.ListUnitSpawn[i].SpawnPlayer.ToString(),
-                            new Vector2((Owner.ListUnitSpawn[i].SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (Owner.ListUnitSpawn[i].SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY),
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY),
+                            Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.2f);
+                    }
+                    foreach (BuildingSpawn ActiveSpawn in Owner.ListBuildingSpawn)
+                    {
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y),
+                                                      null,
+                                        Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+
+                        g.Draw(ActiveSpawn.BuildingToSpawn.SpriteMap, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y),
+                                                      null,
+                                        Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+
+                        int OffsetX = 18;
+                        int OffsetY = 6;
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
+                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY),
                             Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.2f);
                     }
                 }
