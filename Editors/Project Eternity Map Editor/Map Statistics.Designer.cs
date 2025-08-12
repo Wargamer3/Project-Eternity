@@ -41,6 +41,8 @@
             this.txtCameraStartPositionY = new System.Windows.Forms.NumericUpDown();
             this.lblCameraX = new System.Windows.Forms.Label();
             this.txtCameraStartPositionX = new System.Windows.Forms.NumericUpDown();
+            this.lblCameraType = new System.Windows.Forms.Label();
+            this.cbCameraType = new System.Windows.Forms.ComboBox();
             this.btnSetBackgrounds = new System.Windows.Forms.Button();
             this.btnSetForegrounds = new System.Windows.Forms.Button();
             this.gbDescription = new System.Windows.Forms.GroupBox();
@@ -50,8 +52,6 @@
             this.txtTileHeight = new System.Windows.Forms.NumericUpDown();
             this.txtMapWidth = new System.Windows.Forms.NumericUpDown();
             this.txtMapHeight = new System.Windows.Forms.NumericUpDown();
-            this.cbCameraType = new System.Windows.Forms.ComboBox();
-            this.lblCameraType = new System.Windows.Forms.Label();
             this.gbTimeLimits = new System.Windows.Forms.GroupBox();
             this.rbStopTime = new System.Windows.Forms.RadioButton();
             this.rbLoopLastDay = new System.Windows.Forms.RadioButton();
@@ -70,6 +70,10 @@
             this.btnSetDefaultGameModesConditions = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtBGM = new System.Windows.Forms.TextBox();
+            this.btnChangeBGM = new System.Windows.Forms.Button();
             this.gbCameraStartPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
@@ -84,6 +88,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
             this.gbTimeUsage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.txtBGM.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMapWidth
@@ -142,7 +148,7 @@
             // btnAccept
             // 
             this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAccept.Location = new System.Drawing.Point(545, 274);
+            this.btnAccept.Location = new System.Drawing.Point(545, 352);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 10;
@@ -153,7 +159,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(626, 274);
+            this.btnClose.Location = new System.Drawing.Point(626, 352);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 11;
@@ -167,9 +173,11 @@
             this.gbCameraStartPosition.Controls.Add(this.txtCameraStartPositionY);
             this.gbCameraStartPosition.Controls.Add(this.lblCameraX);
             this.gbCameraStartPosition.Controls.Add(this.txtCameraStartPositionX);
+            this.gbCameraStartPosition.Controls.Add(this.lblCameraType);
+            this.gbCameraStartPosition.Controls.Add(this.cbCameraType);
             this.gbCameraStartPosition.Location = new System.Drawing.Point(12, 151);
             this.gbCameraStartPosition.Name = "gbCameraStartPosition";
-            this.gbCameraStartPosition.Size = new System.Drawing.Size(126, 73);
+            this.gbCameraStartPosition.Size = new System.Drawing.Size(259, 73);
             this.gbCameraStartPosition.TabIndex = 12;
             this.gbCameraStartPosition.TabStop = false;
             this.gbCameraStartPosition.Text = "Camera Start Position";
@@ -216,9 +224,30 @@
             this.txtCameraStartPositionX.Size = new System.Drawing.Size(83, 20);
             this.txtCameraStartPositionX.TabIndex = 0;
             // 
+            // lblCameraType
+            // 
+            this.lblCameraType.AutoSize = true;
+            this.lblCameraType.Location = new System.Drawing.Point(130, 16);
+            this.lblCameraType.Name = "lblCameraType";
+            this.lblCameraType.Size = new System.Drawing.Size(70, 13);
+            this.lblCameraType.TabIndex = 20;
+            this.lblCameraType.Text = "Camera Type";
+            // 
+            // cbCameraType
+            // 
+            this.cbCameraType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCameraType.FormattingEnabled = true;
+            this.cbCameraType.Items.AddRange(new object[] {
+            "2D",
+            "3D"});
+            this.cbCameraType.Location = new System.Drawing.Point(133, 31);
+            this.cbCameraType.Name = "cbCameraType";
+            this.cbCameraType.Size = new System.Drawing.Size(92, 21);
+            this.cbCameraType.TabIndex = 12;
+            // 
             // btnSetBackgrounds
             // 
-            this.btnSetBackgrounds.Location = new System.Drawing.Point(154, 172);
+            this.btnSetBackgrounds.Location = new System.Drawing.Point(274, 19);
             this.btnSetBackgrounds.Name = "btnSetBackgrounds";
             this.btnSetBackgrounds.Size = new System.Drawing.Size(117, 23);
             this.btnSetBackgrounds.TabIndex = 13;
@@ -228,7 +257,7 @@
             // 
             // btnSetForegrounds
             // 
-            this.btnSetForegrounds.Location = new System.Drawing.Point(154, 201);
+            this.btnSetForegrounds.Location = new System.Drawing.Point(274, 48);
             this.btnSetForegrounds.Name = "btnSetForegrounds";
             this.btnSetForegrounds.Size = new System.Drawing.Size(117, 23);
             this.btnSetForegrounds.TabIndex = 14;
@@ -245,7 +274,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(478, 12);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(223, 256);
+            this.gbDescription.Size = new System.Drawing.Size(223, 334);
             this.gbDescription.TabIndex = 15;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -253,7 +282,7 @@
             // btnOpenTranslationFile
             // 
             this.btnOpenTranslationFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 227);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 305);
             this.btnOpenTranslationFile.Name = "btnOpenTranslationFile";
             this.btnOpenTranslationFile.Size = new System.Drawing.Size(145, 23);
             this.btnOpenTranslationFile.TabIndex = 11;
@@ -268,7 +297,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(211, 202);
+            this.txtDescription.Size = new System.Drawing.Size(211, 280);
             this.txtDescription.TabIndex = 0;
             // 
             // txtTileWidth
@@ -338,27 +367,6 @@
             0,
             0,
             0});
-            // 
-            // cbCameraType
-            // 
-            this.cbCameraType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCameraType.FormattingEnabled = true;
-            this.cbCameraType.Items.AddRange(new object[] {
-            "2D",
-            "3D"});
-            this.cbCameraType.Location = new System.Drawing.Point(179, 121);
-            this.cbCameraType.Name = "cbCameraType";
-            this.cbCameraType.Size = new System.Drawing.Size(92, 21);
-            this.cbCameraType.TabIndex = 12;
-            // 
-            // lblCameraType
-            // 
-            this.lblCameraType.AutoSize = true;
-            this.lblCameraType.Location = new System.Drawing.Point(197, 106);
-            this.lblCameraType.Name = "lblCameraType";
-            this.lblCameraType.Size = new System.Drawing.Size(70, 13);
-            this.lblCameraType.TabIndex = 20;
-            this.lblCameraType.Text = "Camera Type";
             // 
             // gbTimeLimits
             // 
@@ -520,7 +528,7 @@
             // 
             // btnSetDefaultGameModesConditions
             // 
-            this.btnSetDefaultGameModesConditions.Location = new System.Drawing.Point(68, 230);
+            this.btnSetDefaultGameModesConditions.Location = new System.Drawing.Point(12, 352);
             this.btnSetDefaultGameModesConditions.Name = "btnSetDefaultGameModesConditions";
             this.btnSetDefaultGameModesConditions.Size = new System.Drawing.Size(203, 23);
             this.btnSetDefaultGameModesConditions.TabIndex = 27;
@@ -536,7 +544,7 @@
             "Grid",
             "Spots",
             "3D Model"});
-            this.comboBox1.Location = new System.Drawing.Point(32, 274);
+            this.comboBox1.Location = new System.Drawing.Point(64, 62);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 28;
@@ -544,33 +552,75 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 255);
+            this.label1.Location = new System.Drawing.Point(3, 65);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Map Type";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 31;
+            this.label2.Text = "Default Music";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtBGM);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.btnSetBackgrounds);
+            this.groupBox1.Controls.Add(this.btnSetForegrounds);
+            this.groupBox1.Location = new System.Drawing.Point(12, 235);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(460, 100);
+            this.groupBox1.TabIndex = 32;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Presentation";
+            // 
+            // txtBGM
+            // 
+            this.txtBGM.Controls.Add(this.btnChangeBGM);
+            this.txtBGM.Location = new System.Drawing.Point(6, 32);
+            this.txtBGM.Name = "txtBGM";
+            this.txtBGM.ReadOnly = true;
+            this.txtBGM.Size = new System.Drawing.Size(253, 20);
+            this.txtBGM.TabIndex = 32;
+            // 
+            // btnChangeBGM
+            // 
+            this.btnChangeBGM.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnChangeBGM.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnChangeBGM.Location = new System.Drawing.Point(228, 0);
+            this.btnChangeBGM.Margin = new System.Windows.Forms.Padding(0);
+            this.btnChangeBGM.Name = "btnChangeBGM";
+            this.btnChangeBGM.Size = new System.Drawing.Size(21, 16);
+            this.btnChangeBGM.TabIndex = 34;
+            this.btnChangeBGM.TabStop = false;
+            this.btnChangeBGM.Text = "...";
+            this.btnChangeBGM.UseVisualStyleBackColor = true;
+            this.btnChangeBGM.Click += new System.EventHandler(this.btnChangeBGM_Click);
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 309);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox1);
+            this.ClientSize = new System.Drawing.Size(713, 387);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSetDefaultGameModesConditions);
             this.Controls.Add(this.txtOrderNumber);
             this.Controls.Add(this.lblOrderNumber);
             this.Controls.Add(this.gbTimeUsage);
             this.Controls.Add(this.gbTimeLimits);
-            this.Controls.Add(this.lblCameraType);
-            this.Controls.Add(this.cbCameraType);
             this.Controls.Add(this.txtMapHeight);
             this.Controls.Add(this.txtMapWidth);
             this.Controls.Add(this.txtTileHeight);
             this.Controls.Add(this.txtTileWidth);
             this.Controls.Add(this.gbDescription);
-            this.Controls.Add(this.btnSetForegrounds);
-            this.Controls.Add(this.btnSetBackgrounds);
             this.Controls.Add(this.gbCameraStartPosition);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnAccept);
@@ -600,6 +650,9 @@
             this.gbTimeUsage.ResumeLayout(false);
             this.gbTimeUsage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.txtBGM.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -648,5 +701,9 @@
         protected System.Windows.Forms.Button btnOpenTranslationFile;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnChangeBGM;
+        public System.Windows.Forms.TextBox txtBGM;
     }
 }

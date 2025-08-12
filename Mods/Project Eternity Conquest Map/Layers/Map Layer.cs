@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 UnitSpawn NewUnitspawn = new UnitSpawn(BR);
                 ListUnitSpawn.Add(NewUnitspawn);
             }
-
+            
             int ListBuildingSpawnsCount = BR.ReadInt32();
             ListBuildingSpawn = new List<BuildingSpawn>(ListBuildingSpawnsCount);
 
@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 BuildingSpawn NewBuildingSpawn = new BuildingSpawn(BR);
                 ListBuildingSpawn.Add(NewBuildingSpawn);
             }
-
+            
             int ListPropCount = BR.ReadInt32();
             ListProp = new List<InteractiveProp>(ListPropCount);
             for (int L = 0; L < ListPropCount; L++)

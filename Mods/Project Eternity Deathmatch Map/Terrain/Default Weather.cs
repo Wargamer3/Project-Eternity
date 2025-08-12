@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -53,8 +52,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            TilesetPreset.TilesetTypes TilesetType = Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType;
-                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTileSet[ActiveTile.TilesetIndex], TilesetType));
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, WetEffect));
                         }
 
                         if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))

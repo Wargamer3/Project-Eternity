@@ -38,8 +38,6 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.lblTerrainStarValue = new System.Windows.Forms.Label();
             this.txtTerrainDefenceValue = new System.Windows.Forms.NumericUpDown();
             this.dgvMoveTypes = new System.Windows.Forms.DataGridView();
-            this.clMoveType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbTerrainMoveTypes = new System.Windows.Forms.GroupBox();
             this.gbMoveTypes = new System.Windows.Forms.GroupBox();
             this.txtMoveTypeName = new System.Windows.Forms.TextBox();
@@ -49,6 +47,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.btnAddNewMoveType = new System.Windows.Forms.Button();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.clMoveType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clBonusRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbTerrains.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTerrainDefenceValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMoveTypes)).BeginInit();
@@ -147,7 +148,8 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.dgvMoveTypes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMoveTypes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clMoveType,
-            this.clCost});
+            this.clCost,
+            this.clBonusRange});
             this.dgvMoveTypes.Location = new System.Drawing.Point(6, 19);
             this.dgvMoveTypes.MultiSelect = false;
             this.dgvMoveTypes.Name = "dgvMoveTypes";
@@ -155,18 +157,6 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.dgvMoveTypes.Size = new System.Drawing.Size(604, 374);
             this.dgvMoveTypes.TabIndex = 6;
             this.dgvMoveTypes.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMoveTypes_CellValueChanged);
-            // 
-            // clMoveType
-            // 
-            this.clMoveType.HeaderText = "Move Type";
-            this.clMoveType.Name = "clMoveType";
-            this.clMoveType.ReadOnly = true;
-            // 
-            // clCost
-            // 
-            this.clCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.clCost.HeaderText = "Cost";
-            this.clCost.Name = "clCost";
             // 
             // gbTerrainMoveTypes
             // 
@@ -255,6 +245,23 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
+            // clMoveType
+            // 
+            this.clMoveType.HeaderText = "Move Type";
+            this.clMoveType.Name = "clMoveType";
+            this.clMoveType.ReadOnly = true;
+            // 
+            // clCost
+            // 
+            this.clCost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.clCost.HeaderText = "Cost";
+            this.clCost.Name = "clCost";
+            // 
+            // clBonusRange
+            // 
+            this.clBonusRange.HeaderText = "Bonus Range";
+            this.clBonusRange.Name = "clBonusRange";
+            // 
             // ProjectEternityConquestTerrainsAndMoveTypesEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,8 +294,6 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         private System.Windows.Forms.Label lblTerrainStarValue;
         private System.Windows.Forms.NumericUpDown txtTerrainDefenceValue;
         public System.Windows.Forms.DataGridView dgvMoveTypes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clMoveType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clCost;
         private System.Windows.Forms.Button btnDeleteTerrain;
         private System.Windows.Forms.Button btnAddNewTerrain;
         private System.Windows.Forms.GroupBox gbTerrainMoveTypes;
@@ -303,5 +308,8 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         private System.Windows.Forms.Button btnAddNewMoveType;
         private System.Windows.Forms.MenuStrip mnuToolBar;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clMoveType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clCost;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clBonusRange;
     }
 }

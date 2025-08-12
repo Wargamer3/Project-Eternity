@@ -422,6 +422,7 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.PlayersMax = (byte)MS.frmDefaultGameModesConditions.txtPlayersMax.Value;
             ActiveMap.MaxSquadsPerPlayer = (byte)MS.frmDefaultGameModesConditions.txtMaxSquadsPerPlayer.Value;
             ActiveMap.Description = MS.txtDescription.Text;
+            ActiveMap.sndBattleThemeName = MS.txtBGM.Text;
 
             ActiveMap.ListMandatoryMutator.Clear();
             foreach (DataGridViewRow ActiveRow in MS.frmDefaultGameModesConditions.dgvMandatoryMutators.Rows)

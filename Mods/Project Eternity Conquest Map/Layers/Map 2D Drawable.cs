@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
-            ListDrawableArrowPerColor = new Tile2DHolder(Map.sprCursorPath, TilesetPreset.TilesetTypes.Regular);
+            ListDrawableArrowPerColor = new Tile2DHolder(TilesetPreset.TilesetTypes.Regular, Map.sprCursorPath);
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
             CreateMap(Map, LayerManager);
@@ -70,8 +70,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                         if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            TilesetPreset.TilesetTypes TilesetType = Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType;
-                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTileSet[ActiveTile.TilesetIndex], TilesetType));
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null));
                         }
 
                         if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))

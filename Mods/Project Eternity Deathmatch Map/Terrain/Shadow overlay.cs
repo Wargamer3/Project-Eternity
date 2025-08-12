@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
 					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
 					{
-						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName + " WallMap", Map.Content, WetEffect));
+						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, WetEffect, Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName + " WallMap"));
 					}
 
 					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);

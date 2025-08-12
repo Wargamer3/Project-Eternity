@@ -303,6 +303,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(MaxSquadsPerPlayer);
 
             BW.Write(Description);
+            BW.Write(sndBattleThemeName);
 
             BW.Write((byte)ListMandatoryMutator.Count);
             for (int M = 0; M < ListMandatoryMutator.Count; M++)
@@ -483,6 +484,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerPlayer = BR.ReadByte();
 
             Description = BR.ReadString();
+            sndBattleThemeName = BR.ReadString();
 
             int ListMandatoryMutatorCount = BR.ReadByte();
             for (int M = 0; M < ListMandatoryMutatorCount; M++)

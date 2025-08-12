@@ -21,8 +21,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private bool CanUseEffect;
         private double TimeElapsed;
 
-        public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
+        public Tile2DHolder(TilesetPreset.TilesetTypes TilesetType, Texture2D sprTileset)
         {
+            this.TilesetType = TilesetType;
+            this.sprTileset = sprTileset;
+            ListTile2D = new List<Rectangle>();
+            ListTileWorldPosition = new List<Vector3>();
+
+            if (WetEffect != null)
+            {
+                this.WetEffect = WetEffect.Clone();
+                CanUseEffect = true;
+            }
+            else
+            {
+                CanUseEffect = false;
+            }
+        }
+
+        public Tile2DHolder(TilesetPreset.TilesetTypes TilesetType, string TilesetName,  ContentManager Content, Effect WetEffect)
+        {
+            this.TilesetType = TilesetType;
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
 
@@ -62,13 +81,51 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public Tile2DHolder(Texture2D sprTileset, TilesetPreset.TilesetTypes TilesetType)
+        public Tile2DHolder(Terrain.TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName = null)
         {
-            this.sprTileset = sprTileset;
-            this.TilesetType = TilesetType;
+            string FinalTilesetName = Tileset.TilesetName;
+            if (TilesetName != null)
+            {
+                FinalTilesetName = TilesetName;
+            }
+            this.TilesetType = Tileset.TilesetType;
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
-            CanUseEffect = false;
+
+            if (WetEffect != null)
+            {
+                this.WetEffect = WetEffect.Clone();
+                CanUseEffect = true;
+            }
+            else
+            {
+                CanUseEffect = false;
+            }
+
+            if (Content != null)
+            {
+                sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName);
+
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + FinalTilesetName + " NormalMap.xnb"))
+                {
+                    sprTilesetBumpMap = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName + " NormalMap");
+                    this.WetEffect.Parameters["NormalMap"].SetValue(sprTilesetBumpMap);
+                }
+                else
+                {
+                    CanUseEffect = false;
+                }
+
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + FinalTilesetName + " HeightMap.xnb"))
+                {
+                    sprTilesetHeightMap = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName + " HeightMap");
+                    this.WetEffect.Parameters["HeightMap"].SetValue(sprTilesetHeightMap);
+                }
+                else
+                {
+                    CanUseEffect = false;
+                }
+            }
         }
 
         public void AddTile(Rectangle TileOrigin, Vector3 TileWorldPosition)

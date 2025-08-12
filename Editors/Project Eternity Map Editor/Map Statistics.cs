@@ -11,7 +11,7 @@ namespace ProjectEternity.Editors.MapEditor
         public List<string> ListBackgroundsPath;
         public List<string> ListForegroundsPath;
 
-        private enum ItemSelectionChoices { Backgrounds, Foregrounds };
+        private enum ItemSelectionChoices { Backgrounds, Foregrounds, BGM };
         private ItemSelectionChoices ItemSelectionChoice;
 
         public DefaultGameModesConditions frmDefaultGameModesConditions;
@@ -96,6 +96,12 @@ namespace ProjectEternity.Editors.MapEditor
             frmDefaultGameModesConditions.ShowDialog();
         }
 
+        private void btnChangeBGM_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.BGM;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM));
+        }
+
         protected void ListMenuItemsSelected(List<string> Items)
         {
             if (Items == null)
@@ -115,6 +121,11 @@ namespace ProjectEternity.Editors.MapEditor
                     case ItemSelectionChoices.Foregrounds:
                         ListForegroundsPath.Clear();
                         ListForegroundsPath.Add(BackgroundName);
+                        break;
+
+                    case ItemSelectionChoices.BGM:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(17);
+                        txtBGM.Text = Name;
                         break;
                 }
             }

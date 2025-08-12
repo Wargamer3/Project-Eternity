@@ -126,24 +126,25 @@ namespace ProjectEternity.Core.Scripts
                 PosX = BR.ReadInt32();
                 PosY = BR.ReadInt32();
                 NewScriptType = (MapScriptTypes)BR.ReadByte();
+                string ScriptName = BR.ReadString();
 
                 switch (NewScriptType)
                 {
                     #region Event
 
                     case MapScriptTypes.Event:
-                        NewScript = DicMapEvent[BR.ReadString()].CopyScript();
+                        NewScript = DicMapEvent[ScriptName].CopyScript();
                         ListMapEvent.Add((MapEvent)NewScript);
                         break;
 
                     #endregion
 
                     case MapScriptTypes.Condition:
-                        NewScript = DicMapCondition[BR.ReadString()].CopyScript();
+                        NewScript = DicMapCondition[ScriptName].CopyScript();
                         break;
 
                     case MapScriptTypes.Trigger:
-                        NewScript = DicMapTrigger[BR.ReadString()].CopyScript();
+                        NewScript = DicMapTrigger[ScriptName].CopyScript();
                         break;
                 }
 

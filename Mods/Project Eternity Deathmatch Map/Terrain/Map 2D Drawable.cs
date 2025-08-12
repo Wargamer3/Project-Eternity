@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
-            ListDrawableArrowPerColor = new Tile2DHolder(Map.sprCursorPath, TilesetPreset.TilesetTypes.Regular);
+            ListDrawableArrowPerColor = new Tile2DHolder(TilesetPreset.TilesetTypes.Regular, Map.sprCursorPath);
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
             CreateMap(Map, LayerManager);
@@ -70,8 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            TilesetPreset.TilesetTypes TilesetType = Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType;
-                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTileSet[ActiveTile.TilesetIndex], TilesetType));
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null));
                         }
 
                         if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
@@ -278,8 +277,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X), (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y), TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
-
-            ListDrawableArrowPerColor.Draw(g, Map, 0f);
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -289,6 +286,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.End();
 
             //DrawMap(g);
+
+            ListDrawableArrowPerColor.Draw(g, Map, 0f);
 
             g.Begin();
 
