@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
+                        Terrain NewTerrain = CreateTerrain(X, Y, TileSizeX, TileSizeY);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), TilesetIndex);
                         
                         NewTerrain.TerrainTypeIndex = 0;
@@ -97,6 +97,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         ListBattleBackgroundAnimationPath.Add(BR.ReadString());
                     }
                 }
+            }
+
+            protected virtual Terrain CreateTerrain(int X, int Y, int TileSizeX, int TileSizeY)
+            {
+                return new Terrain(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
             }
 
             protected virtual Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)

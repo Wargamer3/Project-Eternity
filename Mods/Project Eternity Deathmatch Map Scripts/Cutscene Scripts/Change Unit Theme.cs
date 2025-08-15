@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             continue;
 
                         if (!Character.DicBattleTheme.ContainsKey(_ThemePath))
-                            Character.DicBattleTheme.Add(_ThemePath, new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _ThemePath + ".mp3"));
+                            Character.DicBattleTheme.Add(_ThemePath, new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _ThemePath));
 
                         Map.ListPlayer[P].ListSquad[U].CurrentLeader.Pilot.BattleThemeName = _ThemePath;
                         ThemeChanged = true;

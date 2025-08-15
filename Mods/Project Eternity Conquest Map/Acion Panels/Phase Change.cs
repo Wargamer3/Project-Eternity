@@ -122,12 +122,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             //Reset the cursor.
             Map.ActiveUnitIndex = -1;
 
-            if (Map.IsClient && GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemeName && !string.IsNullOrEmpty(Map.sndBattleThemeName))
+            if (Map.IsClient && GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemePath && !string.IsNullOrEmpty(Map.sndBattleThemePath))
             {
                 Map.sndBattleTheme.Stop();
                 Map.sndBattleTheme.SetLoop(true);
                 Map.sndBattleTheme.PlayAsBGM();
-                GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemeName;
+                GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemePath;
             }
 
             do

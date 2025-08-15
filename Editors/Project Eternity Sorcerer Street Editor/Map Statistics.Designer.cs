@@ -60,23 +60,23 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Size = new System.Drawing.Size(211, 240);
+            this.txtDescription.Size = new System.Drawing.Size(211, 373);
             // 
             // gbDescription
             // 
-            this.gbDescription.Size = new System.Drawing.Size(223, 294);
+            this.gbDescription.Size = new System.Drawing.Size(223, 427);
             // 
             // btnAccept
             // 
-            this.btnAccept.Location = new System.Drawing.Point(536, 312);
+            this.btnAccept.Location = new System.Drawing.Point(536, 445);
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(626, 312);
+            this.btnClose.Location = new System.Drawing.Point(626, 445);
             // 
             // btnOpenTranslationFile
             // 
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 265);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 398);
             // 
             // groupBox1
             // 
@@ -90,7 +90,7 @@
             this.groupBox1.Controls.Add(this.txtMagicPerLap);
             this.groupBox1.Controls.Add(this.lblMagicAtStart);
             this.groupBox1.Controls.Add(this.txtMagicAtStart);
-            this.groupBox1.Location = new System.Drawing.Point(12, 259);
+            this.groupBox1.Location = new System.Drawing.Point(12, 386);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(460, 76);
             this.groupBox1.TabIndex = 24;
@@ -226,7 +226,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 345);
+            this.ClientSize = new System.Drawing.Size(713, 478);
             this.Controls.Add(this.groupBox1);
             this.Name = "SorcererStreetMapStatistics";
             this.Text = "Map statistics";
@@ -239,7 +239,6 @@
             this.Controls.SetChildIndex(this.txtTileHeight, 0);
             this.Controls.SetChildIndex(this.txtMapWidth, 0);
             this.Controls.SetChildIndex(this.txtMapHeight, 0);
-            this.Controls.SetChildIndex(this.cbCameraType, 0);
             this.Controls.SetChildIndex(this.groupBox1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).EndInit();

@@ -314,8 +314,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
             {
-                int X = (int)Map.CursorPositionVisible.X;
-                int Y = (int)Map.CursorPositionVisible.Y;
+                int X = (int)Map.CursorPositionVisible.X / Map.TileSize.X;
+                int Y = (int)Map.CursorPositionVisible.Y / Map.TileSize.Y;
                 float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z + 0.3f;
                 DrawableTile ActiveTerrain = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTile[X, Y];
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
@@ -405,9 +405,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool IsCursorHiddenByWall()
         {
-            int CursorX = (int)Map.CursorPosition.X;
+            int CursorX = (int)Map.CursorPosition.X / Map.TileSize.X;
             int CursorLayer = (int)Map.CursorPosition.Z;
-            for (int Y = (int)Map.CursorPosition.Y; Y < Map.MapSize.Y; ++Y)
+            for (int Y = (int)Map.CursorPosition.Y / Map.TileSize.Y; Y < Map.MapSize.Y; ++Y)
             {
                 if (CursorLayer < Map.LayerManager.ListLayer.Count && Map.LayerManager.ListLayer[CursorLayer].ArrayTerrain[CursorX, Y].TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {

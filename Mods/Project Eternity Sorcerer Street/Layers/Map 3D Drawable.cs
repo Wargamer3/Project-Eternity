@@ -419,8 +419,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
             {
-                int X = (int)Map.CursorPositionVisible.X;
-                int Y = (int)Map.CursorPositionVisible.Y;
+                int X = (int)Map.CursorPositionVisible.X / Map.TileSize.X;
+                int Y = (int)Map.CursorPositionVisible.Y / Map.TileSize.Y;
                 float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z + 0.3f;
                 DrawableTile ActiveTerrain = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTile[X, Y];
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;

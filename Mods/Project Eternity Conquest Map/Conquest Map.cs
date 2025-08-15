@@ -326,6 +326,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     Init();
                 }
+                if (sndBattleTheme != null)
+                {
+                    sndBattleTheme.Stop();
+                }
+            }
+            else
+            {
+                if (sndBattleTheme != null)
+                {
+                    sndBattleTheme.PlayAsBGM();
+                }
             }
 
             LayerManager.TogglePreview(UsePreview);

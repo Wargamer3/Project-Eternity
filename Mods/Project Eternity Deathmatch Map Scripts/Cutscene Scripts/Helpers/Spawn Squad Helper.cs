@@ -37,9 +37,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 set
                 { 
                     _SFXPath = value;
-                    if (File.Exists("Content/SFX/" + SFXPath + ".mp3"))
+                    if (File.Exists("Content/SFX/" + SFXPath))
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + SFXPath);
                     }
                 }
             }
@@ -128,9 +128,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ActiveSound.Play();
                     }
-                    else if (File.Exists("Content/SFX/" + SFXPath + ".mp3") && GameScreen.FMODSystem != null)
+                    else if (File.Exists("Content/SFX/" + SFXPath) && GameScreen.FMODSystem != null)
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + SFXPath);
                         ActiveSound.Play();
                     }
                     else

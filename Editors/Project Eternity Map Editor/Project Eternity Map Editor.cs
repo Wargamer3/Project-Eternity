@@ -143,7 +143,7 @@ namespace ProjectEternity.Editors.MapEditor
             EditorInfo[] Info = new EditorInfo[]
             {
                 new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
-                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3" }, typeof(ProjectEternityMusicPlayerEditor), false),
+                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false),
                 new EditorInfo(new string[] { GUIRootPathMapModels }, "Maps/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
             };
 
@@ -277,7 +277,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
             else if (IsMovingRight)
             {
-                ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X - 1) ? ActiveMap.TileSize.X : 0;
+                ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X * ActiveMap.TileSize.X - 1) ? ActiveMap.TileSize.X : 0;
                 KeyProcessed = true;
             }
 
@@ -288,7 +288,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
             else if (IsMovingDown)
             {
-                ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y - 1) ? ActiveMap.TileSize.Y : 0;
+                ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y * ActiveMap.TileSize.Y - 1) ? ActiveMap.TileSize.Y : 0;
                 KeyProcessed = true;
             }
             else if (keyData == Keys.C)
@@ -422,7 +422,7 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.PlayersMax = (byte)MS.frmDefaultGameModesConditions.txtPlayersMax.Value;
             ActiveMap.MaxSquadsPerPlayer = (byte)MS.frmDefaultGameModesConditions.txtMaxSquadsPerPlayer.Value;
             ActiveMap.Description = MS.txtDescription.Text;
-            ActiveMap.sndBattleThemeName = MS.txtBGM.Text;
+            ActiveMap.sndBattleThemePath = MS.txtBGM.Text;
 
             ActiveMap.ListMandatoryMutator.Clear();
             foreach (DataGridViewRow ActiveRow in MS.frmDefaultGameModesConditions.dgvMandatoryMutators.Rows)

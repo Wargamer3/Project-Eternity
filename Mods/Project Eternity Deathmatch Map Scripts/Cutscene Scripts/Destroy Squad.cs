@@ -86,9 +86,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ExecuteEvent(this, 0);
                     }
 
-                    if (File.Exists("Content/Maps/SFX/" + _SFXPath + ".mp3"))
+                    if (File.Exists("Content/Maps/SFX/" + _SFXPath))
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/SFX/" + _SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/SFX/" + _SFXPath);
                         ActiveSound.Play();
                     }
                 }

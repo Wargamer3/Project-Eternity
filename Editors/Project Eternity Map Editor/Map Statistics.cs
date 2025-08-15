@@ -38,6 +38,7 @@ namespace ProjectEternity.Editors.MapEditor
             txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.Camera2DPosition.Y);
             txtOrderNumber.Value = ActiveMap.OrderNumber;
             txtDescription.Text = ActiveMap.Description;
+            txtBGM.Text = ActiveMap.sndBattleThemePath;
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
             txtTimeStart.Value = (decimal)ActiveMap.MapEnvironment.TimeStart;
@@ -124,7 +125,7 @@ namespace ProjectEternity.Editors.MapEditor
                         break;
 
                     case ItemSelectionChoices.BGM:
-                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(17);
+                        Name = Items[I].Substring(17);
                         txtBGM.Text = Name;
                         break;
                 }

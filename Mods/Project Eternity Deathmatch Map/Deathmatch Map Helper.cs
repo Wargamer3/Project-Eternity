@@ -265,5 +265,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             return new MapZoneDeathmatch(ActiveMap, ZoneType);
         }
+
+        public void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+        {
+            ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+        }
     }
 }

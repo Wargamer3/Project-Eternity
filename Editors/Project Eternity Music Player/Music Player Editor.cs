@@ -26,7 +26,7 @@ namespace ProjectEternity.Editors.MusicPlayer
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSFX }, "SFX/", new string[] {".mp3", ".wav"}, typeof(ProjectEternityMusicPlayerEditor), false)
+                new EditorInfo(new string[] { GUIRootPathSFX }, "SFX/", new string[] {".mp3", ".wav", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false)
             };
 
             return Info;

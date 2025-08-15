@@ -18,6 +18,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
+        protected override Terrain CreateTerrain(int X, int Y, int TileSizeX, int TileSizeY)
+        {
+            return new TerrainSorcererStreet(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
+        }
+
         protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
         {
             return new TerrainSorcererStreet(BR, X, Y, 0, 0, LayerIndex, 0, LayerDepth);

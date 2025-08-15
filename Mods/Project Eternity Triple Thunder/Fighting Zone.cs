@@ -258,7 +258,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (!IsServer && !UsePreview && !string.IsNullOrEmpty(BGMPath))
             {
-                FMODSound NewTheme = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + BGMPath + ".mp3");
+                FMODSound NewTheme = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + BGMPath);
                 NewTheme.PlayAsBGM();
                 GameScreen.FMODSystem.ChangeBGMVolume(0.5f);
                 NewTheme.SetLoop(true);

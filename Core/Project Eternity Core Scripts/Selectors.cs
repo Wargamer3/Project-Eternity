@@ -27,7 +27,7 @@ namespace ProjectEternity.Core.Scripts
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX);
                     if (Items != null)
                     {
-                        value = Path.GetFileNameWithoutExtension(Items[0]);
+                        value = Items[0];
                     }
                 }
                 return value;
@@ -50,7 +50,7 @@ namespace ProjectEternity.Core.Scripts
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM);
                     if (Items != null)
                     {
-                        value = Path.GetFileNameWithoutExtension(Items[0]);
+                        value = Items[0];
                     }
                 }
                 return value;

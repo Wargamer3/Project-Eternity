@@ -119,9 +119,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2(AnimationPosition.X - Map.Camera2DPosition.X * Map.TileSize.X, AnimationPosition.Y - Map.Camera2DPosition.Y * Map.TileSize.Y), _AnimationSpeed);
                     }
 
-                    if (File.Exists("Content/SFX/" + _SFXPath + ".mp3"))
+                    if (File.Exists("Content/SFX/" + _SFXPath))
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + _SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + _SFXPath);
                         ActiveSound.Play();
                     }
                 }

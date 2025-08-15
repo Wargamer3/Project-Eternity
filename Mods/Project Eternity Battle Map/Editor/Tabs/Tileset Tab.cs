@@ -688,7 +688,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 }
                                 Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
 
-                                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
+                                Helper.AddTilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count);
                                 ActiveMap.ListTileSet.Add(Tile);
                                 //Add the file name to the tile combo box.
                                 cboTiles.Items.Add(Name);

@@ -343,7 +343,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(ListForeground[F].AnimationFullPath);
             }
 
-            BW.Write(sndBattleThemeName);
+            BW.Write(sndBattleThemePath);
 
             BW.Write(FMODSystem.sndActiveBGMName);
             BW.Write(FMODSystem.GetPosition(FMODSystem.sndActiveBGM));
@@ -443,10 +443,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListForeground.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
             }
 
-            sndBattleThemeName = BR.ReadString();
-            if (!string.IsNullOrEmpty(sndBattleThemeName))
+            sndBattleThemePath = BR.ReadString();
+            if (!string.IsNullOrEmpty(sndBattleThemePath))
             {
-                FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemeName + ".mp3");
+                FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemePath);
 
                 NewBattleTheme.SetLoop(true);
                 sndBattleTheme = NewBattleTheme;
@@ -457,7 +457,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (!string.IsNullOrEmpty(ThemePath))
             {
-                FMODSound NewTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + ThemePath + ".mp3");
+                FMODSound NewTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + ThemePath);
                 NewTheme.SetLoop(true);
                 NewTheme.PlayAsBGM();
                 FMODSystem.sndActiveBGMName = ThemePath;
@@ -581,7 +581,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         for (int C = NewSquad.At(U).ArrayCharacterActive.Length - 1; C >= 0; --C)
                             if (!string.IsNullOrEmpty(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName))
                                 if (!Character.DicBattleTheme.ContainsKey(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName))
-                                    Character.DicBattleTheme.Add(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName, new FMODSound(FMODSystem, "Content/Maps/BGM/" + NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName + ".mp3"));
+                                    Character.DicBattleTheme.Add(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName, new FMODSound(FMODSystem, "Content/Maps/BGM/" + NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName));
                     }
 
                     NewSquad.CurrentTerrainIndex = ActiveSquadCurrentMovement;

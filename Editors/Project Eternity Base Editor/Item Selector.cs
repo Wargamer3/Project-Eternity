@@ -45,6 +45,10 @@ namespace ProjectEternity.Core.Editor
 
         public List<string> GetResult()
         {
+            if (SelectedItem.Count == 0)
+            {
+                return null;
+            }
             return SelectedItem;
         }
 

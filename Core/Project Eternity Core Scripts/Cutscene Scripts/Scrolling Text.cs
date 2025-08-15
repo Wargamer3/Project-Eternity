@@ -57,7 +57,7 @@ namespace ProjectEternity.Core.Scripts
 
                     if (!string.IsNullOrEmpty(_SFXPath))
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/SFX/" + _SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/SFX/" + _SFXPath);
                         ActiveSound.Play();
                     }
                 }

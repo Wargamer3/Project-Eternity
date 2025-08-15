@@ -274,6 +274,11 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             {
                 return new MapZoneConquest(ActiveMap, ZoneType);
             }
+
+            public void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+            }
         }
 
         private static ConquestParams Params;

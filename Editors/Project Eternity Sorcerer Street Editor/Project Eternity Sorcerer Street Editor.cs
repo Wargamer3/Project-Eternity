@@ -256,6 +256,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             {
                 return new MapZoneSorcererStreet(ActiveMap, ZoneType);
             }
+
+            public void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                ActiveMap.ListTilesetPreset.Add(new SorcererStreetTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+            }
         }
 
         private static SorcererStreetBattleParams Params;

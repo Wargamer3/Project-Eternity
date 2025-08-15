@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static readonly string MapType = "Sorcerer Street";
 
         public enum Checkpoints { North, South, West, East }
-        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X / TileSize.X, (int)CursorPosition.Y / TileSize.Y]; } }
 
         #region Ressources
 

@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public RenderTarget2D MapRenderTarget;
 
         public FMODSound sndBattleTheme;
-        public string sndBattleThemeName;
+        public string sndBattleThemePath;
         //SFX
         public FMODSound sndConfirm;
 
@@ -263,7 +263,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             VictoryCondition = "";
             LossCondition = "";
             SkillPoint = "";
-            sndBattleThemeName = "";
+            sndBattleThemePath = "";
             _World = Matrix.Identity;
 
             DicMapVariables = new Dictionary<string, double>();
@@ -303,7 +303,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(MaxSquadsPerPlayer);
 
             BW.Write(Description);
-            BW.Write(sndBattleThemeName);
+            BW.Write(sndBattleThemePath);
 
             BW.Write((byte)ListMandatoryMutator.Count);
             for (int M = 0; M < ListMandatoryMutator.Count; M++)
@@ -484,7 +484,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerPlayer = BR.ReadByte();
 
             Description = BR.ReadString();
-            sndBattleThemeName = BR.ReadString();
+            sndBattleThemePath = BR.ReadString();
+            if (!string.IsNullOrEmpty(sndBattleThemePath) && File.Exists("Content/Maps/BGM/" + sndBattleThemePath))
+            {
+                FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemePath);
+
+                NewBattleTheme.SetLoop(true);
+                sndBattleTheme = NewBattleTheme;
+            }
 
             int ListMandatoryMutatorCount = BR.ReadByte();
             for (int M = 0; M < ListMandatoryMutatorCount; M++)

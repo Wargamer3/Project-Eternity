@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Preload()
         {
             if (PreLoad)
-                Sound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + MusicPath + ".mp3");
+                Sound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + MusicPath);
         }
 
         public override void Update(int Index)

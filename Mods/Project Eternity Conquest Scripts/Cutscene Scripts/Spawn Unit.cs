@@ -96,9 +96,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     else
                         ExecuteEvent(this, 1);
 
-                    if (File.Exists("Content/SFX/" + _SFXPath + ".mp3"))
+                    if (File.Exists("Content/SFX/" + _SFXPath))
                     {
-                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + _SFXPath + ".mp3");
+                        ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + _SFXPath);
                         ActiveSound.Play();
                     }
                     else

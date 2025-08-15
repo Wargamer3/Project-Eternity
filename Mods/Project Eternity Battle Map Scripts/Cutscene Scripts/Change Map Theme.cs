@@ -34,11 +34,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                NewTheme = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _ThemePath + ".mp3");
+                NewTheme = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _ThemePath);
                 NewTheme.SetLoop(true);
                 SoundSystem.ReleaseSound(Map.sndBattleTheme);
                 Map.sndBattleTheme = NewTheme;
-                Map.sndBattleThemeName = _ThemePath;
+                Map.sndBattleThemePath = _ThemePath;
 
                 ExecuteEvent(this, 0);
                 IsEnded = true;

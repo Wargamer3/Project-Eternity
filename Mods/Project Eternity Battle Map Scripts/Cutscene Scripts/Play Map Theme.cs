@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     IsInit = true;
 
-                    ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _BGMPath + ".mp3");
+                    ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + _BGMPath);
                     ActiveSound.SetLoop(true);
                     ActiveSound.PlayAsBGM();
                     GameScreen.FMODSystem.sndActiveBGMName = _BGMPath;

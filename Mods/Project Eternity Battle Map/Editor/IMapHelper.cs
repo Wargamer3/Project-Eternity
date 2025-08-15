@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -23,5 +22,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int GetLayerCount();
         List<BaseMapLayer> GetLayersAndSubLayers();
         MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType);
+        void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
     }
 }
