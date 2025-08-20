@@ -119,6 +119,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
 
+            Map.MapEnvironment.Reset();
+
             float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
 
             Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,

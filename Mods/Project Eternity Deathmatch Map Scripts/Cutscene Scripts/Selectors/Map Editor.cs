@@ -341,7 +341,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 Texture2D sprTileset = NewMap.Content.Load<Texture2D>("Maps/Tilesets/" + TerrainAttribute.ListTileset[T]);
                                 if (!NewMap.ListTileSet.Contains(sprTileset))
                                 {
-                                    Helper.AddTilesetPreset(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, NewMap.TileSize.X, NewMap.TileSize.Y, NewMap.ListTilesetPreset.Count);
+                                    Helper.CreateTilesetPresetFromSprite(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, NewMap.TileSize.X, NewMap.TileSize.Y, NewMap.ListTilesetPreset.Count);
                                     NewMap.ListTileSet.Add(sprTileset);
                                 }
                             }

@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public static TilesetPreset FromFile(string FilePath, int Index = 0)
             {
-                FileStream FS = new FileStream("Content/Maps/Tileset presets/" + FilePath + ".pet", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/Maps/Tilesets presets/" + FilePath + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -155,86 +155,86 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Draw(sprTileset, new Rectangle(Position.X, Position.Y, ArrayTiles[0, 0].Origin.Width, ArrayTiles[0, 0].Origin.Height), ArrayTiles[0, 0].Origin, Color.White);
             }
 
-            public void UpdateSmartTile(int TilesetIndex, int X, int Y, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile)
+            public void UpdateAutotTile(int TilesetIndex, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile)
             {
                 switch (TilesetType)
                 {
                     case TilesetTypes.Water:
-                        UpdtateSmartTileWater(TilesetIndex, X, Y, TileSizeX, TileSizeY, ArrayTile);
+                        UpdtateSmartTileWater(TilesetIndex, GridX, GridY, TileSizeX, TileSizeY, ArrayTile);
                         break;
                 }
-                if (X > 0 && ArrayTile[X - 1, Y].TilesetIndex == TilesetIndex)
+                if (GridX > 0 && ArrayTile[GridX - 1, GridY].TilesetIndex == TilesetIndex)
                 {
                     switch (TilesetType)
                     {
                         case TilesetTypes.Water:
-                            UpdtateSmartTileWater(TilesetIndex, X - 1, Y, TileSizeX, TileSizeY, ArrayTile);
+                            UpdtateSmartTileWater(TilesetIndex, GridX - 1, GridY, TileSizeX, TileSizeY, ArrayTile);
                             break;
                     }
                 }
-                if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y].TilesetIndex == TilesetIndex)
+                if (GridX < ArrayTile.GetLength(0) - 1 && ArrayTile[GridX + 1, GridY].TilesetIndex == TilesetIndex)
                 {
                     switch (TilesetType)
                     {
                         case TilesetTypes.Water:
-                            UpdtateSmartTileWater(TilesetIndex, X + 1, Y, TileSizeX, TileSizeY, ArrayTile);
+                            UpdtateSmartTileWater(TilesetIndex, GridX + 1, GridY, TileSizeX, TileSizeY, ArrayTile);
                             break;
                     }
                 }
-                if (Y > 0 && ArrayTile[X, Y - 1].TilesetIndex == TilesetIndex)
+                if (GridY > 0 && ArrayTile[GridX, GridY - 1].TilesetIndex == TilesetIndex)
                 {
                     switch (TilesetType)
                     {
                         case TilesetTypes.Water:
-                            UpdtateSmartTileWater(TilesetIndex, X, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                            UpdtateSmartTileWater(TilesetIndex, GridX, GridY - 1, TileSizeX, TileSizeY, ArrayTile);
                             break;
                     }
 
                     //Corners
-                    if (X > 0 && ArrayTile[X - 1, Y - 1].TilesetIndex == TilesetIndex)
+                    if (GridX > 0 && ArrayTile[GridX - 1, GridY - 1].TilesetIndex == TilesetIndex)
                     {
                         switch (TilesetType)
                         {
                             case TilesetTypes.Water:
-                                UpdtateSmartTileWater(TilesetIndex, X - 1, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                                UpdtateSmartTileWater(TilesetIndex, GridX - 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile);
                                 break;
                         }
                     }
-                    if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y - 1].TilesetIndex == TilesetIndex)
+                    if (GridX < ArrayTile.GetLength(0) - 1 && ArrayTile[GridX + 1, GridY - 1].TilesetIndex == TilesetIndex)
                     {
                         switch (TilesetType)
                         {
                             case TilesetTypes.Water:
-                                UpdtateSmartTileWater(TilesetIndex, X + 1, Y - 1, TileSizeX, TileSizeY, ArrayTile);
+                                UpdtateSmartTileWater(TilesetIndex, GridX + 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile);
                                 break;
                         }
                     }
                 }
-                if (Y < ArrayTile.GetLength(1) - 1 && ArrayTile[X, Y + 1].TilesetIndex == TilesetIndex)
+                if (GridY < ArrayTile.GetLength(1) - 1 && ArrayTile[GridX, GridY + 1].TilesetIndex == TilesetIndex)
                 {
                     switch (TilesetType)
                     {
                         case TilesetTypes.Water:
-                            UpdtateSmartTileWater(TilesetIndex, X, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                            UpdtateSmartTileWater(TilesetIndex, GridX, GridY + 1, TileSizeX, TileSizeY, ArrayTile);
                             break;
                     }
 
                     //Corners
-                    if (X > 0 && ArrayTile[X - 1, Y + 1].TilesetIndex == TilesetIndex)
+                    if (GridX > 0 && ArrayTile[GridX - 1, GridY + 1].TilesetIndex == TilesetIndex)
                     {
                         switch (TilesetType)
                         {
                             case TilesetTypes.Water:
-                                UpdtateSmartTileWater(TilesetIndex, X - 1, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                                UpdtateSmartTileWater(TilesetIndex, GridX - 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile);
                                 break;
                         }
                     }
-                    if (X < ArrayTile.GetLength(0) - 1 && ArrayTile[X + 1, Y + 1].TilesetIndex == TilesetIndex)
+                    if (GridX < ArrayTile.GetLength(0) - 1 && ArrayTile[GridX + 1, GridY + 1].TilesetIndex == TilesetIndex)
                     {
                         switch (TilesetType)
                         {
                             case TilesetTypes.Water:
-                                UpdtateSmartTileWater(TilesetIndex, X + 1, Y + 1, TileSizeX, TileSizeY, ArrayTile);
+                                UpdtateSmartTileWater(TilesetIndex, GridX + 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile);
                                 break;
                         }
                     }
@@ -556,7 +556,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                     else//Nothing Right
                     {
-                        if (TilesetIndex == UpTile.TilesetIndex)
+                        if (TilesetIndex == UpTile.TilesetIndex)//Something Up
                         {
                             if (TilesetIndex == DownTile.TilesetIndex)
                             {

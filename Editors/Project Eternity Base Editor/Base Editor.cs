@@ -89,8 +89,13 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathMapTilesets = "Maps/Tilesets";
         public const string GUIRootPathMapTilesetImages = "Maps/Tilesets Images";
         public const string GUIRootPathMapTilesetPresets = "Maps/Tileset Presets";
-        public const string GUIRootPathMapTilesetPresetsConquest = "Tileset Presets/Conquest";
-        public const string GUIRootPathMapTilesetPresetsDeathmatch = "Tileset Presets/Deathmatch";
+        public const string GUIRootPathMapTilesetPresetsConquest = "Maps/Tileset Presets/Conquest";
+        public const string GUIRootPathMapTilesetPresetsDeathmatch = "Maps/Tileset Presets/Deathmatch";
+        public const string GUIRootPathMapAutotiles = "Maps/Autotiles";
+        public const string GUIRootPathMapAutotilesImages = "Maps/Autotiles Images";
+        public const string GUIRootPathMapAutotilesPresets = "Maps/Autotiles Presets";
+        public const string GUIRootPathMapAutotilesPresetsConquest = "Maps/Autotiles Presets/Conquest";
+        public const string GUIRootPathMapAutotilesPresetsDeathmatch = "Maps/Autotiles Presets/Deathmatch";
         public const string GUIRootPathMapModels = "Maps/Models";
         public const string GUIRootPathMapBGM = "Maps/BGM";
         public const string GUIRootPathCutscenes = "Cutscenes";

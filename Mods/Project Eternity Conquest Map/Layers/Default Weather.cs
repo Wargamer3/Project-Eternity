@@ -41,27 +41,49 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 DicTile2DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile2DHolder>());
             }
 
-            for (int X = Map.MapSize.X - 1; X >= 0; --X)
-			{
-				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
-				{
-					Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
-                    DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
-
-                    if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
-					{
-						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, WetEffect));
-                    }
-                    if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+            if (Map.ListTileSet.Count > 0)
+            {
+                for (int X = Map.MapSize.X - 1; X >= 0; --X)
+                {
+                    for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                     {
-                        DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, WetEffect));
-                    }
+                        Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
+                        DrawableTile ActiveTile = Owner.ArrayTile[X, Y];
 
-                    DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
-                    DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                        if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null));
+                        }
+
+                        if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile2DByTileset.Add(ActiveTile.TilesetIndex, DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex]);
+                        }
+
+                        if (ActiveTile.ArraySubTile.Length == 0)
+                        {
+                            DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTerrain.WorldPosition);
+                        }
+                        else
+                        {
+                            float OffsetSize = 1f / (ActiveTile.ArraySubTile.Length / 2f);
+                            for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
+                            {
+                                Vector3 TilePosition = ActiveTerrain.WorldPosition;
+                                TilePosition.X += OffsetSize * Map.TileSize.X * (T % (ActiveTile.ArraySubTile.Length / 2));
+                                TilePosition.Y += OffsetSize * Map.TileSize.Y * (T / (ActiveTile.ArraySubTile.Length / 2));
+                                DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
+                            }
+                        }
+                    }
                 }
-			}
-		}
+            }
+
+            for (int L = 0; L < Owner.ListSubLayer.Count; L++)
+            {
+                CreateMap(Map, Owner.ListSubLayer[L], LayerIndex, WetEffect);
+            }
+        }
 
         public void Reset()
         {
@@ -85,7 +107,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
             g.GraphicsDevice.Clear(Color.White);
-
+            
             if (Map.ShowLayerIndex == -1)
             {
                 if (Map.IsEditor)
@@ -104,12 +126,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                     for (int L = 0; L < MaxLayerIndex; L++)
                     {
-                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[L];
-                        if (!ActiveLayer.IsVisible)
-                        {
-                            continue;
-                        }
-
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
                             ActiveTileSet.Value.Draw(g, Map, Map.LayerManager.ListLayer[L].Depth);

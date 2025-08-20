@@ -48,14 +48,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return new TileAttributes();
             }
 
-            public Terrain GetTerrain(int X, int Y, int LayerIndex)
+            public Terrain GetTerrain(int GridX, int GridY, int LayerIndex)
             {
-                return ActiveMap.GetTerrain(new Vector3(X, Y, LayerIndex));
+                return ActiveMap.GetTerrain(new Vector3(GridX, GridY, LayerIndex));
             }
 
-            public DrawableTile GetTile(int X, int Y, int LayerIndex)
+            public DrawableTile GetTile(int GridX, int GridY, int LayerIndex)
             {
-                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
+                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[GridX, GridY];
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -102,23 +102,23 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
             }
 
-            public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
-                TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(X, Y), LayerIndex);
+                TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(GridX, GridY), LayerIndex);
                 NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
+                NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
 
                 if (ConsiderSubLayers)
                 {
-                    GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
+                    GetRealLayer(LayerIndex).ArrayTerrain[GridX, GridY] = NewTerrain;
                 }
                 else
                 {
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
+                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY] = NewTerrain;
                 }
             }
 
-            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
@@ -133,9 +133,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
                 }
 
-                ActiveLayer.ArrayTile[X, Y] = NewTile;
+                ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
 
-                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateSmartTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
+                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset.TilesetIndex, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
 
                 ActiveMap.Reset();
             }
@@ -275,7 +275,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return new MapZoneConquest(ActiveMap, ZoneType);
             }
 
-            public void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
                 ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
             }

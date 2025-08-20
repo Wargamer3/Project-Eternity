@@ -60,7 +60,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(333, 523);
+            this.tabControl1.Size = new System.Drawing.Size(339, 620);
             this.tabControl1.TabIndex = 0;
             // 
             // tabSpawns
@@ -73,7 +73,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabSpawns.Location = new System.Drawing.Point(4, 22);
             this.tabSpawns.Name = "tabSpawns";
             this.tabSpawns.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSpawns.Size = new System.Drawing.Size(325, 497);
+            this.tabSpawns.Size = new System.Drawing.Size(331, 594);
             this.tabSpawns.TabIndex = 0;
             this.tabSpawns.Text = "Spawns";
             this.tabSpawns.UseVisualStyleBackColor = true;
@@ -82,10 +82,10 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             // 
             this.pgUnit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgUnit.Location = new System.Drawing.Point(6, 264);
+            this.pgUnit.Location = new System.Drawing.Point(6, 361);
             this.pgUnit.Name = "pgUnit";
             this.pgUnit.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgUnit.Size = new System.Drawing.Size(313, 227);
+            this.pgUnit.Size = new System.Drawing.Size(319, 227);
             this.pgUnit.TabIndex = 7;
             this.pgUnit.ToolbarVisible = false;
             // 
@@ -96,7 +96,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbUnits.Controls.Add(this.lvUnits);
             this.gbUnits.Location = new System.Drawing.Point(6, 107);
             this.gbUnits.Name = "gbUnits";
-            this.gbUnits.Size = new System.Drawing.Size(313, 151);
+            this.gbUnits.Size = new System.Drawing.Size(319, 248);
             this.gbUnits.TabIndex = 6;
             this.gbUnits.TabStop = false;
             this.gbUnits.Text = "Units";
@@ -109,7 +109,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.lvUnits.HideSelection = false;
             this.lvUnits.Location = new System.Drawing.Point(6, 19);
             this.lvUnits.Name = "lvUnits";
-            this.lvUnits.Size = new System.Drawing.Size(301, 126);
+            this.lvUnits.Size = new System.Drawing.Size(307, 223);
             this.lvUnits.TabIndex = 0;
             this.lvUnits.UseCompatibleStateImageBehavior = false;
             // 
@@ -121,7 +121,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbFilter.Controls.Add(this.cbMoveType);
             this.gbFilter.Location = new System.Drawing.Point(6, 36);
             this.gbFilter.Name = "gbFilter";
-            this.gbFilter.Size = new System.Drawing.Size(313, 65);
+            this.gbFilter.Size = new System.Drawing.Size(319, 65);
             this.gbFilter.TabIndex = 5;
             this.gbFilter.TabStop = false;
             this.gbFilter.Text = "Filter";
@@ -161,7 +161,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cbFactions.FormattingEnabled = true;
             this.cbFactions.Location = new System.Drawing.Point(59, 9);
             this.cbFactions.Name = "cbFactions";
-            this.cbFactions.Size = new System.Drawing.Size(260, 21);
+            this.cbFactions.Size = new System.Drawing.Size(266, 21);
             this.cbFactions.TabIndex = 1;
             // 
             // tabBuildings
@@ -173,7 +173,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabBuildings.Location = new System.Drawing.Point(4, 22);
             this.tabBuildings.Name = "tabBuildings";
             this.tabBuildings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBuildings.Size = new System.Drawing.Size(325, 497);
+            this.tabBuildings.Size = new System.Drawing.Size(331, 594);
             this.tabBuildings.TabIndex = 1;
             this.tabBuildings.Text = "Buildings";
             this.tabBuildings.UseVisualStyleBackColor = true;
@@ -182,10 +182,10 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             // 
             this.pgBuilding.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgBuilding.Location = new System.Drawing.Point(6, 262);
+            this.pgBuilding.Location = new System.Drawing.Point(3, 361);
             this.pgBuilding.Name = "pgBuilding";
             this.pgBuilding.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.pgBuilding.Size = new System.Drawing.Size(313, 227);
+            this.pgBuilding.Size = new System.Drawing.Size(319, 227);
             this.pgBuilding.TabIndex = 11;
             this.pgBuilding.ToolbarVisible = false;
             // 
@@ -196,7 +196,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbBuildings.Controls.Add(this.lvBuildings);
             this.gbBuildings.Location = new System.Drawing.Point(6, 34);
             this.gbBuildings.Name = "gbBuildings";
-            this.gbBuildings.Size = new System.Drawing.Size(313, 222);
+            this.gbBuildings.Size = new System.Drawing.Size(319, 321);
             this.gbBuildings.TabIndex = 10;
             this.gbBuildings.TabStop = false;
             this.gbBuildings.Text = "Buildings";
@@ -209,7 +209,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.lvBuildings.HideSelection = false;
             this.lvBuildings.Location = new System.Drawing.Point(6, 19);
             this.lvBuildings.Name = "lvBuildings";
-            this.lvBuildings.Size = new System.Drawing.Size(301, 197);
+            this.lvBuildings.Size = new System.Drawing.Size(307, 296);
             this.lvBuildings.TabIndex = 0;
             this.lvBuildings.UseCompatibleStateImageBehavior = false;
             // 
@@ -230,14 +230,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cbBuildingFaction.FormattingEnabled = true;
             this.cbBuildingFaction.Location = new System.Drawing.Point(59, 7);
             this.cbBuildingFaction.Name = "cbBuildingFaction";
-            this.cbBuildingFaction.Size = new System.Drawing.Size(260, 21);
+            this.cbBuildingFaction.Size = new System.Drawing.Size(266, 21);
             this.cbBuildingFaction.TabIndex = 8;
             // 
             // ConquestSpawnUserControl
             // 
             this.Controls.Add(this.tabControl1);
             this.Name = "ConquestSpawnUserControl";
-            this.Size = new System.Drawing.Size(333, 523);
+            this.Size = new System.Drawing.Size(349, 635);
             this.tabControl1.ResumeLayout(false);
             this.tabSpawns.ResumeLayout(false);
             this.tabSpawns.PerformLayout();

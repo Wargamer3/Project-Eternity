@@ -23,7 +23,6 @@ namespace ProjectEternity.Editors.MapEditor
         private Button btnRemoveTile;
         private Button btnAddTile;
         private Button btnAddNewTileSetAsBackground;
-        private Label lblActiveTileSet;
         protected ComboBox cboTiles;
         private Button btn3DTileAttributes;
         private VScrollBar sclTileHeight;
@@ -42,138 +41,30 @@ namespace ProjectEternity.Editors.MapEditor
 
         public TabPage InitTab(MenuStrip mnuToolBar)
         {
-            this.tabTiles = new TabPage();
-            this.btn3DTileAttributes = new Button();
-            this.BattleMapViewer.TilesetViewer = new TilesetViewerControl();
-            this.btnTileAttributes = new Button();
-            this.sclTileHeight = new VScrollBar();
-            this.sclTileWidth = new HScrollBar();
-            this.btnRemoveTile = new Button();
-            this.btnAddTile = new Button();
-            this.btnAddNewTileSetAsBackground = new Button();
-            this.lblActiveTileSet = new Label();
-            this.cboTiles = new ComboBox();
-            this.tabTiles.SuspendLayout();
-            // 
-            // tabTiles
-            // 
-            this.tabTiles.Controls.Add(this.btn3DTileAttributes);
-            this.tabTiles.Controls.Add(this.BattleMapViewer.TilesetViewer);
-            this.tabTiles.Controls.Add(this.btnTileAttributes);
-            this.tabTiles.Controls.Add(this.sclTileHeight);
-            this.tabTiles.Controls.Add(this.sclTileWidth);
-            this.tabTiles.Controls.Add(this.btnRemoveTile);
-            this.tabTiles.Controls.Add(this.btnAddTile);
-            this.tabTiles.Controls.Add(this.btnAddNewTileSetAsBackground);
-            this.tabTiles.Controls.Add(this.lblActiveTileSet);
-            this.tabTiles.Controls.Add(this.cboTiles);
-            this.tabTiles.Location = new System.Drawing.Point(4, 22);
-            this.tabTiles.Name = "tabTiles";
-            this.tabTiles.Padding = new Padding(3);
-            this.tabTiles.Size = new System.Drawing.Size(325, 497);
-            this.tabTiles.TabIndex = 2;
-            this.tabTiles.Text = "Tiles";
-            this.tabTiles.UseVisualStyleBackColor = true;
-            // 
-            // btn3DTileAttributes
-            // 
-            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 111);
-            this.btn3DTileAttributes.Name = "btn3DTileAttributes";
-            this.btn3DTileAttributes.Size = new System.Drawing.Size(105, 23);
-            this.btn3DTileAttributes.TabIndex = 8;
-            this.btn3DTileAttributes.Text = "3D Tile attributes";
-            this.btn3DTileAttributes.UseVisualStyleBackColor = true;
+            TabsUserControl SpawnControl = new TabsUserControl();
+            TabPage tabTiles = SpawnControl.tabControl1.TabPages[0];
+
+            this.btn3DTileAttributes = SpawnControl.btn3DTileAttributes;
+            this.BattleMapViewer.TilesetViewer = SpawnControl.TilesetViewer;
+            this.btnTileAttributes = SpawnControl.btnTileAttributes;
+            this.sclTileHeight = SpawnControl.sclTileHeight;
+            this.sclTileWidth = SpawnControl.sclTileWidth;
+            this.btnRemoveTile = SpawnControl.btnRemoveTileset;
+            this.btnAddTile = SpawnControl.btnAddTileset;
+            this.btnAddNewTileSetAsBackground = SpawnControl.btnAddTilesetAsBackground;
+            this.cboTiles = SpawnControl.cboTilesets;
+
             this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
-            // 
-            // BattleMapViewer.TilesetViewer
-            // 
-            this.BattleMapViewer.TilesetViewer.Location = new System.Drawing.Point(3, 140);
-            this.BattleMapViewer.TilesetViewer.Margin = new Padding(3, 3, 0, 0);
-            this.BattleMapViewer.TilesetViewer.Name = "BattleMapViewer.TilesetViewer";
-            this.BattleMapViewer.TilesetViewer.Size = new System.Drawing.Size(302, 340);
-            this.BattleMapViewer.TilesetViewer.TabIndex = 7;
             this.BattleMapViewer.TilesetViewer.Click += new System.EventHandler(this.TileViewer_Click);
             this.BattleMapViewer.TilesetViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseDown);
             this.BattleMapViewer.TilesetViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseMove);
-            // 
-            // btnTileAttributes
-            // 
-            this.btnTileAttributes.Location = new System.Drawing.Point(10, 111);
-            this.btnTileAttributes.Name = "btnTileAttributes";
-            this.btnTileAttributes.Size = new System.Drawing.Size(105, 23);
-            this.btnTileAttributes.TabIndex = 6;
-            this.btnTileAttributes.Text = "Tile attributes";
-            this.btnTileAttributes.UseVisualStyleBackColor = true;
             this.btnTileAttributes.Click += new System.EventHandler(this.btnTileAttributes_Click);
-            // 
-            // btnRemoveTile
-            // 
-            this.btnRemoveTile.Location = new System.Drawing.Point(148, 53);
-            this.btnRemoveTile.Name = "btnRemoveTile";
-            this.btnRemoveTile.Size = new System.Drawing.Size(125, 23);
-            this.btnRemoveTile.TabIndex = 4;
-            this.btnRemoveTile.Text = "Remove";
-            this.btnRemoveTile.UseVisualStyleBackColor = true;
             this.btnRemoveTile.Click += new System.EventHandler(this.btnRemoveTile_Click);
-            // 
-            // btnAddTile
-            // 
-            this.btnAddTile.Location = new System.Drawing.Point(10, 53);
-            this.btnAddTile.Name = "btnAddTile";
-            this.btnAddTile.Size = new System.Drawing.Size(132, 23);
-            this.btnAddTile.TabIndex = 3;
-            this.btnAddTile.Text = "Add";
-            this.btnAddTile.UseVisualStyleBackColor = true;
             this.btnAddTile.Click += new System.EventHandler(this.btnAddTile_Click);
-            // 
-            // btnAddNewTileSetAsBackground
-            // 
-            this.btnAddNewTileSetAsBackground.Location = new System.Drawing.Point(10, 82);
-            this.btnAddNewTileSetAsBackground.Name = "btnAddNewTileSetAsBackground";
-            this.btnAddNewTileSetAsBackground.Size = new System.Drawing.Size(263, 23);
-            this.btnAddNewTileSetAsBackground.TabIndex = 5;
-            this.btnAddNewTileSetAsBackground.Text = "Add new tile set as background";
-            this.btnAddNewTileSetAsBackground.UseVisualStyleBackColor = true;
             this.btnAddNewTileSetAsBackground.Click += new System.EventHandler(this.btnAddNewTileSetAsBackground_Click);
-            // 
-            // lblActiveTileSet
-            // 
-            this.lblActiveTileSet.AutoSize = true;
-            this.lblActiveTileSet.Location = new System.Drawing.Point(7, 7);
-            this.lblActiveTileSet.Name = "lblActiveTileSet";
-            this.lblActiveTileSet.Size = new System.Drawing.Size(70, 13);
-            this.lblActiveTileSet.TabIndex = 1;
-            this.lblActiveTileSet.Text = "Active tile set";
-            // 
-            // cboTiles
-            // 
-            this.cboTiles.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cboTiles.FormattingEnabled = true;
-            this.cboTiles.Location = new System.Drawing.Point(6, 23);
-            this.cboTiles.Name = "cboTiles";
-            this.cboTiles.Size = new System.Drawing.Size(267, 21);
-            this.cboTiles.TabIndex = 2;
             this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
-            // 
-            // sclTileHeight
-            // 
-            this.sclTileHeight.Location = new System.Drawing.Point(305, 140);
-            this.sclTileHeight.Name = "sclTileHeight";
-            this.sclTileHeight.Size = new System.Drawing.Size(17, 340);
-            this.sclTileHeight.TabIndex = 6;
             this.sclTileHeight.Scroll += new ScrollEventHandler(this.sclTileHeight_Scroll);
-            // 
-            // sclTileWidth
-            // 
-            this.sclTileWidth.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left)));
-            this.sclTileWidth.Location = new System.Drawing.Point(3, 480);
-            this.sclTileWidth.Name = "sclTileWidth";
-            this.sclTileWidth.Size = new System.Drawing.Size(302, 17);
-            this.sclTileWidth.TabIndex = 6;
             this.sclTileWidth.Scroll += new ScrollEventHandler(this.sclTileWidth_Scroll);
-
-            this.tabTiles.ResumeLayout(false);
-            this.tabTiles.PerformLayout();
 
             return tabTiles;
         }
@@ -560,17 +451,17 @@ namespace ProjectEternity.Editors.MapEditor
 
             Point TilePos = BattleMapViewer.TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y), BrushIndex);
 
-            if (BattleMapViewer.TilesetViewer.ListSmartTilesetPresets.Count > 0)
+            if (BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Count > 0)
             {
                 if (TilePos.Y == 0)
                 {
-                    if (TilePos.X >= BattleMapViewer.TilesetViewer.ListSmartTilesetPresets.Count)
+                    if (TilePos.X >= BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Count)
                     {
                         return;
                     }
 
-                    Terrain SmartPresetTerrain = BattleMapViewer.TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTerrain[0, 0];
-                    DrawableTile SmartPresetTile = BattleMapViewer.TilesetViewer.ListSmartTilesetPresets[TilePos.X].ArrayTiles[0, 0];
+                    Terrain SmartPresetTerrain = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[TilePos.X].ArrayTerrain[0, 0];
+                    DrawableTile SmartPresetTile = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[TilePos.X].ArrayTiles[0, 0];
 
                     Helper.ReplaceTerrain(X, Y,
                         SmartPresetTerrain, LayerIndex, ConsiderSubLayers);
@@ -615,9 +506,9 @@ namespace ProjectEternity.Editors.MapEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
+                            if (TilePath.StartsWith("Content/Maps/Tilesets Presets"))
                             {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
+                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(30);
                                 if (cboTiles.Items.Contains(Name))
                                 {
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
@@ -674,7 +565,10 @@ namespace ProjectEternity.Editors.MapEditor
                                 ActiveMap.ListTilesetPreset.Add(NewTileset);
                                 ActiveMap.ListTileSet.Add(BattleMapViewer.TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
 
-                                BattleMapViewer.TilesetViewer.ListSmartTilesetPresets.Add(NewTileset);
+                                if (NewTileset.TilesetType != Terrain.TilesetPreset.TilesetTypes.Regular)
+                                {
+                                    BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(NewTileset);
+                                }
                                 BattleMapViewer.TilesetViewer.ListTilesetPresetsSprite.Add(NewTilesetSprite);
                                 cboTiles.Items.Add(Name);
                             }
@@ -688,7 +582,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 }
                                 Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
 
-                                Helper.AddTilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count);
+                                Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count);
                                 ActiveMap.ListTileSet.Add(Tile);
                                 //Add the file name to the tile combo box.
                                 cboTiles.Items.Add(Name);

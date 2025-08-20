@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
-    partial class ProjectEternityTilesetPresetEditor
+    partial class ProjectEternityAutotileTilesetPresetEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -37,13 +37,14 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset = new System.Windows.Forms.GroupBox();
             this.viewerTileset = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbTilesetType = new System.Windows.Forms.ComboBox();
             this.sclTileWidth = new System.Windows.Forms.HScrollBar();
             this.sclTileHeight = new System.Windows.Forms.VScrollBar();
             this.txtTilesetName = new System.Windows.Forms.TextBox();
             this.btnAddTile = new System.Windows.Forms.Button();
             this.lblActiveTileset = new System.Windows.Forms.Label();
             this.gbTileInformation = new System.Windows.Forms.GroupBox();
-            this.btnEditTerrainTypes = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lstTerrainBonus = new System.Windows.Forms.ListBox();
             this.txtBonusValue = new System.Windows.Forms.NumericUpDown();
@@ -64,6 +65,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.btnDeleteBattleAnimationBackground = new System.Windows.Forms.Button();
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
+            this.btnEditTerrainTypes = new System.Windows.Forms.Button();
             this.mnuToolBar.SuspendLayout();
             this.gbTileset.SuspendLayout();
             this.gbTileInformation.SuspendLayout();
@@ -104,6 +106,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTileset.Controls.Add(this.viewerTileset);
             this.gbTileset.Controls.Add(this.panel1);
+            this.gbTileset.Controls.Add(this.label1);
+            this.gbTileset.Controls.Add(this.cbTilesetType);
             this.gbTileset.Controls.Add(this.sclTileWidth);
             this.gbTileset.Controls.Add(this.sclTileHeight);
             this.gbTileset.Controls.Add(this.txtTilesetName);
@@ -134,6 +138,27 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(20, 16);
             this.panel1.TabIndex = 24;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(6, 55);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Tileset type";
+            // 
+            // cbTilesetType
+            // 
+            this.cbTilesetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTilesetType.FormattingEnabled = true;
+            this.cbTilesetType.Items.AddRange(new object[] {
+            "Normal",
+            "Road",
+            "Water"});
+            this.cbTilesetType.Location = new System.Drawing.Point(6, 71);
+            this.cbTilesetType.Name = "cbTilesetType";
+            this.cbTilesetType.Size = new System.Drawing.Size(227, 21);
+            this.cbTilesetType.TabIndex = 23;
             // 
             // sclTileWidth
             // 
@@ -197,17 +222,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileInformation.TabIndex = 20;
             this.gbTileInformation.TabStop = false;
             this.gbTileInformation.Text = "Tile Information";
-            // 
-            // btnEditTerrainTypes
-            // 
-            this.btnEditTerrainTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEditTerrainTypes.Location = new System.Drawing.Point(157, 29);
-            this.btnEditTerrainTypes.Name = "btnEditTerrainTypes";
-            this.btnEditTerrainTypes.Size = new System.Drawing.Size(66, 24);
-            this.btnEditTerrainTypes.TabIndex = 24;
-            this.btnEditTerrainTypes.Text = "Edit";
-            this.btnEditTerrainTypes.UseVisualStyleBackColor = true;
-            this.btnEditTerrainTypes.Click += new System.EventHandler(this.btnEditTerrainTypes_Click);
             // 
             // groupBox2
             // 
@@ -411,6 +425,17 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.cboTerrainType.TabIndex = 0;
             this.cboTerrainType.SelectedIndexChanged += new System.EventHandler(this.cboTerrainType_SelectedIndexChanged);
             // 
+            // btnEditTerrainTypes
+            // 
+            this.btnEditTerrainTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnEditTerrainTypes.Location = new System.Drawing.Point(157, 29);
+            this.btnEditTerrainTypes.Name = "btnEditTerrainTypes";
+            this.btnEditTerrainTypes.Size = new System.Drawing.Size(66, 24);
+            this.btnEditTerrainTypes.TabIndex = 24;
+            this.btnEditTerrainTypes.Text = "Edit";
+            this.btnEditTerrainTypes.UseVisualStyleBackColor = true;
+            this.btnEditTerrainTypes.Click += new System.EventHandler(this.btnEditTerrainTypes_Click);
+            // 
             // ProjectEternityTilesetPresetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -443,6 +468,8 @@ namespace ProjectEternity.Editors.TilesetEditor
         private System.Windows.Forms.Button btnAddTile;
         private System.Windows.Forms.Label lblActiveTileset;
         private TextBox txtTilesetName;
+        private Label label1;
+        private ComboBox cbTilesetType;
         private HScrollBar sclTileWidth;
         private VScrollBar sclTileHeight;
         private Panel panel1;

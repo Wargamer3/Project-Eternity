@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveLayer.ArrayTile[X, Y] = NewTile;
 
-            ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateSmartTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
+            ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
 
             ActiveMap.Reset();
         }
@@ -266,7 +266,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MapZoneDeathmatch(ActiveMap, ZoneType);
         }
 
-        public void AddTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+        public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
             ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
         }

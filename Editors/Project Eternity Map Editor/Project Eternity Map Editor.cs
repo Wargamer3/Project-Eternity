@@ -186,7 +186,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void DrawInfo()
         {//Draw the mouse position minus the map starting point.
-            tslInformation.Text = string.Format("X: {0}, Y: {1}, Z: {2}", ActiveMap.CursorPosition.X, ActiveMap.CursorPosition.Y, ActiveMap.CursorPosition.Z);
+            tslInformation.Text = string.Format("X: {0}, Y: {1}, Z: {2}", ActiveMap.CursorPosition.X / ActiveMap.TileSize.X, ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y, ActiveMap.CursorPosition.Z);
 
             if (ActiveMap.CursorPosition.X < 0 || ActiveMap.CursorPosition.X >= ActiveMap.MapSize.X || ActiveMap.CursorPosition.Y < 0 || ActiveMap.CursorPosition.Y >= ActiveMap.MapSize.Y)
                 return;

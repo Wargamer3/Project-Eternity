@@ -84,6 +84,12 @@
     <Compile Include="Editor\Tabs\Layer Tab.cs" />
     <Compile Include="Editor\Tabs\Prop Tab.cs" />
     <Compile Include="Editor\Tabs\Scripts Tab.cs" />
+    <Compile Include="Editor\Tabs\Tabs Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor\Tabs\Tabs Control.Designer.cs">
+      <DependentUpon>Tabs Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor\Tabs\Tileset Tab.cs" />
     <Compile Include="Editor\Tabs\Zone Tab.cs" />
     <Compile Include="Editor\Tile Attributes 3D.cs">
@@ -400,6 +406,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Editor\Tabs\Tabs Control.resx">
+      <DependentUpon>Tabs Control.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\Tile Attributes 3D.resx">
       <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
     </EmbeddedResource>

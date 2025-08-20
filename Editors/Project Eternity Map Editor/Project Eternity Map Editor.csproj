@@ -81,6 +81,12 @@
     <Compile Include="Project Eternity Map Editor.Designer.cs">
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project Eternity Autotile Tileset Preset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Autotile Tileset Preset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Autotile Tileset Preset Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project Eternity Tileset Preset Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Map Editor.resx">
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Autotile Tileset Preset Editor.resx">
+      <DependentUpon>Project Eternity Autotile Tileset Preset Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Tileset Preset Editor.resx">
       <DependentUpon>Project Eternity Tileset Preset Editor.cs</DependentUpon>
