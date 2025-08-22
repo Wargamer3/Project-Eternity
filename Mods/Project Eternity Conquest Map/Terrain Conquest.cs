@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {/*en gros, le but du jeu ce joue principalement sur la capture de batiment, les ville serve a créé de l'argent, les port a créé des bateau, les caserne a créé des unité de terre etc...
@@ -99,6 +100,29 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 BW.Write(MovementCostByMoveType.Key);
                 BW.Write(MovementCostByMoveType.Value);
             }
+        }
+    }
+
+    public class ConquestTilesetPreset : TilesetPreset
+    {
+        public ConquestTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            : base(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex)
+        {
+        }
+
+        public ConquestTilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index, bool LoadBackgroundPaths = true)
+            : base(BR, TileSizeX, TileSizeY, Index, LoadBackgroundPaths)
+        {
+        }
+
+        protected override Terrain CreateTerrain(int X, int Y, int TileSizeX, int TileSizeY)
+        {
+            return new TerrainConquest(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
+        }
+
+        protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
+        {
+            return new TerrainConquest(BR, X, Y, 0, 0, LayerIndex, 0, LayerDepth);
         }
     }
 

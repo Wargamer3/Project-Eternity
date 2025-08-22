@@ -70,7 +70,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                         if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null));
+                            if (Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType == TilesetPreset.TilesetTypes.Regular)
+                            {
+                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Tilesets/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName));
+                            }
+                            else
+                            {
+                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Autotiles/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName));
+                            }
                         }
 
                         if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))

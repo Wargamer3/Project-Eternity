@@ -14,17 +14,22 @@ namespace ProjectEternity.Editors.MapEditor
 {
     public class TilesetTab : IMapEditorTab
     {
-        private enum ItemSelectionChoices { Tile, TileAsBackground, BGM, UnitPosition, Cutscene };
+        private enum ItemSelectionChoices { Tile, TileAsBackground, Autotile, BGM, UnitPosition, Cutscene };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
         private TabPage tabTiles;
-        private Button btnTileAttributes;
-        private Button btnRemoveTile;
-        private Button btnAddTile;
-        private Button btnAddNewTileSetAsBackground;
         protected ComboBox cboTiles;
+        private Button btnAddTile;
+        private Button btnRemoveTile;
+        private Button btnAddNewTileSetAsBackground;
+        private Button btnTileAttributes;
         private Button btn3DTileAttributes;
+
+        protected ComboBox cboAutotiles;
+        private Button btnAddAutotile;
+        private Button btnRemoveAutotile;
+
         private VScrollBar sclTileHeight;
         private HScrollBar sclTileWidth;
 
@@ -44,27 +49,36 @@ namespace ProjectEternity.Editors.MapEditor
             TabsUserControl SpawnControl = new TabsUserControl();
             TabPage tabTiles = SpawnControl.tabControl1.TabPages[0];
 
-            this.btn3DTileAttributes = SpawnControl.btn3DTileAttributes;
             this.BattleMapViewer.TilesetViewer = SpawnControl.TilesetViewer;
-            this.btnTileAttributes = SpawnControl.btnTileAttributes;
-            this.sclTileHeight = SpawnControl.sclTileHeight;
-            this.sclTileWidth = SpawnControl.sclTileWidth;
-            this.btnRemoveTile = SpawnControl.btnRemoveTileset;
             this.btnAddTile = SpawnControl.btnAddTileset;
+            this.btnRemoveTile = SpawnControl.btnRemoveTileset;
             this.btnAddNewTileSetAsBackground = SpawnControl.btnAddTilesetAsBackground;
+            this.btnTileAttributes = SpawnControl.btnTileAttributes;
+            this.btn3DTileAttributes = SpawnControl.btn3DTileAttributes;
             this.cboTiles = SpawnControl.cboTilesets;
 
-            this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
+            this.cboAutotiles = SpawnControl.cboAutotile;
+            this.btnAddAutotile = SpawnControl.btnAddAutotile;
+            this.btnRemoveAutotile = SpawnControl.btnRemoveAutotile;
+
+            this.sclTileHeight = SpawnControl.sclTileHeight;
+            this.sclTileWidth = SpawnControl.sclTileWidth;
+
             this.BattleMapViewer.TilesetViewer.Click += new System.EventHandler(this.TileViewer_Click);
             this.BattleMapViewer.TilesetViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseDown);
             this.BattleMapViewer.TilesetViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TileViewer_MouseMove);
-            this.btnTileAttributes.Click += new System.EventHandler(this.btnTileAttributes_Click);
-            this.btnRemoveTile.Click += new System.EventHandler(this.btnRemoveTile_Click);
             this.btnAddTile.Click += new System.EventHandler(this.btnAddTile_Click);
+            this.btnRemoveTile.Click += new System.EventHandler(this.btnRemoveTile_Click);
             this.btnAddNewTileSetAsBackground.Click += new System.EventHandler(this.btnAddNewTileSetAsBackground_Click);
+            this.btnTileAttributes.Click += new System.EventHandler(this.btnTileAttributes_Click);
+            this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
             this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
+
+            this.btnAddAutotile.Click += new System.EventHandler(this.btnAddAutotile_Click);
+            this.btnRemoveAutotile.Click += new System.EventHandler(this.btnRemoveTile_Click);
+
             this.sclTileHeight.Scroll += new ScrollEventHandler(this.sclTileHeight_Scroll);
-            this.sclTileWidth.Scroll += new ScrollEventHandler(this.sclTileWidth_Scroll);
+            this.sclTileWidth.Scroll += new ScrollEventHandler(this.btnRemoveAutotile_Click);
 
             return tabTiles;
         }
@@ -84,23 +98,13 @@ namespace ProjectEternity.Editors.MapEditor
         {
             for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; T++)
             {
-                ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, ActiveMap.ListTilesetPreset[T].TilesetName);
+                cboTiles.Items.Add(ActiveMap.ListTilesetPreset[T].TilesetName);
 
-                if (Item.Path != null)
+                if (ActiveMap.ListTilesetPreset[T].TilesetType != Terrain.TilesetPreset.TilesetTypes.Regular)
                 {
-                    if (Item.Name.StartsWith("Tileset presets"))
-                    {
-                        cboTiles.Items.Add(Item.Name);
-                    }
-                    else
-                    {
-                        cboTiles.Items.Add(Item.Name);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(ActiveMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
-                    cboTiles.Items.Add("Default");
+                    BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(ActiveMap.ListTileSet[T]);
+                    BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(ActiveMap.ListTilesetPreset[T]);
+                    cboAutotiles.Items.Add(ActiveMap.ListTilesetPreset[T].TilesetName);
                 }
             }
 
@@ -286,7 +290,6 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.DrawMap();
         }
 
-        //Change the ActiveTile to the mouse position.
         private void TileViewer_Click(object sender, EventArgs e)
         {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
             if (ActiveMap.TileSize.X != 0)
@@ -332,6 +335,8 @@ namespace ProjectEternity.Editors.MapEditor
                                                      Control.ModifierKeys == Keys.Shift, BrushIndex);
             }
         }
+
+        #region Tileset
 
         private void cboTiles_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -427,6 +432,41 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
+        #endregion
+
+        #region Autotile
+
+        private void btnAddAutotile_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Autotile;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
+        }
+
+        private void btnRemoveAutotile_Click(object sender, EventArgs e)
+        {//If there's a tile set selected.
+            if (cboTiles.SelectedIndex >= 0)
+            {//Put the current index in a buffer.
+                int Index = cboTiles.SelectedIndex;
+
+                Helper.RemoveTileset(Index);
+                //Move the current tile set.
+                cboTiles.Items.RemoveAt(Index);
+
+                //Replace the index with a new one.
+                if (cboTiles.Items.Count > 0)
+                {
+                    if (Index >= cboTiles.Items.Count)
+                        cboTiles.SelectedIndex = cboTiles.Items.Count - 1;
+                    else
+                        cboTiles.SelectedIndex = Index;
+                }
+                else
+                    cboTiles.Text = "";
+            }
+        }
+
+        #endregion
+
         private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
         {
             Point DrawOffset = BattleMapViewer.TilesetViewer.DrawOffset;
@@ -515,8 +555,10 @@ namespace ProjectEternity.Editors.MapEditor
                                     continue;
                                 }
 
-                                Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, ActiveMap.ListTilesetPreset.Count);
-                                Microsoft.Xna.Framework.Graphics.Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName);
+                                Terrain.TilesetPreset NewTileset = Helper.LoadTilesetPreset(Name, ActiveMap.ListTilesetPreset.Count);
+                                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName);
+                                ActiveMap.ListTileSet.Add(NewTilesetSprite);
+
                                 for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
                                 {
                                     string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
@@ -562,14 +604,6 @@ namespace ProjectEternity.Editors.MapEditor
                                     }
                                 }
 
-                                ActiveMap.ListTilesetPreset.Add(NewTileset);
-                                ActiveMap.ListTileSet.Add(BattleMapViewer.TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
-
-                                if (NewTileset.TilesetType != Terrain.TilesetPreset.TilesetTypes.Regular)
-                                {
-                                    BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(NewTileset);
-                                }
-                                BattleMapViewer.TilesetViewer.ListTilesetPresetsSprite.Add(NewTilesetSprite);
                                 cboTiles.Items.Add(Name);
                             }
                             else
@@ -660,6 +694,74 @@ namespace ProjectEternity.Editors.MapEditor
                             }
                         }
                         break;
+
+                    case ItemSelectionChoices.Autotile:
+                        string AutotilePath = Items[I];
+                        if (AutotilePath != null)
+                        {
+                            string Name = AutotilePath.Substring(0, AutotilePath.Length - 5).Substring(31);
+                            if (cboTiles.Items.Contains(Name))
+                            {
+                                MessageBox.Show("This autotile is already listed.\r\n" + Name);
+                                continue;
+                            }
+
+                            Terrain.TilesetPreset NewTileset = Helper.LoadAutotilePreset(Name, ActiveMap.ListTilesetPreset.Count);
+                            Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Autotiles/" + NewTileset.TilesetName);
+                            ActiveMap.ListTileSet.Add(NewTilesetSprite);
+
+                            for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
+                            {
+                                string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
+
+                                if (ActiveMap.ListBattleBackgroundAnimationPath.Contains(NewBattleBackgroundPath))
+                                {
+                                    byte MapBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.IndexOf(NewBattleBackgroundPath);
+
+                                    for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
+                                    {
+                                        for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
+                                        {
+                                            if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                            {
+                                                NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = MapBackgroundIndex;
+                                            }
+                                            if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                            {
+                                                NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = MapBackgroundIndex;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    byte NewBattleBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.Count;
+                                    ActiveMap.ListBattleBackgroundAnimationPath.Add(NewBattleBackgroundPath);
+
+                                    for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
+                                    {
+                                        for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
+                                        {
+                                            if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                            {
+                                                NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
+                                            }
+                                            if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                            {
+                                                NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(NewTilesetSprite);
+                            BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(NewTileset);
+                            cboTiles.Items.Add(Name);
+                            cboAutotiles.Items.Add(Name);
+                        }
+                        break;
+
                 }
             }
         }

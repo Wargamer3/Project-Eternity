@@ -19,7 +19,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             string[] GetTerrainTypes();
             void OnTerrainSelected(Terrain SelectedTerrain);
             void EditTerrainTypes();
-            Terrain.TilesetPreset LoadPreset(BinaryReader bR, int x, int y, int v);
+            Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
         }
 
         public class DeathmatchTilesetPresetHelper : ITilesetPresetHelper
@@ -141,13 +141,13 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected void LoadTileset(string Path)
         {
-            string Name = Path.Substring(0, Path.Length - 4).Substring(24);
+            string Name = Path.Substring(0, Path.Length - 4).Substring(30);
 
             this.Text = Name + " - Project Eternity Tileset Preset Editor";
 
             InitHelper();
 
-            FileStream FS = new FileStream("Content/Tileset Presets/" + Name + ".pet", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Maps/Tilesets Presets/" + Name + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

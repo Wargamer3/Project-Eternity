@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
@@ -213,6 +214,44 @@ namespace ProjectEternity.Editors.WorldMapEditor
             public MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType)
             {
                 throw new NotImplementedException();
+            }
+
+            public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            {
+                FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
+                BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+                BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int TileSizeX = BR.ReadInt32();
+                int TileSizeY = BR.ReadInt32();
+
+                Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+
+                BR.Close();
+                FS.Close();
+
+                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+
+                return NewTilesetPreset;
+            }
+
+            public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            {
+                FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+                BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+                BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int TileSizeX = BR.ReadInt32();
+                int TileSizeY = BR.ReadInt32();
+
+                Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+
+                BR.Close();
+                FS.Close();
+
+                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+
+                return NewTilesetPreset;
             }
 
             public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)

@@ -20,13 +20,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point DrawOffset;
         public List<Rectangle> ListTileBrush;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
         public List<Color> ListTileBrushColor;
+        public List<Texture2D> ListAutoTileSprite;
         public List<TilesetPreset> ListAutoTileTilesetPresets;
-        public List<Texture2D> ListTilesetPresetsSprite;
 
         public TilesetViewerControl()
         {
+            ListAutoTileSprite = new List<Texture2D>();
             ListAutoTileTilesetPresets = new List<TilesetPreset>();
-            ListTilesetPresetsSprite = new List<Texture2D>();
             ListTileBrush = new List<Rectangle>();
             ListTileBrushColor = new List<Color>();
             ListTileBrush.Add(new Rectangle());
@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 for (int i = 0; i < ListAutoTileTilesetPresets.Count; i++)
                 {
                     TilesetPreset ActivePreset = ListAutoTileTilesetPresets[i];
-                    ActivePreset.DrawPreview(g, Position, ListTilesetPresetsSprite[i]);
+                    ActivePreset.DrawPreview(g, Position, ListAutoTileSprite[i]);
                     Position.X += TileSize.X;
                 }
                 FirstLineY += TileSize.Y;

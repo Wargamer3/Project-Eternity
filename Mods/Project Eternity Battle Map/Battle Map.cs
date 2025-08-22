@@ -560,10 +560,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Content != null)
                 {
-                    if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
-                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
+                    if (ListTilesetPreset[T].TilesetType == Terrain.TilesetPreset.TilesetTypes.Regular)
+                    {
+                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
+                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
+                        else
+                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
+                    }
                     else
-                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
+                    {
+                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                        else
+                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
+                    }
                 }
 
                 #endregion

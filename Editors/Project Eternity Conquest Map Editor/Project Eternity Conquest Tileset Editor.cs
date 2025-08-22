@@ -30,7 +30,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                return new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)

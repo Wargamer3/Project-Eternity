@@ -81,13 +81,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public Tile2DHolder(Terrain.TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName = null)
+        public Tile2DHolder(Terrain.TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName)
         {
-            string FinalTilesetName = Tileset.TilesetName;
-            if (TilesetName != null)
-            {
-                FinalTilesetName = TilesetName;
-            }
             this.TilesetType = Tileset.TilesetType;
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
@@ -104,11 +99,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Content != null)
             {
-                sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName);
+                sprTileset = Content.Load<Texture2D>("Maps/" + TilesetName);
 
-                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + FinalTilesetName + " NormalMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/" + TilesetName + " NormalMap.xnb"))
                 {
-                    sprTilesetBumpMap = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName + " NormalMap");
+                    sprTilesetBumpMap = Content.Load<Texture2D>("Maps/" + TilesetName + " NormalMap");
                     this.WetEffect.Parameters["NormalMap"].SetValue(sprTilesetBumpMap);
                 }
                 else
@@ -116,9 +111,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     CanUseEffect = false;
                 }
 
-                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + FinalTilesetName + " HeightMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/" + TilesetName + " HeightMap.xnb"))
                 {
-                    sprTilesetHeightMap = Content.Load<Texture2D>("Maps/Tilesets/" + FinalTilesetName + " HeightMap");
+                    sprTilesetHeightMap = Content.Load<Texture2D>("Maps/" + TilesetName + " HeightMap");
                     this.WetEffect.Parameters["HeightMap"].SetValue(sprTilesetHeightMap);
                 }
                 else

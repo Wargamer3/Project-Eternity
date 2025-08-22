@@ -7,6 +7,7 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.MapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
+using System.Text;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
@@ -275,9 +276,45 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return new MapZoneConquest(ActiveMap, ZoneType);
             }
 
+            public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            {
+                FileStream FS = new FileStream("Content/Maps/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
+                BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+                BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int TileSizeX = BR.ReadInt32();
+                int TileSizeY = BR.ReadInt32();
+
+                Terrain.TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+
+                BR.Close();
+                FS.Close();
+
+                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+                return NewTilesetPreset;
+            }
+
+            public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            {
+                FileStream FS = new FileStream("Content/Maps/Tilesets Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+                BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+                BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int TileSizeX = BR.ReadInt32();
+                int TileSizeY = BR.ReadInt32();
+
+                Terrain.TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+
+                BR.Close();
+                FS.Close();
+
+                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+                return NewTilesetPreset;
+            }
+
             public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+                ActiveMap.ListTilesetPreset.Add(new ConquestTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
             }
         }
 

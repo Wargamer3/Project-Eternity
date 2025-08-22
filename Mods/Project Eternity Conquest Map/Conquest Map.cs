@@ -275,6 +275,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             FS.Close();
         }
 
+        protected override Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        {
+            return new ConquestTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+        }
+
         protected void LoadMapGrid(BinaryReader BR)
         {
             int LayerCount = BR.ReadInt32();

@@ -40,6 +40,8 @@ namespace ProjectEternity.Editors.MapEditor
             this.rbBucketLeft = new System.Windows.Forms.RadioButton();
             this.rbPencilLeft = new System.Windows.Forms.RadioButton();
             this.gbTiletset = new System.Windows.Forms.GroupBox();
+            this.sclTileHeight = new System.Windows.Forms.VScrollBar();
+            this.sclTileWidth = new System.Windows.Forms.HScrollBar();
             this.btn3DTileAttributes = new System.Windows.Forms.Button();
             this.btnTileAttributes = new System.Windows.Forms.Button();
             this.TilesetViewer = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
@@ -47,14 +49,12 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnRemoveAutotile = new System.Windows.Forms.Button();
             this.btnAddAutotile = new System.Windows.Forms.Button();
             this.lblAutotile = new System.Windows.Forms.Label();
-            this.cbAutotile = new System.Windows.Forms.ComboBox();
+            this.cboAutotile = new System.Windows.Forms.ComboBox();
             this.btnAddTilesetAsBackground = new System.Windows.Forms.Button();
             this.btnRemoveTileset = new System.Windows.Forms.Button();
             this.btnAddTileset = new System.Windows.Forms.Button();
             this.lblTileset = new System.Windows.Forms.Label();
             this.cboTilesets = new System.Windows.Forms.ComboBox();
-            this.sclTileWidth = new System.Windows.Forms.HScrollBar();
-            this.sclTileHeight = new System.Windows.Forms.VScrollBar();
             this.tabControl1.SuspendLayout();
             this.tabTilesets.SuspendLayout();
             this.gbToolsRight.SuspendLayout();
@@ -203,6 +203,20 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbTiletset.TabStop = false;
             this.gbTiletset.Text = "Tileset";
             // 
+            // sclTileHeight
+            // 
+            this.sclTileHeight.Location = new System.Drawing.Point(292, 117);
+            this.sclTileHeight.Name = "sclTileHeight";
+            this.sclTileHeight.Size = new System.Drawing.Size(17, 307);
+            this.sclTileHeight.TabIndex = 10;
+            // 
+            // sclTileWidth
+            // 
+            this.sclTileWidth.Location = new System.Drawing.Point(3, 424);
+            this.sclTileWidth.Name = "sclTileWidth";
+            this.sclTileWidth.Size = new System.Drawing.Size(291, 17);
+            this.sclTileWidth.TabIndex = 9;
+            // 
             // btn3DTileAttributes
             // 
             this.btn3DTileAttributes.Location = new System.Drawing.Point(160, 88);
@@ -239,7 +253,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbAutotile.Controls.Add(this.btnRemoveAutotile);
             this.gbAutotile.Controls.Add(this.btnAddAutotile);
             this.gbAutotile.Controls.Add(this.lblAutotile);
-            this.gbAutotile.Controls.Add(this.cbAutotile);
+            this.gbAutotile.Controls.Add(this.cboAutotile);
             this.gbAutotile.Location = new System.Drawing.Point(6, 447);
             this.gbAutotile.Name = "gbAutotile";
             this.gbAutotile.Size = new System.Drawing.Size(303, 94);
@@ -274,13 +288,14 @@ namespace ProjectEternity.Editors.MapEditor
             this.lblAutotile.TabIndex = 1;
             this.lblAutotile.Text = "List";
             // 
-            // cbAutotile
+            // cboAutotile
             // 
-            this.cbAutotile.FormattingEnabled = true;
-            this.cbAutotile.Location = new System.Drawing.Point(9, 32);
-            this.cbAutotile.Name = "cbAutotile";
-            this.cbAutotile.Size = new System.Drawing.Size(279, 21);
-            this.cbAutotile.TabIndex = 0;
+            this.cboAutotile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboAutotile.FormattingEnabled = true;
+            this.cboAutotile.Location = new System.Drawing.Point(9, 32);
+            this.cboAutotile.Name = "cboAutotile";
+            this.cboAutotile.Size = new System.Drawing.Size(279, 21);
+            this.cboAutotile.TabIndex = 0;
             // 
             // btnAddTilesetAsBackground
             // 
@@ -320,25 +335,12 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // cboTilesets
             // 
+            this.cboTilesets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTilesets.FormattingEnabled = true;
             this.cboTilesets.Location = new System.Drawing.Point(9, 32);
             this.cboTilesets.Name = "cboTilesets";
             this.cboTilesets.Size = new System.Drawing.Size(291, 21);
             this.cboTilesets.TabIndex = 0;
-            // 
-            // sclTileWidth
-            // 
-            this.sclTileWidth.Location = new System.Drawing.Point(3, 424);
-            this.sclTileWidth.Name = "sclTileWidth";
-            this.sclTileWidth.Size = new System.Drawing.Size(291, 17);
-            this.sclTileWidth.TabIndex = 9;
-            // 
-            // sclTileHeight
-            // 
-            this.sclTileHeight.Location = new System.Drawing.Point(292, 117);
-            this.sclTileHeight.Name = "sclTileHeight";
-            this.sclTileHeight.Size = new System.Drawing.Size(17, 307);
-            this.sclTileHeight.TabIndex = 10;
             // 
             // TabsUserControl
             // 
@@ -379,7 +381,7 @@ namespace ProjectEternity.Editors.MapEditor
         public GameScreens.BattleMapScreen.TilesetViewerControl TilesetViewer;
         public System.Windows.Forms.Button btnRemoveAutotile;
         public System.Windows.Forms.Button btnAddAutotile;
-        public System.Windows.Forms.ComboBox cbAutotile;
+        public System.Windows.Forms.ComboBox cboAutotile;
         public System.Windows.Forms.Button btnAddTilesetAsBackground;
         public System.Windows.Forms.Button btnRemoveTileset;
         public System.Windows.Forms.Button btnAddTileset;

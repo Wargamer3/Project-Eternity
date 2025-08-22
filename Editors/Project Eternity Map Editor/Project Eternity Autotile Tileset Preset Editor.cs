@@ -179,7 +179,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             //Add the file name to the tile combo box.
             txtTilesetName.Text = TilesetName;
 
-            Texture2D Tileset = viewerTileset.content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
+            Texture2D Tileset = viewerTileset.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
 
             if (Tileset.Width >= viewerTileset.Width)
             {
