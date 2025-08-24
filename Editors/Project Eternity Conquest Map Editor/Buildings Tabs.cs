@@ -54,8 +54,8 @@ namespace ProjectEternity.Editors.MapEditor
             string[] ArrayFactions = Directory.GetDirectories("Content/Buildings/Conquest","*.*", SearchOption.TopDirectoryOnly);
             foreach (var ActiveFaction in ArrayFactions)
             {
-                string FactionName = ActiveFaction.Substring(23);
-                if (FactionName == "Map Sprite" || FactionName == "Building Sprite")
+                string FactionName = ActiveFaction.Substring(27);
+                if (FactionName == "Map Sprites" || FactionName == "Menu Sprites")
                 {
                     continue;
                 }
@@ -76,6 +76,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void TabOnMouseDown(MouseEventArgs e)
         {
+            OnMouseMove(e);
         }
 
         public void TabOnMouseUp(MouseEventArgs e)
@@ -132,11 +133,21 @@ namespace ProjectEternity.Editors.MapEditor
             lvBuildings.Items.Clear();
             imageList.Images.Clear();
 
-            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Buildings/Conquest/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
+            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Buildings/Conquest/" + cbFactions.Text, "*.peb*", SearchOption.TopDirectoryOnly);
 
             foreach (var ActiveBuilding in ArrayBuildingTypes)
             {
-                ListFactionBuilding.Add(new BuildingConquest(ActiveBuilding.Substring(0, ActiveBuilding.Length - 4).Substring(23), GameScreens.GameScreen.ContentFallback, null, null, null));
+                ListFactionBuilding.Add(new BuildingConquest(ActiveBuilding.Substring(0, ActiveBuilding.Length - 4).Substring(27), GameScreens.GameScreen.ContentFallback, null, null, null));
+            }
+
+            lvBuildings.Items.Clear();
+
+            int ImageIndex = 0;
+            foreach (BuildingConquest ActiveUnit in ListFactionBuilding)
+            {
+                lvBuildings.Items.Add(ActiveUnit.Name, ImageIndex);
+                lvBuildings.Items[ImageIndex++].Text = ActiveUnit.Name;
+                imageList.Images.Add("itemImageKey", Texture2Image(ActiveUnit.SpriteMap.ActiveSprite));
             }
         }
 
@@ -163,7 +174,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        public static Image Texture2Image(Texture2D sprTexture2D)
+        public Image Texture2Image(Texture2D sprTexture2D)
         {
             Image ReturnImage;
             using (MemoryStream MS = new MemoryStream())
@@ -171,6 +182,12 @@ namespace ProjectEternity.Editors.MapEditor
                 sprTexture2D.SaveAsPng(MS, sprTexture2D.Width, sprTexture2D.Height);
                 MS.Seek(0, SeekOrigin.Begin);
                 ReturnImage = Image.FromStream(MS);
+            }
+
+            if (ReturnImage.Width > ActiveMap.TileSize.X)
+            {
+                Bitmap bmpImage = new Bitmap(ReturnImage);
+                ReturnImage = bmpImage.Clone(new Rectangle(0, 0, ActiveMap.TileSize.X, ReturnImage.Height), bmpImage.PixelFormat);
             }
             return ReturnImage;
         }

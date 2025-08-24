@@ -8,16 +8,17 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class BuildingConquest
     {
         public string SpriteUnitPath;
-        public Texture2D SpriteUnit;
+        public AnimatedSprite SpriteUnit;
 
         public string SpriteMapPath;
-        public Texture2D SpriteMap;
+        public AnimatedSprite SpriteMap;
         public UnitMap3D Unit3DSprite;
         public string Model3DPath;
         public AnimatedModel Unit3DModel;
@@ -41,7 +42,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             RelativePath = FilePath;
-            Name = FilePath;
+            string[] ArrayFileParts = FilePath.Split('/', '\\');
+            Name = ArrayFileParts[ArrayFileParts.Length - 1];
 
             FileStream FS = new FileStream("Content/Buildings/Conquest/" + FilePath + ".peb", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -66,12 +68,15 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (Content != null)
             {
-                if (File.Exists("Buildings\\Conquest\\Map Sprite\\" + Name + ".xnb"))
-                    SpriteMap = Content.Load<Texture2D>("Buildings\\Conquest\\Map Sprite\\" + Name);
+                if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + RelativePath + ".xnb"))
+                    SpriteMap = new AnimatedSprite(Content, "Buildings/Conquest/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Units/Default");
+                    SpriteMap = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 4);
 
-                SpriteUnit = Content.Load<Texture2D>("Buildings\\Conquest\\Menu Sprite\\" + Name);
+                if (File.Exists("Content/Buildings/Conquest/Menu Sprites/" + RelativePath + ".xnb"))
+                    SpriteUnit = new AnimatedSprite(Content, "Buildings/Conquest/Menu Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
+                else
+                    SpriteUnit = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 4);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public class TilesetPreset
         {
-            public enum TilesetTypes { Regular, Road, Water }
+            public enum TilesetTypes { Regular, Road, Water, Ocean, Pipes }
 
             public TilesetTypes TilesetType;
             public string TilesetName;

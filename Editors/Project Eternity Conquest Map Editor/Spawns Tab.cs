@@ -81,6 +81,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void TabOnMouseDown(MouseEventArgs e)
         {
+            OnMouseMove(e);
         }
 
         public void TabOnMouseUp(MouseEventArgs e)

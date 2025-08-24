@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArraySubTile = new Rectangle[ArraySubTileLength];
                 for (int T = 0; T < ArraySubTileLength; ++T)
                 {
-                    ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / ArraySubTileLength / 2, TileHeight / ArraySubTileLength / 2);
+                    ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / (ArraySubTileLength / 2), TileHeight / (ArraySubTileLength / 2));
                 }
             }
             else

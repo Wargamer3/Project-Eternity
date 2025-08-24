@@ -115,9 +115,23 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
             DicDamageNumberByPosition.Clear();
+
             foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
             {
                 ActiveTileSet.Value.Update(gameTime);
+            }
+
+            if (Map.ShowUnits)
+            {
+                foreach (MapLayer Owner in Map.LayerManager.ListLayer)
+                {
+                    foreach (BuildingSpawn ActiveSpawn in Owner.ListBuildingSpawn)
+                    {
+                        ActiveSpawn.BuildingToSpawn.SpriteMap.Update(gameTime);
+                        if (ActiveSpawn.BuildingToSpawn.SpriteMap.AnimationEnded)
+                            ActiveSpawn.BuildingToSpawn.SpriteMap.RestartAnimation();
+                    }
+                }
             }
         }
 
@@ -684,6 +698,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                         (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY),
                             Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.2f);
                     }
+
                     foreach (BuildingSpawn ActiveSpawn in Owner.ListBuildingSpawn)
                     {
                         g.Draw(GameScreen.sprPixel, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
@@ -692,11 +707,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                                       null,
                                         Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
-                        g.Draw(ActiveSpawn.BuildingToSpawn.SpriteMap, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
-                                                       Map.TileSize.X, Map.TileSize.Y),
-                                                      null,
-                                        Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+                        ActiveSpawn.BuildingToSpawn.SpriteMap.Draw(g, new Vector2((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + Map.TileSize.X / 2,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + Map.TileSize.Y / 2), Color.White);
 
                         int OffsetX = 18;
                         int OffsetY = 6;

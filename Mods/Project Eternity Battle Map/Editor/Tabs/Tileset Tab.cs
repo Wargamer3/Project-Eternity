@@ -48,6 +48,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             TabsUserControl SpawnControl = new TabsUserControl();
             TabPage tabTiles = SpawnControl.tabControl1.TabPages[0];
+            tabTiles.Resize += tabControl1_Resize;
 
             this.BattleMapViewer.TilesetViewer = SpawnControl.TilesetViewer;
             this.btnAddTile = SpawnControl.btnAddTileset;
@@ -98,19 +99,29 @@ namespace ProjectEternity.Editors.MapEditor
         {
             for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; T++)
             {
-                cboTiles.Items.Add(ActiveMap.ListTilesetPreset[T].TilesetName);
 
-                if (ActiveMap.ListTilesetPreset[T].TilesetType != Terrain.TilesetPreset.TilesetTypes.Regular)
+                if (ActiveMap.ListTilesetPreset[T].TilesetType == Terrain.TilesetPreset.TilesetTypes.Regular)
                 {
+                    cboTiles.Items.Add(ActiveMap.ListTilesetPreset[T].TilesetName);
+                }
+                else
+                {
+                    cboTiles.Items.Add("Autotile " + ActiveMap.ListTilesetPreset[T].TilesetName);
+
                     BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(ActiveMap.ListTileSet[T]);
                     BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(ActiveMap.ListTilesetPreset[T]);
                     cboAutotiles.Items.Add(ActiveMap.ListTilesetPreset[T].TilesetName);
                 }
             }
 
-            if (ActiveMap.ListTilesetPreset.Count > 0)
+            if (cboTiles.Items.Count > 0)
             {
                 cboTiles.SelectedIndex = 0;
+            }
+
+            if (cboAutotiles.Items.Count > 0)
+            {
+                cboAutotiles.SelectedIndex = 0;
             }
 
             if (cboTiles.SelectedIndex >= 0)
@@ -123,6 +134,15 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             TileAttributesEditor = Helper.GetTileEditor();
+        }
+
+        private void tabControl1_Resize(object sender, EventArgs e)
+        {
+            sclTileHeight.Location = new System.Drawing.Point(BattleMapViewer.TilesetViewer.Right - sclTileHeight.Width, BattleMapViewer.TilesetViewer.Top);
+            sclTileHeight.Height = BattleMapViewer.TilesetViewer.Height - sclTileWidth.Height;
+
+            sclTileWidth.Location = new System.Drawing.Point(BattleMapViewer.TilesetViewer.Left, BattleMapViewer.TilesetViewer.Bottom - sclTileWidth.Height);
+            sclTileWidth.Width = BattleMapViewer.TilesetViewer.Width - sclTileHeight.Width;
         }
 
         public void OnMouseMove(MouseEventArgs e)
@@ -214,6 +234,10 @@ namespace ProjectEternity.Editors.MapEditor
                 int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
 
                 BattleMapViewer.TileReplacementZone = new Rectangle(GridX, GridY, 1, 1);
+            }
+            else
+            {
+                OnMouseMove(e);
             }
         }
 

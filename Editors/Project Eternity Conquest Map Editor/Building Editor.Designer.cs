@@ -40,20 +40,20 @@
             this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.btnImportMapSprite = new System.Windows.Forms.Button();
             this.gbOption = new System.Windows.Forms.GroupBox();
-            this.cbTerrainType = new System.Windows.Forms.ComboBox();
-            this.lblTerrainType = new System.Windows.Forms.Label();
-            this.ckCapture = new System.Windows.Forms.CheckBox();
-            this.lblVision = new System.Windows.Forms.Label();
-            this.txtVision = new System.Windows.Forms.NumericUpDown();
-            this.txtHealth = new System.Windows.Forms.NumericUpDown();
-            this.lblHealth = new System.Windows.Forms.Label();
             this.ckResupply = new System.Windows.Forms.CheckBox();
+            this.lblHealth = new System.Windows.Forms.Label();
+            this.txtHealth = new System.Windows.Forms.NumericUpDown();
+            this.txtVision = new System.Windows.Forms.NumericUpDown();
+            this.lblVision = new System.Windows.Forms.Label();
+            this.ckCapture = new System.Windows.Forms.CheckBox();
+            this.lblTerrainType = new System.Windows.Forms.Label();
+            this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.bgSpritePreview.SuspendLayout();
             this.gbOption.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtVision)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtVision)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -171,7 +171,7 @@
             this.gbOption.Controls.Add(this.lblVision);
             this.gbOption.Controls.Add(this.ckCapture);
             this.gbOption.Controls.Add(this.lblTerrainType);
-            this.gbOption.Controls.Add(this.cbTerrainType);
+            this.gbOption.Controls.Add(this.cboTerrainType);
             this.gbOption.Location = new System.Drawing.Point(196, 166);
             this.gbOption.Name = "gbOption";
             this.gbOption.Size = new System.Drawing.Size(298, 211);
@@ -179,50 +179,25 @@
             this.gbOption.TabStop = false;
             this.gbOption.Text = "Option";
             // 
-            // cbTerrainType
+            // ckResupply
             // 
-            this.cbTerrainType.FormattingEnabled = true;
-            this.cbTerrainType.Location = new System.Drawing.Point(80, 17);
-            this.cbTerrainType.Name = "cbTerrainType";
-            this.cbTerrainType.Size = new System.Drawing.Size(143, 21);
-            this.cbTerrainType.TabIndex = 0;
+            this.ckResupply.AutoSize = true;
+            this.ckResupply.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckResupply.Location = new System.Drawing.Point(23, 98);
+            this.ckResupply.Name = "ckResupply";
+            this.ckResupply.Size = new System.Drawing.Size(70, 17);
+            this.ckResupply.TabIndex = 8;
+            this.ckResupply.Text = "Resupply";
+            this.ckResupply.UseVisualStyleBackColor = true;
             // 
-            // lblTerrainType
+            // lblHealth
             // 
-            this.lblTerrainType.AutoSize = true;
-            this.lblTerrainType.Location = new System.Drawing.Point(7, 20);
-            this.lblTerrainType.Name = "lblTerrainType";
-            this.lblTerrainType.Size = new System.Drawing.Size(67, 13);
-            this.lblTerrainType.TabIndex = 1;
-            this.lblTerrainType.Text = "Terrain Type";
-            // 
-            // ckCapture
-            // 
-            this.ckCapture.AutoSize = true;
-            this.ckCapture.Checked = true;
-            this.ckCapture.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckCapture.Location = new System.Drawing.Point(229, 19);
-            this.ckCapture.Name = "ckCapture";
-            this.ckCapture.Size = new System.Drawing.Size(63, 17);
-            this.ckCapture.TabIndex = 2;
-            this.ckCapture.Text = "Capture";
-            this.ckCapture.UseVisualStyleBackColor = true;
-            // 
-            // lblVision
-            // 
-            this.lblVision.AutoSize = true;
-            this.lblVision.Location = new System.Drawing.Point(39, 47);
-            this.lblVision.Name = "lblVision";
-            this.lblVision.Size = new System.Drawing.Size(35, 13);
-            this.lblVision.TabIndex = 3;
-            this.lblVision.Text = "Vision";
-            // 
-            // txtVision
-            // 
-            this.txtVision.Location = new System.Drawing.Point(80, 45);
-            this.txtVision.Name = "txtVision";
-            this.txtVision.Size = new System.Drawing.Size(77, 20);
-            this.txtVision.TabIndex = 4;
+            this.lblHealth.AutoSize = true;
+            this.lblHealth.Location = new System.Drawing.Point(36, 77);
+            this.lblHealth.Name = "lblHealth";
+            this.lblHealth.Size = new System.Drawing.Size(38, 13);
+            this.lblHealth.TabIndex = 6;
+            this.lblHealth.Text = "Health";
             // 
             // txtHealth
             // 
@@ -236,25 +211,53 @@
             0,
             0});
             // 
-            // lblHealth
+            // txtVision
             // 
-            this.lblHealth.AutoSize = true;
-            this.lblHealth.Location = new System.Drawing.Point(36, 77);
-            this.lblHealth.Name = "lblHealth";
-            this.lblHealth.Size = new System.Drawing.Size(38, 13);
-            this.lblHealth.TabIndex = 6;
-            this.lblHealth.Text = "Health";
+            this.txtVision.Location = new System.Drawing.Point(80, 45);
+            this.txtVision.Name = "txtVision";
+            this.txtVision.Size = new System.Drawing.Size(77, 20);
+            this.txtVision.TabIndex = 4;
             // 
-            // ckResupply
+            // lblVision
             // 
-            this.ckResupply.AutoSize = true;
-            this.ckResupply.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckResupply.Location = new System.Drawing.Point(23, 98);
-            this.ckResupply.Name = "ckResupply";
-            this.ckResupply.Size = new System.Drawing.Size(70, 17);
-            this.ckResupply.TabIndex = 8;
-            this.ckResupply.Text = "Resupply";
-            this.ckResupply.UseVisualStyleBackColor = true;
+            this.lblVision.AutoSize = true;
+            this.lblVision.Location = new System.Drawing.Point(39, 47);
+            this.lblVision.Name = "lblVision";
+            this.lblVision.Size = new System.Drawing.Size(35, 13);
+            this.lblVision.TabIndex = 3;
+            this.lblVision.Text = "Vision";
+            // 
+            // ckCapture
+            // 
+            this.ckCapture.AutoSize = true;
+            this.ckCapture.Checked = true;
+            this.ckCapture.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckCapture.Location = new System.Drawing.Point(229, 19);
+            this.ckCapture.Name = "ckCapture";
+            this.ckCapture.Size = new System.Drawing.Size(63, 17);
+            this.ckCapture.TabIndex = 2;
+            this.ckCapture.Text = "Capture";
+            this.ckCapture.UseVisualStyleBackColor = true;
+            // 
+            // lblTerrainType
+            // 
+            this.lblTerrainType.AutoSize = true;
+            this.lblTerrainType.Location = new System.Drawing.Point(7, 20);
+            this.lblTerrainType.Name = "lblTerrainType";
+            this.lblTerrainType.Size = new System.Drawing.Size(67, 13);
+            this.lblTerrainType.TabIndex = 1;
+            this.lblTerrainType.Text = "Terrain Type";
+            // 
+            // cboTerrainType
+            // 
+            this.cboTerrainType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTerrainType.FormattingEnabled = true;
+            this.cboTerrainType.Items.AddRange(new object[] {
+            "Empty"});
+            this.cboTerrainType.Location = new System.Drawing.Point(80, 17);
+            this.cboTerrainType.Name = "cboTerrainType";
+            this.cboTerrainType.Size = new System.Drawing.Size(143, 21);
+            this.cboTerrainType.TabIndex = 0;
             // 
             // UnitBuilderEditor
             // 
@@ -274,8 +277,8 @@
             this.bgSpritePreview.ResumeLayout(false);
             this.gbOption.ResumeLayout(false);
             this.gbOption.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtVision)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtVision)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +299,7 @@
         private System.Windows.Forms.Button btnImportMapSprite;
         private System.Windows.Forms.GroupBox gbOption;
         private System.Windows.Forms.Label lblTerrainType;
-        private System.Windows.Forms.ComboBox cbTerrainType;
+        private System.Windows.Forms.ComboBox cboTerrainType;
         private System.Windows.Forms.CheckBox ckResupply;
         private System.Windows.Forms.Label lblHealth;
         private System.Windows.Forms.NumericUpDown txtHealth;

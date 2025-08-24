@@ -155,6 +155,10 @@ namespace Microsoft.Xna.Framework.Content.Builder
             {
                 File.Delete(CompleteFilePathOutput);
             }
+            if (!Directory.Exists(FolderToCopyTo))
+            {
+                Directory.CreateDirectory(FolderToCopyTo);
+            }
             File.Move(CompleteFilePath, FolderToCopyTo + "\\" + SpriteFileName + ".xnb");
         }
 

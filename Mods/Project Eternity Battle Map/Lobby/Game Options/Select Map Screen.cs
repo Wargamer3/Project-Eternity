@@ -297,6 +297,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MapInfoToSelect.MaxSquadPerPlayer = BR.ReadByte();
 
             MapInfoToSelect.MapDescription = BR.ReadString();
+            string sndBattleThemePath = BR.ReadString();
 
             MapInfoToSelect.ListMandatoryMutator.Clear();
             int ListMandatoryMutatorCount = BR.ReadByte();

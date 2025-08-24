@@ -524,7 +524,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = 958;
             g.DrawString(fntMenuText, ListFilteredCard[CursorIndex].Card.Name, new Vector2(X, Y), Color.White);
 
-            SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
+            if (ActivePlayer != null)
+            {
+                SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
+            }
 
             MissionScrollbar.Draw(g);
         }

@@ -149,7 +149,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             ArrayTerrain = NewTilesetPreset.ArrayTerrain;
             ArrayTiles = NewTilesetPreset.ArrayTiles;
 
-            viewerTileset.Preload();
+            viewerTilesetMain.Preload();
             if (!string.IsNullOrWhiteSpace(TilesetName))
                 InitTileset(TilesetName);
 
@@ -166,6 +166,24 @@ namespace ProjectEternity.Editors.TilesetEditor
             SaveItem(FilePath, null);
         }
 
+        private void cbTilesetType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tabControl1.TabPages.Clear();
+            tabControl1.TabPages.Add(tabTilesetMain);
+            tabTilesetMain.Text = "Main";
+
+            if (cbTilesetType.SelectedIndex == (int)Terrain.TilesetPreset.TilesetTypes.Ocean)
+            {
+                tabControl1.TabPages.Add(tabTilesetRiver);
+                tabControl1.TabPages.Add(tabTilesetShoal);
+                tabControl1.TabPages.Add(tabTilesetWaterfall);
+                tabTilesetMain.Text = "Sea";
+                tabTilesetRiver.Text = "River";
+                tabTilesetShoal.Text = "Shoal";
+                tabTilesetWaterfall.Text = "Waterfall";
+            }
+        }
+
         #region Tileset
 
         private void btnAddTile_Click(object sender, EventArgs e)
@@ -179,38 +197,38 @@ namespace ProjectEternity.Editors.TilesetEditor
             //Add the file name to the tile combo box.
             txtTilesetName.Text = TilesetName;
 
-            Texture2D Tileset = viewerTileset.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
+            Texture2D Tileset = viewerTilesetMain.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
 
-            if (Tileset.Width >= viewerTileset.Width)
+            if (Tileset.Width >= viewerTilesetMain.Width)
             {
-                sclTileWidth.Maximum = Tileset.Width - viewerTileset.Width;
+                sclTileWidth.Maximum = Tileset.Width - viewerTilesetMain.Width;
                 sclTileWidth.Visible = true;
             }
             else
                 sclTileWidth.Visible = false;
-            if (Tileset.Height >= viewerTileset.Height)
+            if (Tileset.Height >= viewerTilesetMain.Height)
             {
-                sclTileHeight.Maximum = Tileset.Height - viewerTileset.Height;
+                sclTileHeight.Maximum = Tileset.Height - viewerTilesetMain.Height;
                 sclTileHeight.Visible = true;
             }
             else
                 sclTileHeight.Visible = false;
 
-            viewerTileset.InitTileset(Tileset, TileSize);
+            viewerTilesetMain.InitTileset(Tileset, TileSize);
         }
 
         private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
         {
-            Point DrawOffset = viewerTileset.DrawOffset;
+            Point DrawOffset = viewerTilesetMain.DrawOffset;
             DrawOffset.X = e.NewValue;
-            viewerTileset.DrawOffset = DrawOffset;
+            viewerTilesetMain.DrawOffset = DrawOffset;
         }
 
         private void sclTileHeight_Scroll(object sender, ScrollEventArgs e)
         {
-            Point DrawOffset = viewerTileset.DrawOffset;
+            Point DrawOffset = viewerTilesetMain.DrawOffset;
             DrawOffset.Y = e.NewValue;
-            viewerTileset.DrawOffset = DrawOffset;
+            viewerTilesetMain.DrawOffset = DrawOffset;
         }
 
         private void tsmImportTileset_Click(object sender, EventArgs e)
@@ -262,7 +280,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void SelectTile(int X, int Y)
         {
-            Point DrawOffset = viewerTileset.DrawOffset;//Used to avoid warnings.
+            Point DrawOffset = viewerTilesetMain.DrawOffset;//Used to avoid warnings.
             int FinalX = (X + DrawOffset.X) / TileSize.X;
             int FinalY = ((Y + DrawOffset.X)) / TileSize.Y;
 
@@ -271,7 +289,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                 return;
             }
             //Set the ActiveTile to the mouse position.
-            viewerTileset.SelectTile(TileOriginPoint, new Point(FinalX * TileSize.X, FinalY * TileSize.Y),
+            viewerTilesetMain.SelectTile(TileOriginPoint, new Point(FinalX * TileSize.X, FinalY * TileSize.Y),
                                                  Control.ModifierKeys == Keys.Shift, BrushIndex);
 
             Terrain PresetTerrain = ArrayTerrain[FinalX, FinalY];
@@ -307,7 +325,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                 return;
             }
 
-            Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
             Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
             DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
@@ -352,7 +370,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
             Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
             DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
@@ -362,7 +380,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
             Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
             DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
@@ -387,8 +405,8 @@ namespace ProjectEternity.Editors.TilesetEditor
                         {
                             TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(23);
                             InitTileset(TilesetName);
-                            int TilesetWidth = viewerTileset.sprTileset.Width / TileSize.X;
-                            int TilesetHeight = viewerTileset.sprTileset.Height / TileSize.Y;
+                            int TilesetWidth = viewerTilesetMain.sprTileset.Width / TileSize.X;
+                            int TilesetHeight = viewerTilesetMain.sprTileset.Height / TileSize.Y;
                             ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
                             ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
                             for (int X = TilesetWidth - 1; X >= 0; --X)
