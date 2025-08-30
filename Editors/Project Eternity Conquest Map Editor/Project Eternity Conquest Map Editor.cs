@@ -119,7 +119,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 }
             }
 
-            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
@@ -134,9 +134,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
                 }
 
-                ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
-
-                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset.TilesetIndex, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
+                if (IsAutotile)
+                {
+                    ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveMap.ListTilesetPreset);
+                }
+                else
+                {
+                    ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
+                }
 
                 ActiveMap.Reset();
             }
@@ -276,7 +281,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return new MapZoneConquest(ActiveMap, ZoneType);
             }
 
-            public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Maps/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -285,7 +290,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
@@ -294,7 +299,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return NewTilesetPreset;
             }
 
-            public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Maps/Tilesets Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -303,7 +308,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();

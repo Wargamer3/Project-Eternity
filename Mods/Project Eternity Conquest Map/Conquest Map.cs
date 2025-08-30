@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             : this(Params)
         {
             ListTileSet = new List<Texture2D>();
-            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            ListTilesetPreset = new List<TilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveUnitIndex = -1;
 
@@ -275,7 +275,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             FS.Close();
         }
 
-        protected override Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        protected override TilesetPreset ReadTileset(BinaryReader BR, int Index)
         {
             return new ConquestTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }

@@ -65,6 +65,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             BW.Write(ckCapture.Checked);
             BW.Write((byte)txtVision.Value);
             BW.Write((int)txtHealth.Value);
+            BW.Write((int)txtCreditPerTurn.Value);
             BW.Write(ckResupply.Checked);
 
             FS.Close();
@@ -94,6 +95,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             ckCapture.Checked = NewUnit.CanBeCaptured;
             txtVision.Value = NewUnit.VisionRange;
             txtHealth.Value = NewUnit.HP;
+            txtCreditPerTurn.Value = NewUnit.CreditPerTurn;
             ckResupply.Checked = NewUnit.Resupply;
 
             if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + NewUnit.RelativePath + ".xnb"))

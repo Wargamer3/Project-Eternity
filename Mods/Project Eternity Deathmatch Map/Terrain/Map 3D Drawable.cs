@@ -120,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DrawableTile ActiveTerrain = LayerManager.ListLayer[0].ArrayTile[0, 0];
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                 Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                    0, 0, 0, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();

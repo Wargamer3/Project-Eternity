@@ -21,11 +21,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             bool HasArraySubTile = BR.ReadBoolean();
             if (HasArraySubTile)
             {
+                float OffsetSizeX = (TileWidth / 2) / (float)TileWidth * TileWidth;
+                float OffsetSizeY = (1 - (TileHeight / 4) / (float)TileHeight) * TileHeight;
+
                 int ArraySubTileLength = BR.ReadByte();
                 ArraySubTile = new Rectangle[ArraySubTileLength];
                 for (int T = 0; T < ArraySubTileLength; ++T)
                 {
-                    ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / (ArraySubTileLength / 2), TileHeight / (ArraySubTileLength / 2));
+                    int IndexX = (T % (ArraySubTileLength / 2));
+                    int IndexY = (T / (ArraySubTileLength / 2));
+
+                    if (IndexY == 0)
+                    {
+                        ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / (ArraySubTileLength / 2), (int)OffsetSizeY);
+                    }
+                    else
+                    {
+                        ArraySubTile[T] = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth / (ArraySubTileLength / 2), TileHeight - (int)OffsetSizeY);
+                    }
                 }
             }
             else

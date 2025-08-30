@@ -72,11 +72,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         {
                             if (Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetType == TilesetPreset.TilesetTypes.Regular)
                             {
-                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Tilesets/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName));
+                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Tilesets/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName));
                             }
                             else
                             {
-                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Autotiles/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName));
+                                DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Autotiles/" + Map.ListTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName));
                             }
                         }
 
@@ -91,12 +91,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         }
                         else
                         {
-                            float OffsetSize = 1f / (ActiveTile.ArraySubTile.Length / 2f);
+                            float OffsetSizeX = (Map.TileSize.X / 2) / (float)Map.TileSize.X * Map.TileSize.X;
+                            float OffsetSizeY = (1 - (Map.TileSize.X / 4) / (float)Map.TileSize.Y) * Map.TileSize.X;
+
                             for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
                             {
                                 Vector3 TilePosition = ActiveTerrain.WorldPosition;
-                                TilePosition.X += OffsetSize * (T % (ActiveTile.ArraySubTile.Length / 2));
-                                TilePosition.Y += OffsetSize * (T / (ActiveTile.ArraySubTile.Length / 2));
+                                int IndexX = (T % (ActiveTile.ArraySubTile.Length / 2));
+                                int IndexY = (T / (ActiveTile.ArraySubTile.Length / 2));
+                                TilePosition.X += OffsetSizeX * IndexX;
+                                TilePosition.Y += OffsetSizeY * IndexY;
                                 DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
                             }
                         }

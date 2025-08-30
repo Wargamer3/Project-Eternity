@@ -43,14 +43,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new TileAttributes();
         }
 
-        public Terrain GetTerrain(int X, int Y, int LayerIndex)
+        public Terrain GetTerrain(int GridX, int GridY, int LayerIndex)
         {
-            return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
+            return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];
         }
 
-        public DrawableTile GetTile(int X, int Y, int LayerIndex)
+        public DrawableTile GetTile(int GridX, int GridY, int LayerIndex)
         {
-            return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
+            return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[GridX, GridY];
         }
 
         public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -97,23 +97,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveMap.MapSize = new Point(NewWidth, NewHeight);
         }
 
-        public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
+        public void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
         {
-            Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), LayerIndex);
+            Terrain NewTerrain = new Terrain(TerrainPreset, new Point(GridX, GridY), LayerIndex);
             NewTerrain.Owner = ActiveMap;
-            NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
+            NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
 
             if (ConsiderSubLayers)
             {
-                GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
+                GetRealLayer(LayerIndex).ArrayTerrain[GridX, GridY] = NewTerrain;
             }
             else
             {
-                ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
+                ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY] = NewTerrain;
             }
         }
 
-        public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
+        public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
         {
             DrawableTile NewTile = new DrawableTile(TilePreset);
 
@@ -128,9 +128,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
             }
 
-            ActiveLayer.ArrayTile[X, Y] = NewTile;
-
-            ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset.TilesetIndex, X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile);
+            if (IsAutotile)
+            {
+                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveMap.ListTilesetPreset);
+            }
+            else
+            {
+                ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
+            }
 
             ActiveMap.Reset();
         }
@@ -269,7 +274,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MapZoneDeathmatch(ActiveMap, ZoneType);
         }
 
-        public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+        public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
         {
             FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -278,7 +283,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int TileSizeX = BR.ReadInt32();
             int TileSizeY = BR.ReadInt32();
 
-            Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+            TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
             BR.Close();
             FS.Close();
@@ -288,7 +293,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return NewTilesetPreset;
         }
 
-        public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+        public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
         {
             FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -297,7 +302,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int TileSizeX = BR.ReadInt32();
             int TileSizeY = BR.ReadInt32();
 
-            Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+            TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
             BR.Close();
             FS.Close();
@@ -309,7 +314,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
-            ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+            ActiveMap.ListTilesetPreset.Add(new TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
         }
     }
 }

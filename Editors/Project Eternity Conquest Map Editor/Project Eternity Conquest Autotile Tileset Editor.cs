@@ -6,6 +6,8 @@ using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
+using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
+using static ProjectEternity.GameScreens.ConquestMapScreen.ConquestTilesetPreset;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
@@ -29,14 +31,24 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return TerrainHolder.ListConquestTerrainType.Select(x => x.TerrainName).ToArray();
             }
 
-            public Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
                 return new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, 0);
+            }
+
+            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                return new ConquestTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
             {
                 throw new NotImplementedException();
+            }
+
+            public string GetEditorPath()
+            {
+                return GUIRootPathMapAutotilesImages;
             }
         }
 

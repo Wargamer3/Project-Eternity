@@ -48,12 +48,15 @@
             this.ckCapture = new System.Windows.Forms.CheckBox();
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
+            this.lblCreditPerTurn = new System.Windows.Forms.Label();
+            this.txtCreditPerTurn = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.bgSpritePreview.SuspendLayout();
             this.gbOption.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVision)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -164,6 +167,8 @@
             // 
             // gbOption
             // 
+            this.gbOption.Controls.Add(this.lblCreditPerTurn);
+            this.gbOption.Controls.Add(this.txtCreditPerTurn);
             this.gbOption.Controls.Add(this.ckResupply);
             this.gbOption.Controls.Add(this.lblHealth);
             this.gbOption.Controls.Add(this.txtHealth);
@@ -183,7 +188,7 @@
             // 
             this.ckResupply.AutoSize = true;
             this.ckResupply.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckResupply.Location = new System.Drawing.Point(23, 98);
+            this.ckResupply.Location = new System.Drawing.Point(24, 124);
             this.ckResupply.Name = "ckResupply";
             this.ckResupply.Size = new System.Drawing.Size(70, 17);
             this.ckResupply.TabIndex = 8;
@@ -259,6 +264,22 @@
             this.cboTerrainType.Size = new System.Drawing.Size(143, 21);
             this.cboTerrainType.TabIndex = 0;
             // 
+            // lblCreditPerTurn
+            // 
+            this.lblCreditPerTurn.AutoSize = true;
+            this.lblCreditPerTurn.Location = new System.Drawing.Point(3, 100);
+            this.lblCreditPerTurn.Name = "lblCreditPerTurn";
+            this.lblCreditPerTurn.Size = new System.Drawing.Size(74, 13);
+            this.lblCreditPerTurn.TabIndex = 10;
+            this.lblCreditPerTurn.Text = "Credit Per turn";
+            // 
+            // txtCreditPerTurn
+            // 
+            this.txtCreditPerTurn.Location = new System.Drawing.Point(80, 98);
+            this.txtCreditPerTurn.Name = "txtCreditPerTurn";
+            this.txtCreditPerTurn.Size = new System.Drawing.Size(77, 20);
+            this.txtCreditPerTurn.TabIndex = 9;
+            // 
             // UnitBuilderEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,6 +300,7 @@
             this.gbOption.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVision)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,5 +328,7 @@
         private System.Windows.Forms.NumericUpDown txtVision;
         private System.Windows.Forms.Label lblVision;
         private System.Windows.Forms.CheckBox ckCapture;
+        private System.Windows.Forms.Label lblCreditPerTurn;
+        private System.Windows.Forms.NumericUpDown txtCreditPerTurn;
     }
 }

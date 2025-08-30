@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         bool AlreadyExist = false;
                         for (int P = 0; P < Map.ListTilesetPreset.Count; ++P)
                         {
-                            if (TerrainAttribute.ListTileset[T] == Map.ListTilesetPreset[P].TilesetName)
+                            if (TerrainAttribute.ListTileset[T] == Map.ListTilesetPreset[P].ArrayTilesetInformation[0].TilesetName)
                             {
                                 AlreadyExist = true;
                                 break;
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             if (!Map.ListTileSet.Contains(sprTileset))
                             {
                                 TilesetAdded = true;
-                                Map.ListTilesetPreset.Add(new Terrain.TilesetPreset(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, Map.TileSize.X, Map.TileSize.Y, Map.ListTilesetPreset.Count));
+                                Map.ListTilesetPreset.Add(new TilesetPreset(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, Map.TileSize.X, Map.TileSize.Y, Map.ListTilesetPreset.Count));
                                 Map.ListTileSet.Add(sprTileset);
                             }
                         }
@@ -145,7 +145,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             for (int P = 0; P < Map.ListTilesetPreset.Count; ++P)
                             {
-                                if (P != OriginalTilesetIndex && TerrainAttribute.ListTileset[OriginalTilesetIndex] == Map.ListTilesetPreset[P].TilesetName)
+                                if (P != OriginalTilesetIndex && TerrainAttribute.ListTileset[OriginalTilesetIndex] == Map.ListTilesetPreset[P].ArrayTilesetInformation[0].TilesetName)
                                 {
                                     TerrainAttribute.ListTileChangeLocation[L] = new DrawableTile(TerrainAttribute.ListTileChangeLocation[L].Origin, P);
                                     break;

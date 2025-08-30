@@ -117,7 +117,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 }
             }
 
-            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
@@ -258,7 +258,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return new MapZoneSorcererStreet(ActiveMap, ZoneType);
             }
 
-            public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -267,7 +267,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
@@ -277,7 +277,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return NewTilesetPreset;
             }
 
-            public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -286,7 +286,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new SorcererStreetTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new SorcererStreetTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();

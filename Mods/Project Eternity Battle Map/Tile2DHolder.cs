@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public Tile2DHolder(Terrain.TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName)
+        public Tile2DHolder(TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName)
         {
             this.TilesetType = Tileset.TilesetType;
             ListTile2D = new List<Rectangle>();
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Update(GameTime gameTime)
         {
-            if (TilesetType == TilesetPreset.TilesetTypes.Water)
+            if (TilesetType == TilesetPreset.TilesetTypes.River)
             {
                 TimeElapsed += gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int OffsetX = sprTileset.Width / 4;
             int FinalOffsetX = 0;
 
-            if (TilesetType == TilesetPreset.TilesetTypes.Water)
+            if (TilesetType == TilesetPreset.TilesetTypes.River)
             {
                 FinalOffsetX = ((int)(TimeElapsed * 2) % 4) * OffsetX;
             }

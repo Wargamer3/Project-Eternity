@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         DrawableTile GetTile(int GridX, int GridY, int LayerIndex);
         void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset);
         void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers);
-        void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers);
+        void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile);
         void RemoveTileset(int TilesetIndex);
         BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset);
         ISubMapLayer CreateNewSubLayer(BaseMapLayer ParentLayer);
@@ -22,8 +22,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int GetLayerCount();
         List<BaseMapLayer> GetLayersAndSubLayers();
         MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType);
-        Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex);
-        Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex);
+        TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex);
+        TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex);
         void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
     }
 }

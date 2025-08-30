@@ -10,21 +10,163 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
+using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
     public partial class ProjectEternityAutotileTilesetPresetEditor : BaseEditor
     {
+        public class TabContent
+        {
+            public TilesetPresetInformation TilesetInfo;
+
+            public TabPage tabTileset;
+            public Button btnSelectTileset;
+            public TextBox txtTilesetName;
+            public HScrollBar sclTileWidth;
+            public VScrollBar sclTileHeight;
+            public TilesetViewerControl viewerTilesetTab;
+            public Label lblActiveTileset;
+
+            public TabContent(string TabName, TilesetPresetInformation TilesetInfo)
+            {
+                this.TilesetInfo = TilesetInfo;
+
+                tabTileset = new TabPage();
+                btnSelectTileset = new Button();
+                txtTilesetName = new TextBox();
+                sclTileWidth = new HScrollBar();
+                sclTileHeight = new VScrollBar();
+                viewerTilesetTab = new TilesetViewerControl();
+                lblActiveTileset = new Label();
+
+                tabTileset.SuspendLayout();
+                tabTileset.Controls.Add(btnSelectTileset);
+                tabTileset.Controls.Add(sclTileWidth);
+                tabTileset.Controls.Add(txtTilesetName);
+                tabTileset.Controls.Add(sclTileHeight);
+                tabTileset.Controls.Add(viewerTilesetTab);
+                tabTileset.Controls.Add(lblActiveTileset);
+                tabTileset.Location = new System.Drawing.Point(4, 22);
+                tabTileset.Name = "tabTileset" + TabName;
+                tabTileset.Padding = new System.Windows.Forms.Padding(3);
+                tabTileset.Size = new System.Drawing.Size(457, 402);
+                tabTileset.TabIndex = 1;
+                tabTileset.Text = TabName;
+                tabTileset.UseVisualStyleBackColor = true;
+                // 
+                // btnSelectTileset
+                // 
+                btnSelectTileset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+                btnSelectTileset.Location = new System.Drawing.Point(6, 54);
+                btnSelectTileset.Name = "btnSelectTileset" + TabName;
+                btnSelectTileset.Size = new System.Drawing.Size(448, 23);
+                btnSelectTileset.TabIndex = 29;
+                btnSelectTileset.Text = "Select tileset";
+                btnSelectTileset.UseVisualStyleBackColor = true;
+                // 
+                // txtTilesetName
+                // 
+                txtTilesetName.Location = new System.Drawing.Point(6, 21);
+                txtTilesetName.Name = "textBox1" + TabName;
+                txtTilesetName.ReadOnly = true;
+                txtTilesetName.Size = new System.Drawing.Size(227, 20);
+                txtTilesetName.TabIndex = 30;
+                // 
+                // sclTileWidth
+                // 
+                sclTileWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+                sclTileWidth.Location = new System.Drawing.Point(3, 381);
+                sclTileWidth.Name = "sclTileWidth" + TabName;
+                sclTileWidth.Size = new System.Drawing.Size(431, 17);
+                sclTileWidth.TabIndex = 27;
+                // 
+                // sclTileHeight
+                // 
+                sclTileHeight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Right)));
+                sclTileHeight.Location = new System.Drawing.Point(434, 78);
+                sclTileHeight.Name = "vScrollBar1" + TabName;
+                sclTileHeight.Size = new System.Drawing.Size(17, 303);
+                sclTileHeight.TabIndex = 26;
+                // 
+                // viewerTilesetTab
+                // 
+                viewerTilesetTab.Location = new System.Drawing.Point(5, 78);
+                viewerTilesetTab.Name = "tilesetViewerControl1" + TabName;
+                viewerTilesetTab.Size = new System.Drawing.Size(426, 300);
+                viewerTilesetTab.TabIndex = 31;
+                viewerTilesetTab.Text = "tilesetViewerControl";
+                // 
+                // label2
+                // 
+                lblActiveTileset.AutoSize = true;
+                lblActiveTileset.Location = new System.Drawing.Point(6, 5);
+                lblActiveTileset.Name = "lblActiveTileset" + TabName;
+                lblActiveTileset.Size = new System.Drawing.Size(67, 13);
+                lblActiveTileset.TabIndex = 28;
+                lblActiveTileset.Text = "Active tileset";
+
+                tabTileset.ResumeLayout(false);
+                tabTileset.PerformLayout();
+            }
+        }
+
+        public class DeathmatchAutotilePresetHelper : ITilesetPresetHelper
+        {
+            public DeathmatchAutotilePresetHelper()
+            {
+            }
+
+            public void EditTerrainTypes()
+            {
+                throw new NotImplementedException();
+            }
+
+            public string[] GetTerrainTypes()
+            {
+                return new string[]
+                {
+                    "Land",
+                    "Sea",
+                    "Air",
+                    "Space",
+                };
+            }
+
+            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            {
+                return new TilesetPreset(BR, TileSizeX, TileSizeY, 0);
+            }
+
+            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+            }
+
+            public void OnTerrainSelected(Terrain SelectedTerrain)
+            {
+                throw new NotImplementedException();
+            }
+
+            public string GetEditorPath()
+            {
+                return GUIRootPathMapAutotilesImages;
+            }
+        }
+
         protected ITilesetPresetHelper Helper;
 
-        protected string TilesetName;
-        protected Point TileSize;
-        protected Terrain[,] ArrayTerrain;
-        protected DrawableTile[,] ArrayTiles;
         protected List<string> ListBattleBackgroundAnimationPath;
 
+        public Point TileSize;
         protected Point TileOriginPoint;
+        protected List<TabContent> ListActiveTab;
+        protected TabContent ActiveTab => ListActiveTab[tabControl1.SelectedIndex];
         int BrushIndex = 0;
+        bool AllowEvent;
 
         private enum ItemSelectionChoices { Tile, BattleBackgroundAnimation };
 
@@ -34,14 +176,14 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             InitializeComponent();
 
-            TilesetName = "";
             TileSize = new Point(32, 32);
-            ArrayTerrain = new Terrain[0, 0];
             ListBattleBackgroundAnimationPath = new List<string>();
+            ListActiveTab = new List<TabContent>();
+            AllowEvent = true;
         }
 
         public ProjectEternityAutotileTilesetPresetEditor(string FilePath, object[] Params)
-            :this()
+            : this()
         {
             this.FilePath = FilePath;
             if (!File.Exists(FilePath))
@@ -73,24 +215,18 @@ namespace ProjectEternity.Editors.TilesetEditor
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
-            BW.Write(TilesetName);
-            byte TilesetTypeIndex = (byte)cbTilesetType.SelectedIndex;
-            if (TilesetTypeIndex < 0 || TilesetTypeIndex > cbTilesetType.Items.Count)
+            byte TilesetTypeIndex = (byte)cboTilesetType.SelectedIndex;
+            if (TilesetTypeIndex < 0 || TilesetTypeIndex > cboTilesetType.Items.Count)
             {
                 TilesetTypeIndex = 0;
             }
+
             BW.Write(TilesetTypeIndex);
+            BW.Write((byte)ListActiveTab.Count);
 
-            BW.Write(ArrayTerrain.GetLength(0));
-            BW.Write(ArrayTerrain.GetLength(1));
-
-            //Tiles
-            for (int Y = 0; Y < ArrayTerrain.GetLength(1); Y++)
+            foreach (TabContent ActiveTab in ListActiveTab)
             {
-                for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
-                {
-                    ArrayTerrain[X, Y].Save(BW);
-                }
+                ActiveTab.TilesetInfo.Write(BW);
             }
 
             BW.Write(ListBattleBackgroundAnimationPath.Count);
@@ -111,6 +247,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.Text = Name + " - Project Eternity Autotile Tileset Preset Editor";
 
             InitHelper();
+            CreateTab("Main");
 
             FileStream FS = new FileStream("Content/Maps/Autotiles Presets/" + Name + ".peat", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -119,17 +256,10 @@ namespace ProjectEternity.Editors.TilesetEditor
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
-            Terrain.TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
+            TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
 
             BR.Close();
             FS.Close();
-
-            cboTerrainType.Items.Clear();
-            string[] ArrayTerrainType = Helper.GetTerrainTypes();
-            foreach (var ActiveTerrainType in ArrayTerrainType)
-            {
-                cboTerrainType.Items.Add(ActiveTerrainType);
-            }
 
             cboBattleAnimationBackground.Items.Clear();
             cboBattleAnimationBackground.Items.Add("None");
@@ -142,23 +272,56 @@ namespace ProjectEternity.Editors.TilesetEditor
                 cboBattleAnimationForeground.Items.Add(BattleBackgroundAnimationPath);
             }
 
+            cboTerrainType.Items.Clear();
+            string[] ArrayTerrainType = Helper.GetTerrainTypes();
+            foreach (var ActiveTerrainType in ArrayTerrainType)
+            {
+                cboTerrainType.Items.Add(ActiveTerrainType);
+            }
 
-            TilesetName = NewTilesetPreset.TilesetName;
-            cbTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
+            tabControl1.TabPages.Clear();
+            ListActiveTab.Clear();
 
-            ArrayTerrain = NewTilesetPreset.ArrayTerrain;
-            ArrayTiles = NewTilesetPreset.ArrayTiles;
+            for (int i = 0; i < NewTilesetPreset.ArrayTilesetInformation.Length; i++)
+            {
+                TilesetPreset.TilesetPresetInformation ActiveTileset = NewTilesetPreset.ArrayTilesetInformation[i];
+                CreateTab(i.ToString());
 
-            viewerTilesetMain.Preload();
-            if (!string.IsNullOrWhiteSpace(TilesetName))
-                InitTileset(TilesetName);
+                TabContent ActiveTab = ListActiveTab[i];
+                ActiveTab.TilesetInfo.TilesetName = ActiveTileset.TilesetName;
+
+                ActiveTab.TilesetInfo.ArrayTerrain = ActiveTileset.ArrayTerrain;
+                ActiveTab.TilesetInfo.ArrayTiles = ActiveTileset.ArrayTiles;
+
+                ActiveTab.viewerTilesetTab.Preload();
+                if (!string.IsNullOrWhiteSpace(ActiveTab.TilesetInfo.TilesetName))
+                    InitTileset(ActiveTab.TilesetInfo.TilesetName, ActiveTab);
+            }
+
+            AllowEvent = false;
+
+            cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
+
+            if (NewTilesetPreset.TilesetType == TilesetTypes.Ocean)
+            {
+                tabControl1.TabPages[0].Text = "Sea";
+                tabControl1.TabPages[1].Text = "River";
+                tabControl1.TabPages[2].Text = "Shoal";
+                tabControl1.TabPages[3].Text = "Waterfall";
+            }
+            else
+            {
+                tabControl1.TabPages[0].Text = "Main";
+            }
+
+            AllowEvent = true;
 
             SelectTile(0, 0);
         }
 
         protected virtual void InitHelper()
         {
-            Helper = new DeathmatchTilesetPresetHelper();
+            Helper = new DeathmatchAutotilePresetHelper();
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
@@ -166,69 +329,96 @@ namespace ProjectEternity.Editors.TilesetEditor
             SaveItem(FilePath, null);
         }
 
+        private void CreateTab(string TabName)
+        {
+            TabContent NewTab = new TabContent(TabName, Helper.CreatePreset(string.Empty, 0, 0, 32, 32, 0));
+            ListActiveTab.Add(NewTab);
+            this.tabControl1.Controls.Add(NewTab.tabTileset);
+
+            NewTab.btnSelectTileset.Click += new System.EventHandler(this.btnAddTile_Click);
+            NewTab.sclTileWidth.Scroll += new ScrollEventHandler(this.sclTileWidth_Scroll);
+            NewTab.sclTileHeight.Scroll += new ScrollEventHandler(this.sclTileHeight_Scroll);
+
+            NewTab.viewerTilesetTab.Click += new EventHandler(this.viewerTileset_Click);
+            NewTab.viewerTilesetTab.MouseDown += new MouseEventHandler(this.viewerTileset_MouseDown);
+            NewTab.viewerTilesetTab.MouseMove += new MouseEventHandler(this.viewerTileset_MouseMove);
+        }
+
         private void cbTilesetType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tabControl1.TabPages.Clear();
-            tabControl1.TabPages.Add(tabTilesetMain);
-            tabTilesetMain.Text = "Main";
-
-            if (cbTilesetType.SelectedIndex == (int)Terrain.TilesetPreset.TilesetTypes.Ocean)
+            if (!AllowEvent)
             {
-                tabControl1.TabPages.Add(tabTilesetRiver);
-                tabControl1.TabPages.Add(tabTilesetShoal);
-                tabControl1.TabPages.Add(tabTilesetWaterfall);
-                tabTilesetMain.Text = "Sea";
-                tabTilesetRiver.Text = "River";
-                tabTilesetShoal.Text = "Shoal";
-                tabTilesetWaterfall.Text = "Waterfall";
+                return;
+            }
+            tabControl1.TabPages.Clear();
+            ListActiveTab.Clear();
+
+            if (cboTilesetType.SelectedIndex == (int)TilesetPreset.TilesetTypes.Ocean)
+            {
+                CreateTab("Sea");
+                CreateTab("River");
+                CreateTab("Shoal");
+                CreateTab("Waterfall");
+            }
+            else
+            {
+                CreateTab("Main");
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex >= 0)
+            {
+                SelectTile(ActiveTab.viewerTilesetTab.ListTileBrush[0].X, ActiveTab.viewerTilesetTab.ListTileBrush[0].Y);
             }
         }
 
         #region Tileset
 
-        private void btnAddTile_Click(object sender, EventArgs e)
+        public virtual void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapAutotilesImages));
+            ListMenuItemsSelected(ShowContextMenuWithItem(Helper.GetEditorPath()));
         }
 
-        private void InitTileset(string TilesetName)
+        private void InitTileset(string TilesetName, TabContent ActiveTab)
         {
             //Add the file name to the tile combo box.
-            txtTilesetName.Text = TilesetName;
+            ActiveTab.txtTilesetName.Text = TilesetName;
 
-            Texture2D Tileset = viewerTilesetMain.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
+            Texture2D Tileset = ActiveTab.viewerTilesetTab.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
 
-            if (Tileset.Width >= viewerTilesetMain.Width)
+            if (Tileset.Width >= ActiveTab.viewerTilesetTab.Width)
             {
-                sclTileWidth.Maximum = Tileset.Width - viewerTilesetMain.Width;
-                sclTileWidth.Visible = true;
+                ActiveTab.sclTileWidth.Maximum = Tileset.Width - ActiveTab.viewerTilesetTab.Width;
+                ActiveTab.sclTileWidth.Visible = true;
             }
             else
-                sclTileWidth.Visible = false;
-            if (Tileset.Height >= viewerTilesetMain.Height)
+                ActiveTab.sclTileWidth.Visible = false;
+            if (Tileset.Height >= ActiveTab.viewerTilesetTab.Height)
             {
-                sclTileHeight.Maximum = Tileset.Height - viewerTilesetMain.Height;
-                sclTileHeight.Visible = true;
+                ActiveTab.sclTileHeight.Maximum = Tileset.Height - ActiveTab.viewerTilesetTab.Height;
+                ActiveTab.sclTileHeight.Visible = true;
             }
             else
-                sclTileHeight.Visible = false;
+                ActiveTab.sclTileHeight.Visible = false;
 
-            viewerTilesetMain.InitTileset(Tileset, TileSize);
+            ActiveTab.viewerTilesetTab.InitTileset(Tileset, TileSize);
         }
 
         private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
         {
-            Point DrawOffset = viewerTilesetMain.DrawOffset;
+            Point DrawOffset = ActiveTab.viewerTilesetTab.DrawOffset;
             DrawOffset.X = e.NewValue;
-            viewerTilesetMain.DrawOffset = DrawOffset;
+            ActiveTab.viewerTilesetTab.DrawOffset = DrawOffset;
         }
 
         private void sclTileHeight_Scroll(object sender, ScrollEventArgs e)
         {
-            Point DrawOffset = viewerTilesetMain.DrawOffset;
+            Point DrawOffset = ActiveTab.viewerTilesetTab.DrawOffset;
             DrawOffset.Y = e.NewValue;
-            viewerTilesetMain.DrawOffset = DrawOffset;
+            ActiveTab.viewerTilesetTab.DrawOffset = DrawOffset;
         }
 
         private void tsmImportTileset_Click(object sender, EventArgs e)
@@ -248,12 +438,12 @@ namespace ProjectEternity.Editors.TilesetEditor
                 Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
-                string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string SpriteFolder = "Content\\Maps\\Tileset Presets";
-                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(28);
+                string NewSpriteFileName = Path.GetFileNameWithoutExtension(filePath);
+                string SpriteFolder = "Content\\Maps\\Autotiles";
+                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(31);
                 Builder.CopyBuildOutput(fileName, NewSpriteFileName, SpriteFolder + "\\" + NewSpriteFileFolder);
 
-                InitTileset(NewSpriteFileFolder + " \\" + NewSpriteFileName);
+                InitTileset(NewSpriteFileFolder + " \\" + NewSpriteFileName, ActiveTab);
             }
         }
 
@@ -280,20 +470,20 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void SelectTile(int X, int Y)
         {
-            Point DrawOffset = viewerTilesetMain.DrawOffset;//Used to avoid warnings.
+            Point DrawOffset = ActiveTab.viewerTilesetTab.DrawOffset;//Used to avoid warnings.
             int FinalX = (X + DrawOffset.X) / TileSize.X;
             int FinalY = ((Y + DrawOffset.X)) / TileSize.Y;
 
-            if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayTerrain.GetLength(0) || FinalY >= ArrayTerrain.GetLength(1))
+            if (FinalX < 0 || FinalY < 0 || FinalX >= ActiveTab.TilesetInfo.ArrayTerrain.GetLength(0) || FinalY >= ActiveTab.TilesetInfo.ArrayTerrain.GetLength(1))
             {
                 return;
             }
             //Set the ActiveTile to the mouse position.
-            viewerTilesetMain.SelectTile(TileOriginPoint, new Point(FinalX * TileSize.X, FinalY * TileSize.Y),
+            ActiveTab.viewerTilesetTab.SelectTile(TileOriginPoint, new Point(FinalX * TileSize.X, FinalY * TileSize.Y),
                                                  Control.ModifierKeys == Keys.Shift, BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[FinalX, FinalY];
-            DrawableTile PresetTile = ArrayTiles[FinalX, FinalY];
+            Terrain PresetTerrain = ActiveTab.TilesetInfo.ArrayTerrain[FinalX, FinalY];
+            DrawableTile PresetTile = ActiveTab.TilesetInfo.ArrayTiles[FinalX, FinalY];
 
             cboTerrainType.SelectedIndex = PresetTerrain.TerrainTypeIndex;
 
@@ -325,14 +515,14 @@ namespace ProjectEternity.Editors.TilesetEditor
                 return;
             }
 
-            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = ActiveTab.viewerTilesetTab.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = ActiveTab.TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = ActiveTab.TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
 
-            ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y] = PresetTile;
+            ActiveTab.TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y] = PresetTile;
         }
 
         private void btnEditTerrainTypes_Click(object sender, EventArgs e)
@@ -370,20 +560,20 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = ActiveTab.viewerTilesetTab.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = ActiveTab.TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = ActiveTab.TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
         }
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Point TilePos = viewerTilesetMain.GetTileFromBrush(new Point(0, 0), BrushIndex);
+            Point TilePos = ActiveTab.viewerTilesetTab.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = ActiveTab.TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = ActiveTab.TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
         }
@@ -403,19 +593,19 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(23);
-                            InitTileset(TilesetName);
-                            int TilesetWidth = viewerTilesetMain.sprTileset.Width / TileSize.X;
-                            int TilesetHeight = viewerTilesetMain.sprTileset.Height / TileSize.Y;
-                            ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
-                            ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
+                            ActiveTab.TilesetInfo.TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(23);
+                            InitTileset(ActiveTab.TilesetInfo.TilesetName, ActiveTab);
+                            int TilesetWidth = ActiveTab.viewerTilesetTab.sprTileset.Width / TileSize.X;
+                            int TilesetHeight = ActiveTab.viewerTilesetTab.sprTileset.Height / TileSize.Y;
+                            ActiveTab.TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
+                            ActiveTab.TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
                             for (int X = TilesetWidth - 1; X >= 0; --X)
                             {
                                 for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y, TileSize.X, TileSize.Y, 0, 0, 0);
-                                    ArrayTerrain[X, Y].TerrainTypeIndex = 1;
-                                    ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
+                                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
+                                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
+                                    ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
                                 }
                             }
                         }

@@ -25,10 +25,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int T = 0; T < Owner.ListTilesetPreset.Count; T++)
             {
-                cboTilesFront.Items.Add(Owner.ListTilesetPreset[T].TilesetName);
-                cboTilesBack.Items.Add(Owner.ListTilesetPreset[T].TilesetName);
-                cboTilesLeft.Items.Add(Owner.ListTilesetPreset[T].TilesetName);
-                cboTilesRight.Items.Add(Owner.ListTilesetPreset[T].TilesetName);
+                cboTilesFront.Items.Add(Owner.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
+                cboTilesBack.Items.Add(Owner.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
+                cboTilesLeft.Items.Add(Owner.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
+                cboTilesRight.Items.Add(Owner.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
             }
 
             if (Owner.ListTilesetPreset.Count > 0)

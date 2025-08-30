@@ -6,9 +6,8 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -31,6 +30,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public bool CanBeCaptured;
         public byte VisionRange;
         public int HP;
+        public int CreditPerTurn;
         public bool Resupply;
 
 
@@ -61,6 +61,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             CanBeCaptured = BR.ReadBoolean();
             VisionRange = BR.ReadByte();
             HP = BR.ReadInt32();
+            CreditPerTurn = BR.ReadInt32();
             Resupply = BR.ReadBoolean();
 
             FS.Close();

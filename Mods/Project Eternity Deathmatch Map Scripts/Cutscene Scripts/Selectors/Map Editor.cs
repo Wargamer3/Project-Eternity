@@ -94,15 +94,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                         {
                             Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-                            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-                            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+                            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+                            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                             if (MouseX >= 0 && MouseY >= 0 && MouseX < BattleMapViewer.ActiveMap.MapSize.X && MouseY < BattleMapViewer.ActiveMap.MapSize.Y)
                             {
                                 Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, 0, true);
 
                                 Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                    PresetTile, 0, true);
+                                    PresetTile, 0, true, false);
                             }
                         }
                     }
@@ -250,13 +250,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (cboTiles.SelectedIndex >= 0)
             {
                 Rectangle TilePos = TilesetViewer.ListTileBrush[0];
-                Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+                Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                 TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                 if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                 {
-                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TileAttributesEditor.ActiveTerrain;
+                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TileAttributesEditor.ActiveTerrain;
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             bool AlreadyExist = false;
                             for (int P = 0; P < NewMap.ListTilesetPreset.Count; ++P)
                             {
-                                if (TerrainAttribute.ListTileset[T] == NewMap.ListTilesetPreset[P].TilesetName)
+                                if (TerrainAttribute.ListTileset[T] == NewMap.ListTilesetPreset[P].ArrayTilesetInformation[0].TilesetName)
                                 {
                                     AlreadyExist = true;
                                     break;
@@ -349,12 +349,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int T = 0; T < NewMap.ListTilesetPreset.Count; T++)
                         {
-                            if (!TerrainAttribute.ListTileset.Contains(NewMap.ListTilesetPreset[T].TilesetName))
+                            if (!TerrainAttribute.ListTileset.Contains(NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName))
                             {
-                                TerrainAttribute.ListTileset.Add(NewMap.ListTilesetPreset[T].TilesetName);
+                                TerrainAttribute.ListTileset.Add(NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
                             }
 
-                            ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, NewMap.ListTilesetPreset[T].TilesetName);
+                            ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
 
                             if (Item.Path != null)
                             {
@@ -369,7 +369,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                             else
                             {
-                                MessageBox.Show(NewMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
+                                MessageBox.Show(NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName + " not found, loading default tileset instead.");
                                 cboTiles.Items.Add("Default");
                             }
                         }
@@ -383,7 +383,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             int PosY = (int)ActiveTerrain.WorldPosition.Y;
                             DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
                             Helper.ReplaceTerrain(PosX, PosY, ActiveTerrain, 0, true);
-                            Helper.ReplaceTile(PosX, PosY, ActiveTile, 0, true);
+                            Helper.ReplaceTile(PosX, PosY, ActiveTile, 0, true, false);
                         }
 
                         BattleMapViewer.ActiveMap = NewMap;
@@ -415,10 +415,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
                             {
                                 string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
-                                Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
-                                string Output = BaseEditor.GetItemPathInRoot(BaseEditor.GUIRootPathMapTilesets, NewTileset.TilesetName);
+                                TilesetPreset NewTileset = TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
+                                string Output = BaseEditor.GetItemPathInRoot(BaseEditor.GUIRootPathMapTilesets, NewTileset.ArrayTilesetInformation[0].TilesetName);
                                 BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
-                                BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
+                                BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName));
 
                                 cboTiles.Items.Add(Name);
                                 TerrainAttribute.ListTileset.Add(Name);
@@ -433,7 +433,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 }
                                 Microsoft.Xna.Framework.Graphics.Texture2D Tile = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
 
-                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, BattleMapViewer.ActiveMap.TileSize.X, BattleMapViewer.ActiveMap.TileSize.Y, BattleMapViewer.ActiveMap.ListTilesetPreset.Count));
+                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(new TilesetPreset(Name, Tile.Width, Tile.Height, BattleMapViewer.ActiveMap.TileSize.X, BattleMapViewer.ActiveMap.TileSize.Y, BattleMapViewer.ActiveMap.ListTilesetPreset.Count));
                                 BattleMapViewer.ActiveMap.ListTileSet.Add(Tile);
                                 //Add the file name to the tile combo box.
                                 cboTiles.Items.Add(Name);
@@ -444,8 +444,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (BattleMapViewer.ActiveMap.ListTileSet.Count == 1)
                             {
-                                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[0].ArrayTerrain[0, 0];
-                                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[0].ArrayTiles[0, 0];
+                                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[0].ArrayTilesetInformation[0].ArrayTerrain[0, 0];
+                                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[0].ArrayTilesetInformation[0].ArrayTiles[0, 0];
 
                                 //Asign a new tile at the every position, based on its atribtues.
                                 for (int X = BattleMapViewer.ActiveMap.MapSize.X - 1; X >= 0; --X)
@@ -453,7 +453,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
                                         Helper.ReplaceTerrain(X, Y, PresetTerrain, 0, true);
-                                        Helper.ReplaceTile(X, Y, PresetTile, 0, true);
+                                        Helper.ReplaceTile(X, Y, PresetTile, 0, true, false);
                                     }
                                 }
                             }
@@ -488,11 +488,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                                     Helper.ReplaceTile(X, Y,
                                        new DrawableTile(
-                                           new Rectangle((X % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(0))) * ActiveMap.TileSize.X,
-                                                        (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
+                                           new Rectangle((X % (ActiveMap.ListTilesetPreset.Last().ArrayTilesetInformation[0].ArrayTerrain.GetLength(0))) * ActiveMap.TileSize.X,
+                                                        (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTilesetInformation[0].ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
                                                         ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
                                            cboTiles.Items.Count - 1),
-                                       0, true);
+                                       0, true, false);
                                 }
                             }
                         }

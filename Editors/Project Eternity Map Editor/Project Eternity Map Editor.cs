@@ -166,7 +166,7 @@ namespace ProjectEternity.Editors.MapEditor
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 
-            this.Text = ActiveMap.MapName + " - Project Eternity Deathmatch Map Editor";
+            this.Text = MapLogicName + " - Project Eternity Deathmatch Map Editor";
         }
 
         protected void InitMap(BattleMap NewMap)
@@ -405,10 +405,10 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; ++T)
                 {
-                    ActiveMap.ListTilesetPreset[T] = new Terrain.TilesetPreset(ActiveMap.ListTilesetPreset[T].TilesetName,
-                                                                                ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X,
-                                                                                ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y,
-                                                                                TileSize.X, TileSize.Y, T);
+                    ActiveMap.ListTilesetPreset[T] = new TilesetPreset(     ActiveMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName,
+                                                                            ActiveMap.ListTilesetPreset[T].ArrayTilesetInformation[0].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X,
+                                                                            ActiveMap.ListTilesetPreset[T].ArrayTilesetInformation[0].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y,
+                                                                            TileSize.X, TileSize.Y, T);
                 }
 
                 ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);

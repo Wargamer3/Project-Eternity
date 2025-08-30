@@ -36,12 +36,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tsmImportTileset = new System.Windows.Forms.ToolStripMenuItem();
             this.gbTileset = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cbTilesetType = new System.Windows.Forms.ComboBox();
-            this.txtTilesetName = new System.Windows.Forms.TextBox();
-            this.lblActiveTileset = new System.Windows.Forms.Label();
-            this.sclTileWidth = new System.Windows.Forms.HScrollBar();
-            this.sclTileHeight = new System.Windows.Forms.VScrollBar();
-            this.btnAddTile = new System.Windows.Forms.Button();
+            this.cboTilesetType = new System.Windows.Forms.ComboBox();
             this.gbTileInformation = new System.Windows.Forms.GroupBox();
             this.btnEditTerrainTypes = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -65,34 +60,12 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabTilesetMain = new System.Windows.Forms.TabPage();
-            this.viewerTilesetMain = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
-            this.tabTilesetRiver = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.viewerTilesetRiver = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
-            this.tabTilesetShoal = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
-            this.hScrollBar2 = new System.Windows.Forms.HScrollBar();
-            this.vScrollBar2 = new System.Windows.Forms.VScrollBar();
-            this.tilesetViewerControl1 = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
-            this.tabTilesetWaterfall = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
-            this.hScrollBar3 = new System.Windows.Forms.HScrollBar();
-            this.vScrollBar3 = new System.Windows.Forms.VScrollBar();
-            this.tilesetViewerControl2 = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
             this.mnuToolBar.SuspendLayout();
             this.gbTileset.SuspendLayout();
             this.gbTileInformation.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabTilesetMain.SuspendLayout();
-            this.tabTilesetRiver.SuspendLayout();
-            this.tabTilesetShoal.SuspendLayout();
-            this.tabTilesetWaterfall.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuToolBar
@@ -126,7 +99,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTileset.Controls.Add(this.label1);
-            this.gbTileset.Controls.Add(this.cbTilesetType);
+            this.gbTileset.Controls.Add(this.cboTilesetType);
             this.gbTileset.Location = new System.Drawing.Point(12, 27);
             this.gbTileset.Name = "gbTileset";
             this.gbTileset.Size = new System.Drawing.Size(471, 493);
@@ -142,70 +115,21 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.label1.TabIndex = 22;
             this.label1.Text = "Autotile type";
             // 
-            // cbTilesetType
+            // cboTilesetType
             // 
-            this.cbTilesetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTilesetType.FormattingEnabled = true;
-            this.cbTilesetType.Items.AddRange(new object[] {
+            this.cboTilesetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTilesetType.FormattingEnabled = true;
+            this.cboTilesetType.Items.AddRange(new object[] {
             "Normal",
             "Road",
             "Water",
             "Ocean",
             "Pipes"});
-            this.cbTilesetType.Location = new System.Drawing.Point(6, 32);
-            this.cbTilesetType.Name = "cbTilesetType";
-            this.cbTilesetType.Size = new System.Drawing.Size(227, 21);
-            this.cbTilesetType.TabIndex = 23;
-            this.cbTilesetType.SelectedIndexChanged += new System.EventHandler(this.cbTilesetType_SelectedIndexChanged);
-            // 
-            // txtTilesetName
-            // 
-            this.txtTilesetName.Location = new System.Drawing.Point(6, 19);
-            this.txtTilesetName.Name = "txtTilesetName";
-            this.txtTilesetName.ReadOnly = true;
-            this.txtTilesetName.Size = new System.Drawing.Size(227, 20);
-            this.txtTilesetName.TabIndex = 20;
-            // 
-            // lblActiveTileset
-            // 
-            this.lblActiveTileset.AutoSize = true;
-            this.lblActiveTileset.Location = new System.Drawing.Point(6, 3);
-            this.lblActiveTileset.Name = "lblActiveTileset";
-            this.lblActiveTileset.Size = new System.Drawing.Size(67, 13);
-            this.lblActiveTileset.TabIndex = 8;
-            this.lblActiveTileset.Text = "Active tileset";
-            // 
-            // sclTileWidth
-            // 
-            this.sclTileWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sclTileWidth.Location = new System.Drawing.Point(3, 379);
-            this.sclTileWidth.Name = "sclTileWidth";
-            this.sclTileWidth.Size = new System.Drawing.Size(431, 17);
-            this.sclTileWidth.TabIndex = 8;
-            this.sclTileWidth.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sclTileWidth_Scroll);
-            // 
-            // sclTileHeight
-            // 
-            this.sclTileHeight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sclTileHeight.Location = new System.Drawing.Point(434, 76);
-            this.sclTileHeight.Name = "sclTileHeight";
-            this.sclTileHeight.Size = new System.Drawing.Size(17, 303);
-            this.sclTileHeight.TabIndex = 7;
-            this.sclTileHeight.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sclTileHeight_Scroll);
-            // 
-            // btnAddTile
-            // 
-            this.btnAddTile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddTile.Location = new System.Drawing.Point(6, 52);
-            this.btnAddTile.Name = "btnAddTile";
-            this.btnAddTile.Size = new System.Drawing.Size(448, 23);
-            this.btnAddTile.TabIndex = 10;
-            this.btnAddTile.Text = "Select tileset";
-            this.btnAddTile.UseVisualStyleBackColor = true;
-            this.btnAddTile.Click += new System.EventHandler(this.btnAddTile_Click);
+            this.cboTilesetType.Location = new System.Drawing.Point(6, 32);
+            this.cboTilesetType.Name = "cboTilesetType";
+            this.cboTilesetType.Size = new System.Drawing.Size(227, 21);
+            this.cboTilesetType.TabIndex = 23;
+            this.cboTilesetType.SelectedIndexChanged += new System.EventHandler(this.cbTilesetType_SelectedIndexChanged);
             // 
             // gbTileInformation
             // 
@@ -436,195 +360,12 @@ namespace ProjectEternity.Editors.TilesetEditor
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabTilesetMain);
-            this.tabControl1.Controls.Add(this.tabTilesetRiver);
-            this.tabControl1.Controls.Add(this.tabTilesetShoal);
-            this.tabControl1.Controls.Add(this.tabTilesetWaterfall);
             this.tabControl1.Location = new System.Drawing.Point(12, 86);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(465, 428);
             this.tabControl1.TabIndex = 25;
-            // 
-            // tabTilesetMain
-            // 
-            this.tabTilesetMain.Controls.Add(this.btnAddTile);
-            this.tabTilesetMain.Controls.Add(this.sclTileWidth);
-            this.tabTilesetMain.Controls.Add(this.txtTilesetName);
-            this.tabTilesetMain.Controls.Add(this.sclTileHeight);
-            this.tabTilesetMain.Controls.Add(this.viewerTilesetMain);
-            this.tabTilesetMain.Controls.Add(this.lblActiveTileset);
-            this.tabTilesetMain.Location = new System.Drawing.Point(4, 22);
-            this.tabTilesetMain.Name = "tabTilesetMain";
-            this.tabTilesetMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTilesetMain.Size = new System.Drawing.Size(457, 402);
-            this.tabTilesetMain.TabIndex = 0;
-            this.tabTilesetMain.Text = "Main";
-            this.tabTilesetMain.UseVisualStyleBackColor = true;
-            // 
-            // viewerTilesetMain
-            // 
-            this.viewerTilesetMain.Location = new System.Drawing.Point(5, 76);
-            this.viewerTilesetMain.Name = "viewerTilesetMain";
-            this.viewerTilesetMain.Size = new System.Drawing.Size(426, 300);
-            this.viewerTilesetMain.TabIndex = 25;
-            this.viewerTilesetMain.Text = "tilesetViewerControl1";
-            this.viewerTilesetMain.Click += new System.EventHandler(this.viewerTileset_Click);
-            this.viewerTilesetMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.viewerTileset_MouseDown);
-            this.viewerTilesetMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.viewerTileset_MouseMove);
-            // 
-            // tabTilesetRiver
-            // 
-            this.tabTilesetRiver.Controls.Add(this.button1);
-            this.tabTilesetRiver.Controls.Add(this.hScrollBar1);
-            this.tabTilesetRiver.Controls.Add(this.vScrollBar1);
-            this.tabTilesetRiver.Controls.Add(this.viewerTilesetRiver);
-            this.tabTilesetRiver.Location = new System.Drawing.Point(4, 22);
-            this.tabTilesetRiver.Name = "tabTilesetRiver";
-            this.tabTilesetRiver.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTilesetRiver.Size = new System.Drawing.Size(457, 361);
-            this.tabTilesetRiver.TabIndex = 1;
-            this.tabTilesetRiver.Text = "River";
-            this.tabTilesetRiver.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(5, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(448, 23);
-            this.button1.TabIndex = 28;
-            this.button1.Text = "Select tileset";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // hScrollBar1
-            // 
-            this.hScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar1.Location = new System.Drawing.Point(5, 338);
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(431, 17);
-            this.hScrollBar1.TabIndex = 27;
-            // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar1.Location = new System.Drawing.Point(436, 35);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 303);
-            this.vScrollBar1.TabIndex = 26;
-            // 
-            // viewerTilesetRiver
-            // 
-            this.viewerTilesetRiver.Location = new System.Drawing.Point(4, 35);
-            this.viewerTilesetRiver.Name = "viewerTilesetRiver";
-            this.viewerTilesetRiver.Size = new System.Drawing.Size(449, 320);
-            this.viewerTilesetRiver.TabIndex = 29;
-            this.viewerTilesetRiver.Text = "tilesetViewerControl1";
-            // 
-            // tabTilesetShoal
-            // 
-            this.tabTilesetShoal.Controls.Add(this.button2);
-            this.tabTilesetShoal.Controls.Add(this.hScrollBar2);
-            this.tabTilesetShoal.Controls.Add(this.vScrollBar2);
-            this.tabTilesetShoal.Controls.Add(this.tilesetViewerControl1);
-            this.tabTilesetShoal.Location = new System.Drawing.Point(4, 22);
-            this.tabTilesetShoal.Name = "tabTilesetShoal";
-            this.tabTilesetShoal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTilesetShoal.Size = new System.Drawing.Size(457, 361);
-            this.tabTilesetShoal.TabIndex = 2;
-            this.tabTilesetShoal.Text = "Shoal";
-            this.tabTilesetShoal.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(5, 6);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(448, 23);
-            this.button2.TabIndex = 28;
-            this.button2.Text = "Select tileset";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // hScrollBar2
-            // 
-            this.hScrollBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar2.Location = new System.Drawing.Point(5, 338);
-            this.hScrollBar2.Name = "hScrollBar2";
-            this.hScrollBar2.Size = new System.Drawing.Size(431, 17);
-            this.hScrollBar2.TabIndex = 27;
-            // 
-            // vScrollBar2
-            // 
-            this.vScrollBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar2.Location = new System.Drawing.Point(436, 35);
-            this.vScrollBar2.Name = "vScrollBar2";
-            this.vScrollBar2.Size = new System.Drawing.Size(17, 303);
-            this.vScrollBar2.TabIndex = 26;
-            // 
-            // tilesetViewerControl1
-            // 
-            this.tilesetViewerControl1.Location = new System.Drawing.Point(4, 35);
-            this.tilesetViewerControl1.Name = "tilesetViewerControl1";
-            this.tilesetViewerControl1.Size = new System.Drawing.Size(449, 320);
-            this.tilesetViewerControl1.TabIndex = 29;
-            this.tilesetViewerControl1.Text = "tilesetViewerControl1";
-            // 
-            // tabTilesetWaterfall
-            // 
-            this.tabTilesetWaterfall.Controls.Add(this.button3);
-            this.tabTilesetWaterfall.Controls.Add(this.hScrollBar3);
-            this.tabTilesetWaterfall.Controls.Add(this.vScrollBar3);
-            this.tabTilesetWaterfall.Controls.Add(this.tilesetViewerControl2);
-            this.tabTilesetWaterfall.Location = new System.Drawing.Point(4, 22);
-            this.tabTilesetWaterfall.Name = "tabTilesetWaterfall";
-            this.tabTilesetWaterfall.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTilesetWaterfall.Size = new System.Drawing.Size(457, 361);
-            this.tabTilesetWaterfall.TabIndex = 3;
-            this.tabTilesetWaterfall.Text = "Waterfall";
-            this.tabTilesetWaterfall.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(5, 6);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(448, 23);
-            this.button3.TabIndex = 28;
-            this.button3.Text = "Select tileset";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // hScrollBar3
-            // 
-            this.hScrollBar3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar3.Location = new System.Drawing.Point(5, 338);
-            this.hScrollBar3.Name = "hScrollBar3";
-            this.hScrollBar3.Size = new System.Drawing.Size(431, 17);
-            this.hScrollBar3.TabIndex = 27;
-            // 
-            // vScrollBar3
-            // 
-            this.vScrollBar3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar3.Location = new System.Drawing.Point(436, 35);
-            this.vScrollBar3.Name = "vScrollBar3";
-            this.vScrollBar3.Size = new System.Drawing.Size(17, 303);
-            this.vScrollBar3.TabIndex = 26;
-            // 
-            // tilesetViewerControl2
-            // 
-            this.tilesetViewerControl2.Location = new System.Drawing.Point(4, 35);
-            this.tilesetViewerControl2.Name = "tilesetViewerControl2";
-            this.tilesetViewerControl2.Size = new System.Drawing.Size(449, 320);
-            this.tilesetViewerControl2.TabIndex = 29;
-            this.tilesetViewerControl2.Text = "tilesetViewerControl1";
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // ProjectEternityAutotileTilesetPresetEditor
             // 
@@ -646,12 +387,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabTilesetMain.ResumeLayout(false);
-            this.tabTilesetMain.PerformLayout();
-            this.tabTilesetRiver.ResumeLayout(false);
-            this.tabTilesetShoal.ResumeLayout(false);
-            this.tabTilesetWaterfall.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -661,13 +396,8 @@ namespace ProjectEternity.Editors.TilesetEditor
         private System.Windows.Forms.MenuStrip mnuToolBar;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.GroupBox gbTileset;
-        private System.Windows.Forms.Button btnAddTile;
-        private System.Windows.Forms.Label lblActiveTileset;
-        private TextBox txtTilesetName;
         private Label label1;
-        private ComboBox cbTilesetType;
-        private HScrollBar sclTileWidth;
-        private VScrollBar sclTileHeight;
+        private ComboBox cboTilesetType;
         private GroupBox gbTileInformation;
         private Button btnDeleteBattleAnimationBackground;
         private Button btnNewBattleAnimationBackground;
@@ -686,28 +416,11 @@ namespace ProjectEternity.Editors.TilesetEditor
         private ToolStripMenuItem tsmImportTileset;
         private GroupBox groupBox2;
         private GroupBox groupBox1;
-        private GameScreens.BattleMapScreen.TilesetViewerControl viewerTilesetMain;
         private Label lblBattleAnimationForeground;
         private ComboBox cboBattleAnimationForeground;
         private Label lblBattleAnimationBackground;
         private ComboBox cboBattleAnimationBackground;
         private Button btnEditTerrainTypes;
         private TabControl tabControl1;
-        private TabPage tabTilesetMain;
-        private TabPage tabTilesetRiver;
-        private Button button1;
-        private HScrollBar hScrollBar1;
-        private VScrollBar vScrollBar1;
-        private GameScreens.BattleMapScreen.TilesetViewerControl viewerTilesetRiver;
-        private TabPage tabTilesetShoal;
-        private Button button2;
-        private HScrollBar hScrollBar2;
-        private VScrollBar vScrollBar2;
-        private GameScreens.BattleMapScreen.TilesetViewerControl tilesetViewerControl1;
-        private TabPage tabTilesetWaterfall;
-        private Button button3;
-        private HScrollBar hScrollBar3;
-        private VScrollBar vScrollBar3;
-        private GameScreens.BattleMapScreen.TilesetViewerControl tilesetViewerControl2;
     }
 }

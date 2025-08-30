@@ -138,7 +138,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
 
-            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            ListTilesetPreset = new List<TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             Params.ActiveParser = new SorcererStreetFormulaParser(Params);
@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CursorPositionVisible = CursorPosition;
 
             ListTileSet = new List<Texture2D>();
-            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            ListTilesetPreset = new List<TilesetPreset>();
             Camera2DPosition = Vector3.Zero;
 
             if (GameInfo == null)
@@ -453,7 +453,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TogglePreview(BackgroundOnly);
         }
 
-        protected override Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        protected override TilesetPreset ReadTileset(BinaryReader BR, int Index)
         {
             return new SorcererStreetTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }

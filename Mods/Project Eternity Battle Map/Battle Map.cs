@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected float CursorHoldTime;
 
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
-        public List<Terrain.TilesetPreset> ListTilesetPreset;
+        public List<TilesetPreset> ListTilesetPreset;
         public List<string> ListBattleBackgroundAnimationPath;
         public UnitAndTerrainValues TerrainRestrictions;
 
@@ -349,10 +349,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected void SaveTilesets(BinaryWriter BW)
         {
-            //Tile sets
-            BW.Write(ListTilesetPreset.Count);
+            int RealTilesetCount = 0;
             for (int T = 0; T < ListTilesetPreset.Count; T++)
             {
+                if (ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
+                ++RealTilesetCount;
+            }
+
+            BW.Write(RealTilesetCount);
+            for (int T = 0; T < ListTilesetPreset.Count; T++)
+            {
+                if (ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
                 ListTilesetPreset[T].Write(BW);
             }
 
@@ -541,9 +556,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        protected virtual Terrain.TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        protected virtual TilesetPreset ReadTileset(BinaryReader BR, int Index)
         {
-            return new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+            return new TilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
         protected void LoadTilesets(BinaryReader BR)
@@ -552,15 +567,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                ListTilesetPreset.Add(ReadTileset(BR, T));
+                TilesetPreset LoadedTileset = ReadTileset(BR, T);
+                ListTilesetPreset.Add(LoadedTileset);
 
                 #region Load Tilesets
 
-                string SpritePath = ListTilesetPreset[T].TilesetName;
+                string SpritePath = ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName;
 
                 if (Content != null)
                 {
-                    if (ListTilesetPreset[T].TilesetType == Terrain.TilesetPreset.TilesetTypes.Regular)
+                    if (ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
                     {
                         if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
                             ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
@@ -577,6 +593,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 #endregion
+
+
+                for (int i = 1; i < LoadedTileset.ArrayTilesetInformation.Length; i++)
+                {
+                    SpritePath = ListTilesetPreset[T].ArrayTilesetInformation[i].TilesetName;
+                    TilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
+                    ListTilesetPreset.Add(ExtraTileset);
+
+                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                    else
+                        ListTileSet.Add(null);
+                }
             }
 
             int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();

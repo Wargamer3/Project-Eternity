@@ -9,5 +9,15 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             InitializeComponent();
         }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabInfrastructure_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

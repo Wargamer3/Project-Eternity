@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             ListTileSet = new List<Texture2D>();
             ListTileSetPath = new List<string>();
-            ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            ListTilesetPreset = new List<TilesetPreset>();
             ListZone = new List<MapZoneInfo>();
             ListConsumable = new List<MapConsumable>();
             ListLayer = new List<MapLayer>();

@@ -12,14 +12,14 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             if (cboTiles.SelectedIndex >= 0)
             {
                 Rectangle TilePos = BattleMapViewer.TilesetViewer.ListTileBrush[0];
-                Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+                Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                 TileAttributes TA = new TileAttributes();
                 TA.Init(SelectedTerrain, ActiveMap);
 
                 if (TA.ShowDialog() == DialogResult.OK)
                 {
-                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TA.ActiveTerrain;
+                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TA.ActiveTerrain;
                 }
             }
         }

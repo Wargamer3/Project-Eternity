@@ -2,12 +2,34 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetTilesetPreset : TilesetPreset
     {
+        public class SorcererStreetTilesetPresetInformation : TilesetPresetInformation
+        {
+            public SorcererStreetTilesetPresetInformation(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+                : base(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex)
+            {
+            }
+
+            public SorcererStreetTilesetPresetInformation(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex)
+                : base(BR, TileSizeX, TileSizeY, TilesetIndex)
+            {
+            }
+
+            public override Terrain CreateTerrain(int X, int Y, int TileSizeX, int TileSizeY)
+            {
+                return new TerrainSorcererStreet(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
+            }
+
+            protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
+            {
+                return new TerrainSorcererStreet(BR, X, Y, 0, 0, LayerIndex, 0, LayerDepth);
+            }
+        }
+
         public SorcererStreetTilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             :base (TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex)
         {
@@ -18,14 +40,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        protected override Terrain CreateTerrain(int X, int Y, int TileSizeX, int TileSizeY)
+        protected override TilesetPresetInformation CreateTerrain(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
-            return new TerrainSorcererStreet(X, Y, TileSizeX, TileSizeY, 0, 0, 0);
+            return new SorcererStreetTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
         }
 
-        protected override Terrain ReadTerrain(BinaryReader BR, int X, int Y, int LayerIndex, int LayerDepth)
+        protected override TilesetPresetInformation ReadTerrain(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
-            return new TerrainSorcererStreet(BR, X, Y, 0, 0, LayerIndex, 0, LayerDepth);
+            return new SorcererStreetTilesetPresetInformation(BR, TileSizeX, TileSizeY, TilesetIndex);
         }
     }
 

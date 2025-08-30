@@ -9,6 +9,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
+using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
@@ -19,7 +20,9 @@ namespace ProjectEternity.Editors.TilesetEditor
             string[] GetTerrainTypes();
             void OnTerrainSelected(Terrain SelectedTerrain);
             void EditTerrainTypes();
-            Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
+            TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
+            TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
+            string GetEditorPath();
         }
 
         public class DeathmatchTilesetPresetHelper : ITilesetPresetHelper
@@ -44,14 +47,24 @@ namespace ProjectEternity.Editors.TilesetEditor
                 };
             }
 
-            public Terrain.TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                return new TilesetPreset(BR, TileSizeX, TileSizeY, 0);
+            }
+
+            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
             {
                 throw new NotImplementedException();
+            }
+
+            public string GetEditorPath()
+            {
+                return GUIRootPathMapTilesetImages;
             }
         }
 
@@ -114,7 +127,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             BW.Write(TileSize.Y);
 
             BW.Write(TilesetName);
-            BW.Write((byte)Terrain.TilesetPreset.TilesetTypes.Regular);
+            BW.Write((byte)TilesetPreset.TilesetTypes.Regular);
 
             BW.Write(ArrayTerrain.GetLength(0));
             BW.Write(ArrayTerrain.GetLength(1));
@@ -154,7 +167,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
-            Terrain.TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
+            TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
 
             BR.Close();
             FS.Close();
@@ -178,10 +191,10 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
 
 
-            TilesetName = NewTilesetPreset.TilesetName;
+            TilesetName = NewTilesetPreset.ArrayTilesetInformation[0].TilesetName;
 
-            ArrayTerrain = NewTilesetPreset.ArrayTerrain;
-            ArrayTiles = NewTilesetPreset.ArrayTiles;
+            ArrayTerrain = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTerrain;
+            ArrayTiles = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTiles;
 
             viewerTileset.Preload();
             if (!string.IsNullOrWhiteSpace(TilesetName))
@@ -205,7 +218,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         private void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapTilesetImages));
+            ListMenuItemsSelected(ShowContextMenuWithItem(Helper.GetEditorPath()));
         }
 
         private void InitTileset(string TilesetName)

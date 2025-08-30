@@ -107,7 +107,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
             }
 
-            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
                 
@@ -216,7 +216,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 throw new NotImplementedException();
             }
 
-            public Terrain.TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -225,7 +225,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
@@ -235,7 +235,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 return NewTilesetPreset;
             }
 
-            public Terrain.TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
             {
                 FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
@@ -244,7 +244,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                Terrain.TilesetPreset NewTilesetPreset = new Terrain.TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
@@ -256,7 +256,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
             public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+                ActiveMap.ListTilesetPreset.Add(new TilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
             }
         }
 
