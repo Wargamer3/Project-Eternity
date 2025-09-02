@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (CursorMoved)
             {
-                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X, GridOffset.Y, 1f, 15f, out _);
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X * TileSize.X, GridOffset.Y * TileSize.Y, 1f, 15f, out _);
 
                 if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
                 {
@@ -154,7 +154,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             Vector2 PositionInTile = new Vector2(WorldPosition.X - ActiveTerrain.WorldPosition.X, WorldPosition.Y - ActiveTerrain.WorldPosition.Y);
 
-            return WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
+            return ActiveTerrain.WorldPosition + new Vector3(PositionInTile, ActiveTile.Terrain3DInfo.GetZOffset(PositionInTile, ActiveTerrain.Height));
         }
 
         public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, ConquestMap ActiveMap)
@@ -176,7 +176,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
         {
-            return GetFinalPosition(new Vector3(WorldPosition.X, WorldPosition.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
+            return GetFinalPosition(new Vector3(WorldPosition.X + Movement.X, WorldPosition.Y + Movement.Y, GetNextLayerTile(GetTerrain(WorldPosition), Movement.X, Movement.Y, 1f, 15f, out _).Z));
         }
 
         public List<Vector3> GetPathToTerrain(MovementAlgorithmTile ActiveTerrain, Vector3 Position)

@@ -55,10 +55,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].WorldPosition.X, (int)ListMVChoice[M].WorldPosition.Y, (int)ListMVChoice[M].WorldPosition.Z);
+                    TerrainConquest ActiveTerrain = Map.GetTerrain(ListMVChoice[M].WorldPosition);
 
+                    int BuildingIndex = Map.CheckForBuildingPosition(ListMVChoice[M].WorldPosition);
                     //Check if the Terrain is a building.
-                    if (ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex && ActiveTerrain.TerrainTypeIndex >= 13)
+                    if (BuildingIndex >= 0 && Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex)
                     {
                         //Movement initialisation.
                         Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[M].WorldPosition);
@@ -78,13 +79,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (ActiveUnit.CanMove)
             {
                 TerrainConquest ActiveTerrain = Map.GetTerrain(ActiveUnit.Components);
+                int BuildingIndex = Map.CheckForBuildingPosition(ActiveUnit.Components.Position);
 
                 // Can't move and on a building not owned by the current Player, try to capture it
-                if (!ActiveUnit.CanMove && ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex && ActiveTerrain.TerrainTypeIndex >= 13)
+                if (!ActiveUnit.CanMove && BuildingIndex >= 0 && Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex)
                 {
-                    ActiveTerrain.CapturePoints = Math.Max(0, ActiveTerrain.CapturePoints - ActiveUnit.HP);
-                    if (ActiveTerrain.CapturePoints == 0)
-                        ActiveTerrain.CapturedPlayerIndex = Map.ActivePlayerIndex;
+                    Map.ListBuilding[BuildingIndex].CurrentHP = Math.Max(0, Map.ListBuilding[BuildingIndex].CurrentHP - ActiveUnit.HP);
+                    if (Map.ListBuilding[BuildingIndex].CurrentHP == 0)
+                        Map.ListBuilding[BuildingIndex].CapturedTeamIndex = Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex;
 
                     ActiveUnit.EndTurn();
                 }

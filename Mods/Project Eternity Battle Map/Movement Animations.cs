@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UpdatedPosition.Y = NextPosition.Y;
                 }
 
-                UpdatedPosition = Map.GetNextPosition(DicMovingMapUnitByPosition[ActiveUnitMap.Key], UpdatedPosition);
+                UpdatedPosition = Map.GetNextPosition(DicMovingMapUnitByPosition[ActiveUnitMap.Key], UpdatedPosition - DicMovingMapUnitByPosition[ActiveUnitMap.Key]);
 
                 DicMovingMapUnitByPosition[ActiveUnitMap.Key] = UpdatedPosition;
 
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListRemovedSquad.Clear();
 
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased() || InputHelper.InputCancelPressed())
+            if (InputHelper.InputConfirmPressed() || InputHelper.InputCancelReleased())
             {
                 Map.OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(Map));
             }

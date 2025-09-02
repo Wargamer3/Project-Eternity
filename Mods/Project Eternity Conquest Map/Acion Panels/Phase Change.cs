@@ -7,8 +7,8 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -185,6 +185,23 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
 
                 ActiveUnit.OnPlayerPhaseStart(Map.ActivePlayerIndex, null);
+            }
+
+            for (int B = 0; B < Map.ListBuilding.Count; ++B)
+            {
+                //Loop through the players to find a Unit to control.
+                for (int P = 0; P < Map.ListPlayer.Count; P++)
+                {
+                    //Find if a Unit is under the cursor.
+                    int CursorSelect = Map.CheckForUnitAtPosition(P, Map.CursorPosition, Vector3.Zero);
+
+                    //If one was found.
+                    if (CursorSelect < 0)
+                    {
+                        Map.ListBuilding[B].CurrentHP = Map.ListBuilding[B].MaxHP;
+                        break;
+                    }
+                }
             }
         }
 
@@ -406,7 +423,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 else
                 {
-                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map));
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map, Map.ActivePlayerIndex));
                 }
             }
         }

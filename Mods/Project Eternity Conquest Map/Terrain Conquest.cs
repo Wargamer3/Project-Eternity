@@ -17,8 +17,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     //http://strategywiki.org/wiki/Advance_Wars:_Days_of_Ruin/Getting_Started
     //http://www.gamefaqs.com/ds/943675-advance-wars-days-of-ruin/faqs/51639
     //http://www.gamesradar.com/cheats/13550/
-    //http://Conquest.wikia.com/wiki/Terrain
-    //http://Conquest.wikia.com/wiki/Building
+    //http://AdvanceWars.wikia.com/wiki/Terrain
+    //http://AdvanceWars.wikia.com/wiki/Building
     //http://www.advance-wars-net.com/?g=awdor&a=articles/awdor/Terrain.html
     //http://ca.ign.com/wikis/advance-wars-2-black-hole-rising/Basics
     //http://ticc.uvt.nl/~pspronck/pubs/BNAIC2008Bergsma.pdf
@@ -150,9 +150,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
     public class TerrainConquest : Terrain
     {
-        public int CapturePoints;
-        public int CapturedPlayerIndex;//Index of the player which captured the Property.
-
         public TerrainConquest(Terrain Other, Point Position, int LayerIndex)
             : base(Other, Position, LayerIndex)
         {
@@ -164,8 +161,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
             : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
-            TerrainTypeIndex = 0;
-            CapturedPlayerIndex = -1;
         }
 
         public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
@@ -175,19 +170,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         public TerrainConquest(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
-            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+            : base(BR, XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
-            TerrainTypeIndex = BR.ReadByte();
-
-            if (TerrainTypeIndex >= 13)
-                CapturePoints = 20;
-            else
-                CapturePoints = -1;
-        }
-
-        public override void Save(BinaryWriter BW)
-        {
-            BW.Write(TerrainTypeIndex);
         }
     }
 }

@@ -15,19 +15,23 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ActivePlayerIndex;
         private int ActiveUnitIndex;
         private UnitConquest ActiveUnit;
+        private int ActiveBuildingIndex;
+        private BuildingConquest ActiveBuilding;
 
         public ActionPanelCapture(ConquestMap Map)
             : base(PanelName, Map)
         {
         }
 
-        public ActionPanelCapture(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex)
+        public ActionPanelCapture(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex, int ActiveBuildingIndex)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveUnitIndex = ActiveUnitIndex;
+            this.ActiveBuildingIndex = ActiveBuildingIndex;
 
             ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
+            ActiveBuilding = Map.ListBuilding[ActiveBuildingIndex];
         }
 
         public override void OnSelect()
@@ -36,11 +40,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
             TerrainConquest ActiveTerrain = Map.GetTerrain(ActiveUnit.Components);
 
-            if (ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex)
+            if (ActiveBuilding.CapturedTeamIndex != Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex)
             {
-                ActiveTerrain.CapturePoints = Math.Max(0, ActiveTerrain.CapturePoints - ActiveUnit.HP);
-                if (ActiveTerrain.CapturePoints == 0)
-                    ActiveTerrain.CapturedPlayerIndex = Map.ActivePlayerIndex;
+                ActiveBuilding.CurrentHP = Math.Max(0, ActiveBuilding.CurrentHP - ActiveUnit.HP);
+                if (ActiveBuilding.CurrentHP == 0)
+                    ActiveBuilding.CapturedTeamIndex = Map.ActivePlayerIndex;
             }
 
             RemoveAllSubActionPanels();

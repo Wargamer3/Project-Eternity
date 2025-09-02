@@ -980,12 +980,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             bool RightOceanTileValid = false;
             bool DownOceanTileValid = false;
 
-            bool UpLeftOceanTileValid = false;
-            bool UpRightOceanTileValid = false;
-            bool DownLeftOceanTileValid = false;
-            bool DownRightOceanTileValid = false;
-
-            //Find River tile
+            //Find River tile behind
             if (GridX > 0)
             {
                 LeftRiverTileValid = Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 1;
@@ -1011,15 +1006,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (GridY > 0)
             {
                 UpOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex];
-
-                if (GridX > 0)
-                {
-                    UpLeftOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex];
-                }
-                if (GridX < ArrayTile.GetLength(0) - 1)
-                {
-                    UpRightOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex];
-                }
             }
             if (GridX < ArrayTile.GetLength(0) - 1)
             {
@@ -1028,15 +1014,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (GridY < ArrayTile.GetLength(1) - 1)
             {
                 DownOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex];
-
-                if (GridX > 0)
-                {
-                    DownLeftOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex];
-                }
-                if (GridX < ArrayTile.GetLength(0) - 1)
-                {
-                    DownRightOceanTileValid = Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex];
-                }
             }
 
             if (LeftRiverTileValid && RightOceanTileValid && UpOceanTileValid && DownOceanTileValid)

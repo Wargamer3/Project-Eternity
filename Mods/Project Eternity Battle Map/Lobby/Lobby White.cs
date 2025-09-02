@@ -535,10 +535,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
         }
 
-        protected virtual void CreateARoom()
+        protected virtual CreateRoomScreen CreateARoom()
         {
-            PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
+            CreateRoomScreen NewScreen = new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, "");
+
+            PushScreen(NewScreen);
             sndButtonClick.Play();
+
+            return NewScreen;
         }
 
         protected virtual void OpenInfo()

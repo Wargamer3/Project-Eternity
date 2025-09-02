@@ -116,6 +116,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     Owner.CursorPosition = Owner.ListPlayer[0].ListUnit[0].Position;
                 }
             }
+
+
+            for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
+
+                for (int B = 0; B < ActiveLayer.ListBuildingSpawn.Count; B++)
+                {
+                    Vector3 SpawnPosition = new Vector3(ActiveLayer.ListBuildingSpawn[B].SpawnPositionX * Owner.TileSize.X, ActiveLayer.ListBuildingSpawn[B].SpawnPositionY * Owner.TileSize.Y, ActiveLayer.ListBuildingSpawn[B].SpawnLayer);
+                    BuildingConquest NewBuilding = new BuildingConquest(ActiveLayer.ListBuildingSpawn[B].BuildingPath, GameScreens.GameScreen.ContentFallback, null, null, null);
+                    Owner.SpawnBuilding(PlayerIndex, NewBuilding, 0, SpawnPosition);
+                }
+            }
         }
 
         public int GetRemainingResapwn(int PlayerIndex)

@@ -47,7 +47,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapTilesetPresetsConquest;
+                return GUIRootPathMapTilesetPresets;
             }
         }
 

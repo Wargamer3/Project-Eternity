@@ -7,9 +7,9 @@ namespace ProjectEternity.AI.ConquestMapScreen
 {
     public sealed partial class ConquestScriptHolder
     {
-        public class EndSquadTurn : ConquestScript, ScriptEvaluator
+        public class AIEndSquadTurn : ConquestScript, ScriptEvaluator
         {
-            public EndSquadTurn()
+            public AIEndSquadTurn()
                 : base(150, 50, "End Squad Turn Conquest", new string[0], new string[0])
             {
             }
@@ -25,7 +25,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
             public override AIScript CopyScript()
             {
-                return new EndSquadTurn();
+                return new AIEndSquadTurn();
             }
         }
     }

@@ -190,17 +190,19 @@ namespace ProjectEternity.Editors.TilesetEditor
                 cboBattleAnimationForeground.Items.Add(BattleBackgroundAnimationPath);
             }
 
+            if (NewTilesetPreset.ArrayTilesetInformation.Length > 0)
+            {
+                TilesetName = NewTilesetPreset.ArrayTilesetInformation[0].TilesetName;
 
-            TilesetName = NewTilesetPreset.ArrayTilesetInformation[0].TilesetName;
+                ArrayTerrain = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTerrain;
+                ArrayTiles = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTiles;
 
-            ArrayTerrain = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTerrain;
-            ArrayTiles = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTiles;
+                viewerTileset.Preload();
+                if (!string.IsNullOrWhiteSpace(TilesetName))
+                    InitTileset(TilesetName);
 
-            viewerTileset.Preload();
-            if (!string.IsNullOrWhiteSpace(TilesetName))
-                InitTileset(TilesetName);
-
-            SelectTile(0, 0);
+                SelectTile(0, 0);
+            }
         }
 
         protected virtual void InitHelper()

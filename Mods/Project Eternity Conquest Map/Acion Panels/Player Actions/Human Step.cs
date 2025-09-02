@@ -8,7 +8,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelPlayerHumanStep : ActionPanelConquest
     {
-        public ActionPanelPlayerHumanStep(ConquestMap Map)
+        private int ActivePlayerIndex;
+
+        public ActionPanelPlayerHumanStep(ConquestMap Map, int ActivePlayerIndex)
             : base("Player Default", Map)
         {
         }
@@ -32,7 +34,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     //If one was found.
                     if (CursorSelect >= 0)
                     {
-                        if (P == Map.ActivePlayerIndex)//Ally.
+                        if (P == ActivePlayerIndex)//Ally.
                         {
                             AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, P, CursorSelect, Map.GetTerrainUnderCursor()));
                         }
@@ -43,13 +45,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     }
                 }
                 //No unit, search for captured building.
-                if (ActiveUnit == null && Map.CursorPosition.X >= 0 && Map.CursorPosition.X < Map.MapSize.X
-                    && Map.CursorPosition.Y >= 0 && Map.CursorPosition.Y < Map.MapSize.Y)
+                if (ActiveUnit == null)
                 {
-                    if (Map.GetTerrain((int)Map.CursorPosition.X, (int)Map.CursorPosition.Y, 0).TerrainTypeIndex >= 13 &&
-                        Map.GetTerrain((int)Map.CursorPosition.X, (int)Map.CursorPosition.Y, 0).CapturedPlayerIndex == Map.ActivePlayerIndex)
+                    int BuildingIndex = Map.CheckForBuildingPosition(Map.CursorPosition);
+
+                    if (BuildingIndex >= 0)
                     {
-                        AddToPanelListAndSelect(new ActionPanelPlayerBuildingUnitSelected(Map));
+                        if (Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
+                        {
+                            AddToPanelListAndSelect(new ActionPanelPlayerBuildingUnitSelected(Map, ActivePlayerIndex, BuildingIndex));
+                        }
+                        else
+                        {
+                        }
                     }
                 }
 
@@ -72,7 +80,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelPlayerHumanStep(Map);
+            return new ActionPanelPlayerHumanStep(Map, ActivePlayerIndex);
         }
 
         public override void Draw(CustomSpriteBatch g)

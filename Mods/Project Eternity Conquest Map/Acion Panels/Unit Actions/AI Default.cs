@@ -47,10 +47,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     continue;
                 }
 
+                int BuildingIndex = Map.CheckForBuildingPosition(ActiveUnit.Components.Position);
                 //Capture building on self
-                if (UnitTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex)
+                if (Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex)
                 {
-                    AddToPanelListAndSelect(new ActionPanelCapture(Map, Map.ActivePlayerIndex, U));
+                    AddToPanelListAndSelect(new ActionPanelCapture(Map, Map.ActivePlayerIndex, U, BuildingIndex));
                 }
                 else
                 {

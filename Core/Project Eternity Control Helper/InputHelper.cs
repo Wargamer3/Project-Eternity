@@ -91,7 +91,7 @@
                 if (KeyboardHelper.KeyReleased(KeyboardHelper.ConfirmChoice[K]))
                     return true;
 
-            return MouseHelper.InputLeftButtonPressed();
+            return MouseHelper.InputLeftButtonReleased();
         }
         public static bool InputCancelReleased()
         {
@@ -99,7 +99,7 @@
                 if (KeyboardHelper.KeyReleased(KeyboardHelper.CancelChoice[K]))
                     return true;
 
-            return MouseHelper.InputRightButtonPressed();
+            return MouseHelper.InputRightButtonReleased();
         }
         public static bool InputCommand1Released()
         {

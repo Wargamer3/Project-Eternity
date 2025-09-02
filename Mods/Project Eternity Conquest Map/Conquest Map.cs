@@ -58,16 +58,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public Dictionary<string, List<string>> DicWeapon2EffectiveAgainst;//Unit Name, Target Name.
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon1;//Unit Name, <Target Name, Damage>.
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon2;//Unit Name, <Target Name, Damage>.
-        public Dictionary<string, int> DicUnitCost;//Unit name, how much it cost to build.
-        public int BuildingMenuCursor;
-        public List<string> ListCurrentBuildingChoice;
-        public Dictionary<string, List<string>> DicBuildingChoice;//Build type, list of units.
         public Vector3 LastPosition;
 
         private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
         public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
         public List<Player> ListAllPlayer { get { return ListPlayer; } }
+
+        public List<BuildingConquest> ListBuilding;
 
         public List<DelayedAttack> ListDelayedAttack;
         public List<PERAttack> ListPERAttack;
@@ -160,6 +158,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListMutator = new List<ConquestMutator>();
             DicTemporaryTerrain = new Dictionary<Vector3, TerrainConquest>();
             TerrainHolder = new ConquestTerrainHolder();
+            ListBuilding = new List<BuildingConquest>();
         }
 
         public ConquestMap(GameModeInfo GameInfo, ConquestParams Params)
@@ -169,11 +168,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListTilesetPreset = new List<TilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveUnitIndex = -1;
-
-            ListCurrentBuildingChoice = new List<string>();
-
-            ListTileSet = new List<Texture2D>();
-            this.Camera2DPosition = Vector3.Zero;
 
             if (GameInfo == null)
             {
@@ -234,8 +228,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListPlayer.Add(NewPlayer);
 
             PopulateUnitMovementCost();
-            PopulateUnitCost();
-            PopulateBuildingChoice();
             PopulateUnitDamageWeapon1();
             PopulateUnitDamageWeapon2();
 
@@ -1065,48 +1057,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicUnitDamageWeapon2.Add("Rig", new Dictionary<string, int>());
         }
 
-        public void PopulateUnitCost()
-        {
-            DicUnitCost = new Dictionary<string, int>();
-
-            DicUnitCost.Add("Infantry", 1000);
-            DicUnitCost.Add("Mech", 2500);
-            DicUnitCost.Add("Bike", 2500);
-            DicUnitCost.Add("Recon", 4000);
-            DicUnitCost.Add("Flare", 5000);
-            DicUnitCost.Add("Anti-Air", 7000);
-            DicUnitCost.Add("Tank", 7000);
-            DicUnitCost.Add("Medium Tank", 12000);
-            DicUnitCost.Add("War Tank", 16000);
-            DicUnitCost.Add("Anti-Tank", 11000);
-            DicUnitCost.Add("Artillery", 6000);
-            DicUnitCost.Add("Rockets", 15000);
-            DicUnitCost.Add("Missiles", 12000);
-            DicUnitCost.Add("Rig", 5000);
-        }
-
-        public void PopulateBuildingChoice()
-        {
-            DicBuildingChoice = new Dictionary<string, List<string>>();
-
-            DicBuildingChoice.Add("Infantry", new List<string>());
-            DicBuildingChoice["Infantry"].Add("Infantry");
-            DicBuildingChoice["Infantry"].Add("Mech");
-            DicBuildingChoice["Infantry"].Add("Bike");
-            DicBuildingChoice.Add("Vehicle", new List<string>());
-            DicBuildingChoice["Vehicle"].Add("Recon");
-            DicBuildingChoice["Vehicle"].Add("Flare");
-            DicBuildingChoice["Vehicle"].Add("Anti-Air");
-            DicBuildingChoice["Vehicle"].Add("Tank");
-            DicBuildingChoice["Vehicle"].Add("Medium Tank");
-            DicBuildingChoice["Vehicle"].Add("War Tank");
-            DicBuildingChoice["Vehicle"].Add("Artillery");
-            DicBuildingChoice["Vehicle"].Add("Anti-Tank");
-            DicBuildingChoice["Vehicle"].Add("Rockets");
-            DicBuildingChoice["Vehicle"].Add("Missiles");
-            DicBuildingChoice["Vehicle"].Add("Rig");
-        }
-
         public void Reset()
         {
             LayerManager.LayerHolderDrawable.Reset();
@@ -1203,27 +1153,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }*/
         }
 
-        public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
+        public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 WorldPosition, Vector3 Displacement)
         {
-            return CheckForUnitAtPosition(PlayerIndex, Position, Displacement) >= 0;
+            return CheckForUnitAtPosition(PlayerIndex, WorldPosition, Displacement) >= 0;
         }
 
-        public override bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement)
+        public override bool CheckForObstacleAtPosition(Vector3 WorldPosition, Vector3 Displacement)
         {
             bool ObstacleFound = false;
 
             for (int P = 0; P < ListPlayer.Count && !ObstacleFound; P++)
-                ObstacleFound = CheckForObstacleAtPosition(P, Position, Displacement);
+                ObstacleFound = CheckForObstacleAtPosition(P, WorldPosition, Displacement);
 
             return ObstacleFound;
         }
 
-        public int CheckForUnitAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
+        public int CheckForUnitAtPosition(int PlayerIndex, Vector3 WorldPosition, Vector3 Displacement)
         {
             if (ListPlayer[PlayerIndex].ListUnit.Count == 0)
                 return -1;
 
-            Vector3 FinalPosition = Position + Displacement;
+            Vector3 FinalPosition = WorldPosition + Displacement;
 
             if (!IsInsideMap(FinalPosition))
                 return -1;
@@ -1246,6 +1196,28 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             //If a Unit was founded.
             if (SquadFound)
                 return S;
+
+            return -1;
+        }
+
+        public int CheckForBuildingPosition(Vector3 WorldPosition)
+        {
+            Vector3 FinalPosition = WorldPosition;
+
+            if (!IsInsideMap(FinalPosition))
+                return -1;
+
+            Vector3 GridPosition = ConvertToGridPosition(FinalPosition);
+
+            for (int B = 0; B < ListBuilding.Count; B++)
+            {
+                Vector3 BuildingGridPosition = ConvertToGridPosition(ListBuilding[B].Position);
+
+                if (BuildingGridPosition == GridPosition)
+                {
+                    return B;
+                }
+            }
 
             return -1;
         }
@@ -1307,9 +1279,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Params.GlobalContext.ListMVPoints.AddRange(ListMVHoverPoints);
 
             TerrainConquest ActiveTerrain = GetTerrain(ActiveUnit.Components);
-
-            if (ActiveUnit.Position != LastPosition && ActiveTerrain.CapturePoints > 0)
-                ActiveTerrain.CapturePoints = 20;
 
             ActiveUnit.CurrentMovement = ActiveTerrain.TerrainTypeIndex;
 
@@ -1406,7 +1375,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 if (MovementAnimation.Count > 0)
                 {
-                    MovementAnimation.MoveSquad(gameTime, this);
+                    MovementAnimation.MoveSquad(gameTime, this, 100);
                 }
                 if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
                 {
@@ -1486,11 +1455,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-        public TerrainConquest GetTerrain(int X, int Y, int LayerIndex)
-        {
-            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
-        }
-
         public TerrainConquest GetTerrain(UnitMapComponent ActiveUnit)
         {
             return GetTerrain(ActiveUnit.Position);
@@ -1514,13 +1478,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return LayerManager.ListLayer[(int)WorldPosition.Z].ArrayTerrain[(int)WorldPosition.X, (int)WorldPosition.Y];
         }
 
-        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int GridOffsetX, int GridOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, float WorldffsetX, float WorldOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
-            int NextX = StartingPosition.GridPosition.X + GridOffsetX;
-            int NextY = StartingPosition.GridPosition.Y + GridOffsetY;
+            float NextX = StartingPosition.WorldPosition.X + WorldffsetX;
+            float NextY = StartingPosition.WorldPosition.Y + WorldOffsetY;
 
-            if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
+            if (!IsInsideMap(new Vector3(NextX, NextY, 0)))
             {
                 return StartingPosition.WorldPosition;
             }
@@ -1539,7 +1503,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + GridOffsetX * TileSize.X, StartingPosition.WorldPosition.Y + GridOffsetY * TileSize.Y, L * LayerHeight));
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + WorldffsetX, StartingPosition.WorldPosition.Y + WorldOffsetY, L * LayerHeight));
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
                 ConquestTerrainType NextTerrainType = TerrainHolder.ListConquestTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.DicMovementCostByMoveType.Count > 0;
@@ -1564,7 +1528,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         if (NextTerrainZ <= CurrentZ)
                         {
                             float ZDiff = CurrentZ - NextTerrainZ;
-                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
+                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(new Vector3(NextX, NextY, NextTerrainZ), L, MaxClearance))
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
                                 ClosestLayerIndexDown = NextTerrain;
@@ -1636,16 +1600,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
 
-        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
+        private bool HasEnoughClearance(Vector3 WorldPosition, int StartLayer, float MaxClearance)
         {
             for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
-                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
+                Terrain ActiveTerrain = GetTerrain(new Vector3(WorldPosition.X, WorldPosition.Y, L * LayerHeight));
 
                 var NextTerrainType = TerrainHolder.ListConquestTerrainType[ActiveTerrain.TerrainTypeIndex];
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
-                float ZDiff = NextTerrainZ - CurrentZ;
+                float ZDiff = NextTerrainZ - WorldPosition.Z;
 
                 if (NextTerrainType.DicMovementCostByMoveType.Count > 0 && ZDiff != 0 && ZDiff < MaxClearance)
                 {
@@ -1821,6 +1785,33 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListPlayer[PlayerIndex].ListUnit.Add(NewUnit);
 
             NewUnit.Components.CurrentTerrainIndex = UnitStats.TerrainLandIndex;
+        }
+
+        public void SpawnBuilding(int PlayerIndex, BuildingConquest NewBuilding, uint ID, Vector3 Position)
+        {
+            Position = Position + new Vector3(TileSize.X / 2, TileSize.Y / 2, 0);
+
+            NewBuilding.InitStats();
+
+            while (ListPlayer.Count <= PlayerIndex)
+            {
+                Player NewPlayer = new Player("Enemy", "CPU", false, false, PlayerIndex, Color.Red);
+                ListPlayer.Add(NewPlayer);
+            }
+            if (Content != null)
+            {
+                NewBuilding.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewBuilding.SpriteMap.ActiveSprite, 1);
+                Color OutlineColor = ListPlayer[PlayerIndex].Color;
+                NewBuilding.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewBuilding.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+            }
+
+            ListPlayer[PlayerIndex].IsAlive = true;
+
+            NewBuilding.SpawnID = ID;
+            NewBuilding.SetPosition(Position);
+
+            ListBuilding.Add(NewBuilding);
         }
 
         public uint GetNextUnusedUnitID()

@@ -94,7 +94,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             cboTerrainType.SelectedIndex = NewUnit.TerrainType;
             ckCapture.Checked = NewUnit.CanBeCaptured;
             txtVision.Value = NewUnit.VisionRange;
-            txtHealth.Value = NewUnit.HP;
+            txtHealth.Value = NewUnit.MaxHP;
             txtCreditPerTurn.Value = NewUnit.CreditPerTurn;
             ckResupply.Checked = NewUnit.Resupply;
 

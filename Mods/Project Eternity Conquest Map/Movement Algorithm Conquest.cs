@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, (int)GridOffsetX, (int)GridOffsetY, 1f, 1, out ListLayerPossibility));
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetTerrain(Map.GetNextLayerTile(StartingNode, GridOffsetX * Map.TileSize.X, GridOffsetY * Map.TileSize.Y, 1f, 1, out ListLayerPossibility));
 
             if (NextRegularMovementDestination == StartingNode)
             {

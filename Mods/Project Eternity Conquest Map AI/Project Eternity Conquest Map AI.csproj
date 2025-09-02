@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conquest AI Scripts Holder.cs" />
-    <Compile Include="Evaluators\EndSquadTurn.cs" />
+    <Compile Include="Evaluators\AIEndSquadTurn.cs" />
     <Compile Include="References\GetTargets.cs" />
     <Compile Include="References\HasSquadAttacked.cs" />
     <Compile Include="Evaluators\MoveTowardClosestEnemy.cs" />

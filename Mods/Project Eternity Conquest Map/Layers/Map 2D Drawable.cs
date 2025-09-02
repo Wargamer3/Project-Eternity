@@ -343,6 +343,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             DrawPERAttacks(g);
 
+            DrawBuildings(g);
+
             DrawPlayers(g);
 
             DrawDamageNumbers(g);
@@ -454,6 +456,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     DrawUnitMap(g, Map.ListPlayer[P].Color, Map.ListPlayer[P].ListUnit[S].Components, !Map.ListPlayer[P].ListUnit[S].CanMove && P == Map.ActivePlayerIndex);
                 }
+            }
+        }
+
+        public void DrawBuildings(CustomSpriteBatch g)
+        {
+            for (int B = 0; B < Map.ListBuilding.Count; B++)
+            {
+                float PosX = Map.ListBuilding[B].Position.X - CameraPosition.X;
+                float PosY = Map.ListBuilding[B].Position.Y - CameraPosition.Y;
+
+                Map.ListBuilding[B].SpriteMap.Draw(g, new Vector2(PosX, PosY), Color.White, 0f, 0.99f, Vector2.One, SpriteEffects.None);
             }
         }
 
@@ -654,6 +667,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                         (Owner.ListTeleportPoint[T].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
+
                     foreach (UnitSpawn ActiveSpawn in Owner.ListUnitSpawn)
                     {
                         g.Draw(GameScreen.sprPixel, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,

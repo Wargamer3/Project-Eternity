@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 else
                 {
-                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map));
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map, Map.ActivePlayerIndex));
                 }
             }
         }

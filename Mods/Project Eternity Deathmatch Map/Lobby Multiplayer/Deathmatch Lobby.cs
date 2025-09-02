@@ -28,10 +28,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NewPlayer.LoadLocally(GameScreen.ContentFallback);
         }
 
-        protected override void CreateARoom()
+        protected override CreateRoomScreen CreateARoom()
         {
-            PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, "Deathmatch"));
+            CreateRoomScreen NewScreen = new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, "Deathmatch");
+
+            PushScreen(NewScreen);
             sndButtonClick.Play();
+
+            return NewScreen;
         }
     }
 }

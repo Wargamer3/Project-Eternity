@@ -12,27 +12,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return Grades[UnitStat.TerrainAttributeValue(MovementTypeIndex)];
         }
 
-        public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
+        public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 WorldPosition, Vector3 Displacement)
         {
-            return CheckForSquadAtPosition(PlayerIndex, Position, Displacement) >= 0;
+            return CheckForSquadAtPosition(PlayerIndex, WorldPosition, Displacement) >= 0;
         }
 
-        public override bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement)
+        public override bool CheckForObstacleAtPosition(Vector3 WorldPosition, Vector3 Displacement)
         {
             bool ObstacleFound = false;
 
             for (int P = 0; P < ListPlayer.Count && !ObstacleFound; P++)
-                ObstacleFound = CheckForObstacleAtPosition(P, Position, Displacement);
+                ObstacleFound = CheckForObstacleAtPosition(P, WorldPosition, Displacement);
 
             return ObstacleFound;
         }
 
-        public int CheckForSquadAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
+        public int CheckForSquadAtPosition(int PlayerIndex, Vector3 WorldPosition, Vector3 Displacement)
         {
             if (ListPlayer[PlayerIndex].ListSquad.Count == 0)
                 return -1;
 
-            Vector3 FinalPosition = Position + new Vector3(Displacement.X * TileSize.X, Displacement.Y * TileSize.Y, Displacement.Z * LayerHeight);
+            Vector3 FinalPosition = WorldPosition + new Vector3(Displacement.X * TileSize.X, Displacement.Y * TileSize.Y, Displacement.Z * LayerHeight);
 
             if (!IsInsideMap(FinalPosition))
                 return -1;

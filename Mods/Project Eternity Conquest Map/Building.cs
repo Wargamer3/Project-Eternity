@@ -25,14 +25,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public readonly string Name;
         public readonly string RelativePath;
         public readonly List<UnitConquest> ListUnitToSpawn;
-        private UnitMapComponent MapComponents;
         public byte TerrainType;
         public bool CanBeCaptured;
         public byte VisionRange;
-        public int HP;
+        public int MaxHP;
+        public int CurrentHP;
         public int CreditPerTurn;
         public bool Resupply;
 
+        public Vector3 Position;
+        public uint SpawnID;
+        public int CapturedTeamIndex;
 
         public BuildingConquest()
         {
@@ -57,10 +60,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ListUnitToSpawn.Add(LoadedUnit);
             }
 
+            CapturedTeamIndex = -1;
             TerrainType = BR.ReadByte();
             CanBeCaptured = BR.ReadBoolean();
             VisionRange = BR.ReadByte();
-            HP = BR.ReadInt32();
+            MaxHP = BR.ReadInt32();
             CreditPerTurn = BR.ReadInt32();
             Resupply = BR.ReadBoolean();
 
@@ -70,15 +74,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (Content != null)
             {
                 if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + RelativePath + ".xnb"))
-                    SpriteMap = new AnimatedSprite(Content, "Buildings/Conquest/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
+                    SpriteMap = new AnimatedSprite(Content, "Buildings/Conquest/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 1);
                 else
-                    SpriteMap = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 4);
+                    SpriteMap = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 1);
+
+                SpriteMap.Origin = new Vector2(16, 48);
 
                 if (File.Exists("Content/Buildings/Conquest/Menu Sprites/" + RelativePath + ".xnb"))
-                    SpriteUnit = new AnimatedSprite(Content, "Buildings/Conquest/Menu Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
+                    SpriteUnit = new AnimatedSprite(Content, "Buildings/Conquest/Menu Sprites/" + RelativePath, Vector2.Zero, 4, 1, 1);
                 else
-                    SpriteUnit = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 4);
+                    SpriteUnit = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 1);
             }
+        }
+
+        public void InitStats()
+        {
+            CurrentHP = MaxHP;
+        }
+
+        public void SetPosition(Vector3 Position)
+        {
+            this.Position = Position;
         }
     }
 }

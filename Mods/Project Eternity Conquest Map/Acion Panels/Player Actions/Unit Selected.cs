@@ -47,13 +47,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            if (Map.GetTerrain(ActiveUnit.Components).TerrainTypeIndex >= 13)
+            int BuildingIndex = Map.CheckForBuildingPosition(Map.CursorPosition);
+            if (BuildingIndex >= 0)
             {
-                if (Map.GetTerrain(ActiveUnit.Components).CapturedPlayerIndex != Map.ActivePlayerIndex)
-                    AddChoiceToCurrentPanel(new ActionPanelCapture(Map, ActivePlayerIndex, ActiveUnitIndex));
+                if (Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
+                {
+                    AddChoiceToCurrentPanel(new ActionPanelCapture(Map, ActivePlayerIndex, ActiveUnitIndex, BuildingIndex));
+                }
+                else
+                {
+                }
             }
         }
-
+        
         public override void DoUpdate(GameTime gameTime)
         {
             if (NavigateThroughNextChoices(Map.sndSelection))
