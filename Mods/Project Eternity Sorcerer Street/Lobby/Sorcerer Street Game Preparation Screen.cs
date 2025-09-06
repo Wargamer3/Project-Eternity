@@ -63,9 +63,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprIconBot = Content.Load<Texture2D>("Menus/Buttons/Icon Bot");
         }
 
-        protected override void OpenRoomSettingsScreen()
+        public override GameOptionsScreen OpenRoomSettingsScreen()
         {
-            PushScreen(new SorcererStreetGameOptionsScreen(Room, this));
+            GameOptionsScreen NewScreen = new SorcererStreetGameOptionsScreen(Room, this);
+            PushScreen(NewScreen);
+
+            return NewScreen;
         }
 
         public override void Update(GameTime gameTime)

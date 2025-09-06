@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -67,8 +68,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private TextButton ShowFriendsFilter;
         private TextButton ShowGuildsFilter;
 
-        private TextButton ShopButton;
-        private TextButton InventoryButton;
+        public TextButton ShopButton;
+        public TextButton InventoryButton;
 
         private CubeBackgroundBig CubeBackground;
 
@@ -93,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int PlayerListY;
         int PlayerListHeight;
 
-        protected readonly BattleMapOnlineClient OnlineGameClient;
+        public readonly BattleMapOnlineClient OnlineGameClient;
         protected readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
         private OnlinePlayerBase[] ArrayLobbyPlayer;
@@ -203,7 +204,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawY = (int)(384 * Ratio);
             QuickStartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Quick Start}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
             DrawX = (int)(1274 * Ratio);
-            CreateARoomButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Create a Room}}", "Menus/Lobby/Button Big Gray", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, CreateARoom);
+            CreateARoomButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Create a Room}}", "Menus/Lobby/Button Big Gray", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
             WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(DrawX, DrawY), OnButtonOver, null);
 
 
@@ -246,6 +247,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             };
 
             InitPlayer();
+
+            if (!File.Exists("User Data/Profiles/Battle Map/Last Selected Profile.txt"))
+            {
+                PushScreen(new IntroPopup(this));
+            }
         }
 
         protected virtual void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)
@@ -535,7 +541,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
         }
 
-        protected virtual CreateRoomScreen CreateARoom()
+        protected void OnCreateARoomPressed()
+        {
+            CreateARoom();
+        }
+
+        public virtual CreateRoomScreen CreateARoom()
         {
             CreateRoomScreen NewScreen = new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, "");
 
@@ -551,13 +562,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
         }
 
-        protected virtual void OpenInventory()
+        public virtual void OpenInventory()
         {
             PushScreen(new BattleMapInventoryWhiteScreen());
             sndButtonClick.Play();
         }
 
-        protected virtual void OpenShop()
+        public virtual void OpenShop()
         {
             PushScreen(new ShopScreen(OnlineGameClient));
             sndButtonClick.Play();
@@ -588,7 +599,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         #endregion
-
 
         private void SendMessage(TextInput SenderInput, string InputMessage)
         {

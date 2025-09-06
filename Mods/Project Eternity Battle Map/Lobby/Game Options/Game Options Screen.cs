@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private CubeBackgroundSmall CubeBackground;
 
         private TextButton GametypeButton;
-        private TextButton SelectMapButton;
+        public TextButton SelectMapButton;
         private TextButton GameRulesButton;
         private TextButton MutatorsButton;
         private TextButton BotsConfigButton;
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private GamePreparationScreen Owner;
 
         private GameScreen ActiveTab;
-        private GameScreen[] ArrayOptionTab;
+        public GameScreen[] ArrayOptionTab;
         private GameOptionsSelectMapScreen SelectMapScreen;
         private GameOptionsGameRulesScreen GameRuleScreen;
 
@@ -86,15 +86,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(358 * Ratio);
             int DrawY = (int)(350 * Ratio);
-            GametypeButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Type}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGametypePressed);
+            GametypeButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Type}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGametypeTabPressed);
             DrawX += (int)(520 * Ratio);
-            SelectMapButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Select Map}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnSelectMapPressed);
+            SelectMapButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Select Map}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnSelectMapTabPressed);
             DrawX += (int)(520 * Ratio);
-            GameRulesButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Rules}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGameRulePressed);
+            GameRulesButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Rules}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGameRuleTabPressed);
             DrawX += (int)(520 * Ratio);
-            MutatorsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Mutators}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnMutatorPressed);
+            MutatorsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Mutators}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnMutatorTabPressed);
             DrawX += (int)(520 * Ratio);
-            BotsConfigButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Bot Config}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnBotsConfigPressed);
+            BotsConfigButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Bot Config}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnBotsConfigTabPressed);
 
             DrawX = (int)(3350 * Ratio);
             DrawY = (int)(114 * Ratio);
@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void OnGametypePressed()
+        private void OnGametypeTabPressed()
         {
             ActiveTab = ArrayOptionTab[0];
 
@@ -149,7 +149,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BotsConfigButton.Unselect();
         }
 
-        private void OnSelectMapPressed()
+        public void OnSelectMapTabPressed()
         {
             ActiveTab = ArrayOptionTab[1];
 
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BotsConfigButton.Unselect();
         }
 
-        private void OnGameRulePressed()
+        private void OnGameRuleTabPressed()
         {
             ActiveTab = ArrayOptionTab[2];
 
@@ -169,7 +169,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BotsConfigButton.Unselect();
         }
 
-        private void OnMutatorPressed()
+        private void OnMutatorTabPressed()
         {
             ActiveTab = ArrayOptionTab[3];
 
@@ -179,7 +179,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BotsConfigButton.Unselect();
         }
 
-        private void OnBotsConfigPressed()
+        private void OnBotsConfigTabPressed()
         {
             ActiveTab = ArrayOptionTab[4];
 
@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MutatorsButton.Unselect();
         }
 
-        private void OnClosePressed()
+        public void OnClosePressed()
         {
             Owner.OptionsClosed();
             RemoveScreen(this);
@@ -216,6 +216,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            g.End();
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
+
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(BackgroundColor);
 

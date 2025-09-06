@@ -59,8 +59,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private AnimatedSprite sprTabChat;
 
-        private TextButton RoomSettingButton;
-        private TextButton PlayerSettingsButton;
+        public TextButton RoomSettingButton;
+        public TextButton PlayerSettingsButton;
 
         private TextButton ReadyButton;
         private TextButton StartButton;
@@ -98,7 +98,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public GamePreparationScreen(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
         {
-            RequireDrawFocus = true;
             this.OnlineGameClient = OnlineGameClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
@@ -169,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawX = (int)(2758 * Ratio) + sprButtonSmall.Width / 4;
             int DrawY = (int)(726 * Ratio) + sprButtonSmall.Height / 4;
 
-            RoomSettingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Room Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenRoomSettingsScreen);
+            RoomSettingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Room Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnOpenRoomSettingsScreenPressed);
             DrawX = (int)(3280 * Ratio) + sprButtonSmall.Width / 4;
             PlayerSettingsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Player Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, PlayerSettingsScreen);
 
@@ -475,9 +474,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Button methods
 
-        protected virtual void OpenRoomSettingsScreen()
+        public void OnOpenRoomSettingsScreenPressed()
         {
-            PushScreen(new GameOptionsScreen(Room, this));
+            OpenRoomSettingsScreen();
+        }
+
+        public virtual GameOptionsScreen OpenRoomSettingsScreen()
+        {
+            GameOptionsScreen NewScreen = new GameOptionsScreen(Room, this);
+            PushScreen(NewScreen);
+
+            return NewScreen;
         }
 
         private void PlayerSettingsScreen()
@@ -485,7 +492,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PushScreen(new BattleMapInventoryScreen());
         }
 
-        private void ReturnToLobby()
+        public void ReturnToLobby()
         {
             if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {

@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public readonly Point GridPosition;//Position not affected by World Matrix, will be the same as WorldPosition if not a platform.
         public readonly int LayerIndex;
         public float LayerDepth;//Drawn Depth
-        public float Height;
+        public float Height;//Grid Value
         public bool PreventLeavingUpward;
         public bool PreventLeavingDownward;
         public bool PreventLeavingLeft;

@@ -477,7 +477,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     UpdateTextChoices();
                 }
 
-                if (CurrentDialog.CutsceneBefore != null)
+                if (CurrentDialog.CutsceneBefore.ListCutsceneBehavior.Count > 0)
                     PushScreen(CurrentDialog.CutsceneBefore);
             }
 
@@ -823,7 +823,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             WaitingForOtherPlayers = false;
             DicDialogChoiceConfirmation.Clear();
 
-            if (CurrentDialog.CutsceneAfter != null)
+            if (CurrentDialog.CutsceneAfter.ListCutsceneBehavior.Count > 0)
                 PushScreen(CurrentDialog.CutsceneAfter);
 
             if (TimelineIndex < Timeline.Count)
@@ -837,10 +837,10 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 {
                     if (HasMultipleChoices())
                     {
-                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneBefore != null)
+                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneBefore.ListCutsceneBehavior.Count > 0)
                             PushScreen(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneBefore);
 
-                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneAfter != null)
+                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneAfter.ListCutsceneBehavior.Count > 0)
                             PushScreen(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneAfter);
                     }
 
@@ -857,7 +857,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 }
             }
 
-            if (!HasEnded && CurrentDialog.CutsceneBefore != null)
+            if (!HasEnded && CurrentDialog.CutsceneBefore.ListCutsceneBehavior.Count > 0)
                 PushScreen(CurrentDialog.CutsceneBefore);
         }
 
@@ -965,7 +965,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             {
                 if (CurrentDialog.TopPortaitVisibleState != Dialog.PortaitVisibleStates.Invisible)
                 {
-                    DrawBox(g, new Vector2(0, 0), Constants.Width, VNBoxHeight, Color.White);
+                    DrawTextBox(g, 0, 0);
                     DrawBox(g, new Vector2(10, 10), 108, 108, Color.White);
                     g.Draw(sprPixel, new Rectangle(16, 16, 96, 96), Color.Gray);
 
@@ -982,8 +982,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 }
 
                 //Text.
-                DrawBox(g, new Vector2(0, Constants.Height - VNBoxHeight), Constants.Width, VNBoxHeight, Color.White);
-
+                DrawTextBox(g, 0, Constants.Height - VNBoxHeight);
                 if (CurrentDialog.BottomPortaitVisibleState != Dialog.PortaitVisibleStates.Invisible)
                 {
                     DrawBox(g, new Vector2(10, Constants.Height - VNBoxHeight + 10), 108, 108, Color.White);
@@ -1000,6 +999,11 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 else
                     DrawText(g, new Vector2(5, Constants.Height - VNBoxHeight), CurrentDialog.Text);
             }
+        }
+
+        protected virtual void DrawTextBox(CustomSpriteBatch g, int X, int Y)
+        {
+            DrawBox(g, new Vector2(X, Y), Constants.Width, VNBoxHeight, Color.White);
         }
 
         private void DrawText(CustomSpriteBatch g, Vector2 Position, string Text)

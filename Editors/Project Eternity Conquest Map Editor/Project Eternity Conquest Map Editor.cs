@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -7,7 +8,6 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.MapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
-using System.Text;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {

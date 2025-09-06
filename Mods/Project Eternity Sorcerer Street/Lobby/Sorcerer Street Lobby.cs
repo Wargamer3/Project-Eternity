@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        protected override CreateRoomScreen CreateARoom()
+        public override CreateRoomScreen CreateARoom()
         {
             var NewScreen = new SorcererStreetCreateRoomScreen(OnlineGameClient, OnlineCommunicationClient);
 
@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return NewScreen;
         }
 
-        protected override void OpenInventory()
+        public override void OpenInventory()
         {
             PushScreen(new SorcererStreetInventoryScreen((Player)PlayerManager.ListLocalPlayer[0]));
             sndButtonClick.Play();

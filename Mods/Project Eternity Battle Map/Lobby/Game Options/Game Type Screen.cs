@@ -174,6 +174,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return false;
         }
 
+        public void SelectGametype(int CategoryIndex, int GametypeIndex)
+        {
+            SelectedGametype = ArrayGametypeCategory[CategoryIndex].ArrayGametype[GametypeIndex];
+            Room.GameMode = SelectedGametype.Name;
+            Owner.OnGametypeUpdate();
+        }
+
         private void OnGametypeScrollbarChange(float ScrollbarValue)
         {
             GametypeScrollbarValue = (int)ScrollbarValue;
@@ -234,7 +241,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         if (SelectedGametype == ActiveCategory.ArrayGametype[G]
                             || (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY))
+                                && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY
+                                && Owner.IsOnTop))
                         {
                             g.Draw(sprHighlight, new Vector2(LeftPanelX - 20 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                         }

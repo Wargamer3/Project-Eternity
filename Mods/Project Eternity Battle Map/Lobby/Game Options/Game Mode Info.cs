@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         public const string CategoryPVE = "PVE";
-        public const string CategoryPVP = "PVE";
+        public const string CategoryPVP = "PVP";
 
         public string Name;
         public string Description;

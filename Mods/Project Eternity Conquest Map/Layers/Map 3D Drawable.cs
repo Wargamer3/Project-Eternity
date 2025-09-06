@@ -197,7 +197,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         continue;
                     }
 
-                    float Z = Owner.ArrayTerrain[X, Y].WorldPosition.Z * Map.LayerHeight;
+                    float Z = Owner.ArrayTerrain[X, Y].WorldPosition.Z;
                     float MinZ = Z - Owner.ArrayTerrain[X, Y].Height * Map.LayerHeight;
                     float ZFront = MinZ;
                     float ZBack = MinZ;
@@ -205,19 +205,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     float ZLeft = MinZ;
                     if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTile[X, Y + 1].Terrain3DInfo.TerrainStyle))
                     {
-                        ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z * Map.LayerHeight;
+                        ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z;
                     }
                     if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X, Y - 1].Terrain3DInfo.TerrainStyle))
                     {
-                        ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z * Map.LayerHeight;
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z;
                     }
                     if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X - 1, Y].Terrain3DInfo.TerrainStyle))
                     {
-                        ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z * Map.LayerHeight;
+                        ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z;
                     }
                     if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTile[X + 1, Y].Terrain3DInfo.TerrainStyle))
                     {
-                        ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * Map.LayerHeight;
+                        ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z;
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
@@ -398,9 +398,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         private bool IsCursorHiddenByWall()
         {
-            int CursorX = (int)Map.CursorPosition.X;
-            int CursorLayer = (int)Map.CursorPosition.Z;
-            for (int Y = (int)Map.CursorPosition.Y; Y < Map.MapSize.Y; ++Y)
+            int CursorX = (int)Map.CursorPosition.X / Map.TileSize.X;
+            int CursorLayer = (int)Map.CursorPosition.Z / Map.LayerHeight;
+            for (int Y = (int)Map.CursorPosition.Y / Map.TileSize.Y; Y < Map.MapSize.Y; ++Y)
             {
                 if (CursorLayer < Map.LayerManager.ListLayer.Count && Map.LayerManager.ListLayer[CursorLayer].ArrayTerrain[CursorX, Y].TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {

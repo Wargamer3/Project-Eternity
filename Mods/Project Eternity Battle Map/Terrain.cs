@@ -1116,7 +1116,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PreventLeavingLeft = BR.ReadBoolean();
             PreventLeavingRight = BR.ReadBoolean();
 
-
             int ArrayBonusLength = BR.ReadInt32();
             BonusInfo.ListBonus = new TerrainBonus[ArrayBonusLength];
             BonusInfo.ListActivation = new TerrainActivation[ArrayBonusLength];

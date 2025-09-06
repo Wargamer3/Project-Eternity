@@ -19,6 +19,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Ressources
 
+        private RenderTarget2D UnitRenderTarget;
+
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
@@ -59,6 +61,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static int SpriteOffset;
 
         public static int InventoryX;
+        public static int InventoryY;
         public static int InventoryWidth;
         public static int BoxPerLine;
 
@@ -128,9 +131,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             float Ratio = Constants.Height / 2160f;
 
-            InventoryScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, 648 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnInventoryScrollbarChange);
-            LoadoutListScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, 648 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnSquadScrollbarChange);
-
             LoadoutX = (int)(2250 * Ratio);
             LoadoutEntryHeightWithOffset = (int)(190 * Ratio);
             LoadoutBoxSize = (int)(68 * Ratio);
@@ -149,6 +149,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BoxLineHeight = (int)(276 * Ratio);
 
             InventoryX = (int)(140 * Ratio);
+            InventoryY = (int)(648 * Ratio);
             InventoryWidth = (int)(LoadoutX - InventoryX);
             BoxPerLine = InventoryWidth / BoxWithOffsetFinal;
 
@@ -161,8 +162,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FolderWithOffsetFinal = (int)(FolderWidthFinal + FolderOffsetFinal);
             FolderPerLine = InventoryWidth / FolderWithOffsetFinal;
 
+            InventoryScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, InventoryY), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnInventoryScrollbarChange);
+            LoadoutListScrollbar = new Scrollbar(sprScrollbar, new Vector2(2144 * Ratio, InventoryY), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnSquadScrollbarChange);
+
             LoadoutListScrollbar.ChangeMaxValue(Owner.ActivePlayer.Inventory.ListSquadLoadout.Count * LoadoutEntryHeightWithOffset - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
             InventoryScrollbar.ChangeMaxValue(ListCurrentUnit.Count * BoxHeight - BattleMapInventoryWhiteScreen.MiddleSectionHeight);
+
+            UnitRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, (int)(InventoryWidth + 50 * Ratio), ListCurrentUnit.Count * BoxHeight - BattleMapInventoryWhiteScreen.MiddleSectionHeight, false,
+                GameScreen.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 16, RenderTargetUsage.DiscardContents);
+
         }
 
         public override void Update(GameTime gameTime)
@@ -319,7 +327,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Ratio = Constants.Height / 2160f;
             MouseX = MouseX - InventoryX;
 
-            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
+            int DrawY = (int)(InventoryY - InventoryScrollbarValue);
 
             int MouseIndex = (int)(MouseX / BoxWithOffsetFinal + ((MouseY - DrawY) / BoxLineHeight) * BoxPerLine);
             int MouseXFinal = (int)(MouseX  % BoxWithOffsetFinal);
@@ -328,8 +336,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int ItemCount = ListCurrentUnit.Count;
 
             if (MouseIndex >= 0 && MouseIndex < ItemCount
-                && MouseXFinal > 0 && MouseXFinal < BoxWidthFinal && (MouseIndex % BoxPerLine) < InventoryWidth / BoxWithOffsetFinal
-                && MouseYFinal >= 0 && MouseYFinal < BoxLineHeight)
+                && MouseXFinal > 0 && MouseXFinal < BoxWidthFinal && MouseX < BoxWithOffsetFinal * BoxPerLine
+                && MouseYFinal >= 0 && MouseYFinal < BoxLineHeight
+                && (MouseIndex % BoxPerLine) < InventoryWidth / BoxWithOffsetFinal)
             {
                 return MouseIndex;
             }
@@ -374,17 +383,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             InventoryScrollbarValue = (int)ScrollbarValue;
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            float Ratio = Constants.Height / 2160f;
+            g.GraphicsDevice.SetRenderTarget(UnitRenderTarget);
+            g.GraphicsDevice.Clear(Color.Transparent);
+            g.Begin();
+            DrawInventory(g, (int)(50 * Ratio));
+            g.End();
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             float Ratio = Constants.Height / 2160f;
-            g.Draw(sprScrollbarBackground, new Vector2(2144 * Ratio, 648 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
+            g.Draw(sprScrollbarBackground, new Vector2(2144 * Ratio, InventoryY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
 
             InventoryScrollbar.Draw(g);
             //LoadoutListScrollbar.Draw(g);
 
             DrawLoadout(g);
 
-            DrawInventory(g, InventoryX);
+            DrawFolders(g, InventoryX);
+            if (Owner.IsOnTop)
+            {
+                DrawFolderSelection(g);
+            }
+
+            int DrawY = InventoryY;
+            g.Draw(UnitRenderTarget, new Vector2(InventoryX - (50 * Ratio), DrawY), Color.White);
 
             if (DragAndDropEquipment != null)
             {
@@ -451,9 +477,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
             float Ratio = Constants.Height / 2160f;
-            int DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % BoxHeight;
+            int DrawY = (int)(444 * Ratio);
 
-            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)FolderBoxHeight);
+            int StartIndex = 0;
             int TotalItem = CurrentContainer.ListFolder.Count;
 
             if (ListLastContainer.Count > 0)
@@ -501,12 +527,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             float Ratio = Constants.Height / 2160f;
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
-            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
+            int DrawY = (int)-(InventoryScrollbarValue % BoxLineHeight);
 
-            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxHeight);
+            int StartIndex = (int)Math.Floor(InventoryScrollbarValue / (double)BoxLineHeight) * BoxPerLine;
             int TotalItem = ListCurrentUnit.Count;
 
-            DrawFolders(g, X);
             int XPos = 0;
             for (int YPos = StartIndex; YPos < TotalItem; YPos += BoxPerLine)
             {
@@ -544,25 +569,49 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 XPos = 0;
 
-                DrawY += (int)(276 * Ratio);
+                DrawY += BoxLineHeight;
             }
-            DrawSelection(g, X);
+
+            if (Owner.IsOnTop)
+            {
+                DrawUnitSelection(g, X);
+            }
         }
 
-        private void DrawSelection(CustomSpriteBatch g, int X)
+        private void DrawFolderSelection(CustomSpriteBatch g)
         {
+            float Ratio = Constants.Height / 2160f;
+            int MouseXFinal = MouseHelper.MouseStateCurrent.X - InventoryX;
+            int DrawY = (int)(444 * Ratio);
+
+            int SelectedFolderIndex = GetFolderUnderMouse(MouseXFinal, MouseHelper.MouseStateCurrent.Y);
+
+            if (SelectedFolderIndex >= 0)
+            {
+                DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % BoxHeight;
+
+                int FinalX = (int)((MouseXFinal / FolderWithOffsetFinal) * FolderWithOffsetFinal);
+                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / BoxLineHeight) * BoxLineHeight;
+
+                g.Draw(sprPixel, new Rectangle(FinalX, FinalY, FolderWidthFinal, FolderBoxHeightFinal), Color.FromNonPremultiplied(255, 255, 255, 127));
+            }
+        }
+
+        private void DrawUnitSelection(CustomSpriteBatch g, int X)
+        {
+            int MouseXFinal = MouseHelper.MouseStateCurrent.X - InventoryX;
             float Ratio = Constants.Height / 2160f;
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            int DrawY = (int)(648 * Ratio - InventoryScrollbarValue % BoxHeight);
+            int DrawY = (int)-(InventoryScrollbarValue % BoxLineHeight);
 
             int SelectedItemIndex = GetOwnedUnitUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
             //Hover
             if (SelectedItemIndex >= 0)
             {
-                int FinalX = (int)(X + ((MouseHelper.MouseStateCurrent.X - X) / BoxWithOffsetFinal) * BoxWithOffsetFinal);
-                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / BoxLineHeight) * BoxLineHeight;
+                int FinalX = (int)(X + ((MouseXFinal - X) / BoxWithOffsetFinal) * BoxWithOffsetFinal);
+                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - InventoryY) / BoxLineHeight) * BoxLineHeight;
 
                 UnitInfo SelectedUnitInfo = ListCurrentUnit[SelectedItemIndex] as UnitInfo;
                 if (SelectedUnitInfo != null)
@@ -588,20 +637,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.DrawStringMiddleAligned(fntArial12,
                         SelectedUnitSkinInfo.Leader.ItemName,
                         new Vector2(FinalX + BoxWidthFinal / 2, FinalY + BoxHeight + (int)(6 * Ratio)), Color.White);
-                }
-            }
-            else
-            {
-                int SelectedFolderIndex = GetFolderUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
-
-                if (SelectedFolderIndex >= 0)
-                {
-                    DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % BoxHeight;
-
-                    int FinalX = (int)(X + ((MouseHelper.MouseStateCurrent.X - X) / FolderWithOffsetFinal) * FolderWithOffsetFinal);
-                    int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / BoxLineHeight) * BoxLineHeight;
-
-                    g.Draw(sprPixel, new Rectangle(FinalX, FinalY, FolderWidthFinal, FolderBoxHeightFinal), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
             }
 

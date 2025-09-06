@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MenuX = Constants.Width / 2 - MenuWidth / 2;
             int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, CreateRoom);
+            OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
             CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, Cancel);
             LockedRoomCheckbox = new TextButton(Content, "", "Menus/Lobby/Interactive/Checkbox", new Vector2(MenuX + 250 * Ratio, MenuY + 318 * Ratio), 4, 1, Ratio, OnButtonOver, null);
             LockedRoomCheckbox.CanBeChecked = true;
@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver.Play();
         }
 
-        public virtual void CreateRoom()
+        protected void OnCreateARoomPressed()
         {
             sndButtonClick.Play();
             OKButton.Disable();
@@ -146,17 +146,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this,
                     RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
-                
+
                 OnlineGameClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
 
                 OnlineGameClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
             else
             {
-                PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
-                PushScreen(new GamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
-                RemoveScreen(this);
+                CreateRoom();
             }
+        }
+
+        public virtual GamePreparationScreen CreateRoom()
+        {
+            GamePreparationScreen NewScreen = new GamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
+            PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
+            PushScreen(NewScreen);
+            RemoveScreen(this);
+
+            return NewScreen;
         }
 
         public void Cancel()

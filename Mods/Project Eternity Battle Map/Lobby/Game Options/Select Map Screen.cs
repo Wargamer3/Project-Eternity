@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.UI;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -278,6 +277,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OptionsScreen.OnMapUpdate();
         }
 
+        public void SelectMap(string MapInfoToSelect)
+        {
+            ActiveMapInfo = DicMapInfoByPath[MapInfoToSelect];
+            LoadMapInfo(DicMapInfoByPath[MapInfoToSelect], Room.GameMode);
+            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode,
+                ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer,
+                ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator, ActiveMapInfo.ListMapTeam);
+            OptionsScreen.OnMapUpdate();
+        }
+
         private static void LoadMapInfo(MapInfo MapInfoToSelect, string GameMode)
         {
             if (MapInfoToSelect.IsLoaded)
@@ -379,7 +388,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ActiveMapInfo == ActiveMap ||
                         (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20))
+                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
+                            && Owner.IsOnTop))
                     {
                         g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                     }

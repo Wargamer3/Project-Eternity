@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
-using SendRoomIDScriptClient = ProjectEternity.GameScreens.SorcererStreetScreen.Online.SendRoomIDScriptClient;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -14,28 +12,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public override void CreateRoom()
+        public override GamePreparationScreen CreateRoom()
         {
-            sndButtonClick.Play();
-            OKButton.Disable();
+            GamePreparationScreen NewScreen = new SorcererStreetGamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
+            PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
+            PushScreen(NewScreen);
+            RemoveScreen(this);
 
-            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
-            {
-                Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
-
-                DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this,
-                    RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
-
-                OnlineGameClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
-
-                OnlineGameClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
-            }
-            else
-            {
-                PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
-                PushScreen(new SorcererStreetGamePreparationScreen(null, null, new SorcererStreetRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
-                RemoveScreen(this);
-            }
+            return NewScreen;
         }
     }
 }
