@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ListLayer.Add(new MapLayer(Map, BR, L));
             }
 
-            if (Map.CameraType == "2D")
+            if (Map.CameraType == "2D" || Map.IsEditor)
             {
                 LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
             }

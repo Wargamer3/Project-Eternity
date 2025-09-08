@@ -146,7 +146,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override Vector3 GetFinalPosition(Vector3 WorldPosition)
         {
             int GridX = (int)WorldPosition.X / TileSize.X;
+            if (GridX >= MapSize.X)
+            {
+                GridX = MapSize.X - 1;
+            }
+            else if (GridX < 0)
+            {
+                GridX = 0;
+            }
+
             int GridY = (int)WorldPosition.Y / TileSize.Y;
+            if (GridY >= MapSize.Y)
+            {
+                GridY = MapSize.Y - 1;
+            }
+            else if (GridY < 0)
+            {
+                GridY = 0;
+            }
+
             int LayerIndex = (int)WorldPosition.Z / LayerHeight;
 
             Terrain ActiveTerrain = LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];

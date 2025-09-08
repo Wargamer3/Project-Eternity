@@ -272,23 +272,23 @@ namespace ProjectEternity.Editors.MapEditor
             }
             else if (IsMovingLeft)
             {
-                ActiveMap.CursorPosition.X -= (ActiveMap.CursorPosition.X > 0) ? ActiveMap.TileSize.X : 0;
+                ActiveMap.CursorPosition.X -= (ActiveMap.CursorPosition.X >= ActiveMap.TileSize.X) ? ActiveMap.TileSize.X : 0;
                 KeyProcessed = true;
             }
             else if (IsMovingRight)
             {
-                ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X * ActiveMap.TileSize.X - 1) ? ActiveMap.TileSize.X : 0;
+                ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X * ActiveMap.TileSize.X - ActiveMap.TileSize.X) ? ActiveMap.TileSize.X : 0;
                 KeyProcessed = true;
             }
 
             if (IsMovingUp)
             {
-                ActiveMap.CursorPosition.Y -= (ActiveMap.CursorPosition.Y > 0) ? ActiveMap.TileSize.Y : 0;
+                ActiveMap.CursorPosition.Y -= (ActiveMap.CursorPosition.Y >= ActiveMap.TileSize.Y) ? ActiveMap.TileSize.Y : 0;
                 KeyProcessed = true;
             }
             else if (IsMovingDown)
             {
-                ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y * ActiveMap.TileSize.Y - 1) ? ActiveMap.TileSize.Y : 0;
+                ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y * ActiveMap.TileSize.Y - ActiveMap.TileSize.Y) ? ActiveMap.TileSize.Y : 0;
                 KeyProcessed = true;
             }
             else if (keyData == Keys.C)

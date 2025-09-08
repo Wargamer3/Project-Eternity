@@ -36,6 +36,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ListTab.Add(new EventPointsTab());
                 ListTab.Add(new SpawnsTab());
                 ListTab.Add(new BuildingsTab());
+                ListTab.Add(new InfrastructureTab());
                 ListTab.Add(new ScriptsTab());
                 ListTab.Add(new LayerTab());
                 ListTab.Add(new PropTab());
@@ -105,6 +106,11 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
+                if (LayerIndex == 0)
+                {
+                    TerrainPreset.Height = 1;
+                }
+
                 TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(GridX, GridY), LayerIndex);
                 NewTerrain.Owner = ActiveMap;
                 NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
@@ -121,6 +127,12 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
+                if (LayerIndex == 0)
+                {
+                    TilePreset.Terrain3DInfo = new Terrain3D();
+                    TilePreset.Terrain3DInfo.TerrainStyle = Terrain3D.TerrainStyles.Cube;
+                }
+
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
                 MapLayer ActiveLayer;

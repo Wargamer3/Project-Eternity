@@ -129,8 +129,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.IsEditor)
             {
-                Map.CursorPosition.X = Map.MapSize.X / 2;
-                Map.CursorPosition.Y = Map.MapSize.Y / 2;
+                Map.CursorPosition.X = Map.MapSize.X / 2 * Map.TileSize.X;
+                Map.CursorPosition.Y = Map.MapSize.Y / 2 * Map.TileSize.Y;
                 Map.CursorPosition.Z = (LayerManager.ListLayer.Count - 1) / 2;
             }
         }
@@ -305,9 +305,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Cursor.RightFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
 
             ListEditorCursorFace = Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZTop, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
+                X, Y, ZTop, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
             ListEditorCursorFace.Add(Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
+                X, Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
         }
 
         public void Update(GameTime gameTime)

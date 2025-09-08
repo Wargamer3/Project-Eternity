@@ -47,7 +47,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cbBuildingFaction = new System.Windows.Forms.ComboBox();
             this.tabInfrastructure = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.lvInfrastructure = new System.Windows.Forms.ListView();
             this.tabControl1.SuspendLayout();
             this.tabSpawns.SuspendLayout();
             this.gbUnits.SuspendLayout();
@@ -256,7 +256,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.listView1);
+            this.groupBox1.Controls.Add(this.lvInfrastructure);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(319, 321);
@@ -264,17 +264,17 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Instructure";
             // 
-            // listView1
+            // lvInfrastructure
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lvInfrastructure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(6, 19);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(307, 296);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.lvInfrastructure.HideSelection = false;
+            this.lvInfrastructure.Location = new System.Drawing.Point(6, 19);
+            this.lvInfrastructure.Name = "lvInfrastructure";
+            this.lvInfrastructure.Size = new System.Drawing.Size(307, 296);
+            this.lvInfrastructure.TabIndex = 0;
+            this.lvInfrastructure.UseCompatibleStateImageBehavior = false;
             // 
             // ConquestSpawnUserControl
             // 
@@ -315,6 +315,6 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         public System.Windows.Forms.ComboBox cbBuildingFaction;
         private System.Windows.Forms.TabPage tabInfrastructure;
         private System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.ListView listView1;
+        public System.Windows.Forms.ListView lvInfrastructure;
     }
 }

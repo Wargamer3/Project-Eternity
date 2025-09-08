@@ -311,7 +311,14 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
             else
             {
-                tabControl1.TabPages[0].Text = "Main";
+                if (tabControl1.TabPages.Count == 0)
+                {
+                    CreateTab("Main");
+                }
+                else
+                {
+                    tabControl1.TabPages[0].Text = "Main";
+                }
             }
 
             AllowEvent = true;

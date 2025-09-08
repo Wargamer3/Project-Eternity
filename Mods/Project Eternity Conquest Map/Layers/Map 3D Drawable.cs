@@ -128,8 +128,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (Map.IsEditor)
             {
-                Map.CursorPosition.X = Map.MapSize.X / 2;
-                Map.CursorPosition.Y = Map.MapSize.Y / 2;
+                Map.CursorPosition.X = Map.MapSize.X / 2 * Map.TileSize.X;
+                Map.CursorPosition.Y = Map.MapSize.Y / 2 * Map.TileSize.Y;
                 Map.CursorPosition.Z = (LayerManager.ListLayer.Count - 1) / 2;
             }
         }
@@ -304,9 +304,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Cursor.RightFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
 
             ListEditorCursorFace = Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZTop, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
+                X, Y, ZTop, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
             ListEditorCursorFace.Add(Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
+                X, Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
         }
 
         public void Update(GameTime gameTime)
@@ -320,13 +320,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 if (Map.ActivePlatform != null)
                 {
-                    SetTarget(new Vector3(Map.TileSize.X * Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
-                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z * Map.LayerHeight,
-                        Map.TileSize.Y * Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y));
+                    SetTarget(new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
+                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z,
+                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y));
                 }
                 else
                 {
-                    SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * Map.LayerHeight, Map.TileSize.Y * Map.CursorPositionVisible.Y));
+                    SetTarget(new Vector3(Map.CursorPositionVisible.X, Map.CursorPosition.Z, Map.CursorPositionVisible.Y));
                 }
 
                 Camera.Update(gameTime);

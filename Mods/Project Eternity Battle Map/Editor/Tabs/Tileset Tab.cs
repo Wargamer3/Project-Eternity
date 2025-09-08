@@ -18,7 +18,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        private TabPage tabTiles;
         protected ComboBox cboTiles;
         private Button btnAddTile;
         private Button btnRemoveTile;
@@ -76,10 +75,10 @@ namespace ProjectEternity.Editors.MapEditor
             this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
 
             this.btnAddAutotile.Click += new System.EventHandler(this.btnAddAutotile_Click);
-            this.btnRemoveAutotile.Click += new System.EventHandler(this.btnRemoveTile_Click);
+            this.btnRemoveAutotile.Click += new System.EventHandler(this.btnRemoveAutotile_Click);
 
             this.sclTileHeight.Scroll += new ScrollEventHandler(this.sclTileHeight_Scroll);
-            this.sclTileWidth.Scroll += new ScrollEventHandler(this.btnRemoveAutotile_Click);
+            this.sclTileWidth.Scroll += new ScrollEventHandler(this.sclTileWidth_Scroll);
 
             return tabTiles;
         }
@@ -88,7 +87,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
             {
-                PlaceTile((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z, false, 0);
+                PlaceTile((int)ActiveMap.CursorPosition.X / ActiveMap.TileSize.X, (int)ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y, (int)ActiveMap.CursorPosition.Z / ActiveMap.LayerHeight, false, 0);
                 return true;
             }
 
@@ -515,15 +514,15 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.TilesetViewer.DrawOffset = DrawOffset;
         }
 
-        private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers, int BrushIndex)
+        private void PlaceTile(int GridX, int GridY, int LayerIndex, bool ConsiderSubLayers, int BrushIndex)
         {
-            if (X < 0 || X >= ActiveMap.MapSize.X
-                || Y < 0 || Y >= ActiveMap.MapSize.Y)
+            if (GridX < 0 || GridX >= ActiveMap.MapSize.X
+                || GridY < 0 || GridY >= ActiveMap.MapSize.Y)
             {
                 return;
             }
 
-            Point TilePos = BattleMapViewer.TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y), BrushIndex);
+            Point TilePos = BattleMapViewer.TilesetViewer.GetTileFromBrush(new Point(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y), BrushIndex);
 
             if (BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Count > 0)
             {
@@ -538,10 +537,10 @@ namespace ProjectEternity.Editors.MapEditor
                     Terrain SmartPresetTerrain = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[AutotileIndex].ArrayTilesetInformation[0].ArrayTerrain[0, 0];
                     DrawableTile SmartPresetTile = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[AutotileIndex].ArrayTilesetInformation[0].ArrayTiles[0, 0];
 
-                    Helper.ReplaceTerrain(X, Y,
+                    Helper.ReplaceTerrain(GridX, GridY,
                         SmartPresetTerrain, LayerIndex, ConsiderSubLayers);
 
-                    Helper.ReplaceTile(X, Y,
+                    Helper.ReplaceTile(GridX, GridY,
                         SmartPresetTile, LayerIndex, ConsiderSubLayers, true);
 
                     return;
@@ -561,10 +560,10 @@ namespace ProjectEternity.Editors.MapEditor
             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-            Helper.ReplaceTerrain(X, Y,
+            Helper.ReplaceTerrain(GridX, GridY,
                 PresetTerrain, LayerIndex, ConsiderSubLayers);
 
-            Helper.ReplaceTile(X, Y,
+            Helper.ReplaceTile(GridX, GridY,
                 PresetTile, LayerIndex, ConsiderSubLayers, false);
         }
 
