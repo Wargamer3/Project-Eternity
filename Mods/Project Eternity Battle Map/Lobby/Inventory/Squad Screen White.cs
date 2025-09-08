@@ -213,7 +213,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else
                 {
-                    int SelectedFolderIndex = GetFolderUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+                    int MouseXFinal = MouseHelper.MouseStateCurrent.X - InventoryX;
+                    int SelectedFolderIndex = GetFolderUnderMouse(MouseXFinal, MouseHelper.MouseStateCurrent.Y);
 
                     if (SelectedFolderIndex >= 0)
                     {
@@ -335,7 +336,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int ItemCount = ListCurrentUnit.Count;
 
-            if (MouseIndex >= 0 && MouseIndex < ItemCount
+            if (MouseY >= InventoryY
+                && MouseIndex >= 0 && MouseIndex < ItemCount
                 && MouseXFinal > 0 && MouseXFinal < BoxWidthFinal && MouseX < BoxWithOffsetFinal * BoxPerLine
                 && MouseYFinal >= 0 && MouseYFinal < BoxLineHeight
                 && (MouseIndex % BoxPerLine) < InventoryWidth / BoxWithOffsetFinal)
@@ -350,11 +352,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             float Ratio = Constants.Height / 2160f;
 
-            int X = (int)(140 * Ratio);
-            int DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % BoxHeight;
+            int DrawY = (int)(444 * Ratio) - InventoryScrollbarValue;
 
-            int MouseIndex = (int)((MouseX - X) / FolderWithOffsetFinal + ((MouseY - DrawY) / BoxLineHeight) * BoxPerLine);
-            int MouseXFinal = (int)((MouseX - X) % FolderWithOffsetFinal);
+            int MouseIndex = (int)(MouseX / FolderWithOffsetFinal + ((MouseY - DrawY) / BoxLineHeight) * BoxPerLine);
+            int MouseXFinal = (int)(MouseX % FolderWithOffsetFinal);
             int MouseYFinal = (MouseY - DrawY) % BoxLineHeight;
 
             int ItemCount = CurrentContainer.ListFolder.Count;
@@ -408,6 +409,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 DrawFolderSelection(g);
             }
+
+            DrawUnitDescription(g, InventoryX);
 
             int DrawY = InventoryY;
             g.Draw(UnitRenderTarget, new Vector2(InventoryX - (50 * Ratio), DrawY), Color.White);
@@ -588,9 +591,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (SelectedFolderIndex >= 0)
             {
-                DrawY = (int)(444 * Ratio) - InventoryScrollbarValue % BoxHeight;
+                DrawY = (int)(444 * Ratio);
 
-                int FinalX = (int)((MouseXFinal / FolderWithOffsetFinal) * FolderWithOffsetFinal);
+                int FinalX = InventoryX + (int)((MouseXFinal / FolderWithOffsetFinal) * FolderWithOffsetFinal);
                 int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - DrawY) / BoxLineHeight) * BoxLineHeight;
 
                 g.Draw(sprPixel, new Rectangle(FinalX, FinalY, FolderWidthFinal, FolderBoxHeightFinal), Color.FromNonPremultiplied(255, 255, 255, 127));
@@ -601,17 +604,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             int MouseXFinal = MouseHelper.MouseStateCurrent.X - InventoryX;
             float Ratio = Constants.Height / 2160f;
-            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
-            int DrawY = (int)-(InventoryScrollbarValue % BoxLineHeight);
+            int DrawY = (int)-(InventoryScrollbarValue);
 
             int SelectedItemIndex = GetOwnedUnitUnderMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
 
             //Hover
             if (SelectedItemIndex >= 0)
             {
-                int FinalX = (int)(X + ((MouseXFinal - X) / BoxWithOffsetFinal) * BoxWithOffsetFinal);
-                int FinalY = DrawY + ((MouseHelper.MouseStateCurrent.Y - InventoryY) / BoxLineHeight) * BoxLineHeight;
+                int FinalX = (int)(X + (SelectedItemIndex % BoxPerLine) * BoxWithOffsetFinal);
+                int FinalY = DrawY + (SelectedItemIndex / BoxPerLine) * BoxLineHeight;
 
                 UnitInfo SelectedUnitInfo = ListCurrentUnit[SelectedItemIndex] as UnitInfo;
                 if (SelectedUnitInfo != null)
@@ -639,6 +641,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         new Vector2(FinalX + BoxWidthFinal / 2, FinalY + BoxHeight + (int)(6 * Ratio)), Color.White);
                 }
             }
+        }
+
+        private void DrawUnitDescription(CustomSpriteBatch g, int X)
+        {
+            float Ratio = Constants.Height / 2160f;
+            Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
             g.Draw(sprFrameDescription, new Vector2(X * Ratio, 1938 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0f);
             if (LastSelectedUnitInfo != null)
