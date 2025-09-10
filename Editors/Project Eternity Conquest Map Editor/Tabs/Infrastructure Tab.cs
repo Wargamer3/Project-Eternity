@@ -9,7 +9,6 @@ using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.Editors.ConquestMapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
-using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.MapEditor
 {

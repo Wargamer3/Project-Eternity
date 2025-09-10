@@ -114,7 +114,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GameModeInfo GametypeProtectThaPimp = new GameModeInfo("Protect Tha Pimp", "Try to kill the enemy Pimp before it can escape. The pimp move slower and only has a 1 HKO melee attack.", GameModeInfo.CategoryPVP, false, null);
             GameModeInfo GametypeKaiju = new GameModeInfo("Kaiju", "One player controls giant monsters while the other players use their units.", GameModeInfo.CategoryPVP, false, null);
 
-            SelectedGametype = GametypeCampaign;
             ArrayGametypeCategory = new GametypeCategory[2];
             ArrayGametypeCategory[0] = new GametypeCategory(GameModeInfo.CategoryPVE, new GameModeInfo[] { GametypeCampaign, GametypeArcade, GametypeHorde, GametypeBaseDefense });
             ArrayGametypeCategory[1] = new GametypeCategory(GameModeInfo.CategoryPVP, new GameModeInfo[]
@@ -202,14 +201,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 DrawY += CategoryOffsetY;
             }
 
-            g.Draw(sprHighlight, new Vector2(2484 * Ratio, 1100 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
-            g.DrawStringCentered(fntOxanimumRegular, SelectedGametype.Name, new Vector2(2800 * Ratio, 1150 * Ratio), ColorText);
-
-            float DescriptionY = 1220 * Ratio;
-            foreach (string ActiveLine in TextHelper.FitToWidth(fntText, SelectedGametype.Description, (int)(350 * Ratio)))
+            if (SelectedGametype != null)
             {
-                g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(2340 * Ratio, DescriptionY), ColorText);
-                DescriptionY += 80 * Ratio;
+                g.Draw(sprHighlight, new Vector2(2484 * Ratio, 1100 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+                g.DrawStringCentered(fntOxanimumRegular, SelectedGametype.Name, new Vector2(2800 * Ratio, 1150 * Ratio), ColorText);
+
+                float DescriptionY = 1220 * Ratio;
+                foreach (string ActiveLine in TextHelper.FitToWidth(fntText, SelectedGametype.Description, (int)(350 * Ratio)))
+                {
+                    g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(2340 * Ratio, DescriptionY), ColorText);
+                    DescriptionY += 80 * Ratio;
+                }
             }
 
             GametypeScrollbar.Draw(g);

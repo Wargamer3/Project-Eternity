@@ -21,7 +21,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             protected override void DrawTextBox(CustomSpriteBatch g, int X, int Y)
             {
-                base.DrawTextBox(g, X, Y);
+                float Ratio = Constants.Height / 2160f;
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
+                g.Draw(sprFrameDescription, new Rectangle(X, Y, Constants.Width, Constants.Height - Y), null, Color.White);
             }
         }
 
@@ -127,6 +133,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 case 15:
                     PreparationScreen.ReturnToLobby();
+                    Owner.sndBGM.PlayAsBGM();
                     break;
 
                 case 16:

@@ -390,12 +390,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string MapName, string MapModName, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator, List<Color> ListMapTeam)
+        public void UpdateSelectedMap(string MapName, string MapModName, string MapPath, string GameMode, Point MapSize, string MapDescription, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator, List<Color> ListMapTeam)
         {
             Room.MapName = MapName;
             Room.MapModName = MapModName;
             Room.MapPath = MapPath;
+            Room.MapDescription = MapDescription;
             Room.GameMode = GameMode;
+            Room.MapSize = MapSize;
             Room.GameInfo = GameInfo;
             Room.MinNumberOfPlayer = MinNumberOfPlayer;
             Room.MaxNumberOfPlayer = MaxNumberOfPlayer;
@@ -602,25 +604,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.Draw(sprRoomInfo, new Vector2(Constants.Width - 550, 342), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
-            int DrawY = 920;
-            g.DrawString(fntOxanimumBoldSmall, "Game Mode:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-            g.DrawStringRightAligned(fntOxanimumBoldSmall, "Campaign", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+            if (Room.MapName != null)
+            {
+                int DrawY = 920;
+                g.DrawString(fntOxanimumBoldSmall, "Game Mode:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.GameMode, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            DrawY += 74;
-            g.DrawString(fntOxanimumBoldSmall, "Players:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-            g.DrawStringRightAligned(fntOxanimumBoldSmall, "2 - 6", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+                DrawY += 74;
+                g.DrawString(fntOxanimumBoldSmall, "Players:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MinNumberOfPlayer + " - " + Room.MaxNumberOfPlayer, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            DrawY += 74;
-            g.DrawString(fntOxanimumBoldSmall, "Map Size:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-            g.DrawStringRightAligned(fntOxanimumBoldSmall, "0 X 0", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
-            DrawY += 150;
-            g.DrawString(fntOxanimumBoldSmall, "Map:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-            g.DrawStringRightAligned(fntOxanimumBoldSmall, "Random", new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+                DrawY += 74;
+                g.DrawString(fntOxanimumBoldSmall, "Map Size:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MapSize.X + " X " + Room.MapSize.Y, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+                DrawY += 150;
+                g.DrawString(fntOxanimumBoldSmall, "Map:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MapName, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-            DrawY += 74;
-            g.DrawString(fntOxanimumBoldSmall, "Details:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-            DrawY += 74;
-            g.DrawString(fntOxanimumBoldSmall, "Tutorial map", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                DrawY += 74;
+                g.DrawString(fntOxanimumBoldSmall, "Details:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                DrawY += 74;
+                g.DrawString(fntOxanimumBoldSmall, Room.MapDescription, new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+            }
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {

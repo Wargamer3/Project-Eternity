@@ -135,7 +135,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public byte MinNumberOfPlayer;
             public byte MaxNumberOfPlayer;
             public byte MaxSquadPerPlayer;
-            public string MapPlayers;
             public string MapDescription;
             public Texture2D MapImage;
             public GameModeInfo GameInfo;
@@ -156,15 +155,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GameInfo = null;
                 MapImage = null;
                 IsLoaded = false;
-
-                if (MinNumberOfPlayer != MaxNumberOfPlayer)
-                {
-                    MapPlayers = MinNumberOfPlayer + "-" + MaxNumberOfPlayer + " Players";
-                }
-                else
-                {
-                    MapPlayers = MinNumberOfPlayer + " Players";
-                }
             }
         }
 
@@ -272,6 +262,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ActiveMapInfo = MapInfoToSelect;
             LoadMapInfo(MapInfoToSelect, Room.GameMode);
             Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode,
+                ActiveMapInfo.MapSize, ActiveMapInfo.MapDescription,
                 ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer,
                 ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator, ActiveMapInfo.ListMapTeam);
             OptionsScreen.OnMapUpdate();
@@ -280,11 +271,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void SelectMap(string MapInfoToSelect)
         {
             ActiveMapInfo = DicMapInfoByPath[MapInfoToSelect];
-            LoadMapInfo(DicMapInfoByPath[MapInfoToSelect], Room.GameMode);
-            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode,
-                ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer,
-                ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator, ActiveMapInfo.ListMapTeam);
-            OptionsScreen.OnMapUpdate();
+            SelectMap(ActiveMapInfo);
         }
 
         private static void LoadMapInfo(MapInfo MapInfoToSelect, string GameMode)
@@ -389,7 +376,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ActiveMapInfo == ActiveMap ||
                         (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
                             && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
-                            && Owner.IsOnTop))
+                            && OptionsScreen.IsOnTop))
                     {
                         g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                     }
@@ -419,7 +406,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ActiveMapInfo != null && ActiveMapInfo.MapName != null)
             {
-                g.DrawStringCentered(fntOxanimumRegular, ActiveMapInfo.MapPlayers,
+                string MapPlayers;
+                if (ActiveMapInfo.MinNumberOfPlayer != ActiveMapInfo.MaxNumberOfPlayer)
+                {
+                    MapPlayers = ActiveMapInfo.MinNumberOfPlayer + "-" + ActiveMapInfo.MaxNumberOfPlayer + " Players";
+                }
+                else
+                {
+                    MapPlayers = ActiveMapInfo.MinNumberOfPlayer + " Players";
+                }
+
+                g.DrawStringCentered(fntOxanimumRegular, MapPlayers,
                     new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
                         PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), ColorText);
 

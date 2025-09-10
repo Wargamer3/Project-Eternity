@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Ressources
 
-        private FMODSound sndBGM;
+        public FMODSound sndBGM;
         private FMODSound sndButtonOver;
         protected FMODSound sndButtonClick;
 
@@ -210,7 +210,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawX = (int)(3472 * Ratio);
             DrawY = (int)(122 * Ratio);
-            HelpButton = new TextButton(Content, "", "Menus/Lobby/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInfo);
+            HelpButton = new TextButton(Content, "", "Menus/Lobby/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, () => {
+                PushScreen(new IntroPopup(this));
+            });
             DrawX += (int)(180 * Ratio);
             OptionsButton = new TextButton(Content, "", "Menus/Lobby/Button Settings", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
 
@@ -229,7 +231,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShopButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Shop}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenShop);
             DrawX = Constants.Width - 550 + sprButtonSmall.Width / 4;
             DrawY = 238 + sprButtonSmall.Height / 4;
-            InfoButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Help}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            InfoButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Stats}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInfo);
             DrawX += 290;
             RankingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Ranking}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
 

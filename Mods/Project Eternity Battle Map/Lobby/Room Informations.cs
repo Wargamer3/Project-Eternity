@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -19,6 +20,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapName { get; set; }
         public string MapModName { get; set; }
         public string MapPath { get; set; }
+        public string MapDescription { get; set; }
+        public Point MapSize { get; set; }
+        public Texture2D MapImage { get; set; }
         public bool IsPlaying { get; set; }
         public string Password { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }

@@ -16,6 +16,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private string MapType;
         private string MapPath;
         private string GameMode;
+        private Point MapSize;
+        private string MapDescription;
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
         private byte MaxSquadPerPlayer;
@@ -42,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator, ListMapTeam);
+            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MapPath, GameMode, MapSize, MapDescription, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator, ListMapTeam);
         }
 
         protected override void Read(OnlineReader Sender)
@@ -51,6 +53,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             MapType = Sender.ReadString();
             MapPath = Sender.ReadString();
             GameMode = Sender.ReadString();
+            MapSize = new Point(Sender.ReadByte(), Sender.ReadByte());
+            MapDescription = Sender.ReadString();
             MinNumberOfPlayer = Sender.ReadByte();
             MaxNumberOfPlayer = Sender.ReadByte();
             MaxSquadPerPlayer = Sender.ReadByte();

@@ -4,10 +4,11 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -26,6 +27,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntFinlanderFont;
         private SpriteFont fntOxanimumBold;
         private SpriteFont fntOxanimumLight;
+
+        private SimpleAnimation sprShopKeeper;
 
         private Texture2D sprListEntry;
         private Texture2D sprListEntrySub;
@@ -92,6 +95,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UnitListRenderTarget = new RenderTarget2D(GraphicsDevice, 1200, 650, false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
+            sprShopKeeper = new SimpleAnimation("Visual Novels/Bust Portraits/Original/Katarina", Content);
+
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
@@ -137,6 +142,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            sprShopKeeper.Update(gameTime);
+
             float Ratio = Constants.Height / 2160f;
 
             if (Owner.OnlineGameClient != null)
@@ -413,7 +420,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Color TextColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
             DrawFilters(g);
-                        
+
             int DrawY = (int)(UnitListY * Ratio);
             g.Draw(UnitListRenderTarget, new Vector2(0, DrawY), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
@@ -426,6 +433,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprScrollbarBackground, new Vector2(UnitX + UnitWidth + 120, (UnitListY + 50) * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.7f);
 
             SquadListScrollbar.Draw(g);
+
+            if (Owner.IsOnTop)
+            {
+                sprShopKeeper.Draw(g, new Vector2(3200 * Ratio, 1100 * Ratio));
+            }
+
+            g.End();
+            g.Begin();
 
             if (MenuSelection == MenuSelections.Unit && SelectionIndex < CurrentContainer.ListUnlockedUnit.Count)
             {
