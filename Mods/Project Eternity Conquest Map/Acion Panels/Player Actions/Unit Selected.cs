@@ -50,7 +50,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             int BuildingIndex = Map.CheckForBuildingPosition(Map.CursorPosition);
             if (BuildingIndex >= 0)
             {
-                if (Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
+                BuildingConquest ActiveBuilding = Map.ListBuilding[BuildingIndex];
+
+                if (ActiveBuilding.CanBeCaptured && ActiveBuilding.CapturedTeamIndex != Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelCapture(Map, ActivePlayerIndex, ActiveUnitIndex, BuildingIndex));
                 }

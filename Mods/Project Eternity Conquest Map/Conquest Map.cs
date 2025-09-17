@@ -1920,6 +1920,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             NewBuilding.SpawnID = ID;
             NewBuilding.SetPosition(Position);
 
+            if (NewBuilding.RelativePath.StartsWith("Red"))
+            {
+                NewBuilding.CapturedTeamIndex = 0;
+            }
+
             ListBuilding.Add(NewBuilding);
         }
 

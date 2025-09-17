@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class ActionPanelPlayerMainMenu : ActionPanelConquest
     {
         public ActionPanelPlayerMainMenu(ConquestMap Map)
-            : base("Player Unit Main Menu", Map)
+            : base("Player Unit Main Menu", Map, false)
         {
         }
 
@@ -29,6 +29,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else if (ConfirmNextChoices(Map.sndConfirm))
             {
+            }
+            else if (ActiveInputManager.InputCancelPressed())
+            {
+                RemoveAllSubActionPanels();
             }
         }
 

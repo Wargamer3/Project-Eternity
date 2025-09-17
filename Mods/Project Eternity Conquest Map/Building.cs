@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (Content != null)
             {
                 if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + RelativePath + ".xnb"))
-                    SpriteMap = new AnimatedSprite(Content, "Buildings/Conquest/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 1);
+                    SpriteMap = new AnimatedSprite(Content, "Buildings/Conquest/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
                 else
                     SpriteMap = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 1);
 

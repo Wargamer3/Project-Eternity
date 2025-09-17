@@ -11,8 +11,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ActivePlayerIndex;
 
         public ActionPanelPlayerHumanStep(ConquestMap Map, int ActivePlayerIndex)
-            : base("Player Default", Map)
+            : base("Player Default", Map, false)
         {
+            this.ActivePlayerIndex = ActivePlayerIndex;
         }
 
         public override void OnSelect()
@@ -34,6 +35,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     //If one was found.
                     if (CursorSelect >= 0)
                     {
+                        ActiveUnit = Map.ListPlayer[P].ListUnit[CursorSelect];
                         if (P == ActivePlayerIndex)//Ally.
                         {
                             AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, P, CursorSelect, Map.GetTerrainUnderCursor()));
@@ -51,7 +53,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                     if (BuildingIndex >= 0)
                     {
-                        if (Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex != Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
+                        if (Map.ListBuilding[BuildingIndex].CanBeCaptured && Map.ListBuilding[BuildingIndex].CapturedTeamIndex == Map.ListAllPlayer[ActivePlayerIndex].TeamIndex)
                         {
                             AddToPanelListAndSelect(new ActionPanelPlayerBuildingUnitSelected(Map, ActivePlayerIndex, BuildingIndex));
                         }
@@ -63,11 +65,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 Map.sndConfirm.Play();
             }
-        }
-
-        protected override void OnCancelPanel()
-        {
-            AddToPanelListAndSelect(new ActionPanelPlayerMainMenu(Map));
+            else if (ActiveInputManager.InputCancelPressed())
+            {
+                AddToPanelListAndSelect(new ActionPanelPlayerMainMenu(Map));
+            }
         }
 
         public override void DoRead(ByteReader BR)

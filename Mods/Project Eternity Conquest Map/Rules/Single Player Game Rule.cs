@@ -146,7 +146,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     ActiveUnit.HealUnit((int)(HPRegenPerTurnFixed + ActiveUnit.MaxHP * HPRegenPerTurnPercent * 0.01f));
                     ActiveUnit.RefillEN((int)(ENRegenPerTurnFixed + ActiveUnit.MaxEN * ENRegenPerTurnPercent * 0.01f));
-                    ActiveUnit.RefillSP((int)(SPRegenPerTurnFixed + ActiveUnit.Pilot.MaxSP * SPRegenPerTurnPercent * 0.01f));
                     ActiveUnit.RefillAmmo((byte)AmmoRegenPerTurnFixed, AmmoRegenPerTurnPercent);
                 }
             }
