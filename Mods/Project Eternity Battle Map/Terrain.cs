@@ -1074,10 +1074,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
-            : base(XPos, YPos, LayerIndex, LayerDepth)
+        public Terrain(int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(GridPosX, GridPosY, LayerIndex, LayerDepth)
         {
-            WorldPosition = new Vector3(XPos * TileSizeX, YPos * TileSizeY, LayerIndex * LayerHeight);
+            WorldPosition = new Vector3(GridPosX * TileSizeX, GridPosY * TileSizeY, LayerIndex * LayerHeight);
             TerrainTypeIndex = 0;
             BattleBackgroundAnimationIndex = 0;
             BattleForegroundAnimationIndex = 0;
@@ -1095,9 +1095,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListActivation">Activation type of the bonuses.</param>
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
-        public Terrain(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex,
+        public Terrain(int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex,
             TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
-            : this(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+            : this(GridPosX, GridPosY, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
             BonusInfo.ListActivation = ListActivation;
@@ -1105,8 +1105,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BonusInfo.ListBonusValue = ListBonusValue;
         }
 
-        public Terrain(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
-            : this(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+        public Terrain(BinaryReader BR, int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : this(GridPosX, GridPosY, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             TerrainTypeIndex = BR.ReadByte();
             Height = BR.ReadSingle();

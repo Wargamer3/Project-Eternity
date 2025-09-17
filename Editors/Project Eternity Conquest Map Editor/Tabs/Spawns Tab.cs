@@ -44,7 +44,6 @@ namespace ProjectEternity.Editors.MapEditor
             imageList.ColorDepth = ColorDepth.Depth32Bit;
             lvUnits.LargeImageList = imageList;
 
-
             cbFactions.SelectedIndexChanged += cbFactions_SelectedIndexChanged;
             cbMoveType.SelectedIndexChanged += cbMoveType_SelectedIndexChanged;
             lvUnits.SelectedIndexChanged += lvUnits_SelectedIndexChanged;

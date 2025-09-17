@@ -36,7 +36,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ListTab.Add(new EventPointsTab());
                 ListTab.Add(new SpawnsTab());
                 ListTab.Add(new BuildingsTab());
-                ListTab.Add(new InfrastructureTab());
+                ListTab.Add(new SceneryTab());
                 ListTab.Add(new ScriptsTab());
                 ListTab.Add(new LayerTab());
                 ListTab.Add(new PropTab());
@@ -106,11 +106,6 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
-                if (LayerIndex == 0)
-                {
-                    TerrainPreset.Height = 1;
-                }
-
                 TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(GridX, GridY), LayerIndex);
                 NewTerrain.Owner = ActiveMap;
                 NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
@@ -329,9 +324,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 return NewTilesetPreset;
             }
 
-            public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            public TilesetPreset CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                ActiveMap.ListTilesetPreset.Add(new ConquestTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+                return new ConquestTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
         }
 

@@ -22,6 +22,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private Dictionary<int, Tile2DHolder> DicTile2DByTileset;
         private Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
 
+        private Dictionary<int, Tile2DHolder> DicTemporaryTile2DByLayerByTileset;
+
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
         private Tile2DHolder ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
@@ -41,10 +43,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
             DicTile2DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile2DHolder>>();
 
+            DicTemporaryTile2DByLayerByTileset = new Dictionary<int, Tile2DHolder>();
+
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
                 CreateMap(Map, LayerManager.ListLayer[L], L);
             }
+
+            CreateTemporaryTiles(Map);
         }
 
         protected void CreateMap(ConquestMap Map, MapLayer Owner, int LayerIndex)
@@ -111,6 +117,51 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int L = 0; L < Owner.ListSubLayer.Count; L++)
             {
                 CreateMap(Map, Owner.ListSubLayer[L], LayerIndex);
+            }
+        }
+
+        private void CreateTemporaryTiles(ConquestMap Map)
+        {
+            foreach (KeyValuePair<Vector3, DestructableTerrain> ActiveTemporaryTerrain in Map.DicTemporaryTerrain)
+            {
+                var ActiveTile = ActiveTemporaryTerrain.Value.ReplacementTile;
+
+                if (!DicTemporaryTile2DByLayerByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                {
+                    Tile2DHolder NewTile;
+
+                    if (Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].TilesetType == TilesetPreset.TilesetTypes.Regular)
+                    {
+                        NewTile = new Tile2DHolder(Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Tilesets/" + Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName);
+                    }
+                    else
+                    {
+                        NewTile = new Tile2DHolder(Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex], Map.Content, null, "Autotiles/" + Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName);
+                    }
+
+                    DicTemporaryTile2DByLayerByTileset.Add(ActiveTile.TilesetIndex, NewTile);
+                }
+
+
+                if (ActiveTile.ArraySubTile.Length == 0)
+                {
+                    DicTemporaryTile2DByLayerByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTemporaryTerrain.Value.ReplacementTerrain.WorldPosition);
+                }
+                else
+                {
+                    float OffsetSizeX = (Map.TileSize.X / 2) / (float)Map.TileSize.X * Map.TileSize.X;
+                    float OffsetSizeY = (1 - (Map.TileSize.X / 4) / (float)Map.TileSize.Y) * Map.TileSize.X;
+
+                    for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
+                    {
+                        Vector3 TilePosition = ActiveTemporaryTerrain.Value.ReplacementTerrain.WorldPosition;
+                        int IndexX = (T % (ActiveTile.ArraySubTile.Length / 2));
+                        int IndexY = (T / (ActiveTile.ArraySubTile.Length / 2));
+                        TilePosition.X += OffsetSizeX * IndexX;
+                        TilePosition.Y += OffsetSizeY * IndexY;
+                        DicTemporaryTile2DByLayerByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
+                    }
+                }
             }
         }
 
@@ -329,6 +380,15 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             g.Begin();
 
             Map.MapEnvironment.EndDraw(g);
+
+            g.End();
+
+            foreach (Tile2DHolder ActiveTileSet in DicTemporaryTile2DByLayerByTileset.Values)
+            {
+                ActiveTileSet.Draw(g, Map, 0f);
+            }
+
+            g.Begin();
 
             DrawItems(g);
 

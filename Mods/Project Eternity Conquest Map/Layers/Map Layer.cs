@@ -103,7 +103,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-
             ArrayTile = new DrawableTile[Map.MapSize.X, Map.MapSize.Y];
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {

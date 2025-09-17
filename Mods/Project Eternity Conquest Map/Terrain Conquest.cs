@@ -158,20 +158,50 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
-            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+        public TerrainConquest(int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(GridPosX, GridPosY, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
         }
 
-        public TerrainConquest(int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
-            : base(XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+        public TerrainConquest(int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth, byte TerrainTypeIndex)
+            : base(GridPosX, GridPosY, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
         }
 
-        public TerrainConquest(BinaryReader BR, int XPos, int YPos, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
-            : base(BR, XPos, YPos, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
+        public TerrainConquest(BinaryReader BR, int GridPosX, int GridPosY, int TileSizeX, int TileSizeY, int LayerIndex, int LayerHeight, float LayerDepth)
+            : base(BR, GridPosX, GridPosY, TileSizeX, TileSizeY, LayerIndex, LayerHeight, LayerDepth)
         {
+        }
+    }
+
+    public class DestructableTerrain
+    {
+        public TerrainConquest ReplacementTerrain;
+        public DrawableTile ReplacementTile;
+        public int RemainingHP;
+
+        public void DamageTile()
+        {
+            --RemainingHP;
+
+            if (RemainingHP <= 0)
+            {
+            }
+            else
+            {
+                UpdateTile();
+            }
+        }
+
+        public void UpdateTile()
+        {
+            ReplacementTile.Origin.X -= ReplacementTile.Origin.Width;
+        }
+
+        public static void UpdateAllTemporaryTerrain(ConquestMap ActiveMap)
+        {
+            ActiveMap.DicTemporaryTerrain.Clear();
         }
     }
 }

@@ -363,20 +363,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         private void DamageTemporaryTerrain(Vector3 Position)
         {
-            TerrainConquest TemporaryTerrain;
+            DestructableTerrain TemporaryTerrain;
 
             if (Map.DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
             {
-                Map.DicTemporaryTerrain.Remove(Position);
+                TemporaryTerrain.DamageTile();
 
-                MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)Position.Z];
-                for (int P = 0; P < ActiveLayer.ListProp.Count; P++)
+                if (TemporaryTerrain.RemainingHP <= 0)
                 {
-                    if (ActiveLayer.ListProp[P].Position == Position)
+                    Map.DicTemporaryTerrain.Remove(Position);
+
+                    MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)Position.Z];
+                    for (int P = 0; P < ActiveLayer.ListProp.Count; P++)
                     {
-                        ActiveLayer.ListProp.RemoveAt(P);
+                        if (ActiveLayer.ListProp[P].Position == Position)
+                        {
+                            ActiveLayer.ListProp.RemoveAt(P);
+                        }
                     }
                 }
+
+                Map.Reset();
             }
         }
 

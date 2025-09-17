@@ -126,8 +126,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected float CursorHoldTime;
 
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
+        public List<Texture2D> ListTemporaryTileSet;//Picture of the tilesets used for the map.
         public List<TilesetPreset> ListTilesetPreset;
+        public List<TilesetPreset> ListTemporaryTilesetPreset;
         public List<string> ListBattleBackgroundAnimationPath;
+        public List<string> ListTemporaryBattleBackgroundAnimationPath;
         public UnitAndTerrainValues TerrainRestrictions;
 
         public bool IsInit = false;
@@ -249,7 +252,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             GameTurn = 0;
             ListTileSet = new List<Texture2D>();
+            ListTemporaryTileSet = new List<Texture2D>();
             ListBattleBackgroundAnimationPath = new List<string>();
+            ListTemporaryBattleBackgroundAnimationPath = new List<string>();
             ListBackground = new List<AnimationBackground>();
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();

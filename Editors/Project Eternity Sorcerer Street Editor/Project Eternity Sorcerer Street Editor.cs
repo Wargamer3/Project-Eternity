@@ -296,9 +296,9 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return NewTilesetPreset;
             }
 
-            public void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            public TilesetPreset CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                ActiveMap.ListTilesetPreset.Add(new SorcererStreetTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex));
+                return new SorcererStreetTilesetPreset(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
         }
 

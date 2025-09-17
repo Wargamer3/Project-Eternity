@@ -166,6 +166,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<TilesetPreset>();
+            ListTemporaryTilesetPreset = new List<TilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
 

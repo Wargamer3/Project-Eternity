@@ -98,7 +98,6 @@ namespace ProjectEternity.Editors.MapEditor
         {
             for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; T++)
             {
-
                 if (ActiveMap.ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
                 {
                     cboTiles.Items.Add(ActiveMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
@@ -670,9 +669,10 @@ namespace ProjectEternity.Editors.MapEditor
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
                                     continue;
                                 }
+
                                 Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
 
-                                Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count);
+                                ActiveMap.ListTilesetPreset.Add(Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
                                 ActiveMap.ListTileSet.Add(Tile);
                                 //Add the file name to the tile combo box.
                                 cboTiles.Items.Add(Name);

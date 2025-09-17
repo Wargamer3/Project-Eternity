@@ -24,6 +24,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType);
         TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex);
         TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex);
-        void CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
+        TilesetPreset CreateTilesetPresetFromSprite(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
     }
 }

@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public ConquestParams GlobalBattleParams;
         public List<ConquestMutator> ListMutator;
-        public Dictionary<Vector3, TerrainConquest> DicTemporaryTerrain;//Temporary obstacles
+        public Dictionary<Vector3, DestructableTerrain> DicTemporaryTerrain;//Temporary obstacles
         public ConquestTerrainHolder TerrainHolder;
 
         public int ActiveUnitIndex
@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<ConquestMutator>();
-            DicTemporaryTerrain = new Dictionary<Vector3, TerrainConquest>();
+            DicTemporaryTerrain = new Dictionary<Vector3, DestructableTerrain>();
             TerrainHolder = new ConquestTerrainHolder();
             ListBuilding = new List<BuildingConquest>();
         }
@@ -166,6 +166,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<TilesetPreset>();
+            ListTemporaryTilesetPreset = new List<TilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveUnitIndex = -1;
 
@@ -201,12 +202,56 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             SaveTilesets(BW);
 
+            SaveTemporaryTerrain(BW);
+
             LayerManager.Save(BW);
 
             MapEnvironment.Save(BW);
 
             FS.Close();
             BW.Close();
+        }
+
+        private void SaveTemporaryTerrain(BinaryWriter BW)
+        {
+            int RealTilesetCount = 0;
+            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
+            {
+                if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
+                ++RealTilesetCount;
+            }
+
+            BW.Write(RealTilesetCount);
+            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
+            {
+                if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
+                ListTemporaryTilesetPreset[T].Write(BW);
+            }
+
+            BW.Write(ListTemporaryBattleBackgroundAnimationPath.Count);
+            foreach (string BattleBackgroundAnimationPath in ListTemporaryBattleBackgroundAnimationPath)
+            {
+                BW.Write(BattleBackgroundAnimationPath);
+            }
+
+            BW.Write(DicTemporaryTerrain.Count);
+
+            foreach (KeyValuePair<Vector3, DestructableTerrain> ActiveTemporaryTerrain in DicTemporaryTerrain)
+            {
+                BW.Write((int)ActiveTemporaryTerrain.Key.X);
+                BW.Write((int)ActiveTemporaryTerrain.Key.Y);
+                BW.Write((int)ActiveTemporaryTerrain.Key.Z);
+                ActiveTemporaryTerrain.Value.ReplacementTerrain.Save(BW);
+                ActiveTemporaryTerrain.Value.ReplacementTile.Save(BW);
+            }
         }
 
         public override void Load()
@@ -259,6 +304,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             LoadTilesets(BR);
 
+            LoadTemporaryTerrain(BR);
+
             LayerManager = new LayerHolderConquest(this, BR);
 
             MapEnvironment = new EnvironmentManagerConquest(BR, this);
@@ -272,13 +319,75 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return new ConquestTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
-        protected void LoadMapGrid(BinaryReader BR)
+        private void LoadTemporaryTerrain(BinaryReader BR)
         {
-            int LayerCount = BR.ReadInt32();
-
-            for (int L = 0; L < LayerCount; ++L)
+            //Tile sets
+            int Tiles = BR.ReadInt32();
+            for (int T = 0; T < Tiles; T++)
             {
-                LayerManager.ListLayer.Add(new MapLayer(this, BR, L));
+                TilesetPreset LoadedTileset = ReadTileset(BR, T);
+                ListTemporaryTilesetPreset.Add(LoadedTileset);
+
+                #region Load Tilesets
+
+                string SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[0].TilesetName;
+
+                if (Content != null)
+                {
+                    if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
+                    {
+                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
+                        else
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
+                    }
+                    else
+                    {
+                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                        else
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
+                    }
+                }
+
+                #endregion
+
+                for (int i = 1; i < LoadedTileset.ArrayTilesetInformation.Length; i++)
+                {
+                    SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[i].TilesetName;
+                    TilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
+                    ListTemporaryTilesetPreset.Add(ExtraTileset);
+
+                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                    else
+                        ListTemporaryTileSet.Add(null);
+                }
+            }
+
+            int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
+            ListTemporaryBattleBackgroundAnimationPath = new List<string>(ListBattleBackgroundAnimationPathCount);
+            for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+            {
+                ListTemporaryBattleBackgroundAnimationPath.Add(BR.ReadString());
+            }
+
+            int DicTemporaryTerrainCount = BR.ReadInt32();
+
+            for (int T = 0; T < DicTemporaryTerrainCount; ++T)
+            {
+                int GridX = BR.ReadInt32();
+                int GridY = BR.ReadInt32();
+                int LayerIndex = BR.ReadInt32();
+                TerrainConquest ReplacementTerrain = new TerrainConquest(BR, GridX, GridY, TileSize.X, TileSize.Y, LayerIndex, LayerHeight, LayerIndex);
+                DrawableTile ReplacementTile = new DrawableTile(BR, TileSize.X, TileSize.Y);
+
+                var NewTerrain = new DestructableTerrain();
+                NewTerrain.ReplacementTerrain = ReplacementTerrain;
+                NewTerrain.ReplacementTile = ReplacementTile;
+                NewTerrain.RemainingHP = ListTemporaryTileSet[ReplacementTile.TilesetIndex].Height / TileSize.Y;
+
+                DicTemporaryTerrain.Add(new Vector3(GridX, GridY, LayerIndex), NewTerrain);
             }
         }
 
@@ -1462,20 +1571,20 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public TerrainConquest GetTerrain(Vector3 WorldPosition)
         {
-            WorldPosition = ConvertToGridPosition(WorldPosition);
+            Vector3 GridPosition = ConvertToGridPosition(WorldPosition);
 
-            if (WorldPosition.X < 0 || WorldPosition.X >= MapSize.X || WorldPosition.Y < 0 || WorldPosition.Y >= MapSize.Y || WorldPosition.Z < 0 || WorldPosition.Z >= LayerManager.ListLayer.Count)
+            if (GridPosition.X < 0 || GridPosition.X >= MapSize.X || GridPosition.Y < 0 || GridPosition.Y >= MapSize.Y || GridPosition.Z < 0 || GridPosition.Z >= LayerManager.ListLayer.Count)
             {
                 return null;
             }
 
-            TerrainConquest TemporaryTerrain;
-            if (DicTemporaryTerrain.TryGetValue(WorldPosition, out TemporaryTerrain))
+            DestructableTerrain TemporaryTerrain;
+            if (DicTemporaryTerrain.TryGetValue(GridPosition, out TemporaryTerrain))
             {
-                return TemporaryTerrain;
+                return TemporaryTerrain.ReplacementTerrain;
             }
 
-            return LayerManager.ListLayer[(int)WorldPosition.Z].ArrayTerrain[(int)WorldPosition.X, (int)WorldPosition.Y];
+            return LayerManager.ListLayer[(int)GridPosition.Z].ArrayTerrain[(int)GridPosition.X, (int)GridPosition.Y];
         }
 
         public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, float WorldffsetX, float WorldOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
