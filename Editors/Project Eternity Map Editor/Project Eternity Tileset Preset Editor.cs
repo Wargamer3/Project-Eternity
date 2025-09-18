@@ -70,14 +70,14 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected ITilesetPresetHelper Helper;
 
-        protected string TilesetName;
-        protected Point TileSize;
-        protected Terrain[,] ArrayTerrain;
-        protected DrawableTile[,] ArrayTiles;
         protected List<string> ListBattleBackgroundAnimationPath;
 
+        public Point TileSize;
         protected Point TileOriginPoint;
-        int BrushIndex = 0;
+        protected TilesetPreset Preset;
+        protected TilesetPresetInformation TilesetInfo;
+        protected int BrushIndex = 0;
+        bool AllowEvent;
 
         private enum ItemSelectionChoices { Tile, BattleBackgroundAnimation };
 
@@ -87,10 +87,11 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             InitializeComponent();
 
-            TilesetName = "";
+            AllowEvent = true;
             TileSize = new Point(32, 32);
-            ArrayTerrain = new Terrain[0, 0];
             ListBattleBackgroundAnimationPath = new List<string>();
+            InitHelper();
+            TilesetInfo = Helper.CreatePreset(string.Empty, 32, 32, 32, 32, 0);
         }
 
         public ProjectEternityTilesetPresetEditor(string FilePath, object[] Params)
@@ -126,20 +127,10 @@ namespace ProjectEternity.Editors.TilesetEditor
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
-            BW.Write(TilesetName);
-            BW.Write((byte)TilesetPreset.TilesetTypes.Regular);
+            BW.Write((byte)0);
+            BW.Write((byte)1);
 
-            BW.Write(ArrayTerrain.GetLength(0));
-            BW.Write(ArrayTerrain.GetLength(1));
-
-            //Tiles
-            for (int Y = 0; Y < ArrayTerrain.GetLength(1); Y++)
-            {
-                for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
-                {
-                    ArrayTerrain[X, Y].Save(BW);
-                }
-            }
+            TilesetInfo.Write(BW);
 
             BW.Write(ListBattleBackgroundAnimationPath.Count);
             foreach (string BattleBackgroundAnimationPath in ListBattleBackgroundAnimationPath)
@@ -167,7 +158,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
-            TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
+            Preset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
+            TilesetInfo = Preset.ArrayTilesetInformation[0];
 
             BR.Close();
             FS.Close();
@@ -183,26 +175,30 @@ namespace ProjectEternity.Editors.TilesetEditor
             cboBattleAnimationBackground.Items.Add("None");
             cboBattleAnimationForeground.Items.Clear();
             cboBattleAnimationForeground.Items.Add("None");
-            ListBattleBackgroundAnimationPath.AddRange(NewTilesetPreset.ListBattleBackgroundAnimationPath);
-            foreach (string BattleBackgroundAnimationPath in NewTilesetPreset.ListBattleBackgroundAnimationPath)
+            ListBattleBackgroundAnimationPath.AddRange(Preset.ListBattleBackgroundAnimationPath);
+            foreach (string BattleBackgroundAnimationPath in Preset.ListBattleBackgroundAnimationPath)
             {
                 cboBattleAnimationBackground.Items.Add(BattleBackgroundAnimationPath);
                 cboBattleAnimationForeground.Items.Add(BattleBackgroundAnimationPath);
             }
 
-            if (NewTilesetPreset.ArrayTilesetInformation.Length > 0)
-            {
-                TilesetName = NewTilesetPreset.ArrayTilesetInformation[0].TilesetName;
+            AllowEvent = false;
 
-                ArrayTerrain = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTerrain;
-                ArrayTiles = NewTilesetPreset.ArrayTilesetInformation[0].ArrayTiles;
+            if (Preset.ArrayTilesetInformation.Length > 0)
+            {
+                TilesetInfo.TilesetName = TilesetInfo.TilesetName;
+
+                TilesetInfo.ArrayTerrain = TilesetInfo.ArrayTerrain;
+                TilesetInfo.ArrayTiles = TilesetInfo.ArrayTiles;
 
                 viewerTileset.Preload();
-                if (!string.IsNullOrWhiteSpace(TilesetName))
-                    InitTileset(TilesetName);
+                if (!string.IsNullOrWhiteSpace(TilesetInfo.TilesetName))
+                    InitTileset(TilesetInfo.TilesetName);
 
                 SelectTile(0, 0);
             }
+
+            AllowEvent = true;
         }
 
         protected virtual void InitHelper()
@@ -315,7 +311,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             int FinalX = (X + DrawOffset.X) / TileSize.X;
             int FinalY = ((Y + DrawOffset.X)) / TileSize.Y;
 
-            if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayTerrain.GetLength(0) || FinalY >= ArrayTerrain.GetLength(1))
+            if (FinalX < 0 || FinalY < 0 || FinalX >= TilesetInfo.ArrayTerrain.GetLength(0) || FinalY >= TilesetInfo.ArrayTerrain.GetLength(1))
             {
                 return;
             }
@@ -323,8 +319,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             viewerTileset.SelectTile(TileOriginPoint, new Point(FinalX * TileSize.X, FinalY * TileSize.Y),
                                                  Control.ModifierKeys == Keys.Shift, BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[FinalX, FinalY];
-            DrawableTile PresetTile = ArrayTiles[FinalX, FinalY];
+            Terrain PresetTerrain = TilesetInfo.ArrayTerrain[FinalX, FinalY];
+            DrawableTile PresetTile = TilesetInfo.ArrayTiles[FinalX, FinalY];
 
             cboTerrainType.SelectedIndex = PresetTerrain.TerrainTypeIndex;
 
@@ -351,19 +347,19 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboTerrainType.SelectedIndex < 0)
+            if (cboTerrainType.SelectedIndex < 0 || !AllowEvent)
             {
                 return;
             }
 
             Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
 
-            ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y] = PresetTile;
+            TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y] = PresetTile;
         }
 
         private void btnEditTerrainTypes_Click(object sender, EventArgs e)
@@ -401,20 +397,30 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!AllowEvent)
+            {
+                return;
+            }
+
             Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
         }
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!AllowEvent)
+            {
+                return;
+            }
+
             Point TilePos = viewerTileset.GetTileFromBrush(new Point(0, 0), BrushIndex);
 
-            Terrain PresetTerrain = ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
-            DrawableTile PresetTile = ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            Terrain PresetTerrain = TilesetInfo.ArrayTerrain[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
+            DrawableTile PresetTile = TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
         }
@@ -434,19 +440,19 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
-                            InitTileset(TilesetName);
+                            TilesetInfo.TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
+                            InitTileset(TilesetInfo.TilesetName);
                             int TilesetWidth = viewerTileset.sprTileset.Width / TileSize.X;
                             int TilesetHeight = viewerTileset.sprTileset.Height / TileSize.Y;
-                            ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
-                            ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
+                            TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
+                            TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
                             for (int X = TilesetWidth - 1; X >= 0; --X)
                             {
                                 for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y, TileSize.X, TileSize.Y, 0, 0, 0);
-                                    ArrayTerrain[X, Y].TerrainTypeIndex = 1;
-                                    ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
+                                    TilesetInfo.ArrayTerrain[X, Y] = new Terrain(X, Y, TileSize.X, TileSize.Y, 0, 0, 0);
+                                    TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
+                                    TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
                                 }
                             }
                         }
