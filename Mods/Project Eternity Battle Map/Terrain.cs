@@ -319,15 +319,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
 
-            bool LeftTileValid = false;
-            bool UpTileValid = false;
-            bool RightTileValid = false;
-            bool DownTileValid = false;
+            bool LeftTileValid = true;
+            bool UpTileValid = true;
+            bool RightTileValid = true;
+            bool DownTileValid = true;
 
-            bool UpLeftTileValid = false;
-            bool UpRightTileValid = false;
-            bool DownLeftTileValid = false;
-            bool DownRightTileValid = false;
+            bool UpLeftTileValid = true;
+            bool UpRightTileValid = true;
+            bool DownLeftTileValid = true;
+            bool DownRightTileValid = true;
 
             ArrayTile[GridX, GridY].ArraySubTile = new Rectangle[0];
 
@@ -336,36 +336,52 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (GridX > 0)
             {
-                LeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].TilesetType || (ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX - 1, GridY].TilesetIndex);
+                LeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX - 1, GridY].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX - 1, GridY].TilesetIndex);
             }
             if (GridY > 0)
             {
-                UpTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].TilesetType || (ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX, GridY - 1].TilesetIndex);
+                UpTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX, GridY - 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX, GridY - 1].TilesetIndex);
 
                 if (GridX > 0)
                 {
-                    UpLeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].TilesetType;
+                    UpLeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX - 1, GridY - 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX - 1, GridY - 1].TilesetIndex);
                 }
                 if (GridX < ArrayTile.GetLength(0) - 1)
                 {
-                    UpRightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].TilesetType;
+                    UpRightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX + 1, GridY - 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX + 1, GridY - 1].TilesetIndex);
                 }
             }
             if (GridX < ArrayTile.GetLength(0) - 1)
             {
-                RightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].TilesetType || (ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX + 1, GridY].TilesetIndex);
+                RightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].TilesetType
+                     || (ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX + 1, GridY].TilesetIndex)
+                     || (ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX + 1, GridY].TilesetIndex);
             }
             if (GridY < ArrayTile.GetLength(1) - 1)
             {
-                DownTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].TilesetType || (ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX, GridY + 1].TilesetIndex);
+                DownTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX, GridY + 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX, GridY + 1].TilesetIndex);
 
                 if (GridX > 0)
                 {
-                    DownLeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].TilesetType;
+                    DownLeftTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX - 1, GridY + 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX - 1, GridY + 1].TilesetIndex);
                 }
                 if (GridX < ArrayTile.GetLength(0) - 1)
                 {
-                    DownRightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].TilesetType;
+                    DownRightTileValid = TilesetType == ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].TilesetType
+                    || (ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].SlaveIndex == 2 && NewTile.TilesetIndex + 2 == ArrayTile[GridX + 1, GridY + 1].TilesetIndex)
+                    || (ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].SlaveIndex == 3 && NewTile.TilesetIndex + 3 == ArrayTile[GridX + 1, GridY + 1].TilesetIndex);
                 }
             }
 
