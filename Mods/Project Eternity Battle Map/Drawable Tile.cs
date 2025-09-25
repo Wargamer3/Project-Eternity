@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(TilesetIndex);
             BW.Write(Origin.X);
             BW.Write(Origin.Y);
-            if (ArraySubTile.Length > 0)
+            if (ArraySubTile != null && ArraySubTile.Length > 0)
             {
                 BW.Write(true);
                 BW.Write((byte)ArraySubTile.Length);

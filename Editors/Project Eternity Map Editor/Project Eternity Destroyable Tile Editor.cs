@@ -10,11 +10,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
-using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
-    public partial class ProjectEternityAutotileTilesetPresetEditor : BaseEditor
+    public partial class ProjectEternityDestroyableTileEditor : BaseEditor
     {
         public class TabContent
         {
@@ -114,9 +113,9 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
         }
 
-        public class DeathmatchAutotilePresetHelper : ITilesetPresetHelper
+        public class DeathmatcDestroyableTiletHelper : ITilesetPresetHelper
         {
-            public DeathmatchAutotilePresetHelper()
+            public DeathmatcDestroyableTiletHelper()
             {
             }
 
@@ -138,22 +137,22 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new TilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                throw new NotImplementedException();
             }
 
             public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+                throw new NotImplementedException();
             }
 
             public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                throw new NotImplementedException();
+                return new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                throw new NotImplementedException();
+                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
@@ -182,7 +181,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        public ProjectEternityAutotileTilesetPresetEditor()
+        public ProjectEternityDestroyableTileEditor()
         {
             InitializeComponent();
 
@@ -192,7 +191,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             AllowEvent = true;
         }
 
-        public ProjectEternityAutotileTilesetPresetEditor(string FilePath, object[] Params)
+        public ProjectEternityDestroyableTileEditor(string FilePath, object[] Params)
             : this()
         {
             this.FilePath = FilePath;
@@ -210,8 +209,8 @@ namespace ProjectEternity.Editors.TilesetEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesImages }, "Maps/Autotiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsDeathmatch, GUIRootPathMapAutotilesPresets }, "Maps/Autotiles Presets/Deathmatch/", new string[] { ".peat" }, typeof(ProjectEternityAutotileTilesetPresetEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesImages }, "Maps/Destroyable Tiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesPresetsDeathmatch, GUIRootPathMaDestroyableTilesPresets }, "Maps/Destroyable Tiles Presets/Deathmatch/", new string[] { ".pedt" }, typeof(ProjectEternityDestroyableTileEditor), true)
             };
 
             return Info;
@@ -252,21 +251,21 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected void LoadTileset(string Path)
         {
-            string Name = Path.Substring(0, Path.Length - 5).Substring(31);
+            string Name = Path.Substring(0, Path.Length - 5).Substring(39);
 
-            this.Text = Name + " - Project Eternity Autotile Tileset Preset Editor";
+            this.Text = Name + " - Project Eternity Destroyable Tiles Preset Editor";
 
             InitHelper();
             CreateTab("Main");
 
-            FileStream FS = new FileStream("Content/Maps/Autotiles Presets/" + Name + ".peat", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Maps/Destroyable Tiles Presets/" + Name + ".pedt", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
-            TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
+            DestructibleTilesetPreset NewTilesetPreset = Helper.LoadDestructiblePreset(BR, TileSize.X, TileSize.Y, 0);
 
             BR.Close();
             FS.Close();
@@ -312,7 +311,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
 
-            if (NewTilesetPreset.TilesetType == TilesetTypes.Ocean)
+            if (NewTilesetPreset.TilesetType == DestructibleTilesetPreset.TilesetTypes.Ocean)
             {
                 tabControl1.TabPages[0].Text = "Sea";
                 tabControl1.TabPages[1].Text = "River";
@@ -338,7 +337,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected virtual void InitHelper()
         {
-            Helper = new DeathmatchAutotilePresetHelper();
+            Helper = new DeathmatcDestroyableTiletHelper();
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
@@ -348,7 +347,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         private void CreateTab(string TabName)
         {
-            TabContent NewTab = new TabContent(TabName, Helper.CreatePreset(string.Empty, 0, 0, 32, 32, 0));
+            TabContent NewTab = new TabContent(TabName, Helper.CreateDestructiblePreset(string.Empty, 0, 0, 32, 32, 0));
             ListActiveTab.Add(NewTab);
             this.tabControl1.Controls.Add(NewTab.tabTileset);
 

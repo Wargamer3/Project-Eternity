@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public ConquestParams GlobalBattleParams;
         public List<ConquestMutator> ListMutator;
-        public Dictionary<Vector3, DestructableTerrain> DicTemporaryTerrain;//Temporary obstacles
+        public Dictionary<Vector3, DestructibleTerrain> DicTemporaryTerrain;//Temporary obstacles
         public ConquestTerrainHolder TerrainHolder;
 
         public int ActiveUnitIndex
@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<ConquestMutator>();
-            DicTemporaryTerrain = new Dictionary<Vector3, DestructableTerrain>();
+            DicTemporaryTerrain = new Dictionary<Vector3, DestructibleTerrain>();
             TerrainHolder = new ConquestTerrainHolder();
             ListBuilding = new List<BuildingConquest>();
         }
@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<TilesetPreset>();
-            ListTemporaryTilesetPreset = new List<TilesetPreset>();
+            ListTemporaryTilesetPreset = new List<DestructibleTilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveUnitIndex = -1;
 
@@ -214,37 +214,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         private void SaveTemporaryTerrain(BinaryWriter BW)
         {
-            int RealTilesetCount = 0;
-            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
-            {
-                if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
-                {
-                    continue;
-                }
-
-                ++RealTilesetCount;
-            }
-
-            BW.Write(RealTilesetCount);
-            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
-            {
-                if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Slave)
-                {
-                    continue;
-                }
-
-                ListTemporaryTilesetPreset[T].Write(BW);
-            }
-
-            BW.Write(ListTemporaryBattleBackgroundAnimationPath.Count);
-            foreach (string BattleBackgroundAnimationPath in ListTemporaryBattleBackgroundAnimationPath)
-            {
-                BW.Write(BattleBackgroundAnimationPath);
-            }
-
             BW.Write(DicTemporaryTerrain.Count);
 
-            foreach (KeyValuePair<Vector3, DestructableTerrain> ActiveTemporaryTerrain in DicTemporaryTerrain)
+            foreach (KeyValuePair<Vector3, DestructibleTerrain> ActiveTemporaryTerrain in DicTemporaryTerrain)
             {
                 BW.Write((int)ActiveTemporaryTerrain.Key.X);
                 BW.Write((int)ActiveTemporaryTerrain.Key.Y);
@@ -319,59 +291,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return new ConquestTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
+        protected override DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)
+        {
+            return new DestructibleTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+        }
+
         private void LoadTemporaryTerrain(BinaryReader BR)
         {
-            //Tile sets
-            int Tiles = BR.ReadInt32();
-            for (int T = 0; T < Tiles; T++)
-            {
-                TilesetPreset LoadedTileset = ReadTileset(BR, T);
-                ListTemporaryTilesetPreset.Add(LoadedTileset);
-
-                #region Load Tilesets
-
-                string SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[0].TilesetName;
-
-                if (Content != null)
-                {
-                    if (ListTemporaryTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
-                    {
-                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
-                        else
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
-                    }
-                    else
-                    {
-                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
-                        else
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
-                    }
-                }
-
-                #endregion
-
-                for (int i = 1; i < LoadedTileset.ArrayTilesetInformation.Length; i++)
-                {
-                    SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[i].TilesetName;
-                    TilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
-                    ListTemporaryTilesetPreset.Add(ExtraTileset);
-
-                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
-                    else
-                        ListTemporaryTileSet.Add(null);
-                }
-            }
-
-            int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
-            ListTemporaryBattleBackgroundAnimationPath = new List<string>(ListBattleBackgroundAnimationPathCount);
-            for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
-            {
-                ListTemporaryBattleBackgroundAnimationPath.Add(BR.ReadString());
-            }
-
             int DicTemporaryTerrainCount = BR.ReadInt32();
 
             for (int T = 0; T < DicTemporaryTerrainCount; ++T)
@@ -382,7 +308,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 TerrainConquest ReplacementTerrain = new TerrainConquest(BR, GridX, GridY, TileSize.X, TileSize.Y, LayerIndex, LayerHeight, LayerIndex);
                 DrawableTile ReplacementTile = new DrawableTile(BR, TileSize.X, TileSize.Y);
 
-                var NewTerrain = new DestructableTerrain();
+                var NewTerrain = new DestructibleTerrain();
                 NewTerrain.ReplacementTerrain = ReplacementTerrain;
                 NewTerrain.ReplacementTile = ReplacementTile;
                 NewTerrain.RemainingHP = ListTemporaryTileSet[ReplacementTile.TilesetIndex].Height / TileSize.Y;
@@ -1578,7 +1504,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 return null;
             }
 
-            DestructableTerrain TemporaryTerrain;
+            DestructibleTerrain TemporaryTerrain;
             if (DicTemporaryTerrain.TryGetValue(GridPosition, out TemporaryTerrain))
             {
                 return TemporaryTerrain.ReplacementTerrain;

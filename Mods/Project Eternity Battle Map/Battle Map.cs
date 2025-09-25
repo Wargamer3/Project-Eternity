@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<Texture2D> ListTemporaryTileSet;//Picture of the tilesets used for the map.
         public List<TilesetPreset> ListTilesetPreset;
-        public List<TilesetPreset> ListTemporaryTilesetPreset;
+        public List<DestructibleTilesetPreset> ListTemporaryTilesetPreset;
         public List<string> ListBattleBackgroundAnimationPath;
         public List<string> ListTemporaryBattleBackgroundAnimationPath;
         public UnitAndTerrainValues TerrainRestrictions;
@@ -381,6 +381,39 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(BattleBackgroundAnimationPath);
             }
+
+            SaveDestructibleTerrainTilesets(BW);
+        }
+
+        private void SaveDestructibleTerrainTilesets(BinaryWriter BW)
+        {
+            int RealTilesetCount = 0;
+            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
+            {
+                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
+                ++RealTilesetCount;
+            }
+
+            BW.Write(RealTilesetCount);
+            for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
+            {
+                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Slave)
+                {
+                    continue;
+                }
+
+                ListTemporaryTilesetPreset[T].Write(BW);
+            }
+
+            BW.Write(ListTemporaryBattleBackgroundAnimationPath.Count);
+            foreach (string BattleBackgroundAnimationPath in ListTemporaryBattleBackgroundAnimationPath)
+            {
+                BW.Write(BattleBackgroundAnimationPath);
+            }
         }
 
         public override void Load()
@@ -566,6 +599,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return new TilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
         }
 
+        protected virtual DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)
+        {
+            return new DestructibleTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+        }
+
         protected void LoadTilesets(BinaryReader BR)
         {
             //Tile sets
@@ -618,6 +656,62 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
             {
                 ListBattleBackgroundAnimationPath.Add(BR.ReadString());
+            }
+            
+            LoadDestructibleTerrainTilesets(BR);
+        }
+
+        private void LoadDestructibleTerrainTilesets(BinaryReader BR)
+        {
+            //Tile sets
+            int Tiles = BR.ReadInt32();
+            for (int T = 0; T < Tiles; T++)
+            {
+                DestructibleTilesetPreset LoadedTileset = ReadDestructibleTilesetPreset(BR, T);
+                ListTemporaryTilesetPreset.Add(LoadedTileset);
+
+                #region Load Tilesets
+
+                string SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[0].TilesetName;
+
+                if (Content != null)
+                {
+                    if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Regular)
+                    {
+                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
+                        else
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
+                    }
+                    else
+                    {
+                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                        else
+                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
+                    }
+                }
+
+                #endregion
+
+                for (int i = 1; i < LoadedTileset.ArrayTilesetInformation.Length; i++)
+                {
+                    SpritePath = ListTemporaryTilesetPreset[T].ArrayTilesetInformation[i].TilesetName;
+                    DestructibleTilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
+                    ListTemporaryTilesetPreset.Add(ExtraTileset);
+
+                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
+                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                    else
+                        ListTemporaryTileSet.Add(null);
+                }
+            }
+
+            int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
+            ListTemporaryBattleBackgroundAnimationPath = new List<string>(ListBattleBackgroundAnimationPathCount);
+            for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+            {
+                ListTemporaryBattleBackgroundAnimationPath.Add(BR.ReadString());
             }
         }
 

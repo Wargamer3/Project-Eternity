@@ -144,6 +144,10 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 }
             }
 
+            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+            {
+            }
+
             private MapLayer GetRealLayer(int LayerIndex)
             {
                 int RealIndex = 0;
@@ -258,9 +262,9 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return new MapZoneSorcererStreet(ActiveMap, ZoneType);
             }
 
-            public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
             {
-                FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -277,21 +281,21 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return NewTilesetPreset;
             }
 
-            public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            public DestructibleTilesetPreset LoadDestructibleTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
             {
-                FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                TilesetPreset NewTilesetPreset = new SorcererStreetTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                DestructibleTilesetPreset NewTilesetPreset = new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
 
-                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+                ActiveMap.ListTemporaryTilesetPreset.Add(NewTilesetPreset);
 
                 return NewTilesetPreset;
             }

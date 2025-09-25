@@ -14,17 +14,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private List<Rectangle> ListTile2D;
         private List<Vector3> ListTileWorldPosition;
         private Texture2D sprTileset;
-        private TilesetPreset.TilesetTypes TilesetType;
+        private int AnimationFrames;
         private Texture2D sprTilesetBumpMap;
         private Texture2D sprTilesetHeightMap;//R = Depth, G = Wall Left to right angle, B = Wall Up to down angle where 255 = upward wall
         public Effect WetEffect;
         private bool CanUseEffect;
         private double TimeElapsed;
 
-        public Tile2DHolder(TilesetPreset.TilesetTypes TilesetType, Texture2D sprTileset)
+        public Tile2DHolder(int AnimationFrames, Texture2D sprTileset)
         {
-            this.TilesetType = TilesetType;
             this.sprTileset = sprTileset;
+            this.AnimationFrames = AnimationFrames;
+
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
 
@@ -39,9 +40,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public Tile2DHolder(TilesetPreset.TilesetTypes TilesetType, string TilesetName,  ContentManager Content, Effect WetEffect)
+        public Tile2DHolder(int AnimationFrames, string TilesetName,  ContentManager Content, Effect WetEffect)
         {
-            this.TilesetType = TilesetType;
+            this.AnimationFrames = AnimationFrames;
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
 
@@ -81,9 +82,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public Tile2DHolder(TilesetPreset Tileset, ContentManager Content, Effect WetEffect, string TilesetName)
+        public Tile2DHolder(int AnimationFrames, ContentManager Content, Effect WetEffect, string TilesetName)
         {
-            this.TilesetType = Tileset.TilesetType;
+            this.AnimationFrames = AnimationFrames;
             ListTile2D = new List<Rectangle>();
             ListTileWorldPosition = new List<Vector3>();
 
@@ -131,7 +132,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Update(GameTime gameTime)
         {
-            if (TilesetType == TilesetPreset.TilesetTypes.River)
+            if (AnimationFrames > 0)
             {
                 TimeElapsed += gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -148,12 +149,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             }
 
-            int OffsetX = sprTileset.Width / 4;
             int FinalOffsetX = 0;
 
-            if (TilesetType == TilesetPreset.TilesetTypes.River)
+            if (AnimationFrames > 0)
             {
-                FinalOffsetX = ((int)(TimeElapsed * 2) % 4) * OffsetX;
+                int OffsetX = sprTileset.Width / AnimationFrames;
+                FinalOffsetX = ((int)(TimeElapsed * 2) % AnimationFrames) * OffsetX;
             }
 
             for (int T = 0; T < ListTile2D.Count; T++)

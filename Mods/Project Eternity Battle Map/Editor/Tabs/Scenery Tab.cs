@@ -5,19 +5,16 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.Units.Conquest;
-using ProjectEternity.Editors.ConquestMapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.ConquestMapScreen;
 using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.MapEditor
 {
     public class SceneryTab : IMapEditorTab
     {
-        private enum ItemSelectionChoices { Tile, Autotile };
+        protected enum ItemSelectionChoices { Tile };
 
-        private ItemSelectionChoices ItemSelectionChoice;
+        protected ItemSelectionChoices ItemSelectionChoice;
 
         private TabPage tabInfrastructure;
         private ListView lvInfrastructure;
@@ -27,26 +24,18 @@ namespace ProjectEternity.Editors.MapEditor
         private Button btnTileAttributes;
         private Button btn3DTileAttributes;
 
-        protected ComboBox cboAutotiles;
-        private Button btnAddAutotile;
-        private Button btnRemoveAutotile;
-
         private ImageList imageList;
-
-        private List<UnitConquest> ListFactionUnit;
 
         protected ITileAttributes TileAttributesEditor;
 
         public BattleMapViewerControl BattleMapViewer { get; set; }
         public IMapHelper Helper { get; set; }
-        private ConquestMap ActiveMap;
+        private BattleMap ActiveMap;
 
         public TabPage InitTab(MenuStrip mnuToolBar)
         {
-            ListFactionUnit = new List<UnitConquest>();
-
-            ConquestSpawnUserControl SpawnControl = new ConquestSpawnUserControl();
-            tabInfrastructure = SpawnControl.tabControl1.TabPages[2];
+            TabsUserControl SpawnControl = new TabsUserControl();
+            tabInfrastructure = SpawnControl.tabControl1.TabPages[1];
 
             this.lvInfrastructure = SpawnControl.lvIScenery;
 
@@ -56,18 +45,10 @@ namespace ProjectEternity.Editors.MapEditor
             this.btn3DTileAttributes = SpawnControl.btnScenery3DTileAttributes;
             this.cboTiles = SpawnControl.cboSceneryTilesets;
 
-            this.cboAutotiles = SpawnControl.cboSceneryAutotile;
-            this.btnAddAutotile = SpawnControl.btnSceneryAddAutotile;
-            this.btnRemoveAutotile = SpawnControl.btnSceneryRemoveAutotile;
-
             this.btnAddTile.Click += new System.EventHandler(this.btnAddTile_Click);
             this.btnRemoveTile.Click += new System.EventHandler(this.btnRemoveTile_Click);
             this.btnTileAttributes.Click += new System.EventHandler(this.btnTileAttributes_Click);
             this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
-            this.cboTiles.SelectedIndexChanged += new System.EventHandler(this.cboTiles_SelectedIndexChanged);
-
-            this.btnAddAutotile.Click += new System.EventHandler(this.btnAddAutotile_Click);
-            this.btnRemoveAutotile.Click += new System.EventHandler(this.btnRemoveAutotile_Click);
 
             imageList = new ImageList();
             imageList.ImageSize = new Size(32, 32);
@@ -81,34 +62,18 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void OnMapLoaded()
         {
-            ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
+            ActiveMap = BattleMapViewer.ActiveMap;
 
             TileAttributesEditor = Helper.GetTileEditor();
 
             for (int T = 0; T < ActiveMap.ListTemporaryTilesetPreset.Count; T++)
             {
-                TilesetPreset ActiveTilesetPreset = ActiveMap.ListTemporaryTilesetPreset[T];
+                DestructibleTilesetPreset ActiveTilesetPreset = ActiveMap.ListTemporaryTilesetPreset[T];
 
                 AddSceneryImage(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName, ActiveMap.ListTemporaryTileSet[T]);
-                if (ActiveTilesetPreset.TilesetType == TilesetPreset.TilesetTypes.Regular)
+                if (ActiveTilesetPreset.TilesetType != DestructibleTilesetPreset.TilesetTypes.Slave)
                 {
                     cboTiles.Items.Add(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName);
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName))
-                    {
-                        cboTiles.Items.Add("Autotile Not Finished");
-                    }
-                    else
-                    {
-                        cboTiles.Items.Add("Autotile " + ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName);
-                    }
-
-                    if (ActiveTilesetPreset.TilesetType != TilesetPreset.TilesetTypes.Slave)
-                    {
-                        cboAutotiles.Items.Add(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName);
-                    }
                 }
             }
         }
@@ -135,49 +100,20 @@ namespace ProjectEternity.Editors.MapEditor
 
             if (e.Button == MouseButtons.Left)
             {
-                TerrainConquest NewTerrain = new TerrainConquest((TerrainConquest)ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]].ArrayTilesetInformation[0].ArrayTerrain[0, 0], new Microsoft.Xna.Framework.Point(GridX, GridY), TopLayerIndex);
-                NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Microsoft.Xna.Framework.Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (TopLayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
-
-                DestructableTerrain NewTemporaryTerrain = new DestructableTerrain();
-                NewTemporaryTerrain.ReplacementTerrain = NewTerrain;
-                NewTemporaryTerrain.ReplacementTile = ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]].ArrayTilesetInformation[0].ArrayTiles[0, 0];
-                NewTemporaryTerrain.RemainingHP = 10;
-
-                var Position = new Microsoft.Xna.Framework.Vector3(GridX, GridY, TopLayerIndex);
-                if (ActiveMap.DicTemporaryTerrain.ContainsKey(Position))
-                {
-                    ActiveMap.DicTemporaryTerrain[Position] = NewTemporaryTerrain;
-                }
-                else
-                {
-                    ActiveMap.DicTemporaryTerrain.Add(Position, NewTemporaryTerrain);
-                }
-
-                ActiveMap.Reset();
+                Helper.ReplaceDestructibleTileset(GridX, GridY, TopLayerIndex, ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]]);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                var Position = new Microsoft.Xna.Framework.Vector3(GridX, GridY, TopLayerIndex);
-                if (ActiveMap.DicTemporaryTerrain.ContainsKey(Position))
-                {
-                    ActiveMap.DicTemporaryTerrain.Remove(Position);
-                }
-
-                ActiveMap.Reset();
+                Helper.ReplaceDestructibleTileset(GridX, GridY, TopLayerIndex, null);
             }
         }
 
         #region Tileset
 
-        private void cboTiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void btnAddTile_Click(object sender, EventArgs e)
+        protected virtual void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesetPresetsDeathmatch));
         }
 
         private void btnRemoveTile_Click(object sender, EventArgs e)
@@ -239,39 +175,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         #endregion
 
-        #region Autotile
-
-        private void btnAddAutotile_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.Autotile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
-        }
-
-        private void btnRemoveAutotile_Click(object sender, EventArgs e)
-        {//If there's a tile set selected.
-            if (cboTiles.SelectedIndex >= 0)
-            {//Put the current index in a buffer.
-                int Index = cboTiles.SelectedIndex;
-
-                Helper.RemoveTileset(Index);
-                //Move the current tile set.
-                cboTiles.Items.RemoveAt(Index);
-
-                //Replace the index with a new one.
-                if (cboTiles.Items.Count > 0)
-                {
-                    if (Index >= cboTiles.Items.Count)
-                        cboTiles.SelectedIndex = cboTiles.Items.Count - 1;
-                    else
-                        cboTiles.SelectedIndex = Index;
-                }
-                else
-                    cboTiles.Text = "";
-            }
-        }
-
-        #endregion
-
         public void OnMapResize(int NewMapSizeX, int NewMapSizeY)
         {
         }
@@ -310,7 +213,7 @@ namespace ProjectEternity.Editors.MapEditor
             return ReturnImage;
         }
 
-        private Texture2D AddTilesetPreset(TilesetPreset NewTileset)
+        private Texture2D AddTilesetPreset(DestructibleTilesetPreset NewTileset)
         {
             for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
             {
@@ -359,26 +262,11 @@ namespace ProjectEternity.Editors.MapEditor
 
             string TilesetName = NewTileset.ArrayTilesetInformation[0].TilesetName;
 
-            if (NewTileset.TilesetType == TilesetPreset.TilesetTypes.Regular)
-            {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
-                ActiveMap.ListTemporaryTileSet.Add(NewTilesetSprite);
-                AddSceneryImage(TilesetName, NewTilesetSprite);
+            Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
+            ActiveMap.ListTemporaryTileSet.Add(NewTilesetSprite);
+            AddSceneryImage(TilesetName, NewTilesetSprite);
 
-                return NewTilesetSprite;
-            }
-            else if (!string.IsNullOrEmpty(NewTileset.ArrayTilesetInformation[0].TilesetName))
-            {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
-                ActiveMap.ListTemporaryTileSet.Add(NewTilesetSprite);
-                AddSceneryImage(TilesetName, NewTilesetSprite);
-
-                return NewTilesetSprite;
-            }
-            else
-            {
-                return null;
-            }
+            return NewTilesetSprite;
         }
 
         private void AddSceneryImage(string TilesetName, Texture2D sprTileset)
@@ -403,71 +291,20 @@ namespace ProjectEternity.Editors.MapEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            if (TilePath.StartsWith("Content/Maps/Tilesets Presets"))
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(30);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
-
-                                TilesetPreset NewTileset = Helper.LoadTilesetPreset(Name, ActiveMap.ListTemporaryTilesetPreset.Count);
-
-                                AddTilesetPreset(NewTileset);
-
-                                cboTiles.Items.Add(Name);
-                            }
-                            else
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
-
-                                Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
-
-                                ActiveMap.ListTemporaryTilesetPreset.Add(Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTemporaryTilesetPreset.Count));
-                                ActiveMap.ListTemporaryTileSet.Add(Tile);
-                                //Add the file name to the tile combo box.
-                                cboTiles.Items.Add(Name);
-                                AddSceneryImage(Name, Tile);
-                            }
-
-                            cboTiles.SelectedIndex = ActiveMap.ListTemporaryTilesetPreset.Count - 1;
-                        }
-                        break;
-
-                    case ItemSelectionChoices.Autotile:
-                        string AutotilePath = Items[I];
-                        if (AutotilePath != null)
-                        {
-                            string Name = AutotilePath.Substring(0, AutotilePath.Length - 5).Substring(31);
+                            string Name = TilePath.Substring(0, TilePath.Length - 5).Substring(39);
                             if (cboTiles.Items.Contains(Name))
                             {
-                                MessageBox.Show("This autotile is already listed.\r\n" + Name);
+                                MessageBox.Show("This tile is already listed.\r\n" + Name);
                                 continue;
                             }
 
-                            TilesetPreset NewTileset = Helper.LoadAutotilePreset(Name, ActiveMap.ListTemporaryTilesetPreset.Count);
+                            DestructibleTilesetPreset NewTileset = Helper.LoadDestructibleTilesetPreset("Destroyable Tiles Presets", Name, ActiveMap.ListTemporaryTilesetPreset.Count);
 
-                            for (int i = 0; i < NewTileset.ArrayTilesetInformation.Length; i++)
-                            {
-                                TilesetPreset ExtraTileset = NewTileset;
-                                if (i > 0)
-                                {
-                                    ExtraTileset = NewTileset.CreateSlave(i);
-                                    ActiveMap.ListTemporaryTilesetPreset.Add(ExtraTileset);
-                                }
-                                Texture2D NewTilesetSprite = AddTilesetPreset(ExtraTileset);
+                            AddTilesetPreset(NewTileset);
 
-                                BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(NewTilesetSprite);
-                                BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(ExtraTileset);
-                                cboTiles.Items.Add(Name);
-                                cboAutotiles.Items.Add(Name);
-                            }
+                            cboTiles.Items.Add(Name);
+
+                            cboTiles.SelectedIndex = ActiveMap.ListTemporaryTilesetPreset.Count - 1;
                         }
                         break;
 

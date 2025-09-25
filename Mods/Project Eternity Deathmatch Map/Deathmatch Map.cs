@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public UnitDeploymentScreen UnitDeploymentScreen;
         public DeathmatchParams GlobalBattleParams;
         public List<DeathmatchMutator> ListMutator;
-        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;//Temporary obstacles
+        public Dictionary<Vector3, DestructibleTerrain> DicTemporaryTerrain;//Temporary obstacles
 
         public int ActiveSquadIndex
         {
@@ -152,7 +152,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<DeathmatchMutator>();
-            DicTemporaryTerrain = new Dictionary<Vector3, Terrain>();
+            DicTemporaryTerrain = new Dictionary<Vector3, DestructibleTerrain>();
 
             TerrainRestrictions = new UnitAndTerrainValues();
             TerrainRestrictions.Load();
@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<TilesetPreset>();
-            ListTemporaryTilesetPreset = new List<TilesetPreset>();
+            ListTemporaryTilesetPreset = new List<DestructibleTilesetPreset>();
             Camera2DPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
 
@@ -202,6 +202,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             SaveTilesets(BW);
 
+            SaveTemporaryTerrain(BW);
+
             LayerManager.Save(BW);
 
             MapEnvironment.Save(BW);
@@ -209,7 +211,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             FS.Close();
             BW.Close();
         }
-        
+
+        private void SaveTemporaryTerrain(BinaryWriter BW)
+        {
+            BW.Write(DicTemporaryTerrain.Count);
+
+            foreach (KeyValuePair<Vector3, DestructibleTerrain> ActiveTemporaryTerrain in DicTemporaryTerrain)
+            {
+                BW.Write((int)ActiveTemporaryTerrain.Key.X);
+                BW.Write((int)ActiveTemporaryTerrain.Key.Y);
+                BW.Write((int)ActiveTemporaryTerrain.Key.Z);
+                ActiveTemporaryTerrain.Value.ReplacementTerrain.Save(BW);
+                ActiveTemporaryTerrain.Value.ReplacementTile.Save(BW);
+            }
+        }
+
         public override void Load()
         {
             if (PlayerRoster == null)
@@ -380,12 +396,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             LoadTilesets(BR);
 
+            LoadTemporaryTerrain(BR);
+
             LayerManager = new LayerHolderDeathmatch(this, BR);
 
             MapEnvironment = new EnvironmentManagerDeathmatch(BR, this);
 
             BR.Close();
             FS.Close();
+        }
+
+        private void LoadTemporaryTerrain(BinaryReader BR)
+        {
+            int DicTemporaryTerrainCount = BR.ReadInt32();
+
+            for (int T = 0; T < DicTemporaryTerrainCount; ++T)
+            {
+                int GridX = BR.ReadInt32();
+                int GridY = BR.ReadInt32();
+                int LayerIndex = BR.ReadInt32();
+                Terrain ReplacementTerrain = new Terrain(BR, GridX, GridY, TileSize.X, TileSize.Y, LayerIndex, LayerHeight, LayerIndex);
+                DrawableTile ReplacementTile = new DrawableTile(BR, TileSize.X, TileSize.Y);
+
+                var NewTerrain = new DestructibleTerrain();
+                NewTerrain.ReplacementTerrain = ReplacementTerrain;
+                NewTerrain.ReplacementTile = ReplacementTile;
+                NewTerrain.RemainingHP = ListTemporaryTileSet[ReplacementTile.TilesetIndex].Height / TileSize.Y;
+
+                DicTemporaryTerrain.Add(new Vector3(GridX, GridY, LayerIndex), NewTerrain);
+            }
         }
 
         public void LoadDeathmatchAIScripts()
@@ -498,10 +537,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
 
-            Terrain TemporaryTerrain;
+            DestructibleTerrain TemporaryTerrain;
             if (DicTemporaryTerrain.TryGetValue(WorldPosition, out TemporaryTerrain))
             {
-                return TemporaryTerrain;
+                return TemporaryTerrain.ReplacementTerrain;
             }
 
             return LayerManager.ListLayer[(int)WorldPosition.Z].ArrayTerrain[(int)WorldPosition.X, (int)WorldPosition.Y];

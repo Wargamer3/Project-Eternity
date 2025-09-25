@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
@@ -22,6 +23,18 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TA.ActiveTerrain;
                 }
             }
+        }
+
+        protected override void btnAddTile_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Tile;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
+        }
+
+        protected override void btnAddAutotile_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Autotile;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
         }
     }
 }

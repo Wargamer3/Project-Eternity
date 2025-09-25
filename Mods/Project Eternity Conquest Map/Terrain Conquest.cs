@@ -175,11 +175,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
     }
 
-    public class DestructableTerrain
+    public class DestructibleTerrain
     {
         public TerrainConquest ReplacementTerrain;
         public DrawableTile ReplacementTile;
         public int RemainingHP;
+        public int Defense;//Used to determine what can damage it
 
         public void DamageTile()
         {

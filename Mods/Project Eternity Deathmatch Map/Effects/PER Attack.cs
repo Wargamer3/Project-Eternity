@@ -369,7 +369,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DamageTemporaryTerrain(Vector3 Position)
         {
-            Terrain TemporaryTerrain;
+            DestructibleTerrain TemporaryTerrain;
 
             if (Map.DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
             {

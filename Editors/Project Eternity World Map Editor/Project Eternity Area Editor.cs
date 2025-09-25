@@ -125,6 +125,10 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 }
             }
 
+            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+            {
+            }
+
             public BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset)
             {
                 MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.ListLayer.Count);
@@ -216,9 +220,9 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 throw new NotImplementedException();
             }
 
-            public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+            public TilesetPreset LoadTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
             {
-                FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -235,21 +239,21 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 return NewTilesetPreset;
             }
 
-            public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+            public DestructibleTilesetPreset LoadDestructibleTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
             {
-                FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                DestructibleTilesetPreset NewTilesetPreset = new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();
 
-                ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+                ActiveMap.ListTemporaryTilesetPreset.Add(NewTilesetPreset);
 
                 return NewTilesetPreset;
             }

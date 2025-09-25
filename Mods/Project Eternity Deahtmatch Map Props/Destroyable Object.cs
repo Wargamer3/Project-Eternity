@@ -152,10 +152,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (HasTerrain)
             {
+                DestructibleTerrain NewDestructibleTerrain = new DestructibleTerrain();
                 _ReplacementTerrain = new Terrain(BR, (int)Position.X, (int)Position.Y, Map.TileSize.X, Map.TileSize.Y, (int)Position.Z, Map.LayerHeight, Depth);
                 _ReplacementTerrain.Owner = Map;
                 _ReplacementTerrain.WorldPosition.Z = _ReplacementTerrain.Height + Position.Z;
-                Map.DicTemporaryTerrain.Add(Position, _ReplacementTerrain);
+                NewDestructibleTerrain.ReplacementTerrain = _ReplacementTerrain;
+                Map.DicTemporaryTerrain.Add(Position, NewDestructibleTerrain);
             }
 
             if (!string.IsNullOrEmpty(_SpritePath))

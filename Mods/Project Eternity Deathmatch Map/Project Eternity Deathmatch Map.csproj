@@ -192,6 +192,7 @@
     <Compile Include="Deathmatch Map Timeline.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Formula Parser.cs" />
+    <Compile Include="Terrain\DestructibleTerrain.cs" />
     <Compile Include="Terrain\Shadow overlay.cs" />
     <Compile Include="Terrain\Default Weather.cs" />
     <Compile Include="Terrain\Map Zone.cs" />

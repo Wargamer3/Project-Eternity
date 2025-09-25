@@ -6,7 +6,6 @@ using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
-using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 using static ProjectEternity.GameScreens.ConquestMapScreen.ConquestTilesetPreset;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
@@ -39,6 +38,16 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
                 return new ConquestTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+            }
+
+            public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            {
+                throw new NotImplementedException();
+            }
+
+            public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                throw new NotImplementedException();
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
@@ -76,7 +85,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsConquest, GUIRootPathMapAutotilesPresets, GUIRootPathMapAutotiles }, "Maps/Autotiles Presets/Conquest/", new string[] { ".peat" }, typeof(ProjectEternityConquestAutotileTilesetPresetEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsConquest, GUIRootPathMapAutotilesPresets }, "Maps/Autotiles Presets/Conquest/", new string[] { ".peat" }, typeof(ProjectEternityConquestAutotileTilesetPresetEditor), true)
             };
 
             return Info;

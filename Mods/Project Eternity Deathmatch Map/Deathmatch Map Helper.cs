@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListTab.Add(new ScriptsTab());
             ListTab.Add(new LayerTab());
             ListTab.Add(new PropTab());
+            ListTab.Add(new SceneryTab());
             ListTab.Add(new ZoneTab());
 
             return ListTab;
@@ -149,6 +150,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActiveLayer.RemoveTileset(TilesetIndex);
             }
+        }
+
+        public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+        {
+            Terrain NewTerrain = new Terrain(Preset.ArrayTilesetInformation[0].ArrayTerrain[0, 0], new Point(GridX, GridY), LayerIndex);
+            NewTerrain.Owner = ActiveMap;
+            NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
+
+            DestructibleTerrain NewTemporaryTerrain = new DestructibleTerrain();
+            NewTemporaryTerrain.ReplacementTerrain = NewTerrain;
+            NewTemporaryTerrain.ReplacementTile = Preset.ArrayTilesetInformation[0].ArrayTiles[0, 0];
+
+            var Position = new Vector3(GridX, GridY, LayerIndex);
+            if (ActiveMap.DicTemporaryTerrain.ContainsKey(Position))
+            {
+                ActiveMap.DicTemporaryTerrain[Position] = NewTemporaryTerrain;
+            }
+            else
+            {
+                ActiveMap.DicTemporaryTerrain.Add(Position, NewTemporaryTerrain);
+            }
+
+            ActiveMap.Reset();
         }
 
         private MapLayer GetRealLayer(int LayerIndex)
@@ -274,9 +298,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MapZoneDeathmatch(ActiveMap, ZoneType);
         }
 
-        public TilesetPreset LoadAutotilePreset(string TilesetName, int TilesetIndex)
+        public TilesetPreset LoadTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
         {
-            FileStream FS = new FileStream("Content/Autotiles Presets/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -293,21 +317,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return NewTilesetPreset;
         }
 
-        public TilesetPreset LoadTilesetPreset(string TilesetName, int TilesetIndex)
+        public DestructibleTilesetPreset LoadDestructibleTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
         {
-            FileStream FS = new FileStream("Content/Tileset Presets/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
             int TileSizeX = BR.ReadInt32();
             int TileSizeY = BR.ReadInt32();
 
-            TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+            DestructibleTilesetPreset NewTilesetPreset = new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
 
             BR.Close();
             FS.Close();
 
-            ActiveMap.ListTilesetPreset.Add(NewTilesetPreset);
+            ActiveMap.ListTemporaryTilesetPreset.Add(NewTilesetPreset);
 
             return NewTilesetPreset;
         }

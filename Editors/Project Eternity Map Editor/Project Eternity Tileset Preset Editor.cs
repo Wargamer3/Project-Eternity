@@ -9,7 +9,6 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
-using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
@@ -22,6 +21,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             void EditTerrainTypes();
             TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
             TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
+            DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
+            TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
             string GetEditorPath();
         }
 
@@ -55,6 +56,16 @@ namespace ProjectEternity.Editors.TilesetEditor
             public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
                 return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+            }
+
+            public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            {
+                throw new NotImplementedException();
+            }
+
+            public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
+            {
+                throw new NotImplementedException();
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)

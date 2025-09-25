@@ -75,6 +75,12 @@
     <Compile Include="Map Statistics.Designer.cs">
       <DependentUpon>Map Statistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project Eternity Destroyable Tile Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Destroyable Tile Editor.Designer.cs">
+      <DependentUpon>Project Eternity Destroyable Tile Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project Eternity Map Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     <EmbeddedResource Include="Map Statistics.resx">
       <DependentUpon>Map Statistics.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Destroyable Tile Editor.resx">
+      <DependentUpon>Project Eternity Destroyable Tile Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Map Editor.resx">
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>

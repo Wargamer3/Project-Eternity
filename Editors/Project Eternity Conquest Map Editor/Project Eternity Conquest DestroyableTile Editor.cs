@@ -5,11 +5,11 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
-using static ProjectEternity.GameScreens.ConquestMapScreen.ConquestTilesetPreset;
+using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
-    public partial class ProjectEternityConquestTilesetPresetEditor : ProjectEternityTilesetPresetEditor
+    public partial class ProjectEternityConquestProjectEternityDestroyableTileEditor : ProjectEternityDestroyableTileEditor
     {
         public class ConquesTilesetPresetHelper : ITilesetPresetHelper
         {
@@ -31,22 +31,22 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new ConquestTilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                throw new NotImplementedException();
             }
 
             public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                return new ConquestTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+                throw new NotImplementedException();
             }
 
             public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                throw new NotImplementedException();
+                return new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                throw new NotImplementedException();
+                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
@@ -56,17 +56,17 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapTilesetImages;
+                return GUIRootPathMapAutotilesImages;
             }
         }
 
-        public ProjectEternityConquestTilesetPresetEditor()
+        public ProjectEternityConquestProjectEternityDestroyableTileEditor()
             : base()
         {
             InitializeComponent();
         }
 
-        public ProjectEternityConquestTilesetPresetEditor(string FilePath, object[] Params)
+        public ProjectEternityConquestProjectEternityDestroyableTileEditor(string FilePath, object[] Params)
             : this()
         {
             this.FilePath = FilePath;
@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsConquest, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Maps/Tilesets Presets/Conquest/", new string[] { ".pet" }, typeof(ProjectEternityConquestTilesetPresetEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesPresetsConquest, GUIRootPathMaDestroyableTilesPresets }, "Maps/Destroyable Tiles Presets/Conquest/", new string[] { ".pedt" }, typeof(ProjectEternityConquestProjectEternityDestroyableTileEditor), true)
             };
 
             return Info;

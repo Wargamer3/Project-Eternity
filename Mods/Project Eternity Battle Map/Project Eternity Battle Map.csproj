@@ -81,6 +81,7 @@
     <Compile Include="Battle Params.cs" />
     <Compile Include="Editor\AttackSelector.cs" />
     <Compile Include="Editor\Tabs\Event Points Tab.cs" />
+    <Compile Include="Editor\Tabs\Scenery Tab.cs" />
     <Compile Include="Editor\Tabs\Layer Tab.cs" />
     <Compile Include="Editor\Tabs\Prop Tab.cs" />
     <Compile Include="Editor\Tabs\Scripts Tab.cs" />
@@ -308,13 +309,16 @@
     <Compile Include="Event Point.cs" />
     <Compile Include="System List.cs" />
     <Compile Include="Map Scripting.cs" />
-    <Compile Include="Terrain.cs" />
+    <Compile Include="Terrain\Terrain.cs" />
     <Compile Include="Editor\Tileset Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Terrain3D.cs" />
-    <Compile Include="Tile 3D.cs" />
+    <Compile Include="Terrain\Terrain3D.cs" />
+    <Compile Include="Terrain\Tile 3D.cs" />
     <Compile Include="Environment\Time Period.cs" />
+    <Compile Include="Terrain\Destroyable Tileset Preset.cs" />
+    <Compile Include="Terrain\TilesetPreset.cs" />
+    <Compile Include="Terrain\TilesetPresetInformation.cs" />
     <Compile Include="Tile Information Popup.cs" />
     <Compile Include="Tile2DHolder.cs" />
     <Compile Include="Tile3DHolder.cs" />

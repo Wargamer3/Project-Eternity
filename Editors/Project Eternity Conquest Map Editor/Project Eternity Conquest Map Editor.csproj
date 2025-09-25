@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Project Eternity Conquest DestroyableTile Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Conquest DestroyableTile Editor.Designer.cs">
+      <DependentUpon>Project Eternity Conquest DestroyableTile Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project Eternity Conquest Terrains and Move Types Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +75,7 @@
       <DependentUpon>Project Eternity Conquest Tileset Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Tabs\Buildings Tabs.cs" />
-    <Compile Include="Tabs\Infrastructure Tab.cs" />
+    <Compile Include="Tabs\Scenery Tab.cs" />
     <Compile Include="Tabs\Spawns Tab.cs" />
     <Compile Include="Map Statistics.cs">
       <SubType>Form</SubType>
@@ -105,6 +111,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Project Eternity Conquest DestroyableTile Editor.resx">
+      <DependentUpon>Project Eternity Conquest DestroyableTile Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Conquest Terrains and Move Types Editor.resx">
       <DependentUpon>Project Eternity Conquest Terrains and Move Types Editor.cs</DependentUpon>
     </EmbeddedResource>

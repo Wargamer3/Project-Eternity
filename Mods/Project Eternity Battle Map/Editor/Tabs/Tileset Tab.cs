@@ -14,9 +14,9 @@ namespace ProjectEternity.Editors.MapEditor
 {
     public class TilesetTab : IMapEditorTab
     {
-        private enum ItemSelectionChoices { Tile, TileAsBackground, Autotile, BGM, UnitPosition, Cutscene };
+        protected enum ItemSelectionChoices { Tile, TileAsBackground, Autotile, BGM, UnitPosition, Cutscene };
 
-        private ItemSelectionChoices ItemSelectionChoice;
+        protected ItemSelectionChoices ItemSelectionChoice;
 
         protected ComboBox cboTiles;
         private Button btnAddTile;
@@ -392,7 +392,7 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
         }
 
-        private void btnAddTile_Click(object sender, EventArgs e)
+        protected virtual void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
@@ -468,7 +468,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         #region Autotile
 
-        private void btnAddAutotile_Click(object sender, EventArgs e)
+        protected virtual void btnAddAutotile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Autotile;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
@@ -655,7 +655,7 @@ namespace ProjectEternity.Editors.MapEditor
                                     continue;
                                 }
 
-                                TilesetPreset NewTileset = Helper.LoadTilesetPreset(Name, ActiveMap.ListTilesetPreset.Count);
+                                TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", Name, ActiveMap.ListTilesetPreset.Count);
 
                                 AddTilesetPreset(NewTileset);
 
@@ -762,7 +762,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 continue;
                             }
 
-                            TilesetPreset NewTileset = Helper.LoadAutotilePreset(Name, ActiveMap.ListTilesetPreset.Count);
+                            TilesetPreset NewTileset = Helper.LoadTilesetPreset("Autotiles Presets", Name, ActiveMap.ListTilesetPreset.Count);
 
                             for (int i = 0; i < NewTileset.ArrayTilesetInformation.Length; i++)
                             {
