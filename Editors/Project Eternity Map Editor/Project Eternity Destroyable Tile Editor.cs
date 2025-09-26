@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
@@ -311,7 +312,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
 
-            if (NewTilesetPreset.TilesetType == DestructibleTilesetPreset.TilesetTypes.Ocean)
+            if (NewTilesetPreset.TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.Ocean)
             {
                 tabControl1.TabPages[0].Text = "Sea";
                 tabControl1.TabPages[1].Text = "River";

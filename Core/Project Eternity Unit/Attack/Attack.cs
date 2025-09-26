@@ -73,6 +73,7 @@ namespace ProjectEternity.Core.Attacks
         public ExplosionOptions ExplosionOption;
         public KnockbackAttackAttributes KnockbackAttributes;
         public RotationAttackAttributes RotationAttributes;
+        public DestructibleTilesAttackAttributes DestructibleTilesAttributes;
         public byte ALLLevel;//Number of Units an ALL Attack can hit
         public byte DashMaxReach;
         public Attack Parent;
@@ -207,7 +208,9 @@ namespace ProjectEternity.Core.Attacks
             {
                 RotationAttributes = new RotationAttackAttributes();
             }
-            
+
+            DestructibleTilesAttributes = new DestructibleTilesAttackAttributes(BR);
+
             byte AttackType = BR.ReadByte();
 
             if (AttackType == 0)

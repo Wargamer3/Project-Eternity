@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -71,7 +72,7 @@ namespace ProjectEternity.Editors.MapEditor
                 DestructibleTilesetPreset ActiveTilesetPreset = ActiveMap.ListTemporaryTilesetPreset[T];
 
                 AddSceneryImage(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName, ActiveMap.ListTemporaryTileSet[T]);
-                if (ActiveTilesetPreset.TilesetType != DestructibleTilesetPreset.TilesetTypes.Slave)
+                if (ActiveTilesetPreset.TilesetType != DestructibleTilesAttackAttributes.DestructibleTypes.Slave)
                 {
                     cboTiles.Items.Add(ActiveTilesetPreset.ArrayTilesetInformation[0].TilesetName);
                 }

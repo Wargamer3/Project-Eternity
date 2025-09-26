@@ -3,14 +3,13 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class DestructibleTilesetPreset
     {
-        public enum TilesetTypes { Regular, Road, River, Ocean, Shoal, Waterfall, Pipes, Slave /*Only used during loading to fill the tilesets created by multi tileset presets*/ }
-
-        public TilesetTypes TilesetType;
+        public DestructibleTilesAttackAttributes.DestructibleTypes TilesetType;
         public DestructibleTilesetPreset Master;
         public int SlaveIndex;
         public TilesetPresetInformation[] ArrayTilesetInformation;
@@ -34,7 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public DestructibleTilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex, bool LoadBackgroundPaths = true)
         {
-            TilesetType = (TilesetTypes)BR.ReadByte();
+            TilesetType = (DestructibleTilesAttackAttributes.DestructibleTypes)BR.ReadByte();
             byte ArrayTilesetInformationLength = BR.ReadByte();
             ArrayTilesetInformation = new TilesetPresetInformation[ArrayTilesetInformationLength];
 
@@ -57,14 +56,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public virtual DestructibleTilesetPreset CreateSlave(int Index)
         {
             DestructibleTilesetPreset Slave = new DestructibleTilesetPreset(this, Index);
-            Slave.TilesetType = TilesetTypes.Slave;
+            Slave.TilesetType = DestructibleTilesAttackAttributes.DestructibleTypes.Slave;
 
             return Slave;
         }
 
         public int GetAnimationFrames()
         {
-            if (TilesetType == TilesetTypes.River)
+            if (TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.River)
             {
                 return 4;
             }
@@ -118,7 +117,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             switch (TilesetType)
             {
-                case TilesetTypes.River:
+                case DestructibleTilesAttackAttributes.DestructibleTypes.River:
                     g.Draw(sprTileset, new Rectangle(Position.X, Position.Y, ArrayTilesetInformation[0].ArrayTiles[0, 0].Origin.Width, ArrayTilesetInformation[0].ArrayTiles[0, 0].Origin.Height), Color.White);
                     break;
             }

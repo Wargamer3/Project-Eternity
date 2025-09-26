@@ -16,6 +16,7 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -390,7 +391,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int RealTilesetCount = 0;
             for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
             {
-                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Slave)
+                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.Slave)
                 {
                     continue;
                 }
@@ -401,7 +402,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(RealTilesetCount);
             for (int T = 0; T < ListTemporaryTilesetPreset.Count; T++)
             {
-                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Slave)
+                if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.Slave)
                 {
                     continue;
                 }
@@ -676,7 +677,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Content != null)
                 {
-                    if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesetPreset.TilesetTypes.Regular)
+                    if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.Regular)
                     {
                         if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
                             ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));

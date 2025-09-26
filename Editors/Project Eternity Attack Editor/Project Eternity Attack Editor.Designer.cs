@@ -96,8 +96,9 @@
             this.Movement = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnConfigureRotation = new System.Windows.Forms.Button();
             this.ckUseRotation = new System.Windows.Forms.CheckBox();
+            this.btnConfigureRotation = new System.Windows.Forms.Button();
+            this.tsmDestructibleTiles = new System.Windows.Forms.ToolStripMenuItem();
             this.gbStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).BeginInit();
             this.txtMinDamage.SuspendLayout();
@@ -786,10 +787,11 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmSave,
-            this.tsmAdvanced});
+            this.tsmAdvanced,
+            this.tsmDestructibleTiles});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(722, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(944, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -868,9 +870,9 @@
             // gbTerrain
             // 
             this.gbTerrain.Controls.Add(this.dgvTerrainRanks);
-            this.gbTerrain.Location = new System.Drawing.Point(515, 238);
+            this.gbTerrain.Location = new System.Drawing.Point(716, 27);
             this.gbTerrain.Name = "gbTerrain";
-            this.gbTerrain.Size = new System.Drawing.Size(195, 154);
+            this.gbTerrain.Size = new System.Drawing.Size(217, 205);
             this.gbTerrain.TabIndex = 70;
             this.gbTerrain.TabStop = false;
             this.gbTerrain.Text = "Terrain";
@@ -888,7 +890,7 @@
             this.dgvTerrainRanks.Name = "dgvTerrainRanks";
             this.dgvTerrainRanks.RowHeadersVisible = false;
             this.dgvTerrainRanks.ShowCellErrors = false;
-            this.dgvTerrainRanks.Size = new System.Drawing.Size(181, 120);
+            this.dgvTerrainRanks.Size = new System.Drawing.Size(203, 171);
             this.dgvTerrainRanks.TabIndex = 35;
             this.dgvTerrainRanks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTerrainRanks_CellClick);
             this.dgvTerrainRanks.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvTerrainRanks_CurrentCellDirtyStateChanged);
@@ -917,17 +919,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rotation";
             // 
-            // btnConfigureRotation
-            // 
-            this.btnConfigureRotation.Enabled = false;
-            this.btnConfigureRotation.Location = new System.Drawing.Point(95, 19);
-            this.btnConfigureRotation.Name = "btnConfigureRotation";
-            this.btnConfigureRotation.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigureRotation.TabIndex = 5;
-            this.btnConfigureRotation.Text = "Configure";
-            this.btnConfigureRotation.UseVisualStyleBackColor = true;
-            this.btnConfigureRotation.Click += new System.EventHandler(this.btnConfigureRotation_Click);
-            // 
             // ckUseRotation
             // 
             this.ckUseRotation.AutoSize = true;
@@ -939,11 +930,29 @@
             this.ckUseRotation.UseVisualStyleBackColor = true;
             this.ckUseRotation.CheckedChanged += new System.EventHandler(this.ckUseRotation_CheckedChanged);
             // 
+            // btnConfigureRotation
+            // 
+            this.btnConfigureRotation.Enabled = false;
+            this.btnConfigureRotation.Location = new System.Drawing.Point(95, 19);
+            this.btnConfigureRotation.Name = "btnConfigureRotation";
+            this.btnConfigureRotation.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigureRotation.TabIndex = 5;
+            this.btnConfigureRotation.Text = "Configure";
+            this.btnConfigureRotation.UseVisualStyleBackColor = true;
+            this.btnConfigureRotation.Click += new System.EventHandler(this.btnConfigureRotation_Click);
+            // 
+            // tsmDestructibleTiles
+            // 
+            this.tsmDestructibleTiles.Name = "tsmDestructibleTiles";
+            this.tsmDestructibleTiles.Size = new System.Drawing.Size(108, 20);
+            this.tsmDestructibleTiles.Text = "Destructible Tiles";
+            this.tsmDestructibleTiles.Click += new System.EventHandler(this.tsmDestructibleTiles_Click);
+            // 
             // ProjectEternityAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(722, 382);
+            this.ClientSize = new System.Drawing.Size(944, 382);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbTerrain);
             this.Controls.Add(this.gbItemInformtion);
@@ -1062,6 +1071,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnConfigureRotation;
         private System.Windows.Forms.CheckBox ckUseRotation;
+        private System.Windows.Forms.ToolStripMenuItem tsmDestructibleTiles;
     }
 }
 

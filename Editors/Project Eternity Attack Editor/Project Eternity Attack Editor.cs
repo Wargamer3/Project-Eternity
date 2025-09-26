@@ -21,6 +21,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private MAPAttackEditor MAPAttackEditor;
         private ALLAttackEditor ALLAttackEditor;
         private PERAttackEditor PERAttackEditor;
+        private DestructibleTilesEditor DestructibleTilesEditor;
 
         private SolidBrush GridBrush;
 
@@ -53,6 +54,7 @@ namespace ProjectEternity.Editors.AttackEditor
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 AdvancedSettings = new AdvancedSettingsEditor();
+                DestructibleTilesEditor = new DestructibleTilesEditor();
                 SaveItem(FilePath, FilePath);
             }
 
@@ -144,6 +146,8 @@ namespace ProjectEternity.Editors.AttackEditor
             BW.Write((sbyte)txtAccuracy.Value);
             BW.Write((sbyte)txtCritical.Value);
 
+            #region Primary
+
             BW.Write((byte)PrimaryProperty);
             if (PrimaryProperty == WeaponPrimaryProperty.Dash)
             {
@@ -223,6 +227,8 @@ namespace ProjectEternity.Editors.AttackEditor
                 BW.Write((byte)0);
             }
 
+            #endregion
+
             BW.Write((byte)SecondaryProperty);
             BW.Write((byte)txtReMoveLevel.Value);
             BW.Write((byte)txtPostMovementLevel.Value);
@@ -230,6 +236,7 @@ namespace ProjectEternity.Editors.AttackEditor
             BW.Write((byte)txtPostMovementEvasionBonus.Value);
 
             BW.Write(ckUseRotation.Checked);
+            DestructibleTilesEditor.Save(BW);
 
             BW.Write(AttackType);
 
@@ -250,57 +257,7 @@ namespace ProjectEternity.Editors.AttackEditor
                 BW.Write(ActiveRankByMovement.Item2);
             }
 
-            BW.Write(AdvancedSettings.lvSecondaryAttack.Items.Count);
-            for (int S = 0; S < AdvancedSettings.lvSecondaryAttack.Items.Count; S++)
-            {
-                BW.Write(AdvancedSettings.lvSecondaryAttack.Items[S].Tag.ToString());
-            }
-
-            BW.Write(AdvancedSettings.lvChargedAttacks.Items.Count);
-            for (int S = 0; S < AdvancedSettings.lvChargedAttacks.Items.Count; S++)
-            {
-                BW.Write(AdvancedSettings.lvChargedAttacks.Items[S].Tag.ToString());
-            }
-            if (AdvancedSettings.lvChargedAttacks.Items.Count > 0)
-            {
-                BW.Write((byte)AdvancedSettings.txtChargeCancelLevel.Value);
-            }
-
-            BW.Write((float)AdvancedSettings.txtExplosionRadius.Value);
-            if (AdvancedSettings.txtExplosionRadius.Value > 0)
-            {
-                BW.Write((float)AdvancedSettings.txtExplosionWindPowerAtCenter.Value);
-                BW.Write((float)AdvancedSettings.txtExplosionWindPowerAtEdge.Value);
-                BW.Write((float)AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value);
-                BW.Write((float)AdvancedSettings.txtExplosionDamageAtCenter.Value);
-                BW.Write((float)AdvancedSettings.txtExplosionDamageAtEdge.Value);
-                BW.Write((float)AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value);
-            }
-
-            #region Skills
-
-            int PilotSkillCount = 0;
-            if (AdvancedSettings.txtPilotSkill1.Text != "None")
-                ++PilotSkillCount;
-            if (AdvancedSettings.txtPilotSkill2.Text != "None")
-                ++PilotSkillCount;
-            if (AdvancedSettings.txtPilotSkill3.Text != "None")
-                ++PilotSkillCount;
-            if (AdvancedSettings.txtPilotSkill4.Text != "None")
-                ++PilotSkillCount;
-
-            BW.Write(PilotSkillCount);
-
-            if (AdvancedSettings.txtPilotSkill1.Text != "None")
-                BW.Write(AdvancedSettings.txtPilotSkill1.Text);
-            if (AdvancedSettings.txtPilotSkill2.Text != "None")
-                BW.Write(AdvancedSettings.txtPilotSkill2.Text);
-            if (AdvancedSettings.txtPilotSkill3.Text != "None")
-                BW.Write(AdvancedSettings.txtPilotSkill3.Text);
-            if (AdvancedSettings.txtPilotSkill4.Text != "None")
-                BW.Write(AdvancedSettings.txtPilotSkill4.Text);
-
-            #endregion
+            AdvancedSettings.Save(BW);
 
             //Count the actual number of quotes listed.
             int QuoteCount = 0;
@@ -340,6 +297,7 @@ namespace ProjectEternity.Editors.AttackEditor
             MAPAttackEditor = new MAPAttackEditor();
             ALLAttackEditor = new ALLAttackEditor();
             PERAttackEditor = new PERAttackEditor();
+            DestructibleTilesEditor = new DestructibleTilesEditor();
 
             //Create the Part file.
             string ItemName = LoadedAttack.RelativePath;
@@ -543,64 +501,8 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #endregion
 
-            #region Special Attacks
-
-            foreach (Attack ActiveAttack in LoadedAttack.ListSecondaryAttack)
-            {
-                string AttackName = ActiveAttack.RelativePath;
-                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
-                NewItem.Tag = AttackName;
-                AdvancedSettings.lvSecondaryAttack.Items.Add(NewItem);
-            }
-
-            #endregion
-
-            #region Charged Attacks
-
-            foreach (Attack ActiveAttack in LoadedAttack.ListChargedAttack)
-            {
-                string AttackName = ActiveAttack.RelativePath;
-                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
-                NewItem.Tag = AttackName;
-                AdvancedSettings.lvChargedAttacks.Items.Add(NewItem);
-            }
-
-            #endregion
-
-            #region Explosion Attributes
-
-            AdvancedSettings.txtExplosionRadius.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionRadius;
-            AdvancedSettings.txtExplosionWindPowerAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtCenter;
-            AdvancedSettings.txtExplosionWindPowerAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtEdge;
-            AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
-            AdvancedSettings.txtExplosionDamageAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtCenter;
-            AdvancedSettings.txtExplosionDamageAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtEdge;
-            AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageToSelfMultiplier;
-
-            #endregion
-
-            #region Attack Attributes
-
-            if (LoadedAttack.ArrayAttackAttributes.Length >= 1)
-            {
-                AdvancedSettings.txtPilotSkill1.Text = LoadedAttack.ArrayAttackAttributes[0].Name;
-            }
-            if (LoadedAttack.ArrayAttackAttributes.Length >= 2)
-            {
-                AdvancedSettings.txtPilotSkill2.Text = LoadedAttack.ArrayAttackAttributes[1].Name;
-            }
-            if (LoadedAttack.ArrayAttackAttributes.Length >= 3)
-            {
-                AdvancedSettings.txtPilotSkill3.Text = LoadedAttack.ArrayAttackAttributes[2].Name;
-            }
-            if (LoadedAttack.ArrayAttackAttributes.Length >= 4)
-            {
-                AdvancedSettings.txtPilotSkill4.Text = LoadedAttack.ArrayAttackAttributes[3].Name;
-            }
-
-            #endregion
+            AdvancedSettings.Init(LoadedAttack);
+            DestructibleTilesEditor.Init(LoadedAttack);
 
             #region Quotes
 
@@ -695,6 +597,14 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnConfigureRotation_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void tsmDestructibleTiles_Click(object sender, EventArgs e)
+        {
+            DestructibleTilesEditor frmDestructibleTilesEditor = new DestructibleTilesEditor();
+            if (frmDestructibleTilesEditor.ShowDialog() == DialogResult.OK)
+            {
+            }
         }
     }
 }

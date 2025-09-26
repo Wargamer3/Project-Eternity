@@ -81,7 +81,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathWorldMaps = "Maps/World Maps";
         public const string GUIRootPathAdventureMaps = "Maps/Adventure Maps";
         public const string GUIRootPathAdventureRessources = "Maps/Adventure Ressources";
-        public const string GUIRootPathConquestMaps = "Maps/Conquest Maps";
+        public const string GUIRootPathConquestMaps = "Maps/Conquest";
         public const string GUIRootPathRacingMaps = "Maps/Racing Maps";
         public const string GUIRootPathSorcererStreetMaps = "Maps/Sorcerer Street Maps";
         public const string GUIRootPathTripleThunderMaps = "Maps/Triple Thunder Maps";

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
@@ -14,6 +16,123 @@ namespace ProjectEternity.Editors.AttackEditor
         public AdvancedSettingsEditor()
         {
             InitializeComponent();
+        }
+
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(lvSecondaryAttack.Items.Count);
+            for (int S = 0; S < lvSecondaryAttack.Items.Count; S++)
+            {
+                BW.Write(lvSecondaryAttack.Items[S].Tag.ToString());
+            }
+
+            BW.Write(lvChargedAttacks.Items.Count);
+            for (int S = 0; S < lvChargedAttacks.Items.Count; S++)
+            {
+                BW.Write(lvChargedAttacks.Items[S].Tag.ToString());
+            }
+            if (lvChargedAttacks.Items.Count > 0)
+            {
+                BW.Write((byte)txtChargeCancelLevel.Value);
+            }
+
+            BW.Write((float)txtExplosionRadius.Value);
+            if (txtExplosionRadius.Value > 0)
+            {
+                BW.Write((float)txtExplosionWindPowerAtCenter.Value);
+                BW.Write((float)txtExplosionWindPowerAtEdge.Value);
+                BW.Write((float)txtExplosionWindPowerToSelfMultiplier.Value);
+                BW.Write((float)txtExplosionDamageAtCenter.Value);
+                BW.Write((float)txtExplosionDamageAtEdge.Value);
+                BW.Write((float)txtExplosionDamageToSelfMultiplier.Value);
+            }
+
+            #region Skills
+
+            int PilotSkillCount = 0;
+            if (txtPilotSkill1.Text != "None")
+                ++PilotSkillCount;
+            if (txtPilotSkill2.Text != "None")
+                ++PilotSkillCount;
+            if (txtPilotSkill3.Text != "None")
+                ++PilotSkillCount;
+            if (txtPilotSkill4.Text != "None")
+                ++PilotSkillCount;
+
+            BW.Write(PilotSkillCount);
+
+            if (txtPilotSkill1.Text != "None")
+                BW.Write(txtPilotSkill1.Text);
+            if (txtPilotSkill2.Text != "None")
+                BW.Write(txtPilotSkill2.Text);
+            if (txtPilotSkill3.Text != "None")
+                BW.Write(txtPilotSkill3.Text);
+            if (txtPilotSkill4.Text != "None")
+                BW.Write(txtPilotSkill4.Text);
+
+            #endregion
+        }
+
+        public void Init(Attack LoadedAttack)
+        {
+            #region Special Attacks
+
+            foreach (Attack ActiveAttack in LoadedAttack.ListSecondaryAttack)
+            {
+                string AttackName = ActiveAttack.RelativePath;
+                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
+                NewItem.Tag = AttackName;
+                lvSecondaryAttack.Items.Add(NewItem);
+            }
+
+            #endregion
+
+            #region Charged Attacks
+
+            foreach (Attack ActiveAttack in LoadedAttack.ListChargedAttack)
+            {
+                string AttackName = ActiveAttack.RelativePath;
+                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
+                NewItem.Tag = AttackName;
+                lvChargedAttacks.Items.Add(NewItem);
+            }
+
+            #endregion
+
+            #region Explosion Attributes
+
+            txtExplosionRadius.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionRadius;
+            txtExplosionWindPowerAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtCenter;
+            txtExplosionWindPowerAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtEdge;
+            txtExplosionWindPowerToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
+            txtExplosionDamageAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtCenter;
+            txtExplosionDamageAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtEdge;
+            txtExplosionDamageToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageToSelfMultiplier;
+
+            #endregion
+
+            #region Attack Attributes
+
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 1)
+            {
+                txtPilotSkill1.Text = LoadedAttack.ArrayAttackAttributes[0].Name;
+            }
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 2)
+            {
+                txtPilotSkill2.Text = LoadedAttack.ArrayAttackAttributes[1].Name;
+            }
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 3)
+            {
+                txtPilotSkill3.Text = LoadedAttack.ArrayAttackAttributes[2].Name;
+            }
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 4)
+            {
+                txtPilotSkill4.Text = LoadedAttack.ArrayAttackAttributes[3].Name;
+            }
+
+            #endregion
         }
 
         private void btnAddSecondaryAttack_Click(object sender, EventArgs e)

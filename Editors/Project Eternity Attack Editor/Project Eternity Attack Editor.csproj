@@ -93,6 +93,18 @@
     <Compile Include="Dash Editor.Designer.cs">
       <DependentUpon>Dash Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Destructible Tile Type Picker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Destructible Tile Type Picker.Designer.cs">
+      <DependentUpon>Destructible Tile Type Picker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Destructible Tiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Destructible Tiles.Designer.cs">
+      <DependentUpon>Destructible Tiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="MAP Attack Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +153,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dash Editor.resx">
       <DependentUpon>Dash Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Destructible Tile Type Picker.resx">
+      <DependentUpon>Destructible Tile Type Picker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Destructible Tiles.resx">
+      <DependentUpon>Destructible Tiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAP Attack Editor.resx">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>

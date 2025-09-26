@@ -43,7 +43,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathBuildingsConquest, GUIRootPathBuildings }, "Buildings/Conquest/", new string[] { ".peb" }, typeof(UnitBuilderEditor))
+                new EditorInfo(new string[] { GUIRootPathBuildingsConquest, GUIRootPathBuildings }, "Conquest/Buildings/", new string[] { ".peb" }, typeof(UnitBuilderEditor))
             };
             
             return Info;

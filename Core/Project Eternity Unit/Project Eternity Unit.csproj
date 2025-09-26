@@ -57,6 +57,7 @@
     <Compile Include="Attack\Attack Pickup.cs" />
     <Compile Include="Attack\Attack.cs" />
     <Compile Include="Attack\Attack Animations.cs" />
+    <Compile Include="Attack\Destructible Tiles Attributes.cs" />
     <Compile Include="Attack\Explosion Options.cs" />
     <Compile Include="Attack\Knockback Attack Attributes.cs" />
     <Compile Include="Attack\Rotation Attack Attributes.cs" />
