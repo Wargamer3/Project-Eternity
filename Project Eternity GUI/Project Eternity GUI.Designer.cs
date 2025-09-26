@@ -77,6 +77,7 @@
             this.tsmRosterEditor = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSystemList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmTerrainAndUnitTypes = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmVariables = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
@@ -91,7 +92,7 @@
             this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRename = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmVariables = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmOpenInFileExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -217,6 +218,13 @@
             this.tsmTerrainAndUnitTypes.Text = "Terrain and Unit Types";
             this.tsmTerrainAndUnitTypes.Click += new System.EventHandler(this.tsmTerrainAndUnitTypes_Click);
             // 
+            // tsmVariables
+            // 
+            this.tsmVariables.Name = "tsmVariables";
+            this.tsmVariables.Size = new System.Drawing.Size(65, 20);
+            this.tsmVariables.Text = "Variables";
+            this.tsmVariables.Click += new System.EventHandler(this.tsmVariables_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -288,65 +296,66 @@
             this.tsmEdit,
             this.tsmDelete,
             this.tsmRename,
-            this.tsmProperties});
+            this.tsmProperties,
+            this.tsmOpenInFileExplorer});
             this.cmsItemMenu.Name = "cmsItemProperties";
-            this.cmsItemMenu.Size = new System.Drawing.Size(133, 158);
+            this.cmsItemMenu.Size = new System.Drawing.Size(182, 202);
             // 
             // tsmNew
             // 
             this.tsmNew.Name = "tsmNew";
-            this.tsmNew.Size = new System.Drawing.Size(132, 22);
+            this.tsmNew.Size = new System.Drawing.Size(181, 22);
             this.tsmNew.Text = "New";
             this.tsmNew.Click += new System.EventHandler(this.tsmNew_Click);
             // 
             // tsmNewFolder
             // 
             this.tsmNewFolder.Name = "tsmNewFolder";
-            this.tsmNewFolder.Size = new System.Drawing.Size(132, 22);
+            this.tsmNewFolder.Size = new System.Drawing.Size(181, 22);
             this.tsmNewFolder.Text = "New folder";
             this.tsmNewFolder.Click += new System.EventHandler(this.tsmNewFolder_Click);
             // 
             // tsmClone
             // 
             this.tsmClone.Name = "tsmClone";
-            this.tsmClone.Size = new System.Drawing.Size(132, 22);
+            this.tsmClone.Size = new System.Drawing.Size(181, 22);
             this.tsmClone.Text = "Clone";
             this.tsmClone.Click += new System.EventHandler(this.tsmClone_Click);
             // 
             // tsmEdit
             // 
             this.tsmEdit.Name = "tsmEdit";
-            this.tsmEdit.Size = new System.Drawing.Size(132, 22);
+            this.tsmEdit.Size = new System.Drawing.Size(181, 22);
             this.tsmEdit.Text = "Edit";
             this.tsmEdit.Click += new System.EventHandler(this.tsmEdit_Click);
             // 
             // tsmDelete
             // 
             this.tsmDelete.Name = "tsmDelete";
-            this.tsmDelete.Size = new System.Drawing.Size(132, 22);
+            this.tsmDelete.Size = new System.Drawing.Size(181, 22);
             this.tsmDelete.Text = "Delete";
             this.tsmDelete.Click += new System.EventHandler(this.tsmDelete_Click);
             // 
             // tsmRename
             // 
             this.tsmRename.Name = "tsmRename";
-            this.tsmRename.Size = new System.Drawing.Size(132, 22);
+            this.tsmRename.Size = new System.Drawing.Size(181, 22);
             this.tsmRename.Text = "Rename";
             this.tsmRename.Click += new System.EventHandler(this.tsmRename_Click);
             // 
             // tsmProperties
             // 
             this.tsmProperties.Name = "tsmProperties";
-            this.tsmProperties.Size = new System.Drawing.Size(132, 22);
+            this.tsmProperties.Size = new System.Drawing.Size(181, 22);
             this.tsmProperties.Text = "Properties";
             this.tsmProperties.Click += new System.EventHandler(this.tsmProperties_Click);
             // 
-            // tsmVariables
+            // tsmOpenInFileExplorer
             // 
-            this.tsmVariables.Name = "tsmVariables";
-            this.tsmVariables.Size = new System.Drawing.Size(65, 20);
-            this.tsmVariables.Text = "Variables";
-            this.tsmVariables.Click += new System.EventHandler(this.tsmVariables_Click);
+            this.tsmOpenInFileExplorer.Name = "tsmOpenInFileExplorer";
+            this.tsmOpenInFileExplorer.Size = new System.Drawing.Size(181, 22);
+            this.tsmOpenInFileExplorer.Text = "Open in file explorer";
+            this.tsmOpenInFileExplorer.Click += new System.EventHandler(this.tsmOpenInFileExplorer_Click);
             // 
             // GUI
             // 
@@ -395,6 +404,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmClone;
         private System.Windows.Forms.ToolStripMenuItem tsmTerrainAndUnitTypes;
         private System.Windows.Forms.ToolStripMenuItem tsmVariables;
+        private System.Windows.Forms.ToolStripMenuItem tsmOpenInFileExplorer;
     }
 }
 

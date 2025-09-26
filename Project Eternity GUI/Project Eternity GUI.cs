@@ -721,6 +721,7 @@ namespace ProjectEternity.GUI
                         tsmDelete.Visible = true;
                         tsmRename.Visible = true;
                         tsmProperties.Visible = true;
+                        tsmOpenInFileExplorer.Visible = true;
                         if (mySelectedNode.Parent != null && mySelectedNode.Parent.Tag != null && ((EditorInfo)mySelectedNode.Parent.Tag).CanCreateNewItems)
                             tsmNew.Visible = true;
                         else
@@ -730,6 +731,8 @@ namespace ProjectEternity.GUI
                     {
                         tsmEdit.Visible = false;
                         tsmClone.Visible = false;
+                        tsmOpenInFileExplorer.Visible = false;
+
                         if (((EditorInfo)mySelectedNode.Tag).IsFolder)
                         {
                             tsmDelete.Visible = true;
@@ -801,6 +804,20 @@ namespace ProjectEternity.GUI
 
             PropertiesForm pf = new PropertiesForm(EditorNode.Name, (string)EditorNode.Tag);
             pf.Show();
+        }
+
+        private void tsmOpenInFileExplorer_Click(object sender, EventArgs e)
+        {
+            var EditorNode = tvItems.SelectedNode;
+
+            if (EditorNode.Tag == null)
+                EditorNode = EditorNode.Parent;
+
+            EditorInfo Editor = (EditorInfo)EditorNode.Tag;
+
+            string NewItemPath = GetFilePathForItem(Editor, EditorNode.Text);
+
+            System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(Path.GetFullPath(NewItemPath)));
         }
 
         private void tsmUnitTester_Click(object sender, EventArgs e)
