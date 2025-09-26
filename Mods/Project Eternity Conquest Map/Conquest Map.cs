@@ -264,7 +264,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             //Clear everything.
             ListTileSet = new List<Texture2D>();
-            FileStream FS = new FileStream("Content/Maps/Conquest/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Conquest/Maps/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

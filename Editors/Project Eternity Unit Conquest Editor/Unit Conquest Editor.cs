@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnits, GUIRootPathUnitsConquest }, "Units/Conquest/", new string[] { ".peu" }, typeof(UnitConquestEditor))
+                new EditorInfo(new string[] { GUIRootPathUnits, GUIRootPathUnitsConquest }, "Conquest/Units/", new string[] { ".peu" }, typeof(UnitConquestEditor))
             };
 
             return Info;

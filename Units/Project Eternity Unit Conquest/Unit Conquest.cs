@@ -114,7 +114,7 @@ namespace ProjectEternity.Core.Units.Conquest
             string[] ArrayFileParts = Name.Split('/', '\\');
             ItemName = ArrayFileParts[ArrayFileParts.Length - 1];
 
-            FileStream FS = new FileStream("Content/Units/Conquest/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Conquest/Units/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -140,12 +140,12 @@ namespace ProjectEternity.Core.Units.Conquest
 
             if (Content != null)
             {
-                if (File.Exists("Content\\Units\\Conquest\\Map Sprite\\" + Name + ".xnb"))
-                    SpriteMap = Content.Load<Texture2D>("Units\\Conquest\\Map Sprite\\" + Name);
+                if (File.Exists("Content/Conquest/Units/Map Sprite/" + Name + ".xnb"))
+                    SpriteMap = Content.Load<Texture2D>("Conquest/Units/Map Sprite/" + Name);
                 else
                     SpriteMap = Content.Load<Texture2D>("Units/Default");
 
-                SpriteUnit = Content.Load<Texture2D>("Units\\Conquest\\Unit Sprite\\" + Name);
+                SpriteUnit = Content.Load<Texture2D>("Conquest/Units/Unit Sprite/" + Name);
             }
 
             FS.Close();

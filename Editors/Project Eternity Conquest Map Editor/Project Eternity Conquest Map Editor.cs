@@ -320,7 +320,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public TilesetPreset LoadTilesetPreset(string Folder, string TilesetName, int TilesetIndex)
             {
-                FileStream FS = new FileStream("Content/Maps/" + Folder + "/" + TilesetName + ".pet", FileMode.Open, FileAccess.Read);
+                FileStream FS = new FileStream("Content/Maps/" + Folder + "/" + TilesetName + ".peat", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -398,7 +398,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathConquestMaps }, "Maps/Conquest/", new string[] { ".pem" }, typeof(ProjectEternityConquestEditor))
+                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathConquestMaps }, "Conquest/Maps/", new string[] { ".pem" }, typeof(ProjectEternityConquestEditor))
             };
 
             return Info;
