@@ -27,7 +27,7 @@ namespace ProjectEternity.Core.Scripts
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX);
                     if (Items != null)
                     {
-                        value = Items[0];
+                        value = Items[0].Substring(12);
                     }
                 }
                 return value;

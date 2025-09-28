@@ -559,5 +559,10 @@ namespace ProjectEternity.Core.Characters
             BW.Write(EXP);
             BW.Write(PilotPoints);
         }
+
+        public override string ToString()
+        {
+            return FullName;
+        }
     }
 }

@@ -11,7 +11,7 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {
-    class AnimatedChainTimeline : CoreTimeline
+    public class AnimatedChainTimeline : CoreTimeline
     {
         public class AnimatedChainKeyFrame : VisibleAnimationObjectKeyFrame
         {

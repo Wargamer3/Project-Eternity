@@ -761,7 +761,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                         break;
 
                     case ItemSelectionChoices.SetBattleTheme:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(17);
+                        Name = Items[I].Substring(17);
                         txtBattleTheme.Text = Name;
                         break;
 
