@@ -116,22 +116,6 @@ namespace ProjectEternity.Editors.AttackEditor
             if (cbPartialAttack.Checked)
                 SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.Partial;
 
-            byte AttackType = 0;
-            if (rbAttackTypeMelee.Checked)
-                AttackType = 1;
-            else if (rbAttackTypeSolidBlade.Checked)
-                AttackType = 2;
-            else if (rbAttackTypeEnergyBlade.Checked)
-                AttackType = 3;
-            else if (rbAttackTypeSolidShot.Checked)
-                AttackType = 4;
-            else if (rbAttackTypeEnergyShot.Checked)
-                AttackType = 5;
-            else if (rbAttackTypeRemote.Checked)
-                AttackType = 6;
-            else if (rbAttackTypeSpecial.Checked)
-                AttackType = 7;
-
             //Create the Part file.
             BW.Write(Description);
 
@@ -238,7 +222,39 @@ namespace ProjectEternity.Editors.AttackEditor
             BW.Write(ckUseRotation.Checked);
             DestructibleTilesEditor.Save(BW);
 
-            BW.Write(AttackType);
+            if (rbAttackTypeMelee.Checked)
+            {
+                BW.Write((byte)1);
+            }
+            else if (rbAttackTypeSolidBlade.Checked)
+            {
+                BW.Write((byte)2);
+            }
+            else if (rbAttackTypeEnergyBlade.Checked)
+            {
+                BW.Write((byte)3);
+            }
+            else if (rbAttackTypeSolidShot.Checked)
+            {
+                BW.Write((byte)4);
+            }
+            else if (rbAttackTypeEnergyShot.Checked)
+            {
+                BW.Write((byte)5);
+            }
+            else if (rbAttackTypeRemote.Checked)
+            {
+                BW.Write((byte)6);
+            }
+            else if (rbAttackTypeSpecial.Checked)
+            {
+                BW.Write((byte)7);
+                BW.Write(txtSpecialAttack.Text);
+            }
+            else
+            {
+                BW.Write((byte)0);
+            }
 
             List<Tuple<byte, byte>> ListRankByMovement = new List<Tuple<byte, byte>>();
             foreach (DataGridViewRow ActiveRow in dgvTerrainRanks.Rows)
@@ -605,6 +621,11 @@ namespace ProjectEternity.Editors.AttackEditor
             if (frmDestructibleTilesEditor.ShowDialog() == DialogResult.OK)
             {
             }
+        }
+
+        private void rbAttackTypeSpecial_CheckedChanged(object sender, EventArgs e)
+        {
+            txtSpecialAttack.Enabled = rbAttackTypeSpecial.Checked;
         }
     }
 }

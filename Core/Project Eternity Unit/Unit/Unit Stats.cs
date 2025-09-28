@@ -211,6 +211,7 @@ namespace ProjectEternity.Core.Units
                 Attack NewAttack;
                 bool IsExternal = BR.ReadBoolean();
                 string AttackName = BR.ReadString();
+                string Visibility = BR.ReadString();
 
                 if (IsExternal)
                 {
@@ -232,6 +233,8 @@ namespace ProjectEternity.Core.Units
                 {
                     NewAttack.Animations.Add(new AttackContext(BR));
                 }
+
+                NewAttack.Visibility = Visibility;
 
                 ListAttack.Add(NewAttack);
             }

@@ -61,6 +61,7 @@ namespace ProjectEternity.Core.Attacks
                                 * Remote - Attack drones hitting from all angles. Also comes in Energy and Solid.
                                 * Special - Multiple types, or something more.*/
         public string SpecialEffects;// - Any additional information about an attack not shown above. Status attacks use this area to show
+        public string Visibility;//Decide if visible in the menu
 
         public bool CanAttack { get { return _CanAttack; } }
         private bool _CanAttack;//Tell if an ennemy is in range.
@@ -97,6 +98,7 @@ namespace ProjectEternity.Core.Attacks
 
             ListChargedAttack = new List<Attack>();
             ListSecondaryAttack = new List<Attack>();
+            Visibility = string.Empty;
         }
 
         public Attack(string Name, string Description, int Price, string PowerFormula, byte RangeMin, byte RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,
@@ -119,6 +121,7 @@ namespace ProjectEternity.Core.Attacks
 
             ListChargedAttack = new List<Attack>();
             ListSecondaryAttack = new List<Attack>();
+            Visibility = string.Empty;
         }
 
         public Attack(Attack Weapon)
@@ -131,6 +134,7 @@ namespace ProjectEternity.Core.Attacks
             : base(AttackPath)
         {
             Animations = new List<AttackContext>();
+            Visibility = string.Empty;
             IsExternal = true;
 
             FileStream FS = new FileStream("Content/Attacks/" + AttackPath + ".pew", FileMode.Open, FileAccess.Read);
@@ -148,6 +152,7 @@ namespace ProjectEternity.Core.Attacks
             : base(AttackPath)
         {
             Animations = new List<AttackContext>();
+            Visibility = string.Empty;
             IsExternal = false;
 
             Init(BR, Content, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
@@ -252,6 +257,7 @@ namespace ProjectEternity.Core.Attacks
             {
                 this.AttackType = "Special";
                 Style = WeaponStyle.R;
+                SpecialEffects = BR.ReadString();
             }
 
             int TerrainGradeCount = BR.ReadInt32();

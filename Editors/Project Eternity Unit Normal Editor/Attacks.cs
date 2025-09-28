@@ -28,9 +28,13 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         public byte AttackUpgradesValueIndex;
         public byte AttackUpgradesCostIndex;
 
+        private bool AllowEvents;
+
         public Attacks()
         {
             InitializeComponent();
+
+            AllowEvents = true;
 
             _ListAttack = new List<Attack>();
             AttackUpgradesValueIndex = 0;
@@ -137,12 +141,16 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             if (lstAttack.SelectedIndex <= -1)
             {
                 gbAttackContexts.Enabled = false;
+                gbAttackVisibility.Enabled = false;
                 return;
             }
+
+            AllowEvents = false;
 
             Attack ActiveAttack = _ListAttack[lstAttack.SelectedIndex];
 
             gbAttackContexts.Enabled = true;
+            gbAttackVisibility.Enabled = true;
 
             lstAttackContexts.Items.Clear();
             foreach (AttackContext ActiveContext in ActiveAttack.Animations)
@@ -150,9 +158,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 lstAttackContexts.Items.Add(ActiveContext.ContextName);
             }
 
-
             lstAttackAnimations.SelectedIndex = -1;
             lstAttackContexts.SelectedIndex = 0;
+            txtAttackVisibility.Text = ActiveAttack.Visibility;
+
+            AllowEvents = true;
         }
 
         private void lstAttack_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -347,6 +357,18 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void cbUpgradeCost_SelectedIndexChanged(object sender, EventArgs e)
         {
             AttackUpgradesCostIndex = (byte)cbUpgradeCost.SelectedIndex;
+        }
+
+        private void txtAttackVisibility_TextChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || !AllowEvents)
+            {
+                return;
+            }
+
+            Attack ActiveAttack = _ListAttack[lstAttack.SelectedIndex];
+
+            ActiveAttack.Visibility = txtAttackVisibility.Text;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

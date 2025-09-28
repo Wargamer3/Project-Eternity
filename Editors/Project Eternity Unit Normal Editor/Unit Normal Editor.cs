@@ -212,6 +212,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             {
                 BW.Write(frmAttacks.ListAttack[A].IsExternal);
                 BW.Write(frmAttacks.ListAttack[A].RelativePath);
+                BW.Write(frmAttacks.ListAttack[A].Visibility);
 
                 if (!frmAttacks.ListAttack[A].IsExternal)
                 {

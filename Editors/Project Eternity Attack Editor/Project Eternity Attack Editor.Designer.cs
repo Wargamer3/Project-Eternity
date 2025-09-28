@@ -85,6 +85,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAdvanced = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmDestructibleTiles = new System.Windows.Forms.ToolStripMenuItem();
             this.gbItemInformtion = new System.Windows.Forms.GroupBox();
             this.btnEditQuotes = new System.Windows.Forms.Button();
             this.txtName = new System.Windows.Forms.TextBox();
@@ -98,7 +99,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ckUseRotation = new System.Windows.Forms.CheckBox();
             this.btnConfigureRotation = new System.Windows.Forms.Button();
-            this.tsmDestructibleTiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtSpecialAttack = new System.Windows.Forms.TextBox();
             this.gbStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).BeginInit();
             this.txtMinDamage.SuspendLayout();
@@ -538,6 +539,7 @@
             // 
             // gbAttackType
             // 
+            this.gbAttackType.Controls.Add(this.txtSpecialAttack);
             this.gbAttackType.Controls.Add(this.rbAttackTypeSpecial);
             this.gbAttackType.Controls.Add(this.rbAttackTypeRemote);
             this.gbAttackType.Controls.Add(this.rbAttackTypeMelee);
@@ -548,7 +550,7 @@
             this.gbAttackType.Controls.Add(this.rbAttackTypeBlank);
             this.gbAttackType.Location = new System.Drawing.Point(515, 27);
             this.gbAttackType.Name = "gbAttackType";
-            this.gbAttackType.Size = new System.Drawing.Size(195, 205);
+            this.gbAttackType.Size = new System.Drawing.Size(195, 237);
             this.gbAttackType.TabIndex = 5;
             this.gbAttackType.TabStop = false;
             this.gbAttackType.Text = "Attack type";
@@ -563,6 +565,7 @@
             this.rbAttackTypeSpecial.TabStop = true;
             this.rbAttackTypeSpecial.Text = "Special";
             this.rbAttackTypeSpecial.UseVisualStyleBackColor = true;
+            this.rbAttackTypeSpecial.CheckedChanged += new System.EventHandler(this.rbAttackTypeSpecial_CheckedChanged);
             // 
             // rbAttackTypeRemote
             // 
@@ -809,6 +812,13 @@
             this.tsmAdvanced.Text = "Advanced";
             this.tsmAdvanced.Click += new System.EventHandler(this.tsmAdvanced_Click);
             // 
+            // tsmDestructibleTiles
+            // 
+            this.tsmDestructibleTiles.Name = "tsmDestructibleTiles";
+            this.tsmDestructibleTiles.Size = new System.Drawing.Size(108, 20);
+            this.tsmDestructibleTiles.Text = "Destructible Tiles";
+            this.tsmDestructibleTiles.Click += new System.EventHandler(this.tsmDestructibleTiles_Click);
+            // 
             // gbItemInformtion
             // 
             this.gbItemInformtion.Controls.Add(this.btnEditQuotes);
@@ -941,12 +951,13 @@
             this.btnConfigureRotation.UseVisualStyleBackColor = true;
             this.btnConfigureRotation.Click += new System.EventHandler(this.btnConfigureRotation_Click);
             // 
-            // tsmDestructibleTiles
+            // txtSpecialAttack
             // 
-            this.tsmDestructibleTiles.Name = "tsmDestructibleTiles";
-            this.tsmDestructibleTiles.Size = new System.Drawing.Size(108, 20);
-            this.tsmDestructibleTiles.Text = "Destructible Tiles";
-            this.tsmDestructibleTiles.Click += new System.EventHandler(this.tsmDestructibleTiles_Click);
+            this.txtSpecialAttack.Enabled = false;
+            this.txtSpecialAttack.Location = new System.Drawing.Point(6, 203);
+            this.txtSpecialAttack.Name = "txtSpecialAttack";
+            this.txtSpecialAttack.Size = new System.Drawing.Size(183, 20);
+            this.txtSpecialAttack.TabIndex = 35;
             // 
             // ProjectEternityAttackEditor
             // 
@@ -1072,6 +1083,7 @@
         private System.Windows.Forms.Button btnConfigureRotation;
         private System.Windows.Forms.CheckBox ckUseRotation;
         private System.Windows.Forms.ToolStripMenuItem tsmDestructibleTiles;
+        private System.Windows.Forms.TextBox txtSpecialAttack;
     }
 }
 

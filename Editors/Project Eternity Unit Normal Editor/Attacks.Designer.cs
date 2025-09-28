@@ -65,6 +65,9 @@
             this.lblAttackContextName = new System.Windows.Forms.Label();
             this.btnAddAttackContext = new System.Windows.Forms.Button();
             this.lstAttackContexts = new System.Windows.Forms.ListBox();
+            this.gbAttackVisibility = new System.Windows.Forms.GroupBox();
+            this.txtAttackVisibility = new System.Windows.Forms.TextBox();
+            this.lblAttackVisibility = new System.Windows.Forms.Label();
             this.gbAttacks.SuspendLayout();
             this.gbAnimations.SuspendLayout();
             this.gbUpgrades.SuspendLayout();
@@ -72,6 +75,7 @@
             this.gbAttackTargetContext.SuspendLayout();
             this.gbAttackContexts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAttackContextWeight)).BeginInit();
+            this.gbAttackVisibility.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbAttacks
@@ -215,7 +219,7 @@
             this.gbUpgrades.Controls.Add(this.cbUpgradeValues);
             this.gbUpgrades.Location = new System.Drawing.Point(710, 12);
             this.gbUpgrades.Name = "gbUpgrades";
-            this.gbUpgrades.Size = new System.Drawing.Size(155, 230);
+            this.gbUpgrades.Size = new System.Drawing.Size(155, 113);
             this.gbUpgrades.TabIndex = 2;
             this.gbUpgrades.TabStop = false;
             this.gbUpgrades.Text = "Upgrades";
@@ -401,7 +405,7 @@
             this.gbAttackContexts.Size = new System.Drawing.Size(161, 317);
             this.gbAttackContexts.TabIndex = 8;
             this.gbAttackContexts.TabStop = false;
-            this.gbAttackContexts.Text = "Attack Contexts";
+            this.gbAttackContexts.Text = "Animation Contexts";
             // 
             // txtAttackContextWeight
             // 
@@ -483,11 +487,40 @@
             this.lstAttackContexts.TabIndex = 1;
             this.lstAttackContexts.SelectedIndexChanged += new System.EventHandler(this.lstAttackContexts_SelectedIndexChanged);
             // 
+            // gbAttackVisibility
+            // 
+            this.gbAttackVisibility.Controls.Add(this.txtAttackVisibility);
+            this.gbAttackVisibility.Controls.Add(this.lblAttackVisibility);
+            this.gbAttackVisibility.Location = new System.Drawing.Point(710, 131);
+            this.gbAttackVisibility.Name = "gbAttackVisibility";
+            this.gbAttackVisibility.Size = new System.Drawing.Size(155, 69);
+            this.gbAttackVisibility.TabIndex = 10;
+            this.gbAttackVisibility.TabStop = false;
+            this.gbAttackVisibility.Text = "Attack Visibility";
+            // 
+            // txtAttackVisibility
+            // 
+            this.txtAttackVisibility.Location = new System.Drawing.Point(6, 40);
+            this.txtAttackVisibility.Name = "txtAttackVisibility";
+            this.txtAttackVisibility.Size = new System.Drawing.Size(143, 20);
+            this.txtAttackVisibility.TabIndex = 14;
+            this.txtAttackVisibility.TextChanged += new System.EventHandler(this.txtAttackVisibility_TextChanged);
+            // 
+            // lblAttackVisibility
+            // 
+            this.lblAttackVisibility.AutoSize = true;
+            this.lblAttackVisibility.Location = new System.Drawing.Point(6, 24);
+            this.lblAttackVisibility.Name = "lblAttackVisibility";
+            this.lblAttackVisibility.Size = new System.Drawing.Size(70, 13);
+            this.lblAttackVisibility.TabIndex = 13;
+            this.lblAttackVisibility.Text = "Parser Value:";
+            // 
             // Attacks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(877, 341);
+            this.Controls.Add(this.gbAttackVisibility);
             this.Controls.Add(this.gbAttackContexts);
             this.Controls.Add(this.gbAttackTargetContext);
             this.Controls.Add(this.gbAttackOriginContext);
@@ -508,6 +541,8 @@
             this.gbAttackContexts.ResumeLayout(false);
             this.gbAttackContexts.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAttackContextWeight)).EndInit();
+            this.gbAttackVisibility.ResumeLayout(false);
+            this.gbAttackVisibility.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -551,5 +586,8 @@
         private System.Windows.Forms.Label lblAttackContextParserValue;
         private System.Windows.Forms.NumericUpDown txtAttackContextWeight;
         private System.Windows.Forms.Label lblAttackContextWeight;
+        private System.Windows.Forms.GroupBox gbAttackVisibility;
+        private System.Windows.Forms.TextBox txtAttackVisibility;
+        private System.Windows.Forms.Label lblAttackVisibility;
     }
 }
