@@ -26,16 +26,40 @@ namespace ProjectEternity.Editors.AttackEditor
         public void Save(BinaryWriter BW)
         {
             BW.Write((byte)lsGenericType.Items.Count);
+            foreach (GenericAttribute ActiveType in lsGenericType.Items)
+            {
+                BW.Write((byte)ActiveType.TypeIndex);
+                BW.Write(ActiveType.Damage);
+            }
             BW.Write((byte)lsUniqueType.Items.Count);
+            foreach (UniqueAttribute ActiveType in lsUniqueType.Items)
+            {
+                BW.Write(ActiveType.TypeName);
+                BW.Write(ActiveType.Damage);
+            }
         }
 
-        public void Init(Attack loadedAttack)
+        public void Init(Attack LoadedAttack)
         {
+            foreach (GenericAttribute ActiveType in LoadedAttack.DestructibleTilesAttributes.ListGenericAttribute)
+            {
+                lsGenericType.Items.Add(ActiveType);
+            }
+            foreach (UniqueAttribute ActiveType in LoadedAttack.DestructibleTilesAttributes.ListUniqueAttribute)
+            {
+                lsUniqueType.Items.Add(ActiveType);
+            }
         }
 
         private void lsGenericType_SelectedIndexChanged(object sender, EventArgs e)
         {
             AllowEvents = false;
+
+            if (lsGenericType.SelectedIndex >= 0)
+            {
+                lsUniqueType.SelectedIndex = -1;
+                txtDamage.Value = ((GenericAttribute)lsGenericType.SelectedItem).Damage;
+            }
 
             AllowEvents = true;
         }
@@ -62,6 +86,12 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             AllowEvents = false;
 
+            if (lsUniqueType.SelectedIndex >= 0)
+            {
+                lsGenericType.SelectedIndex = -1;
+                txtDamage.Value = ((UniqueAttribute)lsUniqueType.SelectedItem).Damage;
+            }
+
             AllowEvents = true;
         }
 
@@ -84,6 +114,17 @@ namespace ProjectEternity.Editors.AttackEditor
             if (!AllowEvents)
             {
                 return;
+            }
+
+            if (lsGenericType.SelectedIndex >= 0)
+            {
+                GenericAttribute SelectedType = (GenericAttribute)lsGenericType.SelectedItem;
+                SelectedType.Damage = (int)txtDamage.Value;
+            }
+            else if (lsUniqueType.SelectedIndex >= 0)
+            {
+                UniqueAttribute SelectedType = (UniqueAttribute)lsGenericType.SelectedItem;
+                SelectedType.Damage = (int)txtDamage.Value;
             }
         }
 
