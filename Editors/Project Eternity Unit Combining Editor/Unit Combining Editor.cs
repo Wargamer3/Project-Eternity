@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsCombining, GUIRootPathUnits }, "Units/Combining/", new string[] { ".peu" }, typeof(UnitCombiningEditor))
+                new EditorInfo(new string[] { GUIRootPathUnitsCombining, GUIRootPathUnits }, "Deathmatch/Units/Combining/", new string[] { ".peu" }, typeof(UnitCombiningEditor))
             };
 
             return Info;

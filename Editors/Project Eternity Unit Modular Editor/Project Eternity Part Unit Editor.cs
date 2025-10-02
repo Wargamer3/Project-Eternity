@@ -84,10 +84,10 @@ namespace ProjectEternity.Editors.UnitModularEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { "Units/Modular/Head" }, "Units/Modular/Head/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Head }),
-                new EditorInfo(new string[] { "Units/Modular/Torso" }, "Units/Modular/Torso/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Torso }),
-                new EditorInfo(new string[] { "Units/Modular/Arm" }, "Units/Modular/Arm/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Arm }),
-                new EditorInfo(new string[] { "Units/Modular/Legs" }, "Units/Modular/Legs/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Legs })
+                new EditorInfo(new string[] { "Units/Modular/Head" }, "Deathmatch/Units/Modular/Head/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Head }),
+                new EditorInfo(new string[] { "Units/Modular/Torso" }, "Deathmatch/Units/Modular/Torso/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Torso }),
+                new EditorInfo(new string[] { "Units/Modular/Arm" }, "Deathmatch/Units/Modular/Arm/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Arm }),
+                new EditorInfo(new string[] { "Units/Modular/Legs" }, "Deathmatch/Units/Modular/Legs/", new string[] { ".peup" }, typeof(UnitPartEditor), true, new object[] { PartUnitTypes.Legs })
             };
             return Info;
         }

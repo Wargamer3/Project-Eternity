@@ -54,8 +54,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            sprBackground = Content.Load<Texture2D>("Intermission Screens/Squad Selection");
-            sprCursor = Content.Load<Texture2D>("Intermission Screens/Squad Selection Cursor");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Squad Selection");
+            sprCursor = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Squad Selection Cursor");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial14 = Content.Load<SpriteFont>("Fonts/Arial");

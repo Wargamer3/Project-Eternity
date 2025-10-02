@@ -137,7 +137,7 @@ namespace ProjectEternity.Core.Attacks
             Visibility = string.Empty;
             IsExternal = true;
 
-            FileStream FS = new FileStream("Content/Attacks/" + AttackPath + ".pew", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Attacks/" + AttackPath + ".pew", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -162,7 +162,7 @@ namespace ProjectEternity.Core.Attacks
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             //Create the Part file.
-            this.ItemName = Path.GetFileNameWithoutExtension("Content/Attacks/" + AttackName + ".pew");
+            this.ItemName = Path.GetFileNameWithoutExtension("Content/Deathmatch/Attacks/" + AttackName + ".pew");
             this.Description = BR.ReadString();
 
             this.PowerFormula = BR.ReadString();

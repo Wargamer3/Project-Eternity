@@ -76,14 +76,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 if (File.Exists("Content/Conquest/Buildings/Map Sprites/" + RelativePath + ".xnb"))
                     SpriteMap = new AnimatedSprite(Content, "Conquest/Buildings/Map Sprites/" + RelativePath, Vector2.Zero, 4);
                 else
-                    SpriteMap = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 1);
+                    SpriteMap = new AnimatedSprite(Content, "Conquest/Units/Default", Vector2.Zero, 1);
 
                 SpriteMap.Origin = new Vector2(16, 48);
 
                 if (File.Exists("Content/Conquest/Buildings/Menu Sprites/" + RelativePath + ".xnb"))
                     SpriteUnit = new AnimatedSprite(Content, "Conquest/Buildings/Menu Sprites/" + RelativePath, Vector2.Zero, 4);
                 else
-                    SpriteUnit = new AnimatedSprite(Content, "Units/Default", Vector2.Zero, 1);
+                    SpriteUnit = new AnimatedSprite(Content, "Conquest/Units/Default", Vector2.Zero, 1);
             }
         }
 

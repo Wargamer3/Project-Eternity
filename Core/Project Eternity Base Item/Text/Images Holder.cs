@@ -11,7 +11,7 @@ namespace ProjectEternity.Core.Item
 
         public ImagesHolder(ContentManager Content)
         {
-            sprBoss = Content.Load<Texture2D>("Units/Default");
+            sprBoss = Content.Load<Texture2D>("Deathmatch/Units/Default");
         }
     }
 }

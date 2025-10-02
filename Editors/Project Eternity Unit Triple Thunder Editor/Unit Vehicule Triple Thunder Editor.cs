@@ -36,7 +36,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsVehicleTripleThunder, GUIRootPathUnits }, "Units/Triple Thunder/Vehicles/", new string[] { ".peuv" }, typeof(UnitVehiculeTripleThunderEditor))
+                new EditorInfo(new string[] { GUIRootPathUnitsVehicleTripleThunder, GUIRootPathUnits }, "Triple Thunder/Vehicles/", new string[] { ".peuv" }, typeof(UnitVehiculeTripleThunderEditor))
             };
 
             return Info;

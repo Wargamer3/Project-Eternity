@@ -41,7 +41,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathCharacterRelationships }, "Characters/Relationships/", new string[] { ".pecr" }, typeof(ProjectEternityRelationshipEditor), true, null, false)
+                new EditorInfo(new string[] { GUIRootPathCharacterRelationships }, "Deathmatch/Characters/Relationships/", new string[] { ".pecr" }, typeof(ProjectEternityRelationshipEditor), true, null, false)
             };
 
             return Info;

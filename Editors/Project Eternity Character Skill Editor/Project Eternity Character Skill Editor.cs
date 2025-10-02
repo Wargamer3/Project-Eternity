@@ -41,8 +41,8 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathCharacterSkills }, "Characters/Skills/", new string[] { ".pecs" }, typeof(ProjectEternityCharacterSkillEditor), true, null, true),
-                new EditorInfo(new string[] { GUIRootPathAttackAttributes }, "Attacks/Attributes/", new string[] { ".peaa" }, typeof(ProjectEternityCharacterSkillEditor), true, null, true)
+                new EditorInfo(new string[] { GUIRootPathCharacterSkills }, "Deathmatch/Characters/Skills/", new string[] { ".pecs" }, typeof(ProjectEternityCharacterSkillEditor), true, null, true),
+                new EditorInfo(new string[] { GUIRootPathAttackAttributes }, "Deathmatch/Attacks/Attributes/", new string[] { ".peaa" }, typeof(ProjectEternityCharacterSkillEditor), true, null, true)
             };
 
             return Info;

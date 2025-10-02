@@ -62,22 +62,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
-            sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
-            sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
-            sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
-            sprRanged = Content.Load<Texture2D>("Menus/Status Screen/Ranged");
-            sprMelee = Content.Load<Texture2D>("Menus/Status Screen/Melee");
+            sprLand = Content.Load<Texture2D>("Deathmatch/Status Screen/Ground");
+            sprSea = Content.Load<Texture2D>("Deathmatch/Status Screen/Sea");
+            sprSky = Content.Load<Texture2D>("Deathmatch/Status Screen/Sky");
+            sprSpace = Content.Load<Texture2D>("Deathmatch/Status Screen/Space");
+            sprRanged = Content.Load<Texture2D>("Deathmatch/Status Screen/Ranged");
+            sprMelee = Content.Load<Texture2D>("Deathmatch/Status Screen/Melee");
 
-            sprAttackPropertiesBack = Content.Load<Texture2D>("Battle/Attack Select/Properties Back");
-            sprAttackPropertiesP = Content.Load<Texture2D>("Battle/Attack Select/Properties P");
-            sprAttackPropertiesB = Content.Load<Texture2D>("Battle/Attack Select/Properties B");
-            sprAttackPropertiesS = Content.Load<Texture2D>("Battle/Attack Select/Properties S");
+            sprAttackPropertiesBack = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Properties Back");
+            sprAttackPropertiesP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Properties P");
+            sprAttackPropertiesB = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Properties B");
+            sprAttackPropertiesS = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Properties S");
 
-            sprAttackTypeBack = Content.Load<Texture2D>("Battle/Attack Select/Type Back");
-            sprAttackTypeALL = Content.Load<Texture2D>("Battle/Attack Select/Type ALL");
-            sprAttackTypeMAP = Content.Load<Texture2D>("Battle/Attack Select/Type MAP");
-            sprAttackTypePLA = Content.Load<Texture2D>("Battle/Attack Select/Type PLA");
+            sprAttackTypeBack = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Type Back");
+            sprAttackTypeALL = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Type ALL");
+            sprAttackTypeMAP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Type MAP");
+            sprAttackTypePLA = Content.Load<Texture2D>("Deathmatch/Battle Menu/Attack Select/Type PLA");
         }
 
         public override void Update(GameTime gameTime)

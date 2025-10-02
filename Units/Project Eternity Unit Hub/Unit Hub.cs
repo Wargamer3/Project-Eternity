@@ -45,7 +45,7 @@ namespace ProjectEternity.Core.Units.Hub
 
             ActiveVisualNovelIndex = 0;
 
-            FileStream FS = new FileStream("Content/Units/Hub/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Hub/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -65,13 +65,13 @@ namespace ProjectEternity.Core.Units.Hub
 
             if (Content != null)
             {
-                string UnitDirectory = Path.GetDirectoryName("Content\\Units\\Normal\\" + Name);
+                string UnitDirectory = Path.GetDirectoryName("Content/Deathmatch/Units/Normal/" + Name);
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + "\\Map Sprite\\" + Name + ".xnb"))
                     SpriteMap = Content.Load<Texture2D>(XNADirectory + "\\Map Sprite\\" + this.RelativePath);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Units/Default");
+                    SpriteMap = Content.Load<Texture2D>("Deathmatch/Units/Default");
 
                 if (File.Exists(UnitDirectory + "\\Unit Sprite\\" + Name + ".xnb"))
                     SpriteUnit = Content.Load<Texture2D>(XNADirectory + "\\Unit Sprite\\" + this.RelativePath);

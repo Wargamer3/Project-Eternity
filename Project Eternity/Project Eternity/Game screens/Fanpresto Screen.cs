@@ -33,9 +33,9 @@ namespace ProjectEternity
 
         public override void Load()
         {
-            sprFanpresto = Content.Load<Texture2D>("Menus/Title Screen/Fanpresto");
-            sprDisclaimer = Content.Load<Texture2D>("Menus/Title Screen/Disclaimer");
-            sndFanpresto = new FMODSound(FMODSystem, "Content/[Original] Fanpresto.mp3");
+            sprFanpresto = Content.Load<Texture2D>("Title Screen/Fanpresto");
+            sprDisclaimer = Content.Load<Texture2D>("Title Screen/Disclaimer");
+            sndFanpresto = new FMODSound(FMODSystem, "Content/Title Screen/[Original] Fanpresto.mp3");
         }
 
         public override void Update(GameTime gameTime)

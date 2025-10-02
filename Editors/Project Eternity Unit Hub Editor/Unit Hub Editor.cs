@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsHub, GUIRootPathUnits }, "Units/Hub/", new string[] { ".peu" }, typeof(UnitHubEditor))
+                new EditorInfo(new string[] { GUIRootPathUnitsHub, GUIRootPathUnits }, "Deathmatch/Units/Hub/", new string[] { ".peu" }, typeof(UnitHubEditor))
             };
             
             return Info;

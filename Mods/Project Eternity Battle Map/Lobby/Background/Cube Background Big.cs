@@ -30,11 +30,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Load(ContentManager Content)
         {
-            sprTitleHighlight = Content.Load<Texture2D>("Menus/Lobby/Shop/Title Highlight");
-            sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
-            sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
+            sprTitleHighlight = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Title Highlight");
+            sprBarLeft = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Bar Left");
+            sprBarMiddle = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Bar Middle");
 
-            Cube = Content.Load<Model>("Menus/Lobby/Cube thing");
+            Cube = Content.Load<Model>("Deathmatch/Lobby Menu/Cube thing");
         }
 
         public void Update(GameTime gameTime)

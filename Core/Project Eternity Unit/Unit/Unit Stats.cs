@@ -246,7 +246,7 @@ namespace ProjectEternity.Core.Units
             for (int A = ListAbilityCount - 1; A >= 0; --A)
             {
                 string RelativePath = BR.ReadString();
-                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Units/Abilities/" + RelativePath + ".pes", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Deathmatch/Units/Abilities/" + RelativePath + ".pes", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

@@ -96,12 +96,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             TestModel = Content.Load<Model>("3D/Models/A110_010_gundammk2");
-            sprMapMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
-            sprBackWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Back Wall");
-            sprFacingWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Facing Wall");
-            sprFloor = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Floor");
-            sprInnerWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Inner Wall");
-            sprOverhang = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Overhang");
+            sprMapMenuBackground = Content.Load<Texture2D>("Deathmatch/Status Screen/Background Black");
+            sprBackWall = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Hangar/Back Wall");
+            sprFacingWall = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Hangar/Facing Wall");
+            sprFloor = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Hangar/Floor");
+            sprInnerWall = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Hangar/Inner Wall");
+            sprOverhang = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Hangar/Overhang");
 
             AttackPicker = new AttacksMenu(ActiveParser);
             AttackPicker.Load();

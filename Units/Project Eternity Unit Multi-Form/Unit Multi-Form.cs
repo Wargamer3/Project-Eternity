@@ -55,7 +55,7 @@ namespace ProjectEternity.Core.Units.MultiForm
             MaxCharacter = 1;
             ArrayParts = new Parts.UnitPart[0];
 
-            FileStream FS = new FileStream("Content/Units/Multi-Form/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Multi-Form/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

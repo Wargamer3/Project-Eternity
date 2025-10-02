@@ -96,10 +96,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsNormal, GUIRootPathUnits }, "Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalMapSprites }, "Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Units/Normal/Unit Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormal, GUIRootPathUnits }, "Deathmatch/Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalMapSprites }, "Deathmatch/Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Deathmatch/Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Deathmatch/Units/Normal/Unit Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;

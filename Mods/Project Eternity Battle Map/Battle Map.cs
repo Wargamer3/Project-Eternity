@@ -263,6 +263,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListLight = new List<BattleMapLight>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
             ListMandatoryMutator = new List<string>();
+            ListTemporaryTilesetPreset = new List<DestructibleTilesetPreset>();
 
             CameraType = "2D";
             Description = "";
@@ -455,7 +456,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 #region Fonts
 
-                fntPhaseNumber = Content.Load<SpriteFont>("Battle/Phase/Number");
+                fntPhaseNumber = Content.Load<SpriteFont>("Deathmatch/Battle Menu/Phase/Number");
                 fntPhaseNumber.Spacing = -5;
                 fntUnitAttack = Content.Load<SpriteFont>("Fonts/Arial16");
                 fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -480,28 +481,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 fxGrayscale = Content.Load<Effect>("Shaders/Grayscale");
 
                 sprEllipse = Content.Load<Texture2D>("Ellipse");
-                sprCursor = Content.Load<Texture2D>("Cursors/Reticle");
-                sprCursorPath = Content.Load<Texture2D>("Cursors/Cursor Path");
-                sprUnitHover = Content.Load<Texture2D>("Units/Unit Hover");
+                sprCursor = Content.Load<Texture2D>("Editors/Reticle");
+                sprCursorPath = Content.Load<Texture2D>("Editors/Cursor Path");
+                sprUnitHover = Content.Load<Texture2D>("Deathmatch/Units/Unit Hover");
 
-                sprPhaseBackground = Content.Load<Texture2D>("Battle/Phase/Background");
-                sprPhasePlayer = Content.Load<Texture2D>("Battle/Phase/Player");
-                sprPhaseEnemy = Content.Load<Texture2D>("Battle/Phase/Enemy");
-                sprPhaseTurn = Content.Load<Texture2D>("Battle/Phase/Turn");
+                sprPhaseBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Phase/Background");
+                sprPhasePlayer = Content.Load<Texture2D>("Deathmatch/Battle Menu/Phase/Player");
+                sprPhaseEnemy = Content.Load<Texture2D>("Deathmatch/Battle Menu/Phase/Enemy");
+                sprPhaseTurn = Content.Load<Texture2D>("Deathmatch/Battle Menu/Phase/Turn");
 
-                sprCursorTerrainSelection = Content.Load<Texture2D>("Battle/Cursor/Terrain Selection");
+                sprCursorTerrainSelection = Content.Load<Texture2D>("Deathmatch/Battle Menu/Cursor/Terrain Selection");
 
                 #region Bars
 
-                sprBarSmallBackground = Content.Load<Texture2D>("Battle/Bars/Small Bar");
-                sprBarSmallEN = Content.Load<Texture2D>("Battle/Bars/Small Energy");
-                sprBarSmallHP = Content.Load<Texture2D>("Battle/Bars/Small Health");
-                sprBarLargeBackground = Content.Load<Texture2D>("Battle/Bars/Large Bar");
-                sprBarLargeEN = Content.Load<Texture2D>("Battle/Bars/Large Energy");
-                sprBarLargeHP = Content.Load<Texture2D>("Battle/Bars/Large Health");
-                sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-                sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-                sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
+                sprBarSmallBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Bar");
+                sprBarSmallEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Energy");
+                sprBarSmallHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Health");
+                sprBarLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Large Bar");
+                sprBarLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Large Energy");
+                sprBarLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Large Health");
+                sprBarExtraLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Bar");
+                sprBarExtraLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Energy");
+                sprBarExtraLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Health");
 
                 #endregion
             }

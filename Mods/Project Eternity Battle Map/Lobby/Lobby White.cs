@@ -167,23 +167,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprButtonHelp = Content.Load<Texture2D>("Menus/Lobby/Button Help");
-            sprButtonSettings = Content.Load<Texture2D>("Menus/Lobby/Button Settings");
-            sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
-            sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
-            sprButtonSmall = Content.Load<Texture2D>("Menus/Lobby/Button Small");
-            sprFriendsList = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
-            sprButtonFriendsActive = Content.Load<Texture2D>("Menus/Lobby/Button Friend Active");
-            sprButtonFriendsInactive = Content.Load<Texture2D>("Menus/Lobby/Button Friend Inactive");
-            sprChatBox = Content.Load<Texture2D>("Menus/Lobby/Chat Box");
+            sprButtonHelp = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Help");
+            sprButtonSettings = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Settings");
+            sprButtonBigColor = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Big Color");
+            sprButtonBigGray = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Big Gray");
+            sprButtonSmall = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Small");
+            sprFriendsList = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame");
+            sprButtonFriendsActive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Friend Active");
+            sprButtonFriendsInactive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Friend Inactive");
+            sprChatBox = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Chat Box");
 
-            sprRoom = Content.Load<Texture2D>("Menus/Lobby/Room Generic");
-            sprRoomHover = Content.Load<Texture2D>("Menus/Lobby/Room Hover");
-            sprRoomFull = Content.Load<Texture2D>("Menus/Lobby/Room Full");
-            sprButtonLocalPlayerManagement = Content.Load<Texture2D>("Menus/Lobby/Button Local Player Management");
+            sprRoom = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Room Generic");
+            sprRoomHover = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Room Hover");
+            sprRoomFull = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Room Full");
+            sprButtonLocalPlayerManagement = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Local Player Management");
 
-            sprIconPlayerActive = Content.Load<Texture2D>("Menus/Lobby/Icon Player Active");
-            sprIconPlayerInactive = Content.Load<Texture2D>("Menus/Lobby/Icon Player Inactive");
+            sprIconPlayerActive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Icon Player Active");
+            sprIconPlayerInactive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Icon Player Inactive");
 
             ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
@@ -198,42 +198,42 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int DrawX = (int)(1180 * Ratio);
             int DrawY = (int)(122 * Ratio);
-            LocalPlayerSelectionButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Local Players Management}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectLocalPlayers);
+            LocalPlayerSelectionButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Local Players Management}}", "Deathmatch/Lobby Menu/Interactive/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectLocalPlayers);
 
             DrawX = (int)(464 * Ratio);
             DrawY = (int)(384 * Ratio);
-            QuickStartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Quick Start}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            QuickStartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Quick Start}}", "Deathmatch/Lobby Menu/Interactive/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
             DrawX = (int)(1274 * Ratio);
-            CreateARoomButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Create a Room}}", "Menus/Lobby/Button Big Gray", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
+            CreateARoomButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Create a Room}}", "Deathmatch/Lobby Menu/Interactive/Button Big Gray", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
             WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(DrawX, DrawY), OnButtonOver, null);
 
 
             DrawX = (int)(3472 * Ratio);
             DrawY = (int)(122 * Ratio);
-            HelpButton = new TextButton(Content, "", "Menus/Lobby/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, () => {
+            HelpButton = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, () => {
                 PushScreen(new IntroPopup(this));
             });
             DrawX += (int)(180 * Ratio);
-            OptionsButton = new TextButton(Content, "", "Menus/Lobby/Button Settings", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            OptionsButton = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Button Settings", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
 
             DrawX = (int)(2932 * Ratio);
             DrawY = (int)(768 * Ratio);
-            ShowAllPlayersFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}All}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowAllPlayers);
+            ShowAllPlayersFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}All}}", "Deathmatch/Lobby Menu/Interactive/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowAllPlayers);
             DrawX += (int)(232 * Ratio);
-            ShowFriendsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Friends}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowFriends);
+            ShowFriendsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Friends}}", "Deathmatch/Lobby Menu/Interactive/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowFriends);
             DrawX += (int)(232 * Ratio);
-            ShowGuildsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Guild}}", "Menus/Lobby/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowGuild);
+            ShowGuildsFilter = new TextButton(Content, "{{Text:{Font:a Atomic Md}{Centered}{Color:65,70,65,255}Guild}}", "Deathmatch/Lobby Menu/Interactive/Button Friend", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ShowGuild);
 
             DrawX = Constants.Width - 550 + sprButtonSmall.Width / 4;
             DrawY = 147 + sprButtonSmall.Height / 4;
-            InventoryButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Inventory}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInventory);
+            InventoryButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Inventory}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInventory);
             DrawX += 290;
-            ShopButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Shop}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenShop);
+            ShopButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Shop}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenShop);
             DrawX = Constants.Width - 550 + sprButtonSmall.Width / 4;
             DrawY = 238 + sprButtonSmall.Height / 4;
-            InfoButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Stats}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInfo);
+            InfoButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Stats}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenInfo);
             DrawX += 290;
-            RankingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Ranking}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
+            RankingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Ranking}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
 
             ShowAllPlayersFilter.CanBeChecked = true;
             ShowFriendsFilter.CanBeChecked = true;

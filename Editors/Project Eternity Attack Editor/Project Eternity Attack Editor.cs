@@ -70,8 +70,8 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAttacks }, "Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)),
-                new EditorInfo(new string[] { GUIRootPathAttackModels }, "Attacks/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { GUIRootPathAttacks }, "Deathmatch/Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)),
+                new EditorInfo(new string[] { GUIRootPathAttackModels }, "Deathmatch/Attacks/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;

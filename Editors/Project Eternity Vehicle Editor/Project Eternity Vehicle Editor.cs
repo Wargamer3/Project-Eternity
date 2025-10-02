@@ -41,8 +41,8 @@ namespace ProjectEternity.Editors.VehicleEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathVehicles }, "Vehicles/", new string[] { ".pev" }, typeof(VehicleEditor)),
-                new EditorInfo(new string[] { GUIRootPathVehicleSprites }, "Vehicles/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathVehicles }, "Deathmatch/Vehicles/", new string[] { ".pev" }, typeof(VehicleEditor)),
+                new EditorInfo(new string[] { GUIRootPathVehicleSprites }, "Deathmatch/Vehicles/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
             };
         }
 

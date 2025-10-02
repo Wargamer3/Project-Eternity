@@ -59,7 +59,7 @@ namespace ProjectEternity.Core.Attacks
 
                 if (!string.IsNullOrEmpty(Projectile3DModelPath))
                 {
-                    Projectile3DModel = new AnimatedModel("Attacks/Models/" + Projectile3DModelPath);
+                    Projectile3DModel = new AnimatedModel("Deathmatch/Attacks/Models/" + Projectile3DModelPath);
                     Projectile3DModel.LoadContent(Content);
                 }
             }
@@ -83,7 +83,7 @@ namespace ProjectEternity.Core.Attacks
 
             if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
             {
-                FileStream FSSkillChain = new FileStream("Content/Attacks/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
+                FileStream FSSkillChain = new FileStream("Content/Deathmatch/Attacks/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
                 BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
                 BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
 

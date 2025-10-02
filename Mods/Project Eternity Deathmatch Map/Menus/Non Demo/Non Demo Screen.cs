@@ -84,8 +84,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             sndNonDemoAttack = new FMODSound(FMODSystem, "Content/SFX/hit sound.mp3");
 
-            sprNonDemoMiss = Content.Load<Texture2D>("Battle/Miss");
-            sprNonDemoCritical = Content.Load<Texture2D>("Battle/Critical");
+            sprNonDemoMiss = Content.Load<Texture2D>("Deathmatch/Battle Menu/Miss");
+            sprNonDemoCritical = Content.Load<Texture2D>("Deathmatch/Battle Menu/Critical");
             sprNonDemoExplosion = new AnimatedSprite(Content, "Animations/Bitmap Animations/Explosion_strip3", new Vector2(), 10f);
 
             sprNonDemoExplosion.EndAnimation();

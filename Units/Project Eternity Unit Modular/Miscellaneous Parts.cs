@@ -47,7 +47,7 @@ namespace ProjectEternity.Core.Units.Modular
                     break;
             }
 
-            FileStream FS = new FileStream("Content/Units/Modular/" + FullPath + ".pep", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Modular/" + FullPath + ".pep", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

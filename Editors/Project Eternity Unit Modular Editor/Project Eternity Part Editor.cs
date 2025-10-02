@@ -34,34 +34,34 @@ namespace ProjectEternity.Editors.UnitModularEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { "Units/Modular/Head/Antena" },    "Units/Modular/Head/Antena/",      new string[] { ".pep" }, typeof(ProjectEternityPartEditor),      true, new object[] { PartTypes.HeadAntena       }),
-                new EditorInfo(new string[] { "Units/Modular/Head/Ears" },      "Units/Modular/Head/Ears/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.HeadEars         }),
-                new EditorInfo(new string[] { "Units/Modular/Head/Eyes" },      "Units/Modular/Head/Eyes/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.HeadEyes         }),
-                new EditorInfo(new string[] { "Units/Modular/Head/CPU" },       "Units/Modular/Head/CPU/",         new string[] { ".pep" }, typeof(ProjectEternityPartEditor),         true, new object[] { PartTypes.HeadCPU          }),
+                new EditorInfo(new string[] { "Units/Modular/Head/Antena" },    "Deathmatch/Units/Modular/Head/Antena/",      new string[] { ".pep" }, typeof(ProjectEternityPartEditor),      true, new object[] { PartTypes.HeadAntena       }),
+                new EditorInfo(new string[] { "Units/Modular/Head/Ears" },      "Deathmatch/Units/Modular/Head/Ears/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.HeadEars         }),
+                new EditorInfo(new string[] { "Units/Modular/Head/Eyes" },      "Deathmatch/Units/Modular/Head/Eyes/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.HeadEyes         }),
+                new EditorInfo(new string[] { "Units/Modular/Head/CPU" },       "Deathmatch/Units/Modular/Head/CPU/",         new string[] { ".pep" }, typeof(ProjectEternityPartEditor),         true, new object[] { PartTypes.HeadCPU          }),
 
-                new EditorInfo(new string[] { "Units/Modular/Torso/Core" },     "Units/Modular/Torso/Core/",       new string[] { ".pep" }, typeof(ProjectEternityPartEditor),       true, new object[] { PartTypes.TorsoCore        }),
-                new EditorInfo(new string[] { "Units/Modular/Torso/Radiator" }, "Units/Modular/Torso/Radiator/",   new string[] { ".pep" }, typeof(ProjectEternityPartEditor),   true, new object[] { PartTypes.TorsoRadiator    }),
-                new EditorInfo(new string[] { "Units/Modular/Torso/Shell" },    "Units/Modular/Torso/Shell/",      new string[] { ".pep" }, typeof(ProjectEternityPartEditor),      true, new object[] { PartTypes.Shell       }),
+                new EditorInfo(new string[] { "Units/Modular/Torso/Core" },     "Deathmatch/Units/Modular/Torso/Core/",       new string[] { ".pep" }, typeof(ProjectEternityPartEditor),       true, new object[] { PartTypes.TorsoCore        }),
+                new EditorInfo(new string[] { "Units/Modular/Torso/Radiator" }, "Deathmatch/Units/Modular/Torso/Radiator/",   new string[] { ".pep" }, typeof(ProjectEternityPartEditor),   true, new object[] { PartTypes.TorsoRadiator    }),
+                new EditorInfo(new string[] { "Units/Modular/Torso/Shell" },    "Deathmatch/Units/Modular/Torso/Shell/",      new string[] { ".pep" }, typeof(ProjectEternityPartEditor),      true, new object[] { PartTypes.Shell       }),
 
                 new EditorInfo(new string[] { "Units/Modular/Arm/Shell",
-                                              "Units/Modular/Shell" },           "Units/Modular/Arm/Shell/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.Shell         }),
+                                              "Units/Modular/Shell" },           "Deathmatch/Units/Modular/Arm/Shell/",        new string[] { ".pep" }, typeof(ProjectEternityPartEditor),        true, new object[] { PartTypes.Shell         }),
                 new EditorInfo(new string[] { "Units/Modular/Arm/Strength",
-                                              "Units/Modular/Strength" },        "Units/Modular/Arm/Strength/",     new string[] { ".pep" }, typeof(ProjectEternityPartEditor),     true, new object[] { PartTypes.Strength      }),
+                                              "Units/Modular/Strength" },        "Deathmatch/Units/Modular/Arm/Strength/",     new string[] { ".pep" }, typeof(ProjectEternityPartEditor),     true, new object[] { PartTypes.Strength      }),
 
                 new EditorInfo(new string[] { "Units/Modular/Legs/Shell",
-                                              "Units/Modular/Shell" },           "Units/Modular/Legs/Shell/",       new string[] { ".pep" }, typeof(ProjectEternityPartEditor),       true, new object[] { PartTypes.Shell        }),
+                                              "Units/Modular/Shell" },           "Deathmatch/Units/Modular/Legs/Shell/",       new string[] { ".pep" }, typeof(ProjectEternityPartEditor),       true, new object[] { PartTypes.Shell        }),
                 new EditorInfo(new string[] { "Units/Modular/Legs/Strength",
-                                              "Units/Modular/Strength" },        "Units/Modular/Legs/Strength/",    new string[] { ".pep" }, typeof(ProjectEternityPartEditor),    true, new object[] { PartTypes.Strength     }),
+                                              "Units/Modular/Strength" },        "Deathmatch/Units/Modular/Legs/Strength/",    new string[] { ".pep" }, typeof(ProjectEternityPartEditor),    true, new object[] { PartTypes.Strength     }),
 
                 new EditorInfo(new string[] { "Units/Modular/Generic/Shell",
                                               "Units/Modular/Shell",
                                               "Units/Modular/Arm/Shell",
-                                              "Units/Modular/Legs/Shell" },      "Units/Modular/Generic/Shell/",    new string[] { ".pep" }, typeof(ProjectEternityPartEditor),    true, new object[] { PartTypes.Shell     }),
+                                              "Units/Modular/Legs/Shell" },      "Deathmatch/Units/Modular/Generic/Shell/",    new string[] { ".pep" }, typeof(ProjectEternityPartEditor),    true, new object[] { PartTypes.Shell     }),
 
                 new EditorInfo(new string[] { "Units/Modular/Generic/Strength",
                                               "Units/Modular/Strength",
                                               "Units/Modular/Arm/Strength",
-                                              "Units/Modular/Legs/Strength"},    "Units/Modular/Generic/Strength/", new string[] { ".pep" }, typeof(ProjectEternityPartEditor), true, new object[] { PartTypes.Strength  })
+                                              "Units/Modular/Legs/Strength"},    "Deathmatch/Units/Modular/Generic/Strength/", new string[] { ".pep" }, typeof(ProjectEternityPartEditor), true, new object[] { PartTypes.Strength  })
             };
             return Info;
         }

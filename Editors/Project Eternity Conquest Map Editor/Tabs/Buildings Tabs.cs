@@ -51,7 +51,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
 
-            string[] ArrayFactions = Directory.GetDirectories("Content/Buildings/Conquest","*.*", SearchOption.TopDirectoryOnly);
+            string[] ArrayFactions = Directory.GetDirectories("Content/Conquest/Buildings/", "*.*", SearchOption.TopDirectoryOnly);
             foreach (var ActiveFaction in ArrayFactions)
             {
                 string FactionName = ActiveFaction.Substring(27);
@@ -133,7 +133,7 @@ namespace ProjectEternity.Editors.MapEditor
             lvBuildings.Items.Clear();
             imageList.Images.Clear();
 
-            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Buildings/Conquest/" + cbFactions.Text, "*.peb*", SearchOption.TopDirectoryOnly);
+            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Conquest/Buildings/" + cbFactions.Text, "*.peb*", SearchOption.TopDirectoryOnly);
 
             foreach (var ActiveBuilding in ArrayBuildingTypes)
             {

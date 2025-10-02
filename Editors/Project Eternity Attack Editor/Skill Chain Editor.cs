@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.AttackSkillChainEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAttackSkillChains }, "Attacks/Skill Chains/", new string[] { ".pesc" }, typeof(AttackSkillChainEditor), true, null, true)
+                new EditorInfo(new string[] { GUIRootPathAttackSkillChains }, "Deathmatch/Attacks/Skill Chains/", new string[] { ".pesc" }, typeof(AttackSkillChainEditor), true, null, true)
             };
 
             return Info;
@@ -50,7 +50,7 @@ namespace ProjectEternity.Editors.AttackSkillChainEditor
             string Name = SkillChainPath.Substring(0, SkillChainPath.Length - 5).Substring(29);
             this.Text = Name + " - Project Eternity Attack Skill Chain Editor";
 
-            FileStream FS = new FileStream("Content/Attacks/Skill Chains/" + Name + ".pesc", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Attacks/Skill Chains/" + Name + ".pesc", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

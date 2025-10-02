@@ -43,10 +43,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : this(Owner, "Deathmatch UI")
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-            sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-            sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
-            sprInfinity = Content.Load<Texture2D>("Battle/Infinity");
+            sprBarExtraLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Bar");
+            sprBarExtraLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Energy");
+            sprBarExtraLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Health");
+            sprInfinity = Content.Load<Texture2D>("Deathmatch/Battle Menu/Infinity");
         }
 
 
@@ -54,10 +54,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(BR, TimelineType)
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-            sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-            sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
-            sprInfinity = Content.Load<Texture2D>("Battle/Infinity");
+            sprBarExtraLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Bar");
+            sprBarExtraLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Energy");
+            sprBarExtraLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Health");
+            sprInfinity = Content.Load<Texture2D>("Deathmatch/Battle Menu/Infinity");
 
             _SpawnFrame = BR.ReadInt32();
             _DeathFrame = BR.ReadInt32();

@@ -68,15 +68,15 @@ namespace ProjectEternity.Editors.CutsceneEditor
             brScriptBrush = Brushes.White;
             brScriptLink = Brushes.Black;
 
-            imgScriptTopLeft = new UnsafeScriptImage("Content/Menus/Scripts/ScriptTopLeft2.png");
-            imgScriptTopMiddle = new UnsafeScriptImage("Content/Menus/Scripts/ScriptTopMiddle2.png");
-            imgScriptTopRight = new UnsafeScriptImage("Content/Menus/Scripts/ScriptTopRight2.png");
-            imgScriptMiddleLeft = new UnsafeScriptImage("Content/Menus/Scripts/ScriptMiddleLeft2.png");
-            imgScriptMiddleMiddle = new UnsafeScriptImage("Content/Menus/Scripts/ScriptMiddleMiddle2.png");
-            imgScriptMiddleRight = new UnsafeScriptImage("Content/Menus/Scripts/ScriptMiddleRight2.png");
-            imgScriptBottomLeft = new UnsafeScriptImage("Content/Menus/Scripts/ScriptBottomLeft2.png");
-            imgScriptBottomMiddle = new UnsafeScriptImage("Content/Menus/Scripts/ScriptBottomMiddle2.png");
-            imgScriptBottomRight = new UnsafeScriptImage("Content/Menus/Scripts/ScriptBottomRight2.png");
+            imgScriptTopLeft = new UnsafeScriptImage("Content/Editors/Scripts/ScriptTopLeft2.png");
+            imgScriptTopMiddle = new UnsafeScriptImage("Content/Editors/Scripts/ScriptTopMiddle2.png");
+            imgScriptTopRight = new UnsafeScriptImage("Content/Editors/Scripts/ScriptTopRight2.png");
+            imgScriptMiddleLeft = new UnsafeScriptImage("Content/Editors/Scripts/ScriptMiddleLeft2.png");
+            imgScriptMiddleMiddle = new UnsafeScriptImage("Content/Editors/Scripts/ScriptMiddleMiddle2.png");
+            imgScriptMiddleRight = new UnsafeScriptImage("Content/Editors/Scripts/ScriptMiddleRight2.png");
+            imgScriptBottomLeft = new UnsafeScriptImage("Content/Editors/Scripts/ScriptBottomLeft2.png");
+            imgScriptBottomMiddle = new UnsafeScriptImage("Content/Editors/Scripts/ScriptBottomMiddle2.png");
+            imgScriptBottomRight = new UnsafeScriptImage("Content/Editors/Scripts/ScriptBottomRight2.png");
 
             //Create a new buffer based on the picturebox.
             pbDrawingSurfaceGraphics = panDrawingSurface.CreateGraphics();

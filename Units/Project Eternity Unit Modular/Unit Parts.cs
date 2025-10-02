@@ -240,7 +240,7 @@ namespace ProjectEternity.Core.Units.Modular
         public PartHead(string RelativePath)
             : base(RelativePath)
         {
-            FileStream FS = new FileStream("Content/Units/Modular/Head/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Modular/Head/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -378,7 +378,7 @@ namespace ProjectEternity.Core.Units.Modular
         public PartTorso(string RelativePath)
             : base(RelativePath)
         {
-            FileStream FS = new FileStream("Content/Units/Modular/Torso/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Modular/Torso/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -496,7 +496,7 @@ namespace ProjectEternity.Core.Units.Modular
         public PartArm(string RelativePath)
             : base(RelativePath)
         {
-            FileStream FS = new FileStream("Content/Units/Modular/Arm/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Modular/Arm/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -597,7 +597,7 @@ namespace ProjectEternity.Core.Units.Modular
         public PartLegs(string RelativePath)
             : base(RelativePath)
         {
-            FileStream FS = new FileStream("Content/Units/Modular/Legs/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Modular/Legs/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

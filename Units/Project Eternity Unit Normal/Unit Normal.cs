@@ -31,9 +31,9 @@ namespace ProjectEternity.Core.Units.Normal
             MaxCharacter = 1;
             ArrayCharacterActive = new Characters.Character[1];
             FileStream FS;
-            if (File.Exists("Content/Units/Normal/" + RelativePath + ".peu"))
+            if (File.Exists("Content/Deathmatch/Units/Normal/" + RelativePath + ".peu"))
             {
-                FS = new FileStream("Content/Units/Normal/" + RelativePath + ".peu", FileMode.Open, FileAccess.Read);
+                FS = new FileStream("Content/Deathmatch/Units/Normal/" + RelativePath + ".peu", FileMode.Open, FileAccess.Read);
                 BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -56,7 +56,7 @@ namespace ProjectEternity.Core.Units.Normal
             }
             else
             {
-                IniFile UnitFile = IniFile.ReadFromFile("Content/Units/Normal/" + RelativePath + ".txt");
+                IniFile UnitFile = IniFile.ReadFromFile("Content/Deathmatch/Units/Normal/" + RelativePath + ".txt");
                 Description = UnitFile.ReadField("Unit Stats", "Description");
                 Price = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Price"));
                 
@@ -75,28 +75,28 @@ namespace ProjectEternity.Core.Units.Normal
                 if (!string.IsNullOrEmpty(SpriteUnitPath))
                     FinalSpriteUnitPath = "\\Unit Sprite\\" + SpriteUnitPath;
 
-                string UnitDirectory = Path.GetDirectoryName("Content\\Units\\Normal\\");
+                string UnitDirectory = Path.GetDirectoryName("Content/Deathmatch/Units/Normal/");
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + FinalSpriteMapPath + ".xnb"))
                     SpriteMap = Content.Load<Texture2D>(XNADirectory + FinalSpriteMapPath);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Units/Default");
+                    SpriteMap = Content.Load<Texture2D>("Deathmatch/Units/Default");
 
                 if (File.Exists(UnitDirectory + FinalSpriteUnitPath + ".xnb"))
                     SpriteUnit = Content.Load<Texture2D>(XNADirectory + FinalSpriteUnitPath);
                 else
-                    SpriteUnit = Content.Load<Texture2D>("Units/Default");
+                    SpriteUnit = Content.Load<Texture2D>("Deathmatch/Units/Default");
 
                 if (!string.IsNullOrEmpty(Model3DPath))
                 {
                     string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     string ModelFolder = Model3DPath.Replace(ArrayModelFolder[ArrayModelFolder.Length - 1], "");
-                    Unit3DModel = new AnimatedModel("Units/Normal/Unit Models/" + Model3DPath);
+                    Unit3DModel = new AnimatedModel("Deathmatch/Units/Normal/Unit Models/" + Model3DPath);
                     Unit3DModel.LoadContent(Content);
 
-                    Unit3DModel.AddAnimation("Units/Normal/Unit Models/" + ModelFolder + "Walking", "Walking", Content);
-                    Unit3DModel.AddAnimation("Units/Normal/Unit Models/" + ModelFolder + "Idle", "Idle", Content);
+                    Unit3DModel.AddAnimation("Deathmatch/Units/Normal/Unit Models/" + ModelFolder + "Walking", "Walking", Content);
+                    Unit3DModel.AddAnimation("Deathmatch/Units/Normal/Unit Models/" + ModelFolder + "Idle", "Idle", Content);
                 }
             }
         }

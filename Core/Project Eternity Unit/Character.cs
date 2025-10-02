@@ -242,7 +242,7 @@ namespace ProjectEternity.Core.Characters
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             : this()
         {
-            FileStream FS = new FileStream("Content/Characters/" + CharacterPath + ".pec", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Characters/" + CharacterPath + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -284,7 +284,7 @@ namespace ProjectEternity.Core.Characters
 
             for (int S = 0; S < SpiritListCount; ++S)
             {
-                ArrayPilotSpirit[S] = new ManualSkill("Content/Characters/Spirits/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                ArrayPilotSpirit[S] = new ManualSkill("Content/Deathmatch/Characters/Spirits/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 ArrayPilotSpirit[S].ActivationCost = BR.ReadInt32();
                 ArrayPilotSpirit[S].LevelRequirement = BR.ReadInt32();
             }
@@ -297,7 +297,7 @@ namespace ProjectEternity.Core.Characters
             for (int S = 0; S < SkillListCount; ++S)
             {
                 string RelativePath = BR.ReadString();
-                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Characters/Skills/" + RelativePath + ".pecs", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Deathmatch/Characters/Skills/" + RelativePath + ".pecs", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 ArrayPilotSkillLocked[S] = BR.ReadBoolean();
                 Int32 SkillLevelsCount = BR.ReadInt32();
                 ArrayPilotSkillLevels[S] = new SkillLevels(BR, SkillLevelsCount);
@@ -310,7 +310,7 @@ namespace ProjectEternity.Core.Characters
             {
                 string RelationshipBonusName = BR.ReadString();
                 int RelationshipLevel = BR.ReadInt32();
-                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Characters/Relationships/" + RelationshipBonusName + ".pecr", RelationshipBonusName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Deathmatch/Characters/Relationships/" + RelationshipBonusName + ".pecr", RelationshipBonusName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 ArrayRelationshipBonus[S].CurrentLevel = RelationshipLevel;
 
@@ -408,10 +408,10 @@ namespace ProjectEternity.Core.Characters
                     SpritePath = PortraitPath;
                 }
 
-                if (File.Exists("Content\\Visual Novels\\Portraits\\" + SpritePath + ".xnb"))
-                    this.sprPortrait = Content.Load<Texture2D>("Visual Novels\\Portraits\\" + SpritePath);
+                if (File.Exists("Content/Visual Novels/Portraits/" + SpritePath + ".xnb"))
+                    this.sprPortrait = Content.Load<Texture2D>("Visual Novels/Portraits/" + SpritePath);
                 else
-                    this.sprPortrait = Content.Load<Texture2D>("Characters\\Portraits\\Default");
+                    this.sprPortrait = Content.Load<Texture2D>("Deathmatch/Characters/Portraits/Default");
             }
         }
 

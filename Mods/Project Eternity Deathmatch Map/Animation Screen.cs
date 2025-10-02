@@ -236,10 +236,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             IsLoaded = true;
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-            sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-            sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
-            sprInfinity = Content.Load<Texture2D>("Battle/Infinity");
+            sprBarExtraLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Bar");
+            sprBarExtraLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Energy");
+            sprBarExtraLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Health");
+            sprInfinity = Content.Load<Texture2D>("Deathmatch/Battle Menu/Infinity");
 
             foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines(typeof(CoreTimeline)))
             {

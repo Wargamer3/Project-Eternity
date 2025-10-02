@@ -55,7 +55,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
 
-            string[] ArrayFactions = Directory.GetDirectories("Content/Units/Conquest","*.*", SearchOption.TopDirectoryOnly);
+            string[] ArrayFactions = Directory.GetDirectories("Content/Conquest/Units", "*.*", SearchOption.TopDirectoryOnly);
             foreach (var ActiveFaction in ArrayFactions)
             {
                 string FactionName = ActiveFaction.Substring(23);
@@ -139,7 +139,7 @@ namespace ProjectEternity.Editors.MapEditor
             cbMoveType.Items.Add("All");
             imageList.Images.Clear();
 
-            string[] ArrayUnitTypes = Directory.GetFiles("Content/Units/Conquest/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
+            string[] ArrayUnitTypes = Directory.GetFiles("Content/Conquest/Units/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
 
             foreach (var ActiveUnit in ArrayUnitTypes)
             {

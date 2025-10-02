@@ -112,21 +112,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 IsLoaded = true;
 
-                sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
-                sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
-                sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
-                sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
+                sprLand = Content.Load<Texture2D>("Deathmatch/Status Screen/Ground");
+                sprSea = Content.Load<Texture2D>("Deathmatch/Status Screen/Sea");
+                sprSky = Content.Load<Texture2D>("Deathmatch/Status Screen/Sky");
+                sprSpace = Content.Load<Texture2D>("Deathmatch/Status Screen/Space");
 
-                sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-                sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-                sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
+                sprBarExtraLargeBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Bar");
+                sprBarExtraLargeEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Energy");
+                sprBarExtraLargeHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Extra Long Health");
 
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
                 sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
                 sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
                 sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
 
-                sprBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
+                sprBackground = Content.Load<Texture2D>("Deathmatch/Status Screen/Background Black");
 
                 fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 
@@ -685,7 +685,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.PilotMorale.ToString(), new Vector2(390, 110), Color.White);
 
             g.DrawString(fntFinlanderFont, "Kills", new Vector2(410, 80), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ActiveSquad.CurrentLeader.Pilot.ID].ToString(), new Vector2(540, 80), Color.White);
+            if (ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills.ContainsKey(ActiveSquad.CurrentLeader.Pilot.ID))
+            {
+                g.DrawStringRightAligned(fntFinlanderFont, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ActiveSquad.CurrentLeader.Pilot.ID].ToString(), new Vector2(540, 80), Color.White);
+            }
+            else
+            {
+                g.DrawStringRightAligned(fntFinlanderFont, "???", new Vector2(540, 80), Color.White);
+            }
 
             g.DrawString(fntFinlanderFont, "PP", new Vector2(410, 110), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.PilotPilotPoints.ToString(), new Vector2(540, 110), Color.White);

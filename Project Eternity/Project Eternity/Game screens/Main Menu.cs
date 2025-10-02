@@ -44,17 +44,17 @@ namespace ProjectEternity
 
         public override void Load()
         {
-            sndIntroSong = new FMODSound(FMODSystem, "Content/[Title] The Eternal History.mp3");
+            sndIntroSong = new FMODSound(FMODSystem, "Content/Title Screen/[Title] The Eternal History.mp3");
             sndIntroSong.SetLoop(true);
             sndIntroSong.PlayAsBGM();
             sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
             sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
             sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
-            sprNewGame = Content.Load<Texture2D>("Menus/Main Menu/Title screenSTART");
-            sprQuickLoad = Content.Load<Texture2D>("Menus/Main Menu/Title screenCONTINUE");
-            sprEncyclopedia = Content.Load<Texture2D>("Menus/Main Menu/Title screenLIBRARY");
-            sprOption = Content.Load<Texture2D>("Menus/Main Menu/Title screenOPTIONS");
-            sprLoadGame = Content.Load<Texture2D>("Menus/Main Menu/Title screenLOAD");
+            sprNewGame = Content.Load<Texture2D>("Title Screen/Main Menu/Title screenSTART");
+            sprQuickLoad = Content.Load<Texture2D>("Title Screen/Main Menu/Title screenCONTINUE");
+            sprEncyclopedia = Content.Load<Texture2D>("Title Screen/Main Menu/Title screenLIBRARY");
+            sprOption = Content.Load<Texture2D>("Title Screen/Main Menu/Title screenOPTIONS");
+            sprLoadGame = Content.Load<Texture2D>("Title Screen/Main Menu/Title screenLOAD");
         }
 
         public override void Update(GameTime gameTime)

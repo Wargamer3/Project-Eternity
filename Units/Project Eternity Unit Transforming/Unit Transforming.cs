@@ -78,7 +78,7 @@ namespace ProjectEternity.Core.Units.Transforming
             TimeRemaining = -1;
             ArrayOriginalCharacter = new Character[0];
 
-            FileStream FS = new FileStream("Content/Units/Transforming/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Units/Transforming/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

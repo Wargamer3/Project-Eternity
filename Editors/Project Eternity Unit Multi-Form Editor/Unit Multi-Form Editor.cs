@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsMultiForm, GUIRootPathUnits }, "Units/Multi-Form/", new string[] {".peu" }, typeof(UnitMultiFormEditor))
+                new EditorInfo(new string[] { GUIRootPathUnitsMultiForm, GUIRootPathUnits }, "Deathmatch/Units/Multi-Form/", new string[] {".peu" }, typeof(UnitMultiFormEditor))
             };
 
             return Info;

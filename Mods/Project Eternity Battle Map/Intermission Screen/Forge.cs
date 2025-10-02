@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             sprRectangle = Content.Load<Texture2D>("Pixel");
-            sprBackground = Content.Load<Texture2D>("Intermission Screens/Forge");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Forge");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial10 = Content.Load<SpriteFont>("Fonts/Arial10");
             MainFilter = new FilterItem("", new List<ShopItem>(), new List<FilterItem>());

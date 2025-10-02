@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.PartsEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitParts, GUIRootPathUnitConsumableParts }, "Units/Consumable Parts/", new string[] { ".pep" }, typeof(ProjectEternityConsumablePartEditor))
+                new EditorInfo(new string[] { GUIRootPathUnitParts, GUIRootPathUnitConsumableParts }, "Deathmatch/Units/Consumable Parts/", new string[] { ".pep" }, typeof(ProjectEternityConsumablePartEditor))
             };
 
             return Info;

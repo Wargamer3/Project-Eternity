@@ -42,7 +42,7 @@ namespace ProjectEternity.Core.Units.Modular
             }
             public void LoadParts()
             {
-                string[] Files = Directory.GetFiles("Content/Units/Modular/Head", "*.peup", SearchOption.AllDirectories);
+                string[] Files = Directory.GetFiles("Content/Deathmatch/Units/Modular/Head", "*.peup", SearchOption.AllDirectories);
                 foreach (string Item in Files)
                 {
                     string CorrectedPath = Item.Replace("\\", "/");
@@ -50,7 +50,7 @@ namespace ProjectEternity.Core.Units.Modular
                     ListPartHead.Add(new PartHead(Name));
                 }
 
-                Files = Directory.GetFiles("Content/Units/Modular/Torso", "*.peup", SearchOption.AllDirectories);
+                Files = Directory.GetFiles("Content/Deathmatch/Units/Modular/Torso", "*.peup", SearchOption.AllDirectories);
                 foreach (string Item in Files)
                 {
                     string CorrectedPath = Item.Replace("\\", "/");
@@ -58,14 +58,14 @@ namespace ProjectEternity.Core.Units.Modular
                     ListPartTorso.Add(new PartTorso(Name));
                 }
 
-                Files = Directory.GetFiles("Content/Units/Modular/Arm", "*.peup", SearchOption.AllDirectories);
+                Files = Directory.GetFiles("Content/Deathmatch/Units/Modular/Arm", "*.peup", SearchOption.AllDirectories);
                 foreach (string Item in Files)
                 {
                     string CorrectedPath = Item.Replace("\\", "/");
                     string Name = CorrectedPath.Substring(0, CorrectedPath.Length - 5).Substring(26);
                     ListPartArm.Add(new PartArm(Name));
                 }
-                Files = Directory.GetFiles("Content/Units/Modular/Legs", "*.peup", SearchOption.AllDirectories);
+                Files = Directory.GetFiles("Content/Deathmatch/Units/Modular/Legs", "*.peup", SearchOption.AllDirectories);
                 foreach (string Item in Files)
                 {
                     string CorrectedPath = Item.Replace("\\", "/");

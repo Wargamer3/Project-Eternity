@@ -112,21 +112,21 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         protected override void Initialize()
         {
-            Bitmap b = new Bitmap("Content/Cursors/UpLeft.png");
+            Bitmap b = new Bitmap("Content/Editors/UpLeft.png");
             RotateUpLeft = CreateCursor(b, 4, 4);
-            b = new Bitmap("Content/Cursors/UpRight.png");
+            b = new Bitmap("Content/Editors/UpRight.png");
             RotateUpRight = CreateCursor(b, 13, 4);
-            b = new Bitmap("Content/Cursors/DownLeft.png");
+            b = new Bitmap("Content/Editors/DownLeft.png");
             RotateDownLeft = CreateCursor(b, 4, 13);
-            b = new Bitmap("Content/Cursors/DownRight.png");
+            b = new Bitmap("Content/Editors/DownRight.png");
             RotateDownRight = CreateCursor(b, 13, 13);
-            b = new Bitmap("Content/Cursors/Up.png");
+            b = new Bitmap("Content/Editors/Up.png");
             RotateUp = CreateCursor(b, 13, 13);
-            b = new Bitmap("Content/Cursors/Down.png");
+            b = new Bitmap("Content/Editors/Down.png");
             RotateDown = CreateCursor(b, 13, 13);
-            b = new Bitmap("Content/Cursors/Left.png");
+            b = new Bitmap("Content/Editors/Left.png");
             RotateLeft = CreateCursor(b, 13, 13);
-            b = new Bitmap("Content/Cursors/Right.png");
+            b = new Bitmap("Content/Editors/Right.png");
             RotateRight = CreateCursor(b, 13, 13);
 
             Zoom = 1;

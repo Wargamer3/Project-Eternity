@@ -51,7 +51,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { "Characters" }, "Characters/", new string[] { ".pec" }, typeof(ProjectEternityCharacterEditor), true, null, true)
+                new EditorInfo(new string[] { "Characters" }, "Deathmatch/Characters/", new string[] { ".pec" }, typeof(ProjectEternityCharacterEditor), true, null, true)
             };
 
             return Info;

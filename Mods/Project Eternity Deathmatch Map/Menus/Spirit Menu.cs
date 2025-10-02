@@ -96,16 +96,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListSelectedSpirit = new List<ManualSkill>();
 
-            sprSpiritMenuMain = Content.Load<Texture2D>("Menus/Spirit Screen/Main");
-            sprSpiritMenuPilotBox = Content.Load<Texture2D>("Menus/Spirit Screen/Pilot Box");
-            sprSpiritMenuSelectBox = Content.Load<Texture2D>("Menus/Spirit Screen/Select Box");
-            sprSpiritMenuSelectChosen = Content.Load<Texture2D>("Menus/Spirit Screen/Select Chosen");
-            sprSpiritMenuDescription = Content.Load<Texture2D>("Menus/Spirit Screen/Description");
-            sprSpiritMenuHighlight = Content.Load<Texture2D>("Menus/Spirit Screen/Highlight");
+            sprSpiritMenuMain = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Main");
+            sprSpiritMenuPilotBox = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Pilot Box");
+            sprSpiritMenuSelectBox = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Select Box");
+            sprSpiritMenuSelectChosen = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Select Chosen");
+            sprSpiritMenuDescription = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Description");
+            sprSpiritMenuHighlight = Content.Load<Texture2D>("Deathmatch/Spirit Screen/Highlight");
 
-            sprBarSmallBackground = Content.Load<Texture2D>("Battle/Bars/Small Bar");
-            sprBarSmallEN = Content.Load<Texture2D>("Battle/Bars/Small Energy");
-            sprBarSmallHP = Content.Load<Texture2D>("Battle/Bars/Small Health");
+            sprBarSmallBackground = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Bar");
+            sprBarSmallEN = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Energy");
+            sprBarSmallHP = Content.Load<Texture2D>("Deathmatch/Battle Menu/Bars/Small Health");
 
             fntBattleNumberSmall = Content.Load<SpriteFont>("Fonts/Battle Numbers Small");
             fntBattleNumberSmall.Spacing = -3;

@@ -109,10 +109,10 @@ namespace ProjectEternity.Editors.AnimationEditor
             AnimationLayersDragDropSelectedItemIndex = -1;
             AnimationLayerItemHeight = 21;
 
-            imgEyeOpen = Bitmap.FromFile("Content/Cursors/Eye Open.png");
-            imgEyeClosed = Bitmap.FromFile("Content/Cursors/Eye Closed.png");
-            imgUnlocked = Bitmap.FromFile("Content/Cursors/Unlocked.png");
-            imgLocked = Bitmap.FromFile("Content/Cursors/Locked.png");
+            imgEyeOpen = Bitmap.FromFile("Content/Editors/Eye Open.png");
+            imgEyeClosed = Bitmap.FromFile("Content/Editors/Eye Closed.png");
+            imgUnlocked = Bitmap.FromFile("Content/Editors/Unlocked.png");
+            imgLocked = Bitmap.FromFile("Content/Editors/Locked.png");
 
             //Create a new buffer based on the pannel.
             panAnimationLayersGraphics = Owner.panAnimationLayers.CreateGraphics();

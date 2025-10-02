@@ -52,10 +52,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             sprRectangle = Content.Load<Texture2D>("Pixel");
-            sprBackground = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection");
-            sprCursor = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Cursor");
-            sprConfirmation = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Confirmation");
-            sprWarning = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Warning");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Unit Selection");
+            sprCursor = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Unit Selection Cursor");
+            sprConfirmation = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Unit Selection Confirmation");
+            sprWarning = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Unit Selection Warning");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial14 = Content.Load<SpriteFont>("Fonts/Arial");

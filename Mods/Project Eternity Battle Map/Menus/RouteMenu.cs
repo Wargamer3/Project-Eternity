@@ -56,11 +56,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            Background = Content.Load<Texture2D>("Intermission Screens/Route Menu/Background");
-            TopBar = Content.Load<Texture2D>("Intermission Screens/Route Menu/TopBar");
-            Choice = Content.Load<Texture2D>("Intermission Screens/Route Menu/Choice");
-            Description = Content.Load<Texture2D>("Intermission Screens/Route Menu/Description");
-            Highlight = Content.Load<Texture2D>("Intermission Screens/Route Menu/Highlight");
+            Background = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Route Menu/Background");
+            TopBar = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Route Menu/TopBar");
+            Choice = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Route Menu/Choice");
+            Description = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Route Menu/Description");
+            Highlight = Content.Load<Texture2D>("Deathmatch/Intermission Screens/Route Menu/Highlight");
 
             fntTitle = Content.Load<SpriteFont>("Fonts/Arial11Bold");
         }

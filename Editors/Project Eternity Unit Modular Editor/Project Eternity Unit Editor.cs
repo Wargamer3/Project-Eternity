@@ -59,7 +59,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { "Units" }, "Units/Modular/", new string[] { ".peu" }, typeof(ProjectEternityUnitModularEditor))
+                new EditorInfo(new string[] { "Units" }, "Deathmatch/Units/Modular/", new string[] { ".peu" }, typeof(ProjectEternityUnitModularEditor))
             };
 
             return Info;
