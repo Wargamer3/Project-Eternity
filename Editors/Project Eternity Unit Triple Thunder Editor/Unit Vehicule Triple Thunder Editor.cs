@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             string Name = UnitPath.Substring(0, UnitPath.Length - 5).Substring(38);
             this.Text = Name + " - Project Eternity Triple Thunder Vehicle Unit Editor";
 
-            FileStream FS = new FileStream("Content/Units/Triple Thunder/Vehicles/" + Name + ".peuv", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Triple Thunder/Vehicles/" + Name + ".peuv", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

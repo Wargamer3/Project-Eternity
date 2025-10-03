@@ -45,12 +45,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Deathmatch\Units\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\Deathmatch\Units\</OutputPath>
     <Optimize>true</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>

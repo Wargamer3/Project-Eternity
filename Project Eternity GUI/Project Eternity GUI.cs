@@ -74,12 +74,16 @@ namespace ProjectEternity.GUI
             {
                 tvItems.Nodes.Clear();
                 //Look for every dll in the Editors folder.
-                String[] Files = Directory.GetFiles("Editors", "*.dll");
+                String[] Files = Directory.GetFiles("Editors", "*.dll", SearchOption.AllDirectories);
                 Type EditorType;
                 bool EditorIsBaseEditor = true;
                 for (int F = 0; F < Files.Count(); F++)
                 {//Load a dll.
                     Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                    if (ass.GetName().Name == "Project Eternity Base Editor")
+                    {
+                        continue;
+                    }
                     Type[] types = null;
                     //Get every classes in it.
                     try

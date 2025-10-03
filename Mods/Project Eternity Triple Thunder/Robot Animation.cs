@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.Team = Team;
             this.Equipment = new EquipmentLoadout(Equipment, this);
 
-            FileStream FS = new FileStream("Content/Units/Triple Thunder/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Triple Thunder/Characters/" + Name + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

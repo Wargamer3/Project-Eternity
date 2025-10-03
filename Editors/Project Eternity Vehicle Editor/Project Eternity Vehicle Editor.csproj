@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Deathmatch\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -24,7 +24,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\Deathmatch\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
@@ -56,12 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Vehicle Preview Viewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Project Eternity Vehicle Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Vehicle Preview Viewer.cs" />
+    <Compile Include="Project Eternity Vehicle Editor.cs" />
     <Compile Include="Project Eternity Vehicle Editor.Designer.cs">
       <DependentUpon>Project Eternity Vehicle Editor.cs</DependentUpon>
     </Compile>

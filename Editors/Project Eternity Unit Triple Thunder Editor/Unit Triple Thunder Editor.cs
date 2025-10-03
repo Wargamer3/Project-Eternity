@@ -98,7 +98,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(29);
             this.Text = Name + " - Project Eternity Triple Thunder Unit Editor";
 
-            FileStream FS = new FileStream("Content/Units/Triple Thunder/" + Name + ".peu", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Triple Thunder/Characters/" + Name + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

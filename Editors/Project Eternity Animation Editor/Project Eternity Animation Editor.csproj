@@ -35,7 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Core\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,7 +46,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\Core\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
