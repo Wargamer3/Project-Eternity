@@ -252,14 +252,14 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected void LoadTileset(string Path)
         {
-            string Name = Path.Substring(0, Path.Length - 5).Substring(39);
+            string Name = Path.Substring(0, Path.Length - 5).Substring(8);
 
             this.Text = Name + " - Project Eternity Destroyable Tiles Preset Editor";
 
             InitHelper();
             CreateTab("Main");
 
-            FileStream FS = new FileStream("Content/Maps/Destroyable Tiles Presets/" + Name + ".pedt", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + Name + ".pedt", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

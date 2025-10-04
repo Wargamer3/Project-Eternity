@@ -156,13 +156,13 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected void LoadTileset(string Path)
         {
-            string Name = Path.Substring(0, Path.Length - 4).Substring(30);
+            string Name = Path.Substring(0, Path.Length - 4).Substring(8);
 
             this.Text = Name + " - Project Eternity Tileset Preset Editor";
 
             InitHelper();
 
-            FileStream FS = new FileStream("Content/Maps/Tilesets Presets/" + Name + ".pet", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + Name + ".pet", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

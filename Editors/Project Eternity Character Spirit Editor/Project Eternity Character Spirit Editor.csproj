@@ -52,7 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Project Eternity Character Spirit Editor.cs" />
+    <Compile Include="Project Eternity Character Spirit Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Project Eternity Character Spirit Editor.Designer.cs">
       <DependentUpon>Project Eternity Character Spirit Editor.cs</DependentUpon>
     </Compile>
@@ -102,7 +104,7 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
       <Name>Project Eternity Base Editor</Name>
       <Private>False</Private>
     </ProjectReference>

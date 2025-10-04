@@ -82,9 +82,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
         public override EditorInfo[] LoadEditors()
         {
-            EditorInfo[] Info = new EditorInfo[]
+            ProjectEternity.Core.Editor.EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsConquest, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Maps/Tilesets Presets/Conquest/", new string[] { ".pet" }, typeof(ProjectEternityConquestTilesetPresetEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsConquest, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Conquest/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityConquestTilesetPresetEditor), true)
             };
 
             return Info;

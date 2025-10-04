@@ -69,52 +69,76 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Advanced Settings Editor.cs" />
+    <Compile Include="Advanced Settings Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Advanced Settings Editor.Designer.cs">
       <DependentUpon>Advanced Settings Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Attack Formula Editor.cs" />
+    <Compile Include="Attack Formula Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Attack Formula Editor.Designer.cs">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="All Editor.cs" />
+    <Compile Include="All Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="All Editor.Designer.cs">
       <DependentUpon>All Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dash Editor.cs" />
+    <Compile Include="Dash Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dash Editor.Designer.cs">
       <DependentUpon>Dash Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Destructible Tile Type Picker.cs" />
+    <Compile Include="Destructible Tile Type Picker.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Destructible Tile Type Picker.Designer.cs">
       <DependentUpon>Destructible Tile Type Picker.cs</DependentUpon>
     </Compile>
-    <Compile Include="Destructible Tiles.cs" />
+    <Compile Include="Destructible Tiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Destructible Tiles.Designer.cs">
       <DependentUpon>Destructible Tiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="MAP Attack Editor.cs" />
+    <Compile Include="MAP Attack Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MAP Attack Editor.Designer.cs">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Knockback Editor.cs" />
+    <Compile Include="Knockback Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Knockback Editor.Designer.cs">
       <DependentUpon>Knockback Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="PER Attack Editor.cs" />
+    <Compile Include="PER Attack Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PER Attack Editor.Designer.cs">
       <DependentUpon>PER Attack Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Project Eternity Attack Editor.cs" />
+    <Compile Include="Project Eternity Attack Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Project Eternity Attack Editor.Designer.cs">
       <DependentUpon>Project Eternity Attack Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quote Editor.cs" />
+    <Compile Include="Quote Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Quote Editor.Designer.cs">
       <DependentUpon>Quote Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Skill Chain Editor.cs" />
+    <Compile Include="Skill Chain Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Skill Chain Editor.Designer.cs">
       <DependentUpon>Skill Chain Editor.cs</DependentUpon>
     </Compile>
@@ -196,7 +220,7 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
       <Name>Project Eternity Base Editor</Name>
       <Private>False</Private>
     </ProjectReference>

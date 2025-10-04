@@ -252,14 +252,14 @@ namespace ProjectEternity.Editors.TilesetEditor
 
         protected void LoadTileset(string Path)
         {
-            string Name = Path.Substring(0, Path.Length - 5).Substring(31);
+            string Name = Path.Substring(0, Path.Length - 5).Substring(8);
 
             this.Text = Name + " - Project Eternity Autotile Tileset Preset Editor";
 
             InitHelper();
             CreateTab("Main");
 
-            FileStream FS = new FileStream("Content/Maps/Autotiles Presets/" + Name + ".peat", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + Name + ".peat", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
