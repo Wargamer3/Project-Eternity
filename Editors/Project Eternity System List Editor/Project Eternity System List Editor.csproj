@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Deathmatch\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors Standalone\Deathmatch\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -23,7 +23,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\Deathmatch\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors Standalone\Deathmatch\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <Optimize>true</Optimize>

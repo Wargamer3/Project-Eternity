@@ -73,11 +73,6 @@
             this.tvItems = new System.Windows.Forms.TreeView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmUnitTester = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmRosterEditor = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmSystemList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmTerrainAndUnitTypes = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmVariables = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
@@ -172,12 +167,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.tsmUnitTester,
-            this.tsmRosterEditor,
-            this.tsmSystemList,
-            this.tsmTerrainAndUnitTypes,
-            this.tsmVariables});
+            this.fileToolStripMenuItem,});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(758, 24);
@@ -189,41 +179,6 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
-            // 
-            // tsmUnitTester
-            // 
-            this.tsmUnitTester.Name = "tsmUnitTester";
-            this.tsmUnitTester.Size = new System.Drawing.Size(74, 20);
-            this.tsmUnitTester.Text = "Unit Tester";
-            this.tsmUnitTester.Click += new System.EventHandler(this.tsmUnitTester_Click);
-            // 
-            // tsmRosterEditor
-            // 
-            this.tsmRosterEditor.Name = "tsmRosterEditor";
-            this.tsmRosterEditor.Size = new System.Drawing.Size(86, 20);
-            this.tsmRosterEditor.Text = "Roster Editor";
-            this.tsmRosterEditor.Click += new System.EventHandler(this.tsmRosterEditor_Click);
-            // 
-            // tsmSystemList
-            // 
-            this.tsmSystemList.Name = "tsmSystemList";
-            this.tsmSystemList.Size = new System.Drawing.Size(78, 20);
-            this.tsmSystemList.Text = "System List";
-            this.tsmSystemList.Click += new System.EventHandler(this.tsmSystemList_Click);
-            // 
-            // tsmTerrainAndUnitTypes
-            // 
-            this.tsmTerrainAndUnitTypes.Name = "tsmTerrainAndUnitTypes";
-            this.tsmTerrainAndUnitTypes.Size = new System.Drawing.Size(134, 20);
-            this.tsmTerrainAndUnitTypes.Text = "Terrain and Unit Types";
-            this.tsmTerrainAndUnitTypes.Click += new System.EventHandler(this.tsmTerrainAndUnitTypes_Click);
-            // 
-            // tsmVariables
-            // 
-            this.tsmVariables.Name = "tsmVariables";
-            this.tsmVariables.Size = new System.Drawing.Size(65, 20);
-            this.tsmVariables.Text = "Variables";
-            this.tsmVariables.Click += new System.EventHandler(this.tsmVariables_Click);
             // 
             // toolStrip1
             // 
@@ -397,13 +352,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmEdit;
         private System.Windows.Forms.ToolStripMenuItem tsmRename;
         private System.Windows.Forms.ToolStripMenuItem tsmNewFolder;
-        private System.Windows.Forms.ToolStripMenuItem tsmUnitTester;
-        private System.Windows.Forms.ToolStripMenuItem tsmRosterEditor;
-        private System.Windows.Forms.ToolStripMenuItem tsmSystemList;
         public System.Windows.Forms.TreeView tvItems;
         private System.Windows.Forms.ToolStripMenuItem tsmClone;
-        private System.Windows.Forms.ToolStripMenuItem tsmTerrainAndUnitTypes;
-        private System.Windows.Forms.ToolStripMenuItem tsmVariables;
         private System.Windows.Forms.ToolStripMenuItem tsmOpenInFileExplorer;
     }
 }

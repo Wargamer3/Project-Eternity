@@ -133,28 +133,13 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
-      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
       <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
       <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Editors\Project Eternity Roster Editor\Project Eternity Roster Editor.csproj">
-      <Project>{CAA74451-92BA-4D52-BA7B-F9341C1E47AC}</Project>
-      <Name>Project Eternity Roster Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Editors\Project Eternity System List Editor\Project Eternity System List Editor.csproj">
-      <Project>{8cd134e1-2c2f-4a5d-af05-9b89a04f9b41}</Project>
-      <Name>Project Eternity System List Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Editors\Project Eternity Unit Tester\Project Eternity Unit Tester.csproj">
-      <Project>{C8E0E745-5644-4674-B9B9-05CA7576A1A6}</Project>
-      <Name>Project Eternity Unit Tester</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

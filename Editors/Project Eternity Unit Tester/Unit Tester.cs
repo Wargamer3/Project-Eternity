@@ -34,7 +34,12 @@ namespace ProjectEternity.Editors.UnitTester
 
         public override EditorInfo[] LoadEditors()
         {
-            return null;
+            EditorInfo[] Info = new EditorInfo[]
+            {
+                new EditorInfo(new string[0], "Unit Tester", new string[0], typeof(UnitTester))
+            };
+
+            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)

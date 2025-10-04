@@ -28,7 +28,12 @@ namespace ProjectEternity.Editors.RosterEditor
 
         public override EditorInfo[] LoadEditors()
         {
-            return null;
+            EditorInfo[] Info = new EditorInfo[]
+            {
+                new EditorInfo(new string[0], "Roster Editor", new string[0], typeof(ProjectEternityRosterEditor))
+            };
+
+            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)

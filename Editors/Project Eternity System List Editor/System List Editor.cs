@@ -1,8 +1,8 @@
-﻿using ProjectEternity.Core.Editor;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.SystemListEditor
 {
@@ -19,7 +19,12 @@ namespace ProjectEternity.Editors.SystemListEditor
 
         public override EditorInfo[] LoadEditors()
         {
-            return null;
+            EditorInfo[] Info = new EditorInfo[]
+            {
+                new EditorInfo(new string[0], "System List", new string[0], typeof(SystemListEditor)),
+            };
+
+            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)

@@ -3,11 +3,12 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.SystemListEditor
 {
 
-    public partial class TerrainAndUnitTypesEditor : Form
+    public partial class TerrainAndUnitTypesEditor : BaseEditor
     {
         private bool AllowEvents;
         private SolidBrush GridBrush;
@@ -41,6 +42,16 @@ namespace ProjectEternity.Editors.SystemListEditor
             {
                 lsTerrainTypes.Items.Add(ActiveTerrainType);
             }
+        }
+
+        public override EditorInfo[] LoadEditors()
+        {
+            EditorInfo[] Info = new EditorInfo[]
+            {
+                new EditorInfo(new string[0], "Terrain and Unit Types", new string[0], typeof(TerrainAndUnitTypesEditor)),
+            };
+
+            return Info;
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

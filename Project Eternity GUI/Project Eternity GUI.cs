@@ -70,9 +70,23 @@ namespace ProjectEternity.GUI
             //Place holder to store values for the lookup.
             ListEditor = new Dictionary<string, List<ItemContainer>>();
 
-            if (Directory.Exists("Editors") && LoadContent)
+            if (LoadContent)
             {
                 tvItems.Nodes.Clear();
+                LoadEditors();
+                LoadStandaloneEditors();
+            }
+
+            if (LoadContent)
+            {
+                SplashScreen.CloseForm();
+            }
+        }
+
+        private void LoadEditors()
+        {
+            if (Directory.Exists("Editors"))
+            {
                 //Look for every dll in the Editors folder.
                 String[] Files = Directory.GetFiles("Editors", "*.dll", SearchOption.AllDirectories);
                 Type EditorType;
@@ -143,10 +157,75 @@ namespace ProjectEternity.GUI
 
                 InitGUI();
             }
+        }
 
-            if (LoadContent)
+        private void LoadStandaloneEditors()
+        {
+            if (Directory.Exists("Editors Standalone"))
             {
-                SplashScreen.CloseForm();
+                //Look for every dll in the Editors folder.
+                String[] Files = Directory.GetFiles("Editors Standalone", "*.dll", SearchOption.AllDirectories);
+                Type EditorType;
+                bool EditorIsBaseEditor = true;
+                for (int F = 0; F < Files.Count(); F++)
+                {//Load a dll.
+                    Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                    Type[] types = null;
+                    //Get every classes in it.
+                    try
+                    {
+                        types = ass.GetTypes();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ReflectionTypeLoadException)
+                        {
+                            var typeLoadException = ex as ReflectionTypeLoadException;
+                            var loaderExceptions = typeLoadException.LoaderExceptions;
+
+                            MessageBox.Show(ex.Message);
+                        }
+                        continue;
+                    }
+                    for (int t = 0; t < types.Count(); t++)
+                    {
+                        //Look if the class inherit from BaseEditor somewhere.
+                        EditorType = types[t];
+                        EditorIsBaseEditor = false;
+                        while (EditorType != null && !EditorIsBaseEditor)
+                        {
+                            EditorType = EditorType.BaseType;
+                            if (EditorType == typeof(BaseEditor))
+                                EditorIsBaseEditor = true;
+                        }
+                        //If this class is from BaseEditor, load it.
+                        if (EditorIsBaseEditor)
+                        {
+                            BaseEditor instance = null;
+                            try
+                            {
+                                instance = Activator.CreateInstance(types[t]) as BaseEditor;
+                                SplashScreen.SetStatus($"Initializing Editors ({instance.Name})");
+                            }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show(e.ToString());
+                                continue;
+                            }
+
+                            //Get the BaseEditor's EditorInfo.
+                            EditorInfo[] Info = instance.LoadEditors();
+                            if (Info == null)
+                                continue;
+
+                            //Loop through the Item paths used to filter the items(if there is multiple items type by editor).
+                            for (int P = 0; P < Info.Length; P++)
+                            {
+                                AddStandaloneEditor(Info[P]);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -272,6 +351,16 @@ namespace ProjectEternity.GUI
                 }
                 ListEditor[Info.ArrayLogicPath[R]].Add(new ItemContainer(Info.ItemContainer));
             }
+        }
+
+        public void AddStandaloneEditor(EditorInfo Info)
+        {
+            ToolStripMenuItem tsmNewEditor = new ToolStripMenuItem();
+            this.menuStrip1.Items.Add(tsmNewEditor);
+            tsmNewEditor.Name = "tsm" + Info.EditorType.Name;
+            tsmNewEditor.Size = new System.Drawing.Size(78, 20);
+            tsmNewEditor.Text = Info.ItemContainer.ContainerGUIPath;
+            tsmNewEditor.Click += ((sender, e) => (Activator.CreateInstance(Info.EditorType, Info.InitParams) as BaseEditor).Show());
         }
 
         private IEnumerable<ItemContainer> GetItemsByRoot(string RootPath)
@@ -822,38 +911,6 @@ namespace ProjectEternity.GUI
             string NewItemPath = GetFilePathForItem(Editor, EditorNode.Text);
 
             System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(Path.GetFullPath(NewItemPath)));
-        }
-
-        private void tsmUnitTester_Click(object sender, EventArgs e)
-        {
-            Editors.UnitTester.UnitTester NewTester = new Editors.UnitTester.UnitTester();
-            NewTester.Show();
-        }
-
-        private void tsmRosterEditor_Click(object sender, EventArgs e)
-        {
-            Editors.RosterEditor.ProjectEternityRosterEditor NewTester = new Editors.RosterEditor.ProjectEternityRosterEditor();
-            NewTester.LoadRoster();
-            NewTester.Show();
-        }
-
-        private void tsmSystemList_Click(object sender, EventArgs e)
-        {
-            Editors.SystemListEditor.SystemListEditor NewTester = new Editors.SystemListEditor.SystemListEditor();
-            NewTester.LoadData();
-            NewTester.Show();
-        }
-
-        private void tsmTerrainAndUnitTypes_Click(object sender, EventArgs e)
-        {
-            Editors.SystemListEditor.TerrainAndUnitTypesEditor NewTester = new Editors.SystemListEditor.TerrainAndUnitTypesEditor();
-            NewTester.Show();
-        }
-
-        private void tsmVariables_Click(object sender, EventArgs e)
-        {
-            Editors.SystemListEditor.VariablesListEditor NewTester = new Editors.SystemListEditor.VariablesListEditor();
-            NewTester.Show();
         }
     }
 }

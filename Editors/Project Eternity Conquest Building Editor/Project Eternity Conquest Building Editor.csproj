@@ -56,7 +56,6 @@
     <Compile Include="Project Eternity Conquest Building Editor.Designer.cs">
       <DependentUpon>Project Eternity Conquest Building Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Project Eternity Conquest Building Editor.resx">
       <DependentUpon>Project Eternity Conquest Building Editor.cs</DependentUpon>
