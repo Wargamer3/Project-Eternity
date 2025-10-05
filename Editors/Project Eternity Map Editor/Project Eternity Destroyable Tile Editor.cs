@@ -4,17 +4,17 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Attacks;
 using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Builder;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
-using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
-    public partial class ProjectEternityDestroyableTileEditor : BaseEditor
+    public abstract partial class ProjectEternityDestroyableTileEditor : BaseEditor
     {
         public class TabContent
         {
@@ -114,59 +114,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
         }
 
-        public class DeathmatcDestroyableTiletHelper : ITilesetPresetHelper
-        {
-            public DeathmatcDestroyableTiletHelper()
-            {
-            }
-
-            public void EditTerrainTypes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public string[] GetTerrainTypes()
-            {
-                return new string[]
-                {
-                    "Land",
-                    "Sea",
-                    "Air",
-                    "Space",
-                };
-            }
-
-            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                throw new NotImplementedException();
-            }
-
-            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                return new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, 0);
-            }
-
-            public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
-            }
-
-            public void OnTerrainSelected(Terrain SelectedTerrain)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string GetEditorPath()
-            {
-                return GUIRootPathMapAutotilesImages;
-            }
-        }
-
         protected ITilesetPresetHelper Helper;
 
         protected List<string> ListBattleBackgroundAnimationPath;
@@ -190,31 +137,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             ListBattleBackgroundAnimationPath = new List<string>();
             ListActiveTab = new List<TabContent>();
             AllowEvent = true;
-        }
-
-        public ProjectEternityDestroyableTileEditor(string FilePath, object[] Params)
-            : this()
-        {
-            this.FilePath = FilePath;
-            if (!File.Exists(FilePath))
-            {
-                FileStream fs = File.Create(FilePath);
-                fs.Close();
-                SaveItem(FilePath, FilePath);
-            }
-
-            LoadTileset(FilePath);
-        }
-
-        public override EditorInfo[] LoadEditors()
-        {
-            EditorInfo[] Info = new EditorInfo[]
-            {
-                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesImages }, "Maps/Destroyable Tiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesPresetsDeathmatch, GUIRootPathMaDestroyableTilesPresets }, "Maps/Destroyable Tiles Presets/Deathmatch/", new string[] { ".pedt" }, typeof(ProjectEternityDestroyableTileEditor), true)
-            };
-
-            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
@@ -336,10 +258,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             SelectTile(0, 0);
         }
 
-        protected virtual void InitHelper()
-        {
-            Helper = new DeathmatcDestroyableTiletHelper();
-        }
+        protected abstract void InitHelper();
 
         private void tsmSave_Click(object sender, EventArgs e)
         {

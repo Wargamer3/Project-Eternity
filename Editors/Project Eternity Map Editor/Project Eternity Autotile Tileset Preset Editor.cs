@@ -14,7 +14,7 @@ using static ProjectEternity.GameScreens.BattleMapScreen.TilesetPreset;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
-    public partial class ProjectEternityAutotileTilesetPresetEditor : BaseEditor
+    public abstract partial class ProjectEternityAutotileTilesetPresetEditor : BaseEditor
     {
         public class TabContent
         {
@@ -114,59 +114,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
         }
 
-        public class DeathmatchAutotilePresetHelper : ITilesetPresetHelper
-        {
-            public DeathmatchAutotilePresetHelper()
-            {
-            }
-
-            public void EditTerrainTypes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public string[] GetTerrainTypes()
-            {
-                return new string[]
-                {
-                    "Land",
-                    "Sea",
-                    "Air",
-                    "Space",
-                };
-            }
-
-            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                return new TilesetPreset(BR, TileSizeX, TileSizeY, 0);
-            }
-
-            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
-            }
-
-            public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                throw new NotImplementedException();
-            }
-
-            public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnTerrainSelected(Terrain SelectedTerrain)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string GetEditorPath()
-            {
-                return GUIRootPathMapAutotilesImages;
-            }
-        }
-
         protected ITilesetPresetHelper Helper;
 
         protected List<string> ListBattleBackgroundAnimationPath;
@@ -190,31 +137,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             ListBattleBackgroundAnimationPath = new List<string>();
             ListActiveTab = new List<TabContent>();
             AllowEvent = true;
-        }
-
-        public ProjectEternityAutotileTilesetPresetEditor(string FilePath, object[] Params)
-            : this()
-        {
-            this.FilePath = FilePath;
-            if (!File.Exists(FilePath))
-            {
-                FileStream fs = File.Create(FilePath);
-                fs.Close();
-                SaveItem(FilePath, FilePath);
-            }
-
-            LoadTileset(FilePath);
-        }
-
-        public override EditorInfo[] LoadEditors()
-        {
-            EditorInfo[] Info = new EditorInfo[]
-            {
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesImages }, "Maps/Autotiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsDeathmatch, GUIRootPathMapAutotilesPresets }, "Maps/Autotiles Presets/Deathmatch/", new string[] { ".peat" }, typeof(ProjectEternityAutotileTilesetPresetEditor), true)
-            };
-
-            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
@@ -336,10 +258,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             SelectTile(0, 0);
         }
 
-        protected virtual void InitHelper()
-        {
-            Helper = new DeathmatchAutotilePresetHelper();
-        }
+        protected abstract void InitHelper();
 
         private void tsmSave_Click(object sender, EventArgs e)
         {

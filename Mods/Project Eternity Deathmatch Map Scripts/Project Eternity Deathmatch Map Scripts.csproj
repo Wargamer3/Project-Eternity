@@ -58,6 +58,7 @@
     <Compile Include="Cutscene Scripts\Change Camera Type.cs" />
     <Compile Include="Cutscene Scripts\Damage Zone.cs" />
     <Compile Include="Cutscene Scripts\Disable Unit Attacks.cs" />
+    <Compile Include="Cutscene Scripts\Helpers\Deathmatch Map Helper.cs" />
     <Compile Include="Cutscene Scripts\Shield Unit.cs" />
     <Compile Include="Cutscene Scripts\Edit Map.cs" />
     <Compile Include="Cutscene Scripts\Change Terrain.cs" />

@@ -13,7 +13,7 @@ using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    public partial class ProjectEternityMapEditor : BaseEditor
+    public abstract partial class ProjectEternityMapEditor : BaseEditor
     {
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
@@ -120,24 +120,6 @@ namespace ProjectEternity.Editors.MapEditor
             this.mnuToolBar.PerformLayout();
         }
 
-        public ProjectEternityMapEditor(string FilePath, object[] Params)
-            : this()
-        {
-            this.FilePath = FilePath;
-            if (!File.Exists(FilePath))
-            {
-                FileStream fs = File.Create(FilePath);
-                fs.Close();
-                DeathmatchMap NewMap = new DeathmatchMap(FilePath, new GameModeInfo(), ProjectEternityMapEditor.Params);
-                BattleMapViewer.ActiveMap = NewMap;
-                NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
-
-                SaveItem(FilePath, FilePath);
-            }
-
-            LoadMap(FilePath);
-        }
-
         public override EditorInfo[] LoadEditors()
         {
             EditorInfo[] Info = new EditorInfo[]
@@ -155,18 +137,6 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.MapName = ItemName;
 
             ActiveMap.Save(ItemPath);
-        }
-
-        private void LoadMap(string Path)
-        {
-            string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
-
-            BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, new GameModeInfo(), Params);
-            Helper = new DeathmatchMapHelper(NewMap);
-            InitMap(NewMap);
-
-            this.Text = MapLogicName + " - Project Eternity Deathmatch Map Editor";
         }
 
         protected void InitMap(BattleMap NewMap)

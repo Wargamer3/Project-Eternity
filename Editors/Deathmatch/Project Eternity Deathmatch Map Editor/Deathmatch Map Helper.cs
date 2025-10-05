@@ -4,10 +4,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Editors.MapEditor;
+using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.Editors.DeathmatchMapEditor
 {
     public class DeathmatchMapHelper : IMapHelper
     {

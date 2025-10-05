@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Editors.DeathmatchMapEditor;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

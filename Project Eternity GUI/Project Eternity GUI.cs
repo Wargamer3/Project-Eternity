@@ -119,6 +119,12 @@ namespace ProjectEternity.GUI
                     {
                         //Look if the class inherit from BaseEditor somewhere.
                         EditorType = types[t];
+
+                        if (EditorType.IsAbstract)
+                        {
+                            continue;
+                        }
+
                         EditorIsBaseEditor = false;
                         while (EditorType != null && !EditorIsBaseEditor)
                         {

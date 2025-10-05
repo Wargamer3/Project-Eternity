@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content.Builder;
 
 namespace ProjectEternity.Editors.TilesetEditor
 {
-    public partial class ProjectEternityTilesetPresetEditor : BaseEditor
+    public abstract partial class ProjectEternityTilesetPresetEditor : BaseEditor
     {
         public interface ITilesetPresetHelper
         {
@@ -24,59 +24,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index);
             TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex);
             string GetEditorPath();
-        }
-
-        public class DeathmatchTilesetPresetHelper : ITilesetPresetHelper
-        {
-            public DeathmatchTilesetPresetHelper()
-            {
-            }
-
-            public void EditTerrainTypes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public string[] GetTerrainTypes()
-            {
-                return new string[]
-                {
-                    "Land",
-                    "Sea",
-                    "Air",
-                    "Space",
-                };
-            }
-
-            public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                return new TilesetPreset(BR, TileSizeX, TileSizeY, 0);
-            }
-
-            public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
-            }
-
-            public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
-            {
-                throw new NotImplementedException();
-            }
-
-            public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnTerrainSelected(Terrain SelectedTerrain)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string GetEditorPath()
-            {
-                return GUIRootPathMapTilesetImages;
-            }
         }
 
         protected ITilesetPresetHelper Helper;
@@ -197,11 +144,6 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             if (Preset.ArrayTilesetInformation.Length > 0)
             {
-                TilesetInfo.TilesetName = TilesetInfo.TilesetName;
-
-                TilesetInfo.ArrayTerrain = TilesetInfo.ArrayTerrain;
-                TilesetInfo.ArrayTiles = TilesetInfo.ArrayTiles;
-
                 viewerTileset.Preload();
                 if (!string.IsNullOrWhiteSpace(TilesetInfo.TilesetName))
                     InitTileset(TilesetInfo.TilesetName);
@@ -212,10 +154,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             AllowEvent = true;
         }
 
-        protected virtual void InitHelper()
-        {
-            Helper = new DeathmatchTilesetPresetHelper();
-        }
+        protected abstract void InitHelper();
 
         private void tsmSave_Click(object sender, EventArgs e)
         {

@@ -137,7 +137,6 @@
     <Compile Include="Effects\Automatic Skill Deathmatch.cs" />
     <Compile Include="Effects\Deathmatch Attack PER Effect.cs" />
     <Compile Include="Effects\Deathmatch Effect.cs" />
-    <Compile Include="Deathmatch Map Helper.cs" />
     <Compile Include="Deathmatch Params.cs" />
     <Compile Include="Effects\Deathmatch Squad PER Effect.cs" />
     <Compile Include="Effects\Squad PER Requirement.cs" />
