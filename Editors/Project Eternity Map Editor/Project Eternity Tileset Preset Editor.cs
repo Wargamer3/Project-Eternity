@@ -148,7 +148,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             //Add the file name to the tile combo box.
             txtTilesetName.Text = TilesetName;
 
-            Texture2D Tileset = viewerTileset.content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
+            Texture2D Tileset = viewerTileset.content.Load<Texture2D>("Assets/Tilesets/" + TilesetName);
 
             if (Tileset.Width >= viewerTileset.Width)
             {
@@ -193,18 +193,24 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             if (SpriteFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var filePath = SpriteFileDialog.FileName;
+                var NewSpriteFilePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(NewSpriteFilePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
+                
+                string NewSpriteFileName = Path.GetFileNameWithoutExtension(NewSpriteFilePath);
+                string SpriteFolder = "Content/Assets/Tilesets";
+                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(33);
 
-                string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string SpriteFolder = "Content\\Maps\\Tileset Presets";
-                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(28);
-                Builder.CopyBuildOutput(fileName, NewSpriteFileName, SpriteFolder + "\\" + NewSpriteFileFolder);
+                if (!string.IsNullOrEmpty(NewSpriteFileFolder))
+                {
+                    NewSpriteFileFolder += "/";
+                }
 
-                InitTileset(NewSpriteFileFolder + " \\" + NewSpriteFileName);
+                Builder.CopyBuildOutput(NewSpriteFileName, NewSpriteFileName, SpriteFolder + NewSpriteFileFolder);
+
+                InitTileset(NewSpriteFileFolder + NewSpriteFileName);
             }
         }
 

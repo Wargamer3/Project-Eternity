@@ -148,8 +148,8 @@ namespace Microsoft.Xna.Framework.Content.Builder
 
         public void CopyBuildOutput(string OriginalSpriteFileName, string SpriteFileName, string FolderToCopyTo)
         {
-            string CompleteFilePath = projectRootElement.FullPath + "\\" + OriginalSpriteFileName.Substring(0, OriginalSpriteFileName.Length - 4) + ".xnb";
-            string CompleteFilePathOutput = FolderToCopyTo + "\\" + SpriteFileName + ".xnb";
+            string CompleteFilePath = projectRootElement.FullPath + "/" + OriginalSpriteFileName + ".xnb";
+            string CompleteFilePathOutput = FolderToCopyTo + "/" + SpriteFileName + ".xnb";
 
             if (File.Exists(CompleteFilePathOutput))
             {
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
             {
                 Directory.CreateDirectory(FolderToCopyTo);
             }
-            File.Move(CompleteFilePath, FolderToCopyTo + "\\" + SpriteFileName + ".xnb");
+            File.Move(CompleteFilePath, FolderToCopyTo + "/" + SpriteFileName + ".xnb");
         }
 
         /// <summary>

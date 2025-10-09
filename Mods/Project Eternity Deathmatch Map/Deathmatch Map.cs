@@ -383,7 +383,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Clear everything.
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
-            FileStream FS = new FileStream("Content/Maps/Deathmatch/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Deathmatch/Maps/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

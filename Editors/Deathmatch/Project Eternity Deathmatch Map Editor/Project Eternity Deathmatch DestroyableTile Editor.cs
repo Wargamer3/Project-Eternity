@@ -58,7 +58,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapAutotilesImages;
+                return GUIRootPathMaDestroyableTilesImages;
             }
         }
 

@@ -72,7 +72,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (!string.IsNullOrEmpty(_ModelPath))
             {
-                ModelToDraw = Map.Content.Load<Model>("Maps/Models/" + _ModelPath);
+                ModelToDraw = Map.Content.Load<Model>("Assets/Models/" + _ModelPath);
 
                 foreach (ModelMesh mesh in ModelToDraw.Meshes)
                 {

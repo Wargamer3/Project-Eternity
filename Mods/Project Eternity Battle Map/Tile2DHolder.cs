@@ -100,11 +100,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Content != null)
             {
-                sprTileset = Content.Load<Texture2D>("Maps/" + TilesetName);
+                sprTileset = Content.Load<Texture2D>("Assets/" + TilesetName);
 
-                if (CanUseEffect && File.Exists("Content/Maps/" + TilesetName + " NormalMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Assets/" + TilesetName + " NormalMap.xnb"))
                 {
-                    sprTilesetBumpMap = Content.Load<Texture2D>("Maps/" + TilesetName + " NormalMap");
+                    sprTilesetBumpMap = Content.Load<Texture2D>("Assets/" + TilesetName + " NormalMap");
                     this.WetEffect.Parameters["NormalMap"].SetValue(sprTilesetBumpMap);
                 }
                 else
@@ -112,9 +112,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     CanUseEffect = false;
                 }
 
-                if (CanUseEffect && File.Exists("Content/Maps/" + TilesetName + " HeightMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Assets/" + TilesetName + " HeightMap.xnb"))
                 {
-                    sprTilesetHeightMap = Content.Load<Texture2D>("Maps/" + TilesetName + " HeightMap");
+                    sprTilesetHeightMap = Content.Load<Texture2D>("Assets/" + TilesetName + " HeightMap");
                     this.WetEffect.Parameters["HeightMap"].SetValue(sprTilesetHeightMap);
                 }
                 else

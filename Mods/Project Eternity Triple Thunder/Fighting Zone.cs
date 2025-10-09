@@ -399,7 +399,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void LoadMap()
         {
-            FileStream FS = new FileStream("Content/Maps/Triple Thunder/" + FightingZonePath + ".ttm", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Triple Thunder/Maps/" + FightingZonePath + ".ttm", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

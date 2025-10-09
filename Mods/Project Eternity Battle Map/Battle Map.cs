@@ -623,17 +623,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
                     {
-                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
-                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
+                        if (File.Exists("Content/Assets/Tilesets/" + SpritePath + ".xnb"))
+                            ListTileSet.Add(Content.Load<Texture2D>("Assets/Tilesets/" + SpritePath));
                         else
-                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
+                            ListTileSet.Add(Content.Load<Texture2D>("Assets/Tilesets/Default"));
                     }
                     else
                     {
-                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                        if (File.Exists("Content/Assets/Autotiles/" + SpritePath + ".xnb"))
+                            ListTileSet.Add(Content.Load<Texture2D>("Assets/Autotiles/" + SpritePath));
                         else
-                            ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
+                            ListTileSet.Add(Content.Load<Texture2D>("Assets/Autotiles/Default"));
                     }
                 }
 
@@ -646,8 +646,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     TilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
                     ListTilesetPreset.Add(ExtraTileset);
 
-                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                    if (File.Exists("Content/Assets/Autotiles/" + SpritePath + ".xnb"))
+                        ListTileSet.Add(Content.Load<Texture2D>("Assets/Autotiles/" + SpritePath));
                     else
                         ListTileSet.Add(null);
                 }

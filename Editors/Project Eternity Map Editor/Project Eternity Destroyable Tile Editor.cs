@@ -322,7 +322,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             //Add the file name to the tile combo box.
             ActiveTab.txtTilesetName.Text = TilesetName;
 
-            Texture2D Tileset = ActiveTab.viewerTilesetTab.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
+            Texture2D Tileset = ActiveTab.viewerTilesetTab.content.Load<Texture2D>("Assets/Destroyable Tiles/" + TilesetName);
 
             if (Tileset.Width >= ActiveTab.viewerTilesetTab.Width)
             {
@@ -367,18 +367,24 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             if (SpriteFileDialog.ShowDialog() == DialogResult.OK)
             {
-                var filePath = SpriteFileDialog.FileName;
+                var NewSpriteFilePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(NewSpriteFilePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
-                string NewSpriteFileName = Path.GetFileNameWithoutExtension(filePath);
-                string SpriteFolder = "Content\\Maps\\Autotiles";
-                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(31);
-                Builder.CopyBuildOutput(fileName, NewSpriteFileName, SpriteFolder + "\\" + NewSpriteFileFolder);
+                string NewSpriteFileName = Path.GetFileNameWithoutExtension(NewSpriteFilePath);
+                string SpriteFolder = "Content/Assets/Destroyable Tiles";
+                string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(42);
 
-                InitTileset(NewSpriteFileFolder + " \\" + NewSpriteFileName, ActiveTab);
+                if (!string.IsNullOrEmpty(NewSpriteFileFolder))
+                {
+                    NewSpriteFileFolder += "/";
+                }
+
+                Builder.CopyBuildOutput(NewSpriteFileName, NewSpriteFileName, SpriteFolder + NewSpriteFileFolder);
+
+                InitTileset(NewSpriteFileFolder + NewSpriteFileName, ActiveTab);
             }
         }
 
