@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsDeathmatch, GUIRootPathMapAutotilesPresets }, "Maps/Autotiles Presets/Deathmatch/", new string[] { ".peat" }, typeof(ProjectEternityDeathmatchAutotileTilesetPresetEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsDeathmatch, GUIRootPathMapAutotilesPresets }, "Deathmatch/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternityDeathmatchAutotileTilesetPresetEditor), true)
             };
 
             return Info;

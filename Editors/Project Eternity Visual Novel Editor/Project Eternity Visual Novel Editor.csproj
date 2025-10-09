@@ -158,11 +158,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Script.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
       <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
       <Name>Project Eternity Animation Screen</Name>

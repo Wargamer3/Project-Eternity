@@ -88,7 +88,7 @@ namespace ProjectEternity.Editors.RacingMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathRacingMaps }, "Maps/Racing/", new string[] { ".pem" }, typeof(ProjectEternityRacingMapEditor))
+                new EditorInfo(new string[] { GUIRootPathRacingMaps }, "Racing/Maps/", new string[] { ".pem" }, typeof(ProjectEternityRacingMapEditor))
             };
 
             return Info;

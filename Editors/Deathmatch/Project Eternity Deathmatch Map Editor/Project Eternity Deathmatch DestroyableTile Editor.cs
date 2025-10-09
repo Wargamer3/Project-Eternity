@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesPresetsDeathmatch, GUIRootPathMaDestroyableTilesPresets }, "Maps/Destroyable Tiles Presets/Deathmatch/", new string[] { ".pedt" }, typeof(ProjectEternityDeathmatchProjectEternityDestroyableTileEditor), true)
+                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesPresetsDeathmatch, GUIRootPathMaDestroyableTilesPresets }, "Deathmatch/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityDeathmatchProjectEternityDestroyableTileEditor), true)
             };
 
             return Info;

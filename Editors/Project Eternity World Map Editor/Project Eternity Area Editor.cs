@@ -310,7 +310,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathWorldMaps, GUIRootPathMaps }, "Maps/World Maps/", new string[] { ".pem" }, typeof(ProjectEternityWorldMapEditor))
+                new EditorInfo(new string[] { GUIRootPathWorldMaps, GUIRootPathMaps }, "World Maps/Maps/", new string[] { ".pem" }, typeof(ProjectEternityWorldMapEditor))
             };
 
             return Info;

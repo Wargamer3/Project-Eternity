@@ -50,7 +50,7 @@ namespace ProjectEternity.Editors.AdventureEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAdventureMaps }, "Maps/Adventure/", new string[] {".am" }, typeof(AdventureMapEditor)),
+                new EditorInfo(new string[] { GUIRootPathAdventureMaps }, "Adventure/Maps/", new string[] {".am" }, typeof(AdventureMapEditor)),
                 new EditorInfo(new string[] { GUIRootPathAdventureRessources }, "Adventure/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
             };
 

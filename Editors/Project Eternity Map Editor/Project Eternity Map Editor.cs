@@ -1,19 +1,16 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Scripts;
 using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.Editors.ImageViewer;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    public abstract partial class ProjectEternityMapEditor : BaseEditor
+    public partial class ProjectEternityMapEditor : BaseEditor
     {
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
@@ -124,9 +121,12 @@ namespace ProjectEternity.Editors.MapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
-                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false),
-                new EditorInfo(new string[] { GUIRootPathMapModels }, "Maps/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
+                new EditorInfo(new string[] { GUIRootPathMapTilesetImages, GUIRootPathMapTilesets }, "Assets/Tilesets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathMapAutotilesImages }, "Assets/Autotiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesImages }, "Assets/Destroyable Tiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Deathmatch/Maps/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
+                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Assets/BGM/", new string[] { ".mp3", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false),
+                new EditorInfo(new string[] { GUIRootPathMapModels }, "Assets/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
             };
 
             return Info;

@@ -4,7 +4,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -50,31 +49,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             ListBattleBackgroundAnimationPath = new List<string>();
             InitHelper();
             TilesetInfo = Helper.CreatePreset(string.Empty, 32, 32, 32, 32, 0);
-        }
-
-        public ProjectEternityTilesetPresetEditor(string FilePath, object[] Params)
-            :this()
-        {
-            this.FilePath = FilePath;
-            if (!File.Exists(FilePath))
-            {
-                FileStream fs = File.Create(FilePath);
-                fs.Close();
-                SaveItem(FilePath, FilePath);
-            }
-
-            LoadTileset(FilePath);
-        }
-
-        public override EditorInfo[] LoadEditors()
-        {
-            EditorInfo[] Info = new EditorInfo[]
-            {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetImages, GUIRootPathMapTilesets }, "Maps/Tilesets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsDeathmatch, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Maps/Tilesets Presets/Deathmatch/", new string[] { ".pet" }, typeof(ProjectEternityTilesetPresetEditor), true)
-            };
-
-            return Info;
         }
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)

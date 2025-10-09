@@ -73,7 +73,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathTripleThunderMaps }, "Maps/Triple Thunder/", new string[] {".ttm" }, typeof(TripleThunderMapEditor)),
+                new EditorInfo(new string[] { GUIRootPathTripleThunderMaps }, "Triple Thunder/Maps/", new string[] {".ttm" }, typeof(TripleThunderMapEditor)),
                 new EditorInfo(new string[] { GUIRootPathTripleThunderRessources }, "Triple Thunder/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
             };
 

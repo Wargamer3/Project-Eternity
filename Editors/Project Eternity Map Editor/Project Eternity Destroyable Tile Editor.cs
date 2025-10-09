@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
-using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
