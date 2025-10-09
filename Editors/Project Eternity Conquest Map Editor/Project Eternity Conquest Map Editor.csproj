@@ -192,7 +192,7 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Map Editor\Project Eternity Map Editor.csproj">
-      <Project>{7e9fe48e-9926-4ef4-9b6b-3241841be67b}</Project>
+      <Project>{7E9FE48E-9926-4EF4-9B6B-3241841BE67B}</Project>
       <Name>Project Eternity Map Editor</Name>
       <Private>False</Private>
     </ProjectReference>

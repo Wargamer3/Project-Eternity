@@ -340,6 +340,22 @@ namespace ProjectEternity.Editors.TilesetEditor
                 ActiveTab.sclTileHeight.Visible = false;
 
             ActiveTab.viewerTilesetTab.InitTileset(Tileset, TileSize);
+
+            ActiveTab.TilesetInfo.TilesetName = TilesetName;
+
+            int TilesetWidth = ActiveTab.viewerTilesetTab.sprTileset.Width / TileSize.X;
+            int TilesetHeight = ActiveTab.viewerTilesetTab.sprTileset.Height / TileSize.Y;
+            ActiveTab.TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
+            ActiveTab.TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
+            for (int X = TilesetWidth - 1; X >= 0; --X)
+            {
+                for (int Y = TilesetHeight - 1; Y >= 0; --Y)
+                {
+                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
+                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
+                    ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
+                }
+            }
         }
 
         private void sclTileWidth_Scroll(object sender, ScrollEventArgs e)
@@ -534,21 +550,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            ActiveTab.TilesetInfo.TilesetName = TilePath.Substring(0, TilePath.Length - 4).Substring(23);
-                            InitTileset(ActiveTab.TilesetInfo.TilesetName, ActiveTab);
-                            int TilesetWidth = ActiveTab.viewerTilesetTab.sprTileset.Width / TileSize.X;
-                            int TilesetHeight = ActiveTab.viewerTilesetTab.sprTileset.Height / TileSize.Y;
-                            ActiveTab.TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
-                            ActiveTab.TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
-                            for (int X = TilesetWidth - 1; X >= 0; --X)
-                            {
-                                for (int Y = TilesetHeight - 1; Y >= 0; --Y)
-                                {
-                                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
-                                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
-                                    ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
-                                }
-                            }
+                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(23), ActiveTab);
                         }
                         break;
 

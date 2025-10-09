@@ -1,11 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Editor;
-using static ProjectEternity.GameScreens.BattleMapScreen.Terrain;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -181,6 +181,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
+            Thread.Sleep(33);
             g.End();
         }
     }

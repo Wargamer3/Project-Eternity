@@ -90,11 +90,6 @@
       <Name>Project Eternity Control Helper</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Editors\Project Eternity Attack Editor\Project Eternity Attack Editor.csproj">
-      <Project>{4e01d29c-40a8-47e3-8f62-124919ee06c6}</Project>
-      <Name>Project Eternity Attack Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
       <Name>Project Eternity Base Editor</Name>
