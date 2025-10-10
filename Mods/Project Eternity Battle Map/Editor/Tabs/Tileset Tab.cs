@@ -615,14 +615,14 @@ namespace ProjectEternity.Editors.MapEditor
 
             if (NewTileset.TilesetType == TilesetPreset.TilesetTypes.Regular)
             {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
+                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
                 ActiveMap.ListTileSet.Add(NewTilesetSprite);
 
                 return NewTilesetSprite;
             }
             else if (!string.IsNullOrEmpty(NewTileset.ArrayTilesetInformation[0].TilesetName))
             {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Autotiles/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
+                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Autotiles/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
                 ActiveMap.ListTileSet.Add(NewTilesetSprite);
 
                 return NewTilesetSprite;
@@ -646,16 +646,16 @@ namespace ProjectEternity.Editors.MapEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            if (TilePath.StartsWith("Content/Maps/Tilesets Presets"))
+                            if (!TilePath.StartsWith("Content/Assets/Tilesets/"))
                             {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(30);
+                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(34);
                                 if (cboTiles.Items.Contains(Name))
                                 {
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
                                     continue;
                                 }
 
-                                TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", Name, ActiveMap.ListTilesetPreset.Count);
+                                TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", TilePath.Substring(34), ActiveMap.ListTilesetPreset.Count);
 
                                 AddTilesetPreset(NewTileset);
 
@@ -663,14 +663,14 @@ namespace ProjectEternity.Editors.MapEditor
                             }
                             else
                             {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
+                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(24);
                                 if (cboTiles.Items.Contains(Name))
                                 {
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
                                     continue;
                                 }
 
-                                Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + Name);
+                                Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Tilesets/" + Name);
 
                                 ActiveMap.ListTilesetPreset.Add(Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
                                 ActiveMap.ListTileSet.Add(Tile);
@@ -755,14 +755,14 @@ namespace ProjectEternity.Editors.MapEditor
                         string AutotilePath = Items[I];
                         if (AutotilePath != null)
                         {
-                            string Name = AutotilePath.Substring(0, AutotilePath.Length - 5).Substring(31);
+                            string Name = AutotilePath.Substring(0, AutotilePath.Length - 5).Substring(35);
                             if (cboTiles.Items.Contains(Name))
                             {
                                 MessageBox.Show("This autotile is already listed.\r\n" + Name);
                                 continue;
                             }
 
-                            TilesetPreset NewTileset = Helper.LoadTilesetPreset("Autotiles Presets", Name, ActiveMap.ListTilesetPreset.Count);
+                            TilesetPreset NewTileset = Helper.LoadTilesetPreset("Autotiles Presets", AutotilePath.Substring(35), ActiveMap.ListTilesetPreset.Count);
 
                             for (int i = 0; i < NewTileset.ArrayTilesetInformation.Length; i++)
                             {
