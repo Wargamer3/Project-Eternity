@@ -226,7 +226,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
                 ActiveTab.viewerTilesetTab.Preload();
                 if (!string.IsNullOrWhiteSpace(ActiveTab.TilesetInfo.TilesetName))
-                    InitTileset(ActiveTab.TilesetInfo.TilesetName, ActiveTab);
+                    InitTileset(ActiveTab.TilesetInfo.TilesetName, ActiveTab, false);
             }
 
             AllowEvent = false;
@@ -317,7 +317,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             ListMenuItemsSelected(ShowContextMenuWithItem(Helper.GetEditorPath()));
         }
 
-        private void InitTileset(string TilesetName, TabContent ActiveTab)
+        private void InitTileset(string TilesetName, TabContent ActiveTab, bool NewTileset)
         {
             //Add the file name to the tile combo box.
             ActiveTab.txtTilesetName.Text = TilesetName;
@@ -343,17 +343,19 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             ActiveTab.TilesetInfo.TilesetName = TilesetName;
 
-            int TilesetWidth = ActiveTab.viewerTilesetTab.sprTileset.Width / TileSize.X;
-            int TilesetHeight = ActiveTab.viewerTilesetTab.sprTileset.Height / TileSize.Y;
-            ActiveTab.TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
-            ActiveTab.TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
-            for (int X = TilesetWidth - 1; X >= 0; --X)
+            if (NewTileset)
             {
-                for (int Y = TilesetHeight - 1; Y >= 0; --Y)
+                int TilesetWidth = ActiveTab.viewerTilesetTab.sprTileset.Width / TileSize.X;
+                int TilesetHeight = ActiveTab.viewerTilesetTab.sprTileset.Height / TileSize.Y;
+                ActiveTab.TilesetInfo.ArrayTerrain = new Terrain[TilesetWidth, TilesetHeight];
+                ActiveTab.TilesetInfo.ArrayTiles = new DrawableTile[TilesetWidth, TilesetHeight];
+                for (int X = TilesetWidth - 1; X >= 0; --X)
                 {
-                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
-                    ActiveTab.TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
-                    ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
+                    for (int Y = TilesetHeight - 1; Y >= 0; --Y)
+                    {
+                        ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
+                        ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
+                    }
                 }
             }
         }
@@ -400,7 +402,7 @@ namespace ProjectEternity.Editors.TilesetEditor
 
                 Builder.CopyBuildOutput(NewSpriteFileName, NewSpriteFileName, SpriteFolder + NewSpriteFileFolder);
 
-                InitTileset(NewSpriteFileFolder + NewSpriteFileName, ActiveTab);
+                InitTileset(NewSpriteFileFolder + NewSpriteFileName, ActiveTab, true);
             }
         }
 
@@ -550,7 +552,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(25), ActiveTab);
+                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(25), ActiveTab, true);
                         }
                         break;
 

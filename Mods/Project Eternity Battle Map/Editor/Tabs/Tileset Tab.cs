@@ -566,7 +566,7 @@ namespace ProjectEternity.Editors.MapEditor
                 PresetTile, LayerIndex, ConsiderSubLayers, false);
         }
 
-        private Texture2D AddTilesetPreset(TilesetPreset NewTileset)
+        private Texture2D AddTilesetPreset(TilesetPreset NewTileset, string AssetFolder)
         {
             for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
             {
@@ -613,24 +613,10 @@ namespace ProjectEternity.Editors.MapEditor
                 }
             }
 
-            if (NewTileset.TilesetType == TilesetPreset.TilesetTypes.Regular)
-            {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
-                ActiveMap.ListTileSet.Add(NewTilesetSprite);
+            Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>(AssetFolder + NewTileset.ArrayTilesetInformation[0].TilesetName);
+            ActiveMap.ListTileSet.Add(NewTilesetSprite);
 
-                return NewTilesetSprite;
-            }
-            else if (!string.IsNullOrEmpty(NewTileset.ArrayTilesetInformation[0].TilesetName))
-            {
-                Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Autotiles/" + NewTileset.ArrayTilesetInformation[0].TilesetName);
-                ActiveMap.ListTileSet.Add(NewTilesetSprite);
-
-                return NewTilesetSprite;
-            }
-            else
-            {
-                return null;
-            }
+            return NewTilesetSprite;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -657,7 +643,7 @@ namespace ProjectEternity.Editors.MapEditor
 
                                 TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", TilePath.Substring(34), ActiveMap.ListTilesetPreset.Count);
 
-                                AddTilesetPreset(NewTileset);
+                                AddTilesetPreset(NewTileset, "Assets/Tilesets/");
 
                                 cboTiles.Items.Add(Name);
                             }
@@ -772,7 +758,7 @@ namespace ProjectEternity.Editors.MapEditor
                                     ExtraTileset = NewTileset.CreateSlave(i);
                                     ActiveMap.ListTilesetPreset.Add(ExtraTileset);
                                 }
-                                Texture2D NewTilesetSprite = AddTilesetPreset(ExtraTileset);
+                                Texture2D NewTilesetSprite = AddTilesetPreset(ExtraTileset, "Assets/Autotiles/");
 
                                 BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(NewTilesetSprite);
                                 BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(ExtraTileset);
