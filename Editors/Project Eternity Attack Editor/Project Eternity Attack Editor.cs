@@ -70,8 +70,8 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAttacks }, "Deathmatch/Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)),
-                new EditorInfo(new string[] { GUIRootPathAttackModels }, "Deathmatch/Attacks/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAttacks }, "Deathmatch/Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAttackModels }, "Deathmatch/Attacks/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;
@@ -297,7 +297,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private void LoadAttack(string AttackPath)
         {
-            string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(16);
+            string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(27);
 
             Attack ActiveAttack = new Attack(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
             LoadAttack(ActiveAttack);

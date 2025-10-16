@@ -72,16 +72,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldSmaller = Content.Load<SpriteFont>("Fonts/Oxanium Bold Smaller");
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
 
-            sprLoadouts = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
-            sprLoadoutsFrame = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Loadout");
-            sprLoadoutsName = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Loadout Name");
-            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Inventory/Frame Description");
+            sprLoadouts = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Frame Outline");
+            sprLoadoutsFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Frame Loadout");
+            sprLoadoutsName = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Frame Loadout Name");
+            sprFrameDescription = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Frame Description");
 
-            sprButtonFolderInactive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Inactive");
-            sprButtonRename = Content.Load<Texture2D>("Menus/Lobby/Inventory/Button Rename");
+            sprButtonFolderInactive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Folder Button Inactive");
+            sprButtonRename = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Button Rename");
 
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Bar");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Bar");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");

@@ -97,7 +97,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnTimePeriodPassiveSkill_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         #endregion

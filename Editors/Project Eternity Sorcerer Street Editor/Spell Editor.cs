@@ -46,7 +46,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetSpells }, "Sorcerer Street/Spells/", new string[] { ".pes" }, typeof(SpellEditor), true, null, true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetSpells }, "Sorcerer Street/Spells/", new string[] { ".pes" }, typeof(SpellEditor), true, null, true)
             };
 
             return Info;

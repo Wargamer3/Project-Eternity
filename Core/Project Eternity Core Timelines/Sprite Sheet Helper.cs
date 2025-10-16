@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem("Animations/Sprite Sheets", "Select a sprite sheet to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Animations/Sprite Sheets", "Select a sprite sheet to use", false));
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

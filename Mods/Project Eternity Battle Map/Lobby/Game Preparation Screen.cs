@@ -138,16 +138,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprRoomNameFrame = Content.Load<Texture2D>("Menus/Lobby/Waiting/Room Name Frame");
-            sprButtonBigColor = Content.Load<Texture2D>("Menus/Lobby/Button Big Color");
-            sprButtonBigGray = Content.Load<Texture2D>("Menus/Lobby/Button Big Gray");
-            sprButtonBigBlack = Content.Load<Texture2D>("Menus/Lobby/Button Big Black");
-            sprButtonSmall = Content.Load<Texture2D>("Menus/Lobby/Button Small");
-            sprPlayerBox = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Slot");
-            sprPlayerIcon = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Icon");
-            sprPlayerInfo = Content.Load<Texture2D>("Menus/Lobby/Waiting/Player Info");
-            sprRoomInfo = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
-            sprChatBox = Content.Load<Texture2D>("Menus/Lobby/Chat Box");
+            sprRoomNameFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Waiting/Room Name Frame");
+            sprButtonBigColor = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Big Color");
+            sprButtonBigGray = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Big Gray");
+            sprButtonBigBlack = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Big Black");
+            sprButtonSmall = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Small");
+            sprPlayerBox = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Waiting/Player Slot");
+            sprPlayerIcon = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Waiting/Player Icon");
+            sprPlayerInfo = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Waiting/Player Info");
+            sprRoomInfo = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame");
+            sprChatBox = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Chat Box");
 
             ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
@@ -168,16 +168,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawX = (int)(2758 * Ratio) + sprButtonSmall.Width / 4;
             int DrawY = (int)(726 * Ratio) + sprButtonSmall.Height / 4;
 
-            RoomSettingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Room Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnOpenRoomSettingsScreenPressed);
+            RoomSettingButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Room Settings}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnOpenRoomSettingsScreenPressed);
             DrawX = (int)(3280 * Ratio) + sprButtonSmall.Width / 4;
-            PlayerSettingsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Player Settings}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, PlayerSettingsScreen);
+            PlayerSettingsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Small}{Centered}{Color:65,70,65,255}Player Settings}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, PlayerSettingsScreen);
 
             DrawX = (int)(2784 * Ratio) + sprButtonBigColor.Width / 4;
             DrawY = (int)(1648 * Ratio) + sprButtonBigColor.Width / 16;
-            ReadyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Ready);
-            StartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, StartGame);
+            ReadyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Deathmatch/Lobby Menu/Interactive/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Ready);
+            StartButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Ready}}", "Deathmatch/Lobby Menu/Interactive/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, StartGame);
             DrawY = (int)(1876 * Ratio) + sprButtonBigColor.Width / 16;
-            BackToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Leave}}", "Menus/Lobby/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ReturnToLobby);
+            BackToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold}{Centered}{Color:65,70,65,255}Leave}}", "Deathmatch/Lobby Menu/Interactive/Button Big Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, ReturnToLobby);
 
             sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
@@ -536,7 +536,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     NewMap = BattleMap.DicBattmeMapType[Room.MapModName].GetNewMap(Room.GameInfo, string.Empty);
                 }
 
-                NewMap.BattleMapPath = Room.MapPath;
+                NewMap.BattleMapPath = "Multiplayer/" + Room.MapPath;
                 NewMap.ListGameScreen = ListGameScreen;
                 NewMap.SetMutators(Room.ListMutator);
 

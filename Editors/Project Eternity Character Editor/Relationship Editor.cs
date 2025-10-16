@@ -106,7 +106,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnSelectRelationshipBonus_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Bonus;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCharacterRelationships));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterRelationships));
         }
 
         private void txtRelationshipLevel_ValueChanged(object sender, EventArgs e)

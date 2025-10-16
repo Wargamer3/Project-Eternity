@@ -49,19 +49,19 @@ namespace ProjectEternity.Editors.UnitTester
         private void btnLoadUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnLoadPilot_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Pilot;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void btnLoadWeapon_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Weapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttacks));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks));
         }
 
         private void UpdateResults(object sender, EventArgs e)

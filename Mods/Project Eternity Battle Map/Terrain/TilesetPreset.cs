@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return NewTilesetPreset;
         }
 
-        internal void DrawPreview(SpriteBatch g, Point Position, Texture2D sprTileset)
+        public void DrawPreview(SpriteBatch g, Point Position, Texture2D sprTileset)
         {
             if (sprTileset == null)
             {

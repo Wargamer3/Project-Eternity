@@ -313,7 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial30");
 
             sprInfoBand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Info Band");
-            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
+            sprExtraFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame 2");
         }
 
         private void OnMissionScrollbarChange(float ScrollbarValue)

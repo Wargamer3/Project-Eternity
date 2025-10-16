@@ -79,11 +79,22 @@
     <Compile Include="Battle Map Cutscene Script Holder.cs" />
     <Compile Include="Battle Context.cs" />
     <Compile Include="Battle Params.cs" />
-    <Compile Include="Editor\AttackSelector.cs" />
+    <Compile Include="Editors\AttackSelector.cs" />
+    <Compile Include="Editor\Battle Map Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\Extra Layer Attributes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Extra Layer Attributes.Designer.cs">
+      <DependentUpon>Extra Layer Attributes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\IMapHelper.cs" />
+    <Compile Include="Editor\ITileAttributes.cs" />
     <Compile Include="Editor\Tabs\Event Points Tab.cs" />
-    <Compile Include="Editor\Tabs\Scenery Tab.cs" />
     <Compile Include="Editor\Tabs\Layer Tab.cs" />
     <Compile Include="Editor\Tabs\Prop Tab.cs" />
+    <Compile Include="Editor\Tabs\Scenery Tab.cs" />
     <Compile Include="Editor\Tabs\Scripts Tab.cs" />
     <Compile Include="Editor\Tabs\Tabs Control.cs">
       <SubType>UserControl</SubType>
@@ -99,13 +110,6 @@
     <Compile Include="Editor\Tile Attributes 3D.Designer.cs">
       <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\Extra Layer Attributes.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Editor\Extra Layer Attributes.Designer.cs">
-      <DependentUpon>Extra Layer Attributes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\IMapHelper.cs" />
     <Compile Include="Editor\Tile Attributes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +117,9 @@
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\Tile Viewer 3D.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Editor\Tileset Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Editor\Zone Editor.cs">
@@ -141,7 +148,6 @@
     <Compile Include="Intermission Screen\Commander\Commander Screen.cs" />
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
-    <Compile Include="Editor\ITileAttributes.cs" />
     <Compile Include="Intermission Screen\Data Save Screen.cs" />
     <Compile Include="Intermission Screen\Commander\Commander Loadout Screen.cs" />
     <Compile Include="Intermission Screen\Records\Multiplayer Records Tab.cs" />
@@ -271,9 +277,6 @@
     <Compile Include="Team Lists\Team List Character.cs" />
     <Compile Include="Team Lists\Team List Squad.cs" />
     <Compile Include="Team Lists\Team List Unit.cs" />
-    <Compile Include="Editor\Battle Map Viewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Environment\DayNightCycle.cs" />
     <Compile Include="Drawable Tile.cs" />
     <Compile Include="Abstract Methods.cs" />
@@ -310,9 +313,6 @@
     <Compile Include="System List.cs" />
     <Compile Include="Map Scripting.cs" />
     <Compile Include="Terrain\Terrain.cs" />
-    <Compile Include="Editor\Tileset Viewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Terrain\Terrain3D.cs" />
     <Compile Include="Terrain\Tile 3D.cs" />
     <Compile Include="Environment\Time Period.cs" />
@@ -364,6 +364,10 @@
       <Name>Project Eternity Cutscene</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53A1885C-107D-49FD-BA51-50EF05D3CEFE}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>
@@ -389,11 +393,6 @@
       <Name>Project Eternity Visual Novel</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
@@ -411,17 +410,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Editor\Tabs\Tabs Control.resx">
-      <DependentUpon>Tabs Control.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editor\Tile Attributes 3D.resx">
-      <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Editor\Battle Map Viewer.resx">
       <DependentUpon>Battle Map Viewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Extra Layer Attributes.resx">
       <DependentUpon>Extra Layer Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Tabs\Tabs Control.resx">
+      <DependentUpon>Tabs Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Tile Attributes 3D.resx">
+      <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\Tile Attributes.resx">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
@@ -430,7 +429,6 @@
       <DependentUpon>Zone Editor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -462,6 +462,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Triple Thunder", "Triple Th
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Deathmatch Map Editor", "Editors\Deathmatch\Project Eternity Deathmatch Map Editor\Project Eternity Deathmatch Map Editor.csproj", "{FCEA59AC-B503-4DB6-9509-716556D28CC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Editor Helper", "Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj", "{53A1885C-107D-49FD-BA51-50EF05D3CEFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Conquest|x86 = Debug Conquest|x86
@@ -1078,6 +1080,10 @@ Global
 		{FCEA59AC-B503-4DB6-9509-716556D28CC9}.Debug|x86.ActiveCfg = Debug|x86
 		{FCEA59AC-B503-4DB6-9509-716556D28CC9}.Debug|x86.Build.0 = Debug|x86
 		{FCEA59AC-B503-4DB6-9509-716556D28CC9}.Release|x86.ActiveCfg = Release|x86
+		{53A1885C-107D-49FD-BA51-50EF05D3CEFE}.Debug Conquest|x86.ActiveCfg = Debug|x86
+		{53A1885C-107D-49FD-BA51-50EF05D3CEFE}.Debug|x86.ActiveCfg = Debug|x86
+		{53A1885C-107D-49FD-BA51-50EF05D3CEFE}.Debug|x86.Build.0 = Debug|x86
+		{53A1885C-107D-49FD-BA51-50EF05D3CEFE}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1202,6 +1208,7 @@ Global
 		{301E33E3-F668-43D6-8198-693C9A28B59F} = {F774D98B-8C76-48C4-BD9A-AFB29F5E728C}
 		{5CE27523-D1AD-40CF-9005-C83DD5F0C27C} = {F774D98B-8C76-48C4-BD9A-AFB29F5E728C}
 		{FCEA59AC-B503-4DB6-9509-716556D28CC9} = {B0BA7188-5D49-4ED0-BBBB-658234071A11}
+		{53A1885C-107D-49FD-BA51-50EF05D3CEFE} = {DDBEFB7A-32E0-4FF3-BE92-66E31BE553D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDDE4437-1061-4E3A-8C8F-A1F2AA9F76A8}

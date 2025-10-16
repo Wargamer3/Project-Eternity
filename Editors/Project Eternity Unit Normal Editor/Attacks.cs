@@ -133,7 +133,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void btnAddAttack_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Attack;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks));
         }
 
         private void lstAttack_SelectedIndexChanged(object sender, EventArgs e)
@@ -345,7 +345,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             if (lstAttack.SelectedIndex >= 0 && lstAttackContexts.SelectedIndex >= 0 && lstAttackAnimations.SelectedIndex >= 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.Animation;
-                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
             }
         }
 

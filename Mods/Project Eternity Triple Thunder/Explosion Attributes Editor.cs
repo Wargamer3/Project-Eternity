@@ -38,19 +38,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void btnUseAnimatedProjectile_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         private void btnUseTextureProjectile_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites));
         }
 
         private void btnSelectSound_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Sound;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSFX));
         }
 
         private void btnConfirm_Click(object sender, System.EventArgs e)

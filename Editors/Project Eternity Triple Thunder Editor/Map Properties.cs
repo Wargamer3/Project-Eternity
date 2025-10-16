@@ -19,7 +19,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         private void btnSetMusic_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BGM;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM, "Select BGM", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapBGM, "Select BGM", false));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

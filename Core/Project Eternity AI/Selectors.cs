@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Collections.Generic;
 using System.Windows.Forms.Design;
 using ProjectEternity.Core.Editor;
 
@@ -44,7 +44,7 @@ namespace ProjectEternity.Core.AI
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAIs);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAIs);
                     if (Items != null && Items.Count > 0)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 5).Substring(12);

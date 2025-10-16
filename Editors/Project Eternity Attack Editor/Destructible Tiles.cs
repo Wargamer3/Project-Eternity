@@ -2,9 +2,9 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core.Editor;
-using static ProjectEternity.Core.Attacks.DestructibleTilesAttackAttributes;
 using ProjectEternity.Core.Attacks;
+using static ProjectEternity.Core.Attacks.DestructibleTilesAttackAttributes;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
@@ -98,7 +98,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnAddUniqueType_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Preset;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMaDestroyableTilesPresets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMaDestroyableTilesPresets));
         }
 
         private void btnRemoveUniqueType_Click(object sender, EventArgs e)

@@ -21,25 +21,25 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnUseAnimatedProjectile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         private void btnUseTextureProjectile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites));
         }
 
         private void btn3DModelPath_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Model;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackModels));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackModels));
         }
 
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SkillChain;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackSkillChains));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackSkillChains));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

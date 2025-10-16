@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsCombining, GUIRootPathUnits }, "Deathmatch/Units/Combining/", new string[] { ".peu" }, typeof(UnitCombiningEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsCombining, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Combining/", new string[] { ".peu" }, typeof(UnitCombiningEditor))
             };
 
             return Info;
@@ -85,7 +85,7 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.CombiningUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -99,13 +99,13 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         private void btnSelectOrginalUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.OriginalUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnCombinedUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.CombinedUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

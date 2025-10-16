@@ -206,7 +206,7 @@ namespace ProjectEternity.Editors.RosterEditor
         private void btnAddCharacter_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Character;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void btnRemoveCharacter_Click(object sender, EventArgs e)
@@ -347,7 +347,7 @@ namespace ProjectEternity.Editors.RosterEditor
         private void btnAddUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnRemoveUnit_Click(object sender, EventArgs e)

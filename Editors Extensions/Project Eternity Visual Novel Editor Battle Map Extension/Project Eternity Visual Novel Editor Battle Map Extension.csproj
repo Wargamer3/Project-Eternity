@@ -88,6 +88,11 @@
       <Name>Project Eternity Cutscene</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>

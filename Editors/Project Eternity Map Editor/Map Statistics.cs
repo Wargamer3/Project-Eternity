@@ -83,13 +83,13 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnSetBackgrounds_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Backgrounds;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which backgrounds to use.", true));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll, "Select which backgrounds to use.", true));
         }
 
         private void btnSetForegrounds_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Foregrounds;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true));
         }
 
         private void btnSetDefaultGameModesConditions_Click(object sender, EventArgs e)
@@ -100,7 +100,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnChangeBGM_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BGM;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapBGM));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

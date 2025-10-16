@@ -455,7 +455,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             Room.CurrentDifficulty = Difficulty;
 
-            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "/Maps/Triple Thunder/Missions/" + Difficulty);
+            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "/Triple Thunder/Maps/Missions/" + Difficulty);
 
             ListMissionInfo.Clear();
             FileInfo[] ArrayMapFile = MapDirectory.GetFiles("*.ttm");

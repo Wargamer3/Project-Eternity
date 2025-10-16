@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsConquest);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsConquest);
                 if (Items != null)
                 {
                     value = Items[0].Substring(0, Items[0].Length - 4).Substring(Items[0].LastIndexOf("Units") + 6);

@@ -63,12 +63,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
 
-            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+            sprHighlight = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Select Highlight");
 
-            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top Large");
-            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
+            sprFrameTop = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Top Large");
+            sprFrameDescription = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Bar");
 
             LoadGameTypes();
 

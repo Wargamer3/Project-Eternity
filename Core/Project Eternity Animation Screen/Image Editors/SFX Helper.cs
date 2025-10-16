@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private void btnSelectSFX_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX, "Select a SFX to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSFX, "Select a SFX to use", false));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

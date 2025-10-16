@@ -92,7 +92,7 @@ namespace ProjectEternity.Editors.SystemListEditor
             }
             else
             {
-                IEnumerable<ItemContainer> Parts = GetItemsByRoot(GUIRootPathUnitParts);
+                IEnumerable<ItemContainer> Parts = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitParts);
                 foreach (var Container in Parts)
                 {
                     foreach (var Part in Container.ListItem)
@@ -119,7 +119,7 @@ namespace ProjectEternity.Editors.SystemListEditor
             }
             else
             {
-                IEnumerable<ItemContainer> BuyableSkills = GetItemsByRoot(GUIRootPathCharacterSkills);
+                IEnumerable<ItemContainer> BuyableSkills = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathCharacterSkills);
                 foreach (var Container in BuyableSkills)
                 {
                     foreach (var Part in Container.ListItem.Keys)
@@ -149,7 +149,7 @@ namespace ProjectEternity.Editors.SystemListEditor
             }
             else
             {
-                IEnumerable<ItemContainer> Spirits = GetItemsByRoot(GUIRootPathCharacterSpirits);
+                IEnumerable<ItemContainer> Spirits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathCharacterSpirits);
                 foreach (var Container in Spirits)
                 {
                     foreach (var Part in Container.ListItem.Keys)
@@ -179,7 +179,7 @@ namespace ProjectEternity.Editors.SystemListEditor
             }
             else
             {
-                IEnumerable<ItemContainer> Skills = GetItemsByRoot(GUIRootPathCharacterSkills);
+                IEnumerable<ItemContainer> Skills = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathCharacterSkills);
                 foreach (var Container in Skills)
                 {
                     foreach (var Part in Container.ListItem.Keys)
@@ -209,7 +209,7 @@ namespace ProjectEternity.Editors.SystemListEditor
             }
             else
             {
-                IEnumerable<ItemContainer> Abilities = GetItemsByRoot(GUIRootPathUnitAbilities);
+                IEnumerable<ItemContainer> Abilities = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitAbilities);
                 foreach (var Container in Abilities)
                 {
                     foreach (var Part in Container.ListItem.Keys)
@@ -266,7 +266,7 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void btnAddPart_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Parts;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitParts));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitParts));
         }
 
         private void btnRemoveParts_Click(object sender, EventArgs e)
@@ -291,7 +291,7 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void btnAddBuyableSkill_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BuyableSkills;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnRemoveBuyableSkill_Click(object sender, EventArgs e)
@@ -316,7 +316,7 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void btnAddSpirit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirits;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnRemoveSpirit_Click(object sender, EventArgs e)
@@ -341,7 +341,7 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void btnAddSkill_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skills;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnRemoveSkill_Click(object sender, EventArgs e)
@@ -366,7 +366,7 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void btnAddAbility_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Abilities;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitAbilities));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitAbilities));
         }
 
         private void btnRemoveAbility_Click(object sender, EventArgs e)

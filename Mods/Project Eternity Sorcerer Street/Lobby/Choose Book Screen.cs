@@ -51,8 +51,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
             fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
-            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top");
+            sprExtraFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame 2");
+            sprFrameTop = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Top");
         }
 
         public override void Update(GameTime gameTime)

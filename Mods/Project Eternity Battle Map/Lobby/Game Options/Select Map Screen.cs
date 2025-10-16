@@ -35,12 +35,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 IEnumerable<string> ListMapFolder;
                 if (!string.IsNullOrEmpty(ActiveModName))
                 {
-                    ListMapFolder = Directory.EnumerateDirectories(ContentRootDirectory + "/Maps/" + ActiveModName + "/", "Multiplayer", SearchOption.AllDirectories);
+                    RootDirectory = ContentRootDirectory + "/" + ActiveModName + "/Maps/";
                 }
-                else
-                {
-                    ListMapFolder = Directory.EnumerateDirectories(ContentRootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories);
-                }
+
+                ListMapFolder = Directory.EnumerateDirectories(RootDirectory, "Multiplayer", SearchOption.AllDirectories);
 
                 foreach (string ActiveMultiplayerFolder in ListMapFolder)
                 {
@@ -48,9 +46,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pem", SearchOption.AllDirectories))
                         {
-                            string MapFolder = ActiveMultiplayerFolder.Substring(RootDirectory.Length);
-                            MapFolder = MapFolder.Substring(0, MapFolder.Length - "Multiplayer/".Length);
-                            string FilePath = ActiveFile.Substring(RootDirectory.Length + MapFolder.Length + 1).Replace('\\', '/');
+                            string MapFolder = ActiveMultiplayerFolder.Substring(ContentRootDirectory.Length + 1);
+                            MapFolder = MapFolder.Substring(0, MapFolder.Length - "Maps/Multiplayer/".Length);
+                            string FilePath = ActiveFile.Substring(RootDirectory.Length + "Multiplayer/".Length).Replace('\\', '/');
                             FilePath = FilePath.Substring(0, FilePath.Length - 4);
                             string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
                             FileName = FileName.Substring(0, FileName.Length - 4);
@@ -89,7 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     bool MissionFound = false;
                     foreach (MissionInfo UnlockedMission in ListUnlockedMission)
                     {
-                        if (ActiveMission == UnlockedMission.MapPath.Substring(ActiveModName.Length + 1))
+                        if (ActiveMission == UnlockedMission.MapPath)
                         {
                             MissionFound = true;
                         }
@@ -207,12 +205,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
 
-            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+            sprHighlight = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Select Highlight");
 
-            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top Large");
-            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Extra Frame");
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
+            sprFrameTop = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Top Large");
+            sprFrameDescription = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Bar");
 
             float Ratio = Constants.Height / 2160f;
             PanelY = (int)(510 * Ratio);
@@ -279,7 +277,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (MapInfoToSelect.IsLoaded)
                 return;
 
-            FileStream FS = new FileStream("Content/Maps/" + MapInfoToSelect.MapModName + "/" + MapInfoToSelect.MapPath + ".pem", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + MapInfoToSelect.MapModName + "/Maps/Multiplayer/" + MapInfoToSelect.MapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

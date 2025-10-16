@@ -35,7 +35,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsTripleThunder, GUIRootPathUnits }, "Triple Thunder/Characters/", new string[] { ".peu" }, typeof(UnitTripleThunderEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsTripleThunder, EditorHelper.GUIRootPathUnits }, "Triple Thunder/Characters/", new string[] { ".peu" }, typeof(UnitTripleThunderEditor))
             };
 
             return Info;
@@ -157,7 +157,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         private void btnAddWeapon_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AddWeapon;
-            IEnumerable<ItemContainer> Items = GetItemsByRoot(GUIRootPathTripleThunderWeapons);
+            IEnumerable<ItemContainer> Items = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathTripleThunderWeapons);
             MenuFilter OutMenu = new MenuFilter();
             OutMenu.ListItem = new Dictionary<string, string>();
 

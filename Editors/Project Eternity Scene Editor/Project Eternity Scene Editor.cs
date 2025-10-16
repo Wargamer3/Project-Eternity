@@ -59,7 +59,7 @@ namespace ProjectEternity.Editors.SceneEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathScenes }, "Scenes/", new string[] { ".pes" }, typeof(SceneEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathScenes }, "Scenes/", new string[] { ".pes" }, typeof(SceneEditor))
             };
         }
 

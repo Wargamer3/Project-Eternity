@@ -46,8 +46,8 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackgrounds2D, GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 2D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor2D)),
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackgroundSprites, GUIRootPathAnimationsBackground2DUsableItems, GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Background Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBackgrounds2D, EditorHelper.GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 2D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor2D)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBackgroundSprites, EditorHelper.GUIRootPathAnimationsBackground2DUsableItems, EditorHelper.GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Background Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
             };
         }
 
@@ -88,7 +88,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         private void btnAddBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Sprite;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackground2DUsableItems));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackground2DUsableItems));
         }
 
         private void btnRemoveSprite_Click(object sender, EventArgs e)

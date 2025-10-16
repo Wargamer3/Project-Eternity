@@ -224,7 +224,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll));
         }
 
         private void btnDeleteBattleAnimationBackground_Click(object sender, EventArgs e)

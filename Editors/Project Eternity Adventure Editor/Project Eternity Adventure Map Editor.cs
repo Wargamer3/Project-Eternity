@@ -50,8 +50,8 @@ namespace ProjectEternity.Editors.AdventureEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAdventureMaps }, "Adventure/Maps/", new string[] {".am" }, typeof(AdventureMapEditor)),
-                new EditorInfo(new string[] { GUIRootPathAdventureRessources }, "Adventure/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAdventureMaps }, "Adventure/Maps/", new string[] {".am" }, typeof(AdventureMapEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAdventureRessources }, "Adventure/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
             };
 
             return Info;
@@ -271,7 +271,7 @@ namespace ProjectEternity.Editors.AdventureEditor
         private void btnAddImage_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Images;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAdventureRessources));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAdventureRessources));
         }
 
         private void btnRemoveImage_Click(object sender, EventArgs e)

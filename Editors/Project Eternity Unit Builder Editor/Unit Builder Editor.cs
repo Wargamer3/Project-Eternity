@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsBuilder, GUIRootPathUnits }, "Deathmatch/Units/Builder/", new string[] { ".peu" }, typeof(UnitBuilderEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsBuilder, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Builder/", new string[] { ".peu" }, typeof(UnitBuilderEditor))
             };
             
             return Info;
@@ -82,7 +82,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitsNormal));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormal));
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -96,7 +96,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void btnSelectOrginalUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.OriginalUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

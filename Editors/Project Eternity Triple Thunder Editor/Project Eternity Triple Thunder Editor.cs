@@ -73,8 +73,8 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathTripleThunderMaps }, "Triple Thunder/Maps/", new string[] {".ttm" }, typeof(TripleThunderMapEditor)),
-                new EditorInfo(new string[] { GUIRootPathTripleThunderRessources }, "Triple Thunder/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathTripleThunderMaps }, "Triple Thunder/Maps/", new string[] {".ttm" }, typeof(TripleThunderMapEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathTripleThunderRessources }, "Triple Thunder/Ressources/",new string[] { ".xnb" }, typeof(ProjectEternityBitmapAnimationEditor))
             };
 
             return Info;
@@ -488,7 +488,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         private void btnAddImage_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Images;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderRessources));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderRessources));
         }
 
         private void btnRemoveImage_Click(object sender, EventArgs e)
@@ -764,7 +764,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         private void tsmBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Background;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackgroundsAll));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll));
         }
 
         private void tsmProperties_Click(object sender, EventArgs e)

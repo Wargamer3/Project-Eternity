@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private void btnSetTexture_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem("Animations/Sprites", "Select a Sprite to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Animations/Sprites", "Select a Sprite to use", false));
         }
 
         private void btnNoPlaceholder_Click(object sender, EventArgs e)
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             //Show the user a list of sprite to pick.
             if (MarkerViewer.ActiveMarker == null)
-                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem("Animations/Sprites", "Select a Sprite to use", false));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Animations/Sprites", "Select a Sprite to use", false));
         }
     }
 }

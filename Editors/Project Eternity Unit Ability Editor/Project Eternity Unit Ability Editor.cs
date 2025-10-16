@@ -41,7 +41,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitAbilities }, "Deathmatch/Units/Abilities/", new string[] { ".pes" }, typeof(ProjectEternityUnitAbilityEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitAbilities }, "Deathmatch/Units/Abilities/", new string[] { ".pes" }, typeof(ProjectEternityUnitAbilityEditor))
             };
 
             return Info;

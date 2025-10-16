@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetCardsCreatures, "Select Creatures", true);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsCreatures, "Select Creatures", true);
                     if (Items != null)
                     {
                         string[] ArrayCreatureName = new string[Items.Count];

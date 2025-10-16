@@ -102,26 +102,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
             fntOxanimumLight = Content.Load<SpriteFont>("Fonts/Oxanium Light");
 
-            sprListEntry = Content.Load<Texture2D>("Menus/Lobby/Shop/ContentFrame_Main");
-            sprListEntrySub = Content.Load<Texture2D>("Menus/Lobby/Shop/ContentFrame_Sub");
-            sprArrowDown = Content.Load<Texture2D>("Menus/Lobby/Shop/Arrow Down");
-            sprArrowRight = Content.Load<Texture2D>("Menus/Lobby/Shop/Arrow Right");
-            sprDropDownClose = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Close");
-            sprDropDownOpen = Content.Load<Texture2D>("Menus/Lobby/Shop/Listing_Open");
-            sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
+            sprListEntry = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/ContentFrame_Main");
+            sprListEntrySub = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/ContentFrame_Sub");
+            sprArrowDown = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Arrow Down");
+            sprArrowRight = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Arrow Right");
+            sprDropDownClose = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Listing_Close");
+            sprDropDownOpen = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Listing_Open");
+            sprSelectAUnitToBuy = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Frame Outline");
 
-            sprButtonFolderActive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Active");
-            sprButtonFolderInactive = Content.Load<Texture2D>("Menus/Lobby/Inventory/Folder Button Inactive");
+            sprButtonFolderActive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Folder Button Active");
+            sprButtonFolderInactive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Inventory/Folder Button Inactive");
 
-            sprFrameSelectedPopup = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Selected Popup");
+            sprFrameSelectedPopup = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Frame Selected Popup");
 
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Bar");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Bar");
 
-            sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
-            sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
-            sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
-            sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
+            sprLand = Content.Load<Texture2D>("Deathmatch/Status Screen/Ground");
+            sprSea = Content.Load<Texture2D>("Deathmatch/Status Screen/Sea");
+            sprSky = Content.Load<Texture2D>("Deathmatch/Status Screen/Sky");
+            sprSpace = Content.Load<Texture2D>("Deathmatch/Status Screen/Space");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");

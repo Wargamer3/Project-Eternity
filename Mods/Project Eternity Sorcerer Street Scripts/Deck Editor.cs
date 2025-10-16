@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void btnAddCard_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetCards));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCards));
         }
 
         private void btnRemoveCard_Click(object sender, EventArgs e)

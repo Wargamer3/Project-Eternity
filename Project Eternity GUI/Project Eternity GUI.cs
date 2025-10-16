@@ -63,8 +63,8 @@ namespace ProjectEternity.GUI
             }
 
             SplashScreen.SetStatus("Initializing Editors");
-            BaseEditor.GetItemsByRoot = GetItemsByRoot;
-            BaseEditor.GetItemByKey = GetItemValueByKey;
+            EditorHelper.GetItemsByRoot = GetItemsByRoot;
+            EditorHelper.GetItemByKey = GetItemValueByKey;
             this.SetStyle(ControlStyles.StandardDoubleClick, false);//Disable right double click.
 
             //Place holder to store values for the lookup.

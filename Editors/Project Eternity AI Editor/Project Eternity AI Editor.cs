@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.AIEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAIs }, "AIs/", new string[] { ".peai" }, typeof(AIEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAIs }, "AIs/", new string[] { ".peai" }, typeof(AIEditor))
             };
         }
 

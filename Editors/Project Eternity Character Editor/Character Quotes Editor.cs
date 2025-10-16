@@ -114,7 +114,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnAddVersusQuote_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Pilot;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void btnDeleteVersusQuote_Click(object sender, EventArgs e)
@@ -221,7 +221,7 @@ namespace ProjectEternity.Editors.CharacterEditor
             if (lstQuotes.SelectedIndex >= 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.Portrait;
-                ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathVisualNovelCharacters));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelCharacters));
             }
         }
 

@@ -60,12 +60,15 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.mnuToolBar.SuspendLayout();
             this.gbTileset.SuspendLayout();
             this.gbTileInformation.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuToolBar
@@ -98,6 +101,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbTileset.Controls.Add(this.label2);
+            this.gbTileset.Controls.Add(this.numericUpDown1);
             this.gbTileset.Controls.Add(this.label1);
             this.gbTileset.Controls.Add(this.cboTilesetType);
             this.gbTileset.Location = new System.Drawing.Point(12, 27);
@@ -367,6 +372,22 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tabControl1.TabIndex = 25;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(399, 33);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(66, 20);
+            this.numericUpDown1.TabIndex = 24;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(300, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Animation Frames:";
+            // 
             // ProjectEternityAutotileTilesetPresetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,12 +402,14 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.mnuToolBar.ResumeLayout(false);
             this.mnuToolBar.PerformLayout();
             this.gbTileset.ResumeLayout(false);
+            this.gbTileset.PerformLayout();
             this.gbTileInformation.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -422,5 +445,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         private ComboBox cboBattleAnimationBackground;
         private Button btnEditTerrainTypes;
         private TabControl tabControl1;
+        private Label label2;
+        private NumericUpDown numericUpDown1;
     }
 }

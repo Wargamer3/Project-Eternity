@@ -51,19 +51,19 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         private void btnSetChainLinkSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ChainLink;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites, "Select an image to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites, "Select an image to use", false));
         }
 
         private void btnSetChainEndSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ChainEnd;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites, "Select an image to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites, "Select an image to use", false));
         }
 
         private void btnSetChainStartSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ChainStart;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites, "Select an image to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites, "Select an image to use", false));
         }
 
         private void ChainLinkViewer_MouseMove(object sender, MouseEventArgs e)

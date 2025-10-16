@@ -36,7 +36,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsVehicleTripleThunder, GUIRootPathUnits }, "Triple Thunder/Vehicles/", new string[] { ".peuv" }, typeof(UnitVehiculeTripleThunderEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsVehicleTripleThunder, EditorHelper.GUIRootPathUnits }, "Triple Thunder/Vehicles/", new string[] { ".peuv" }, typeof(UnitVehiculeTripleThunderEditor))
             };
 
             return Info;
@@ -123,13 +123,13 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         private void btnSelectWeapon_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.DefaultStance;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderWeapons));
         }
 
         private void btnAddWeapon_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AddWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderWeapons));
         }
 
         private void btnRemoveWeapon_Click(object sender, EventArgs e)

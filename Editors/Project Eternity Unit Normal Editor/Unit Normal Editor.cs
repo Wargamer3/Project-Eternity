@@ -96,10 +96,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsNormal, GUIRootPathUnits }, "Deathmatch/Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalMapSprites }, "Deathmatch/Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Deathmatch/Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Deathmatch/Units/Normal/Unit Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsNormal, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsNormalMapSprites }, "Deathmatch/Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsNormalUnitSprites }, "Deathmatch/Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsNormalUnitModels }, "Deathmatch/Units/Normal/Unit Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;
@@ -246,7 +246,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
         private void LoadUnit(string UnitPath)
         {
-            Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(21);
+            Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(32);
             UnitNormal LoadedUnit = new UnitNormal(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             frmAttacks.UnitName = Name;
@@ -460,7 +460,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void btnAddPilot_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Pilot;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void btnRemovePilot_Click(object sender, EventArgs e)
@@ -607,7 +607,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             if (lstAnimations.SelectedIndices.Count > 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.Animations;
-                ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimations));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
             }
         }
 
@@ -645,7 +645,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void btnAddAbility_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Abilities;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitAbilities));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitAbilities));
         }
 
         private void btnRemoveAbility_Click(object sender, EventArgs e)

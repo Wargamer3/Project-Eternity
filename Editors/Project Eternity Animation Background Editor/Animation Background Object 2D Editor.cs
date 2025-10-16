@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackground2DObject, GUIRootPathAnimationsBackground2DUsableItems }, "Animations/Background Objects 2D/", new string[] { ".pebo" }, typeof(BackgroundObject2DEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBackground2DObject, EditorHelper.GUIRootPathAnimationsBackground2DUsableItems }, "Animations/Background Objects 2D/", new string[] { ".pebo" }, typeof(BackgroundObject2DEditor)),
             };
         }
 
@@ -119,7 +119,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         private void tsmSetBackgroundImage_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Background;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundSprites, "Select a Background to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundSprites, "Select a Background to use", false));
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
@@ -140,7 +140,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         private void btnAddBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.NewLink;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundSprites, "Select a Background to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundSprites, "Select a Background to use", false));
         }
 
         private void btnRemoveBackground_Click(object sender, EventArgs e)

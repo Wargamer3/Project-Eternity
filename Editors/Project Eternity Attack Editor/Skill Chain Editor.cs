@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.AttackSkillChainEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAttackSkillChains }, "Deathmatch/Attacks/Skill Chains/", new string[] { ".pesc" }, typeof(AttackSkillChainEditor), true, null, true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAttackSkillChains }, "Deathmatch/Attacks/Skill Chains/", new string[] { ".pesc" }, typeof(AttackSkillChainEditor), true, null, true)
             };
 
             return Info;

@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapModels);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapModels);
                 if (Items != null)
                 {
                     value = Items[0].Substring(0, Items[0].Length - 4).Substring(20);

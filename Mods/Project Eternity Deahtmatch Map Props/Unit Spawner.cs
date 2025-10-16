@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnits);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(14);
@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCharacters);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters);
 
                     if (Items != null)
                     {

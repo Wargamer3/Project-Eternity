@@ -209,6 +209,11 @@
       <Name>Project Eternity Base Item</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53A1885C-107D-49FD-BA51-50EF05D3CEFE}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
       <Name>Project Eternity Unit</Name>

@@ -46,7 +46,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Deathmatch/Maps/", new string[] { ".pem" }, typeof(ProjectEternityDeathmatchEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaps, EditorHelper.GUIRootPathDeathmatchMaps }, "Deathmatch/Maps/", new string[] { ".pem" }, typeof(ProjectEternityDeathmatchEditor))
             };
 
             return Info;

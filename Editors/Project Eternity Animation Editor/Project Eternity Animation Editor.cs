@@ -81,10 +81,10 @@ namespace ProjectEternity.Editors.AnimationEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAnimations, GUIRootPathVisualNovelCharacters }, "Animations/", new string[] { ".pea" }, typeof(ProjectEternityAnimationEditor)),
-                new EditorInfo(new string[] { GUIRootPathAnimationsSprites }, "Animations/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathAnimationsSpriteSheets }, "Animations/Sprite Sheets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathAnimationsBitmapAnimations }, "Animations/Bitmap Animations/", new string[] { ".png" }, typeof(ProjectEternityBitmapAnimationEditor), false)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimations, EditorHelper.GUIRootPathVisualNovelCharacters }, "Animations/", new string[] { ".pea" }, typeof(ProjectEternityAnimationEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsSprites }, "Animations/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsSpriteSheets }, "Animations/Sprite Sheets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBitmapAnimations }, "Animations/Bitmap Animations/", new string[] { ".png" }, typeof(ProjectEternityBitmapAnimationEditor), false)
             };
 
             return Info;

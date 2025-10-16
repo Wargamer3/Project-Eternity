@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
+using System.Windows.Forms;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Conquest;
-using ProjectEternity.Core.Item;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework.Content.Builder;
 
 namespace ProjectEternity.Editors.UnitConquestEditor
@@ -38,7 +37,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnits, GUIRootPathUnitsConquest }, "Conquest/Units/", new string[] { ".peu" }, typeof(UnitConquestEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnits, EditorHelper.GUIRootPathUnitsConquest }, "Conquest/Units/", new string[] { ".peu" }, typeof(UnitConquestEditor))
             };
 
             return Info;

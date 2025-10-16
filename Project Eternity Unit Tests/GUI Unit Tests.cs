@@ -79,7 +79,7 @@ namespace ProjectEternity.UnitTests
                 Directory.CreateDirectory("Content/" + RessourcePath);
             }
 
-            TestGui.AddEditor(new EditorInfo(new string[] { BaseEditor.GUIRootPathUnitsNormal, BaseEditor.GUIRootPathUnits }, RessourcePath, new string[] { ItemExtention },
+            TestGui.AddEditor(new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsNormal, EditorHelper.GUIRootPathUnits }, RessourcePath, new string[] { ItemExtention },
                 typeof(UnitNormalEditor)));
 
             TestGui.InitGUI();
@@ -98,8 +98,8 @@ namespace ProjectEternity.UnitTests
             Assert.AreEqual(NewNode, NewItemNode);
             Assert.AreEqual(NewItemName, NewItemNode.Text);
 
-            List<ItemContainer> ListContainerUnits = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnits).ToList();
-            List<ItemContainer> ListContainerUnitsNormal = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnitsNormal).ToList();
+            List<ItemContainer> ListContainerUnits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnits).ToList();
+            List<ItemContainer> ListContainerUnitsNormal = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitsNormal).ToList();
 
             Assert.AreEqual(1, ListContainerUnits.Count);
             Assert.AreEqual(1, ListContainerUnitsNormal.Count);
@@ -121,8 +121,8 @@ namespace ProjectEternity.UnitTests
             TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
             TreeNode NewItemNode = TestGui.CreateNewItem(NormalNode); // Create New Item
 
-            ItemContainer ContainerUnits = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnits).First();
-            ItemContainer ContainerUnitsNormal = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnitsNormal).First();
+            ItemContainer ContainerUnits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnits).First();
+            ItemContainer ContainerUnitsNormal = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitsNormal).First();
 
             TestGui.RenameNode(NewItemNode, RenamedItemName);
 
@@ -164,8 +164,8 @@ namespace ProjectEternity.UnitTests
             Assert.AreEqual(NewNode, NewItemNode);
             Assert.AreEqual(NewItemName, NewItemNode.Text);
 
-            List<ItemContainer> ListContainerUnits = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnits).ToList();
-            List<ItemContainer> ListContainerUnitsNormal = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnitsNormal).ToList();
+            List<ItemContainer> ListContainerUnits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnits).ToList();
+            List<ItemContainer> ListContainerUnitsNormal = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitsNormal).ToList();
 
             Assert.AreEqual(1, ListContainerUnits.Count);
             Assert.AreEqual(1, ListContainerUnitsNormal.Count);
@@ -191,8 +191,8 @@ namespace ProjectEternity.UnitTests
 
             TreeNode NewItemNode = NewFolderNode.Nodes.Find(NewItemName, false)[0];
 
-            List<ItemContainer> ListContainerUnits = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnits).ToList();
-            List<ItemContainer> ListContainerUnitsNormal = BaseEditor.GetItemsByRoot(BaseEditor.GUIRootPathUnitsNormal).ToList();
+            List<ItemContainer> ListContainerUnits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnits).ToList();
+            List<ItemContainer> ListContainerUnitsNormal = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnitsNormal).ToList();
             ItemContainer ContainerUnits = ListContainerUnits[0];
             ItemContainer ContainerUnitsNormal = ListContainerUnitsNormal[0];
 

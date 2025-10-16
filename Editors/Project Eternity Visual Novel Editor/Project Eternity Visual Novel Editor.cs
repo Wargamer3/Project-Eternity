@@ -102,10 +102,10 @@ namespace ProjectEternity.Editors.VisualNovelEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathVisualNovel }, "Visual Novels/", new string[] { ".pevn" }, typeof(ProjectEternityVisualNovelEditor)),
-                new EditorInfo(new string[] { GUIRootPathVisualNovelBustPortraits, GUIRootPathVisualNovelCharacters }, "Visual Novels/Bust Portraits/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathVisualNovelPortraits, GUIRootPathVisualNovelCharacters }, "Visual Novels/Portraits/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathVisualNovelBackgrounds }, "Visual Novels/Backgrounds/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVisualNovel }, "Visual Novels/", new string[] { ".pevn" }, typeof(ProjectEternityVisualNovelEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVisualNovelBustPortraits, EditorHelper.GUIRootPathVisualNovelCharacters }, "Visual Novels/Bust Portraits/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVisualNovelPortraits, EditorHelper.GUIRootPathVisualNovelCharacters }, "Visual Novels/Portraits/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVisualNovelBackgrounds }, "Visual Novels/Backgrounds/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false)
             };
 
             return Info;
@@ -879,7 +879,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void btnAddCharacter_Click(object sender, EventArgs e)
         {
-            List<string> Items = ShowContextMenuWithItem(GUIRootPathCharacters, "Chose a new character.");
+            List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters, "Chose a new character.");
 
             if (Items == null || Items.Count == 0)
                 return;
@@ -925,7 +925,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void btnAddAnimation_Click(object sender, EventArgs e)
         {
-            List<string> Items = ShowContextMenuWithItem(GUIRootPathAnimations, "Chose a sprite for the new character.");
+            List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations, "Chose a sprite for the new character.");
 
             if (Items == null || Items.Count == 0)
                 return;
@@ -953,7 +953,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void btnAddExtraPortrait_Click(object sender, EventArgs e)
         {
-            List<string> Items = ShowContextMenuWithItem(GUIRootPathVisualNovelCharacters, "Chose a sprite for the new character.");
+            List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelCharacters, "Chose a sprite for the new character.");
 
             if (Items == null || Items.Count == 0)
                 return;
@@ -1039,7 +1039,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void btnAddBackground_Click(object sender, EventArgs e)
         {
-            List<string> Items = ShowContextMenuWithItem(GUIRootPathVisualNovelBackgrounds);
+            List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelBackgrounds);
 
             if (Items == null)
                 return;

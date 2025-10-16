@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Load()
         {
             NewMap = new DeathmatchMap(new GameModeInfo(), Params);
-            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "\\Maps\\Deathmatch");
+            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "/Deathmatch/Maps");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             MaxItemToDraw = (Constants.Height - 100) / fntArial12.LineSpacing - 1;

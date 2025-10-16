@@ -55,10 +55,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Ratio = Constants.Height / 2160f;
             float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / 7);
 
-            sprExtraFrame = Content.Load<Texture2D>("Menus/Lobby/Extra Frame 2");
+            sprExtraFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame 2");
 
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Scrollbar Bar");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Bar");
 
             MissionScrollbar = new Scrollbar(sprScrollbar, new Vector2(3780 * Ratio, 360 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnScrollbarChange);
 

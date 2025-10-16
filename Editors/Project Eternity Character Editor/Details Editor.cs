@@ -19,13 +19,13 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnSelectPortrait_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Portrait;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovelPortraits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelPortraits));
         }
 
         private void btnAddBustPortrait_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BustPortrait;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovelBustPortraits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelBustPortraits));
         }
 
         private void btnRemoveBustPortrait_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnAddBoxPortrait_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BoxPortrait;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovelPortraits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelPortraits));
         }
 
         private void btnRemoveBoxPortrait_Click(object sender, EventArgs e)

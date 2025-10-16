@@ -57,13 +57,13 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
         private void btnUseAnimatedProjectile_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         private void btnUseTextureProjectile_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureProjectile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites));
         }
 
         private void cboTrailStyle_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -89,13 +89,13 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
         private void btnAnimatedTrail_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationTrail;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         private void btnTextureTrail_Click(object sender, System.EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureTrail;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites));
         }
 
         private void btnConfirm_Click(object sender, System.EventArgs e)

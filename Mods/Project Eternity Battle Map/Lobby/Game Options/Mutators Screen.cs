@@ -84,12 +84,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
 
-            sprHighlight = Content.Load<Texture2D>("Menus/Lobby/Room/Select Highlight");
+            sprHighlight = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Select Highlight");
 
-            sprFrameTop = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Top");
-            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Description");
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Background");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Room/Scrollbar Bar");
+            sprFrameTop = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Top");
+            sprFrameDescription = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Description");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Scrollbar Bar");
             float Ratio = Constants.Height / 2160f;
 
             AvailableMutatorsScrollbar = new Scrollbar(sprScrollbar, new Vector2(LeftPanelX + PanelWidth - 20, PanelY + 30), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 5, OnAvailableMutatorsScrollbarChange);
@@ -97,13 +97,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int ButtonsX = (int)(1912 * Ratio);
             int ButtonsY = (int)(770 * Ratio);
-            AddButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddPressed);
+            AddButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add}}", "Deathmatch/Lobby Menu/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddPressed);
             ButtonsY += (int)(132 * Ratio);
-            AddAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add All}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddAllPressed);
+            AddAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Add All}}", "Deathmatch/Lobby Menu/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnAddAllPressed);
             ButtonsY += (int)(306 * Ratio);
-            RemoveButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemovePressed);
+            RemoveButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove}}", "Deathmatch/Lobby Menu/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemovePressed);
             ButtonsY += (int)(132 * Ratio);
-            RemoveAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove All}}", "Menus/Lobby/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemoveAllPressed);
+            RemoveAllButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Remove All}}", "Deathmatch/Lobby Menu/Room/Button Small", new Vector2(ButtonsX, ButtonsY), 4, 1, Ratio, OnButtonOver, OnRemoveAllPressed);
 
             ArrayMenuButton = new IUIElement[]
             {

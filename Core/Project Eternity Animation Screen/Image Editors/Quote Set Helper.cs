@@ -178,7 +178,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private void btnSelectPortrait_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovelCharacters, "Select a Portrait to use", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelCharacters, "Select a Portrait to use", false));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

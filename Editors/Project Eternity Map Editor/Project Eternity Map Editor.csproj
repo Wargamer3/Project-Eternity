@@ -48,6 +48,9 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
       <Private>False</Private>
     </Reference>
@@ -159,6 +162,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
       <Project>{7EE3C972-F915-4491-99A2-E654E634405F}</Project>
       <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">

@@ -152,11 +152,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
@@ -170,6 +165,11 @@
     <ProjectReference Include="..\Project Eternity Constants\Project Eternity Constants.csproj">
       <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
       <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Game Screen\Project Eternity Game Screen.csproj">

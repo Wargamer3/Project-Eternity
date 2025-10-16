@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVehicles);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVehicles);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(17);

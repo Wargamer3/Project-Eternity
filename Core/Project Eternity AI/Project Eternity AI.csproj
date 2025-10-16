@@ -64,11 +64,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
       <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
       <Name>Project Eternity Base Item</Name>
@@ -77,6 +72,11 @@
     <ProjectReference Include="..\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
       <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
       <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53A1885C-107D-49FD-BA51-50EF05D3CEFE}</Project>
+      <Name>Project Eternity Editor Helper</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

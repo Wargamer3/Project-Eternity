@@ -398,7 +398,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathConquestMaps }, "Conquest/Maps/", new string[] { ".pem" }, typeof(ProjectEternityConquestEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaps, EditorHelper.GUIRootPathConquestMaps }, "Conquest/Maps/", new string[] { ".pem" }, typeof(ProjectEternityConquestEditor))
             };
 
             return Info;

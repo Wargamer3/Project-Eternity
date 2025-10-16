@@ -58,9 +58,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Symbols = CardSymbols.Symbols;
             Icons = IconHolder.Icons;
 
-            sprArrowDown = Content.Load<Texture2D>("Menus/Buttons/Arrow Down");
-            sprIconHuman = Content.Load<Texture2D>("Menus/Buttons/Icon Human");
-            sprIconBot = Content.Load<Texture2D>("Menus/Buttons/Icon Bot");
+            sprArrowDown = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Arrow Down");
+            sprIconHuman = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Icon Human");
+            sprIconBot = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Icon Bot");
         }
 
         public override GameOptionsScreen OpenRoomSettingsScreen()

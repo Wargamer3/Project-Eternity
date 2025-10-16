@@ -341,7 +341,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathSorcererStreetMaps }, "Sorcerer Street/Maps/", new string[] { ".pem" }, typeof(ProjectEternitySorcererStreetEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaps, EditorHelper.GUIRootPathSorcererStreetMaps }, "Sorcerer Street/Maps/", new string[] { ".pem" }, typeof(ProjectEternitySorcererStreetEditor))
             };
 
             return Info;

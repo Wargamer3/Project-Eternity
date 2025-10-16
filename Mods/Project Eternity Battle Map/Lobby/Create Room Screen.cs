@@ -84,9 +84,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldSmaller = Content.Load<SpriteFont>("Fonts/Oxanium Bold Smaller");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Normal");
-            sprInputSmall = Content.Load<Texture2D>("Menus/Lobby/Interactive/Input Small");
-            sprInputLarge = Content.Load<Texture2D>("Menus/Lobby/Interactive/Input Large");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Popup/Popup Normal");
+            sprInputSmall = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Input Small");
+            sprInputLarge = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Input Large");
 
             float Ratio = Constants.Height / 2160f;
             int MenuWidth = (int)(sprBackground.Width * Ratio);
@@ -94,9 +94,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MenuX = Constants.Width / 2 - MenuWidth / 2;
             int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
-            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, Cancel);
-            LockedRoomCheckbox = new TextButton(Content, "", "Menus/Lobby/Interactive/Checkbox", new Vector2(MenuX + 250 * Ratio, MenuY + 318 * Ratio), 4, 1, Ratio, OnButtonOver, null);
+            OKButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}OK}}", "Deathmatch/Lobby Menu/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCreateARoomPressed);
+            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Cancel}}", "Deathmatch/Lobby Menu/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 180 * Ratio)), 4, 1, Ratio, OnButtonOver, Cancel);
+            LockedRoomCheckbox = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Checkbox", new Vector2(MenuX + 250 * Ratio, MenuY + 318 * Ratio), 4, 1, Ratio, OnButtonOver, null);
             LockedRoomCheckbox.CanBeChecked = true;
             LockedRoomCheckbox.CanBeUnChecked = true;
 

@@ -19,19 +19,19 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         private void btnChangeShopSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ShopSprite;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetShopSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetShopSprites));
         }
 
         private void btnChangeMapSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.MapSprite;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetMapSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetMapSprites));
         }
 
         private void btnChange3DModel_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Model;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetCharacterModels));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCharacterModels));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

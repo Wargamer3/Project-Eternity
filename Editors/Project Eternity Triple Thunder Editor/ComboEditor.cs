@@ -55,7 +55,7 @@ namespace ProjectEternity.Editors.ComboEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathTripleThunderCombos }, "Triple Thunder/Combos/", new string[] { ".ttc" }, typeof(ComboEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathTripleThunderCombos }, "Triple Thunder/Combos/", new string[] { ".ttc" }, typeof(ComboEditor))
             };
 
             return Info;
@@ -166,7 +166,7 @@ namespace ProjectEternity.Editors.ComboEditor
         private void btnSelectAnimation_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationName;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Animations", "Select an animation to use", true));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Animations", "Select an animation to use", true));
             DrawTimeline();
         }
 
@@ -206,7 +206,7 @@ namespace ProjectEternity.Editors.ComboEditor
             if (lstComboList.SelectedIndex >= 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.NextComboName;
-                ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderCombos, "Select a combo to import", true));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderCombos, "Select a combo to import", true));
             }
         }
 

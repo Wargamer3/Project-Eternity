@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsMultiForm, GUIRootPathUnits }, "Deathmatch/Units/Multi-Form/", new string[] {".peu" }, typeof(UnitMultiFormEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsMultiForm, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Multi-Form/", new string[] {".peu" }, typeof(UnitMultiFormEditor))
             };
 
             return Info;
@@ -93,7 +93,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitsNormal));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormal));
         }
 
         private void btnRemove_Click(object sender, EventArgs e)

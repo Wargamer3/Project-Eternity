@@ -42,7 +42,7 @@ namespace ProjectEternity.Editors.PartsEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitParts, GUIRootPathUnitStandardParts }, "Deathmatch/Units/Standard Parts/", new string[] { ".pep" }, typeof(ProjectEternityStandardPartEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitParts, EditorHelper.GUIRootPathUnitStandardParts }, "Deathmatch/Units/Standard Parts/", new string[] { ".pep" }, typeof(ProjectEternityStandardPartEditor))
             };
 
             return Info;

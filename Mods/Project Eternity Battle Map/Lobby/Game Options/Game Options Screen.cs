@@ -54,8 +54,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             CubeBackground.Load(Content);
 
-            sprBarLeft = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Left");
-            sprBarMiddle = Content.Load<Texture2D>("Menus/Lobby/Shop/Bar Middle");
+            sprBarLeft = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Bar Left");
+            sprBarMiddle = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Bar Middle");
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
@@ -86,19 +86,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(358 * Ratio);
             int DrawY = (int)(350 * Ratio);
-            GametypeButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Type}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGametypeTabPressed);
+            GametypeButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Type}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGametypeTabPressed);
             DrawX += (int)(520 * Ratio);
-            SelectMapButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Select Map}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnSelectMapTabPressed);
+            SelectMapButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Select Map}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnSelectMapTabPressed);
             DrawX += (int)(520 * Ratio);
-            GameRulesButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Rules}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGameRuleTabPressed);
+            GameRulesButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Game Rules}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnGameRuleTabPressed);
             DrawX += (int)(520 * Ratio);
-            MutatorsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Mutators}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnMutatorTabPressed);
+            MutatorsButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Mutators}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnMutatorTabPressed);
             DrawX += (int)(520 * Ratio);
-            BotsConfigButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Bot Config}}", "Menus/Lobby/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnBotsConfigTabPressed);
+            BotsConfigButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Bot Config}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnBotsConfigTabPressed);
 
             DrawX = (int)(3350 * Ratio);
             DrawY = (int)(114 * Ratio);
-            CloseButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Close}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnClosePressed);
+            CloseButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Close}}", "Deathmatch/Lobby Menu/Interactive/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OnClosePressed);
 
             GametypeButton.CanBeChecked = true;
             SelectMapButton.CanBeChecked = true;

@@ -140,7 +140,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         private void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(ShowContextMenuWithItem(Helper.GetEditorPath()));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(Helper.GetEditorPath()));
         }
 
         private void InitTileset(string TilesetName, bool NewTileset)
@@ -329,7 +329,7 @@ namespace ProjectEternity.Editors.TilesetEditor
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll));
         }
 
         private void btnDeleteBattleAnimationBackground_Click(object sender, EventArgs e)

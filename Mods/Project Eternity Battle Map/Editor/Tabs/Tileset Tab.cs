@@ -395,7 +395,7 @@ namespace ProjectEternity.Editors.MapEditor
         protected virtual void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesets));
         }
 
         private void btnAddNewTileSetAsBackground_Click(object sender, EventArgs e)
@@ -403,7 +403,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (ActiveMap.TileSize.X != 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.TileAsBackground;
-                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesetImages));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesetImages));
             }
         }
 
@@ -471,7 +471,7 @@ namespace ProjectEternity.Editors.MapEditor
         protected virtual void btnAddAutotile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Autotile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapAutotilesPresets));
         }
 
         private void btnRemoveAutotile_Click(object sender, EventArgs e)

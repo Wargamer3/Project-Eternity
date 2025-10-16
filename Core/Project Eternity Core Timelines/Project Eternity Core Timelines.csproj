@@ -111,11 +111,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
       <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
       <Name>Project Eternity Animation Screen</Name>
@@ -124,6 +119,11 @@
     <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
       <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
       <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Game Screen\Project Eternity Game Screen.csproj">

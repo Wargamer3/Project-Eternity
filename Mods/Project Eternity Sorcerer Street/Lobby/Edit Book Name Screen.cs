@@ -44,6 +44,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public EditBookNameScreen(Player ActivePlayer)
         {
             this.ActivePlayer = ActivePlayer;
+            OriginalBookName = "New Book";
             CreateNewBook = true;
         }
 

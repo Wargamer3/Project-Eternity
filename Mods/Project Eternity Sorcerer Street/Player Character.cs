@@ -331,26 +331,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Content != null)
             {
-                string FinalSpriteMapPath = "\\Map Sprites\\" + CharacterPath;
+                string FinalSpriteMapPath = "/Map Sprites/" + CharacterPath;
                 if (!string.IsNullOrEmpty(SpriteMapPath))
-                    FinalSpriteMapPath = "\\Map Sprites\\" + SpriteMapPath;
+                    FinalSpriteMapPath = "/Map Sprites/" + SpriteMapPath;
 
-                string FinalSpriteUnitPath = "\\Shop Sprites\\" + CharacterPath;
+                string FinalSpriteUnitPath = "/Shop Sprites/" + CharacterPath;
                 if (!string.IsNullOrEmpty(SpriteShopPath))
-                    FinalSpriteUnitPath = "\\Shop Sprites\\" + SpriteShopPath;
+                    FinalSpriteUnitPath = "/Shop Sprites/" + SpriteShopPath;
 
-                string UnitDirectory = Path.GetDirectoryName("Content\\Sorcerer Street\\");
+                string UnitDirectory = Path.GetDirectoryName("Content/Sorcerer Street/Characters/");
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + FinalSpriteMapPath + ".xnb"))
                     SpriteMap = Content.Load<Texture2D>(XNADirectory + FinalSpriteMapPath);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Units/Default");
+                    SpriteMap = Content.Load<Texture2D>("Deathmatch/Units/Default");
 
                 if (File.Exists(UnitDirectory + FinalSpriteUnitPath + ".xnb"))
                     SpriteShop = Content.Load<Texture2D>(XNADirectory + FinalSpriteUnitPath);
                 else
-                    SpriteShop = Content.Load<Texture2D>("Units/Default");
+                    SpriteShop = Content.Load<Texture2D>("Deathmatch/Units/Default");
 
                 if (!string.IsNullOrEmpty(Model3DPath))
                 {

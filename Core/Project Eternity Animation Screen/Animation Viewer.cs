@@ -192,7 +192,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public void tsmAnimation_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem("Animations", "Select an animation to import", true));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Animations", "Select an animation to import", true));
         }
 
         public void tsmEditPolygon_Click(object sender, EventArgs e)

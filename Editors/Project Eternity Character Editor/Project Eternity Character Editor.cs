@@ -567,25 +567,25 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnPersonality_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Personality;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterPersonalities));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterPersonalities));
         }
 
         private void btnSetBattleTheme_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SetBattleTheme;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapBGM));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapBGM));
         }
 
         private void btnAceBonus_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AceBonus;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSelectSlave_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Slave;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void dgvTerrainRanks_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -622,37 +622,37 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnSetSkill1_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill1;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSetSkill2_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill2;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSetSkill3_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill3;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSetSkill4_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill4;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSetSkill5_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill5;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnSetSkill6_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill6;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSkills));
         }
 
         private void btnEditLevels1_Click(object sender, EventArgs e)
@@ -710,37 +710,37 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void btnSetSpirit1_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit1;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnSetSpirit2_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit2;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnSetSpirit3_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit3;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnSetSpirit4_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit4;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnSetSpirit5_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit5;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         private void btnSetSpirit6_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spirit6;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSpirits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacterSpirits));
         }
 
         #endregion

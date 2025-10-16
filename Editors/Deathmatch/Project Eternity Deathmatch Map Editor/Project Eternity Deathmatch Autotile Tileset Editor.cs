@@ -58,7 +58,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapAutotilesImages;
+                return EditorHelper.GUIRootPathMapAutotilesImages;
             }
         }
 
@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesPresetsDeathmatch, GUIRootPathMapAutotilesPresets }, "Deathmatch/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternityDeathmatchAutotileTilesetPresetEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapAutotilesPresetsDeathmatch, EditorHelper.GUIRootPathMapAutotilesPresets }, "Deathmatch/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternityDeathmatchAutotileTilesetPresetEditor), true)
             };
 
             return Info;

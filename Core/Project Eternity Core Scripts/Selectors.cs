@@ -24,7 +24,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSFX);
                     if (Items != null)
                     {
                         value = Items[0].Substring(12);
@@ -47,7 +47,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapBGM);
                     if (Items != null)
                     {
                         value = Items[0];
@@ -70,7 +70,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnits);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(14);
@@ -93,7 +93,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCharacters);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters);
 
                     if (Items != null)
                     {
@@ -123,7 +123,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitParts);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitParts);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(14);
@@ -146,7 +146,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBitmapAnimations);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBitmapAnimations);
                     if (Items != null)
                     {
                         value = Path.GetFileNameWithoutExtension(Items[0]);
@@ -169,7 +169,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsSprites);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(27);
@@ -192,7 +192,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovel);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovel);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 5).Substring(22);
@@ -215,7 +215,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVisualNovelBackgrounds);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVisualNovelBackgrounds);
                     if (Items != null)
                     {
                         value = Path.GetFileNameWithoutExtension(Items[0]);
@@ -238,7 +238,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCutscenes);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCutscenes);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(Items[0].LastIndexOf("Cutscenes") + 10);
@@ -261,7 +261,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMaps);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMaps);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(Items[0].LastIndexOf("Maps") + 5);
@@ -284,7 +284,7 @@ namespace ProjectEternity.Core.Scripts
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true);
                     if (Items != null)
                     {
                         List<string> ListForegroundsPath = new List<string>();

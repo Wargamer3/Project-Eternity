@@ -56,7 +56,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapTilesetImages;
+                return EditorHelper.GUIRootPathMapTilesetImages;
             }
         }
 
@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsConquest, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Conquest/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityConquestTilesetPresetEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapTilesetPresetsConquest, EditorHelper.GUIRootPathMapTilesetPresets, EditorHelper.GUIRootPathMapTilesets }, "Conquest/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityConquestTilesetPresetEditor), true)
             };
 
             return Info;

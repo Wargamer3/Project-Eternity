@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks);
 
                 if (Items != null)
                 {

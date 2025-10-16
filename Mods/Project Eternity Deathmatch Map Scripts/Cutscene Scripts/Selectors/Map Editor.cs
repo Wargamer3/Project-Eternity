@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void btnPreviewMap_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Map;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathDeathmatchMaps, "Select a Map", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathDeathmatchMaps, "Select a Map", false));
         }
 
         private void BattleMapViewer_MouseDown(object sender, MouseEventArgs e)
@@ -209,7 +209,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesets));
         }
 
         private void btnAddNewTileSetAsBackground_Click(object sender, EventArgs e)
@@ -217,7 +217,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.TileAsBackground;
-                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesetImages));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesetImages));
             }
         }
 
@@ -355,7 +355,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 TerrainAttribute.ListTileset.Add(NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
                             }
 
-                            ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
+                            ItemInfo Item = EditorHelper.GetItemByKey(EditorHelper.GUIRootPathMapTilesetImages, NewMap.ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName);
 
                             if (Item.Path != null)
                             {
@@ -417,7 +417,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
                                 TilesetPreset NewTileset = TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
-                                string Output = BaseEditor.GetItemPathInRoot(BaseEditor.GUIRootPathMapTilesets, NewTileset.ArrayTilesetInformation[0].TilesetName);
+                                string Output = EditorHelper.GetItemPathInRoot(EditorHelper.GUIRootPathMapTilesets, NewTileset.ArrayTilesetInformation[0].TilesetName);
                                 BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
                                 BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName));
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -58,7 +57,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
 
             public string GetEditorPath()
             {
-                return GUIRootPathMapTilesetImages;
+                return EditorHelper.GUIRootPathMapTilesetImages;
             }
         }
 
@@ -86,7 +85,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetPresetsDeathmatch, GUIRootPathMapTilesetPresets, GUIRootPathMapTilesets }, "Deathmatch/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityTilesetPresetEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapTilesetPresetsDeathmatch, EditorHelper.GUIRootPathMapTilesetPresets, EditorHelper.GUIRootPathMapTilesets }, "Deathmatch/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityTilesetPresetEditor), true)
             };
 
             return Info;

@@ -30,7 +30,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathCharacterPersonalities }, "Deathmatch/Characters/Personalities/", new string[] { ".pecp" }, typeof(ProjectEternityPersonalityEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathCharacterPersonalities }, "Deathmatch/Characters/Personalities/", new string[] { ".pecp" }, typeof(ProjectEternityPersonalityEditor))
             };
 
             return Info;

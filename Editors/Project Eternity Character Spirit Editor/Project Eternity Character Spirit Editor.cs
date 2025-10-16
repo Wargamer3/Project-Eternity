@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.CharacterSpiritEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathCharacterSpirits }, "Deathmatch/Characters/Spirits/", new string[] { ".pecs" }, typeof(ProjectEternityCharacterSpiritEditor), true, null, true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathCharacterSpirits }, "Deathmatch/Characters/Spirits/", new string[] { ".pecs" }, typeof(ProjectEternityCharacterSpiritEditor), true, null, true)
             };
 
             return Info;

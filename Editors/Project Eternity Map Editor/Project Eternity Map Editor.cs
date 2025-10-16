@@ -121,11 +121,11 @@ namespace ProjectEternity.Editors.MapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMapTilesetImages, GUIRootPathMapTilesets }, "Assets/Tilesets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMapAutotilesImages }, "Assets/Autotiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMaDestroyableTilesImages }, "Assets/Destroyable Tiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Assets/BGM/", new string[] { ".mp3", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false),
-                new EditorInfo(new string[] { GUIRootPathMapModels }, "Assets/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapTilesetImages, EditorHelper.GUIRootPathMapTilesets }, "Assets/Tilesets/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapAutotilesImages }, "Assets/Autotiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaDestroyableTilesImages }, "Assets/Destroyable Tiles/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapBGM }, "Assets/BGM/", new string[] { ".mp3", ".ogg" }, typeof(ProjectEternityMusicPlayerEditor), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapModels }, "Assets/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
             };
 
             return Info;

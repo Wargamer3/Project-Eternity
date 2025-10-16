@@ -42,13 +42,13 @@ namespace ProjectEternity.EditorsExtensions.VisualNovelEditorExtension
         private void btnChangeBGM_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BGM;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapBGM));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapBGM));
         }
 
         private void btnChangeSFX_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SFX;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSFX));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSFX));
         }
 
         private string GetBGMScriptPath()

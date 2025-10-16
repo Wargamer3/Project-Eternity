@@ -138,7 +138,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnAddSecondaryAttack_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SecondaryAttack;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks));
         }
 
         private void btnRemoveSecondaryAttack_Click(object sender, EventArgs e)
@@ -152,7 +152,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnAddChargedAttack_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ChargedAttack;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks));
         }
 
         private void btnRemoveChargedAttack_Click(object sender, EventArgs e)
@@ -166,25 +166,25 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnSetSkill1_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill1;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackAttributes));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackAttributes));
         }
 
         private void btnSetSkill2_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill2;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackAttributes));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackAttributes));
         }
 
         private void btnSetSkill3_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill3;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackAttributes));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackAttributes));
         }
 
         private void btnSetSkill4_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill4;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackAttributes));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttackAttributes));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

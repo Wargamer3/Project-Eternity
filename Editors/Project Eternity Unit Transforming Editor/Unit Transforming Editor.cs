@@ -39,7 +39,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsTransforming, GUIRootPathUnits }, "Deathmatch/Units/Transforming/", new string[] { ".peu" }, typeof(UnitTransformingEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsTransforming, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Transforming/", new string[] { ".peu" }, typeof(UnitTransformingEditor))
             };
 
             return Info;
@@ -95,7 +95,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitsNormal));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormal));
         }
 
         private void btnRemove_Click(object sender, EventArgs e)

@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.SorcererStreetSkillChainEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetSkillChains }, "Sorcerer Street/Skill Chains/", new string[] { ".pesc" }, typeof(SorcererStreetSkillChainEditor), true, null, true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetSkillChains }, "Sorcerer Street/Skill Chains/", new string[] { ".pesc" }, typeof(SorcererStreetSkillChainEditor), true, null, true)
             };
 
             return Info;

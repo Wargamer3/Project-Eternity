@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsTripleThunder, "Select Robot", false);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsTripleThunder, "Select Robot", false);
                 if (Items != null)
                 {
                     value = Items[0].Substring(0, Items[0].Length - 4).Substring(29);
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsVehicleTripleThunder, "Select Vehicle", false);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsVehicleTripleThunder, "Select Vehicle", false);
                 if (Items != null)
                 {
                     value = Items[0].Substring(0, Items[0].Length - 5).Substring(38);
@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathTripleThunderWeapons, "Select every Weapons to use", true);
+                List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderWeapons, "Select every Weapons to use", true);
 
                 if (Items != null)
                 {

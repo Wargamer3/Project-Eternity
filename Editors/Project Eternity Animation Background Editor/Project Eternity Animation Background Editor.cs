@@ -56,8 +56,8 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackgrounds3D, GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 3D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor)),
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackground3DModels, GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBackgrounds3D, EditorHelper.GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 3D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathAnimationsBackground3DModels, EditorHelper.GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
             };
         }
 
@@ -127,7 +127,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
         private void btnLoadNewBackgroundType_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Sprite;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackground3DUsableItems));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackground3DUsableItems));
         }
 
         private void btnCreateNewProp_Click(object sender, EventArgs e)

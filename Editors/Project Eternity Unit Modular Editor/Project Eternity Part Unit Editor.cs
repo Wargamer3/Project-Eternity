@@ -643,7 +643,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddHeadAntena_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.HeadAntena;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Head/Antena"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Head/Antena"));
         }
 
         private void btnRemoveHeadAntena_Click(object sender, EventArgs e)
@@ -713,7 +713,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddHeadEars_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.HeadEars;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Head/Ears"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Head/Ears"));
         }
 
         private void btnRemoveHeadEars_Click(object sender, EventArgs e)
@@ -783,7 +783,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddHeadEyes_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.HeadEyes;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Head/Eyes"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Head/Eyes"));
         }
 
         private void btnRemoveHeadEyes_Click(object sender, EventArgs e)
@@ -853,7 +853,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddHeadCPU_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.HeadCPU;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Head/CPU"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Head/CPU"));
         }
 
         private void btnRemoveHeadCPU_Click(object sender, EventArgs e)
@@ -927,7 +927,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddTorsoCore_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TorsoCore;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Torso/Core"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Torso/Core"));
         }
 
         private void btnRemoveTorsoCore_Click(object sender, EventArgs e)
@@ -997,7 +997,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddTorsoRadiator_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TorsoRadiator;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Torso/Radiator"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Torso/Radiator"));
         }
 
         private void btnRemoveTorsoRadiator_Click(object sender, EventArgs e)
@@ -1067,7 +1067,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddTorsoShell_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TorsoShell;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Torso/Shell"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Torso/Shell"));
         }
 
         private void btnRemoveTorsoShell_Click(object sender, EventArgs e)
@@ -1141,7 +1141,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddArmShell_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ArmShell;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Arm/Shell"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Arm/Shell"));
         }
 
         private void btnRemoveArmShell_Click(object sender, EventArgs e)
@@ -1211,7 +1211,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddArmStrength_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.ArmStrength;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Arm/Strength"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Arm/Strength"));
         }
 
         private void btnRemoveArmStrength_Click(object sender, EventArgs e)
@@ -1285,7 +1285,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddLegsShell_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.LegsShell;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Legs/Shell"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Legs/Shell"));
         }
 
         private void btnRemoveLegsShell_Click(object sender, EventArgs e)
@@ -1355,7 +1355,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddLegsStrength_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.LegsStrength;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Legs/Strength"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Legs/Strength"));
         }
 
         private void btnRemoveLegsStrength_Click(object sender, EventArgs e)
@@ -1461,7 +1461,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
             if (lstWeaponSlots.SelectedIndex >= 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.Weapon;
-                ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttacks));
+                ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAttacks));
             }
         }
 

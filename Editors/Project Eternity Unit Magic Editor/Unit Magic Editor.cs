@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathUnitsMagic, GUIRootPathUnits }, "Deathmatch/Units/Magic/", new string[] { ".peu" }, typeof(UnitMagicEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathUnitsMagic, EditorHelper.GUIRootPathUnits }, "Deathmatch/Units/Magic/", new string[] { ".peu" }, typeof(UnitMagicEditor))
             };
             
             return Info;
@@ -78,13 +78,13 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void btnSelectOrginalUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.OriginalUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnAddSpell_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Spell;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSpells));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSpells));
         }
 
         private void btnRemoveSpell_Click(object sender, EventArgs e)

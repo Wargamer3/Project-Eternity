@@ -43,7 +43,7 @@ namespace ProjectEternity.Editors.CardEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetCardsSpells, GUIRootPathSorcererStreetCards }, "Sorcerer Street/Spell Cards/", new string[] { ".pec" }, typeof(SpellCardEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetCardsSpells, EditorHelper.GUIRootPathSorcererStreetCards }, "Sorcerer Street/Spell Cards/", new string[] { ".pec" }, typeof(SpellCardEditor)),
             };
 
             return Info;
@@ -103,13 +103,13 @@ namespace ProjectEternity.Editors.CardEditor
         private void btnSetSkill_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSorcererStreetSpells));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetSpells));
         }
 
         private void btnSetActivationAnimation_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Animation;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimations));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

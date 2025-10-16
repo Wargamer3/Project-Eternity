@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathSorcererStreetCardsSpells);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsSpells);
                     if (Items != null)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 4).Substring(39);

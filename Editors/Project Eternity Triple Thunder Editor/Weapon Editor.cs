@@ -42,7 +42,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathTripleThunderWeapons }, "Triple Thunder/Weapons/", new string[] { ".ttw" }, typeof(WeaponEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathTripleThunderWeapons }, "Triple Thunder/Weapons/", new string[] { ".ttw" }, typeof(WeaponEditor)),
             };
 
             return Info;
@@ -161,7 +161,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SkillChain;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderSkillChains));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathTripleThunderSkillChains));
         }
 
         private void ckUseRangedProperties_CheckedChanged(object sender, EventArgs e)

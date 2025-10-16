@@ -41,7 +41,7 @@ namespace ProjectEternity.Editors.TripleThunderSkillChainEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathTripleThunderSkillChains }, "Triple Thunder/Skill Chains/", new string[] { ".pesc" }, typeof(TripleThunderSkillChainEditor), true, null, true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathTripleThunderSkillChains }, "Triple Thunder/Skill Chains/", new string[] { ".pesc" }, typeof(TripleThunderSkillChainEditor), true, null, true)
             };
 
             return Info;

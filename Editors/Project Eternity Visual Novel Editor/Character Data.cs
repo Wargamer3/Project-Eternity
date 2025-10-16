@@ -23,7 +23,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void btnAddNewCharacter_Click(object sender, EventArgs e)
         {
-            List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathCharacters, "Chose a new character.");
+            List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters, "Chose a new character.");
 
             if (Items == null || Items.Count == 0)
                 return;

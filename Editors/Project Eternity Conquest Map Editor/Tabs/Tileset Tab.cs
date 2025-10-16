@@ -28,13 +28,13 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         protected override void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapTilesets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesets));
         }
 
         protected override void btnAddAutotile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Autotile;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathMapAutotilesPresets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapAutotilesPresets));
         }
     }
 }

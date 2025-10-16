@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Magic;
 
 namespace ProjectEternity.Editors.SpellEditor
 {
@@ -34,7 +33,7 @@ namespace ProjectEternity.Editors.SpellEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSpells }, "Spells/", new string[] { ".pes" }, typeof(SpellEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSpells }, "Spells/", new string[] { ".pes" }, typeof(SpellEditor)),
             };
         }
 

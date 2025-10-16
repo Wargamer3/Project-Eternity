@@ -705,7 +705,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddHead_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Head;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Head"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Head"));
         }
 
         private void btnRemoveHead_Click(object sender, EventArgs e)
@@ -775,7 +775,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddTorso_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Torso;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Torso"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Torso"));
         }
 
         private void btnRemoveTorso_Click(object sender, EventArgs e)
@@ -845,7 +845,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddLeftArm_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.LeftArm;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Arm"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Arm"));
         }
 
         private void btnRemoveLeftArm_Click(object sender, EventArgs e)
@@ -915,7 +915,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddRightArm_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.RightArm;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Arm"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Arm"));
         }
 
         private void btnRemoveRightArm_Click(object sender, EventArgs e)
@@ -985,7 +985,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddLegs_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Legs;
-            ListMenuItemsSelected(ShowContextMenuWithItem("Units/Modular/Legs"));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem("Units/Modular/Legs"));
         }
 
         private void btnRemoveLegs_Click(object sender, EventArgs e)
@@ -1059,7 +1059,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private void btnAddPilot_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Pilot;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathCharacters));
         }
 
         private void btnRemovePilot_Click(object sender, EventArgs e)

@@ -43,7 +43,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathBuildingsConquest, GUIRootPathBuildings }, "Conquest/Buildings/", new string[] { ".peb" }, typeof(UnitBuilderEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathBuildingsConquest, EditorHelper.GUIRootPathBuildings }, "Conquest/Buildings/", new string[] { ".peb" }, typeof(UnitBuilderEditor))
             };
             
             return Info;
@@ -112,7 +112,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void btnAdd_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Unit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnitsConquest));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsConquest));
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -126,7 +126,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void btnSelectOrginalUnit_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.OriginalUnit;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathUnits));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnits));
         }
 
         private void btnImportMapSprite_Click(object sender, EventArgs e)

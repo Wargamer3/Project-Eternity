@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void btnPreviewMap_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathDeathmatchMaps, "Select a Map", false));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathDeathmatchMaps, "Select a Map", false));
         }
 
         private void BattleMapViewer_MouseDown(object sender, MouseEventArgs e)

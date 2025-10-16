@@ -19,19 +19,19 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void btnMapSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.MapSprite;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsNormalMapSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormalMapSprites));
         }
 
         private void btnChangeUnitSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.UnitSprite;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsNormalUnitSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormalUnitSprites));
         }
 
         private void btnChange3DModel_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Model;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsNormalUnitModels));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathUnitsNormalUnitModels));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

@@ -1,7 +1,7 @@
 ﻿using ProjectEternity.Core.Editor;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Editors.AnimationEditor
 {
@@ -18,7 +18,7 @@ namespace ProjectEternity.Editors.AnimationEditor
 
         private void btnSelectBackgroundPreview_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimationsBackgroundsAll));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

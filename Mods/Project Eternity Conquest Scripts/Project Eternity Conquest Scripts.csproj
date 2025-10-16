@@ -76,6 +76,11 @@
       <Name>Project Eternity Cutscene</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
       <Name>Project Eternity Game Screen</Name>
@@ -84,11 +89,6 @@
     <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
       <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
       <Name>Project Eternity Graphics</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">

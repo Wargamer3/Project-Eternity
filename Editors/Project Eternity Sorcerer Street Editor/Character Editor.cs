@@ -44,10 +44,10 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetCharacters }, "Sorcerer Street/Characters/", new string[] { ".pec" }, typeof(CharacterEditor), true, null, true),
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetShopSprites }, "Sorcerer Street/Shop Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetMapSprites }, "Sorcerer Street/Map Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathSorcererStreetCharacterModels }, "Sorcerer Street/Models/Characters/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetCharacters }, "Sorcerer Street/Characters/", new string[] { ".pec" }, typeof(CharacterEditor), true, null, true),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetShopSprites }, "Sorcerer Street/Shop Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetMapSprites }, "Sorcerer Street/Map Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathSorcererStreetCharacterModels }, "Sorcerer Street/Models/Characters/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;

@@ -42,7 +42,6 @@ namespace ProjectEternity.Core.Editor
 
         #endregion
 
-
         /// <summary>
         /// Constructor is private, because this is a singleton class:
         /// client controls should use the public AddRef method instead.

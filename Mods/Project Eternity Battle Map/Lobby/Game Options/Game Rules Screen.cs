@@ -63,8 +63,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprFrame = Content.Load<Texture2D>("Menus/Lobby/Room/GameRules Frame");
-            sprInputSmall = Content.Load<Texture2D>("Menus/Lobby/Interactive/Input Small");
+            sprFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/GameRules Frame");
+            sprInputSmall = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Input Small");
 
             float Ratio = Constants.Height / 2160f;
 
@@ -119,8 +119,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             NumericUpDown NewNumericUpDown = new NumericUpDown(fntOxanimumBold, sprPixel, sprPixel, new Vector2(Position.X + 20 * Ratio, Position.Y + 10 * Ratio), new Vector2(Size.X - 40 * Ratio, Size.Y - 20 * Ratio), Ratio, Confirm);
 
-            TextButton ButtonUp = new TextButton(Content, "", "Menus/Lobby/Interactive/Arrow Up", new Vector2(Position.X + Size.X + 112 / 2 * Ratio, Position.Y + 56 / 2 * Ratio), 4, 1, Ratio, OnButtonOver, () => { OnConfirmUpButton(NewNumericUpDown); });
-            TextButton ButtonDown = new TextButton(Content, "", "Menus/Lobby/Interactive/Arrow Down", new Vector2(Position.X + Size.X + 112 / 2 * Ratio, Position.Y + 56 / 2 * Ratio + Size.Y / 2), 4, 1, Ratio, OnButtonOver, () => { OnConfirmDownButton(NewNumericUpDown); });
+            TextButton ButtonUp = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Arrow Up", new Vector2(Position.X + Size.X + 112 / 2 * Ratio, Position.Y + 56 / 2 * Ratio), 4, 1, Ratio, OnButtonOver, () => { OnConfirmUpButton(NewNumericUpDown); });
+            TextButton ButtonDown = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Arrow Down", new Vector2(Position.X + Size.X + 112 / 2 * Ratio, Position.Y + 56 / 2 * Ratio + Size.Y / 2), 4, 1, Ratio, OnButtonOver, () => { OnConfirmDownButton(NewNumericUpDown); });
 
             NewNumericUpDown.ButtonUp = ButtonUp;
             NewNumericUpDown.ButtonDown = ButtonDown;

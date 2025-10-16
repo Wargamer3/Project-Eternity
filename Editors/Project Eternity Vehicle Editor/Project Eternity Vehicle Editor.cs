@@ -41,8 +41,8 @@ namespace ProjectEternity.Editors.VehicleEditor
         {
             return new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathVehicles }, "Deathmatch/Vehicles/", new string[] { ".pev" }, typeof(VehicleEditor)),
-                new EditorInfo(new string[] { GUIRootPathVehicleSprites }, "Deathmatch/Vehicles/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVehicles }, "Deathmatch/Vehicles/", new string[] { ".pev" }, typeof(VehicleEditor)),
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathVehicleSprites }, "Deathmatch/Vehicles/Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
             };
         }
 
@@ -109,7 +109,7 @@ namespace ProjectEternity.Editors.VehicleEditor
         private void btnSelectVehicleSprite_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.VehicleSprite;
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathVehicleSprites));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathVehicleSprites));
         }
 
         private void btnAddSeat_Click(object sender, EventArgs e)
