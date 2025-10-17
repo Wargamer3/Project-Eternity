@@ -241,6 +241,8 @@ namespace ProjectEternity.GUI
             ItemsByLogicPath = (Lookup<string, ItemContainer>)ListEditor.SelectMany(pair => pair.Value,
                                    (pair, Value) => new { pair.Key, Value })
                        .ToLookup(pair => pair.Key, pair => pair.Value);
+
+            tvItems.Sort();
         }
 
         public void AddEditor(EditorInfo Info)
