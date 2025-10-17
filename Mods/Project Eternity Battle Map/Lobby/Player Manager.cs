@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string OnlinePlayerID = string.Empty;
         public static string OnlinePlayerName = string.Empty;
         public static int OnlinePlayerLevel = 0;
+        //Dummy values used for menus, not be used inside a game.
         public static Dictionary<string, Unit> DicUnitType;
         public static Dictionary<string, BaseSkillRequirement> DicRequirement;
         public static Dictionary<string, BaseEffect> DicEffect;

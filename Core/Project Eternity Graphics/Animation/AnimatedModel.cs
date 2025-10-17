@@ -20,6 +20,9 @@ namespace ProjectEternity.Core.Graphics
         private float AnimationTimeElapsed = 0;
         public bool IsLooping = false;
 
+        public Model Model => OriginalModel;
+        public List<AnimationBone> Bones => ListBone;
+
         public AnimatedModel(string FilePath)
         {
             this.FilePath = FilePath;
@@ -142,6 +145,19 @@ namespace ProjectEternity.Core.Graphics
                     }
                 }
             }
+        }
+
+        public Matrix[] PrepareForCustomDraw()
+        {
+            Matrix[] ArrayBoneTransform = new Matrix[AnimationInformation.ListBoneIndex.Count];
+
+            for (int B = 0; B < AnimationInformation.ListBoneIndex.Count; B++)
+            {
+                AnimationBone ActiveBone = ListBone[AnimationInformation.ListBoneIndex[B]];
+                ArrayBoneTransform[B] = ActiveBone.InverseTransform * ActiveBone.AbsoluteTransform;
+            }
+
+            return ArrayBoneTransform;
         }
 
         public void Draw(Matrix View, Matrix Projection, Matrix World)
