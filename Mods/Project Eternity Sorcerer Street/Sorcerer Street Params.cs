@@ -175,7 +175,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public SorcererStreetBattleContext(SorcererStreetBattleContext GlobalContext)
-            :this()
+            : this()
         {
         }
 
@@ -187,11 +187,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Defender.Reset();
             ListBoostCreature.Clear();
             ListActivatedEffect.Clear();
+            ListBattlePanelHolder = null;
+            DefenderTerrain = null;
+            Background = null;
         }
 
         public void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
         {
+            this.Invader = Invader;
             SelfCreature = Invader;
+            this.Defender = Defender;
             OpponentCreature = Defender;
 
             foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicSkillActivation)

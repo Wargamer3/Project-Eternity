@@ -53,14 +53,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Map.MovementAnimation.Count == 0)
             {
-                if (Movement > 0)
-                {
-                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
-                }
-                else
+                if (Movement <= 1)
                 {
                     RemoveFromPanelList(this);
                 }
+
+                PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
             }
         }
 
@@ -77,14 +75,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Map.MovementAnimation.Count == 0)
             {
-                if (Movement > 0)
-                {
-                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
-                }
-                else
+                if (Movement <= 1)
                 {
                     RemoveFromPanelList(this);
                 }
+
+                PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
             }
         }
 
@@ -194,6 +190,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             --Movement;
             NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);
 
+            if (Movement == 0 && !ListActionMenuChoice.HasMainPanel)
+            {
+            }
+
             if (Map.OnlineClient != null)
             {
                 Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
@@ -202,6 +202,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
+            if (Movement == 0)
+            {
+                NextTerrain = Map.GetTerrain(PlayerPosition);
+                MoveToNextTerrain();
+                return;
+            }
+
             Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, PlayerPosition, ActivePlayer.GamePiece.Direction);
 
             if (DicNextTerrain.Count == 1)

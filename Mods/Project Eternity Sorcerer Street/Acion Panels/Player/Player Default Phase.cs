@@ -47,6 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     continue;
                 }
 
+                Map.GlobalPlayerContext.SetPlayer(Map.ActivePlayerIndex, Map.ListPlayer[Map.ActivePlayerIndex]);
                 Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
                 UpdateProps(Map, Map.ActivePlayerIndex);
@@ -166,25 +167,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DeleteBattleInformation()
         {
-            Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = null;
-
-            if (Map.GlobalSorcererStreetBattleContext.Invader != null)
-            {
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner = null;
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation = null;
-            }
-            if (Map.GlobalSorcererStreetBattleContext.Defender != null)
-            {
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner = null;
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation = null;
-            }
-
-            Map.GlobalSorcererStreetBattleContext.Invader = null;
-            Map.GlobalSorcererStreetBattleContext.Defender = null;
-
-            Map.GlobalSorcererStreetBattleContext.DefenderTerrain = null;
-
-            Map.GlobalSorcererStreetBattleContext.Background = null;
+            Map.GlobalSorcererStreetBattleContext.Reset();
         }
 
         public override void DoUpdate(GameTime gameTime)

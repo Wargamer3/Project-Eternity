@@ -28,7 +28,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (ActionMenuCursor == 0)
                 {
-                    EnchantHelper.ActivateEnchant(Map.GlobalPlayerContext, EnchantToAdd);
+                    Map.GlobalSorcererStreetBattleContext.Reset();
+
+                    foreach (TerrainSorcererStreet ActiveTerrain in Map.ListSummonedCreature)
+                    {
+                        EnchantHelper.ActivateEnchantOnCreature(Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActiveTerrain.DefendingCreature);
+                    }
+
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
                     RemoveAllSubActionPanels();
                 }

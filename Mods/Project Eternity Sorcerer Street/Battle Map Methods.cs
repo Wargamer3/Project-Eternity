@@ -36,6 +36,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
                 ActionPanelDialogPhase.AddIntrodctionIfAvailable(this);
+                GlobalPlayerContext.SetPlayer(ActivePlayerIndex, ListPlayer[ActivePlayerIndex]);
             }
 
             base.Init();
@@ -196,7 +197,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override Vector3 GetNextPosition(Vector3 WorldPosition, Vector3 Movement)
         {
-            return GetFinalPosition(new Vector3(Movement.X, Movement.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
+            return GetFinalPosition(new Vector3(WorldPosition.X + Movement.X, WorldPosition.Y + Movement.Y, GetNextLayerTile(GetTerrain(WorldPosition), (int)(Movement.X / TileSize.X), (int)(Movement.Y / TileSize.Y), 1f, 15f, out _).Z));
         }
 
         public override Tile3D CreateTile3D(int TilesetIndex, Vector3 WorldPosition, Point Origin, Point TileSize, Point TextureSize, float PositionOffset)

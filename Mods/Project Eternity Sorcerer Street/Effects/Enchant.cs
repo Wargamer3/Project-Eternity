@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return Spell.CanActivate;
         }
 
-        public static void ActivateEnchant( SorcererStreetPlayerContext GlobalPlayerContext, ManualSkill Spell)
+        public static void ActivateEnchant(SorcererStreetPlayerContext GlobalPlayerContext, ManualSkill Spell)
         {
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
@@ -60,6 +60,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
                         {
                             ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalPlayerContext.ActivePlayerIndex;
+                        }
+
+                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                    }
+                }
+            }
+        }
+
+        public static void ActivateEnchantOnCreature(SorcererStreetBattleContext GlobalContext, ManualSkill Spell, CreatureCard SelfCreature)
+        {
+            GlobalContext.SelfCreature.Creature = SelfCreature;
+
+            for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
+            {
+                BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
+
+                ActiveEffect.ExecuteEffect();
+            }
+
+            foreach (BaseSkillActivation Activation in SelfCreature.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            {
+                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                {
+                    BaseEffect ActiveEffect = Activation.ListEffect[E];
+
+                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                    {
+                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                        {
+                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalContext.SelfCreature.PlayerIndex;
                         }
 
                         ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;

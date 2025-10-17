@@ -7,6 +7,9 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -44,6 +47,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private CardSymbols Symbols;
         private IconHolder Icons;
 
+        public Dictionary<string, Unit> DicUnitType;
+        public Dictionary<string, BaseSkillRequirement> DicRequirement;
+        public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
+
         public EditBookCardListFilterScreen(Player ActivePlayer, CardBook ActiveBook, Filters Filter)
         {
             RequireFocus = true;
@@ -56,6 +65,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Symbols = CardSymbols.Symbols;
             Icons = IconHolder.Icons;
+
+            DicUnitType = PlayerManager.DicUnitType;
+            DicRequirement = PlayerManager.DicRequirement;
+            DicEffect = PlayerManager.DicEffect;
+            DicAutomaticSkillTarget = PlayerManager.DicAutomaticSkillTarget;
+            DicManualSkillTarget = PlayerManager.DicManualSkillTarget;
         }
 
         public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, Card LastCard, bool MultipleSelection, bool DrawBackground = true)
@@ -81,6 +96,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
             }
+
+            DicUnitType = PlayerManager.DicUnitType;
+            DicRequirement = PlayerManager.DicRequirement;
+            DicEffect = PlayerManager.DicEffect;
+            DicAutomaticSkillTarget = PlayerManager.DicAutomaticSkillTarget;
+            DicManualSkillTarget = PlayerManager.DicManualSkillTarget;
         }
 
         private void FillCardList(Filters Filter, Card LastCard)
@@ -330,7 +351,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (ActivePlayer == null)
                 {
                     Card SelectedCard = ListFilteredCard[CursorIndex].Card;
-                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     ListSelectedCard.Add(CopyCard);
 
                     RemoveScreen(this);
@@ -340,7 +361,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Card SelectedCard = ListFilteredCard[CursorIndex].Card;
                     if (!ActiveBook.DicCardsByType.ContainsKey(SelectedCard.CardType) || !ActiveBook.DicCardsByType[SelectedCard.CardType].ContainsKey(SelectedCard.Path))
                     {
-                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Card.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                         ActiveBook.AddCard(new CardInfo(CopyCard, 0));
                     }
 

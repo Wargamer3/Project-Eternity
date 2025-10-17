@@ -72,7 +72,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 VisibleDiceValue = Random.Next(MinimumDiceValue, MaximumDiceValue);
             }
 
-
             if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D1) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad1))
             {
                 AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 1));
