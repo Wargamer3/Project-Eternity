@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly CardBook PlayerGlobalBook;
         private CardInfo ActiveCard;
         private CardInfo GlobalBookActiveCard;
-        private AnimatedModel Map3DModel;
+        private AnimatedModelTransparent Map3DModel;
 
         byte OriginalCardQuantityOwned;
         int OriginalTotalCardQuantityOwned;
@@ -60,17 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveCard.Card is CreatureCard)
             {
-                Map3DModel = new AnimatedModel(((CreatureCard)ActiveCard.Card).GamePiece.Unit3DModel);
-
-                foreach (ModelMesh mesh in Map3DModel.Model.Meshes)
-                {
-                    foreach (ModelMeshPart part in mesh.MeshParts)
-                    {
-                        Effect NewEffect = Content.Load<Effect>("Shaders/Default Shader 3D").Clone();
-                        NewEffect.Parameters["ModelTexture"].SetValue(((BasicEffect)part.Effect).Texture);
-                        part.Effect = NewEffect;
-                    }
-                }
+                Map3DModel = new AnimatedModelTransparent(((CreatureCard)ActiveCard.Card).GamePiece.Unit3DModel);
             }
         }
 
@@ -155,11 +145,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.End();
             g.Begin();
 
-            Draw3D(GraphicsDevice, Map3DModel, Matrix.Identity);
-        }
-
-        public void Draw3D(GraphicsDevice GraphicsDevice, AnimatedModel ModelToDraw, Matrix View)
-        {
             var World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(-45)) * Matrix.CreateRotationX(MathHelper.ToRadians(45))
                 * Matrix.CreateScale(2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2 + 140, 0);
             float aspectRatio = GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height;
@@ -171,59 +156,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
 
-            foreach (ModelMesh mesh in ModelToDraw.Model.Meshes)
-            {
-                foreach (ModelMeshPart part in mesh.MeshParts)
-                {
-                    part.Effect.Parameters["ShowAlpha"].SetValue(0f);
-                }
-
-            }
-
-            DrawModel(ModelToDraw, View, Projection, World);
-
-            foreach (ModelMesh mesh in ModelToDraw.Model.Meshes)
-            {
-                foreach (ModelMeshPart part in mesh.MeshParts)
-                {
-                    part.Effect.Parameters["ShowAlpha"].SetValue(1f);
-                }
-            }
-
-            GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-
-            DrawModel(ModelToDraw, View, Projection, World);
-
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-
-        }
-
-        private void DrawModel(AnimatedModel ModelToDraw, Matrix view, Matrix projection, Matrix world)
-        {
-            var model = ModelToDraw.Model;
-            Matrix[] transforms = new Matrix[model.Bones.Count];
-            model.CopyAbsoluteBoneTransformsTo(transforms);
-
-            foreach (ModelMesh ActiveMesh in model.Meshes)
-            {
-                foreach (ModelMeshPart part in ActiveMesh.MeshParts)
-                {
-                    var World = ModelToDraw.Bones[ActiveMesh.ParentBone.Index].AbsoluteTransform * world;
-                    Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(World));
-                    part.Effect.Parameters["WorldInverseTransposeMatrix"].SetValue(worldInverseTransposeMatrix);
-                    part.Effect.Parameters["WorldMatrix"].SetValue(World);
-                    part.Effect.Parameters["ViewMatrix"].SetValue(view);
-                    part.Effect.Parameters["ProjectionMatrix"].SetValue(projection);
-                    part.Effect.Parameters["AmbienceColor"].SetValue(new Vector4(0.0f, 0.0f, 0.0f, 1));
-                    part.Effect.Parameters["DiffuseColor"].SetValue(new Vector4(40000f, 40000f, 40000f, 1));
-                    part.Effect.Parameters["DiffuseLightDirection"].SetValue(new Vector3(-0.1f, -0.1f, -0.9f));
-                }
-
-                ActiveMesh.Draw();
-            }
+            Map3DModel.Draw3D(GraphicsDevice, Matrix.Identity, Projection, World);
         }
     }
 }

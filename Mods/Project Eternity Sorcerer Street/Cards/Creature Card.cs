@@ -144,8 +144,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/" + Path);
 
-                GamePiece.Unit3DModel = new AnimatedModel("Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
-                GamePiece.Unit3DModel.LoadContent(Content);
+                GamePiece.Unit3DModel = AnimatedModelTransparent.Load(Content, "Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
             }
         }
 
@@ -221,7 +220,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprCard = Clone.sprCard;
             if (Clone.GamePiece.Unit3DModel != null)
             {
-                GamePiece.Unit3DModel = new AnimatedModel(Clone.GamePiece.Unit3DModel);
+                GamePiece.Unit3DModel = new AnimatedModelTransparent(Clone.GamePiece.Unit3DModel);
             }
         }
 

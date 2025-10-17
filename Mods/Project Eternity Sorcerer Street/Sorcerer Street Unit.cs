@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D SpriteMap;
         public UnitMap3D Unit3DSprite;
         public string Model3DPath;
-        public AnimatedModel Unit3DModel;
+        public AnimatedModelTransparent Unit3DModel;
         internal UnitStats UnitStat;
 
         public override int Width => 32;

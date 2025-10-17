@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\AnimatedModelTransparent.cs" />
     <Compile Include="Animation\AnimatedModel.cs" />
     <Compile Include="Animation\Animation3D.cs" />
     <Compile Include="Animation\AnimationBone.cs" />
