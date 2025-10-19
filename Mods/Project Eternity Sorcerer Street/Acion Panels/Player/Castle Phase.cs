@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RemoveFromPanelList(this);
 
-                if (MovementRemaining == 0)
+                if (MovementRemaining <= 0)
                 {
                     AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
                 }
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RemoveFromPanelList(this);
 
-                if (MovementRemaining == 0)
+                if (MovementRemaining <= 0)
                 {
                     AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
                 }

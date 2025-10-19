@@ -57,7 +57,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 MaximumDiceValue = EnchantMax;
             }
 
-            EnchantHelper.ActivateOnPlayer(Map.GlobalSorcererStreetBattleContext, ActivePlayer, null, null);
             ForcedDiceValue = ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).DiceValue;
         }
 

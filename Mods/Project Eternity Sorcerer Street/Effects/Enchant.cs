@@ -66,6 +66,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
+
+            List<BaseSkillActivation> DicSkillActivation = GlobalPlayerContext.ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+
+            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+            {
+                ActiveSkill.Activate(GlobalPlayerContext.ActivePlayer.Enchant.Skill.Name);
+            }
         }
 
         public static void ActivateEnchantOnCreature(SorcererStreetBattleContext GlobalContext, ManualSkill Spell, CreatureCard SelfCreature)

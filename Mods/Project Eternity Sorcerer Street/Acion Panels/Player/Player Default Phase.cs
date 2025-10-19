@@ -27,8 +27,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Reset the cursor.
             if (GameScreen.FMODSystem != null && GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemePath && !string.IsNullOrEmpty(Map.sndBattleThemePath))
             {
-                 Map.sndBattleTheme.Stop();
-                 Map.sndBattleTheme.SetLoop(true);
+                Map.sndBattleTheme.Stop();
+                Map.sndBattleTheme.SetLoop(true);
                 Map.sndBattleTheme.PlayAsBGM();
                 GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemePath;
             }
@@ -66,6 +66,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         EnchantHelper.UpdateLifetime(ActivePlayer, SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
                     }
+
+                    ActivePlayer.ClearAbilities();
+                    EnchantHelper.ActivateOnPlayer(Map.GlobalSorcererStreetBattleContext, ActivePlayer, null, null);
                 }
             }
             while (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex < 0);

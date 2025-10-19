@@ -11,7 +11,7 @@
 
         public override void OnReached(SorcererStreetMap Map, int ActivePlayerIndex, int MovementRemaining)
         {
-            if (MovementRemaining == 0)
+            if (MovementRemaining <= 0)
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
             }

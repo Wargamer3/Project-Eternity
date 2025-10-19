@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnReached(SorcererStreetMap Map, int ActivePlayerIndex, int MovementRemaining)
         {
-            if (MovementRemaining == 0)
+            if (MovementRemaining <= 0)
             {
                 if (DefendingCreature == null)
                 {

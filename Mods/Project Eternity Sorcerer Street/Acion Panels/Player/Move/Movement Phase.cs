@@ -190,8 +190,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             --Movement;
             NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);
 
-            if (Movement == 0 && !ListActionMenuChoice.HasMainPanel)
+            if (Movement <= 0 && ListActionMenuChoice.HasMainPanel)
             {
+                RemoveFromPanelList(this);
             }
 
             if (Map.OnlineClient != null)
@@ -202,7 +203,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
-            if (Movement == 0)
+            if (Movement <= 0)
             {
                 NextTerrain = Map.GetTerrain(PlayerPosition);
                 MoveToNextTerrain();
