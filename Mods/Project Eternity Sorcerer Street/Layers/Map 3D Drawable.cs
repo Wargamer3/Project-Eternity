@@ -1343,10 +1343,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetViewMatrix(View);
 
-                    DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
-                        CurrentPosition.X,
-                        CurrentPosition.Z + 1.5f * Map.LayerHeight,
-                        CurrentPosition.Y);
+
+                    List<Player> ListPlayerOnTerrain = FindPlayersOnGrid(DefendingTerrain.DefendingCreature.GamePiece.Position);
+                    if (ListPlayerOnTerrain.Count > 0)
+                    {
+                        DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
+                            CurrentPosition.X + Map.TileSize.X / 2,
+                            CurrentPosition.Z + 1f * Map.LayerHeight,
+                            CurrentPosition.Y + Map.TileSize.Y / 2);
+                    }
+                    else
+                    {
+                        DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.SetPosition(
+                            CurrentPosition.X,
+                            CurrentPosition.Z + 1.5f * Map.LayerHeight,
+                            CurrentPosition.Y);
+                    }
 
                     DefendingTerrain.DefendingCreature.Enchant.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                 }

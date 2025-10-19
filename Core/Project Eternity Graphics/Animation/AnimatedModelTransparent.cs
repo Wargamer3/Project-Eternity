@@ -35,12 +35,15 @@ namespace ProjectEternity.Core.Graphics
             {
                 foreach (ModelMeshPart part in mesh.MeshParts)
                 {
-                    Effect NewEffect = Content.Load<Effect>("Shaders/Default Shader 3D").Clone();
-                    NewEffect.Parameters["ModelTexture"].SetValue(((BasicEffect)part.Effect).Texture);
-                    NewEffect.Parameters["AmbienceColor"].SetValue(AmbienceColor);
-                    NewEffect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
-                    NewEffect.Parameters["DiffuseLightDirection"].SetValue(DiffuseLightDirection);
-                    part.Effect = NewEffect;
+                    if (part.Effect is BasicEffect)
+                    {
+                        Effect NewEffect = Content.Load<Effect>("Shaders/Default Shader 3D").Clone();
+                        NewEffect.Parameters["ModelTexture"].SetValue(((BasicEffect)part.Effect).Texture);
+                        NewEffect.Parameters["AmbienceColor"].SetValue(AmbienceColor);
+                        NewEffect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
+                        NewEffect.Parameters["DiffuseLightDirection"].SetValue(DiffuseLightDirection);
+                        part.Effect = NewEffect;
+                    }
                 }
             }
 
