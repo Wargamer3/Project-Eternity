@@ -194,11 +194,6 @@
       <Name>Project Eternity Battle Map</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mods\Project Eternity Deathmatch Map\Project Eternity Deathmatch Map.csproj">
-      <Project>{24157076-0f9f-4fab-8e32-76b4320c28b9}</Project>
-      <Name>Project Eternity Deathmatch Map</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
       <Name>Project Eternity Base Editor</Name>

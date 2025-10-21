@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.Editors.ImageViewer;
 
 namespace ProjectEternity.Editors.MapEditor
@@ -26,16 +25,10 @@ namespace ProjectEternity.Editors.MapEditor
         //Spawn point related stuff.
         private System.Drawing.Point LastMousePosition;
 
-        private static DeathmatchParams Params;
-
         public ProjectEternityMapEditor()
         {
             InitializeComponent();
             KeyPreview = true;
-            if (Params == null)
-            {
-                Params = new DeathmatchParams(new BattleContext());
-            }
 
             #region cbShowGrid
 
