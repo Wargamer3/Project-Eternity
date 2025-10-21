@@ -30,7 +30,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ListFactionBuilding = new List<BuildingConquest>();
 
-            ConquestSpawnUserControl SpawnControl = new ConquestSpawnUserControl();
+            ExtraTabsUserControl SpawnControl = new ExtraTabsUserControl();
             tabSpawns = SpawnControl.tabControl1.TabPages[1];
 
             cbFactions = SpawnControl.cbBuildingFaction;
@@ -94,9 +94,8 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     int BuildingIndex = lvBuildings.SelectedIndices[0];
 
-                    int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-                    BuildingSpawn NewBuilding = new BuildingSpawn(new BuildingConquest(ListFactionBuilding[BuildingIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)TopLayerIndex);
+                    BuildingSpawn NewBuilding = new BuildingSpawn(new BuildingConquest(ListFactionBuilding[BuildingIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
                     pgBuilding.SelectedObject = NewBuilding;
 
                     NewSpawn(GridX, GridY, TopLayer, NewBuilding);

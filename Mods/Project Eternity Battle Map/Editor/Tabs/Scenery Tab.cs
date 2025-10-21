@@ -97,15 +97,14 @@ namespace ProjectEternity.Editors.MapEditor
         {
             int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
             int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
 
             if (e.Button == MouseButtons.Left)
             {
-                Helper.ReplaceDestructibleTileset(GridX, GridY, TopLayerIndex, ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]]);
+                Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]]);
             }
             else if (e.Button == MouseButtons.Right)
             {
-                Helper.ReplaceDestructibleTileset(GridX, GridY, TopLayerIndex, null);
+                Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, null);
             }
         }
 

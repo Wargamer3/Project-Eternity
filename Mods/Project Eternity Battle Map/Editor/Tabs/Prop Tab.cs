@@ -228,7 +228,6 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (ActiveMap.TileSize.X != 0)
             {
-                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
                 BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
@@ -259,7 +258,7 @@ namespace ProjectEternity.Editors.MapEditor
                     return;
                 }
 
-                ActiveProp = ActiveProp.Copy(new Vector3(X * ActiveMap.TileSize.X + ActiveMap.TileSize.X / 2, Y * ActiveMap.TileSize.Y + ActiveMap.TileSize.Y / 2, 0), TopLayerIndex);
+                ActiveProp = ActiveProp.Copy(new Vector3(X * ActiveMap.TileSize.X + ActiveMap.TileSize.X / 2, Y * ActiveMap.TileSize.Y + ActiveMap.TileSize.Y / 2, 0), BattleMapViewer.SelectedListLayerIndex);
                 pgPropProperties.SelectedObject = ActiveProp;
 
                 TopLayer.ListProp.Add(ActiveProp);
@@ -270,7 +269,6 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (ActiveMap.TileSize.X != 0)
             {
-                int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
                 BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.

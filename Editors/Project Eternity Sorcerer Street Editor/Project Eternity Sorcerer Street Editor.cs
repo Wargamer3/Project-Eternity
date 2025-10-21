@@ -36,6 +36,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ListTab.Add(new EventPointsTab());
                 ListTab.Add(new ScriptsTab());
                 ListTab.Add(new LayerTab());
+                ListTab.Add(new SorcererStreetAreasTab());
                 ListTab.Add(new PropTab());
                 ListTab.Add(new ZoneTab());
 

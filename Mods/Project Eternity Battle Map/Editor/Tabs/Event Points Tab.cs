@@ -385,12 +385,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewSpawnSingleplayer(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
             BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
+                Spawn.Position = new Vector3(X, Y, BattleMapViewer.SelectedListLayerIndex);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListCampaignSpawns.Count; S++)
@@ -416,12 +415,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewSpawnMultiplayer(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
             BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
+                Spawn.Position = new Vector3(X, Y, BattleMapViewer.SelectedListLayerIndex);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
@@ -447,7 +445,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewMapSwitchPoint(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
             BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             MapSwitchPoint OldEventPoint = null;
 
@@ -465,7 +462,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (OldEventPoint == null)
                 {
                     MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
+                    NewMapSwitchPoint.Position = new Vector3(X, Y, BattleMapViewer.SelectedListLayerIndex);
                     TopLayer.ListMapSwitchPoint.Add(NewMapSwitchPoint);
                     pgEventPoints.SelectedObject = NewMapSwitchPoint;
                 }
@@ -482,7 +479,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewTeleporterPoint(int X, int Y, EventPoint Spawn)
         {
-            int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
             BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
             TeleportPoint OldEventPoint = null;
 
@@ -500,7 +496,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (OldEventPoint == null)
                 {
                     TeleportPoint NewMapSwitchPoint = new TeleportPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
+                    NewMapSwitchPoint.Position = new Vector3(X, Y, BattleMapViewer.SelectedListLayerIndex);
                     TopLayer.ListTeleportPoint.Add(NewMapSwitchPoint);
                     pgEventPoints.SelectedObject = NewMapSwitchPoint;
                 }

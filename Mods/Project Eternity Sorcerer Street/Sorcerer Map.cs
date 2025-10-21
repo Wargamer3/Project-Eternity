@@ -107,7 +107,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly SorcererStreetBattleParams SorcererStreetParams;
         public readonly List<string> ListTerrainType = new List<string>();
         public LayerHolderSorcererStreet LayerManager;
-        public List<TerrainSorcererStreet> ListPassedTerrein = new List<TerrainSorcererStreet>();
+        public List<Area> ListArea;
+        public List<TerrainSorcererStreet> ListPassedTerrain;
         public Dictionary<Vector3, TerrainSorcererStreet> DicTemporaryTerrain;//Temporary obstacles
 
         public SorcererStreetMap()
@@ -137,6 +138,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListLocalPlayerInfo = new List<Player>();
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
+            ListArea = new List<Area>();
+            ListPassedTerrain = new List<TerrainSorcererStreet>();
 
             ListTilesetPreset = new List<TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
@@ -242,8 +245,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             MapEnvironment.Save(BW);
 
+            SaveAreas(BW);
+
             FS.Close();
             BW.Close();
+        }
+
+        private void SaveAreas(BinaryWriter BW)
+        {
+            BW.Write((byte)ListArea.Count);
+            foreach (Area ActiveArea in ListArea)
+            {
+                BW.Write(ActiveArea.Name);
+                BW.Write((byte)ActiveArea.ListTerrainInArea.Count);
+                foreach (TerrainSorcererStreet ActiveTile in ActiveArea.ListTerrainInArea)
+                {
+                    BW.Write(ActiveTile.GridPosition.X);
+                    BW.Write(ActiveTile.GridPosition.Y);
+                    BW.Write(ActiveTile.LayerIndex);
+                }
+            }
         }
 
         public override void Load()
@@ -447,10 +468,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             MapEnvironment = new EnvironmentManagerSorcererStreet(BR, this);
 
+            LoadAreas(BR);
+
             BR.Close();
             FS.Close();
 
             TogglePreview(BackgroundOnly);
+        }
+
+        private void LoadAreas(BinaryReader BR)
+        {
+            byte ListAreaCount = BR.ReadByte();
+            ListArea = new List<Area>(ListAreaCount);
+            for (int A = 0; A < ListAreaCount; A++)
+            {
+                string ActiveAreaName = BR.ReadString();
+                byte ListTerrainCount = BR.ReadByte();
+                Area LoadedArea = new Area(ActiveAreaName);
+                LoadedArea.ListTerrainInArea = new List<TerrainSorcererStreet>(ListTerrainCount);
+
+                for (int T = 0; T < ListTerrainCount; T++)
+                {
+                    int GridX = BR.ReadInt32();
+                    int GridY = BR.ReadInt32();
+                    int LayerIndex = BR.ReadInt32();
+
+                    TerrainSorcererStreet FoundTile = LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY];
+                    LoadedArea.ListTerrainInArea.Add(FoundTile);
+                }
+
+                ListArea.Add(LoadedArea);
+            }
         }
 
         protected override TilesetPreset ReadTileset(BinaryReader BR, int Index)
@@ -874,22 +922,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             #endregion
         }
 
-        public TerrainSorcererStreet GetTerrain(Vector3 Position)
+        public TerrainSorcererStreet GetTerrain(Vector3 GridPosition)
         {
-            Position = ConvertToGridPosition(Position);
+            GridPosition = ConvertToGridPosition(GridPosition);
 
-            if (Position.X < 0 || Position.X >= MapSize.X || Position.Y < 0 || Position.Y >= MapSize.Y || Position.Z < 0 || Position.Z >= LayerManager.ListLayer.Count)
+            if (GridPosition.X < 0 || GridPosition.X >= MapSize.X || GridPosition.Y < 0 || GridPosition.Y >= MapSize.Y || GridPosition.Z < 0 || GridPosition.Z >= LayerManager.ListLayer.Count)
             {
                 return null;
             }
 
             TerrainSorcererStreet TemporaryTerrain;
-            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            if (DicTemporaryTerrain.TryGetValue(GridPosition, out TemporaryTerrain))
             {
                 return TemporaryTerrain;
             }
 
-            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
+            return LayerManager.ListLayer[(int)GridPosition.Z].ArrayTerrain[(int)GridPosition.X, (int)GridPosition.Y];
         }
 
         public Vector3 GetNextLayerTile(MovementAlgorithmTile StartingPosition, int GridOffsetX, int GridOffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)

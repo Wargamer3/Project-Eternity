@@ -32,7 +32,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ListFactionUnit = new List<UnitConquest>();
 
-            ConquestSpawnUserControl SpawnControl = new ConquestSpawnUserControl();
+            ExtraTabsUserControl SpawnControl = new ExtraTabsUserControl();
             tabSpawns = SpawnControl.tabControl1.TabPages[0];
 
             cbFactions = SpawnControl.cbFactions;
@@ -98,9 +98,8 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     int UnitIndex = lvUnits.SelectedIndices[0];
 
-                    int TopLayerIndex = BattleMapViewer.GetRealTopLayerIndex(BattleMapViewer.SelectedListLayerIndex);
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-                    UnitSpawn NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)TopLayerIndex);
+                    UnitSpawn NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
                     pgUnit.SelectedObject = NewUnit;
 
                     NewSpawn(GridX, GridY, TopLayer, NewUnit);

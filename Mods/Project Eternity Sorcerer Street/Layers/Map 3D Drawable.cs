@@ -1046,7 +1046,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ActiveTerrain3D.TerrainStyle != Terrain3D.TerrainStyles.Invisible)
                         {
-                            if (Map.ListPassedTerrein.Contains(ActiveLayer.ArrayTerrain[X, Y]))
+                            if (Map.ListPassedTerrain.Contains(ActiveLayer.ArrayTerrain[X, Y]))
                             {
                                 PolygonEffect.Texture = Map.sprActiveCreatureCursor;
                                 PolygonEffect.CurrentTechnique.Passes[0].Apply();

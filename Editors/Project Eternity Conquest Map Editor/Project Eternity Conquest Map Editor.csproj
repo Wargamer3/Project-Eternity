@@ -74,7 +74,7 @@
     <Compile Include="Project Eternity Conquest Tileset Editor.Designer.cs">
       <DependentUpon>Project Eternity Conquest Tileset Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tabs\Buildings Tabs.cs" />
+    <Compile Include="Tabs\Buildings Tab.cs" />
     <Compile Include="Tabs\Scenery Tab.cs" />
     <Compile Include="Tabs\Spawns Tab.cs" />
     <Compile Include="Map Statistics.cs">
@@ -97,11 +97,11 @@
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </Compile>
     <Compile Include="Tabs\Tileset Tab.cs" />
-    <Compile Include="Tabs\Spawn Control.cs">
+    <Compile Include="Tabs\Extra Tabs.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tabs\Spawn Control.Designer.cs">
-      <DependentUpon>Spawn Control.cs</DependentUpon>
+    <Compile Include="Tabs\Extra Tabs.Designer.cs">
+      <DependentUpon>Extra Tabs.cs</DependentUpon>
     </Compile>
     <Compile Include="Building Editor.cs">
       <SubType>Form</SubType>
@@ -133,8 +133,8 @@
     <EmbeddedResource Include="Tile Attributes.resx">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tabs\Spawn Control.resx">
-      <DependentUpon>Spawn Control.cs</DependentUpon>
+    <EmbeddedResource Include="Tabs\Extra Tabs.resx">
+      <DependentUpon>Extra Tabs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Building Editor.resx">
       <DependentUpon>Building Editor.cs</DependentUpon>

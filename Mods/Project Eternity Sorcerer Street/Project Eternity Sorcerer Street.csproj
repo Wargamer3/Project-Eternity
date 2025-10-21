@@ -116,6 +116,7 @@
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Animation Damage Timeline.cs" />
+    <Compile Include="Area.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Battle.cs" />
     <Compile Include="Icon Holder.cs" />

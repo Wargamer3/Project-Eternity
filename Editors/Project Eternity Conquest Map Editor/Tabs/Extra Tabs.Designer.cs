@@ -1,7 +1,7 @@
 ﻿
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
-    partial class ConquestSpawnUserControl
+    partial class ExtraTabsUserControl
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.

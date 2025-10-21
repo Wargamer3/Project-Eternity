@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
             if (ActiveInputManager.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0
-                && (AllTerritory || Map.ListPassedTerrein.Contains(HoverTerrain)))
+                && (AllTerritory || Map.ListPassedTerrain.Contains(HoverTerrain)))
             {
                 AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, HoverTerrain, AllTerritory));
 

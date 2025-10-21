@@ -26,5 +26,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.LayerIndex = LayerIndex;
             this.LayerDepth = LayerDepth;
         }
+
+        public override string ToString()
+        {
+            return GridPosition.X + " - " + GridPosition.Y;
+        }
     }
 }

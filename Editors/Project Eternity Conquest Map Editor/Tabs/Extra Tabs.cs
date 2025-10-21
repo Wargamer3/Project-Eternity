@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
-    public partial class ConquestSpawnUserControl : UserControl
+    public partial class ExtraTabsUserControl : UserControl
     {
-        public ConquestSpawnUserControl()
+        public ExtraTabsUserControl()
         {
             InitializeComponent();
         }

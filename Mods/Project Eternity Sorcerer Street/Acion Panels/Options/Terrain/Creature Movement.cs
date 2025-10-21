@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
             if (ActiveInputManager.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0
-                && (Map.ListPassedTerrein.Contains(HoverTerrain)))
+                && (Map.ListPassedTerrain.Contains(HoverTerrain)))
             {
                 if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).FreeTravel)
                 {
