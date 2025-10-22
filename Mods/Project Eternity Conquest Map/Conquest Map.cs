@@ -286,9 +286,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             FS.Close();
         }
 
-        protected override TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
         {
-            return new ConquestTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+            return TilesetPreset.FromFile("Conquest", TilesetPresetPath, Index);
         }
 
         protected override DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)

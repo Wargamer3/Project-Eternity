@@ -411,36 +411,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     case ItemSelectionChoices.Tile:
                         string TilePath = Items[I];
-                        if (TilePath != null)
+                        if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
                         {
-                            if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
-                                TilesetPreset NewTileset = TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
-                                string Output = EditorHelper.GetItemPathInRoot(EditorHelper.GUIRootPathMapTilesets, NewTileset.ArrayTilesetInformation[0].TilesetName);
-                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
-                                BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName));
+                            string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
+                            TilesetPreset NewTileset = TilesetPreset.FromFile("Deathmatch", Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
+                            string Output = EditorHelper.GetItemPathInRoot(EditorHelper.GUIRootPathMapTilesets, NewTileset.ArrayTilesetInformation[0].TilesetName);
+                            BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
+                            BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + NewTileset.ArrayTilesetInformation[0].TilesetName));
 
-                                cboTiles.Items.Add(Name);
-                                TerrainAttribute.ListTileset.Add(Name);
-                            }
-                            else
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(22);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    return;
-                                }
-                                Microsoft.Xna.Framework.Graphics.Texture2D Tile = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
-
-                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(new TilesetPreset(Name, Tile.Width, Tile.Height, BattleMapViewer.ActiveMap.TileSize.X, BattleMapViewer.ActiveMap.TileSize.Y, BattleMapViewer.ActiveMap.ListTilesetPreset.Count));
-                                BattleMapViewer.ActiveMap.ListTileSet.Add(Tile);
-                                //Add the file name to the tile combo box.
-                                cboTiles.Items.Add(Name);
-                                TerrainAttribute.ListTileset.Add(Name);
-                            }
-
+                            cboTiles.Items.Add(Name);
+                            TerrainAttribute.ListTileset.Add(Name);
                             cboTiles.SelectedIndex = BattleMapViewer.ActiveMap.ListTilesetPreset.Count - 1;
 
                             if (BattleMapViewer.ActiveMap.ListTileSet.Count == 1)

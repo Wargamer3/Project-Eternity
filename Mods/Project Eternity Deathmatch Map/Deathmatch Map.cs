@@ -221,6 +221,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write((int)ActiveTemporaryTerrain.Key.X);
                 BW.Write((int)ActiveTemporaryTerrain.Key.Y);
                 BW.Write((int)ActiveTemporaryTerrain.Key.Z);
+                BW.Write(ActiveTemporaryTerrain.Value.Defense);
+                BW.Write(ActiveTemporaryTerrain.Value.MaxHP);
                 ActiveTemporaryTerrain.Value.ReplacementTerrain.Save(BW);
                 ActiveTemporaryTerrain.Value.ReplacementTile.Save(BW);
             }
@@ -415,13 +417,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int GridX = BR.ReadInt32();
                 int GridY = BR.ReadInt32();
                 int LayerIndex = BR.ReadInt32();
+                int Defense = BR.ReadInt32();
+                int MaxHP = BR.ReadInt32();
                 Terrain ReplacementTerrain = new Terrain(BR, GridX, GridY, TileSize.X, TileSize.Y, LayerIndex, LayerHeight, LayerIndex);
                 DrawableTile ReplacementTile = new DrawableTile(BR, TileSize.X, TileSize.Y);
 
                 var NewTerrain = new DestructibleTerrain();
                 NewTerrain.ReplacementTerrain = ReplacementTerrain;
                 NewTerrain.ReplacementTile = ReplacementTile;
-                NewTerrain.RemainingHP = ListTemporaryTileSet[ReplacementTile.TilesetIndex].Height / TileSize.Y;
+                NewTerrain.Defense = Defense;
+                NewTerrain.RemainingHP = MaxHP;
 
                 DicTemporaryTerrain.Add(new Vector3(GridX, GridY, LayerIndex), NewTerrain);
             }
@@ -452,6 +457,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveProp.Value.LoadPreset(Content);
                 DicInteractiveProp.Add(ActiveProp.Value.PropName, ActiveProp.Value);
             }
+        }
+
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
+        {
+            return TilesetPreset.FromFile("Deathmatch", TilesetPresetPath, Index);
         }
 
         public override void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)

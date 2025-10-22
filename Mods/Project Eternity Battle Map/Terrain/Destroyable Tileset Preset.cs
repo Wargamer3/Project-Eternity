@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int SlaveIndex;
         public TilesetPresetInformation[] ArrayTilesetInformation;
         public List<string> ListBattleBackgroundAnimationPath;
+        public string RelativePath;
 
         private DestructibleTilesetPreset(DestructibleTilesetPreset Clone, int Index)
         {

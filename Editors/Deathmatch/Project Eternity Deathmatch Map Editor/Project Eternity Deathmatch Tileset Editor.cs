@@ -85,7 +85,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapTilesetPresetsDeathmatch, EditorHelper.GUIRootPathMapTilesetPresets, EditorHelper.GUIRootPathMapTilesets }, "Deathmatch/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityTilesetPresetEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapTilesetPresetsDeathmatch, EditorHelper.GUIRootPathMapTilesetPresets, EditorHelper.GUIRootPathMapTilesets }, "Deathmatch/Tilesets Presets/", new string[] { ".pet" }, typeof(ProjectEternityDeathmatchTilesetPresetEditor), true)
             };
 
             return Info;

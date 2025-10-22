@@ -389,7 +389,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(22), true);
+                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(24), true);
                         }
                         break;
 

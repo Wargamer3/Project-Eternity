@@ -146,7 +146,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
-            byte TilesetTypeIndex = (byte)cboTilesetType.SelectedIndex;
+            byte TilesetTypeIndex = (byte)(cboTilesetType.SelectedIndex + 1);
             if (TilesetTypeIndex < 0 || TilesetTypeIndex > cboTilesetType.Items.Count)
             {
                 TilesetTypeIndex = 0;
@@ -233,7 +233,12 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
 
-            if (NewTilesetPreset.TilesetType == TilesetTypes.Ocean)
+            if (NewTilesetPreset.TilesetType == TilesetTypes.Road)
+            {
+                tabControl1.TabPages[0].Text = "Road";
+                tabControl1.TabPages[1].Text = "Bridge";
+            }
+            else if (NewTilesetPreset.TilesetType == TilesetTypes.Ocean)
             {
                 tabControl1.TabPages[0].Text = "Sea";
                 tabControl1.TabPages[1].Text = "River";
@@ -288,7 +293,14 @@ namespace ProjectEternity.Editors.TilesetEditor
             tabControl1.TabPages.Clear();
             ListActiveTab.Clear();
 
-            if (cboTilesetType.SelectedIndex == (int)TilesetPreset.TilesetTypes.Ocean)
+            TilesetPreset.TilesetTypes TilesetType = (TilesetPreset.TilesetTypes)cboTilesetType.SelectedIndex + 1;
+
+            if (TilesetType == TilesetPreset.TilesetTypes.Road)
+            {
+                CreateTab("Road");
+                CreateTab("Bridge");
+            }
+            else if (TilesetType == TilesetPreset.TilesetTypes.Ocean)
             {
                 CreateTab("Sea");
                 CreateTab("River");

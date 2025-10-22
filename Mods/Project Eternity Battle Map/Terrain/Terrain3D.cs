@@ -39,6 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             switch (TerrainStyle)
             {
                 case TerrainStyles.Flat:
+                case TerrainStyles.Invisible:
                     break;
 
                 default:
@@ -53,10 +54,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Terrain3D(BinaryReader BR, int TileWidth, int TileHeight)
         {
             TerrainStyle = (TerrainStyles)BR.ReadByte();
+            Transparancy = BR.ReadByte();
 
             switch (TerrainStyle)
             {
                 case TerrainStyles.Flat:
+                case TerrainStyles.Invisible:
                     break;
 
                 default:
@@ -71,10 +74,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Save(BinaryWriter BW)
         {
             BW.Write((byte)TerrainStyle);
+            BW.Write((byte)Transparancy);
 
             switch (TerrainStyle)
             {
                 case TerrainStyles.Flat:
+                case TerrainStyles.Invisible:
                     break;
 
                 default:

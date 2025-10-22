@@ -501,9 +501,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        protected override TilesetPreset ReadTileset(BinaryReader BR, int Index)
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
         {
-            return new SorcererStreetTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+            return TilesetPreset.FromFile("Sorcerer Street", TilesetPresetPath, Index);
         }
 
         private void SendMessage(TextInput Sender, string InputMessage)

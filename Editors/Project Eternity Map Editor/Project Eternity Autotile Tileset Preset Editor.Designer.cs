@@ -35,6 +35,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmImportTileset = new System.Windows.Forms.ToolStripMenuItem();
             this.gbTileset = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.cboTilesetType = new System.Windows.Forms.ComboBox();
             this.gbTileInformation = new System.Windows.Forms.GroupBox();
@@ -60,15 +62,13 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
             this.mnuToolBar.SuspendLayout();
             this.gbTileset.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.gbTileInformation.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuToolBar
@@ -112,6 +112,22 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.TabStop = false;
             this.gbTileset.Text = "Tilesets";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(300, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Animation Frames:";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(399, 33);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(66, 20);
+            this.numericUpDown1.TabIndex = 24;
+            // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(6, 16);
@@ -125,7 +141,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.cboTilesetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTilesetType.FormattingEnabled = true;
             this.cboTilesetType.Items.AddRange(new object[] {
-            "Normal",
             "Road",
             "Water",
             "Ocean",
@@ -372,22 +387,6 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tabControl1.TabIndex = 25;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(399, 33);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(66, 20);
-            this.numericUpDown1.TabIndex = 24;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 13);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Animation Frames:";
-            // 
             // ProjectEternityAutotileTilesetPresetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,13 +402,13 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.mnuToolBar.PerformLayout();
             this.gbTileset.ResumeLayout(false);
             this.gbTileset.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.gbTileInformation.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

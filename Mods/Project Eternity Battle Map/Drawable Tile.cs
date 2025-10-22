@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArraySubTile = new Rectangle[0];
             }
             bool HasTerrain3DInfo = BR.ReadBoolean();
-            Terrain3DInfo = null;
+            Terrain3DInfo = new Terrain3D();
             if (HasTerrain3DInfo)
             {
                 Terrain3DInfo = new Terrain3D(BR, TileWidth, TileHeight);

@@ -7,6 +7,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public Terrain ReplacementTerrain;
         public DrawableTile ReplacementTile;
         public int RemainingHP;
+        public int MaxHP;
         public int Defense;//Used to determine what can damage it
 
         public void DamageTile()

@@ -168,9 +168,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (!string.IsNullOrEmpty(_ModelPath))
             {
-                Unit3DModel = new AnimatedModel("Maps/Models/" + _ModelPath);
+                Unit3DModel = new AnimatedModel("Assets/Models/" + _ModelPath);
                 Unit3DModel.LoadContent(Map.Content);
-                Unit3DModel.AddAnimation("Maps/Models/" + _ModelPath, "Idle", Map.Content);
+                Unit3DModel.AddAnimation("Assets/Models/" + _ModelPath, "Idle", Map.Content);
                 Unit3DModel.PlayAnimation("Idle");
             }
         }
