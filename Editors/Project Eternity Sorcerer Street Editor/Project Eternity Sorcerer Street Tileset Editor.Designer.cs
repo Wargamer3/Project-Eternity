@@ -1,7 +1,6 @@
-﻿
-namespace ProjectEternity.Editors.ConquestMapEditor
+﻿namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    partial class ProjectEternityConquestDestroyableTileEditor
+    partial class ProjectEternitySorcererStreetTilesetPresetEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -31,13 +30,13 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             this.SuspendLayout();
             // 
-            // ProjectEternityConquestAutotileTilesetPresetEditor
+            // ProjectEternityConquestTilesetPresetEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(935, 531);
-            this.Name = "ProjectEternityConquestAutotileTilesetPresetEditor";
-            this.Text = "Project Eternity Conquest Autotile Tileset Editor";
+            this.Name = "ProjectEternityConquestTilesetPresetEditor";
+            this.Text = "Project_Eternity_Conquest_Tileset_Ediotr";
             this.ResumeLayout(false);
             this.PerformLayout();
 

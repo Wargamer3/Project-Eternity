@@ -21,33 +21,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     {
         public static readonly string MapType = "Conquest";
 
-        public static string[] AllTerrains => new string[]
-                {
-                    "Plains",
-                    "Road",
-                    "Wood",
-                    "Mountains",
-                    "Wasteland",
-                    "Ruins",
-                    "Sea",
-                    "Bridge",
-                    "River",
-                    "Beach",
-                    "Rough Sea",
-                    "Mist",
-                    "Reef",
-                    "HQ",
-                    "City",
-                    "Factory",
-                    "Airport",
-                    "Port",
-                    "Com Tower",
-                    "Radar",
-                    "Temp Airport",
-                    "Temp Port",
-                    "Missile Silo",
-                };
-
         public Texture2D sprTileBorderRed;
         public Texture2D sprTileBorderBlue;
 
@@ -1525,7 +1498,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
-            ConquestTerrainType CurrentTerrainType = TerrainHolder.ListConquestTerrainType[CurrentTerrainIndex];
+            ConquestTerrainTypeAttributes CurrentTerrainType = TerrainHolder.ListConquestTerrainType[CurrentTerrainIndex];
 
             bool IsOnUsableTerrain = CurrentTerrainType.DicMovementCostByMoveType.Count > 0;
 
@@ -1540,11 +1513,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(new Vector3(StartingPosition.WorldPosition.X + WorldffsetX, StartingPosition.WorldPosition.Y + WorldOffsetY, L * LayerHeight));
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
-                ConquestTerrainType NextTerrainType = TerrainHolder.ListConquestTerrainType[NextTerrainIndex];
+                ConquestTerrainTypeAttributes NextTerrainType = TerrainHolder.ListConquestTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.DicMovementCostByMoveType.Count > 0;
 
                 Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
-                ConquestTerrainType PreviousTerrainType = TerrainHolder.ListConquestTerrainType[PreviousTerrain.TerrainTypeIndex];
+                ConquestTerrainTypeAttributes PreviousTerrainType = TerrainHolder.ListConquestTerrainType[PreviousTerrain.TerrainTypeIndex];
                 bool IsPreviousTerrainnUsable = PreviousTerrainType.DicMovementCostByMoveType.Count > 0;
 
                 if (L > StartingPosition.LayerIndex && PreviousTerrainType.DicMovementCostByMoveType.Count == 0)

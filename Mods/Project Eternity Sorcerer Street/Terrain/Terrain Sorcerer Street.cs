@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -48,6 +49,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override TilesetPresetInformation ReadTerrain(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
             return new SorcererStreetTilesetPresetInformation(BR, TileSizeX, TileSizeY, TilesetIndex);
+        }
+
+        public static SorcererStreetTilesetPreset FromFile(string FilePath, int TilesetIndex = 0)
+        {
+            FileStream FS = new FileStream("Content/Sorcerer Street/Tilesets presets/" + FilePath + ".pet", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
+            BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            int TileSizeX = BR.ReadInt32();
+            int TileSizeY = BR.ReadInt32();
+
+            SorcererStreetTilesetPreset NewTilesetPreset = new SorcererStreetTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+            NewTilesetPreset.RelativePath = FilePath;
+
+            BR.Close();
+            FS.Close();
+
+            return NewTilesetPreset;
         }
     }
 

@@ -180,7 +180,6 @@ namespace ProjectEternity.Editors.TilesetEditor
                     for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                     {
                         TilesetInfo.ArrayTerrain[X, Y] = new Terrain(X, Y, TileSize.X, TileSize.Y, 0, 0, 0);
-                        TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
                         TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
                     }
                 }

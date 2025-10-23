@@ -1,6 +1,6 @@
 ﻿namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    partial class TileAttributes
+    partial class SorcererStreetTileAttributes
     {
         /// <summary>
         /// Required designer variable.

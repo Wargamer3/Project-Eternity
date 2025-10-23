@@ -5,21 +5,21 @@ using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    public partial class TileAttributes : Form, ITileAttributes
+    public partial class SorcererStreetTileAttributes : Form, ITileAttributes
     {
         public byte TerrainTypeIndex;
-        public float Height;
+        public float TerrainHeight;
 
         TerrainSorcererStreet ActiveTerrain;
 
         Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
 
-        public TileAttributes()
+        public SorcererStreetTileAttributes()
         {
             InitializeComponent();
         }
 
-        public TileAttributes(byte TerrainTypeIndex, float Height)
+        public SorcererStreetTileAttributes(byte TerrainTypeIndex, float Height)
         {
             InitializeComponent();
 
@@ -40,7 +40,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
         private void txtHeight_ValueChanged(object sender, EventArgs e)
         {
-            Height = (float)txtHeight.Value;
+            TerrainHeight = (float)txtHeight.Value;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

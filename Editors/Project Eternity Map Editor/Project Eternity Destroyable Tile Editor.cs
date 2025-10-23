@@ -354,7 +354,6 @@ namespace ProjectEternity.Editors.TilesetEditor
                     for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                     {
                         ActiveTab.TilesetInfo.ArrayTerrain[X, Y] = ActiveTab.TilesetInfo.CreateTerrain(X, Y, TileSize.X, TileSize.Y);
-                        ActiveTab.TilesetInfo.ArrayTerrain[X, Y].TerrainTypeIndex = 1;
                         ActiveTab.TilesetInfo.ArrayTiles[X, Y] = new DrawableTile(new Rectangle(0, 0, TileSize.X, TileSize.Y), 0);
                     }
                 }

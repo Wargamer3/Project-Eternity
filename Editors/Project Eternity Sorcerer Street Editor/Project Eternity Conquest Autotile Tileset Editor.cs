@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Editors.TilesetEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.ConquestMapScreen;
+using ProjectEternity.GameScreens.SorcererStreetScreen;
 using static ProjectEternity.Editors.TilesetEditor.ProjectEternityTilesetPresetEditor;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetTilesetPreset;
 
-namespace ProjectEternity.Editors.ConquestMapEditor
+namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    public partial class ProjectEternityConquestDestroyableTileEditor : ProjectEternityDestroyableTileEditor
+    public partial class ProjectEternityConquestAutotileTilesetPresetEditor : ProjectEternityAutotileTilesetPresetEditor
     {
         public class ConquesTilesetPresetHelper : ITilesetPresetHelper
         {
@@ -19,34 +19,34 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public void EditTerrainTypes()
             {
-                new ProjectEternityConquestTerrainsAndMoveTypesEditor().ShowDialog();
+                new ProjectEternitySorcererStreetTerrainsEditor().ShowDialog();
             }
 
             public string[] GetTerrainTypes()
             {
-                ConquestTerrainHolder TerrainHolder = new ConquestTerrainHolder();
+                SorcererStreetTerrainHolder TerrainHolder = new SorcererStreetTerrainHolder();
                 TerrainHolder.LoadData();
-                return TerrainHolder.ListConquestTerrainType.Select(x => x.TerrainName).ToArray();
+                return TerrainHolder.ListTerrainType.ToArray();
             }
 
             public TilesetPreset LoadPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                throw new NotImplementedException();
+                return new SorcererStreetTilesetPreset(BR, TileSizeX, TileSizeY, 0);
             }
 
             public TilesetPresetInformation CreatePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                throw new NotImplementedException();
+                return new SorcererStreetTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                throw new NotImplementedException();
             }
 
             public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+                throw new NotImplementedException();
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)
@@ -60,13 +60,13 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             }
         }
 
-        public ProjectEternityConquestDestroyableTileEditor()
+        public ProjectEternityConquestAutotileTilesetPresetEditor()
             : base()
         {
             InitializeComponent();
         }
 
-        public ProjectEternityConquestDestroyableTileEditor(string FilePath, object[] Params)
+        public ProjectEternityConquestAutotileTilesetPresetEditor(string FilePath, object[] Params)
             : this()
         {
             this.FilePath = FilePath;
@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaDestroyableTilesPresetsConquest, EditorHelper.GUIRootPathMaDestroyableTilesPresets }, "Conquest/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityConquestDestroyableTileEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapAutotilesPresetsSorcererStreet, EditorHelper.GUIRootPathMapAutotilesPresets }, "Sorcerer Street/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternityConquestAutotileTilesetPresetEditor), true)
             };
 
             return Info;

@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (InputHelper.InputDownPressed())
             {
                 RemoveFromPanelList(this);
-                switch (Map.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
+                switch (Map.TerrainHolder.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.Castle:
                     case TerrainSorcererStreet.NorthTower:

@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     byte TerrainTypeIndex = BR.ReadByte();
                     float Height = BR.ReadSingle();
 
-                    switch (Map.ListTerrainType[TerrainTypeIndex])
+                    switch (Map.TerrainHolder.ListTerrainType[TerrainTypeIndex])
                     {
                         case TerrainSorcererStreet.Castle:
                             ArrayTerrain[X, Y] = new CastleTerrain(X, Y, Map.TileSize.X, Map.TileSize.Y, LayerIndex, Map.LayerHeight, Depth, TerrainTypeIndex);

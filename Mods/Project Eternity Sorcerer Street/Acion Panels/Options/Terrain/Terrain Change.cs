@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int GetChangeCost()
         {
-            switch (Map.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
+            switch (Map.TerrainHolder.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.MultiElement:
                 case TerrainSorcererStreet.NeutralElement:

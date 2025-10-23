@@ -95,6 +95,7 @@
     <Compile Include="Battle Animation Screen.cs" />
     <Compile Include="Conquest Map.cs" />
     <Compile Include="Battle Formulas.cs" />
+    <Compile Include="Terrain Conquest Holder.cs" />
     <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Conquest Params.cs" />
     <Compile Include="Conquest Mutator.cs" />

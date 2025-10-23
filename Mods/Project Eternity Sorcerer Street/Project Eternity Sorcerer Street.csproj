@@ -193,6 +193,7 @@
     <Compile Include="Rules\Deathmatch Game Rule.cs" />
     <Compile Include="Environment\Default Weather.cs" />
     <Compile Include="Environment\Environment Manager.cs" />
+    <Compile Include="Terrain\Terrain Holder.cs" />
     <Compile Include="Terrain\Shrine Terrain.cs" />
     <Compile Include="Terrain\Castle Terrain.cs" />
     <Compile Include="Terrain\Tower Terrain.cs" />

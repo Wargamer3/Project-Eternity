@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
-{/*en gros, le but du jeu ce joue principalement sur la capture de batiment, les ville serve a créé de l'argent, les port a créé des bateau, les caserne a créé des unité de terre etc...
-  *et ultimement le but par défaut d'une partie c'est sois éliminé tout les unité ennemis ou sois de capturé le QG ennemis
- bob Le Nolife: c'est assez simpliste comme jeu, après il y a des subtilité comme le choix du générale qui donne des bonus, mais ça je m'en fou carrément, je prend toujours les généraux par défaut*/
+{
     //Captured building give 1000g per turn
     //Any unit in a friendly city will repair 2 HP and deduct 20% of its cost
     //http://www.warsworldnews.com/index.php?page=aw/battlemechanics/index.php
@@ -24,48 +21,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     //http://ticc.uvt.nl/~pspronck/pubs/BNAIC2008Bergsma.pdf
     //http://www.warsworldnews.com/dor/aw4-color.pdf attacks
 
-    public class ConquestTerrainHolder
-    {
-        public List<string> ListMoveType;
-        public List<ConquestTerrainType> ListConquestTerrainType;
-
-        public ConquestTerrainHolder()
-        {
-            ListMoveType = new List<string>();
-            ListConquestTerrainType = new List<ConquestTerrainType>();
-        }
-
-        public void LoadData()
-        {
-            FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
-
-            int ListMoveTypeCount = BR.ReadInt32();
-            ListMoveType = new List<string>(ListMoveTypeCount);
-            for (int i = 0; i < ListMoveTypeCount; ++i)
-            {
-                ListMoveType.Add(BR.ReadString());
-            }
-
-            int ListConquestTerrainTypeCount = BR.ReadInt32();
-            ListConquestTerrainType = new List<ConquestTerrainType>(ListConquestTerrainTypeCount);
-            for (int i = 0; i < ListConquestTerrainTypeCount; ++i)
-            {
-                ListConquestTerrainType.Add(new ConquestTerrainType(BR));
-            }
-
-            BR.Close();
-            FS.Close();
-        }
-    }
-
-    public class ConquestTerrainType
+    public class ConquestTerrainTypeAttributes
     {
         public string TerrainName;
         public byte DefenceValue;
         public Dictionary<byte, byte> DicMovementCostByMoveType;
 
-        public ConquestTerrainType()
+        public ConquestTerrainTypeAttributes()
         {
             TerrainName = "New Terrain";
             DefenceValue = 1;
@@ -73,7 +35,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicMovementCostByMoveType = new Dictionary<byte, byte>();
         }
 
-        public ConquestTerrainType(BinaryReader BR)
+        public ConquestTerrainTypeAttributes(BinaryReader BR)
         {
             TerrainName = BR.ReadString();
             DefenceValue = BR.ReadByte();

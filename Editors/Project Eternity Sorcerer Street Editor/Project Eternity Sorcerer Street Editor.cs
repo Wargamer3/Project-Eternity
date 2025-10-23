@@ -45,7 +45,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
             public ITileAttributes GetTileEditor()
             {
-                return new TileAttributes();
+                return new SorcererStreetTileAttributes();
             }
 
             public Terrain GetTerrain(int X, int Y, int LayerIndex)

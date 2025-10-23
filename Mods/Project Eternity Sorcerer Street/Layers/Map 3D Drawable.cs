@@ -226,7 +226,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         TextureSize = new Point(128, 128);
 
-                        switch (Map.ListTerrainType[Owner.ArrayTerrain[X, Y].TerrainTypeIndex])
+                        switch (Map.TerrainHolder.ListTerrainType[Owner.ArrayTerrain[X, Y].TerrainTypeIndex])
                         {
                             case TerrainSorcererStreet.FireElement:
                                 Location = new Point(0, 0);

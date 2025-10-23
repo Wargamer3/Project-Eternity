@@ -76,6 +76,30 @@
     <Compile Include="Character Relationship Editor.Designer.cs">
       <DependentUpon>Character Relationship Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project Eternity Conquest Autotile Tileset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Conquest Autotile Tileset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Conquest Autotile Tileset Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street DestroyableTile Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street DestroyableTile Editor.Designer.cs">
+      <DependentUpon>Project Eternity Sorcerer Street DestroyableTile Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Terrains Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Terrains Editor.Designer.cs">
+      <DependentUpon>Project Eternity Sorcerer Street Terrains Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Tileset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Tileset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Sorcerer Street Tileset Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Spell Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +173,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Character Relationship Editor.resx">
       <DependentUpon>Character Relationship Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Conquest Autotile Tileset Editor.resx">
+      <DependentUpon>Project Eternity Conquest Autotile Tileset Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Sorcerer Street DestroyableTile Editor.resx">
+      <DependentUpon>Project Eternity Sorcerer Street DestroyableTile Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Sorcerer Street Terrains Editor.resx">
+      <DependentUpon>Project Eternity Sorcerer Street Terrains Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Sorcerer Street Tileset Editor.resx">
+      <DependentUpon>Project Eternity Sorcerer Street Tileset Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Spell Editor.resx">
       <DependentUpon>Spell Editor.cs</DependentUpon>

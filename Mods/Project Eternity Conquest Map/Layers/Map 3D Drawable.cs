@@ -669,7 +669,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         int LayerIndex = (int)ActiveUnit.Z;
                         Terrain UpperTerrain = Map.LayerManager.ListLayer[LayerIndex + 1].ArrayTerrain[X, Y];
                         DrawableTile ActiveTile = Map.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
-                        ConquestTerrainType UpperTerrainType = Map.TerrainHolder.ListConquestTerrainType[UpperTerrain.TerrainTypeIndex];
+                        ConquestTerrainTypeAttributes UpperTerrainType = Map.TerrainHolder.ListConquestTerrainType[UpperTerrain.TerrainTypeIndex];
 
                         if (UpperTerrainType.DicMovementCostByMoveType.Count > 0 || ActiveTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
                             && !ListIgnoredTerrain.Contains(ActiveTile))

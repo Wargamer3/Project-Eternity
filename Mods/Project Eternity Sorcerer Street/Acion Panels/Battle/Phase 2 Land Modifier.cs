@@ -34,37 +34,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                switch (Map.ListTerrainType[Map.GlobalSorcererStreetBattleContext.DefenderTerrain.TerrainTypeIndex])
+                switch (Map.TerrainHolder.ListTerrainType[Map.GlobalSorcererStreetBattleContext.DefenderTerrain.TerrainTypeIndex])
                 {
-                    case "Multi-Element":
+                    case TerrainSorcererStreet.MultiElement:
                         if (Abilities.ArrayElementAffinity.Length != 1 || Abilities.ArrayElementAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
                         {
                             HasTerrainBonus = true;
                         }
                         break;
 
-                    case "Fire":
+                    case TerrainSorcererStreet.FireElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
                         {
                             HasTerrainBonus = true;
                         }
                         break;
 
-                    case "Water":
+                    case TerrainSorcererStreet.WaterElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
                         {
                             HasTerrainBonus = true;
                         }
                         break;
 
-                    case "Earth":
+                    case TerrainSorcererStreet.EarthElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
                         {
                             HasTerrainBonus = true;
                         }
                         break;
 
-                    case "Air":
+                    case TerrainSorcererStreet.AirElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                         {
                             HasTerrainBonus = true;

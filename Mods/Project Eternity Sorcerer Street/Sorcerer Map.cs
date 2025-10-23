@@ -105,11 +105,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly SorcererStreetPlayerContext GlobalPlayerContext;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
         public readonly SorcererStreetBattleParams SorcererStreetParams;
-        public readonly List<string> ListTerrainType = new List<string>();
         public LayerHolderSorcererStreet LayerManager;
         public List<Area> ListArea;
         public List<TerrainSorcererStreet> ListPassedTerrain;
         public Dictionary<Vector3, TerrainSorcererStreet> DicTemporaryTerrain;//Temporary obstacles
+        public SorcererStreetTerrainHolder TerrainHolder;
 
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
@@ -157,39 +157,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
 
-            ListTerrainType.Add("Not Assigned");
-            ListTerrainType.Add(TerrainSorcererStreet.Castle);
-            ListTerrainType.Add(TerrainSorcererStreet.FireElement);
-            ListTerrainType.Add(TerrainSorcererStreet.WaterElement);
-            ListTerrainType.Add(TerrainSorcererStreet.EarthElement);
-            ListTerrainType.Add(TerrainSorcererStreet.AirElement);
-            ListTerrainType.Add(TerrainSorcererStreet.NeutralElement);
-            ListTerrainType.Add(TerrainSorcererStreet.MorphElement);
-            ListTerrainType.Add(TerrainSorcererStreet.MultiElement);
-            ListTerrainType.Add(TerrainSorcererStreet.EastTower);
-            ListTerrainType.Add(TerrainSorcererStreet.WestTower);
-            ListTerrainType.Add(TerrainSorcererStreet.SouthTower);
-            ListTerrainType.Add(TerrainSorcererStreet.NorthTower);
-            ListTerrainType.Add(TerrainSorcererStreet.Shrine);
-            ListTerrainType.Add(TerrainSorcererStreet.FortuneTeller);
-            ListTerrainType.Add("Warp");
-            ListTerrainType.Add("Bridge");
-            ListTerrainType.Add("Spell Circle");
-            ListTerrainType.Add("Path Switch");
-            ListTerrainType.Add("Card Shop");
-            ListTerrainType.Add("Magic Trap");
-            ListTerrainType.Add("Siege Tower");
-            ListTerrainType.Add("Gem Store");
+            TerrainHolder = new SorcererStreetTerrainHolder();
 
             ListTileSet = new List<Texture2D>();
             this.Camera2DPosition = Vector3.Zero;
-            TerrainRestrictions = new UnitAndTerrainValues();
-            for (int i = 0; i < ListTerrainType.Count; ++i)
-            {
-                TerrainRestrictions.ListTerrainType.Add(new TerrainType(ListTerrainType[i]));
-            }
-
-            Params.GlobalContext.TerrainRestrictions = TerrainRestrictions;
         }
 
         public SorcererStreetMap(GameModeInfo GameInfo, SorcererStreetBattleParams Params)
@@ -326,6 +297,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
                 sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
             }
+
+            TerrainHolder.LoadData();
 
             LoadMap();
             LoadMapAssets();
@@ -503,7 +476,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
         {
-            return TilesetPreset.FromFile("Sorcerer Street", TilesetPresetPath, Index);
+            return SorcererStreetTilesetPreset.FromFile(TilesetPresetPath, Index);
         }
 
         private void SendMessage(TextInput Sender, string InputMessage)

@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            switch (Map.ListTerrainType[TerrainTypeIndex])
+            switch (Map.TerrainHolder.ListTerrainType[TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.EastTower:
                     ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.East);
@@ -130,7 +130,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
                 g.DrawString(Map.fntMenuText, "Passed checkpoint", new Vector2(BoxX + 60, BoxY + 30), Color.White);
-                switch (Map.ListTerrainType[TerrainTypeIndex])
+                switch (Map.TerrainHolder.ListTerrainType[TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.EastTower:
                         g.Draw(Map.sprDirectionEastFilled, new Rectangle(BoxX + 380, BoxY + 28, IconWidth, IconHeight), Color.White);
@@ -186,7 +186,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(Map.sprTowerPopupBackground, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
                 0f, new Vector2(Map.sprTowerPopupBackground.Width / 2, Map.sprTowerPopupBackground.Height / 2), SpriteEffects.None, 0f);
 
-            switch (Map.ListTerrainType[TerrainTypeIndex])
+            switch (Map.TerrainHolder.ListTerrainType[TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.EastTower:
                     g.Draw(Map.sprTowerPopupEast, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,

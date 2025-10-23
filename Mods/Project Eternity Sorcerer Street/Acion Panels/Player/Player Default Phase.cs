@@ -393,7 +393,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(Map.fntMenuText, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), Color.White);
 
             CurrentX = X + 180;
-            switch (Map.ListTerrainType[HoverTerrain.TerrainTypeIndex])
+            switch (Map.TerrainHolder.ListTerrainType[HoverTerrain.TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.FireElement:
                     g.Draw(Map.Symbols.sprElementFire, new Rectangle((int)CurrentX, (int)CurrentY - 2, IconWidth, IconHeight), Color.White);

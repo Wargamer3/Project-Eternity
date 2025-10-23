@@ -1,7 +1,6 @@
-﻿
-namespace ProjectEternity.Editors.ConquestMapEditor
+﻿namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    partial class ProjectEternityConquestDestroyableTileEditor
+    partial class ProjectEternitySorcererStreetDestroyableTileEditor
     {
         /// <summary>
         /// Required designer variable.

@@ -48,7 +48,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             }
 
             BW.Write(TerrainHolder.ListConquestTerrainType.Count);
-            foreach (ConquestTerrainType ActiveTerrainType in TerrainHolder.ListConquestTerrainType)
+            foreach (ConquestTerrainTypeAttributes ActiveTerrainType in TerrainHolder.ListConquestTerrainType)
             {
                 ActiveTerrainType.Save(BW);
             }
@@ -137,7 +137,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
         private void btnAddNewTerrain_Click(object sender, EventArgs e)
         {
-            TerrainHolder.ListConquestTerrainType.Add(new ConquestTerrainType());
+            TerrainHolder.ListConquestTerrainType.Add(new ConquestTerrainTypeAttributes());
             lsTerrains.Items.Add("New Terrain");
         }
 

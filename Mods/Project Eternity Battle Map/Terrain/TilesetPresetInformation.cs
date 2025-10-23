@@ -15,6 +15,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.TilesetName = TilesetName;
 
+            ListAllowedTerrainTypeIndex = new List<int>();
+
             ArrayTerrain = new Terrain[TilesetWidth / TileSizeX, TilesetHeight / TileSizeY];
             ArrayTiles = new DrawableTile[ArrayTerrain.GetLength(0), ArrayTerrain.GetLength(1)];
 
@@ -37,6 +39,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TilesetPresetInformation(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
             TilesetName = BR.ReadString();
+
+            int ListAllowedTerrainTypeIndexCount = BR.ReadByte();
+            ListAllowedTerrainTypeIndex = new List<int>(ListAllowedTerrainTypeIndexCount);
+
+            for (int I = 0; I < ListAllowedTerrainTypeIndexCount; I++)
+            {
+                ListAllowedTerrainTypeIndex.Add(BR.ReadByte());
+            }
 
             ArrayTerrain = new Terrain[BR.ReadInt32(), BR.ReadInt32()];
             ArrayTiles = new DrawableTile[ArrayTerrain.GetLength(0), ArrayTerrain.GetLength(1)];
@@ -69,6 +79,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Write(BinaryWriter BW)
         {
             BW.Write(TilesetName);
+
+            BW.Write((byte)ListAllowedTerrainTypeIndex.Count);
+
+            for (int I = 0; I < ListAllowedTerrainTypeIndex.Count; I++)
+            {
+                BW.Write((byte)ListAllowedTerrainTypeIndex[I]);
+            }
 
             BW.Write(ArrayTerrain.GetLength(0));
             BW.Write(ArrayTerrain.GetLength(1));
