@@ -286,6 +286,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new ActionPanelConfirmCreatureSummon(Map, ActivePlayerIndex, this);
         }
 
+        public void ClearAbilities()
+        {
+            EnchantAbilities = null;
+            BattleAbilities = null;
+        }
+
         public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
             int BoxWidth = 620;

@@ -11,11 +11,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class ActionPanelAllCreatureSpellConfirm : ActionPanelSorcererStreet
     {
         private ManualSkill EnchantToAdd;
+        private int ActivePlayerIndex;
 
-        public ActionPanelAllCreatureSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelf)
+        public ActionPanelAllCreatureSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex, bool AllowSelf)
             : base("All Creature Spell Confirm", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
+            this.ActivePlayerIndex = ActivePlayerIndex;
         }
 
         public override void OnSelect()
@@ -32,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     foreach (TerrainSorcererStreet ActiveTerrain in Map.ListSummonedCreature)
                     {
-                        EnchantHelper.ActivateEnchantOnCreature(Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActiveTerrain.DefendingCreature);
+                        EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
                     }
 
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);

@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAllCreatureSpellConfirm(Params.Map, ActiveSkill, false));
+            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAllCreatureSpellConfirm(Params.Map, ActiveSkill, Params. GlobalPlayerContext.ActivePlayerIndex, false));
         }
 
         public override ManualSkillTarget Copy()

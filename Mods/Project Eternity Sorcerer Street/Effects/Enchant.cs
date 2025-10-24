@@ -75,9 +75,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static void ActivateEnchantOnCreature(SorcererStreetBattleContext GlobalContext, ManualSkill Spell, CreatureCard SelfCreature)
+        public static void ActivateEnchantOnCreature(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
-            GlobalContext.SelfCreature.Creature = SelfCreature;
+            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null);
 
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
@@ -161,6 +161,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public static void ActivateOnCreatures(SorcererStreetMap Map, SorcererStreetBattleContext Context, List<TerrainSorcererStreet> ListSummonedCreature)
+        {
+            foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+            {
+                ActiveTerrain.DefendingCreature.ClearAbilities();
+                Context.Reset();
+
+                if (ActiveTerrain.DefendingCreature.Enchant == null)
+                {
+                    return;
+                }
+
+                Context.SetCreatures(Map, ActiveTerrain.DefendingCreature, Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner), null);
+
+                List<BaseSkillActivation> DicSkillActivation = ActiveTerrain.DefendingCreature.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+
+                foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+                {
+                    ActiveSkill.Activate(ActiveTerrain.DefendingCreature.Enchant.Skill.Name);
+                }
+            }
+        }
+
         public static void UpdateLifetime(Player ActivePlayer, string LifetimeType)
         {
             if (ActivePlayer.Enchant == null)
@@ -199,6 +222,50 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (EnchantHasUpdated && !EnchantIsAlive)
             {
                 ActivePlayer.Enchant = null;
+            }
+        }
+
+        public static void UpdateCreaturesLifetime(List<TerrainSorcererStreet> ListSummonedCreature, string LifetimeType)
+        {
+            foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+            {
+                if (ActiveTerrain.DefendingCreature.Enchant == null)
+                {
+                    continue;
+                }
+
+                bool EnchantHasUpdated = false;
+                bool EnchantIsAlive = false;
+                foreach (BaseSkillActivation Activation in ActiveTerrain.DefendingCreature.Enchant.Skill.CurrentSkillLevel.ListActivation)
+                {
+                    for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                    {
+                        BaseEffect ActiveEffect = Activation.ListEffect[E];
+
+                        foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                        {
+                            if (ActiveLifetime.LifetimeType == LifetimeType)
+                            {
+                                --ActiveLifetime.Lifetime;
+                                ActiveEffect.ResetState();
+
+                                if (ActiveLifetime.Lifetime == 0)
+                                {
+                                    EnchantHasUpdated = true;
+                                    Activation.ListEffect.RemoveAt(E);
+                                    continue;
+                                }
+
+                                EnchantIsAlive = true;
+                            }
+                        }
+                    }
+                }
+
+                if (EnchantHasUpdated && !EnchantIsAlive)
+                {
+                    ActiveTerrain.DefendingCreature.Enchant = null;
+                }
             }
         }
 

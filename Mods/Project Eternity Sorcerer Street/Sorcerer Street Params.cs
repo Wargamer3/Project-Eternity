@@ -260,6 +260,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             return CreatureCount;
         }
+
+        public void SetCreatures(SorcererStreetMap Map, CreatureCard Invader, int PlayerIndex, TerrainSorcererStreet Defender)
+        {
+            this.DicCreatureCountByElementType = Map.DicCreatureCountByElementType;
+            this.ListSummonedCreature = Map.ListSummonedCreature;
+            this.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
+            this.CurrentTurn = Map.GameTurn;
+            this.DefenderTerrain = Defender;
+
+            this.Invader.Creature = Invader;
+            this.Invader.Owner = Map.ListPlayer[PlayerIndex];
+            this.Invader.PlayerIndex = PlayerIndex;
+            this.Invader.OwnerTeam = Map.DicTeam[this.Invader.Owner.TeamIndex];
+
+            if (Defender != null)
+            {
+                this.Defender.Creature = Defender.DefendingCreature;
+                this.Defender.Owner = Defender.PlayerOwner;
+                this.Defender.PlayerIndex = Map.ListPlayer.IndexOf(Defender.PlayerOwner);
+                this.Defender.OwnerTeam = Map.DicTeam[this.Defender.Owner.TeamIndex];
+            }
+        }
     }
 
     public class SkillActivationContext

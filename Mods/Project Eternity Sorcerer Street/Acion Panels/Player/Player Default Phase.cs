@@ -62,13 +62,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         continue;
                     }
 
-                    if (ActivePlayer.Enchant != null)
-                    {
-                        EnchantHelper.UpdateLifetime(ActivePlayer, SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
-                    }
+                    EnchantHelper.UpdateLifetime(ActivePlayer, SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
+                    EnchantHelper.UpdateCreaturesLifetime(Map.ListSummonedCreature, SkillEffect.LifetimeTypeTurns + Map.ActivePlayerIndex);
 
                     ActivePlayer.ClearAbilities();
                     EnchantHelper.ActivateOnPlayer(Map.GlobalSorcererStreetBattleContext, ActivePlayer, null, null);
+                    EnchantHelper.ActivateOnCreatures(Map, Map.GlobalSorcererStreetBattleContext, Map.ListSummonedCreature);
                 }
             }
             while (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex < 0);
