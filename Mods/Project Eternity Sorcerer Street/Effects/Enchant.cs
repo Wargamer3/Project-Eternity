@@ -103,6 +103,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
+
+            List<BaseSkillActivation> DicSkillActivation = SelfCreature.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+
+            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+            {
+                ActiveSkill.Activate(SelfCreature.Enchant.Skill.Name);
+            }
         }
 
         /// <summary>
@@ -112,10 +119,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         /// <param name="Spell"></param>
         /// <param name="Invader"></param>
         /// <param name="Defender"></param>
-        public static void ActivateOnPlayer(SorcererStreetBattleContext Context, ManualSkill Spell, BattleCreatureInfo Invader, BattleCreatureInfo Defender)
+        public static void ActivateOnPlayer(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
-            Context.SelfCreature = Invader;
-            Context.OpponentCreature = Defender;
+            Player ActivePlayer = Map.ListPlayer[PlayerIndex];
+            Map.GlobalPlayerContext.SetPlayer(PlayerIndex, ActivePlayer);
+
+            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null);
 
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
@@ -124,7 +133,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActiveEffect.ExecuteEffect();
             }
 
-            foreach (BaseSkillActivation Activation in Invader.Owner.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            foreach (BaseSkillActivation Activation in ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
             {
                 for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
                 {
@@ -134,12 +143,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
                         {
-                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + Context.SelfCreature.PlayerIndex;
+                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + PlayerIndex;
                         }
 
                         ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
                     }
                 }
+            }
+
+            List<BaseSkillActivation> DicSkillActivation = ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+
+            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+            {
+                ActiveSkill.Activate(ActivePlayer.Enchant.Skill.Name);
             }
         }
 

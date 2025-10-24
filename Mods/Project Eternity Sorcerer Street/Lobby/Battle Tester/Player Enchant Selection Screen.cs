@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
@@ -40,7 +41,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
-                EnchantHelper.ActivateOnPlayer(Context, ActiveSpellCard.Spell, Invader, Defender);
+                Context.Invader = Invader;
+                Context.Defender = Defender;
+
+                for (int E = ActiveSpellCard.Spell.ListEffect.Count - 1; E >= 0; --E)
+                {
+                    BaseEffect ActiveEffect = ActiveSpellCard.Spell.ListEffect[E].Copy();
+
+                    ActiveEffect.ExecuteEffect();
+                }
+
                 RemoveScreen(this);
             }
             else if (InputHelper.InputCancelPressed())

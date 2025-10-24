@@ -5,16 +5,17 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelAllCreatureSpellConfirm : ActionPanelSorcererStreet
+    public class ActionPanelAllPlayersSpellConfirm : ActionPanelSorcererStreet
     {
         private ManualSkill EnchantToAdd;
         private int ActivePlayerIndex;
 
-        public ActionPanelAllCreatureSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex, bool AllowSelf)
-            : base("All Creature Spell Confirm", Map, true)
+        public ActionPanelAllPlayersSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex, bool AllowSelf)
+            : base("All Players Spell Confirm", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -32,9 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.GlobalSorcererStreetBattleContext.Reset();
 
-                    foreach (TerrainSorcererStreet ActiveTerrain in Map.ListSummonedCreature)
+                    for (int P = 0; P < Map.ListPlayer.Count; P++)
                     {
-                        EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
+                        if (Map.ListPlayer[P].OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                        {
+                            continue;
+                        }
+                        EnchantHelper.ActivateOnPlayer(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, null);
                     }
 
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
@@ -91,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxY = Constants.Height - BoxHeight - (int)(74 * Ratio);
             MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
-            g.DrawStringMiddleAligned(Map.fntMenuText, "Use spell on all creatures?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Use spell on all players?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, "Yes", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio)), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, "No", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 90 * Ratio)), Color.White);
             MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 150, (int)(BoxY + 54 * Ratio + ActionMenuCursor * 36 * Ratio)));
@@ -99,7 +104,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override string ToString()
         {
-            return "Confirm All Creature Spell.";
+            return "Confirm All Players Spell.";
         }
     }
 }
