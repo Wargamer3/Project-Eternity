@@ -132,7 +132,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<DestructibleTilesetPreset> ListTemporaryTilesetPreset;
         public List<string> ListBattleBackgroundAnimationPath;
         public List<string> ListTemporaryBattleBackgroundAnimationPath;
-        public UnitAndTerrainValues TerrainRestrictions;
 
         public bool IsInit = false;
         public string MapTerrainType;//Grid, Spots, Free roam

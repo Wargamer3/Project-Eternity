@@ -925,7 +925,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
-            TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
 
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
@@ -934,20 +933,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
+            bool IsOnUsableTerrain = CurrentTerrainIndex > 0;
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
                 MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, GridOffsetX, GridOffsetY, L);
                 byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
-                TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
-                bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+                bool IsNextTerrainnUsable = NextTerrainIndex > 0;
 
                 Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
-                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
-                bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+                bool IsPreviousTerrainnUsable = PreviousTerrain.TerrainTypeIndex > 0;
 
-                if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
+                if (L > StartingPosition.LayerIndex && PreviousTerrain.TerrainTypeIndex == 0)//Void, abort
                 {
                     break;
                 }
@@ -1045,7 +1042,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff < MaxClearance)
+                if (NextTerrainType > 0 && ZDiff < MaxClearance)
                 {
                     return false;
                 }

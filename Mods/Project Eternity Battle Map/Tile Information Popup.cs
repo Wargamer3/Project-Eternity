@@ -20,12 +20,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public string TileName;
             public List<string> ListVisibleExtraText;
 
-            public TileInformationPopup(BattleMap Map, ILayerHolderDrawable LayerHolder, double TimeOffset, MovementAlgorithmTile CurrentTile)
+            private TileInformationPopupManager Owner;
+
+            public TileInformationPopup(BattleMap Map, ILayerHolderDrawable LayerHolder, TileInformationPopupManager Owner, double TimeOffset, MovementAlgorithmTile CurrentTile)
             {
+                this.Owner = Owner;
                 this.TimeOffset = TimeOffset;
                 this.CurrentTile = CurrentTile;
 
-                TileName = Map.TerrainRestrictions.ListTerrainType[CurrentTile.TerrainTypeIndex].Name;
+                TileName = Owner.GetTileName(CurrentTile.TerrainTypeIndex);
 
                 ListVisibleExtraText = new List<string>();
 
@@ -78,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (Vector2 ActivePosition in ListPosition)
             {
-                TileInformationPopup NewTilePopup = new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, LayerHolder[LayerIndex].GetTile((int)ActivePosition.X, (int)ActivePosition.Y));
+                TileInformationPopup NewTilePopup = new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, this, CurrentOffset, LayerHolder[LayerIndex].GetTile((int)ActivePosition.X, (int)ActivePosition.Y));
                 ListTilePopup.Add(NewTilePopup);
                 CurrentOffset += OffsetBetweenPopup;
             }
@@ -94,7 +97,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (Vector3 ActivePosition in ListPosition)
             {
-                ListTilePopup.Add(new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, LayerHolder[(int)ActivePosition.Z].GetTile((int)ActivePosition.X, (int)ActivePosition.Y)));
+                ListTilePopup.Add(new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, this, CurrentOffset, LayerHolder[(int)ActivePosition.Z].GetTile((int)ActivePosition.X, (int)ActivePosition.Y)));
                 CurrentOffset += OffsetBetweenPopup;
             }
 
@@ -119,6 +122,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     IsClosed = true;
                 }
             }
+        }
+
+        public virtual string GetTileName(int TerrainTypeIndex)
+        {
+            return string.Empty;
         }
 
         public void Draw(CustomSpriteBatch g)

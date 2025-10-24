@@ -53,5 +53,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
         }
+        public override string GetTileName(int TerrainTypeIndex)
+        {
+            return Map.TerrainRestrictions.ListTerrainType[TerrainTypeIndex].Name;
+        }
     }
 }

@@ -33,8 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (MovementAlgorithmTile ActiveTile in ListLayerPossibility)
             {
                 //Wall
-                if (ActiveTile == null || !Map.TerrainRestrictions.CanMove(MapComponent, UnitStat, ActiveTile.TerrainTypeIndex) || ActiveTile.MovementCost == -1
-                    || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                if (ActiveTile == null || ActiveTile.TerrainTypeIndex == 0 || ActiveTile.MovementCost == -1)
                 {
                     continue;
                 }
@@ -66,7 +65,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
-            return Map.TerrainRestrictions.GetMVCost(MapComponent, UnitStat, TerrainToGo.TerrainTypeIndex);
+            return 1;
         }
 
         public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)

@@ -62,6 +62,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<PERAttack> ListPERAttack;
         public MovementAlgorithm Pathfinder;
         public LayerHolderDeathmatch LayerManager;
+        public UnitAndTerrainValues TerrainRestrictions;
 
         public NonDemoScreen NonDemoScreen;
         public SpiritMenu SpiritMenu;

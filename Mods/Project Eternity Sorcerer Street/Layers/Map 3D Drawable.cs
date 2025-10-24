@@ -768,9 +768,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         int PosY = (int)ActiveSquad.Y;
                         Terrain UpperTerrain = ActiveLayer.ArrayTerrain[PosX, PosY];
                         DrawableTile UpperTile = ActiveLayer.ArrayTile[PosX, PosY];
-                        TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
 
-                        if (UpperTerrainType.ListRestriction.Count > 0 || UpperTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
+                        if (UpperTerrain.TerrainTypeIndex > 0 || UpperTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
                             && !ListIgnoredTerrain.Contains(UpperTile))
                         {
                             ListIgnoredTerrain.Add(UpperTile);
