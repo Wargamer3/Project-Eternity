@@ -44,8 +44,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArrayTilesetInformation[i] = ReadTerrain(BR, TileSizeX, TileSizeY, TilesetIndex + i);
             }
 
-            RelativePath = ArrayTilesetInformation[0].TilesetName;
-
             if (LoadBackgroundPaths)
             {
                 int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();

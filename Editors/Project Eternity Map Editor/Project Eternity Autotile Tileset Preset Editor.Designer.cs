@@ -40,6 +40,12 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.label1 = new System.Windows.Forms.Label();
             this.cboTilesetType = new System.Windows.Forms.ComboBox();
             this.gbTileInformation = new System.Windows.Forms.GroupBox();
+            this.gbWhitelist = new System.Windows.Forms.GroupBox();
+            this.lsWhitelist = new System.Windows.Forms.ListBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cboWhitelistType = new System.Windows.Forms.ComboBox();
+            this.btnAddWhitelist = new System.Windows.Forms.Button();
+            this.btnRemoveWhitelist = new System.Windows.Forms.Button();
             this.btnEditTerrainTypes = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lstTerrainBonus = new System.Windows.Forms.ListBox();
@@ -66,6 +72,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.gbTileInformation.SuspendLayout();
+            this.gbWhitelist.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -153,6 +160,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             // 
             // gbTileInformation
             // 
+            this.gbTileInformation.Controls.Add(this.gbWhitelist);
             this.gbTileInformation.Controls.Add(this.btnEditTerrainTypes);
             this.gbTileInformation.Controls.Add(this.groupBox2);
             this.gbTileInformation.Controls.Add(this.groupBox1);
@@ -164,6 +172,70 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileInformation.TabIndex = 20;
             this.gbTileInformation.TabStop = false;
             this.gbTileInformation.Text = "Tile Information";
+            // 
+            // gbWhitelist
+            // 
+            this.gbWhitelist.Controls.Add(this.lsWhitelist);
+            this.gbWhitelist.Controls.Add(this.label4);
+            this.gbWhitelist.Controls.Add(this.cboWhitelistType);
+            this.gbWhitelist.Controls.Add(this.btnAddWhitelist);
+            this.gbWhitelist.Controls.Add(this.btnRemoveWhitelist);
+            this.gbWhitelist.Location = new System.Drawing.Point(9, 206);
+            this.gbWhitelist.Name = "gbWhitelist";
+            this.gbWhitelist.Size = new System.Drawing.Size(214, 182);
+            this.gbWhitelist.TabIndex = 25;
+            this.gbWhitelist.TabStop = false;
+            this.gbWhitelist.Text = "Whitelist";
+            // 
+            // lsWhitelist
+            // 
+            this.lsWhitelist.FormattingEnabled = true;
+            this.lsWhitelist.Location = new System.Drawing.Point(6, 19);
+            this.lsWhitelist.Name = "lsWhitelist";
+            this.lsWhitelist.Size = new System.Drawing.Size(202, 95);
+            this.lsWhitelist.TabIndex = 32;
+            this.lsWhitelist.SelectedIndexChanged += new System.EventHandler(this.lsWhitelist_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 68);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(142, 13);
+            this.label4.TabIndex = 31;
+            this.label4.Text = "Battle animation background";
+            // 
+            // cboWhitelistType
+            // 
+            this.cboWhitelistType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboWhitelistType.FormattingEnabled = true;
+            this.cboWhitelistType.Location = new System.Drawing.Point(6, 125);
+            this.cboWhitelistType.Name = "cboWhitelistType";
+            this.cboWhitelistType.Size = new System.Drawing.Size(202, 21);
+            this.cboWhitelistType.TabIndex = 30;
+            this.cboWhitelistType.SelectedIndexChanged += new System.EventHandler(this.cboWhitelistType_SelectedIndexChanged);
+            // 
+            // btnAddWhitelist
+            // 
+            this.btnAddWhitelist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddWhitelist.Location = new System.Drawing.Point(6, 152);
+            this.btnAddWhitelist.Name = "btnAddWhitelist";
+            this.btnAddWhitelist.Size = new System.Drawing.Size(75, 24);
+            this.btnAddWhitelist.TabIndex = 1;
+            this.btnAddWhitelist.Text = "Add";
+            this.btnAddWhitelist.UseVisualStyleBackColor = true;
+            this.btnAddWhitelist.Click += new System.EventHandler(this.btnAddWhitelist_Click);
+            // 
+            // btnRemoveWhitelist
+            // 
+            this.btnRemoveWhitelist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRemoveWhitelist.Location = new System.Drawing.Point(87, 152);
+            this.btnRemoveWhitelist.Name = "btnRemoveWhitelist";
+            this.btnRemoveWhitelist.Size = new System.Drawing.Size(75, 24);
+            this.btnRemoveWhitelist.TabIndex = 2;
+            this.btnRemoveWhitelist.Text = "Remove";
+            this.btnRemoveWhitelist.UseVisualStyleBackColor = true;
+            this.btnRemoveWhitelist.Click += new System.EventHandler(this.btnRemoveWhitelist_Click);
             // 
             // btnEditTerrainTypes
             // 
@@ -404,6 +476,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.gbTileInformation.ResumeLayout(false);
+            this.gbWhitelist.ResumeLayout(false);
+            this.gbWhitelist.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
@@ -446,5 +520,11 @@ namespace ProjectEternity.Editors.TilesetEditor
         private TabControl tabControl1;
         private Label label2;
         private NumericUpDown numericUpDown1;
+        private GroupBox gbWhitelist;
+        private ListBox lsWhitelist;
+        private Label label4;
+        private ComboBox cboWhitelistType;
+        private Button btnAddWhitelist;
+        private Button btnRemoveWhitelist;
     }
 }

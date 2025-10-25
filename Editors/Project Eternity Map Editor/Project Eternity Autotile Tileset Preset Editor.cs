@@ -146,7 +146,12 @@ namespace ProjectEternity.Editors.TilesetEditor
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
-            byte TilesetTypeIndex = (byte)(cboTilesetType.SelectedIndex + 1);
+            int TypeIndex = 0;
+            if (cboTilesetType.SelectedIndex > 0)
+            {
+                TypeIndex = cboTilesetType.SelectedIndex;
+            }
+            byte TilesetTypeIndex = (byte)(TypeIndex + 1);
             if (TilesetTypeIndex < 0 || TilesetTypeIndex > cboTilesetType.Items.Count)
             {
                 TilesetTypeIndex = 0;
@@ -189,6 +194,8 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             TilesetPreset NewTilesetPreset = Helper.LoadPreset(BR, TileSize.X, TileSize.Y, 0);
 
+            NewTilesetPreset.RelativePath = Name;
+
             BR.Close();
             FS.Close();
 
@@ -205,9 +212,10 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             cboTerrainType.Items.Clear();
             string[] ArrayTerrainType = Helper.GetTerrainTypes();
-            foreach (var ActiveTerrainType in ArrayTerrainType)
+            foreach (string ActiveTerrainType in ArrayTerrainType)
             {
                 cboTerrainType.Items.Add(ActiveTerrainType);
+                cboWhitelistType.Items.Add(ActiveTerrainType);
             }
 
             tabControl1.TabPages.Clear();
@@ -221,6 +229,8 @@ namespace ProjectEternity.Editors.TilesetEditor
                 TabContent ActiveTab = ListActiveTab[i];
                 ActiveTab.TilesetInfo.TilesetName = ActiveTileset.TilesetName;
 
+                ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex = ActiveTileset.ListAllowedTerrainTypeIndex;
+
                 ActiveTab.TilesetInfo.ArrayTerrain = ActiveTileset.ArrayTerrain;
                 ActiveTab.TilesetInfo.ArrayTiles = ActiveTileset.ArrayTiles;
 
@@ -231,12 +241,20 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             AllowEvent = false;
 
-            cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType;
+            cboTilesetType.SelectedIndex = (int)NewTilesetPreset.TilesetType - 1;
 
             if (NewTilesetPreset.TilesetType == TilesetTypes.Road)
             {
-                tabControl1.TabPages[0].Text = "Road";
-                tabControl1.TabPages[1].Text = "Bridge";
+                if (tabControl1.TabPages.Count == 0)
+                {
+                    CreateTab("Road");
+                    CreateTab("Bridge");
+                }
+                else
+                {
+                    tabControl1.TabPages[0].Text = "Road";
+                    tabControl1.TabPages[1].Text = "Bridge";
+                }
             }
             else if (NewTilesetPreset.TilesetType == TilesetTypes.Ocean)
             {
@@ -255,6 +273,16 @@ namespace ProjectEternity.Editors.TilesetEditor
                 {
                     tabControl1.TabPages[0].Text = "Main";
                 }
+            }
+
+            lsWhitelist.Items.Clear();
+            foreach (int ActiveTerrainTypeIndex in ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex)
+            {
+                lsWhitelist.Items.Add(cboWhitelistType.Items[ActiveTerrainTypeIndex].ToString());
+            }
+            if (lsWhitelist.Items.Count > 0)
+            {
+                lsWhitelist.SelectedIndex = 0;
             }
 
             AllowEvent = true;
@@ -318,6 +346,15 @@ namespace ProjectEternity.Editors.TilesetEditor
             if (tabControl1.SelectedIndex >= 0)
             {
                 SelectTile(ActiveTab.viewerTilesetTab.ListTileBrush[0].X, ActiveTab.viewerTilesetTab.ListTileBrush[0].Y);
+                lsWhitelist.Items.Clear();
+                foreach (int ActiveTerrainTypeIndex in ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex)
+                {
+                    lsWhitelist.Items.Add(cboWhitelistType.Items[ActiveTerrainTypeIndex].ToString());
+                }
+                if (lsWhitelist.Items.Count > 0)
+                {
+                    lsWhitelist.SelectedIndex = 0;
+                }
             }
         }
 
@@ -547,6 +584,66 @@ namespace ProjectEternity.Editors.TilesetEditor
             DrawableTile PresetTile = ActiveTab.TilesetInfo.ArrayTiles[TilePos.X / TileSize.X, TilePos.Y / TileSize.Y];
 
             PresetTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
+        }
+
+        #endregion
+
+        #region Whitelist
+
+        private void lsWhitelist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!AllowEvent || lsWhitelist.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            cboWhitelistType.SelectedIndex = ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex[lsWhitelist.SelectedIndex];
+        }
+
+        private void cboWhitelistType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!AllowEvent || lsWhitelist.SelectedIndex < 0 || cboWhitelistType.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            AllowEvent = false;
+            lsWhitelist.Items[lsWhitelist.SelectedIndex] = cboWhitelistType.Items[cboWhitelistType.SelectedIndex];
+            ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex[lsWhitelist.SelectedIndex] = cboWhitelistType.SelectedIndex;
+            AllowEvent = true;
+        }
+
+        private void btnAddWhitelist_Click(object sender, EventArgs e)
+        {
+            lsWhitelist.Items.Add(cboWhitelistType.Items[0]);
+            ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex.Add(0);
+
+            lsWhitelist.SelectedIndex = lsWhitelist.Items.Count - 1;
+        }
+
+        private void btnRemoveWhitelist_Click(object sender, EventArgs e)
+        {
+            if (lsWhitelist.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            int Index = lsWhitelist.SelectedIndex;
+
+            ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex.RemoveAt(Index);
+            lsWhitelist.Items.RemoveAt(Index);
+
+            if (lsWhitelist.Items.Count > 0)
+            {
+                if (Index >= lsWhitelist.Items.Count)
+                {
+                    lsWhitelist.SelectedIndex = lsWhitelist.Items.Count - 1;
+                }
+                else
+                {
+                    lsWhitelist.SelectedIndex = Index;
+                }
+            }
         }
 
         #endregion
