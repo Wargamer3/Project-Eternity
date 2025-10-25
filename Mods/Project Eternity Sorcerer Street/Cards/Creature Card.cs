@@ -238,11 +238,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Enchant)
             {
+                if (EnchantAbilities == null)
+                {
+                    EnchantAbilities = new CardAbilities(Abilities);
+                }
                 return EnchantAbilities;
             }
             else if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Battle)
             {
-                return EnchantAbilities;
+                if (BattleAbilities == null)
+                {
+                    BattleAbilities = new CardAbilities(Abilities);
+                }
+                return BattleAbilities;
             }
 
             return Abilities;

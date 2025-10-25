@@ -63,9 +63,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 Player ActivePlayer = Map.ListPlayer[P];
-                for (int S = 0; S < ActivePlayer.ListCreatureOnBoard.Count; S++)
+                for (int S = 0; S < ActivePlayer.ListSummonedCreature.Count; S++)
                 {
-                    SorcererStreetUnit ActiveUnit = ActivePlayer.ListCreatureOnBoard[S];
+                    SorcererStreetUnit ActiveUnit = ActivePlayer.ListSummonedCreature[S].DefendingCreature.GamePiece;
                     if (ActiveUnit.Speed != Vector3.Zero)
                     {
                         ListSquadAutoMovement.Add(new UnitAutoMovement(P, S, ActiveUnit, Map.GetTerrain(ActiveUnit.Position)));

@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class PERAttack : Projectile3D
     {
         private readonly SorcererStreetMap Map;
-        public SorcererStreetUnit Owner;
+        public TerrainSorcererStreet Owner;
         public int PlayerIndex;//Only decrement TurnsRemaining if the current player index correspond
         public Vector3 Position;
         public Attack3D Map3DComponent;
@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public PERAttackAttributes PERAttributes;
         public ExplosionOptions ExplosionOption;
 
-        public PERAttack(SorcererStreetUnit Owner, int PlayerIndex, SorcererStreetMap Map, Vector3 Position, Vector3 Speed, int Lifetime)
+        public PERAttack(TerrainSorcererStreet Owner, int PlayerIndex, SorcererStreetMap Map, Vector3 Position, Vector3 Speed, int Lifetime)
             : base(Lifetime)
         {
             this.Owner = Owner;
@@ -80,14 +80,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveTarget != null)
             {
-                if (Map.ListPlayer[ActiveTarget.Item1].ListCreatureOnBoard[ActiveTarget.Item2] == Owner && !IsAttackingSelf)
+                if (Map.ListPlayer[ActiveTarget.Item1].ListSummonedCreature[ActiveTarget.Item2] == Owner && !IsAttackingSelf)
                 {
                     return false;
                 }
 
                 if (ExplosionOption.ExplosionRadius > 0)
                 {
-                    Map.AttackWithExplosion(PlayerIndex, Owner, ExplosionOption, Position);
+                    Map.AttackWithExplosion(PlayerIndex, Owner.DefendingCreature.GamePiece, ExplosionOption, Position);
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (ExplosionOption.ExplosionRadius > 0)
                 {
-                    Map.AttackWithExplosion(PlayerIndex, Owner, ExplosionOption, Position);
+                    Map.AttackWithExplosion(PlayerIndex, Owner.DefendingCreature.GamePiece, ExplosionOption, Position);
                 }
 
                 return true;

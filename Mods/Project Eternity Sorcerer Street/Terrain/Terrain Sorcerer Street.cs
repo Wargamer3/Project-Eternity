@@ -80,10 +80,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string NeutralElement = "Neutral";
         public const string MorphElement = "Morph";
         public const string MultiElement = "Multi";
-        public const string EastTower = "East Gate";
-        public const string WestTower = "Weast Gate";
-        public const string SouthTower = "South Gate";
-        public const string NorthTower = "North Gate";
+        public const string EastTower = "East Tower";
+        public const string WestTower = "Weast Tower";
+        public const string SouthTower = "South Tower";
+        public const string NorthTower = "North Tower";
         public const string Shrine = "Shrine";
         public const string FortuneTeller = "Fortune Teller";
 

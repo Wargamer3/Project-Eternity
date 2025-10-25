@@ -135,9 +135,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return;
             }
 
-            for (int S = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count - 1; S >= 0; --S)
+            for (int S = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count - 1; S >= 0; --S)
             {
-                if (Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[S].Speed != Vector3.Zero)
+                if (Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[S].DefendingCreature.GamePiece.Speed != Vector3.Zero)
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
                     return;

@@ -759,13 +759,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (Player ActivePlayer in Map.ListPlayer)
             {
-                foreach (SorcererStreetUnit ActiveSquad in ActivePlayer.ListCreatureOnBoard)
+                foreach (TerrainSorcererStreet ActiveSquad in ActivePlayer.ListSummonedCreature)
                 {
-                    if (ActiveSquad.Z + 1 < Map.LayerManager.ListLayer.Count)
+                    if (ActiveSquad.LayerIndex + 1 < Map.LayerManager.ListLayer.Count)
                     {
-                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)ActiveSquad.Z + 1];
-                        int PosX = (int)ActiveSquad.X;
-                        int PosY = (int)ActiveSquad.Y;
+                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)ActiveSquad.LayerIndex + 1];
+                        int PosX = (int)ActiveSquad.GridPosition.X;
+                        int PosY = (int)ActiveSquad.GridPosition.Y;
                         Terrain UpperTerrain = ActiveLayer.ArrayTerrain[PosX, PosY];
                         DrawableTile UpperTile = ActiveLayer.ArrayTile[PosX, PosY];
 

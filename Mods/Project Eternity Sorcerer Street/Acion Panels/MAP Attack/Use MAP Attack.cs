@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
@@ -13,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "UseMapAttack";
 
-        private SorcererStreetUnit ActiveUnit;
+        private TerrainSorcererStreet ActiveUnit;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private List<Vector3> ListMVHoverPoints;
@@ -35,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ListMVHoverPoints = ListMVHoverPoints;
             this.ListAttackChoice = AttackChoice;
 
-            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -79,7 +78,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void DoWrite(ByteWriter BW)

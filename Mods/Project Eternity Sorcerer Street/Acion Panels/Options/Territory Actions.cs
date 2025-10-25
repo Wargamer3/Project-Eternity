@@ -57,7 +57,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (ActionMenuCursor)
                 {
                     case 0:
-                        AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map, ActivePlayerIndex, ActiveTerrain));
+                        if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LandLevelLock)
+                        {
+                        }
+                        else
+                        {
+                            AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map, ActivePlayerIndex, ActiveTerrain));
+                        }
                         break;
                     case 1:
                         if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
@@ -103,38 +109,51 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = (int)(Constants.Height / 2);
-            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth;
-            float InfoBoxY = Constants.Height / 10;
+            float Ratio = Constants.Height / 720f;
 
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
+            int BoxWidth = (int)(456 * Ratio);
+            int BoxHeight = (int)(210 * Ratio);
+            int InfoBoxX = 1075;
+            int InfoBoxY = 108;
 
-            float CurrentX = InfoBoxX + 10;
-            float CurrentY = InfoBoxY - 10;
+            int IconWidth = (int)(32 * Ratio);
+            int IconHeight = (int)(32 * Ratio);
+            int LineHeight = (int)(33 * Ratio);
 
-            CurrentY += 20;
+            MenuHelper.DrawNamedBox(g, "Menu", new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
+
+            int CurrentX = InfoBoxX + (int)(40 * Ratio);
+            int CurrentY = InfoBoxY + (int)(10 * Ratio);
+
             g.DrawString(Map.fntMenuText, "What would you like to do?", new Vector2(CurrentX, CurrentY), Color.White);
-            CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX + 10, CurrentY), Color.White);
-            CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX + 10, CurrentY), Color.White);
-            CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            CurrentX += 50;
+            CurrentY += LineHeight;
+            if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LandLevelLock)
+            {
+                g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX, CurrentY), Color.Gray);
+                g.Draw(IconHolder.Icons.sprMenuLimitLand, new Rectangle(CurrentX + (int)(180 * Ratio), CurrentY, IconWidth, IconHeight), Color.White);
+            }
+            else
+            {
+                g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX, CurrentY), Color.White);
+            }
+            CurrentY += LineHeight;
+            g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX, CurrentY), Color.White);
+            CurrentY += LineHeight;
+            g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX, CurrentY), Color.White);
             if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
             {
                 g.DrawString(Map.fntMenuText, "X", new Vector2(CurrentX + 150, CurrentY), Color.White);
             }
-            CurrentY += 20;
+            CurrentY += LineHeight;
             g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
-            CurrentY += 20;
+            CurrentY += LineHeight;
             g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, InfoBoxY + 30 + 20 * ActionMenuCursor));
+            MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX, InfoBoxY + (int)(50 * Ratio) + LineHeight * ActionMenuCursor));
 
-            ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, ActiveTerrain);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer);
+            ActionPanelPlayerDefault.DrawLandInformationBottom(g, Map, ActiveTerrain);
         }
     }
 }

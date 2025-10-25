@@ -83,15 +83,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveInputManager.InputLButtonPressed())
             {
-                if (ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count == 0)
+                if (ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count == 0)
                     return CursorMoved;
 
-                SorcererStreetUnit ActiveSquad = null;
+                TerrainSorcererStreet ActiveSquad = null;
                 int ActiveSquadIndex;
 
                 int UnitIndex = 0;
                 if (ActiveSquad != null)
-                    UnitIndex = ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.IndexOf(ActiveSquad);
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSummonedCreature.IndexOf(ActiveSquad);
 
                 int StartIndex = UnitIndex;
                 bool UnmovedSquadFound = false;
@@ -100,10 +100,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ++UnitIndex;
 
-                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count)
+                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count)
                         UnitIndex = 0;
 
-                    if (!ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].IsActive && ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].CanMove)
+                    if (!ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.IsActive && ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.CanMove)
                     {
                         UnmovedSquadFound = true;
                     }
@@ -114,33 +114,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     do
                     {
-                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count)
+                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count)
                             UnitIndex = 0;
                     }
-                    while (!ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].IsActive);
+                    while (!ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.IsActive);
                 }
 
                 ActiveSquadIndex = UnitIndex;
-                CursorPosition = ActiveSquad.Position;
+                CursorPosition = ActiveSquad.WorldPosition;
                 CursorPositionVisible = CursorPosition;
 
-                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
-                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                if (ActiveSquad.WorldPosition.X < Camera2DPosition.X || ActiveSquad.WorldPosition.Y < Camera2DPosition.Y ||
+                    ActiveSquad.WorldPosition.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.WorldPosition.Y >= Camera2DPosition.Y + ScreenSize.Y)
                 {
-                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.WorldPosition));
                 }
             }
             else if (ActiveInputManager.InputRButtonPressed())
             {
-                if (ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count == 0)
+                if (ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count == 0)
                     return CursorMoved;
 
-                SorcererStreetUnit ActiveSquad = null;
+                TerrainSorcererStreet ActiveSquad = null;
                 int ActiveSquadIndex;
 
                 int UnitIndex = 0;
                 if (ActiveSquad != null)
-                    UnitIndex = ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.IndexOf(ActiveSquad);
+                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSummonedCreature.IndexOf(ActiveSquad);
                 int StartIndex = UnitIndex;
                 bool UnmovedSquadFound = false;
 
@@ -149,9 +149,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     --UnitIndex;
 
                     if (UnitIndex < 0)
-                        UnitIndex = ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count - 1;
+                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count - 1;
 
-                    if (!ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].IsActive && ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].CanMove)
+                    if (!ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.IsActive && ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.CanMove)
                     {
                         UnmovedSquadFound = true;
                     }
@@ -163,19 +163,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     do
                     {
                         if (--UnitIndex < 0)
-                            UnitIndex = ListPlayer[ActivePlayerIndex].ListCreatureOnBoard.Count - 1;
+                            UnitIndex = ListPlayer[ActivePlayerIndex].ListSummonedCreature.Count - 1;
                     }
-                    while (ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[UnitIndex].IsActive);
+                    while (ListPlayer[ActivePlayerIndex].ListSummonedCreature[UnitIndex].DefendingCreature.GamePiece.IsActive);
                 }
 
                 ActiveSquadIndex = UnitIndex;
-                CursorPosition = ActiveSquad.Position;
+                CursorPosition = ActiveSquad.WorldPosition;
                 CursorPositionVisible = CursorPosition;
 
-                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
-                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
+                if (ActiveSquad.WorldPosition.X < Camera2DPosition.X || ActiveSquad.WorldPosition.Y < Camera2DPosition.Y ||
+                    ActiveSquad.WorldPosition.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.WorldPosition.Y >= Camera2DPosition.Y + ScreenSize.Y)
                 {
-                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
+                    PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.WorldPosition));
                 }
             }
             return CursorMoved;

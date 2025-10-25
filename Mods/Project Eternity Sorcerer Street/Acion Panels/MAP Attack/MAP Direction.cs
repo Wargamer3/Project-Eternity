@@ -8,7 +8,6 @@ using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -16,7 +15,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "AttackMAPDirection";
 
-        private SorcererStreetUnit ActiveSquad;
+        private TerrainSorcererStreet ActiveSquad;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         public MAPAttackAttributes MAPAttributes;
@@ -36,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ListMVHoverPoints = ListMVHoverPoints;
             ListAttackTerrain = new List<MovementAlgorithmTile>();
 
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -79,11 +78,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void AimUp()
         {
-            Map.CursorPosition.X = ActiveSquad.X;
-            Map.CursorPosition.Y = ActiveSquad.Y - 1;
+            Map.CursorPosition.X = ActiveSquad.WorldPosition.X;
+            Map.CursorPosition.Y = ActiveSquad.WorldPosition.Y - 1;
 
             ListAttackTerrain.Clear();
-            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalUp(ActiveSquad.Position))
+            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalUp(ActiveSquad.WorldPosition))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
@@ -94,11 +93,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void AimDown()
         {
-            Map.CursorPosition.X = ActiveSquad.X;
-            Map.CursorPosition.Y = ActiveSquad.Y + 1;
+            Map.CursorPosition.X = ActiveSquad.WorldPosition.X;
+            Map.CursorPosition.Y = ActiveSquad.WorldPosition.Y + 1;
 
             ListAttackTerrain.Clear();
-            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalDown(ActiveSquad.Position))
+            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalDown(ActiveSquad.WorldPosition))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
@@ -109,11 +108,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void AimLeft()
         {
-            Map.CursorPosition.X = ActiveSquad.X - 1;
-            Map.CursorPosition.Y = ActiveSquad.Y;
+            Map.CursorPosition.X = ActiveSquad.WorldPosition.X - 1;
+            Map.CursorPosition.Y = ActiveSquad.WorldPosition.Y;
 
             ListAttackTerrain.Clear();
-            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalLeft(ActiveSquad.Position))
+            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalLeft(ActiveSquad.WorldPosition))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
@@ -124,11 +123,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void AimRight()
         {
-            Map.CursorPosition.X = ActiveSquad.X + 1;
-            Map.CursorPosition.Y = ActiveSquad.Y;
+            Map.CursorPosition.X = ActiveSquad.WorldPosition.X + 1;
+            Map.CursorPosition.Y = ActiveSquad.WorldPosition.Y;
 
             ListAttackTerrain.Clear();
-            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalRight(ActiveSquad.Position))
+            foreach (Vector3 TargetPosition in MAPAttributes.GetTargetsDirectionalRight(ActiveSquad.WorldPosition))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
@@ -141,7 +140,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
 
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);

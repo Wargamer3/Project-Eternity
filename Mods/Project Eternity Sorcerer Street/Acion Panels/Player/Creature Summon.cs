@@ -57,6 +57,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.DicTeam[ActivePlayer.TeamIndex].IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
 
             Map.ListSummonedCreature.Add(ActiveTerrain);
+            ActivePlayer.ListSummonedCreature.Add(ActiveTerrain);
 
             Map.OnCreatureSummon(SelectedCard, ActiveTerrain);
 

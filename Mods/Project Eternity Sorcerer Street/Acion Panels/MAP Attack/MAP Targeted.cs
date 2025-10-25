@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "AttackMAPTargeted";
 
-        private SorcererStreetUnit ActiveSquad;
+        private TerrainSorcererStreet ActiveSquad;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private List<Vector3> ListMVHoverPoints;
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         Stack<Tuple<int, int>> ListMAPAttackTarget;
 
-        private SorcererStreetUnit TemptativeTargetSquad;
+        private TerrainSorcererStreet TemptativeTargetSquad;
         private int TemptativeTargetSquadIndex;
         private int TemptativeTargetPlayerIndex;
 
@@ -47,12 +47,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCursorTarget = new List<MovementAlgorithmTile>();
             ListExplosionTerrain = new List<MovementAlgorithmTile>();
 
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void OnSelect()
         {
-            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad, RangeMaximum);
+            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad.DefendingCreature.GamePiece, RangeMaximum);
             ListMAPAttackTarget = Map.GetEnemies(MAPAttributes.FriendlyFire, ListAttackTerrain);
 
             ListAttackChoice = new List<Vector3>();
@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 do
                 {
-                    if (++SquadIndex >= Map.ListPlayer[PlayerIndex].ListCreatureOnBoard.Count)
+                    if (++SquadIndex >= Map.ListPlayer[PlayerIndex].ListSummonedCreature.Count)
                     {
                         SquadIndex = 0;
 
@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (ContainsSquad(PlayerIndex, SquadIndex))
                     {
-                        TemptativeTargetSquad = Map.ListPlayer[PlayerIndex].ListCreatureOnBoard[SquadIndex];
+                        TemptativeTargetSquad = Map.ListPlayer[PlayerIndex].ListSummonedCreature[SquadIndex];
                         TemptativeTargetSquadIndex = SquadIndex;
                         TemptativeTargetPlayerIndex = PlayerIndex;
                         break;
@@ -132,14 +132,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 while (StartSquadIndex != SquadIndex || StartPlayerIndex != PlayerIndex);
 
-                Map.CursorPosition = TemptativeTargetSquad.Position;
+                Map.CursorPosition = TemptativeTargetSquad.WorldPosition;
                 Map.CursorPositionVisible = Map.CursorPosition;
                 UpdateExplosionPositions();
 
-                if (TemptativeTargetSquad.X < Map.Camera2DPosition.X || TemptativeTargetSquad.Y < Map.Camera2DPosition.Y ||
-                    TemptativeTargetSquad.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
+                if (TemptativeTargetSquad.WorldPosition.X < Map.Camera2DPosition.X || TemptativeTargetSquad.WorldPosition.Y < Map.Camera2DPosition.Y ||
+                    TemptativeTargetSquad.WorldPosition.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.WorldPosition.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
-                    Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.Position));
+                    Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.WorldPosition));
                 }
             }
             else if (ActiveInputManager.InputRButtonPressed())
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (--SquadIndex < 0)
                     {
-                        SquadIndex = Map.ListPlayer[PlayerIndex].ListCreatureOnBoard.Count - 1;
+                        SquadIndex = Map.ListPlayer[PlayerIndex].ListSummonedCreature.Count - 1;
 
                         if (--PlayerIndex < 0)
                         {
@@ -169,7 +169,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (ContainsSquad(PlayerIndex, SquadIndex))
                     {
-                        TemptativeTargetSquad = Map.ListPlayer[PlayerIndex].ListCreatureOnBoard[SquadIndex];
+                        TemptativeTargetSquad = Map.ListPlayer[PlayerIndex].ListSummonedCreature[SquadIndex];
                         TemptativeTargetSquadIndex = SquadIndex;
                         TemptativeTargetPlayerIndex = PlayerIndex;
                         break;
@@ -177,14 +177,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 while (StartSquadIndex != SquadIndex && StartPlayerIndex != PlayerIndex);
 
-                Map.CursorPosition = TemptativeTargetSquad.Position;
+                Map.CursorPosition = TemptativeTargetSquad.WorldPosition;
                 Map.CursorPositionVisible = Map.CursorPosition;
                 UpdateExplosionPositions();
 
-                if (TemptativeTargetSquad.X < Map.Camera2DPosition.X || TemptativeTargetSquad.Y < Map.Camera2DPosition.Y ||
-                    TemptativeTargetSquad.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
+                if (TemptativeTargetSquad.WorldPosition.X < Map.Camera2DPosition.X || TemptativeTargetSquad.WorldPosition.Y < Map.Camera2DPosition.Y ||
+                    TemptativeTargetSquad.WorldPosition.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.WorldPosition.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
-                    Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.Position));
+                    Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.WorldPosition));
                 }
             }
             else
@@ -223,7 +223,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             foreach (Tuple<int, int> ActiveTarget in ListMAPAttackTarget)
             {
-                if (ActiveTarget.Item1 == PlayerIndex && ActiveTarget.Item2 == SquadIndex && Map.ListPlayer[PlayerIndex].ListCreatureOnBoard[SquadIndex].IsActive)
+                if (ActiveTarget.Item1 == PlayerIndex && ActiveTarget.Item2 == SquadIndex && Map.ListPlayer[PlayerIndex].ListSummonedCreature[SquadIndex].DefendingCreature.GamePiece.IsActive)
                 {
                     return true;
                 }
@@ -236,7 +236,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
 
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackChoice = new List<Vector3>(AttackChoiceCount);

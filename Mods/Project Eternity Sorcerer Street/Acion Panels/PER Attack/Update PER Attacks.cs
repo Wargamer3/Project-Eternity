@@ -86,7 +86,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         if (ActiveAttack.Lifetime <= 0)
                         {
                             Map.ListPERAttack.RemoveAt(A);
-                            SetAttackContext(ActiveAttack, ActiveAttack.Owner, Vector3.Normalize(ActiveAttack.Speed), ActiveAttack.Position);
+                            SetAttackContext(ActiveAttack, ActiveAttack.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Speed), ActiveAttack.Position);
                             ActiveAttack.UpdateSkills(AttackPERRequirement.OnDeath);
                         }
                         else
@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ActiveAttack.Owner.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
                         {
-                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                             ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
                             ActiveAttack.Owner.DestroySelf();
                         }
@@ -175,14 +175,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (NextTerrain != ActiveAttack.LastTerrain)
                     {
-                        SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                        SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                         if (ActiveAttack.Owner.ProcessMovement(NextPosition, NextTerrain))
                         {
                             ListPERAttackToUpdate.RemoveAt(P);
 
                             if (ActiveAttack.Owner.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
                             {
-                                SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                                SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                                 ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
                                 ActiveAttack.Owner.DestroySelf();
                             }
@@ -211,7 +211,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ActiveAttack.Owner.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
                         {
-                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                             ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
                             ActiveAttack.Owner.DestroySelf();
                         }
@@ -221,7 +221,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActiveAttack.Owner.SetPosition(NextPosition);
                     }
 
-                    SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                    SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner.DefendingCreature.GamePiece, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                     ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDistanceTravelled);
 
                     ActiveAttack.LastRealPosition = NextTerrainRealPosition;

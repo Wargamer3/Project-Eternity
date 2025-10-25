@@ -19,6 +19,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
+        protected ActionPanelViewMap(string Name, SorcererStreetMap Map, bool CanCancel)
+            : base(Name, Map, CanCancel)
+        {
+        }
+
         public override void OnSelect()
         {
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);

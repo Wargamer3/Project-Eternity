@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.PlayerIndex = PlayerIndex;
             this.SquadIndex = SquadIndex;
 
-            SquadToKill = Map.ListPlayer[PlayerIndex].ListCreatureOnBoard[SquadIndex];
+            SquadToKill = Map.ListPlayer[PlayerIndex].ListSummonedCreature[SquadIndex].DefendingCreature.GamePiece;
         }
 
         public override void OnSelect()
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (!IsDead)
                 {
-                    Map.ListPlayer[PlayerIndex].ListCreatureOnBoard.RemoveAt(SquadIndex);
+                    Map.ListPlayer[PlayerIndex].ListSummonedCreature.RemoveAt(SquadIndex);
                     SquadToKill.KillUnit();
                     IsDead = true;
                 }

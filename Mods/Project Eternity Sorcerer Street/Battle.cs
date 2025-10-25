@@ -51,9 +51,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                for (int C = 0; C < ActivePlayer.ListCreatureOnBoard.Count; C++)
+                for (int C = 0; C < ActivePlayer.ListSummonedCreature.Count; C++)
                 {
-                    SorcererStreetUnit ActiveCreature = ActivePlayer.ListCreatureOnBoard[C];
+                    SorcererStreetUnit ActiveCreature = ActivePlayer.ListSummonedCreature[C].DefendingCreature.GamePiece;
                     if (ActiveCreature.Position.X == FinalPosition.X && ActiveCreature.Position.Y == FinalPosition.Y)
                     {
                         return C;
@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ActiveTarget.Item2 >= 0)
                     {
-                        SorcererStreetUnit CreatureToKill = ListPlayer[ActiveTarget.Item1].ListCreatureOnBoard[ActiveTarget.Item2];
+                        SorcererStreetUnit CreatureToKill = ListPlayer[ActiveTarget.Item1].ListSummonedCreature[ActiveTarget.Item2].DefendingCreature.GamePiece;
 
                         TerrainSorcererStreet SquadTerrain = GetTerrain(CreatureToKill.Position);
 
@@ -210,7 +210,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (MAPAttributes.Delay > 0)
             {
-                SorcererStreetUnit ActiveSquad = ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+                SorcererStreetUnit ActiveSquad = ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex].DefendingCreature.GamePiece;
                 ListDelayedAttack.Add(new DelayedAttack(ActiveSquad, ActivePlayerIndex, AttackChoice));
                 ListActionMenuChoice.RemoveAllSubActionPanels();
                 ActiveSquad.EndTurn();

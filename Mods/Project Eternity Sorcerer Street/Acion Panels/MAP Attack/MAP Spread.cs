@@ -6,7 +6,6 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -14,7 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "AttackMAPSpread";
 
-        private SorcererStreetUnit ActiveSquad;
+        private TerrainSorcererStreet ActiveSquad;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         public MAPAttackAttributes MAPAttributes;
@@ -34,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.ListMVHoverPoints = ListMVHoverPoints;
 
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -82,7 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
 
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackChoice = new List<Vector3>(AttackChoiceCount);

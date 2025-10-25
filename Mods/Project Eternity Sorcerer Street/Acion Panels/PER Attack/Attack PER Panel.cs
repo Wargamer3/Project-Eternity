@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActiveSquadIndex;
         private PERAttackAttributes PERAttributes;
         private List<Vector3> ListMVHoverPoints;
-        private SorcererStreetUnit ActiveSquad;
+        private TerrainSorcererStreet ActiveSquad;
         public List<MovementAlgorithmTile> ListAttackDirectionHelper;
         public List<MovementAlgorithmTile> ListAttackTerrain;
 
@@ -36,12 +36,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ListAttackDirectionHelper = new List<MovementAlgorithmTile>();
 
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
         }
 
         public override void OnSelect()
         {
-            PERAttackPahtfinding Pathfinder = new PERAttackPahtfinding(Map, ActiveSquad);
+            PERAttackPahtfinding Pathfinder = new PERAttackPahtfinding(Map, ActiveSquad.DefendingCreature.GamePiece);
             Pathfinder.ComputeAttackTargets();
             ListAttackTerrain = Pathfinder.ListUsableAttackTerrain;
         }
@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveInputManager.InputConfirmPressed())
             {
-                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad.Position);
+                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad.WorldPosition);
                 Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
 
                 Terrain TargetTerrain = Map.GetTerrain(Map.CursorPosition);
@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     AttackPosition.Z = ActiveTerrain.WorldPosition.Z + 0.5f;
                 }
 
-                SetRobotContext(ActiveSquad, Vector3.Normalize(TargetPosition - AttackPosition), AttackPosition);
+                SetRobotContext(ActiveSquad.DefendingCreature.GamePiece, Vector3.Normalize(TargetPosition - AttackPosition), AttackPosition);
 
                 if (PERAttributes.HasSkills)
                 {
@@ -77,20 +77,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 else
                 {
-                    CreateAttack(Map, ActivePlayerIndex, ActiveSquad, PERAttributes, AttackPosition, Map.CursorPosition - ActiveSquad.Position, new List<BaseAutomaticSkill>());
+                    CreateAttack(Map, ActivePlayerIndex, ActiveSquad, PERAttributes, AttackPosition, Map.CursorPosition - ActiveSquad.WorldPosition, new List<BaseAutomaticSkill>());
                 }
 
-                ActiveSquad.EndTurn();
+                ActiveSquad.DefendingCreature.GamePiece.EndTurn();
 
-                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.WorldPosition.Z].ListProp)
                 {
-                    ActiveProp.FinishMoving(null, ActiveSquad, ListMVHoverPoints);
+                    ActiveProp.FinishMoving(null, ActiveSquad.DefendingCreature.GamePiece, ListMVHoverPoints);
                 }
 
                 RemoveAllSubActionPanels();
 
-                Map.CursorPosition = ActiveSquad.Position;
-                Map.CursorPositionVisible = ActiveSquad.Position;
+                Map.CursorPosition = ActiveSquad.WorldPosition;
+                Map.CursorPositionVisible = ActiveSquad.WorldPosition;
                 Map.sndConfirm.Play();
             }
             else
@@ -103,7 +103,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static List<PERAttack> CreateAttack(SorcererStreetMap Map, int ActivePlayerIndex, SorcererStreetUnit ActiveSquad, PERAttackAttributes PERAttributes, Vector3 AttackPosition, Vector3 AttackForwardVector, List<BaseAutomaticSkill> ListFollowingSkill)
+        public static List<PERAttack> CreateAttack(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveSquad, PERAttackAttributes PERAttributes, Vector3 AttackPosition, Vector3 AttackForwardVector, List<BaseAutomaticSkill> ListFollowingSkill)
         {
             List<PERAttack> ListNewList = new List<PERAttack>();
 
@@ -163,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListCreatureOnBoard[ActiveSquadIndex];
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSummonedCreature[ActiveSquadIndex];
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)

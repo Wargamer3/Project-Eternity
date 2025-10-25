@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (ActionMenuCursor > 0 || (ActionMenuCursor == 0 && Map.ListPassedTerrain.Count > 0))
+                if (ActionMenuCursor > 0 || (ActionMenuCursor == 0 && Map.ListPassedTerrain.Count > 0) || AllTerritory)
                 {
                     AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
                 }
@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float X = DistanceBetweenCard;
             Color CardColor = Color.FromNonPremultiplied(255, 255, 255, 200);
             Color UnavailableColor = Color.FromNonPremultiplied(127, 127, 127, 200);
-            if (Map.ListPassedTerrain.Count == 0)
+            if (Map.ListPassedTerrain.Count == 0 || AllTerritory)
             {
                 DrawCardMiniature(g, Map.sprTerritory, UnavailableColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
             }
