@@ -132,7 +132,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
 
             if (IsAutotile)
             {
-                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveMap.ListTilesetPreset);
+                ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY], GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveMap.ListTilesetPreset);
             }
             else
             {

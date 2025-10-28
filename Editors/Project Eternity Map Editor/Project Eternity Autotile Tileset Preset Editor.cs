@@ -229,6 +229,8 @@ namespace ProjectEternity.Editors.TilesetEditor
                 TabContent ActiveTab = ListActiveTab[i];
                 ActiveTab.TilesetInfo.TilesetName = ActiveTileset.TilesetName;
 
+                ActiveTab.TilesetInfo.AnimationFrames = ActiveTileset.AnimationFrames;
+
                 ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex = ActiveTileset.ListAllowedTerrainTypeIndex;
 
                 ActiveTab.TilesetInfo.ArrayTerrain = ActiveTileset.ArrayTerrain;
@@ -284,6 +286,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             {
                 lsWhitelist.SelectedIndex = 0;
             }
+
+            txtAnimationFrame.Value = ActiveTab.TilesetInfo.AnimationFrames;
 
             AllowEvent = true;
 
@@ -355,6 +359,8 @@ namespace ProjectEternity.Editors.TilesetEditor
                 {
                     lsWhitelist.SelectedIndex = 0;
                 }
+
+                txtAnimationFrame.Value = ActiveTab.TilesetInfo.AnimationFrames;
             }
         }
 
@@ -544,6 +550,16 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
 
             SelectTile(0, 0);
+        }
+
+        private void txtAnimationFrame_ValueChanged(object sender, EventArgs e)
+        {
+            if (!AllowEvent)
+            {
+                return;
+            }
+
+            ActiveTab.TilesetInfo.AnimationFrames = (int)txtAnimationFrame.Value;
         }
 
         #region Backgrounds

@@ -632,37 +632,19 @@ namespace ProjectEternity.Editors.MapEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            if (!TilePath.StartsWith("Content/Assets/Tilesets/"))
+                            string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(34);
+                            if (cboTiles.Items.Contains(Name))
                             {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(34);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
-
-                                TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", TilePath.Substring(34), ActiveMap.ListTilesetPreset.Count);
-
-                                AddTilesetPreset(NewTileset, "Assets/Tilesets/");
-
-                                cboTiles.Items.Add(Name);
+                                MessageBox.Show("This tile is already listed.\r\n" + Name);
+                                continue;
                             }
-                            else
-                            {
-                                string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(24);
-                                if (cboTiles.Items.Contains(Name))
-                                {
-                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    continue;
-                                }
 
-                                Texture2D Tile = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Tilesets/" + Name);
+                            TilesetPreset NewTileset = Helper.LoadTilesetPreset("Tilesets Presets", TilePath.Substring(34), ActiveMap.ListTilesetPreset.Count);
+                            NewTileset.RelativePath = Name;
 
-                                ActiveMap.ListTilesetPreset.Add(Helper.CreateTilesetPresetFromSprite(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
-                                ActiveMap.ListTileSet.Add(Tile);
-                                //Add the file name to the tile combo box.
-                                cboTiles.Items.Add(Name);
-                            }
+                            AddTilesetPreset(NewTileset, "Assets/Tilesets/");
+
+                            cboTiles.Items.Add(Name);
 
                             cboTiles.SelectedIndex = ActiveMap.ListTilesetPreset.Count - 1;
 

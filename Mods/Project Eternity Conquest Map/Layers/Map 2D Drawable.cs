@@ -97,8 +97,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         }
                         else
                         {
-                            float OffsetSizeX = (Map.TileSize.X / 2) / (float)Map.TileSize.X * Map.TileSize.X;
-                            float OffsetSizeY = (1 - (Map.TileSize.X / 4) / (float)Map.TileSize.Y) * Map.TileSize.X;
+                            float OffsetSizeX = ActiveTile.ArraySubTile[0].Width;
+                            float OffsetSizeY = ActiveTile.ArraySubTile[0].Height;
 
                             for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
                             {

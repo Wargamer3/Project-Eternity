@@ -35,8 +35,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmImportTileset = new System.Windows.Forms.ToolStripMenuItem();
             this.gbTileset = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationFrame = new System.Windows.Forms.Label();
+            this.txtAnimationFrame = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.cboTilesetType = new System.Windows.Forms.ComboBox();
             this.gbTileInformation = new System.Windows.Forms.GroupBox();
@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mnuToolBar.SuspendLayout();
             this.gbTileset.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationFrame)).BeginInit();
             this.gbTileInformation.SuspendLayout();
             this.gbWhitelist.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -108,8 +108,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbTileset.Controls.Add(this.label2);
-            this.gbTileset.Controls.Add(this.numericUpDown1);
+            this.gbTileset.Controls.Add(this.lblAnimationFrame);
+            this.gbTileset.Controls.Add(this.txtAnimationFrame);
             this.gbTileset.Controls.Add(this.label1);
             this.gbTileset.Controls.Add(this.cboTilesetType);
             this.gbTileset.Location = new System.Drawing.Point(12, 27);
@@ -119,21 +119,22 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.gbTileset.TabStop = false;
             this.gbTileset.Text = "Tilesets";
             // 
-            // label2
+            // lblAnimationFrame
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 13);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Animation Frames:";
+            this.lblAnimationFrame.AutoSize = true;
+            this.lblAnimationFrame.Location = new System.Drawing.Point(300, 35);
+            this.lblAnimationFrame.Name = "lblAnimationFrame";
+            this.lblAnimationFrame.Size = new System.Drawing.Size(93, 13);
+            this.lblAnimationFrame.TabIndex = 19;
+            this.lblAnimationFrame.Text = "Animation Frames:";
             // 
-            // numericUpDown1
+            // txtAnimationFrame
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(399, 33);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(66, 20);
-            this.numericUpDown1.TabIndex = 24;
+            this.txtAnimationFrame.Location = new System.Drawing.Point(399, 33);
+            this.txtAnimationFrame.Name = "txtAnimationFrame";
+            this.txtAnimationFrame.Size = new System.Drawing.Size(66, 20);
+            this.txtAnimationFrame.TabIndex = 24;
+            this.txtAnimationFrame.ValueChanged += new System.EventHandler(this.txtAnimationFrame_ValueChanged);
             // 
             // label1
             // 
@@ -474,7 +475,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             this.mnuToolBar.PerformLayout();
             this.gbTileset.ResumeLayout(false);
             this.gbTileset.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationFrame)).EndInit();
             this.gbTileInformation.ResumeLayout(false);
             this.gbWhitelist.ResumeLayout(false);
             this.gbWhitelist.PerformLayout();
@@ -518,8 +519,8 @@ namespace ProjectEternity.Editors.TilesetEditor
         private ComboBox cboBattleAnimationBackground;
         private Button btnEditTerrainTypes;
         private TabControl tabControl1;
-        private Label label2;
-        private NumericUpDown numericUpDown1;
+        private Label lblAnimationFrame;
+        private NumericUpDown txtAnimationFrame;
         private GroupBox gbWhitelist;
         private ListBox lsWhitelist;
         private Label label4;

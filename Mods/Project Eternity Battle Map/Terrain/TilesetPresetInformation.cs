@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string TilesetName;
         public Terrain[,] ArrayTerrain;
         public DrawableTile[,] ArrayTiles;
+        public int AnimationFrames;
         public List<int> ListAllowedTerrainTypeIndex;
 
         public TilesetPresetInformation(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
@@ -39,6 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TilesetPresetInformation(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex)
         {
             TilesetName = BR.ReadString();
+            AnimationFrames = BR.ReadByte();
 
             int ListAllowedTerrainTypeIndexCount = BR.ReadByte();
             ListAllowedTerrainTypeIndex = new List<int>(ListAllowedTerrainTypeIndexCount);
@@ -79,6 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Write(BinaryWriter BW)
         {
             BW.Write(TilesetName);
+            BW.Write((byte)AnimationFrames);
 
             BW.Write((byte)ListAllowedTerrainTypeIndex.Count);
 
