@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class SorcererStreetTerriotryRequirement : SorcererStreetRequirement
     {
-        private string _Price;
+        private string _CostToActivate;
 
         public SorcererStreetTerriotryRequirement()
             : this(null)
@@ -15,19 +15,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public SorcererStreetTerriotryRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Territory", GlobalContext)
+            : base(CreatureCard.TerritoryRequirementName, GlobalContext)
         {
-            _Price = string.Empty;
+            _CostToActivate = string.Empty;
         }
 
         protected override void DoSave(BinaryWriter BW)
         {
-            BW.Write(_Price);
+            BW.Write(_CostToActivate);
         }
 
         protected override void Load(BinaryReader BR)
         {
-            _Price = BR.ReadString();
+            _CostToActivate = BR.ReadString();
         }
 
         public override bool CanActivatePassive()
@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetTerriotryRequirement NewRequirement = new SorcererStreetTerriotryRequirement(GlobalContext);
 
-            NewRequirement._Price = _Price;
+            NewRequirement._CostToActivate = _CostToActivate;
 
             return NewRequirement;
         }
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetTerriotryRequirement CopyRequirement = (SorcererStreetTerriotryRequirement)Copy;
 
-            _Price = CopyRequirement._Price;
+            _CostToActivate = CopyRequirement._CostToActivate;
         }
 
         #region Properties
@@ -60,11 +60,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             get
             {
-                return _Price;
+                return _CostToActivate;
             }
             set
             {
-                _Price = value;
+                _CostToActivate = value;
             }
         }
 

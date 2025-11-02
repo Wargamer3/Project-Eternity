@@ -137,9 +137,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CreatureCard OriginalInvaderCreature;
         public CreatureCard OriginalDefenderCreature;
 
-        public BattleCreatureInfo Invader;
-        public BattleCreatureInfo Defender;
-        public TerrainSorcererStreet DefenderTerrain;
+        public TerrainSorcererStreet ActiveTerrain;
 
         public EffectActivationPhases EffectActivationPhase;
         public List<BaseEffect> ListActivatedEffect;
@@ -148,7 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BattleCreatureInfo OpponentCreature;
 
         public bool CanUseEffectsOrAbilities;
-        public UnitAndTerrainValues TerrainRestrictions;
+        public SorcererStreetTerrainHolder TerrainHolder;
         public List<TerrainSorcererStreet> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public List<TerrainSorcererStreet> ListBoostCreature;
@@ -166,10 +164,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CanUseEffectsOrAbilities = true;
 
-            Invader = new BattleCreatureInfo();
-            Defender = new BattleCreatureInfo();
-            SelfCreature = Invader;
-            OpponentCreature = Defender;
+            SelfCreature = new BattleCreatureInfo();
+            OpponentCreature = new BattleCreatureInfo();
             ListBoostCreature = new List<TerrainSorcererStreet>();
             ListActivatedEffect = new List<BaseEffect>();
         }
@@ -183,21 +179,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CanUseEffectsOrAbilities = true;
 
-            Invader.Reset();
-            Defender.Reset();
+            SelfCreature.Reset();
+            OpponentCreature.Reset();
             ListBoostCreature.Clear();
             ListActivatedEffect.Clear();
             ListBattlePanelHolder = null;
-            DefenderTerrain = null;
+            ActiveTerrain = null;
             Background = null;
         }
 
-        public void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
+        public void ActivateSkill(BattleCreatureInfo SelfCreature, BattleCreatureInfo OpponentCreature, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
         {
-            this.Invader = Invader;
-            SelfCreature = Invader;
-            this.Defender = Defender;
-            OpponentCreature = Defender;
+            this.SelfCreature = SelfCreature;
+            this.OpponentCreature = OpponentCreature;
 
             foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicSkillActivation)
             {
@@ -261,25 +255,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return CreatureCount;
         }
 
-        public void SetCreatures(SorcererStreetMap Map, CreatureCard Invader, int PlayerIndex, TerrainSorcererStreet Defender)
+        public void SetCreatures(SorcererStreetMap Map, CreatureCard SelfCreature, int SelfPlayerIndex, TerrainSorcererStreet ActiveTerrain, CreatureCard OpponentCreature, int OpponentPlayerIndex)
         {
             this.DicCreatureCountByElementType = Map.DicCreatureCountByElementType;
             this.ListSummonedCreature = Map.ListSummonedCreature;
             this.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
             this.CurrentTurn = Map.GameTurn;
-            this.DefenderTerrain = Defender;
+            this.ActiveTerrain = ActiveTerrain;
 
-            this.Invader.Creature = Invader;
-            this.Invader.Owner = Map.ListPlayer[PlayerIndex];
-            this.Invader.PlayerIndex = PlayerIndex;
-            this.Invader.OwnerTeam = Map.DicTeam[this.Invader.Owner.TeamIndex];
+            this.SelfCreature.Creature = SelfCreature;
+            this.SelfCreature.Owner = Map.ListPlayer[SelfPlayerIndex];
+            this.SelfCreature.PlayerIndex = SelfPlayerIndex;
+            this.SelfCreature.OwnerTeam = Map.DicTeam[this.SelfCreature.Owner.TeamIndex];
 
-            if (Defender != null)
+            if (OpponentCreature != null)
             {
-                this.Defender.Creature = Defender.DefendingCreature;
-                this.Defender.Owner = Defender.PlayerOwner;
-                this.Defender.PlayerIndex = Map.ListPlayer.IndexOf(Defender.PlayerOwner);
-                this.Defender.OwnerTeam = Map.DicTeam[this.Defender.Owner.TeamIndex];
+                this.OpponentCreature.Creature = OpponentCreature;
+                this.OpponentCreature.Owner = Map.ListPlayer[OpponentPlayerIndex];
+                this.OpponentCreature.PlayerIndex = OpponentPlayerIndex;
+                this.OpponentCreature.OwnerTeam = Map.DicTeam[this.OpponentCreature.Owner.TeamIndex];
             }
         }
     }
@@ -391,42 +385,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void ReplaceSelfCreature(CreatureCard TransformationCreature, bool IsTemporary)
         {
-            if (GlobalContext.SelfCreature == GlobalContext.Invader)
-            {
-                GlobalContext.InvaderCreatureTemporaryTransformation = IsTemporary;
-                GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
+            GlobalContext.InvaderCreatureTemporaryTransformation = IsTemporary;
+            GlobalContext.OriginalInvaderCreature = GlobalContext.SelfCreature.Creature;
 
-                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                GlobalContext.Invader.Creature.InitBattleBonuses();
-            }
-            else
-            {
-                GlobalContext.DefenderCreatureTemporaryTransformation = IsTemporary;
-                GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
-
-                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                GlobalContext.Defender.Creature.InitBattleBonuses();
-            }
+            GlobalContext.SelfCreature.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            GlobalContext.SelfCreature.Creature.InitBattleBonuses();
         }
 
         public void ReplaceOtherCreature(CreatureCard TransformationCreature, bool IsTemporary)
         {
-            if (GlobalContext.SelfCreature == GlobalContext.Invader)
-            {
-                GlobalContext.DefenderCreatureTemporaryTransformation = IsTemporary;
-                GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
+            GlobalContext.DefenderCreatureTemporaryTransformation = IsTemporary;
+            GlobalContext.OriginalDefenderCreature = GlobalContext.OpponentCreature.Creature;
 
-                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                GlobalContext.Defender.Creature.InitBattleBonuses();
-            }
-            else
-            {
-                GlobalContext.InvaderCreatureTemporaryTransformation = IsTemporary;
-                GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
-
-                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                GlobalContext.Invader.Creature.InitBattleBonuses();
-            }
+            GlobalContext.OpponentCreature.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            GlobalContext.OpponentCreature.Creature.InitBattleBonuses();
         }
 
         protected override void LoadEffects()

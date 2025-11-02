@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void ActivateEnchantOnCreature(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
-            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null);
+            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, Map.GetTerrain(SelfCreature.GamePiece.Position), SelfCreature, PlayerIndex);
 
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
@@ -86,29 +86,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActiveEffect.ExecuteEffect();
             }
 
-            foreach (BaseSkillActivation Activation in SelfCreature.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            if (SelfCreature.Enchant != null)
             {
-                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                foreach (BaseSkillActivation Activation in SelfCreature.Enchant.Skill.CurrentSkillLevel.ListActivation)
                 {
-                    BaseEffect ActiveEffect = Activation.ListEffect[E];
-
-                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                    for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
                     {
-                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
-                        {
-                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalContext.SelfCreature.PlayerIndex;
-                        }
+                        BaseEffect ActiveEffect = Activation.ListEffect[E];
 
-                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                        foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                        {
+                            if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                            {
+                                ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalContext.SelfCreature.PlayerIndex;
+                            }
+
+                            ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                        }
                     }
                 }
-            }
 
-            List<BaseSkillActivation> DicSkillActivation = SelfCreature.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+                List<BaseSkillActivation> DicSkillActivation = SelfCreature.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
 
-            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
-            {
-                ActiveSkill.Activate(SelfCreature.Enchant.Skill.Name);
+                foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+                {
+                    ActiveSkill.Activate(SelfCreature.Enchant.Skill.Name);
+                }
             }
         }
 
@@ -124,7 +127,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Player ActivePlayer = Map.ListPlayer[PlayerIndex];
             Map.GlobalPlayerContext.SetPlayer(PlayerIndex, ActivePlayer);
 
-            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null);
+            GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null, SelfCreature, PlayerIndex);
 
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
@@ -189,7 +192,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     return;
                 }
 
-                Context.SetCreatures(Map, ActiveTerrain.DefendingCreature, Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner), null);
+                int PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
+                Context.SetCreatures(Map, ActiveTerrain.DefendingCreature, PlayerIndex, ActiveTerrain, ActiveTerrain.DefendingCreature, PlayerIndex);
 
                 List<BaseSkillActivation> DicSkillActivation = ActiveTerrain.DefendingCreature.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
 
@@ -406,10 +410,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefaultActivation.ListEffect.Add(ListEffect);
 
             DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
-
             DefaultActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { new EffectActivationExecuteOnly() });
 
-            return new Enchant(NewEnchant);
+            return new Enchant(NewEnchant, sprIcon);
         }
     }
 

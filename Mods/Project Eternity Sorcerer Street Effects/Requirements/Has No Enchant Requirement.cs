@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                return GlobalContext.Defender.Creature.Enchant == null;
+                return GlobalContext.ActiveTerrain.DefendingCreature.Enchant == null;
             }
         }
 
@@ -59,8 +59,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetHasNoEnchantRequirement CopyRequirement = (SorcererStreetHasNoEnchantRequirement)Copy;
-            _Target = CopyRequirement._Target;
+            SorcererStreetHasNoEnchantRequirement CopyRequirement = Copy as SorcererStreetHasNoEnchantRequirement;
+
+            if (CopyRequirement != null)
+            {
+                _Target = CopyRequirement._Target;
+            }
         }
 
         #region Properties

@@ -111,6 +111,8 @@ namespace ProjectEternity.Core.Skill
             return DicManualSkillTarget;
         }
 
+        public abstract void CopyMembers(ManualSkillTarget Copy);
+
         public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
         {
             Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();

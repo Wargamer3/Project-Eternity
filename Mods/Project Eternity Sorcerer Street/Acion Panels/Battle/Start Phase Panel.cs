@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             //Ensure something will look off if the Invader.Animation is not properly disposed at the end of a battle
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Animation == null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation == null)
             {
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
 
@@ -47,46 +47,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Creature = Invader;
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature = ActiveTerrain.DefendingCreature;
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature = Invader;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature = ActiveTerrain.DefendingCreature;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner = ActivePlayer;
-                Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex = ActivePlayerIndex;
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner = ActiveTerrain.PlayerOwner;
-                Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
-                Map.GlobalSorcererStreetBattleContext.DefenderTerrain = ActiveTerrain;
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner = ActivePlayer;
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex = ActivePlayerIndex;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner = ActiveTerrain.PlayerOwner;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
+                Map.GlobalSorcererStreetBattleContext.ActiveTerrain = ActiveTerrain;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.InitBattleBonuses();
 
-                Map.GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
-                Map.GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
-                Map.GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
-                Map.GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusHP = 0;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusHP = 0;
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusST = 0;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusST = 0;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation.Scale = new Vector2(1);
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.Defender.Animation.StaticSprite.Width - Constants.Width / 9, Constants.Height / 12);
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation.Scale = new Vector2(1);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Scale = new Vector2(1);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.StaticSprite.Width - Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Scale = new Vector2(1);
 
                 Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Map.Content, GameScreen.GraphicsDevice);
 
-                InvaderHPBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalHP;
-                InvaderSTBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalST;
-                DefenderHPBar = Map.GlobalSorcererStreetBattleContext.Defender.FinalHP;
-                DefenderSTBar = Map.GlobalSorcererStreetBattleContext.Defender.FinalST;
+                InvaderHPBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP;
+                InvaderSTBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalST;
+                DefenderHPBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP;
+                DefenderSTBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalST;
             }
         }
 
         public static void InitIntroAnimation(SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
             AnimationTime = 0;
-            if (!GlobalSorcererStreetBattleContext.Invader.Creature.UseCardAnimation)
+            if (!GlobalSorcererStreetBattleContext.SelfCreature.Creature.UseCardAnimation)
             {
-                ActionPanelBattleAttackAnimationPhase.InitAnimation(true, GlobalSorcererStreetBattleContext.Invader.Creature.MoveInAnimationPath, GlobalSorcererStreetBattleContext.Invader, true);
-                GlobalSorcererStreetBattleContext.Invader.Animation.Position = new Vector2(1750, 190);
+                ActionPanelBattleAttackAnimationPhase.InitAnimation(true, GlobalSorcererStreetBattleContext.SelfCreature.Creature.MoveInAnimationPath, GlobalSorcererStreetBattleContext.SelfCreature, true);
+                GlobalSorcererStreetBattleContext.SelfCreature.Animation.Position = new Vector2(1750, 190);
             }
         }
 
@@ -126,9 +126,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (AnimationTime < 8)
             {
-                if (GlobalSorcererStreetBattleContext.Invader.Animation != null)
+                if (GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
                 {
-                    GlobalSorcererStreetBattleContext.Invader.Animation.Update(gameTime);
+                    GlobalSorcererStreetBattleContext.SelfCreature.Animation.Update(gameTime);
                 }
 
                 AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
@@ -145,13 +145,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             g.GraphicsDevice.Clear(Color.Black);
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Animation != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation.BeginDraw(g);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.BeginDraw(g);
             }
-            if (Map.GlobalSorcererStreetBattleContext.Defender.Animation != null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation.BeginDraw(g);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.BeginDraw(g);
             }
 
             g.End();
@@ -189,13 +189,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void IntroduceInvader(CustomSpriteBatch g, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            if (GlobalSorcererStreetBattleContext.Invader.Creature.UseCardAnimation)
+            if (GlobalSorcererStreetBattleContext.SelfCreature.Creature.UseCardAnimation)
             {
                 //Spin card from the left
                 float MaxScale = 1f;
 
                 float RealRotationTimer = (float)AnimationTime - 2;
-                float FinalX = Constants.Width / 9 + GlobalSorcererStreetBattleContext.Invader.Creature.sprCard.Width / 2;
+                float FinalX = Constants.Width / 9 + GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard.Width / 2;
                 float StartX = -10;
                 float DistanceX = FinalX - StartX;
                 float X = StartX + (RealRotationTimer) * DistanceX;
@@ -209,11 +209,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     X = FinalX;
                 }
 
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Invader.Creature.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
             }
-            else if (GlobalSorcererStreetBattleContext.Invader.Animation != null)
+            else if (GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
             {
-                GlobalSorcererStreetBattleContext.Invader.Animation.Draw(g);
+                GlobalSorcererStreetBattleContext.SelfCreature.Animation.Draw(g);
             }
         }
 
@@ -223,7 +223,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float MaxScale = 1f;
 
             float RealRotationTimer = (float)AnimationTime - 4;
-            float FinalX = Constants.Width - Constants.Width / 9 - GlobalSorcererStreetBattleContext.Defender.Creature.sprCard.Width / 2;
+            float FinalX = Constants.Width - Constants.Width / 9 - GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard.Width / 2;
             float StartX = Constants.Width + 10;
             float DistanceX = FinalX - StartX;
             float X = StartX + (RealRotationTimer) * DistanceX;
@@ -237,7 +237,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Defender.Creature.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
+            Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public override void DoRead(ByteReader BR)

@@ -29,43 +29,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static bool HasFinishedUpdatingBars(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            if (InvaderHPBar > GlobalSorcererStreetBattleContext.Invader.FinalHP)
+            if (InvaderHPBar > GlobalSorcererStreetBattleContext.SelfCreature.FinalHP)
             {
                 --InvaderHPBar;
                 return false;
             }
-            else if (InvaderSTBar > GlobalSorcererStreetBattleContext.Invader.FinalST)
+            else if (InvaderSTBar > GlobalSorcererStreetBattleContext.SelfCreature.FinalST)
             {
                 --InvaderSTBar;
                 return false;
             }
-            else if (DefenderHPBar > GlobalSorcererStreetBattleContext.Defender.FinalHP)
+            else if (DefenderHPBar > GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP)
             {
                 --DefenderHPBar;
                 return false;
             }
-            else if (DefenderSTBar > GlobalSorcererStreetBattleContext.Defender.FinalST)
+            else if (DefenderSTBar > GlobalSorcererStreetBattleContext.OpponentCreature.FinalST)
             {
                 --DefenderSTBar;
                 return false;
             }
 
-            if (InvaderHPBar < GlobalSorcererStreetBattleContext.Invader.FinalHP)
+            if (InvaderHPBar < GlobalSorcererStreetBattleContext.SelfCreature.FinalHP)
             {
                 ++InvaderHPBar;
                 return false;
             }
-            else if (InvaderSTBar < GlobalSorcererStreetBattleContext.Invader.FinalST)
+            else if (InvaderSTBar < GlobalSorcererStreetBattleContext.SelfCreature.FinalST)
             {
                 ++InvaderSTBar;
                 return false;
             }
-            else if (DefenderHPBar < GlobalSorcererStreetBattleContext.Defender.FinalHP)
+            else if (DefenderHPBar < GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP)
             {
                 ++DefenderHPBar;
                 return false;
             }
-            else if (DefenderSTBar < GlobalSorcererStreetBattleContext.Defender.FinalST)
+            else if (DefenderSTBar < GlobalSorcererStreetBattleContext.OpponentCreature.FinalST)
             {
                 ++DefenderSTBar;
                 return false;
@@ -76,87 +76,87 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void UpdateCards(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            if (GlobalSorcererStreetBattleContext.Invader.Animation != null)
+            if (GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
             {
-                GlobalSorcererStreetBattleContext.Invader.Animation.Update(gameTime);
+                GlobalSorcererStreetBattleContext.SelfCreature.Animation.Update(gameTime);
             }
-            if (GlobalSorcererStreetBattleContext.Defender.Animation != null)
+            if (GlobalSorcererStreetBattleContext.OpponentCreature.Animation != null)
             {
-                GlobalSorcererStreetBattleContext.Defender.Animation.Update(gameTime);
+                GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Update(gameTime);
             }
         }
 
         public static void ReadPlayerInfo(ByteReader BR, SorcererStreetMap Map)
         {
-            Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex = BR.ReadInt32();
-            Map.GlobalSorcererStreetBattleContext.Invader.Owner = Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex];
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex = BR.ReadInt32();
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner = Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex];
 
             string CardType = BR.ReadString();
             string CardPath = BR.ReadString();
-            foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand)
+            foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand)
             {
                 if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
                 {
-                    Map.GlobalSorcererStreetBattleContext.Invader.Creature = (CreatureCard)ActiveCard;
+                    Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature = (CreatureCard)ActiveCard;
                     break;
                 }
             }
 
             TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Animation == null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation == null)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature = ActiveTerrain.DefendingCreature;
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner = ActiveTerrain.PlayerOwner;
-                Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
-                Map.GlobalSorcererStreetBattleContext.DefenderTerrain = ActiveTerrain;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature = ActiveTerrain.DefendingCreature;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner = ActiveTerrain.PlayerOwner;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
+                Map.GlobalSorcererStreetBattleContext.ActiveTerrain = ActiveTerrain;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.InitBattleBonuses();
 
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = Map.ListActionMenuChoice;
 
                 if (!Map.IsServer)
                 {
-                    Map.GlobalSorcererStreetBattleContext.Invader.Animation = new SimpleAnimation("Invader", "Invader", Map.GlobalSorcererStreetBattleContext.Invader.Creature.sprCard);
-                    Map.GlobalSorcererStreetBattleContext.Invader.Animation.Position = new Vector2(37, 48);
-                    Map.GlobalSorcererStreetBattleContext.Invader.Animation.Scale = new Vector2(0.6f);
-                    Map.GlobalSorcererStreetBattleContext.Defender.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
-                    Map.GlobalSorcererStreetBattleContext.Defender.Animation.Position = new Vector2(Constants.Width - 282, 48);
-                    Map.GlobalSorcererStreetBattleContext.Defender.Animation.Scale = new Vector2(0.6f);
+                    Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard);
+                    Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Position = new Vector2(37, 48);
+                    Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Scale = new Vector2(0.6f);
+                    Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
+                    Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Position = new Vector2(Constants.Width - 282, 48);
+                    Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Scale = new Vector2(0.6f);
 
                     Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Map.Content, GameScreen.GraphicsDevice);
                 }
             }
 
-            Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP = BR.ReadInt32();
-            Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST = BR.ReadInt32();
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.CurrentHP = BR.ReadInt32();
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.CurrentST = BR.ReadInt32();
 
-            Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP = BR.ReadInt32();
-            Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST = BR.ReadInt32();
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.CurrentHP = BR.ReadInt32();
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.CurrentST = BR.ReadInt32();
 
-            Map.GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
-            Map.GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
-            Map.GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
-            Map.GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusHP = 0;
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusHP = 0;
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusST = 0;
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusST = 0;
 
-            InvaderHPBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalHP;
-            InvaderSTBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalST;
-            DefenderHPBar = Map.GlobalSorcererStreetBattleContext.Defender.FinalHP;
-            DefenderSTBar = Map.GlobalSorcererStreetBattleContext.Defender.FinalST;
+            InvaderHPBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP;
+            InvaderSTBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalST;
+            DefenderHPBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP;
+            DefenderSTBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalST;
 
             string InvaderItemCardType = BR.ReadString();
             if (!string.IsNullOrEmpty(InvaderItemCardType))
             {
                 string InvaderItemCardPath = BR.ReadString();
 
-                if (Map.GlobalSorcererStreetBattleContext.Invader.Item == null)
+                if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item == null)
                 {
-                    foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand)
+                    foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand)
                     {
                         if (ActiveCard.CardType == InvaderItemCardType && ActiveCard.Path == InvaderItemCardPath)
                         {
-                            Map.GlobalSorcererStreetBattleContext.Invader.Item = (CreatureCard)ActiveCard;
+                            Map.GlobalSorcererStreetBattleContext.SelfCreature.Item = (CreatureCard)ActiveCard;
                             break;
                         }
                     }
@@ -168,13 +168,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 string DefenderItemCardPath = BR.ReadString();
 
-                if (Map.GlobalSorcererStreetBattleContext.Defender.Item == null)
+                if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item == null)
                 {
-                    foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand)
+                    foreach (Card ActiveCard in Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListCardInHand)
                     {
                         if (ActiveCard.CardType == DefenderItemCardType && ActiveCard.Path == DefenderItemCardPath)
                         {
-                            Map.GlobalSorcererStreetBattleContext.Defender.Item = (CreatureCard)ActiveCard;
+                            Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item = (CreatureCard)ActiveCard;
                             break;
                         }
                     }
@@ -184,37 +184,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void WritePlayerInfo(ByteWriter BW, SorcererStreetMap Map)
         {
-            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex);
-            BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Creature.CardType);
-            BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Creature.Path);
+            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex);
+            BW.AppendString(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.CardType);
+            BW.AppendString(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.Path);
 
-            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.GridPosition.X);
-            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.GridPosition.Y);
-            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.DefenderTerrain.LayerIndex);
+            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.ActiveTerrain.GridPosition.X);
+            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.ActiveTerrain.GridPosition.Y);
+            BW.AppendFloat(Map.GlobalSorcererStreetBattleContext.ActiveTerrain.LayerIndex);
 
-            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP);
-            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST);
+            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.CurrentHP);
+            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.CurrentST);
 
-            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP);
-            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST);
+            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.CurrentHP);
+            BW.AppendInt32(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.CurrentST);
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Item == null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item == null)
             {
                 BW.AppendString(string.Empty);
             }
             else
             {
-                BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Item.CardType);
-                BW.AppendString(Map.GlobalSorcererStreetBattleContext.Invader.Item.Path);
+                BW.AppendString(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item.CardType);
+                BW.AppendString(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item.Path);
             }
-            if (Map.GlobalSorcererStreetBattleContext.Defender.Item == null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item == null)
             {
                 BW.AppendString(string.Empty);
             }
             else
             {
-                BW.AppendString(Map.GlobalSorcererStreetBattleContext.Defender.Item.CardType);
-                BW.AppendString(Map.GlobalSorcererStreetBattleContext.Defender.Item.Path);
+                BW.AppendString(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item.CardType);
+                BW.AppendString(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item.Path);
             }
         }
 
@@ -223,13 +223,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             g.GraphicsDevice.Clear(Color.Black);
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Animation != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Invader.Animation.BeginDraw(g);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.BeginDraw(g);
             }
-            if (Map.GlobalSorcererStreetBattleContext.Defender.Animation != null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.Animation.BeginDraw(g);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.BeginDraw(g);
             }
 
             g.End();
@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
             Map.GlobalSorcererStreetBattleContext.Background.Draw(g, Constants.Width, Constants.Height);
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader != null && Map.GlobalSorcererStreetBattleContext.Defender.Animation != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature != null && Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation != null)
             {
                 DrawInvaderBattle(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext, g);
                 DrawDefenderBattle(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext, g);
@@ -250,14 +250,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static void DrawInvaderBattle(SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
         {
             //Left Card
-            if (GlobalSorcererStreetBattleContext.Invader.Animation != null)
+            if (GlobalSorcererStreetBattleContext.SelfCreature.Animation != null)
             {
-                GlobalSorcererStreetBattleContext.Invader.Animation.Draw(g);
+                GlobalSorcererStreetBattleContext.SelfCreature.Animation.Draw(g);
             }
             //Item Card
-            if (GlobalSorcererStreetBattleContext.Invader.Item != null)
+            if (GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, -ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
@@ -265,7 +265,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BarWeight = Constants.Width / 4;
             int BarX = Constants.Width / 2  - BarWeight - Constants.Width / 10;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.Invader.FinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.SelfCreature.FinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
             g.DrawString(fntMenuText, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
@@ -274,7 +274,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //HP Bar
             CurrentY +=30;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.Invader.FinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.SelfCreature.FinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
             g.DrawString(fntMenuText, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
@@ -284,14 +284,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static void DrawDefenderBattle(SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
         {
             //Right Card
-            if (GlobalSorcererStreetBattleContext.Defender.Animation != null)
+            if (GlobalSorcererStreetBattleContext.OpponentCreature.Animation != null)
             {
-                GlobalSorcererStreetBattleContext.Defender.Animation.Draw(g);
+                GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Draw(g);
             }
             //Item Card
-            if (GlobalSorcererStreetBattleContext.Defender.Item != null)
+            if (GlobalSorcererStreetBattleContext.OpponentCreature.Item != null)
             {
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, Constants.Height / 16, - ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, Constants.Height / 16, - ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
@@ -299,7 +299,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BarWeight = Constants.Width / 4;
             int BarX = Constants.Width / 2 + Constants.Width / 10;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.Defender.FinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.OpponentCreature.FinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
             g.DrawString(fntMenuText, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
@@ -308,7 +308,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //HP Bar
             CurrentY += 30;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.Defender.FinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntMenuText, GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
             g.DrawString(fntMenuText, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
@@ -322,14 +322,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y = Constants.Height / 4;
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 16, Y), Constants.Width - Constants.Width / 8, Constants.Height / 5, Color.White);
             Y = Constants.Height / 4 + 10;
-            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.Invader.Owner.Name, new Vector2(Constants.Width / 4, Y), Color.White);
-            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.Defender.Owner.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.SelfCreature.Owner.Name, new Vector2(Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
             Y = Constants.Height / 4 + 35;
             g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 12, Y), new Vector2(Constants.Width - Constants.Width / 12, Y), Color.White);
             g.Draw(sprVS, new Rectangle(Constants.Width / 2 - 30, Y, 60, 60), Color.White);
             Y = Constants.Height / 4 + 40;
-            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.Invader.Animation.Name, new Vector2(Constants.Width / 4, Y), Color.White);
-            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.Defender.Animation.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.SelfCreature.Animation.Name, new Vector2(Constants.Width / 4, Y), Color.White);
+            g.DrawStringMiddleAligned(fntMenuText, GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
         }
     }
 }

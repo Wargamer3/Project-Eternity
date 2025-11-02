@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 
@@ -10,29 +11,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Destroy Cards";
         public enum Targets { Self, Opponent }
-        public enum CardDestroyTypes { All, Random, Specific, SameAsDefeated }
+        public enum CardDestroyTypes { All, Random, Specific, SameAsDefeated, DuplicateGlobal }
+        public enum CardTypes { All, Creature, Item, Armor, Weapon, Spell, Scroll }
+        public enum CardLocations { Hand, Book, Both }
 
         private Targets _Target;
         private CardDestroyTypes _CardDestroyType;
+        private CardTypes _CardType;
+        private CardLocations _CardLocation;
+        private bool _RedrawCards;
         private byte _NumberOfCards;
+        private Operators.LogicOperators _LogicOperator;
+        private int _MagicCost;
 
         public DestroyCardsEffect()
             : base(Name, false)
         {
+            _LogicOperator = Operators.LogicOperators.GreaterOrEqual;
         }
 
         public DestroyCardsEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
+            _LogicOperator = Operators.LogicOperators.GreaterOrEqual;
         }
         
         protected override void Load(BinaryReader BR)
         {
             _Target = (Targets)BR.ReadByte();
             _CardDestroyType = (CardDestroyTypes)BR.ReadByte();
-            if (_CardDestroyType != CardDestroyTypes.All && _CardDestroyType != CardDestroyTypes.SameAsDefeated)
+            _RedrawCards = BR.ReadBoolean();
+            _CardType = (CardTypes)BR.ReadByte();
+
+            if (_CardDestroyType == CardDestroyTypes.Random && _CardDestroyType == CardDestroyTypes.Specific)
             {
                 _NumberOfCards = BR.ReadByte();
+            }
+            if (_CardDestroyType == CardDestroyTypes.Random || _CardDestroyType == CardDestroyTypes.All)
+            {
+                _LogicOperator = (Operators.LogicOperators)BR.ReadByte();
+                _MagicCost = BR.ReadInt32();
             }
         }
 
@@ -40,9 +58,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             BW.Write((byte)_Target);
             BW.Write((byte)_CardDestroyType);
-            if (_CardDestroyType != CardDestroyTypes.All && _CardDestroyType != CardDestroyTypes.SameAsDefeated)
+            BW.Write((byte)_CardType);
+            BW.Write((byte)_CardLocation);
+            BW.Write(_RedrawCards);
+
+            if (_CardDestroyType == CardDestroyTypes.Random && _CardDestroyType == CardDestroyTypes.Specific)
             {
                 BW.Write(_NumberOfCards);
+            }
+            if (_CardDestroyType == CardDestroyTypes.Random || _CardDestroyType == CardDestroyTypes.All)
+            {
+                BW.Write((byte)_LogicOperator);
+                BW.Write(_MagicCost);
             }
         }
 
@@ -59,11 +86,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 RealTarget = Params.GlobalContext.OpponentCreature;
             }
 
+            List<Card> ListCard = new List<Card>();
+            for (int I = RealTarget.Owner.ListCardInHand.Count - 1; I > 0; --I)
+            {
+                if (_MagicCost > 0 && Operators.CompareValue(LogicOperator, RealTarget.Owner.ListCardInHand[I].MagicCost, _MagicCost))
+                {
+                    continue;
+                }
+
+                ListCard.Add(RealTarget.Owner.ListCardInHand[I]);
+            }
+
             if (_CardDestroyType == CardDestroyTypes.All)
             {
-                while (RealTarget.Owner.ListCardInHand.Count > 0)
+                for (int I = ListCard.Count - 1; I > 0; --I)
                 {
-                    RealTarget.Owner.ListCardInHand.RemoveAt(0);
+                    RealTarget.Owner.ListCardInHand.Remove(ListCard[I]);
                 }
                 return "Destroy All Cards";
             }
@@ -71,11 +109,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int C = 0; C < _NumberOfCards && RealTarget.Owner.ListCardInHand.Count > 0; ++C)
                 {
-                    RealTarget.Owner.ListCardInHand.RemoveAt(RandomHelper.Next(RealTarget.Owner.ListCardInHand.Count));
+                    int RandomIndex = RandomHelper.Next(ListCard.Count);
+                    RealTarget.Owner.ListCardInHand.Remove(ListCard[RandomIndex]);
+                    ListCard.Remove(ListCard[RandomIndex]);
                 }
             }
             else if (_CardDestroyType == CardDestroyTypes.Specific)
             {//User chooses a card from target Player's hand and destroys it.
+            }
+            else if (_CardDestroyType == CardDestroyTypes.DuplicateGlobal)
+            {
+
             }
 
             return "Destroy " + _NumberOfCards + " Cards";
@@ -103,7 +147,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Properties
 
-        [CategoryAttribute(""),
+        [CategoryAttribute("Default"),
         DescriptionAttribute("The Target."),
         DefaultValueAttribute(0)]
         public Targets Target
@@ -118,7 +162,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        [CategoryAttribute(""),
+        [CategoryAttribute("Default"),
         DescriptionAttribute("How to destroy cards."),
         DefaultValueAttribute(0)]
         public CardDestroyTypes CardDestroyType
@@ -133,7 +177,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        [CategoryAttribute(""),
+        [CategoryAttribute("Default"),
+        DescriptionAttribute("Where the cards to destroy are."),
+        DefaultValueAttribute(0)]
+        public CardLocations CardLocation
+        {
+            get
+            {
+                return _CardLocation;
+            }
+            set
+            {
+                _CardLocation = value;
+            }
+        }
+
+        [CategoryAttribute("Default"),
+        DescriptionAttribute("Replace destroyed cards."),
+        DefaultValueAttribute(0)]
+        public bool RedrawCards
+        {
+            get
+            {
+                return _RedrawCards;
+            }
+            set
+            {
+                _RedrawCards = value;
+            }
+        }
+
+        [CategoryAttribute("Default"),
         DescriptionAttribute("Number of cards to destroy if not using All."),
         DefaultValueAttribute(0)]
         public byte NumberOfCards
@@ -145,6 +219,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             set
             {
                 _NumberOfCards = value;
+            }
+        }
+
+        [CategoryAttribute("Destruction Limit"),
+        DescriptionAttribute("Limit of the magical cost of the card."),
+        DefaultValueAttribute(0)]
+        public int MagicCost
+        {
+            get
+            {
+                return _MagicCost;
+            }
+            set
+            {
+                _MagicCost = value;
+            }
+        }
+
+        [CategoryAttribute("Destruction Limit"),
+        DescriptionAttribute("How to interpret the magic cost."),
+        DefaultValueAttribute("")]
+        public Operators.LogicOperators LogicOperator
+        {
+            get
+            {
+                return _LogicOperator;
+            }
+            set
+            {
+                _LogicOperator = value;
             }
         }
 

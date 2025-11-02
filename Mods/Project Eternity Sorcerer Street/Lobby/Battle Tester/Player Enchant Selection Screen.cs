@@ -41,8 +41,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
-                Context.Invader = Invader;
-                Context.Defender = Defender;
+                Context.SelfCreature = Invader;
+                Context.OpponentCreature = Defender;
 
                 for (int E = ActiveSpellCard.Spell.ListEffect.Count - 1; E >= 0; --E)
                 {

@@ -149,11 +149,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 bool CanUseSupportCreature;
                 if (ActivePlayerIndex == Map.ActivePlayerIndex)
                 {
-                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
+                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
                 }
                 else
                 {
-                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
+                    CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
                 }
 
                 CreatureCard ActiveCard = (CreatureCard)ActivePlayer.ListCardInHand[ActionMenuCursor];

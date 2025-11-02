@@ -2,7 +2,6 @@
 using System.IO;
 using System.Globalization;
 using System.ComponentModel;
-using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 

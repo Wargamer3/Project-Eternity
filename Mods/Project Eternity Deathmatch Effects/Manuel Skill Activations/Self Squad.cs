@@ -54,5 +54,9 @@ namespace ProjectEternity.Core.Skill
         {
             return new PilotSkillActivationSelfSquad(Params);
         }
+
+        public override void CopyMembers(ManualSkillTarget Copy)
+        {
+        }
     }
 }

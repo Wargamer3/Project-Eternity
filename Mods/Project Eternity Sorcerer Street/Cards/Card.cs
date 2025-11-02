@@ -237,7 +237,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string Name;
         public string Description;
         public string FlavorText = string.Empty;
-        public int Price;
+        public int ShopPrice;
         public CardRarities Rarity;
         public int MagicCost;
 

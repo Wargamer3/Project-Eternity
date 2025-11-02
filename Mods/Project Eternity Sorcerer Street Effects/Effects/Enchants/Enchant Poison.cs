@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DealDamageEffect NewDealDamageEffect = new DealDamageEffect(Params);
             NewDealDamageEffect.DamageToDeal = "opponent.maxhp/2";
 
-            Params.GlobalPlayerContext.ActivePlayer.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetBattleEndRequirement(), NewDealDamageEffect, IconHolder.Icons.sprCreaturePoison);
+            Params.GlobalContext.SelfCreature.Creature.Enchant = EnchantHelper.CreateEnchant(Name, new SorcererStreetBattleEndRequirement(), NewDealDamageEffect, IconHolder.Icons.sprCreaturePoison);
             return "Poison";
         }
 

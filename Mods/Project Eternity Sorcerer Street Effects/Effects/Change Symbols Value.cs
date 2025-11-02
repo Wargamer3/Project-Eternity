@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Change Symbols Value";
 
-        public enum Targets { Terrain, Fire, Water, Earth, Air }
+        public enum Targets { Terrain, Fire, Water, Earth, Air, All }
 
         private Targets _Target;
         private SignOperators _SignOperator;
@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            return "ST+" + EvaluationResult;
+            return "Symbol Value+" + EvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

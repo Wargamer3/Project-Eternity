@@ -5,19 +5,19 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetHasEnchantRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetHasAttackFirstRequirement : SorcererStreetRequirement
     {
         public enum Targets { Self, Opponent, Territory }
 
         private Targets _Target;
 
-        public SorcererStreetHasEnchantRequirement()
+        public SorcererStreetHasAttackFirstRequirement()
             : this(null)
         {
         }
 
-        public SorcererStreetHasEnchantRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Enchant", GlobalContext)
+        public SorcererStreetHasAttackFirstRequirement(SorcererStreetBattleContext GlobalContext)
+            : base("Sorcerer Street Has Attack First", GlobalContext)
         {
             _Target = Targets.Territory;
         }
@@ -36,21 +36,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return GlobalContext.SelfCreature.Creature.Enchant != null;
+                return GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
             else if (_Target == Targets.Opponent)
             {
-                return GlobalContext.OpponentCreature.Creature.Enchant != null;
+                return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
             else
             {
-                return GlobalContext.ActiveTerrain.DefendingCreature.Enchant != null;
+                return GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasEnchantRequirement NewRequirement = new SorcererStreetHasEnchantRequirement(GlobalContext);
+            SorcererStreetHasAttackFirstRequirement NewRequirement = new SorcererStreetHasAttackFirstRequirement(GlobalContext);
 
             NewRequirement._Target =_Target;
 
@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetHasEnchantRequirement CopyRequirement = Copy as SorcererStreetHasEnchantRequirement;
+            SorcererStreetHasAttackFirstRequirement CopyRequirement = Copy as SorcererStreetHasAttackFirstRequirement;
 
             if (CopyRequirement != null)
             {

@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 while (RealTarget.Owner.ListCardInHand.Count < _NumberOfCards)
                 {
-                    Params.GlobalContext.Defender.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+                    Params.GlobalContext.OpponentCreature.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
                 }
             }
             else

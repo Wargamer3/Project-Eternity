@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.SelfCreature == GlobalContext.Invader;
+            return GlobalContext.SelfCreature.Creature != GlobalContext.ActiveTerrain.DefendingCreature;
         }
 
         public override BaseSkillRequirement Copy()

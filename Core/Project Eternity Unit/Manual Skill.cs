@@ -32,7 +32,7 @@ namespace ProjectEternity.Core.Skill
             _CanActivate = false;
             IsUnlocked = false;
 
-            FullName = SkillPath.Substring(0, SkillPath.Length - 5).Substring(27);
+            FullName = SkillPath.Substring(0, SkillPath.Length - 4).Substring(8);
             Name = Path.GetFileNameWithoutExtension(SkillPath);
 
             FileStream FS = new FileStream(SkillPath, FileMode.Open, FileAccess.Read);
@@ -97,10 +97,20 @@ namespace ProjectEternity.Core.Skill
             _CanActivate = Target.CanActivateOnTarget(this);
         }
 
+        /// <summary>
+        /// Reload skill from dictionnary to update their Params
+        /// </summary>
+        /// <param name="DicRequirement"></param>
+        /// <param name="DicEffect"></param>
+        /// <param name="DicAutomaticSkillTarget"></param>
+        /// <param name="DicManualSkillTarget"></param>
         public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            Target = DicManualSkillTarget[Target.TargetType].Copy();
+            ManualSkillTarget NewTarget = DicManualSkillTarget[Target.TargetType].Copy();
+            NewTarget.CopyMembers(Target);
+
+            Target = NewTarget;
 
             for (int R = 0; R < ListRequirement.Count; R++)
             {

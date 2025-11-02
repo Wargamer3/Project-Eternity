@@ -73,8 +73,9 @@
     <Compile Include="Acion Panels\MAP Attack\MAP Targeted.cs" />
     <Compile Include="Acion Panels\MAP Attack\Use MAP Attack.cs" />
     <Compile Include="Acion Panels\Options\Suspend.cs" />
-    <Compile Include="Acion Panels\Player\Spell\All Players Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\All Creatures Spell Confirm.cs" />
+    <Compile Include="Acion Panels\Player\Spell\All Players Spell Confirm.cs" />
+    <Compile Include="Acion Panels\Player\Spell\All Creatures In Area Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\Select Player Spell.cs" />
     <Compile Include="Acion Panels\Player\Spell\Confirm Spell.cs" />
     <Compile Include="Acion Panels\PER Attack\Attack PER Panel.cs" />

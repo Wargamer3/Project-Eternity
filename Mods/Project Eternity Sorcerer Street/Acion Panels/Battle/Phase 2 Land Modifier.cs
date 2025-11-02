@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             HasTerrainBonus = false;
 
-            CardAbilities Abilities = Map.GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(Map.GlobalSorcererStreetBattleContext.EffectActivationPhase);
+            CardAbilities Abilities = Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(Map.GlobalSorcererStreetBattleContext.EffectActivationPhase);
 
             if (Abilities.LandEffectLimit)
             {
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                switch (Map.TerrainHolder.ListTerrainType[Map.GlobalSorcererStreetBattleContext.DefenderTerrain.TerrainTypeIndex])
+                switch (Map.TerrainHolder.ListTerrainType[Map.GlobalSorcererStreetBattleContext.ActiveTerrain.TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.MultiElement:
                         if (Abilities.ArrayElementAffinity.Length != 1 || Abilities.ArrayElementAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (HasTerrainBonus)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.LandHP = 10 *  Map.GlobalSorcererStreetBattleContext.DefenderTerrain.LandLevel;
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.LandHP = 10 *  Map.GlobalSorcererStreetBattleContext.ActiveTerrain.LandLevel;
             }
 
             ContinueBattlePhase();

@@ -152,9 +152,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
             Context.ListSummonedCreature = new List<TerrainSorcererStreet>();
             Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
-            Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);
-            Context.DefenderTerrain.LandLevel = 1;
-            Context.DefenderTerrain.TerrainTypeIndex = 2;
+            Context.ActiveTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);
+            Context.ActiveTerrain.LandLevel = 1;
+            Context.ActiveTerrain.TerrainTypeIndex = 2;
             Context.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;
 
             ButtonHeight = fntMenuText.LineSpacing + 2;
@@ -285,66 +285,44 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value.Card;
 
-            Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
-            Context.Defender.OwnerTeam = new Team(2);
-            Context.Defender.OwnerTeam.Rank = 2;
-            Context.Defender.Owner.Gold = 100;
-            Context.Defender.Owner.ListCardInHand.Add(new CreatureCard(""));
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
-            Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-            Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-            Context.Defender.Animation.Scale = new Vector2(1f);
-            DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-            DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-            DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+            Context.OpponentCreature.Owner = new Player("Defender Player", "Defender Player", false);
+            Context.OpponentCreature.OwnerTeam = new Team(2);
+            Context.OpponentCreature.OwnerTeam.Rank = 2;
+            Context.OpponentCreature.Owner.Gold = 100;
+            Context.OpponentCreature.Owner.ListCardInHand.Add(new CreatureCard(""));
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
+            Context.OpponentCreature.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            Context.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+            Context.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+            Context.OpponentCreature.Animation.Scale = new Vector2(1f);
+            DefenderHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+            DefenderMaxHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+            DefenderSTInput.SetText(Context.OpponentCreature.Creature.OriginalST.ToString());
 
-            Context.Invader.Owner = new Player("Invader Player", "Invader Player", false);
-            Context.Invader.OwnerTeam = new Team(1);
-            Context.Invader.OwnerTeam.Rank = 1;
-            Context.Invader.Owner.Gold = 100;
-            Context.Invader.Owner.ListCardInHand.Add(new CreatureCard(""));
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
-            Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-            Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-            Context.Invader.Animation.Scale = new Vector2(1f);
-            InvaderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-            InvaderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-            InvaderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+            Context.SelfCreature.Owner = new Player("Invader Player", "Invader Player", false);
+            Context.SelfCreature.OwnerTeam = new Team(1);
+            Context.SelfCreature.OwnerTeam.Rank = 1;
+            Context.SelfCreature.Owner.Gold = 100;
+            Context.SelfCreature.Owner.ListCardInHand.Add(new CreatureCard(""));
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Air, 1);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Earth, 1);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
+            Context.SelfCreature.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
+            Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+            Context.SelfCreature.Animation.Scale = new Vector2(1f);
+            InvaderHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+            InvaderMaxHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+            InvaderSTInput.SetText(Context.OpponentCreature.Creature.OriginalST.ToString());
 
-            Context.TerrainRestrictions = new UnitAndTerrainValues();
-
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Not Assigned"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.Castle));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.FireElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.WaterElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.EarthElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.AirElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.NeutralElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.MorphElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.MultiElement));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.EastTower));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.WestTower));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.SouthTower));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType(TerrainSorcererStreet.NorthTower));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Warp"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Bridge"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Fortune Teller"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Spell Circle"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Path Switch"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Card Shop"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Magic Trap"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Siege Tower"));
-            Context.TerrainRestrictions.ListTerrainType.Add(new TerrainType("Gem Store"));
+            Context.TerrainHolder = new SorcererStreetTerrainHolder();
+            Context.TerrainHolder.LoadData();
 
             if (Context.ListActivatedEffect.Count > 0)
             {
@@ -367,10 +345,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         PhasesChoice = PhasesChoices.Idle;
                     }
-                    if (!Context.Invader.Creature.UseCardAnimation && Context.Invader.Animation.HasEnded)
+                    if (!Context.SelfCreature.Creature.UseCardAnimation && Context.SelfCreature.Animation.HasEnded)
                     {
-                        ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.Invader.Creature.IdleAnimationPath, Context.Invader, true);
-                        Context.Invader.Animation.Position = new Vector2(1750, 190);
+                        ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.SelfCreature.Creature.IdleAnimationPath, Context.SelfCreature, true);
+                        Context.SelfCreature.Animation.Position = new Vector2(1750, 190);
                     }
                     break;
 
@@ -460,10 +438,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        if (!Context.Invader.Creature.UseCardAnimation)
+                        if (!Context.SelfCreature.Creature.UseCardAnimation)
                         {
-                            ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.Invader.Creature.IdleAnimationPath, Context.Invader, true);
-                            Context.Invader.Animation.Position = new Vector2(1750, 190);
+                            ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.SelfCreature.Creature.IdleAnimationPath, Context.SelfCreature, true);
+                            Context.SelfCreature.Animation.Position = new Vector2(1750, 190);
                         }
 
                         PhasesChoice = PhasesChoices.PrepareAttackPhase;
@@ -473,13 +451,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.PrepareAttackPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        if (Context.Invader.Creature.CurrentHP <= 0)
+                        if (Context.SelfCreature.Creature.CurrentHP <= 0)
                         {
                             ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.UponVictoryRequirement);
                             PhasesChoice = PhasesChoices.UponVictory;
                             break;
                         }
-                        else if (Context.Defender.Creature.CurrentHP <= 0)
+                        else if (Context.OpponentCreature.Creature.CurrentHP <= 0)
                         {
                             ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.UponVictoryRequirement);
                             PhasesChoice = PhasesChoices.UponVictory;
@@ -494,7 +472,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActionPanelBattleAttackPhase.ProcessAttack(FirstAttacker, SecondAttacker);
                         if (SecondAttacker.DamageReceived > 0)
                         {
-                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, FirstAttacker == Context.Invader, ActionPanelBattleAttackPhase.AttackBonusRequirement);
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, FirstAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
                         }
                     }
                     break;
@@ -535,12 +513,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             ActiveAnimation.Defender.Creature.CurrentHP = ActiveAnimation.Defender.FinalHP;
                         }
 
-                        Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-                        Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                        Context.Invader.Animation.Scale = new Vector2(1f);
-                        Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                        Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                        Context.Defender.Animation.Scale = new Vector2(1f);
+                        Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
+                        Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                        Context.SelfCreature.Animation.Scale = new Vector2(1f);
+                        Context.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+                        Context.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                        Context.OpponentCreature.Animation.Scale = new Vector2(1f);
 
                         ListAttackAnimation.RemoveAt(0);
 
@@ -569,7 +547,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                         ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
                                         if (FirstAttacker.DamageReceived > 0)
                                         {
-                                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.Invader, ActionPanelBattleAttackPhase.AttackBonusRequirement);
+                                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
                                         }
                                         PhasesChoice = PhasesChoices.CounterAttackBonusAnimation;
                                     }
@@ -579,7 +557,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
                                     if (FirstAttacker.DamageReceived > 0)
                                     {
-                                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.Invader, ActionPanelBattleAttackPhase.AttackBonusRequirement);
+                                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
                                     }
                                     PhasesChoice = PhasesChoices.CounterAttackBonusAnimation;
                                 }
@@ -605,7 +583,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             }
                             else
                             {
-                                if (Context.Invader.Creature.CurrentHP <= 0)
+                                if (Context.SelfCreature.Creature.CurrentHP <= 0)
                                 {
                                     ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.UponVictoryRequirement);
                                 }
@@ -633,7 +611,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
                         Context.TotalCreaturesDestroyed++;
-                        if (Context.Invader.Creature.CurrentHP <= 0)
+                        if (Context.SelfCreature.Creature.CurrentHP <= 0)
                         {
                             ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.UponDefeatRequirement);
                         }
@@ -652,21 +630,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         PhasesChoice = PhasesChoices.Idle;
 
-                        Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-                        Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                        Context.Invader.Animation.Scale = new Vector2(1f);
-                        Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                        Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                        Context.Defender.Animation.Scale = new Vector2(1f);
+                        Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
+                        Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                        Context.SelfCreature.Animation.Scale = new Vector2(1f);
+                        Context.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+                        Context.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                        Context.OpponentCreature.Animation.Scale = new Vector2(1f);
 
-                        DefenderSTInput.SetText(Context.Defender.Creature.CurrentST.ToString());
-                        DefenderMaxHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
-                        DefenderGoldInput.SetText(Context.Defender.Owner.Gold.ToString());
+                        DefenderSTInput.SetText(Context.OpponentCreature.Creature.CurrentST.ToString());
+                        DefenderMaxHPInput.SetText(Context.OpponentCreature.Creature.MaxHP.ToString());
+                        DefenderGoldInput.SetText(Context.OpponentCreature.Owner.Gold.ToString());
 
-                        InvaderSTInput.SetText(Context.Invader.Creature.CurrentST.ToString());
-                        InvaderMaxHPInput.SetText(Context.Invader.Creature.MaxHP.ToString());
-                        InvaderGoldInput.SetText(Context.Invader.Owner.Gold.ToString());
-                        DefenderTerrainHPBonusInput.SetText((Context.DefenderTerrain.LandLevel).ToString());
+                        InvaderSTInput.SetText(Context.SelfCreature.Creature.CurrentST.ToString());
+                        InvaderMaxHPInput.SetText(Context.SelfCreature.Creature.MaxHP.ToString());
+                        InvaderGoldInput.SetText(Context.SelfCreature.Owner.Gold.ToString());
+                        DefenderTerrainHPBonusInput.SetText((Context.ActiveTerrain.LandLevel).ToString());
                     }
                     break;
 
@@ -715,31 +693,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (SetupChoice)
             {
                 case SetupChoices.DefenderCreature:
-                    Context.Defender.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
-                    Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                    Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                    Context.Defender.Animation.Scale = new Vector2(1f);
-                    DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-                    DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-                    DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+                    Context.OpponentCreature.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
+                    Context.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+                    Context.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                    Context.OpponentCreature.Animation.Scale = new Vector2(1f);
+                    DefenderHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+                    DefenderMaxHPInput.SetText(Context.OpponentCreature.Creature.OriginalMaxHP.ToString());
+                    DefenderSTInput.SetText(Context.OpponentCreature.Creature.OriginalST.ToString());
                     break;
 
                 case SetupChoices.InvaderCreature:
-                    Context.Invader.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
-                    Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-                    Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                    Context.Invader.Animation.Scale = new Vector2(1f);
-                    InvaderHPInput.SetText(Context.Invader.Creature.OriginalMaxHP.ToString());
-                    InvaderMaxHPInput.SetText(Context.Invader.Creature.OriginalMaxHP.ToString());
-                    InvaderSTInput.SetText(Context.Invader.Creature.OriginalST.ToString());
+                    Context.SelfCreature.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
+                    Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
+                    Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                    Context.SelfCreature.Animation.Scale = new Vector2(1f);
+                    InvaderHPInput.SetText(Context.SelfCreature.Creature.OriginalMaxHP.ToString());
+                    InvaderMaxHPInput.SetText(Context.SelfCreature.Creature.OriginalMaxHP.ToString());
+                    InvaderSTInput.SetText(Context.SelfCreature.Creature.OriginalST.ToString());
                     break;
 
                 case SetupChoices.DefenderItem:
-                    Context.Defender.Item = CardSelectionScreen.ListSelectedCard[0];
+                    Context.OpponentCreature.Item = CardSelectionScreen.ListSelectedCard[0];
                     break;
 
                 case SetupChoices.InvaderItem:
-                    Context.Invader.Item = CardSelectionScreen.ListSelectedCard[0];
+                    Context.SelfCreature.Item = CardSelectionScreen.ListSelectedCard[0];
                     break;
 
                 case SetupChoices.DefenderEnchant:
@@ -754,7 +732,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
                     if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                     {
-                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.Invader, Context.Defender, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.SelfCreature, Context.OpponentCreature, ActiveSpellCard));
                     }
                     break;
 
@@ -762,7 +740,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
                     if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                     {
-                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.Defender, Context.Invader, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.OpponentCreature, Context.SelfCreature, ActiveSpellCard));
                     }
                     break;
             }
@@ -782,7 +760,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ReflectedDamage > 0)
             {
-                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender != Context.Defender, "Sorcerer Street/Default", FirstAttacker, true));
+                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender != Context.OpponentCreature, "Sorcerer Street/Default", FirstAttacker, true));
             }
 
             if (Damage > 0)
@@ -793,31 +771,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         if (string.IsNullOrEmpty(ActiveAnimationPath))
                         {
-                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.Defender, "Sorcerer Street/Default", Defender, true));
+                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.OpponentCreature, "Sorcerer Street/Default", Defender, true));
                         }
                         else
                         {
-                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.Defender, ActiveAnimationPath, Defender, true));
+                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.OpponentCreature, ActiveAnimationPath, Defender, true));
                         }
                     }
                 }
                 else
                 {
-                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.Defender, FirstAttacker.Creature.AttackStartAnimationPath, FirstAttacker, true));
+                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.OpponentCreature, FirstAttacker.Creature.AttackStartAnimationPath, FirstAttacker, true));
                     FirstAttacker.Animation.Position = new Vector2(1750, 190);
-                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.Defender, FirstAttacker.Creature.AttackEndAnimationPath, Defender, true));
+                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.OpponentCreature, FirstAttacker.Creature.AttackEndAnimationPath, Defender, true));
                     Defender.Animation.Position = new Vector2(573, 90);
 
                     FirstAttacker.Animation = null;
                     Defender.Animation = null;
-                    Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                    Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                    Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+                    Defender.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
                     Defender.Animation.Scale = new Vector2(1f);
                 }
             }
             else
             {
-                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.Defender, "Sorcerer Street/Neutralize", Defender, true));
+                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(Defender == Context.OpponentCreature, "Sorcerer Street/Neutralize", Defender, true));
             }
 
             AnimationScreen ActiveAnimation = (AnimationScreen)ListAttackAnimation[0].ActiveAnimation;
@@ -830,7 +808,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.DefenderCreature;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.Defender.Creature, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.OpponentCreature.Creature, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -839,7 +817,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.DefenderItem;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.Defender.Item, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.OpponentCreature.Item, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -872,13 +850,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
-            while (Context.Defender.Owner.ListCardInHand.Count < CardsInHand)
+            while (Context.OpponentCreature.Owner.ListCardInHand.Count < CardsInHand)
             {
-                Context.Defender.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+                Context.OpponentCreature.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
             }
-            while (Context.Defender.Owner.ListCardInHand.Count > CardsInHand)
+            while (Context.OpponentCreature.Owner.ListCardInHand.Count > CardsInHand)
             {
-                Context.Defender.Owner.ListCardInHand.RemoveAt(0);
+                Context.OpponentCreature.Owner.ListCardInHand.RemoveAt(0);
             }
         }
 
@@ -886,34 +864,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
-            while (Context.Defender.Owner.ListCardInDeck.Count < CardsInHand)
+            while (Context.OpponentCreature.Owner.ListCardInDeck.Count < CardsInHand)
             {
-                Context.Defender.Owner.ListCardInDeck.Add(new CreatureCard("Dummy"));
+                Context.OpponentCreature.Owner.ListCardInDeck.Add(new CreatureCard("Dummy"));
             }
-            while (Context.Defender.Owner.ListCardInDeck.Count > CardsInHand)
+            while (Context.OpponentCreature.Owner.ListCardInDeck.Count > CardsInHand)
             {
-                Context.Defender.Owner.ListCardInDeck.RemoveAt(0);
+                Context.OpponentCreature.Owner.ListCardInDeck.RemoveAt(0);
             }
         }
 
         private void SetDefenderHPInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Creature.CurrentHP);
+            int.TryParse(InputValue, out Context.OpponentCreature.Creature.CurrentHP);
         }
 
         private void SetDefenderMaxHPInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Creature.MaxHP);
+            int.TryParse(InputValue, out Context.OpponentCreature.Creature.MaxHP);
         }
 
         private void SetDefenderSTInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Creature.CurrentST);
+            int.TryParse(InputValue, out Context.OpponentCreature.Creature.CurrentST);
         }
 
         private void SetDefenderTerrainHPBonusInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(DefenderTerrainHPBonusInput.Text, out Context.DefenderTerrain.LandLevel);
+            int.TryParse(DefenderTerrainHPBonusInput.Text, out Context.ActiveTerrain.LandLevel);
         }
 
         private void SetDefenderSupportSTBonusInput(TextInput Sender, string InputValue)
@@ -924,47 +902,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
         private void SetDefenderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
         private void SetDefenderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
         private void SetDefenderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
+            Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
         private void SetDefenderRankInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.OwnerTeam.Rank);
+            int.TryParse(InputValue, out Context.OpponentCreature.OwnerTeam.Rank);
         }
 
         private void SetDefenderGoldInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Owner.Gold);
+            int.TryParse(InputValue, out Context.OpponentCreature.Owner.Gold);
         }
 
         private void SetDefenderLapInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.Owner.CompletedLaps);
+            int.TryParse(InputValue, out Context.OpponentCreature.Owner.CompletedLaps);
         }
         
         private void SetRoundInput(TextInput Sender, string InputValue)
@@ -977,19 +955,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (SelectedItem)
             {
                 case TerrainSorcererStreet.FireElement:
-                    Context.DefenderTerrain.TerrainTypeIndex = 2;
+                    Context.ActiveTerrain.TerrainTypeIndex = 2;
                     break;
                 case TerrainSorcererStreet.WaterElement:
-                    Context.DefenderTerrain.TerrainTypeIndex = 3;
+                    Context.ActiveTerrain.TerrainTypeIndex = 3;
                     break;
                 case TerrainSorcererStreet.EarthElement:
-                    Context.DefenderTerrain.TerrainTypeIndex = 4;
+                    Context.ActiveTerrain.TerrainTypeIndex = 4;
                     break;
                 case TerrainSorcererStreet.AirElement:
-                    Context.DefenderTerrain.TerrainTypeIndex = 5;
+                    Context.ActiveTerrain.TerrainTypeIndex = 5;
                     break;
                 case TerrainSorcererStreet.NeutralElement:
-                    Context.DefenderTerrain.TerrainTypeIndex = 6;
+                    Context.ActiveTerrain.TerrainTypeIndex = 6;
                     break;
             }
         }
@@ -1000,7 +978,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.InvaderCreature;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.Invader.Creature, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.SelfCreature.Creature, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1009,7 +987,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.InvaderItem;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.Invader.Item, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.SelfCreature.Item, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1042,13 +1020,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
-            while (Context.Invader.Owner.ListCardInHand.Count < CardsInHand)
+            while (Context.SelfCreature.Owner.ListCardInHand.Count < CardsInHand)
             {
-                Context.Invader.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+                Context.SelfCreature.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
             }
-            while (Context.Invader.Owner.ListCardInHand.Count > CardsInHand)
+            while (Context.SelfCreature.Owner.ListCardInHand.Count > CardsInHand)
             {
-                Context.Invader.Owner.ListCardInHand.RemoveAt(0);
+                Context.SelfCreature.Owner.ListCardInHand.RemoveAt(0);
             }
         }
 
@@ -1056,29 +1034,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
-            while (Context.Invader.Owner.ListCardInDeck.Count < CardsInHand)
+            while (Context.SelfCreature.Owner.ListCardInDeck.Count < CardsInHand)
             {
-                Context.Invader.Owner.ListCardInDeck.Add(new CreatureCard("Dummy"));
+                Context.SelfCreature.Owner.ListCardInDeck.Add(new CreatureCard("Dummy"));
             }
-            while (Context.Invader.Owner.ListCardInDeck.Count > CardsInHand)
+            while (Context.SelfCreature.Owner.ListCardInDeck.Count > CardsInHand)
             {
-                Context.Invader.Owner.ListCardInDeck.RemoveAt(0);
+                Context.SelfCreature.Owner.ListCardInDeck.RemoveAt(0);
             }
         }
 
         private void SetInvaderHPInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Creature.CurrentHP);
+            int.TryParse(InputValue, out Context.SelfCreature.Creature.CurrentHP);
         }
 
         private void SetInvaderMaxHPInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Creature.MaxHP);
+            int.TryParse(InputValue, out Context.SelfCreature.Creature.MaxHP);
         }
 
         private void SetInvaderSTInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Creature.CurrentST);
+            int.TryParse(InputValue, out Context.SelfCreature.Creature.CurrentST);
         }
 
         private void SetInvaderSupportSTBonusInput(TextInput Sender, string InputValue)
@@ -1089,47 +1067,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
         private void SetInvaderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
         private void SetInvaderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
         private void SetInvaderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
-            Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
-            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
+            Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] = FinalValue;
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.SelfCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.OpponentCreature.OwnerTeam.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
         private void SetInvaderRankInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.OwnerTeam.Rank);
+            int.TryParse(InputValue, out Context.SelfCreature.OwnerTeam.Rank);
         }
 
         private void SetInvaderGoldInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Owner.Gold);
+            int.TryParse(InputValue, out Context.SelfCreature.Owner.Gold);
         }
 
         private void SetInvaderLapInput(TextInput Sender, string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.Owner.CompletedLaps);
+            int.TryParse(InputValue, out Context.SelfCreature.Owner.CompletedLaps);
         }
 
         #endregion
@@ -1142,35 +1120,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             PhasesChoice = PhasesChoices.IntroPhase;
 
-            Context.Invader.Creature.InitBattleBonuses();
-            Context.Defender.Creature.InitBattleBonuses();
+            Context.SelfCreature.Creature.InitBattleBonuses();
+            Context.OpponentCreature.Creature.InitBattleBonuses();
 
-            Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-            Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-            Context.Invader.Animation.Scale = new Vector2(1f);
-            Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-            Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-            Context.Defender.Animation.Scale = new Vector2(1f);
+            Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
+            Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+            Context.SelfCreature.Animation.Scale = new Vector2(1f);
+            Context.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", Context.OpponentCreature.Creature.sprCard);
+            Context.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Context.OpponentCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+            Context.OpponentCreature.Animation.Scale = new Vector2(1f);
 
-            Context.Defender.Creature.CurrentHP = int.Parse(DefenderHPInput.Text);
-            Context.Defender.Creature.CurrentST = int.Parse(DefenderSTInput.Text);
-            Context.Defender.BonusHP = 0;
-            Context.Defender.BonusST = 0;
-            Context.Defender.LandHP = 0;
-            Context.Defender.DamageNeutralizedByOpponent = 0;
-            Context.Defender.DamageReceived = 0;
-            Context.Defender.DamageReflectedByOpponent = 0;
-            Context.Defender.DamageReceivedIgnoreLandBonus = false;
+            Context.OpponentCreature.Creature.CurrentHP = int.Parse(DefenderHPInput.Text);
+            Context.OpponentCreature.Creature.CurrentST = int.Parse(DefenderSTInput.Text);
+            Context.OpponentCreature.BonusHP = 0;
+            Context.OpponentCreature.BonusST = 0;
+            Context.OpponentCreature.LandHP = 0;
+            Context.OpponentCreature.DamageNeutralizedByOpponent = 0;
+            Context.OpponentCreature.DamageReceived = 0;
+            Context.OpponentCreature.DamageReflectedByOpponent = 0;
+            Context.OpponentCreature.DamageReceivedIgnoreLandBonus = false;
 
-            Context.Invader.Creature.CurrentHP = int.Parse(InvaderHPInput.Text);
-            Context.Invader.Creature.CurrentST = int.Parse(InvaderSTInput.Text);
-            Context.Invader.BonusHP = 0;
-            Context.Invader.BonusST = 0;
-            Context.Invader.LandHP = 0;
-            Context.Invader.DamageNeutralizedByOpponent = 0;
-            Context.Invader.DamageReceived = 0;
-            Context.Invader.DamageReflectedByOpponent = 0;
-            Context.Invader.DamageReceivedIgnoreLandBonus = false;
+            Context.SelfCreature.Creature.CurrentHP = int.Parse(InvaderHPInput.Text);
+            Context.SelfCreature.Creature.CurrentST = int.Parse(InvaderSTInput.Text);
+            Context.SelfCreature.BonusHP = 0;
+            Context.SelfCreature.BonusST = 0;
+            Context.SelfCreature.LandHP = 0;
+            Context.SelfCreature.DamageNeutralizedByOpponent = 0;
+            Context.SelfCreature.DamageReceived = 0;
+            Context.SelfCreature.DamageReflectedByOpponent = 0;
+            Context.SelfCreature.DamageReceivedIgnoreLandBonus = false;
 
             ActionPanelBattleStartPhase.InitIntroAnimation(Context);
 
@@ -1184,10 +1162,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             PhasesChoice = PhasesChoices.LandModifierPhase;
             PhasesEnd = PhasesChoices.LandModifierPhase;
 
-            Context.Defender.LandHP = int.Parse(DefenderTerrainHPBonusInput.Text) * 10;
-            Context.Defender.BonusST = int.Parse(DefenderSupportSTBonusInput.Text) * 10;
+            Context.OpponentCreature.LandHP = int.Parse(DefenderTerrainHPBonusInput.Text) * 10;
+            Context.OpponentCreature.BonusST = int.Parse(DefenderSupportSTBonusInput.Text) * 10;
 
-            Context.Invader.BonusST = int.Parse(InvaderSupportSTBonusInput.Text) * 10;
+            Context.SelfCreature.BonusST = int.Parse(InvaderSupportSTBonusInput.Text) * 10;
 
             sndButtonClick.Play();
         }
@@ -1257,13 +1235,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             g.GraphicsDevice.Clear(Color.Black);
 
-            if (Context.Invader.Animation != null)
+            if (Context.SelfCreature.Animation != null)
             {
-                Context.Invader.Animation.BeginDraw(g);
+                Context.SelfCreature.Animation.BeginDraw(g);
             }
-            if (Context.Defender.Animation != null)
+            if (Context.OpponentCreature.Animation != null)
             {
-                Context.Defender.Animation.BeginDraw(g);
+                Context.OpponentCreature.Animation.BeginDraw(g);
             }
 
             switch (PhasesChoice)

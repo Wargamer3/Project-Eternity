@@ -49,9 +49,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AnimationPhase = AnimationPhases.Finished;
             ItemAnimationTime = 9999;
 
-            if (GlobalSorcererStreetBattleContext.Invader.Item != null)
+            if (GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
-                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName);
+                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.SelfCreature, GlobalSorcererStreetBattleContext.OpponentCreature, RequirementName);
                 if (ListSkillActivation.Count > 0)
                 {
                     ItemAnimationTime = 0;
@@ -60,9 +60,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     return true;
                 }
             }
-            else if (GlobalSorcererStreetBattleContext.Defender.Item != null)
+            else if (GlobalSorcererStreetBattleContext.OpponentCreature.Item != null)
             {
-                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName);
+                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.OpponentCreature, GlobalSorcererStreetBattleContext.SelfCreature, RequirementName);
                 if (ListSkillActivation.Count > 0)
                 {
                     ItemAnimationTime = 0;
@@ -98,11 +98,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<SkillActivationContext> ListSkillActivation;
             if (InvaderSide)
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.Invader, Context.Defender, RequirementName);
+                ListSkillActivation = Context.GetAvailableActivation(Context.SelfCreature, Context.OpponentCreature, RequirementName);
             }
             else
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, RequirementName);
+                ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, RequirementName);
             }
 
             if (ListSkillActivation.Count > 0)
@@ -115,14 +115,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActionPanelBattleItemModifierPhase.ActivePhase = RequirementName;
 
-            List<SkillActivationContext> ListSkillActivation = Context.GetAvailableActivation(Context.Invader, Context.Defender, RequirementName);
+            List<SkillActivationContext> ListSkillActivation = Context.GetAvailableActivation(Context.SelfCreature, Context.OpponentCreature, RequirementName);
             if (ListSkillActivation.Count > 0)
             {
                 StartAnimation(true, ListSkillActivation);
             }
             else
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, RequirementName);
+                ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, RequirementName);
                 if (ListSkillActivation.Count > 0)
                 {
                     StartAnimation(false, ListSkillActivation);
@@ -150,7 +150,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Context.ListActivatedEffect.Clear();
 
-                    Context.ActivateSkill(Context.Invader, Context.Defender, ListSkillActivation[0].DicSkillActivation);
+                    Context.ActivateSkill(Context.SelfCreature, Context.OpponentCreature, ListSkillActivation[0].DicSkillActivation);
 
                     AnimationPhase = AnimationPhases.InvaderActivation;
                 }
@@ -161,7 +161,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Context.ListActivatedEffect.Clear();
 
-                    Context.ActivateSkill(Context.Defender, Context.Invader, ListSkillActivation[0].DicSkillActivation);
+                    Context.ActivateSkill(Context.OpponentCreature, Context.SelfCreature, ListSkillActivation[0].DicSkillActivation);
 
                     AnimationPhase = AnimationPhases.DefenderActivation;
                 }
@@ -174,9 +174,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListSkillActivation.RemoveAt(0);
                     if (ListSkillActivation.Count == 0)
                     {
-                        if (Context.Defender.FinalHP > 0)
+                        if (Context.OpponentCreature.FinalHP > 0)
                         {
-                            ListSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, ActivePhase);
+                            ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, ActivePhase);
                             if (ListSkillActivation.Count > 0)
                             {
                                 ItemAnimationTime = 0;
@@ -291,38 +291,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawInvaderItemCardActivation(CustomSpriteBatch g, SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            float CardHeight = Constants.Height / 16 + (GlobalSorcererStreetBattleContext.Invader.Item.sprCard.Height / 2) * ItemCardScale;
+            float CardHeight = Constants.Height / 16 + (GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard.Height / 2) * ItemCardScale;
 
             if (ItemAnimationTime < 0.3)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + (float)Math.Sin((ItemAnimationTime / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.6)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.9)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + (float)Math.Sin(((ItemAnimationTime - 0.3) / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 1.5)//Bonus text + effect activation animaton
             {
             }
             else if (ItemAnimationTime <= 2.5)//Bonus text + effect activation animaton
             {
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 12, (int)(Constants.Height / 1.8f)), Constants.Width / 3, Constants.Height / 14);
                 g.DrawStringCentered(fntMenuText, "Ability Values Changed", new Vector2(Constants.Width / 12 + Constants.Width / 6, Constants.Height / 1.8f + Constants.Height / 28), Color.White);
             }
             else if ((int)Math.Ceiling(ItemAnimationTime - 3.5) < GlobalSorcererStreetBattleContext.ListActivatedEffect.Count)//Effect text
             {
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Invader.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.SelfCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 12, (int)(Constants.Height / 1.8f)), Constants.Width / 3, Constants.Height / 14);
 
                 g.DrawStringCentered(fntMenuText, GlobalSorcererStreetBattleContext.ListActivatedEffect[(int)Math.Ceiling(ItemAnimationTime - 3.5)].ActivationInfo, new Vector2(Constants.Width / 12 + Constants.Width / 6, Constants.Height / 1.8f + Constants.Height / 28), Color.White);
@@ -331,26 +331,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawInvaderCreatureCardActivation(CustomSpriteBatch g, SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            float CardX = Constants.Width / 9 + GlobalSorcererStreetBattleContext.Invader.Creature.sprCard.Width / 2;
+            float CardX = Constants.Width / 9 + GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard.Width / 2;
             float CardY = Constants.Height / 12 * CreatureCardScale;
 
             if (ItemAnimationTime < 0.3)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + (float)Math.Sin((ItemAnimationTime / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Invader.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.6)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Invader.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.9)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + (float)Math.Sin(((ItemAnimationTime - 0.3) / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Invader.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.SelfCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 1.5)//Bonus text + effect activation animaton
             {
@@ -370,38 +370,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawDenderItemCardActivation(CustomSpriteBatch g, SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            float CardHeight = Constants.Height / 16 + (GlobalSorcererStreetBattleContext.Defender.Item.sprCard.Height / 2) * ItemCardScale;
+            float CardHeight = Constants.Height / 16 + (GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard.Height / 2) * ItemCardScale;
 
             if (ItemAnimationTime < 0.3)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + (float)Math.Sin((ItemAnimationTime / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.6)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.9)
             {
                 float StartScale = ItemCardScale;
                 float FinalScale = StartScale + (float)Math.Sin(((ItemAnimationTime - 0.3) / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 1.5)//Bonus text + effect activation animaton
             {
             }
             else if (ItemAnimationTime <= 2.5)//Bonus text + effect activation animaton
             {
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width - Constants.Width / 3 - Constants.Width / 12, (int)(Constants.Height / 1.8f)), Constants.Width / 3, Constants.Height / 14);
                 g.DrawStringCentered(fntMenuText, "Ability Values Changed", new Vector2(Constants.Width - Constants.Width / 3 - Constants.Width / 12 + Constants.Width / 6, Constants.Height / 1.8f + Constants.Height / 28), Color.White);
             }
             else if ((int)Math.Ceiling(ItemAnimationTime - 3.5) < GlobalSorcererStreetBattleContext.ListActivatedEffect.Count)//Effect text
             {
-                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.Defender.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniatureCentered(g, GlobalSorcererStreetBattleContext.OpponentCreature.Item.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, CardHeight, -ItemCardScale, ItemCardScale, false);
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width - Constants.Width / 3 - Constants.Width / 12, (int)(Constants.Height / 1.8f)), Constants.Width / 3, Constants.Height / 14);
 
                 g.DrawStringCentered(fntMenuText, GlobalSorcererStreetBattleContext.ListActivatedEffect[(int)Math.Ceiling(ItemAnimationTime - 3.5)].ActivationInfo, new Vector2(Constants.Width - Constants.Width / 3 - Constants.Width / 12 + Constants.Width / 6, Constants.Height / 1.8f + Constants.Height / 28), Color.White);
@@ -410,26 +410,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawDenderCreatureCardActivation(CustomSpriteBatch g, SpriteFont fntMenuText, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            float CardX = Constants.Width - Constants.Width / 9 - GlobalSorcererStreetBattleContext.Defender.Creature.sprCard.Width / 2;
+            float CardX = Constants.Width - Constants.Width / 9 - GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard.Width / 2;
             float CardY = Constants.Height / 12 * CreatureCardScale;
 
             if (ItemAnimationTime < 0.3)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + (float)Math.Sin((ItemAnimationTime / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Defender.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.6)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Defender.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 0.9)
             {
                 float StartScale = CreatureCardScale;
                 float FinalScale = StartScale + (float)Math.Sin(((ItemAnimationTime - 0.3) / 0.6) * MathHelper.Pi) * 0.07f;
-                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.Defender.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.OpponentCreature.Creature.sprCard, MenuHelper.sprCardBack, Color.White, CardX, CardY, -FinalScale, FinalScale, false);
             }
             else if (ItemAnimationTime < 1.5)//Bonus text + effect activation animaton
             {

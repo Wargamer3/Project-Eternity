@@ -22,9 +22,22 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
             List<string> ListAllowedRequirements = new List<string>() { "SorcererStreetRequirement" };
             List<string> ListAllowedEffect = new List<string>() { "SorcererStreetEffect" };
 
-            cboTargetType.Items.AddRange(ManualSkillTarget.DicDefaultTarget.Values.Where(T => ListAllowedTargets.Contains(T.GetType().BaseType.Name)).OrderBy(T => T.ToString()).ToArray());
-            cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.Where(R => ListAllowedRequirements.Contains(R.GetType().BaseType.Name)).OrderBy(R => R.ToString()).ToArray());
-            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.Where(E => ListAllowedEffect.Contains(E.GetType().BaseType.Name)).OrderBy(E => E.ToString()).ToArray());
+            ManualSkillTarget[] ArraySkillTargets = ManualSkillTarget.DicDefaultTarget.Values.Where(T => ListAllowedTargets.Contains(T.GetType().BaseType.Name)).OrderBy(T => T.ToString()).ToArray();
+            BaseSkillRequirement[] ArrayRequirement = BaseSkillRequirement.DicDefaultRequirement.Values.Where(R => ListAllowedRequirements.Contains(R.GetType().BaseType.Name)).OrderBy(R => R.ToString()).ToArray();
+            BaseEffect[] ArrayEffects = BaseEffect.DicDefaultEffect.Values.Where(E => ListAllowedEffect.Contains(E.GetType().BaseType.Name)).OrderBy(E => E.ToString()).ToArray();
+
+            foreach (ManualSkillTarget ActiveTarget in ArraySkillTargets)
+            {
+                cboTargetType.Items.Add(ActiveTarget.Copy());
+            }
+            foreach (BaseSkillRequirement ActiveRequirement in ArrayRequirement)
+            {
+                cboRequirementType.Items.Add(ActiveRequirement.Copy());
+            }
+            foreach (BaseEffect ActiveEffect in ArrayEffects)
+            {
+                cboEffectType.Items.Add(ActiveEffect.Copy());
+            }
         }
 
         public SpellEditor(string FilePath, object[] Params)
@@ -87,6 +100,8 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
             txtRange.Text = ActiveSkill.Range.ToString();
             txtDescription.Text = ActiveSkill.Description;
             cboTargetType.Text = ActiveSkill.Target.TargetType;
+            cboTargetType.Items[cboTargetType.SelectedIndex] = ActiveSkill.Target;
+            pgTargetType.SelectedObject = cboTargetType.SelectedItem;
 
             for (int R = 0; R < ActiveSkill.ListRequirement.Count; R++)
             {
@@ -127,6 +142,7 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
         private void lvRequirements_SelectedIndexChanged(object sender, EventArgs e)
         {
             AllowEvents = false;
+
             if (lvRequirements.SelectedItems.Count == 0)
             {
                 gbRequirementInformation.Enabled = false;
@@ -138,6 +154,8 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
             cboRequirementType.Text = lvRequirements.SelectedItems[0].Text;
 
             gbRequirementInformation.Enabled = true;
+
+            AllowEvents = true;
         }
 
         private void cboRequirementType_SelectedIndexChanged(object sender, EventArgs e)
@@ -145,16 +163,14 @@ namespace ProjectEternity.Editors.SorcererStreetSpellEditor
             if (!AllowEvents || lvRequirements.SelectedItems.Count == 0)
                 return;
 
-            BaseSkillRequirement NewSkillEffect = ((BaseSkillRequirement)cboEffectType.SelectedItem).Copy();
+            BaseSkillRequirement NewSkillEffect = ((BaseSkillRequirement)cboRequirementType.SelectedItem).Copy();
             BaseSkillRequirement OldSkillRequirement = (BaseSkillRequirement)lvRequirements.SelectedItems[0].Tag;
 
             NewSkillEffect.CopyMembers(OldSkillRequirement);
 
             lvRequirements.SelectedItems[0].Tag = NewSkillEffect;
-            lvRequirements.SelectedItems[0].Text = cboEffectType.Text;
+            lvRequirements.SelectedItems[0].Text = cboRequirementType.Text;
             pgRequirement.SelectedObject = NewSkillEffect;
-
-            AllowEvents = true;
         }
 
         private void btnAddEffect_Click(object sender, EventArgs e)

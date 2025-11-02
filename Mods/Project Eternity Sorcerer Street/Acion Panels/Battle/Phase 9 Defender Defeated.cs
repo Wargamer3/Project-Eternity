@@ -22,30 +22,55 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Invader.Item);
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.Invader.Item);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
             }
-            if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Defender.Item);
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.Defender.Item);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
             }
 
-            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.Invader.Owner.GamePiece.Position);
+            ReplaceDeadCreature(Map);
+        }
 
-            ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader.Creature;
-            ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.Invader.Owner;
+        public static void ReplaceDeadCreature(SorcererStreetMap Map)
+        {
+            TerrainSorcererStreet ActiveTerrain = Map.GlobalSorcererStreetBattleContext.ActiveTerrain;
 
-            Map.GlobalSorcererStreetBattleContext.Invader.OwnerTeam.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.GlobalSorcererStreetBattleContext.Defender.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListSummonedCreature.Remove(ActiveTerrain);
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListSummonedCreature.Add(ActiveTerrain);
 
-            Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.Defender.Creature);
-            Map.OnCreatureSummon(Map.GlobalSorcererStreetBattleContext.Invader.Creature, ActiveTerrain);
+            ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature;
+            ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner;
 
-            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.Invader.Owner);
-            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.Defender.Owner);
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.OwnerTeam.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.GlobalSorcererStreetBattleContext.OpponentCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+
+            Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
+            Map.OnCreatureSummon(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature, ActiveTerrain);
+
+            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner);
+            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner);
+        }
+
+        public static void DestroyDeadCreature(SorcererStreetMap Map)
+        {
+            TerrainSorcererStreet ActiveTerrain = Map.GlobalSorcererStreetBattleContext.ActiveTerrain;
+
+            Map.ListSummonedCreature.Remove(ActiveTerrain);
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListSummonedCreature.Remove(ActiveTerrain);
+
+            ActiveTerrain.DefendingCreature = null;
+            ActiveTerrain.PlayerOwner = null;
+
+            Map.GlobalSorcererStreetBattleContext.SelfCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+
+            Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature);
+
+            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner);
         }
 
         public override void DoUpdate(GameTime gameTime)

@@ -5,22 +5,21 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetHasSupportRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetHasTerritoryAbilityRequirement : SorcererStreetRequirement
     {
-        public enum Targets { Self, Opponent }
+        public enum Targets { Self, Opponent, Territory }
 
         private Targets _Target;
 
-        public SorcererStreetHasSupportRequirement()
+        public SorcererStreetHasTerritoryAbilityRequirement()
             : this(null)
         {
-            _Target = Targets.Opponent;
         }
 
-        public SorcererStreetHasSupportRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Support", GlobalContext)
+        public SorcererStreetHasTerritoryAbilityRequirement(SorcererStreetBattleContext GlobalContext)
+            : base("Sorcerer Street Has Territory Ability", GlobalContext)
         {
-            _Target = Targets.Opponent;
+            _Target = Targets.Territory;
         }
 
         protected override void DoSave(BinaryWriter BW)
@@ -35,12 +34,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.SelfCreature.BonusST > 0;
+            if (_Target == Targets.Self)
+            {
+                return GlobalContext.SelfCreature.Creature.TerritoryAbility != null;
+            }
+            else if (_Target == Targets.Opponent)
+            {
+                return GlobalContext.OpponentCreature.Creature.TerritoryAbility != null;
+            }
+            else
+            {
+                return GlobalContext.ActiveTerrain.DefendingCreature.TerritoryAbility != null;
+            }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasSupportRequirement NewRequirement = new SorcererStreetHasSupportRequirement(GlobalContext);
+            SorcererStreetHasTerritoryAbilityRequirement NewRequirement = new SorcererStreetHasTerritoryAbilityRequirement(GlobalContext);
 
             NewRequirement._Target =_Target;
 
@@ -49,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetHasSupportRequirement CopyRequirement = Copy as SorcererStreetHasSupportRequirement;
+            SorcererStreetHasTerritoryAbilityRequirement CopyRequirement = Copy as SorcererStreetHasTerritoryAbilityRequirement;
 
             if (CopyRequirement != null)
             {

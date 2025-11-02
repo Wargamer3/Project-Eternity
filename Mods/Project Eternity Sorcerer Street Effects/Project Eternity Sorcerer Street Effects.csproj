@@ -70,6 +70,7 @@
     <Compile Include="Effects\Player Enchant Effect\Set Castle Value.cs" />
     <Compile Include="Effects\Player Enchant Effect\Set Creature Cost.cs" />
     <Compile Include="Effects\Player Enchant Effect\Set Dice Value.cs" />
+    <Compile Include="Effects\Reset Stats.cs" />
     <Compile Include="Effects\Territory Command.cs" />
     <Compile Include="Effects\Player Enchant Effect\Toll Immunity.cs" />
     <Compile Include="Effects\Toll Steal.cs" />
@@ -217,6 +218,9 @@
     <Compile Include="Requirements\Before Battle Start Requirement.cs" />
     <Compile Include="Requirements\Battle Start Requirement.cs" />
     <Compile Include="Requirements\Destroyed By Spell Requirement.cs" />
+    <Compile Include="Requirements\Has Attack First Requirement.cs" />
+    <Compile Include="Requirements\Has Territory Ability Requirement.cs" />
+    <Compile Include="Requirements\Has Player Enchant Requirement.cs" />
     <Compile Include="Requirements\Has No Enchant Requirement.cs" />
     <Compile Include="Requirements\Has Support Requirement.cs" />
     <Compile Include="Requirements\Has Enchant Requirement.cs" />
@@ -238,6 +242,7 @@
     <Compile Include="Requirements\Attack Bonus Requirement.cs" />
     <Compile Include="Requirements\Against Defensive Requirement.cs" />
     <Compile Include="Requirements\Is Defending Requirement.cs" />
+    <Compile Include="Requirements\Territory Level Requirement.cs" />
     <Compile Include="Requirements\Territory Owned Requirement.cs" />
     <Compile Include="Requirements\Uppon Defeat Requirement.cs" />
     <Compile Include="Requirements\After Enemy Survived Requirement.cs" />

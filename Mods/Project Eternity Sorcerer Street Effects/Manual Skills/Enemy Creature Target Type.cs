@@ -68,5 +68,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             return new SorcererStreetEnemyCreatureTargetType(Params);
         }
+
+        public override void CopyMembers(ManualSkillTarget Copy)
+        {
+        }
     }
 }

@@ -22,15 +22,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Invader.Item);
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.Invader.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.Invader.Item);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
             }
-            if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Defender.Item);
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.Defender.Item);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
             }
         }
 
@@ -71,8 +71,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringMiddleAligned(Map.fntMenuText, "Toll", new Vector2(Constants.Width / 2, Y), Color.White);
             Y = Constants.Height - Constants.Height / 5;
             Y += 20;
-            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
             Y += 20;
             g.DrawStringMiddleAligned(Map.fntMenuText, "-20", new Vector2(Constants.Width / 2 - 80, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, "+20", new Vector2(Constants.Width / 2 + 80, Y), Color.White);

@@ -139,10 +139,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringCentered(fntOxanimumLightBigger, "Do you want to buy", new Vector2(Constants.Width / 2, DrawY + 300 * Ratio), TextColor);
             g.DrawStringCentered(fntOxanimumBold, CardToBuy.CardToBuy.Name.ToUpper(), new Vector2(Constants.Width / 2, DrawY + 435 * Ratio), TextColor);
 
-            int TextWidth = (int)(fntOxanimumLightBigger.MeasureString("For ").X + fntOxanimumBold.MeasureString(CardToBuy.CardToBuy.Price + " cr ?").X);
+            int TextWidth = (int)(fntOxanimumLightBigger.MeasureString("For ").X + fntOxanimumBold.MeasureString(CardToBuy.CardToBuy.ShopPrice + " cr ?").X);
 
             g.DrawString(fntOxanimumLightBigger, "For ", new Vector2(Constants.Width / 2 - TextWidth / 2, DrawY + 570 * Ratio), TextColor);
-            g.DrawString(fntOxanimumBold, CardToBuy.CardToBuy.Price + " cr ?", new Vector2(Constants.Width / 2 - TextWidth / 2 + fntOxanimumLightBigger.MeasureString("For ").X, DrawY + 560 * Ratio), TextColor);
+            g.DrawString(fntOxanimumBold, CardToBuy.CardToBuy.ShopPrice + " cr ?", new Vector2(Constants.Width / 2 - TextWidth / 2 + fntOxanimumLightBigger.MeasureString("For ").X, DrawY + 560 * Ratio), TextColor);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

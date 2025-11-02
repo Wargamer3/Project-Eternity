@@ -29,5 +29,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             return new SorcererStreetAllPlayerTargetType(Params);
         }
+
+        public override void CopyMembers(ManualSkillTarget Copy)
+        {
+        }
     }
 }

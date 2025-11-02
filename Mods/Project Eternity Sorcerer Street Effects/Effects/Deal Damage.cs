@@ -45,6 +45,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Params.GlobalContext.OpponentCreature.ReceiveDamage(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
 
+            if (Params.GlobalContext.SelfCreature.FinalHP <= 0)
+            {
+                ActionPanelBattleDefenderDefeatedPhase.DestroyDeadCreature(Params.Map);
+            }
+
             return "Damage dealt" + _DamageToDeal;
         }
 

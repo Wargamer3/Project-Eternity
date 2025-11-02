@@ -28,19 +28,16 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             SorcererStreetBattleContext GlobalSorcererStreetBattleContext = new SorcererStreetBattleContext();
 
-            GlobalSorcererStreetBattleContext.Invader.Creature = DummyInvaderCard;
-            GlobalSorcererStreetBattleContext.Defender.Creature = DummyDefenderCard;
+            GlobalSorcererStreetBattleContext.SelfCreature.Creature = DummyInvaderCard;
+            GlobalSorcererStreetBattleContext.OpponentCreature.Creature = DummyDefenderCard;
 
-            GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
-            GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
+            GlobalSorcererStreetBattleContext.SelfCreature.Creature.InitBattleBonuses();
+            GlobalSorcererStreetBattleContext.OpponentCreature.Creature.InitBattleBonuses();
 
-            GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
-            GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
-            GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
-            GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
-
-            GlobalSorcererStreetBattleContext.SelfCreature = GlobalSorcererStreetBattleContext.Invader;
-            GlobalSorcererStreetBattleContext.OpponentCreature = GlobalSorcererStreetBattleContext.Defender;
+            GlobalSorcererStreetBattleContext.SelfCreature.BonusHP = 0;
+            GlobalSorcererStreetBattleContext.OpponentCreature.BonusHP = 0;
+            GlobalSorcererStreetBattleContext.SelfCreature.BonusST = 0;
+            GlobalSorcererStreetBattleContext.OpponentCreature.BonusST = 0;
 
             SorcererStreetBattleParams BattleParams = new SorcererStreetBattleParams(GlobalSorcererStreetBattleContext);
             BaseEffect SkillEffect = new ChangeStatsEffect(BattleParams);
@@ -63,7 +60,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             HPIncreaseSkill.AddSkillEffectsToTarget(Requirement.SkillRequirementName);
 
-            Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, GlobalSorcererStreetBattleContext.Invader.FinalHP);
+            Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, GlobalSorcererStreetBattleContext.SelfCreature.FinalHP);
         }
 
         [TestMethod]
@@ -110,7 +107,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap);
             CreaturePhase.OnSelect();
 
-            Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, DummyMap.GlobalSorcererStreetBattleContext.Invader.FinalHP);
+            Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP);
         }
 
         private static SorcererStreetMap CreateDummyMap()

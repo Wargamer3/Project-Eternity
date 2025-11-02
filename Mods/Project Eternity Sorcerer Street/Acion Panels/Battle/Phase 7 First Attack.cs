@@ -85,35 +85,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             bool InvaderFirst = true;
             bool InvaderDecided = false;
 
-            if (!GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
+            if (!GlobalSorcererStreetBattleContext.SelfCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.SelfCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
             {
                 InvaderFirst = true;
                 InvaderDecided = true;
             }
-            else if (!GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
+            else if (!GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
             {
                 InvaderFirst = false;
                 InvaderDecided = true;
             }
 
-            if (!InvaderDecided && GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
+            if (!InvaderDecided && GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
             {
                 InvaderFirst = true;
             }
-            else if (!InvaderDecided && GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
+            else if (!InvaderDecided && GlobalSorcererStreetBattleContext.SelfCreature.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
             {
                 InvaderFirst = false;
             }
 
             if (InvaderFirst)
             {
-                FirstAttacker = GlobalSorcererStreetBattleContext.Invader;
-                SecondAttacker = GlobalSorcererStreetBattleContext.Defender;
+                FirstAttacker = GlobalSorcererStreetBattleContext.SelfCreature;
+                SecondAttacker = GlobalSorcererStreetBattleContext.OpponentCreature;
             }
             else
             {
-                FirstAttacker = GlobalSorcererStreetBattleContext.Defender;
-                SecondAttacker = GlobalSorcererStreetBattleContext.Invader;
+                FirstAttacker = GlobalSorcererStreetBattleContext.OpponentCreature;
+                SecondAttacker = GlobalSorcererStreetBattleContext.SelfCreature;
             }
         }
 
@@ -271,8 +271,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void ProcessAttack()
         {
-            ActionPanelSorcererStreet AttackerActivationScreen = FirstAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Invader.Owner));
-            ActionPanelSorcererStreet DefenderActivationScreen = SecondAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Defender.Owner));
+            ActionPanelSorcererStreet AttackerActivationScreen = FirstAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner));
+            ActionPanelSorcererStreet DefenderActivationScreen = SecondAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner));
 
             if (PlayAnimations && DefenderActivationScreen != null)
             {
@@ -310,7 +310,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.OpponentCreature));
                 }
             }
         }

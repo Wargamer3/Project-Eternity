@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
@@ -8,21 +9,16 @@ using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelAllCreatureSpellConfirm : ActionPanelSorcererStreet
+    public class ActionPanelAllCreatureInAreaSpellConfirm : ActionPanelSorcererStreet
     {
-        public enum CreatureTypes { All, Defensive }
-
         private ManualSkill EnchantToAdd;
         private int ActivePlayerIndex;
 
-        private ActionPanelAllCreatureSpellConfirm.CreatureTypes CreatureType;
-
-        public ActionPanelAllCreatureSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex, ActionPanelAllCreatureSpellConfirm.CreatureTypes CreatureType)
-            : base("All Creatures Spell Confirm", Map, true)
+        public ActionPanelAllCreatureInAreaSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex)
+            : base("All Creatures In Area Spell Confirm", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.CreatureType = CreatureType;
         }
 
         public override void OnSelect()
@@ -37,14 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.GlobalSorcererStreetBattleContext.Reset();
 
-                    for (int C = Map.ListSummonedCreature.Count - 1; C >= 0; C--)
-                    {
-                        TerrainSorcererStreet ActiveTerrain = Map.ListSummonedCreature[C];
-                        if (CreatureType == CreatureTypes.Defensive && !ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
-                        {
-                            //continue;
-                        }
+                    List<TerrainSorcererStreet> ListSummonedCreature = GetCreatures();
 
+                    foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+                    {
                         EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
                     }
 
@@ -80,6 +72,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        private List<TerrainSorcererStreet> GetCreatures()
+        {
+            List<TerrainSorcererStreet> ListSummonedCreature = Map.ListSummonedCreature;
+
+            if (Map.ListArea.Count > 0)
+            {
+                TerrainSorcererStreet ActivePlayerTerrain = Map.GetTerrain(Map.ListPlayer[ActivePlayerIndex].GamePiece.Position);
+
+                foreach (Area ActiveArea in Map.ListArea)
+                {
+                    if (ActiveArea.ListTerrainInArea.Contains(ActivePlayerTerrain))
+                    {
+                        return ActiveArea.ListTerrainInArea;
+                    }
+                }
+            }
+
+            return ListSummonedCreature;
+        }
+
         public override void DoRead(ByteReader BR)
         {
         }
@@ -90,7 +102,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelAllCreatureSpellConfirm(Map, EnchantToAdd, ActivePlayerIndex, CreatureType);
+            return new ActionPanelAllCreatureInAreaSpellConfirm(Map, EnchantToAdd, ActivePlayerIndex);
         }
 
         public override void Draw(CustomSpriteBatch g)

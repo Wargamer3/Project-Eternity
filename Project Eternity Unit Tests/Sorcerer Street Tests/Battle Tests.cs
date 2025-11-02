@@ -38,14 +38,14 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.OnSelect();
 
-            Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.Invader);
-            Assert.AreEqual(DummyDefenderCard, DummyMap.GlobalSorcererStreetBattleContext.Defender);
+            Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature);
+            Assert.AreEqual(DummyDefenderCard, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature);
 
-            Assert.AreEqual(DummyInvaderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.Invader.FinalHP);
-            Assert.AreEqual(DummyDefenderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.Defender.FinalHP);
+            Assert.AreEqual(DummyInvaderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP);
+            Assert.AreEqual(DummyDefenderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP);
 
-            Assert.AreEqual(DummyInvaderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.Invader.FinalST);
-            Assert.AreEqual(DummyDefenderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.Defender.FinalST);
+            Assert.AreEqual(DummyInvaderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.FinalST);
+            Assert.AreEqual(DummyDefenderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature.FinalST);
         }
 
         [TestMethod]

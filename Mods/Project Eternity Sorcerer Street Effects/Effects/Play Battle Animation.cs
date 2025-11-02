@@ -38,8 +38,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.Defender.DamageReceived = Damage;
-            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Params.Map, Params.GlobalContext.Defender, "", false));
+            Params.GlobalContext.OpponentCreature.DamageReceived = Damage;
+            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Params.Map, Params.GlobalContext.OpponentCreature, "", false));
 
             return null;
         }

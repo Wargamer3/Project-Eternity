@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class CreatureCard : Card
     {
         public const string CreatureCardType = "Creature";
+        public const string TerritoryRequirementName = "Sorcerer Street Territory";
 
         public enum ElementalAffinity { Neutral, Fire, Water, Earth, Air }
 
@@ -46,10 +47,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private CardAbilities Abilities;
         private CardAbilities EnchantAbilities;//Based on Abilities
-
         private CardAbilities BattleAbilities;//Based on EnchantAbilities
 
         public Enchant Enchant;
+        public BaseSkillActivation TerritoryAbility;
 
         public CreatureCard(string Path)
             : base(Path, CreatureCardType)
@@ -112,6 +113,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicTerrainRequiement.Add((ElementalAffinity)BR.ReadByte(), BR.ReadInt32());
             }
+
             if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
             {
                 FileStream FSSkillChain = new FileStream("Content/Sorcerer Street/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
@@ -127,6 +129,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
 
                     ListActiveSkill.Add(ActiveSkill);
+
+                    foreach (BaseSkillActivation ActiveAcivation in ActiveSkill.CurrentSkillLevel.ListActivation)
+                    {
+                        if (TerritoryAbility != null)
+                        {
+                            break;
+                        }
+
+                        foreach (BaseSkillRequirement ActiveRequirement in ActiveAcivation.ListRequirement)
+                        {
+                            if (ActiveRequirement.SkillRequirementName == TerritoryRequirementName)
+                            {
+                                TerritoryAbility = ActiveAcivation;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 BRSkillChain.Close();

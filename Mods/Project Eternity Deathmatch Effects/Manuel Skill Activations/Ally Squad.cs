@@ -53,5 +53,9 @@ namespace ProjectEternity.Core.Skill
         {
             return new PilotSkillActivationAllySquad(Params);
         }
+
+        public override void CopyMembers(ManualSkillTarget Copy)
+        {
+        }
     }
 }

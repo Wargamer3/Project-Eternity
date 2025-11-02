@@ -9,14 +9,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street All Creatures";
 
-        public enum CreatureTypes { All, Defensive }
-
-        CreatureTypes _CreatureType;
+        private ActionPanelAllCreatureSpellConfirm.CreatureTypes _CreatureType;
 
         public SorcererStreetAllCreaturesTargetType()
             : this(null)
         {
-
         }
 
         public SorcererStreetAllCreaturesTargetType(SorcererStreetBattleParams Context)
@@ -31,7 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void Load(BinaryReader BR)
         {
-            _CreatureType = (CreatureTypes)BR.ReadByte();
+            _CreatureType = (ActionPanelAllCreatureSpellConfirm.CreatureTypes)BR.ReadByte();
         }
 
         public override bool CanActivateOnTarget(ManualSkill ActiveSkill)
@@ -41,6 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
+            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAllCreatureSpellConfirm(Params.Map, ActiveSkill, Params.GlobalPlayerContext.ActivePlayerIndex, _CreatureType));
         }
 
         public override ManualSkillTarget Copy()
@@ -52,12 +50,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return NewRequirement;
         }
 
+        public override void CopyMembers(ManualSkillTarget Copy)
+        {
+            SorcererStreetAllCreaturesTargetType NewTarget = (SorcererStreetAllCreaturesTargetType)Copy;
+
+            _CreatureType = NewTarget._CreatureType;
+        }
+
         #region Properties
 
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public CreatureTypes CreatureType
+        public ActionPanelAllCreatureSpellConfirm.CreatureTypes CreatureType
         {
             get
             {

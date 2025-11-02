@@ -96,15 +96,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     case "atk":
                     case "invader":
-                        if (Params.GlobalContext.Invader == null)
+                        if (Params.GlobalContext.SelfCreature == null)
                             throw new Exception(Input + " is invalid");
-                        return StatsFromCreature(Params.GlobalContext.Invader, Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.SelfCreature, Expression[1]);
 
                     case "def":
                     case "defender":
-                        if (Params.GlobalContext.Defender == null)
+                        if (Params.GlobalContext.OpponentCreature == null)
                             throw new Exception(Input + " is invalid");
-                        return StatsFromCreature(Params.GlobalContext.Defender,  Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.OpponentCreature,  Expression[1]);
 
                     case "self":
                     case "owner":
@@ -174,7 +174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (Expression[0])
                 {
                     case "terrainlevel":
-                        return Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
+                        return Params.GlobalContext.ActiveTerrain.LandLevel.ToString();
 
                     case "creaturesdestroyed":
                         return Params.GlobalContext.TotalCreaturesDestroyed.ToString();
@@ -280,10 +280,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "damagereceived":
-                    SorcererStreetBattleContext.BattleCreatureInfo Opponent = Params.GlobalContext.Defender;
+                    SorcererStreetBattleContext.BattleCreatureInfo Opponent = Params.GlobalContext.OpponentCreature;
                     if (ActiveCreature == Opponent)
                     {
-                        Opponent = Params.GlobalContext.Invader;
+                        Opponent = Params.GlobalContext.SelfCreature;
                     }
                     if (Opponent.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ScrollAttack)//Ignore scroll attacks
                     {
@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "terrainlevel":
-                    ReturnExpression = Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
+                    ReturnExpression = Params.GlobalContext.ActiveTerrain.LandLevel.ToString();
                     break;
 
                 case "cardsinhand":
