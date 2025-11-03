@@ -94,9 +94,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public static TilesetPreset FromFile(string Folder, string FilePath, int TilesetIndex = 0)
+        public static TilesetPreset FromFile(string FilePath, string RelativePath, int TilesetIndex = 0)
         {
-            FileStream FS = new FileStream("Content/" + Folder + "/Tilesets presets/" + FilePath + ".pet", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/" + FilePath, FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int TileSizeY = BR.ReadInt32();
 
             TilesetPreset NewTilesetPreset = new TilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
-            NewTilesetPreset.RelativePath = FilePath;
+            NewTilesetPreset.RelativePath = RelativePath;
 
             BR.Close();
             FS.Close();
@@ -128,67 +128,69 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprTileset, new Rectangle(Position.X, Position.Y, ArrayTilesetInformation[0].ArrayTiles[0, 0].Origin.Width, ArrayTilesetInformation[0].ArrayTiles[0, 0].Origin.Height), ArrayTilesetInformation[0].ArrayTiles[0, 0].Origin, Color.White);
         }
 
-        public void UpdateAutotTile(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        public bool UpdateAutotTile(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, Terrain[,] ArrayTerrain, List<TilesetPreset> ListTilesetPreset)
         {
             List<int> Whitelist = ListTilesetPreset[NewTile.TilesetIndex].ArrayTilesetInformation[0].ListAllowedTerrainTypeIndex;
 
-            if (Whitelist.Count > 0 && !Whitelist.Contains(CurrentTerrain.TerrainTypeIndex))
+            if (Whitelist.Count > 0 && !Whitelist.Contains(ArrayTerrain[GridX, GridY].TerrainTypeIndex))
             {
-                return;
+                return false;
             }
 
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
 
-            UpdateAutotTileParse(TilesetType, NewTile, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+            bool TileWasReplaced = UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX, GridY], GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
 
             //Left
             if (GridX > 0 && ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].TilesetType == TilesetType)
             {
-                UpdateAutotTileParse(TilesetType, NewTile, GridX - 1, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX - 1, GridY], GridX - 1, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
             }
 
             //Right
             if (GridX < ArrayTile.GetLength(0) - 1 && ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].TilesetType == TilesetType)
             {
-                UpdateAutotTileParse(TilesetType, NewTile, GridX + 1, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX + 1, GridY], GridX + 1, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
             }
 
             //Up
             if (GridY > 0 && ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].TilesetType == TilesetType)
             {
-                UpdateAutotTileParse(TilesetType, NewTile, GridX, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX, GridY - 1], GridX, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
 
                 //Corner Up Left
                 if (GridX > 0 && ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].TilesetType == TilesetType)
                 {
-                    UpdateAutotTileParse(TilesetType, NewTile, GridX - 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                    UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX - 1, GridY - 1], GridX - 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
                 }
                 //Corner Up Right
                 if (GridX < ArrayTile.GetLength(0) - 1 && ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].TilesetType == TilesetType)
                 {
-                    UpdateAutotTileParse(TilesetType, NewTile, GridX + 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                    UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX + 1, GridY - 1], GridX + 1, GridY - 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
                 }
             }
 
             //Down
             if (GridY < ArrayTile.GetLength(1) - 1 && ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].TilesetType == TilesetType)
             {
-                UpdateAutotTileParse(TilesetType, NewTile, GridX, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX, GridY + 1], GridX, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
 
                 //Corner Down Left
                 if (GridX > 0 && ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].TilesetType == TilesetType)
                 {
-                    UpdateAutotTileParse(TilesetType, NewTile, GridX - 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                    UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX - 1, GridY + 1], GridX - 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
                 }
                 //Corner Down Right
                 if (GridX < ArrayTile.GetLength(0) - 1 && ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].TilesetType == TilesetType)
                 {
-                    UpdateAutotTileParse(TilesetType, NewTile, GridX + 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                    UpdateAutotTileParse(TilesetType, NewTile, ArrayTerrain[GridX + 1, GridY + 1], GridX + 1, GridY + 1, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
                 }
             }
+
+            return TileWasReplaced;
         }
 
-        public void UpdateAutotTileParse(TilesetTypes TilesetType, DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        public bool UpdateAutotTileParse(TilesetTypes TilesetType, DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetPreset CurrentPreset = ListTilesetPreset[NewTile.TilesetIndex];
 
@@ -225,8 +227,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 case TilesetTypes.Road:
                 case TilesetTypes.Bridge:
-                    UpdtateSmartTileRoad(NewTile, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
-                    break;
+                    return UpdtateSmartTileRoad(NewTile, CurrentTerrain, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
 
                 case TilesetTypes.Ocean:
                     ArrayTile[GridX, GridY] = NewTile;
@@ -240,14 +241,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case TilesetTypes.Shoal:
-                    UpdateSmartTileShoal(NewTile, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
-                    break;
+                    return UpdateSmartTileShoal(NewTile, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
             }
+
+            return true;
         }
 
-        private void UpdtateSmartTileRoad(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private bool UpdtateSmartTileRoad(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetPreset Self = ListTilesetPreset[NewTile.TilesetIndex];
+
+            if (ListTilesetPreset.Count >= NewTile.TilesetIndex + 1)
+            {
+                if (Self.ArrayTilesetInformation[1].ListAllowedTerrainTypeIndex.Contains(CurrentTerrain.TerrainTypeIndex) || NewTile.TilesetIndex + 1 == ArrayTile[GridX, GridY].TilesetIndex)
+                {
+                    NewTile.TilesetIndex = NewTile.TilesetIndex + 1;
+                    return UpdtateSmartTileBridge(NewTile, CurrentTerrain, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
+                }
+            }
+
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
 
             bool LeftTileValid = false;
@@ -265,19 +277,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (GridX > 0)
             {
-                LeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 1);
+                LeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex].SlaveIndex == 1);
             }
             if (GridY > 0)
             {
-                UpTileValid = ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].SlaveIndex == 1);
+                UpTileValid = ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex].SlaveIndex == 1);
+
+                if (GridX > 0)
+                {
+                    UpLeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex].SlaveIndex == 1);
+                }
+                if (GridX < ArrayTile.GetLength(0) - 1)
+                {
+                    UpRightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex].SlaveIndex == 1);
+                }
             }
             if (GridX < ArrayTile.GetLength(0) - 1)
             {
-                RightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].SlaveIndex == 1);
+                RightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex].SlaveIndex == 1);
             }
             if (GridY < ArrayTile.GetLength(1) - 1)
             {
-                DownTileValid = ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].SlaveIndex == 1);
+                DownTileValid = ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex].SlaveIndex == 1);
+
+                if (GridX > 0)
+                {
+                    DownLeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].SlaveIndex == 1);
+                }
+                if (GridX < ArrayTile.GetLength(0) - 1)
+                {
+                    DownRightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex] == Self || (Self == ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].Master && ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].SlaveIndex == 1);
+                }
             }
 
             //No corners allowed
@@ -286,7 +316,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 || (DownTileValid && LeftTileValid && DownLeftTileValid)
                 || (DownTileValid && RightTileValid && DownRightTileValid))
             {
-                return;
+                return false;
             }
 
             ArrayTile[GridX, GridY] = NewTile;
@@ -456,6 +486,84 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
+
+            return true;
+        }
+
+        private bool UpdtateSmartTileBridge(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        {
+            TilesetPreset Self = ListTilesetPreset[NewTile.TilesetIndex];
+            TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
+
+            bool LeftTileValid = false;
+            bool UpTileValid = false;
+            bool RightTileValid = false;
+            bool DownTileValid = false;
+
+            bool UpLeftTileValid = false;
+            bool UpRightTileValid = false;
+            bool DownLeftTileValid = false;
+            bool DownRightTileValid = false;
+
+            int TopHalf = TileSizeY - TileSizeY / 2;
+            int BottomHalf = TileSizeY - TopHalf;
+
+            if (GridX > 0)
+            {
+                LeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY].TilesetIndex]);
+            }
+            if (GridY > 0)
+            {
+                UpTileValid = ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX, GridY - 1].TilesetIndex]);
+
+                if (GridX > 0)
+                {
+                    UpLeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex] == Self || Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY - 1].TilesetIndex];
+                }
+                if (GridX < ArrayTile.GetLength(0) - 1)
+                {
+                    UpRightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex] == Self || Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY - 1].TilesetIndex];
+                }
+            }
+            if (GridX < ArrayTile.GetLength(0) - 1)
+            {
+                RightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY].TilesetIndex]);
+            }
+            if (GridY < ArrayTile.GetLength(1) - 1)
+            {
+                DownTileValid = ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex] == Self || (Master == ListTilesetPreset[ArrayTile[GridX, GridY + 1].TilesetIndex]);
+
+                if (GridX > 0)
+                {
+                    DownLeftTileValid = ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex] == Self || Master == ListTilesetPreset[ArrayTile[GridX - 1, GridY + 1].TilesetIndex].Master;
+                }
+                if (GridX < ArrayTile.GetLength(0) - 1)
+                {
+                    DownRightTileValid = ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex] == Self || Master == ListTilesetPreset[ArrayTile[GridX + 1, GridY + 1].TilesetIndex].Master;
+                }
+            }
+
+            //No corners allowed
+            if ((LeftTileValid && (UpLeftTileValid || DownLeftTileValid))
+                || (RightTileValid && (UpRightTileValid || DownRightTileValid))
+                || (DownTileValid && (DownLeftTileValid || DownRightTileValid))
+                || (UpTileValid && (UpRightTileValid || UpLeftTileValid)))
+            {
+                return false;
+            }
+
+            ArrayTile[GridX, GridY] = NewTile;
+
+            if (LeftTileValid || RightTileValid)
+            {
+                ArrayTile[GridX, GridY].Origin.Location = new Point(1 * TileSizeX, 1 * TileSizeY);
+            }
+            else if (UpTileValid || DownTileValid)
+            {
+                ArrayTile[GridX, GridY].Origin.Location = new Point(0 * TileSizeX, 2 * TileSizeY);
+            }
+
+            return true;
         }
 
         private void UpdtateSmartTileWater(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
@@ -1101,7 +1209,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void UpdateSmartTileShoal(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private bool UpdateSmartTileShoal(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             if (ListTilesetPreset[ArrayTile[GridX, GridY].TilesetIndex] == ListTilesetPreset[NewTile.TilesetIndex].Master)//Ocean type master
             {
@@ -1112,8 +1220,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     ArrayTile[GridX, GridY] = NewTile;
                     ArrayTile[GridX, GridY].Origin = MasterTile.Origin;
                     ArrayTile[GridX, GridY].ArraySubTile = MasterTile.ArraySubTile;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private void UpdtateSmartTileWaterfall(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)

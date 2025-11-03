@@ -134,6 +134,14 @@ namespace ProjectEternity.Core.Skill
 
         public bool CanActivateEffectsOnTarget(EffectHolder Effects)
         {
+            for (int R = 0; R < ListRequirement.Count; R++)
+            {
+                if (!ListRequirement[R].CanActivatePassive())
+                {
+                    return false;
+                }
+            }
+
             //Make sure the PilotSkill can be used on this Character.
             for (int E = ListEffect.Count - 1; E >= 0; --E)
             {

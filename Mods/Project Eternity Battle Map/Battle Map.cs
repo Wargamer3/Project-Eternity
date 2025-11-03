@@ -375,6 +375,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 BW.Write(ListTilesetPreset[T].RelativePath);
+                BW.Write(ListTilesetPreset[T].TilesetType != TilesetPreset.TilesetTypes.Regular);
             }
 
             BW.Write(ListBattleBackgroundAnimationPath.Count);
@@ -595,9 +596,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        protected virtual TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
+        protected virtual TilesetPreset ReadTileset(string TilesetPresetPath, bool IsAutotile, int Index)
         {
-            return TilesetPreset.FromFile("", TilesetPresetPath, Index);
+            return TilesetPreset.FromFile("/Tilesets presets/" + TilesetPresetPath + ".pet", TilesetPresetPath, Index);
         }
 
         protected virtual DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)
@@ -611,7 +612,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                TilesetPreset LoadedTileset = ReadTileset(BR.ReadString(), T);
+                TilesetPreset LoadedTileset = ReadTileset(BR.ReadString(), BR.ReadBoolean(), T);
                 ListTilesetPreset.Add(LoadedTileset);
 
                 #region Load Tilesets

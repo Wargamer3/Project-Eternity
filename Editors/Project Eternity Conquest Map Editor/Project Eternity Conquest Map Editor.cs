@@ -104,23 +104,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
             }
 
-            public void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
-            {
-                TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(GridX, GridY), LayerIndex);
-                NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
-
-                if (ConsiderSubLayers)
-                {
-                    GetRealLayer(LayerIndex).ArrayTerrain[GridX, GridY] = NewTerrain;
-                }
-                else
-                {
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY] = NewTerrain;
-                }
-            }
-
-            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
+            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
                 if (LayerIndex == 0)
                 {
@@ -128,6 +112,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     TilePreset.Terrain3DInfo.TerrainStyle = Terrain3D.TerrainStyles.Cube;
                 }
 
+                bool UpdateTerrain = true;
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
                 MapLayer ActiveLayer;
@@ -143,11 +128,20 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
                 if (IsAutotile)
                 {
-                    ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[GridX, GridY], GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveMap.ListTilesetPreset);
+                    UpdateTerrain = ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveLayer.ArrayTerrain, ActiveMap.ListTilesetPreset);
                 }
                 else
                 {
                     ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
+                }
+
+                if (UpdateTerrain)
+                {
+                    TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset, new Point(GridX, GridY), LayerIndex);
+                    NewTerrain.Owner = ActiveMap;
+                    NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
+
+                    ActiveLayer.ArrayTerrain[GridX, GridY] = NewTerrain;
                 }
 
                 ActiveMap.Reset();

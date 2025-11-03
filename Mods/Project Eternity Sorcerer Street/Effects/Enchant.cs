@@ -79,6 +79,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, Map.GetTerrain(SelfCreature.GamePiece.Position), SelfCreature, PlayerIndex);
 
+            Spell.UpdateSkillActivation();
+            bool IsValid = Spell.CanActivateEffectsOnTarget(SelfCreature.Effects);
+
+            if (!IsValid)
+            {
+                return;
+            }
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
                 BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();

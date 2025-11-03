@@ -6,8 +6,18 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
-    public class SubMapLayer : BaseMapLayer, ISubMapLayer
+    public class SubMapLayer : MapLayer, ISubMapLayer
     {
+        public SubMapLayer(WorldMap Map, int LayerIndex)
+            : base(Map, LayerIndex)
+        {
+        }
+
+        public SubMapLayer(WorldMap Map, BinaryReader BR, int LayerIndex)
+            : base(Map, BR, LayerIndex)
+        {
+        }
+
         //Only used to display a grid, should never have movement logic in it.
         public override MovementAlgorithmTile GetTile(int X, int Y)
         {

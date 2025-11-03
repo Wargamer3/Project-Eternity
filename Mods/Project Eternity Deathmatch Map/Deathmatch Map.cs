@@ -460,9 +460,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, bool IsAutotile, int Index)
         {
-            return TilesetPreset.FromFile("Deathmatch", TilesetPresetPath, Index);
+            if (IsAutotile)
+            {
+                return TilesetPreset.FromFile("Deathmatch/Autotiles Presets/" + TilesetPresetPath + ".peat", TilesetPresetPath, Index);
+            }
+            else
+            {
+                return TilesetPreset.FromFile("Deathmatch/Tilesets Presets/" + TilesetPresetPath + ".pet", TilesetPresetPath, Index);
+            }
         }
 
         public override void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)

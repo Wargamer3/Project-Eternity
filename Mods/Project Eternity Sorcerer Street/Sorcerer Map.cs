@@ -474,7 +474,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, bool IsAutotile, int Index)
         {
             return SorcererStreetTilesetPreset.FromFile(TilesetPresetPath, Index);
         }

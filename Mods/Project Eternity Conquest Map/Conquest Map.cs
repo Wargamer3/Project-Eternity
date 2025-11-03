@@ -259,9 +259,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             FS.Close();
         }
 
-        protected override TilesetPreset ReadTileset(string TilesetPresetPath, int Index)
+        protected override TilesetPreset ReadTileset(string TilesetPresetPath, bool IsAutotile, int Index)
         {
-            return TilesetPreset.FromFile("Conquest", TilesetPresetPath, Index);
+            if (IsAutotile)
+            {
+                return TilesetPreset.FromFile("Conquest/Autotiles Presets/" + TilesetPresetPath + ".peat", TilesetPresetPath, Index);
+            }
+            else
+            {
+                return TilesetPreset.FromFile("Conquest/Tilesets Presets/" + TilesetPresetPath + ".pet", TilesetPresetPath, Index);
+            }
         }
 
         protected override DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)

@@ -20,6 +20,17 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
                 if (TA.ShowDialog() == DialogResult.OK)
                 {
+                    if (BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Count > 0)
+                    {
+                        if (TilePos.Y == 0)
+                        {
+                        }
+                        else
+                        {
+                            TilePos.Y -= ActiveMap.TileSize.Y;
+                        }
+                    }
+
                     ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TA.ActiveTerrain;
                 }
             }

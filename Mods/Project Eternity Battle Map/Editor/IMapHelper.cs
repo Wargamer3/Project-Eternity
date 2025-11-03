@@ -11,8 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         Terrain GetTerrain(int GridX, int GridY, int LayerIndex);
         DrawableTile GetTile(int GridX, int GridY, int LayerIndex);
         void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset);
-        void ReplaceTerrain(int GridX, int GridY, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers);
-        void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile);
+        void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile);
         void RemoveTileset(int TilesetIndex);
         void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset);
         BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset);

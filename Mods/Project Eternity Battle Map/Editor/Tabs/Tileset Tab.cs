@@ -206,7 +206,8 @@ namespace ProjectEternity.Editors.MapEditor
 
                         if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                         {
-                            Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true);
+                            DrawableTile SelectedTile = Helper.GetTile(TilePos.X, TilePos.Y, BattleMapViewer.SelectedListLayerIndex);
+                            Helper.ReplaceTile(TilePos.X, TilePos.Y, SelectedTile, TileAttributesEditor.ActiveTerrain, BattleMapViewer.SelectedListLayerIndex, true, false);
                         }
                     }
                     else if (e.Button == MouseButtons.Right)
@@ -536,17 +537,15 @@ namespace ProjectEternity.Editors.MapEditor
                     Terrain SmartPresetTerrain = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[AutotileIndex].ArrayTilesetInformation[0].ArrayTerrain[0, 0];
                     DrawableTile SmartPresetTile = BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets[AutotileIndex].ArrayTilesetInformation[0].ArrayTiles[0, 0];
 
-                    Helper.ReplaceTerrain(GridX, GridY,
-                        SmartPresetTerrain, LayerIndex, ConsiderSubLayers);
-
+                    //Replace tile before terrain so it can read the terrain before change.
                     Helper.ReplaceTile(GridX, GridY,
-                        SmartPresetTile, LayerIndex, ConsiderSubLayers, true);
+                        SmartPresetTile, SmartPresetTerrain, LayerIndex, ConsiderSubLayers, true);
 
                     return;
                 }
                 else
                 {
-                    TilePos.Y -= 1;
+                    TilePos.Y -= ActiveMap.TileSize.Y;
                 }
             }
 
@@ -559,11 +558,8 @@ namespace ProjectEternity.Editors.MapEditor
             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTilesetInformation[0].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-            Helper.ReplaceTerrain(GridX, GridY,
-                PresetTerrain, LayerIndex, ConsiderSubLayers);
-
             Helper.ReplaceTile(GridX, GridY,
-                PresetTile, LayerIndex, ConsiderSubLayers, false);
+                PresetTile, PresetTerrain, LayerIndex, ConsiderSubLayers, false);
         }
 
         private Texture2D AddTilesetPreset(TilesetPreset NewTileset, string AssetFolder)
@@ -658,8 +654,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 {
                                     for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
-                                        Helper.ReplaceTerrain(X, Y, PresetTerrain, 0, true);
-                                        Helper.ReplaceTile(X, Y, PresetTile, 0, true, false);
+                                        Helper.ReplaceTile(X, Y, PresetTile, PresetTerrain, 0, true, false);
                                     }
                                 }
                             }
@@ -703,16 +698,14 @@ namespace ProjectEternity.Editors.MapEditor
                             {
                                 for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
-                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, 0, ActiveMap.LayerHeight,
-                                       0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
-                                       0, true);
-
                                     Helper.ReplaceTile(X, Y,
                                        new DrawableTile(
                                            new Rectangle((X % (ActiveMap.ListTilesetPreset.Last().ArrayTilesetInformation[0].ArrayTerrain.GetLength(0))) * ActiveMap.TileSize.X,
                                                         (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTilesetInformation[0].ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
                                                         ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
                                            cboTiles.Items.Count - 1),
+                                       new Terrain(X, Y, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, BattleMapViewer.SelectedListLayerIndex, 0, ActiveMap.LayerHeight,
+                                            0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
                                        0, true, false);
                                 }
                             }
@@ -741,6 +734,7 @@ namespace ProjectEternity.Editors.MapEditor
                                     ActiveMap.ListTilesetPreset.Add(ExtraTileset);
                                 }
                                 Texture2D NewTilesetSprite = AddTilesetPreset(ExtraTileset, "Assets/Autotiles/");
+                                NewTileset.RelativePath = Name;
 
                                 BattleMapViewer.TilesetViewer.ListAutoTileSprite.Add(NewTilesetSprite);
                                 BattleMapViewer.TilesetViewer.ListAutoTileTilesetPresets.Add(ExtraTileset);

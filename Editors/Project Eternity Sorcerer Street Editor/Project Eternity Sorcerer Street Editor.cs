@@ -48,14 +48,14 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return new SorcererStreetTileAttributes();
             }
 
-            public Terrain GetTerrain(int X, int Y, int LayerIndex)
+            public Terrain GetTerrain(int GridX, int GridY, int LayerIndex)
             {
-                return ActiveMap.GetTerrain(new Vector3(X, Y, LayerIndex));
+                return ActiveMap.GetTerrain(new Vector3(GridX, GridY, LayerIndex));
             }
 
-            public DrawableTile GetTile(int X, int Y, int LayerIndex)
+            public DrawableTile GetTile(int GridX, int GridY, int LayerIndex)
             {
-                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y];
+                return ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[GridX, GridY];
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -102,33 +102,36 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
             }
 
-            public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
+            public void ReplaceTile(int GridX, int GridY, DrawableTile TilePreset, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
             {
-                TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), LayerIndex);
-                NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
-
-                if (ConsiderSubLayers)
-                {
-                    GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
-                }
-                else
-                {
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
-                }
-            }
-
-            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers, bool IsAutotile)
-            {
+                bool UpdateTerrain = true;
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 
+                MapLayer ActiveLayer;
+
                 if (ConsiderSubLayers)
                 {
-                    GetRealLayer(LayerIndex).ArrayTile[X, Y] = NewTile;
+                    ActiveLayer = GetRealLayer(LayerIndex);
                 }
                 else
                 {
-                    ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTile[X, Y] = NewTile;
+                    ActiveLayer = ActiveMap.LayerManager.ListLayer[LayerIndex];
+                }
+
+                if (IsAutotile)
+                {
+                    ActiveMap.ListTilesetPreset[TilePreset.TilesetIndex].UpdateAutotTile(TilePreset, GridX, GridY, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveLayer.ArrayTile, ActiveLayer.ArrayTerrain, ActiveMap.ListTilesetPreset);
+                }
+                else
+                {
+                    ActiveLayer.ArrayTile[GridX, GridY] = NewTile;
+                }
+
+                if (UpdateTerrain)
+                {
+                    TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(GridX, GridY), LayerIndex);
+                    NewTerrain.Owner = ActiveMap;
+                    NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
                 }
 
                 ActiveMap.Reset();
