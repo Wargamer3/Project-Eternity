@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (TextRead == "Self")
             {
-                OriginalText = "Success";
+                OriginalText = Map.ListPlayer[Map.ActivePlayerIndex].Name;
             }
             else
             {

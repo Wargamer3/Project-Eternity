@@ -17,7 +17,7 @@ namespace ProjectEternity.Core.Item
             this.Images = Images;
             if (Images != null)
             {
-                sprIcon = Images.sprBoss;
+                sprIcon = Images.sprDefault;
             }
         }
 
@@ -25,7 +25,10 @@ namespace ProjectEternity.Core.Item
         {
             if (Images != null)
             {
-                sprIcon = Images.sprBoss;
+                if (!Images.DicSprite.TryGetValue(TextRead, out sprIcon))
+                {
+                    sprIcon = Images.sprDefault;
+                }
             }
         }
 

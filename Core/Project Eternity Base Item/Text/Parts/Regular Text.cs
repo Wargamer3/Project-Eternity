@@ -82,7 +82,7 @@ namespace ProjectEternity.Core.Item
                         if (TextWidth <= RemainingSpaceOnLine)
                         {
                             int LastSpace = TestString.LastIndexOf(' ') + 1;
-                            if (LastSpace > 0)
+                            if (LastSpace > 1)//Try to split the text on spaces, don't count the space if it's the first character of the text
                             {
                                 CurrentChar = LastSpace;
                             }
@@ -90,6 +90,11 @@ namespace ProjectEternity.Core.Item
                             TestString = WorkingString.Substring(0, CurrentChar);
                             DicTextByPosition.Add(ActivePosition, TestString);
                             WorkingString = WorkingString.Remove(0, CurrentChar);
+                            if (WorkingString.StartsWith(" "))//If the next line start with a space, ignore it
+                            {
+                                WorkingString = WorkingString.Remove(0, 1);
+                                TextWidth = MeasureString(WorkingString);
+                            }
                             CurrentChar = 0;
                             ActivePosition.Y += Owner.LineHeight;
                             ActivePosition.X = 0;
@@ -104,6 +109,7 @@ namespace ProjectEternity.Core.Item
                         {
                             TestString = WorkingString;
                             DicTextByPosition.Add(ActivePosition, TestString);
+                            TextWidth = MeasureString(TestString);
                             WorkingString = string.Empty;
                             CurrentChar = 0;
                         }
@@ -280,7 +286,7 @@ namespace ProjectEternity.Core.Item
             }
             else
             {
-                TextColor = Color.White;
+                TextColor = Owner.TextColor;
             }
         }
 

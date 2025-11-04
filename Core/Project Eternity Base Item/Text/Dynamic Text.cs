@@ -12,6 +12,8 @@ namespace ProjectEternity.Core.Item
         public double EllapsedTime;
         public float TextMaxWidthInPixel;
         public float LineHeight;
+        public Color TextColor = Color.White;
+        public bool IsInit = false;
 
         public DynamicTextProcessor DefaultProcessor;
         public List<DynamicTextProcessor> ListProcessor;
@@ -55,6 +57,7 @@ namespace ProjectEternity.Core.Item
             Root.ProcessText(TextToParse, ref i);
 
             UpdateTextPositions();
+            IsInit = true;
         }
 
         public void Update(GameTime gameTime)
@@ -82,6 +85,23 @@ namespace ProjectEternity.Core.Item
             Vector2 CurrentPosition = Vector2.Zero;
 
             Root.UpdatePosition();
+        }
+
+        public DynamicText Copy()
+        {
+            DynamicText NewText = new DynamicText();
+            NewText.TextMaxWidthInPixel = TextMaxWidthInPixel;
+            NewText.LineHeight = LineHeight;
+            foreach (DynamicTextProcessor ActiveProcessor in ListProcessor)
+            {
+                NewText.ListProcessor.Add(ActiveProcessor);
+            }
+
+            NewText.SetDefaultProcessor(DefaultProcessor);
+
+            NewText.Root = NewText.DefaultProcessor.ParseText(string.Empty);
+
+            return NewText;
         }
 
         public void Draw(CustomSpriteBatch g, Vector2 Offset)

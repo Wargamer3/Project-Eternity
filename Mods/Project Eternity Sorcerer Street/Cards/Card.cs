@@ -236,6 +236,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly string CardType;
         public string Name;
         public string Description;
+        public static DynamicText TextParser;
+        public DynamicText DescriptionText;
         public string FlavorText = string.Empty;
         public int ShopPrice;
         public CardRarities Rarity;
@@ -246,6 +248,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public EffectHolder Effects;
         public string SkillChainName;
         public List<BaseAutomaticSkill> ListActiveSkill;
+
+        public const int BoxWidth = 620;
 
         public Card()
             : this("None", "None")
@@ -350,6 +354,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             NewCopy.Rarity = Rarity;
             NewCopy.MagicCost = MagicCost;
 
+            if (TextParser != null)
+            {
+                NewCopy.DescriptionText = TextParser.Copy();
+            }
+
             return NewCopy;
         }
 
@@ -383,7 +392,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public virtual void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, Player ActivePlayer, float OffsetX, float OffsetY)
         {
-            int BoxWidth = 620;
             int BoxHeight = 610;
             float InfoBoxX = Constants.Width - BoxWidth - 50 + OffsetX;
             float InfoBoxY = 106 + OffsetY;
@@ -428,9 +436,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentY += Constants.Height / 24;
 
-            int MaxTextWidth = BoxWidth - 100;
-            List<string> ListLine = TextHelper.FitToWidth(fntCardInfo, Description, MaxTextWidth);
-            TextHelper.DrawTextMultiline(g, fntCardInfo, ListLine, TextHelper.TextAligns.Left, CurrentX + MaxTextWidth / 2, CurrentY, MaxTextWidth, SorcererStreetMap.TextColor);
+            if (!DescriptionText.IsInit)
+            {
+                DescriptionText.ParseText(Description);
+            }
+
+            DescriptionText.Draw(g, new Vector2(CurrentX, CurrentY));
         }
 
         public static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCardFront, Texture2D sprCardBack, Color CardFrontColor,

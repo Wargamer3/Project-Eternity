@@ -539,6 +539,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.BattleMapPath = "Multiplayer/" + Room.MapPath;
                 NewMap.ListGameScreen = ListGameScreen;
                 NewMap.SetMutators(Room.ListMutator);
+                NewMap.Room = Room;
+
+                NewMap.Load();
 
                 for (int P = 0; P < 10; P++)
                 {
@@ -558,9 +561,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                NewMap.Room = Room;
-
-                NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
                 ListGameScreen.Insert(0, NewMap);

@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         TerrainSorcererStreet ActiveTerrain = Map.ListSummonedCreature[C];
                         if (CreatureType == CreatureTypes.Defensive && !ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
                         {
-                            //continue;
+                            continue;
                         }
 
                         EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
