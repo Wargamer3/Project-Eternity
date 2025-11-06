@@ -36,6 +36,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static void ActivateEnchantOnCreature(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
+            GlobalContext.EffectActivationPhase = EffectActivationPhases.Enchant;
+
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, Map.GetTerrain(SelfCreature.GamePiece.Position), SelfCreature, PlayerIndex);
 
             Spell.UpdateSkillActivation();
@@ -93,6 +95,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Player ActivePlayer = Map.ListPlayer[PlayerIndex];
             Map.GlobalPlayerContext.SetPlayer(PlayerIndex, ActivePlayer);
 
+            if (ActivePlayer.Enchant != null && ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).NeutralizeNextSpell)
+            {
+                ActivePlayer.Enchant = null;
+                return;
+            }
+
+            GlobalContext.EffectActivationPhase = EffectActivationPhases.Enchant;
+
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null, SelfCreature, PlayerIndex);
 
             Spell.UpdateSkillActivation();
@@ -139,15 +149,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static void ActivateOnPlayer(SorcererStreetBattleContext Context, Player ActivePlayer, BattleCreatureInfo Invader, BattleCreatureInfo Defender)
+        public static void ActivateOnPlayer(SorcererStreetBattleContext GlobalContext, Player ActivePlayer, BattleCreatureInfo Invader, BattleCreatureInfo Defender)
         {
             if (ActivePlayer.Enchant == null)
             {
                 return;
             }
 
-            Context.SelfCreature = Invader;
-            Context.OpponentCreature = Defender;
+            GlobalContext.EffectActivationPhase = EffectActivationPhases.Enchant;
+
+            GlobalContext.SelfCreature = Invader;
+            GlobalContext.OpponentCreature = Defender;
 
             List<BaseSkillActivation> DicSkillActivation = ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
 
@@ -159,6 +171,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void ActivateOnCreatures(SorcererStreetMap Map, SorcererStreetBattleContext Context, List<TerrainSorcererStreet> ListSummonedCreature)
         {
+            Map.GlobalSorcererStreetBattleContext.EffectActivationPhase = EffectActivationPhases.Enchant;
+
             foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
             {
                 ActiveTerrain.DefendingCreature.ClearAbilities();

@@ -29,13 +29,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public bool CreatureLimit;//Cannont use Creatures
             public bool InvasionLimit;//Cannot invade.
             public bool CreatureEnchantProtection;//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory abilities for 8 rounds.
+            public bool NeutralizeNextSpell;//Neutralizes the next spell or territory ability that targets target Player (except those that dispel Enchantments).
 
             public float TollGainShareMultiplier;//User gains X% of tolls collected by other Players until user reaches the castle.
             public bool TollProtection;//Target Player is exempt from tolls.
             public bool TollLimit;//Target enemy Player cannot claim tolls.
 
             public float CastleValueMultiplier;//% gold gained by castles
-            public bool AllowTerrainCommands;//Can use Territory commands on any of his/her creatures. This is the same effect as landing on a fort or castle.
+            public bool AllowTerrainCommands;//Can use Territory commands on any of his creatures. This is the same effect as landing on a fort or castle.
 
             public PlayerAbilities()
             {
