@@ -35,8 +35,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     List<TerrainSorcererStreet> ListSummonedCreature = GetCreatures();
 
-                    foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+                    for (int C = ListSummonedCreature.Count - 1; C >= 0; C--)
                     {
+                        TerrainSorcererStreet ActiveTerrain = ListSummonedCreature[C];
                         EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
                     }
 

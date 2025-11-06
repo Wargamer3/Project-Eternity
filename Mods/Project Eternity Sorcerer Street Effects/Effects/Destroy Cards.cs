@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -190,8 +191,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {//User chooses a card from target Player's hand and destroys it.
             }
             else if (_CardDestroyType == CardDestroyTypes.DuplicateGlobal)
-            {
+            {//If any card exists more than once across all Players' hands, said copies of that card are destroyed.
+                Dictionary<string, int> DicCardCount = new Dictionary<string, int>();
+                foreach (Player ActivePlayer in Params.Map.ListPlayer)
+                {
+                    if (ActivePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                    {
+                        continue;
+                    }
 
+                    foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+                    {
+                        if (!DicCardCount.ContainsKey(ActiveCard.Path))
+                        {
+                            DicCardCount.Add(ActiveCard.Path, 0);
+                        }
+                        DicCardCount[ActiveCard.Path] = DicCardCount[ActiveCard.Path] + 1;
+                    }
+                }
+
+                foreach (Player ActivePlayer in Params.Map.ListPlayer)
+                {
+                    if (ActivePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeNA)
+                    {
+                        continue;
+                    }
+
+                    for (int C = ActivePlayer.ListCardInHand.Count - 1; C >= 0; C--)
+                    {
+                        if (DicCardCount[ActivePlayer.ListCardInHand[C].Path] > 1)
+                        {
+                            ActivePlayer.ListCardInHand.RemoveAt(C);
+                        }
+                    }
+                }
             }
 
             return "Destroy " + _NumberOfCards + " Cards";
