@@ -23,8 +23,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _MaxHP = string.Empty;
         }
 
-        public SorcererStreetMaxHPRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Max HP", GlobalContext)
+        public SorcererStreetMaxHPRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Max HP", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
@@ -51,20 +51,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (_Target)
             {
                 case Targets.Self:
-                    CreatureMaxHP = GlobalContext.SelfCreature.Creature.MaxHP;
+                    CreatureMaxHP = Params.GlobalContext.SelfCreature.Creature.MaxHP;
                     break;
                 case Targets.Opponent:
-                    CreatureMaxHP = GlobalContext.OpponentCreature.Creature.MaxHP;
+                    CreatureMaxHP = Params.GlobalContext.OpponentCreature.Creature.MaxHP;
                     break;
             }
 
-            int MaxHPFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_MaxHP), CultureInfo.InvariantCulture);
+            int MaxHPFinal = int.Parse(Params.ActiveParser.Evaluate(_MaxHP), CultureInfo.InvariantCulture);
             return Operators.CompareValue(LogicOperator, CreatureMaxHP, MaxHPFinal);
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetMaxHPRequirement NewRequirement = new SorcererStreetMaxHPRequirement(GlobalContext);
+            SorcererStreetMaxHPRequirement NewRequirement = new SorcererStreetMaxHPRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetAgainstDefensiveRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Against Defensive", GlobalContext)
+        public SorcererStreetAgainstDefensiveRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Against Defensive", Params)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).IsDefensive;
+            return Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).IsDefensive;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetAgainstDefensiveRequirement(GlobalContext);
+            return new SorcererStreetAgainstDefensiveRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

@@ -17,8 +17,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _Target = Targets.Opponent;
         }
 
-        public SorcererStreetHasSupportRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Support", GlobalContext)
+        public SorcererStreetHasSupportRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Has Support", Params)
         {
             _Target = Targets.Opponent;
         }
@@ -35,12 +35,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.SelfCreature.BonusST > 0;
+            return Params.GlobalContext.SelfCreature.BonusST > 0;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasSupportRequirement NewRequirement = new SorcererStreetHasSupportRequirement(GlobalContext);
+            SorcererStreetHasSupportRequirement NewRequirement = new SorcererStreetHasSupportRequirement(Params);
 
             NewRequirement._Target =_Target;
 

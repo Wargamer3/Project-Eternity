@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
@@ -10,40 +8,36 @@ using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelSelectPlayerSpell : ActionPanelSorcererStreet
+    public class ActionPanelCreatureSpellConfirm : ActionPanelSorcererStreet
     {
         private ManualSkill EnchantToAdd;
-        private List<Player> ListPlayer;
-        private bool AllowSelf;
+        private int ActivePlayerIndex;
+        private int ActiveCreatureIndex;
+        private Player ActivePlayer;
 
-        public ActionPanelSelectPlayerSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelf)
-            : base("Select Player Spell", Map, true)
+        public ActionPanelCreatureSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex, int ActiveCreatureIndex)
+            : base("Confirm Creature Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
-            this.AllowSelf = AllowSelf;
-            ListPlayer = new List<Player>();
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveCreatureIndex = ActiveCreatureIndex;
+
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
         {
-            for (int P = 0; P < Map.ListPlayer.Count; ++P)
-            {
-                if (Map.ListPlayer[P].TeamIndex == -1)
-                {
-                    break;
-                }
-
-                ListPlayer.Add(Map.ListPlayer[P]);
-            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
             if (ActiveInputManager.InputConfirmPressed())
             {
-                if (ActionMenuCursor < ListPlayer.Count)
+                if (ActionMenuCursor == 0)
                 {
-                    AddToPanelListAndSelect(new ActionPanelPlayerSpellConfirm(Map, EnchantToAdd, Map.ListPlayer.IndexOf(ListPlayer[ActionMenuCursor])));
+                    EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActivePlayer.ListSummonedCreature[ActiveCreatureIndex].DefendingCreature);
+                    Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
+                    RemoveAllSubActionPanels();
                 }
                 else if (ActionMenuCursor == 1)
                 {
@@ -84,7 +78,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelSelectPlayerSpell(Map, EnchantToAdd, AllowSelf);
+            return new ActionPanelCreatureSpellConfirm(Map, EnchantToAdd, ActivePlayerIndex, ActiveCreatureIndex);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -96,11 +90,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxY = Constants.Height - BoxHeight - (int)(74 * Ratio);
             MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
-            g.DrawStringMiddleAligned(Map.fntMenuText, "Select a player", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
-            for (int P = 0; P < ListPlayer.Count; ++P)
-            {
-                g.DrawStringMiddleAligned(Map.fntMenuText, ListPlayer[P].Name, new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio + 36 * P * Ratio)), Color.White);
-            }
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Is this correct?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Yes", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "No", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 90 * Ratio)), Color.White);
             MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 150, (int)(BoxY + 54 * Ratio + ActionMenuCursor * 36 * Ratio)));
         }
 

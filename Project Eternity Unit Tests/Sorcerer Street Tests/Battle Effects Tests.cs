@@ -41,8 +41,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             SorcererStreetBattleParams BattleParams = new SorcererStreetBattleParams(GlobalSorcererStreetBattleContext);
             BaseEffect SkillEffect = new ChangeStatsEffect(BattleParams);
-            BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(GlobalSorcererStreetBattleContext);
-            AutomaticSkillTargetType Target = new SorcererStreetSelfTargetType(GlobalSorcererStreetBattleContext);
+            BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(BattleParams);
+            AutomaticSkillTargetType Target = new SorcererStreetSelfTargetType(BattleParams);
 
             BaseAutomaticSkill HPIncreaseSkill = new BaseAutomaticSkill();
             HPIncreaseSkill.Name = "Dummy";
@@ -85,8 +85,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             BattleStartPhase.OnSelect();
 
             BaseEffect SkillEffect = new ChangeStatsEffect(BattleParams);
-            BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(DummyMap.GlobalSorcererStreetBattleContext);
-            AutomaticSkillTargetType Target = new SorcererStreetSelfTargetType(DummyMap.GlobalSorcererStreetBattleContext);
+            BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(BattleParams);
+            AutomaticSkillTargetType Target = new SorcererStreetSelfTargetType(BattleParams);
 
             BaseAutomaticSkill HPIncreaseSkill = new BaseAutomaticSkill();
             HPIncreaseSkill.Name = "Dummy";

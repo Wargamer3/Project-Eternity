@@ -11,8 +11,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetIsDefendingRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Is Defending", GlobalContext)
+        public SorcererStreetIsDefendingRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Is Defending", Params)
         {
         }
 
@@ -26,12 +26,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.SelfCreature == GlobalContext.OpponentCreature;
+            return Params.GlobalContext.SelfCreature == Params.GlobalContext.OpponentCreature;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetIsDefendingRequirement NewRequirement = new SorcererStreetIsDefendingRequirement(GlobalContext);
+            SorcererStreetIsDefendingRequirement NewRequirement = new SorcererStreetIsDefendingRequirement(Params);
 
             return NewRequirement;
         }

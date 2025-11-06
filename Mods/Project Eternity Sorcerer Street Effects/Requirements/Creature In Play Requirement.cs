@@ -52,8 +52,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetCreaturesInPlayrRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Creatures In Play", GlobalContext)
+        public SorcererStreetCreaturesInPlayrRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Creatures In Play", Params)
         {
             _ArrayCreatureName = new string[0];
             _LogicOperator = Operators.LogicOperators.GreaterOrEqual;
@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetCreaturesInPlayrRequirement NewRequirement = new SorcererStreetCreaturesInPlayrRequirement(GlobalContext);
+            SorcererStreetCreaturesInPlayrRequirement NewRequirement = new SorcererStreetCreaturesInPlayrRequirement(Params);
 
             NewRequirement._ArrayCreatureName = new string[_ArrayCreatureName.Length];
             _ArrayCreatureName.CopyTo(NewRequirement._ArrayCreatureName, 0);

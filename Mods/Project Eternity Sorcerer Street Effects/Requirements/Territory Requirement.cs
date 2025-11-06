@@ -14,8 +14,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetTerriotryRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(CreatureCard.TerritoryRequirementName, GlobalContext)
+        public SorcererStreetTerriotryRequirement(SorcererStreetBattleParams Params)
+            : base(CreatureCard.TerritoryRequirementName, Params)
         {
             _CostToActivate = string.Empty;
         }
@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetTerriotryRequirement NewRequirement = new SorcererStreetTerriotryRequirement(GlobalContext);
+            SorcererStreetTerriotryRequirement NewRequirement = new SorcererStreetTerriotryRequirement(Params);
 
             NewRequirement._CostToActivate = _CostToActivate;
 

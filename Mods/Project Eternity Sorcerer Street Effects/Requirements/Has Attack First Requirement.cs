@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetHasAttackFirstRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Attack First", GlobalContext)
+        public SorcererStreetHasAttackFirstRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Has Attack First", Params)
         {
             _Target = Targets.Territory;
         }
@@ -36,21 +36,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
             else if (_Target == Targets.Opponent)
             {
-                return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
             else
             {
-                return GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
             }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasAttackFirstRequirement NewRequirement = new SorcererStreetHasAttackFirstRequirement(GlobalContext);
+            SorcererStreetHasAttackFirstRequirement NewRequirement = new SorcererStreetHasAttackFirstRequirement(Params);
 
             NewRequirement._Target =_Target;
 

@@ -44,8 +44,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetCreaturesNameRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Creature Name", GlobalContext)
+        public SorcererStreetCreaturesNameRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Creature Name", Params)
         {
             _CreatureName = string.Empty;
         }
@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetCreaturesNameRequirement NewRequirement = new SorcererStreetCreaturesNameRequirement(GlobalContext);
+            SorcererStreetCreaturesNameRequirement NewRequirement = new SorcererStreetCreaturesNameRequirement(Params);
 
             NewRequirement._CreatureName = _CreatureName;
             NewRequirement._Target = _Target;

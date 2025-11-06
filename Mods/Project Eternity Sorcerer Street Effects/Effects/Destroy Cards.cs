@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static string Name = "Sorcerer Street Destroy Cards";
         public enum Targets { Self, Opponent }
         public enum CardDestroyTypes { All, Random, Specific, SameAsDefeated, DuplicateGlobal }
-        public enum CardTypes { All, Creature, Item, Armor, Weapon, Spell, Scroll }
+        public enum CardTypes { All, Creature, Item, Armor, Weapon, Scroll, Tool, Spell }
         public enum CardLocations { Hand, Book, Both }
 
         private Targets _Target;
@@ -87,11 +87,83 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             List<Card> ListCard = new List<Card>();
-            for (int I = RealTarget.Owner.ListCardInHand.Count - 1; I > 0; --I)
+
+            for (int I = RealTarget.Owner.ListCardInHand.Count - 1; I >= 0; --I)
             {
-                if (_MagicCost > 0 && Operators.CompareValue(LogicOperator, RealTarget.Owner.ListCardInHand[I].MagicCost, _MagicCost))
+                if (_MagicCost > 0 && !Operators.CompareValue(LogicOperator, RealTarget.Owner.ListCardInHand[I].MagicCost, _MagicCost))
                 {
                     continue;
+                }
+
+                switch (_CardType)
+                {
+                    case CardTypes.All:
+                        break;
+
+                    case CardTypes.Item:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType != ItemCard.ItemCardType)
+                        {
+                            continue;
+                        }
+                        break;
+
+                    case CardTypes.Armor:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType == ItemCard.ItemCardType)
+                        {
+                            ItemCard ItemCard = (ItemCard)RealTarget.Owner.ListCardInHand[I];
+                            if (ItemCard.ItemType != ItemCard.ItemTypes.Armor)
+                            {
+                                continue;
+                            }
+                        }
+                        break;
+
+                    case CardTypes.Scroll:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType == ItemCard.ItemCardType)
+                        {
+                            ItemCard ItemCard = (ItemCard)RealTarget.Owner.ListCardInHand[I];
+                            if (ItemCard.ItemType != ItemCard.ItemTypes.Scrolls)
+                            {
+                                continue;
+                            }
+                        }
+                        break;
+
+                    case CardTypes.Weapon:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType == ItemCard.ItemCardType)
+                        {
+                            ItemCard ItemCard = (ItemCard)RealTarget.Owner.ListCardInHand[I];
+                            if (ItemCard.ItemType != ItemCard.ItemTypes.Weapon)
+                            {
+                                continue;
+                            }
+                        }
+                        break;
+
+                    case CardTypes.Tool:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType == ItemCard.ItemCardType)
+                        {
+                            ItemCard ItemCard = (ItemCard)RealTarget.Owner.ListCardInHand[I];
+                            if (ItemCard.ItemType != ItemCard.ItemTypes.Tools)
+                            {
+                                continue;
+                            }
+                        }
+                        break;
+
+                    case CardTypes.Spell:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType != SpellCard.SpellCardType)
+                        {
+                            continue;
+                        }
+                        break;
+
+                    case CardTypes.Creature:
+                        if (RealTarget.Owner.ListCardInHand[I].CardType != CreatureCard.CreatureCardType)
+                        {
+                            continue;
+                        }
+                        break;
                 }
 
                 ListCard.Add(RealTarget.Owner.ListCardInHand[I]);

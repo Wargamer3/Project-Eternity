@@ -99,6 +99,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private PlayerAbilities BattleAbilities;//Based on EnchantAbilities
 
         public Enchant Enchant;
+        public EffectHolder Effects;
 
         public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
         public Dictionary<ElementalAffinity, int> DicOwnedSymbols;
@@ -122,6 +123,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
+            Effects = new EffectHolder();
 
             Init();
         }
@@ -140,6 +142,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
+            Effects = new EffectHolder();
+
             Init();
         }
 
@@ -158,6 +162,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
+            Effects = new EffectHolder();
 
             CardBook NewCardBook = new CardBook();
             foreach (Card ActiveCard in ListCardInDeck)
@@ -166,6 +171,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Inventory.UseBook(NewCardBook);
+
             Init();
         }
 
@@ -183,6 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
+            Effects = new EffectHolder();
 
             Init();
         }
@@ -206,6 +213,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
+            Effects = new EffectHolder();
 
             Init();
             FillDeck(Params);

@@ -11,8 +11,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetSelfTargetType(SorcererStreetBattleContext GlobalContext)
-            : base(Name, GlobalContext)
+        public SorcererStreetSelfTargetType(SorcererStreetBattleParams Params)
+            : base(Name, Params)
         {
         }
 
@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override AutomaticSkillTargetType Copy()
         {
-            return new SorcererStreetSelfTargetType(GlobalContext);
+            return new SorcererStreetSelfTargetType(Params);
         }
     }
 }

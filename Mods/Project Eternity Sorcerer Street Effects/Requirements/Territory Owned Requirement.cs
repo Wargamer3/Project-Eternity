@@ -20,8 +20,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetTerriotryOwnedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Territory Owned", GlobalContext)
+        public SorcererStreetTerriotryOwnedRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Territory Owned", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.GreaterOrEqual;
@@ -49,16 +49,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (_Target == Targets.Self)
             {
-                Owner = GlobalContext.SelfCreature.Owner;
-                OwnerTeam = GlobalContext.SelfCreature.OwnerTeam;
+                Owner = Params.GlobalContext.SelfCreature.Owner;
+                OwnerTeam = Params.GlobalContext.SelfCreature.OwnerTeam;
             }
             else
             {
-                Owner = GlobalContext.OpponentCreature.Owner;
-                OwnerTeam = GlobalContext.OpponentCreature.OwnerTeam;
+                Owner = Params.GlobalContext.OpponentCreature.Owner;
+                OwnerTeam = Params.GlobalContext.OpponentCreature.OwnerTeam;
             }
 
-            int TerriotryOwnedFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_TerriotryOwned), CultureInfo.InvariantCulture);
+            int TerriotryOwnedFinal = int.Parse(Params.ActiveParser.Evaluate(_TerriotryOwned), CultureInfo.InvariantCulture);
             int OwnedTerritories = 0;
             foreach (byte ActiveElement in OwnerTeam.DicCreatureCountByElementType.Values)
             {
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetTerriotryOwnedRequirement NewRequirement = new SorcererStreetTerriotryOwnedRequirement(GlobalContext);
+            SorcererStreetTerriotryOwnedRequirement NewRequirement = new SorcererStreetTerriotryOwnedRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

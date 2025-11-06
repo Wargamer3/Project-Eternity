@@ -23,8 +23,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _ST = string.Empty;
         }
 
-        public SorcererStreetSTRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street ST", GlobalContext)
+        public SorcererStreetSTRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street ST", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
@@ -51,20 +51,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (_Target)
             {
                 case Targets.Self:
-                    CreatureST = GlobalContext.SelfCreature.Creature.CurrentST;
+                    CreatureST = Params.GlobalContext.SelfCreature.Creature.CurrentST;
                     break;
                 case Targets.Opponent:
-                    CreatureST = GlobalContext.OpponentCreature.Creature.CurrentST;
+                    CreatureST = Params.GlobalContext.OpponentCreature.Creature.CurrentST;
                     break;
             }
 
-            int STFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_ST), CultureInfo.InvariantCulture);
+            int STFinal = int.Parse(Params.ActiveParser.Evaluate(_ST), CultureInfo.InvariantCulture);
             return Operators.CompareValue(LogicOperator, CreatureST, STFinal);
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetSTRequirement NewRequirement = new SorcererStreetSTRequirement(GlobalContext);
+            SorcererStreetSTRequirement NewRequirement = new SorcererStreetSTRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

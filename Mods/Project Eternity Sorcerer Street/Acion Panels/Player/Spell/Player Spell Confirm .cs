@@ -8,14 +8,16 @@ using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelConfirmSpell : ActionPanelSorcererStreet
+    public class ActionPanelPlayerSpellConfirm : ActionPanelSorcererStreet
     {
         private ManualSkill EnchantToAdd;
+        private int ActivePlayerIndex;
 
-        public ActionPanelConfirmSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd)
-            : base("Confirm Spell", Map, true)
+        public ActionPanelPlayerSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex)
+            : base("Confirm Player Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
+            this.ActivePlayerIndex = ActivePlayerIndex;
         }
 
         public override void OnSelect()
@@ -28,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (ActionMenuCursor == 0)
                 {
-                    EnchantHelper.ActivateEnchant(Map.GlobalPlayerContext, EnchantToAdd);
+                    EnchantHelper.ActivateOnPlayer(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, null);
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
                     RemoveAllSubActionPanels();
                 }

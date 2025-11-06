@@ -19,8 +19,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _RoundLeft = string.Empty;
         }
 
-        public SorcererStreetRoundRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Round Reached", GlobalContext)
+        public SorcererStreetRoundRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Round Reached", Params)
         {
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
             _RoundLeft = string.Empty;
@@ -40,14 +40,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            int RoundLeftFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_RoundLeft), CultureInfo.InvariantCulture);
+            int RoundLeftFinal = int.Parse(Params.ActiveParser.Evaluate(_RoundLeft), CultureInfo.InvariantCulture);
 
-            return Operators.CompareValue(_LogicOperator, GlobalContext.CurrentTurn, RoundLeftFinal);
+            return Operators.CompareValue(_LogicOperator, Params.GlobalContext.CurrentTurn, RoundLeftFinal);
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetRoundRequirement NewRequirement = new SorcererStreetRoundRequirement(GlobalContext);
+            SorcererStreetRoundRequirement NewRequirement = new SorcererStreetRoundRequirement(Params);
 
             NewRequirement._LogicOperator = _LogicOperator;
             NewRequirement._RoundLeft = _RoundLeft;

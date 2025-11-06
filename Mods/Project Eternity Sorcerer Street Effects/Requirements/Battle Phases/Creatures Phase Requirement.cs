@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetCreaturePhaseRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleCreatureModifierPhase.RequirementName, GlobalContext)
+        public SorcererStreetCreaturePhaseRequirement(SorcererStreetBattleParams Params)
+            : base(ActionPanelBattleCreatureModifierPhase.RequirementName, Params)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetCreaturePhaseRequirement(GlobalContext);
+            return new SorcererStreetCreaturePhaseRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

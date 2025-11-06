@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetHasPlayerEnchantRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Player Enchant", GlobalContext)
+        public SorcererStreetHasPlayerEnchantRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Has Player Enchant", Params)
         {
             _Target = Targets.Territory;
         }
@@ -36,21 +36,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return GlobalContext.SelfCreature.Owner.Enchant != null;
+                return Params.GlobalContext.SelfCreature.Owner.Enchant != null;
             }
             else if (_Target == Targets.Opponent)
             {
-                return GlobalContext.OpponentCreature.Owner.Enchant != null;
+                return Params.GlobalContext.OpponentCreature.Owner.Enchant != null;
             }
             else
             {
-                return GlobalContext.ActiveTerrain.PlayerOwner.Enchant != null;
+                return Params.GlobalContext.ActiveTerrain.PlayerOwner.Enchant != null;
             }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasPlayerEnchantRequirement NewRequirement = new SorcererStreetHasPlayerEnchantRequirement(GlobalContext);
+            SorcererStreetHasPlayerEnchantRequirement NewRequirement = new SorcererStreetHasPlayerEnchantRequirement(Params);
 
             NewRequirement._Target =_Target;
 

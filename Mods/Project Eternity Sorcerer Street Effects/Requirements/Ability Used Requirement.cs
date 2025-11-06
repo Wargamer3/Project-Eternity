@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetRegenerateUsedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Regenerates Used", GlobalContext)
+        public SorcererStreetRegenerateUsedRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Regenerates Used", Params)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).Regenerate;
+            return Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).Regenerate;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetRegenerateUsedRequirement(GlobalContext);
+            return new SorcererStreetRegenerateUsedRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

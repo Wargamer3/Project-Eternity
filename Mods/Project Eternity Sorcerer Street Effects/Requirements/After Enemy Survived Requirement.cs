@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreesAfterEnemySurvivedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement, GlobalContext)
+        public SorcererStreesAfterEnemySurvivedRequirement(SorcererStreetBattleParams Params)
+            : base(ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement, Params)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreesAfterEnemySurvivedRequirement(GlobalContext);
+            return new SorcererStreesAfterEnemySurvivedRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetHasTerritoryAbilityRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Has Territory Ability", GlobalContext)
+        public SorcererStreetHasTerritoryAbilityRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Has Territory Ability", Params)
         {
             _Target = Targets.Territory;
         }
@@ -36,21 +36,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return GlobalContext.SelfCreature.Creature.TerritoryAbility != null;
+                return Params.GlobalContext.SelfCreature.Creature.TerritoryAbility != null;
             }
             else if (_Target == Targets.Opponent)
             {
-                return GlobalContext.OpponentCreature.Creature.TerritoryAbility != null;
+                return Params.GlobalContext.OpponentCreature.Creature.TerritoryAbility != null;
             }
             else
             {
-                return GlobalContext.ActiveTerrain.DefendingCreature.TerritoryAbility != null;
+                return Params.GlobalContext.ActiveTerrain.DefendingCreature.TerritoryAbility != null;
             }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHasTerritoryAbilityRequirement NewRequirement = new SorcererStreetHasTerritoryAbilityRequirement(GlobalContext);
+            SorcererStreetHasTerritoryAbilityRequirement NewRequirement = new SorcererStreetHasTerritoryAbilityRequirement(Params);
 
             NewRequirement._Target =_Target;
 

@@ -25,8 +25,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _HPLeft = string.Empty;
         }
 
-        public SorcererStreetHPLeftRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street HP Left", GlobalContext)
+        public SorcererStreetHPLeftRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street HP Left", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
@@ -57,23 +57,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (_Target)
             {
                 case Targets.Self:
-                    CreatureHP = GlobalContext.SelfCreature.FinalHP;
-                    CreatureMaxHP = GlobalContext.SelfCreature.Creature.MaxHP;
+                    CreatureHP = Params.GlobalContext.SelfCreature.FinalHP;
+                    CreatureMaxHP = Params.GlobalContext.SelfCreature.Creature.MaxHP;
                     break;
                 case Targets.Opponent:
-                    CreatureHP = GlobalContext.OpponentCreature.FinalHP;
-                    CreatureMaxHP = GlobalContext.OpponentCreature.Creature.MaxHP;
+                    CreatureHP = Params.GlobalContext.OpponentCreature.FinalHP;
+                    CreatureMaxHP = Params.GlobalContext.OpponentCreature.Creature.MaxHP;
                     break;
             }
 
             if (_NumberType == Operators.NumberTypes.Absolute)
             {
-                int HPLeftFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
+                int HPLeftFinal = int.Parse(Params.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
                 return Operators.CompareValue(LogicOperator, CreatureHP, HPLeftFinal);
             }
             else
             {
-                int ExpectedHPPercent = int.Parse(GlobalContext.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
+                int ExpectedHPPercent = int.Parse(Params.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
                 int HPPercent = (CreatureHP * 100) / CreatureMaxHP;
                 return Operators.CompareValue(LogicOperator, HPPercent, ExpectedHPPercent);
             }
@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetHPLeftRequirement NewRequirement = new SorcererStreetHPLeftRequirement(GlobalContext);
+            SorcererStreetHPLeftRequirement NewRequirement = new SorcererStreetHPLeftRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

@@ -20,8 +20,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetElementRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Element", GlobalContext)
+        public SorcererStreetElementRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Element", Params)
         {
             _Target = Targets.Self;
             ArrayElement = new ElementChoices[0];
@@ -56,46 +56,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (ElementChoices ActiveElement in ArrayElement)
                 {
-                    if ((ActiveElement == ElementChoices.Air && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Fire && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.FireElement)
-                        || (ActiveElement == ElementChoices.Earth && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.EarthElement)
-                        || (ActiveElement == ElementChoices.Water && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.WaterElement)
-                        || (ActiveElement == ElementChoices.Neutral && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.NeutralElement))
+                    if ((ActiveElement == ElementChoices.Air && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Fire && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.FireElement)
+                        || (ActiveElement == ElementChoices.Earth && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.EarthElement)
+                        || (ActiveElement == ElementChoices.Water && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.WaterElement)
+                        || (ActiveElement == ElementChoices.Neutral && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.NeutralElement))
                     {
                         return true;
                     }
-                    else if (ActiveElement == ElementChoices.DifferentFromTerritory)
-                    {
-                        CardAbilities Abilities = GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase);
-                        bool ElementMatch = false;
-
-                        if ((Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air) && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.AirElement)
-                            || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire) && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.FireElement)
-                            || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth) && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.EarthElement)
-                            || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water) && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.WaterElement)
-                            || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral) && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.NeutralElement))
-                        {
-                            ElementMatch = true;
-                        }
-
-                        return !ElementMatch;
-                    }
                 }
 
-                return false;
+                TargetCreature = Params.GlobalContext.ActiveTerrain.DefendingCreature;
             }
             else if (_Target == Targets.Self)
             {
-                TargetCreature = GlobalContext.SelfCreature.Creature;
+                TargetCreature = Params.GlobalContext.SelfCreature.Creature;
             }
             else
             {
-                TargetCreature = GlobalContext.OpponentCreature.Creature;
+                TargetCreature = Params.GlobalContext.OpponentCreature.Creature;
             }
 
             foreach (ElementChoices ActiveElement in ArrayElement)
             {
-                CardAbilities Abilities = TargetCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase);
+                CardAbilities Abilities = TargetCreature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase);
                 if ((ActiveElement == ElementChoices.Air && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                     || (ActiveElement == ElementChoices.Fire && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
                     || (ActiveElement == ElementChoices.Earth && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
@@ -111,20 +95,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (_Target == Targets.Self)
                     {
-                        OtherCreature = GlobalContext.OpponentCreature.Creature;
+                        OtherCreature = Params.GlobalContext.OpponentCreature.Creature;
                     }
                     else
                     {
-                        OtherCreature = GlobalContext.SelfCreature.Creature;
+                        OtherCreature = Params.GlobalContext.SelfCreature.Creature;
                     }
 
                     foreach (CreatureCard.ElementalAffinity ActiveAffinity in Abilities.ArrayElementAffinity)
                     {
-                        if (!OtherCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).ArrayElementAffinity.Contains(ActiveAffinity))
+                        if (!OtherCreature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ArrayElementAffinity.Contains(ActiveAffinity))
                         {
                             return true;
                         }
                     }
+                }
+                else if (ActiveElement == ElementChoices.DifferentFromTerritory)
+                {
+                    bool ElementMatch = false;
+
+                    if ((Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air) && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.AirElement)
+                        || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire) && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.FireElement)
+                        || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth) && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.EarthElement)
+                        || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water) && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.WaterElement)
+                        || (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral) && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] == TerrainSorcererStreet.NeutralElement))
+                    {
+                        ElementMatch = true;
+                    }
+
+                    return !ElementMatch;
                 }
             }
 
@@ -133,7 +132,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetElementRequirement NewRequirement = new SorcererStreetElementRequirement(GlobalContext);
+            SorcererStreetElementRequirement NewRequirement = new SorcererStreetElementRequirement(Params);
 
             NewRequirement.ArrayElement = ArrayElement;
             NewRequirement._Target = _Target;

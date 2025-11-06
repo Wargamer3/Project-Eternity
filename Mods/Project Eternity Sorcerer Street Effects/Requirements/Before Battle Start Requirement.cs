@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetBeforeBattleStartRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleAttackPhase.BeforeBattleStartRequirement, GlobalContext)
+        public SorcererStreetBeforeBattleStartRequirement(SorcererStreetBattleParams Params)
+            : base(ActionPanelBattleAttackPhase.BeforeBattleStartRequirement, Params)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetBeforeBattleStartRequirement(GlobalContext);
+            return new SorcererStreetBeforeBattleStartRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

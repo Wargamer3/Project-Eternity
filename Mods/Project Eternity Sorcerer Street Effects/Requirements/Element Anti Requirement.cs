@@ -20,8 +20,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetElementAntiRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Element Anti", GlobalContext)
+        public SorcererStreetElementAntiRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Element Anti", Params)
         {
             _Target = Targets.Self;
             ArrayElement = new ElementChoices[0];
@@ -56,11 +56,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (ElementChoices ActiveElement in ArrayElement)
                 {
-                    if ((ActiveElement == ElementChoices.Air && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Fire && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.FireElement)
-                        || (ActiveElement == ElementChoices.Earth && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.EarthElement)
-                        || (ActiveElement == ElementChoices.Water && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.WaterElement)
-                        || (ActiveElement == ElementChoices.Neutral && GlobalContext.TerrainHolder.ListTerrainType[GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.NeutralElement))
+                    if ((ActiveElement == ElementChoices.Air && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Fire && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.FireElement)
+                        || (ActiveElement == ElementChoices.Earth && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.EarthElement)
+                        || (ActiveElement == ElementChoices.Water && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.WaterElement)
+                        || (ActiveElement == ElementChoices.Neutral && Params.GlobalContext.TerrainHolder.ListTerrainType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex] != TerrainSorcererStreet.NeutralElement))
                     {
                         return true;
                     }
@@ -70,16 +70,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (_Target == Targets.Self)
             {
-                TargetCreature = GlobalContext.SelfCreature.Creature;
+                TargetCreature = Params.GlobalContext.SelfCreature.Creature;
             }
             else
             {
-                TargetCreature = GlobalContext.OpponentCreature.Creature;
+                TargetCreature = Params.GlobalContext.OpponentCreature.Creature;
             }
 
             foreach (ElementChoices ActiveElement in ArrayElement)
             {
-                CardAbilities Abilities = TargetCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase);
+                CardAbilities Abilities = TargetCreature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase);
 
                 if ((ActiveElement == ElementChoices.Air && !Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                     || (ActiveElement == ElementChoices.Fire && !Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetElementAntiRequirement NewRequirement = new SorcererStreetElementAntiRequirement(GlobalContext);
+            SorcererStreetElementAntiRequirement NewRequirement = new SorcererStreetElementAntiRequirement(Params);
 
             NewRequirement.ArrayElement = ArrayElement;
             NewRequirement._Target = _Target;

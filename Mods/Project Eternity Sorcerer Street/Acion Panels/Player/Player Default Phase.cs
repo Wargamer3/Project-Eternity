@@ -383,13 +383,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             float LineHight = 56;
 
-            g.DrawString(Map.fntMenuText, "Owner: " + "None", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Owner: " + "None", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             CurrentY += LineHight;
-            g.DrawString(Map.fntMenuText, "Value: " + HoverTerrain.CurrentValue, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Value: " + HoverTerrain.CurrentValue, new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             CurrentY += LineHight;
-            g.DrawString(Map.fntMenuText, "Toll: " + HoverTerrain.CurrentToll, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Toll: " + HoverTerrain.CurrentToll, new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             CurrentY += LineHight;
-            g.DrawString(Map.fntMenuText, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
 
             CurrentX = X + 180;
             switch (Map.TerrainHolder.ListTerrainType[HoverTerrain.TerrainTypeIndex])

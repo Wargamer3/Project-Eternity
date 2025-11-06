@@ -41,6 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Params.GlobalContext.ActiveTerrain.LandLevel += _LevelIncrease;
             Params.GlobalContext.ActiveTerrain.LandLevel = Math.Max(0, Math.Min(5, Params.GlobalContext.ActiveTerrain.LandLevel));
+            Params.GlobalContext.ActiveTerrain.UpdateValue(Params.Map.DicTeam[Params.GlobalPlayerContext.ActivePlayer.TeamIndex].DicCreatureCountByElementType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex], Params.GlobalContext.ActiveTerrain.DefendingCreature);
             return "Terrain Level increase by " + string.Join(",", _LevelIncrease);
         }
 

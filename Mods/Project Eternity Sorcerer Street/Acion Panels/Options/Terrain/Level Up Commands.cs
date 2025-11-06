@@ -53,15 +53,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (ActionMenuCursor < 5 && ActionMenuCursor + 2 > ActiveTerrain.LandLevel)
+                if (ActionMenuCursor < 5 - ActiveTerrain.LandLevel)
                 {
-                    int UpgradePrice = GetUpgradePrice(ActionMenuCursor + 2 - ActiveTerrain.LandLevel);
+                    int UpgradePrice = GetUpgradePrice(ActionMenuCursor + ActiveTerrain.LandLevel) - GetUpgradePrice(ActiveTerrain.LandLevel - 1);
                     if (UpgradePrice <= ActivePlayer.Gold)
                     {
                         ActivePlayer.Gold -= UpgradePrice;
+                        ActiveTerrain.LandLevel += ActionMenuCursor + 1;
                         ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
                         Map.EndPlayerPhase();
                     }
+                }
+                else
+                {
+                    RemoveFromPanelList(this);
                 }
             }
             else if (InputHelper.InputCancelPressed())
@@ -103,69 +108,89 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActionPanelPlayerDefault.DrawLandInformationTop(g, Map, ActiveTerrain);
 
-            int BoxWidth = (int)(Constants.Width / 2.8);
-            int BoxHeight = 137;
+            float Ratio = Constants.Height / 720f;
+            int BoxWidth = (int)(456 * Ratio);
+            int BoxHeight = (int)(200 * Ratio);
             float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth;
             float InfoBoxY = Constants.Height / 10;
 
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
+            MenuHelper.DrawNamedBox(g, "Menu", new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
 
-            float CurrentX = InfoBoxX + 10;
-            float CurrentY = InfoBoxY - 10;
+            float CurrentX = InfoBoxX + 40 * Ratio;
+            float CurrentY = InfoBoxY - 20 * Ratio;
 
-            CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Make it what terrain?", new Vector2(CurrentX, CurrentY), Color.White);
+            CurrentY += Map.fntMenuText.LineSpacing;
+            g.DrawString(Map.fntMenuText, "Raise to how much?", new Vector2(CurrentX, CurrentY), Color.White);
 
-            CurrentY += 20;
+            CurrentY += Map.fntMenuText.LineSpacing;
             Color TextColor = Color.White;
-            int UpgradePrice = GetUpgradePrice(2 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Gold < UpgradePrice)
-            {
-                TextColor = Color.Gray;
-            }
-            g.DrawString(Map.fntMenuText, "Level 2", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
-            CurrentY += 20;
-            UpgradePrice = GetUpgradePrice(3 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Gold < UpgradePrice)
+            if (ActiveTerrain.LandLevel < 2)
             {
-                TextColor = Color.Gray;
-            }
+                int UpgradePrice = GetUpgradePrice(1);
+                if (ActivePlayer.Gold < UpgradePrice)
+                {
+                    TextColor = Color.Gray;
+                    g.Draw(IconHolder.Icons.sprMenuLimitG, new Rectangle((int)(CurrentX + 390 * Ratio), (int)CurrentY, (int)(32 * Ratio), (int)(32 * Ratio)), Color.White);
+                }
+                g.DrawString(Map.fntMenuText, "Level 2", new Vector2((int)(CurrentX + 10 * Ratio), CurrentY), TextColor);
+                g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)(CurrentX + 280 * Ratio), (int)CurrentY, (int)(14 * Ratio), (int)(23 * Ratio)), Color.White);
+                g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2((int)(CurrentX + 380 * Ratio), CurrentY), TextColor);
 
-            g.DrawString(Map.fntMenuText, "Level 3", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
-
-            CurrentY += 20;
-            UpgradePrice = GetUpgradePrice(4 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Gold < UpgradePrice)
-            {
-                TextColor = Color.Gray;
+                CurrentY += Map.fntMenuText.LineSpacing;
             }
 
-            g.DrawString(Map.fntMenuText, "Level 4", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
-
-            CurrentY += 20;
-            UpgradePrice = GetUpgradePrice(5 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Gold < UpgradePrice)
+            if (ActiveTerrain.LandLevel < 3)
             {
-                TextColor = Color.Gray;
+                int UpgradePrice = GetUpgradePrice(2) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                if (ActivePlayer.Gold < UpgradePrice)
+                {
+                    TextColor = Color.Gray;
+                    g.Draw(IconHolder.Icons.sprMenuLimitG, new Rectangle((int)(CurrentX + 390 * Ratio), (int)CurrentY, (int)(32 * Ratio), (int)(32 * Ratio)), Color.White);
+                }
+
+                g.DrawString(Map.fntMenuText, "Level 3", new Vector2((int)(CurrentX + 10 * Ratio), CurrentY), TextColor);
+                g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)(CurrentX + 280 * Ratio), (int)CurrentY, (int)(14 * Ratio), (int)(23 * Ratio)), Color.White);
+                g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2((int)(CurrentX + 380 * Ratio), CurrentY), TextColor);
+
+                CurrentY += Map.fntMenuText.LineSpacing;
             }
 
-            g.DrawString(Map.fntMenuText, "Level 5", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
-            g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
+            if (ActiveTerrain.LandLevel < 4)
+            {
+                int UpgradePrice = GetUpgradePrice(3) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                if (ActivePlayer.Gold < UpgradePrice)
+                {
+                    TextColor = Color.Gray;
+                    g.Draw(IconHolder.Icons.sprMenuLimitG, new Rectangle((int)(CurrentX + 390 * Ratio), (int)CurrentY, (int)(32 * Ratio), (int)(32 * Ratio)), Color.White);
+                }
 
-            CurrentY += 20;
+                g.DrawString(Map.fntMenuText, "Level 4", new Vector2((int)(CurrentX + 10 * Ratio), CurrentY), TextColor);
+                g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)(CurrentX + 280 * Ratio), (int)CurrentY, (int)(14 * Ratio), (int)(23 * Ratio)), Color.White);
+                g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2((int)(CurrentX + 380 * Ratio), CurrentY), TextColor);
+
+                CurrentY += Map.fntMenuText.LineSpacing;
+            }
+
+            if (ActiveTerrain.LandLevel < 5)
+            {
+                int UpgradePrice = GetUpgradePrice(4) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                if (ActivePlayer.Gold < UpgradePrice)
+                {
+                    TextColor = Color.Gray;
+                    g.Draw(IconHolder.Icons.sprMenuLimitG, new Rectangle((int)(CurrentX + 390 * Ratio), (int)CurrentY, (int)(32 * Ratio), (int)(32 * Ratio)), Color.White);
+                }
+
+                g.DrawString(Map.fntMenuText, "Level 5", new Vector2((int)(CurrentX + 10 * Ratio), CurrentY), TextColor);
+                g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)(CurrentX + 280 * Ratio), (int)CurrentY, (int)(14 * Ratio), (int)(23 * Ratio)), Color.White);
+                g.DrawStringRightAligned(Map.fntMenuText, UpgradePrice.ToString(), new Vector2((int)(CurrentX + 380 * Ratio), CurrentY), TextColor);
+
+                CurrentY += Map.fntMenuText.LineSpacing;
+            }
+
             g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 
-            MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, InfoBoxY + 30 + 20 * ActionMenuCursor));
+            MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, (int)(InfoBoxY + 44 * Ratio + Map.fntMenuText.LineSpacing * ActionMenuCursor)));
         }
     }
 }

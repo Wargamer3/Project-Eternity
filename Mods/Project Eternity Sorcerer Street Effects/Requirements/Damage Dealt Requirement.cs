@@ -23,8 +23,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _DamageDelt = string.Empty;
         }
 
-        public SorcererStreetDamageDealtRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Damage Dealt", GlobalContext)
+        public SorcererStreetDamageDealtRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Damage Dealt", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
@@ -51,20 +51,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (_Target)
             {
                 case Targets.Self:
-                    DamageDelt = GlobalContext.OpponentCreature.DamageReceived;
+                    DamageDelt = Params.GlobalContext.OpponentCreature.DamageReceived;
                     break;
                 case Targets.Opponent:
-                    DamageDelt = GlobalContext.SelfCreature.DamageReceived;
+                    DamageDelt = Params.GlobalContext.SelfCreature.DamageReceived;
                     break;
             }
 
-            int DamageDeltFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_DamageDelt), CultureInfo.InvariantCulture);
+            int DamageDeltFinal = int.Parse(Params.ActiveParser.Evaluate(_DamageDelt), CultureInfo.InvariantCulture);
             return Operators.CompareValue(LogicOperator, DamageDelt, DamageDeltFinal);
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetDamageDealtRequirement NewRequirement = new SorcererStreetDamageDealtRequirement(GlobalContext);
+            SorcererStreetDamageDealtRequirement NewRequirement = new SorcererStreetDamageDealtRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetDestroyedBySpellRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Destroyed By Spell", GlobalContext)
+        public SorcererStreetDestroyedBySpellRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Destroyed By Spell", Params)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetDestroyedBySpellRequirement(GlobalContext);
+            return new SorcererStreetDestroyedBySpellRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

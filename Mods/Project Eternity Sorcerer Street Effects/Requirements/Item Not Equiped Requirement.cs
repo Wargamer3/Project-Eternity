@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetItemNotEquipedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Item Not Equiped", GlobalContext)
+        public SorcererStreetItemNotEquipedRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Item Not Equiped", Params)
         {
         }
 
@@ -35,17 +35,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return GlobalContext.SelfCreature.Item == null;
+                return Params.GlobalContext.SelfCreature.Item == null;
             }
             else
             {
-                return GlobalContext.OpponentCreature.Item == null;
+                return Params.GlobalContext.OpponentCreature.Item == null;
             }
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetItemNotEquipedRequirement NewRequirement = new SorcererStreetItemNotEquipedRequirement(GlobalContext);
+            SorcererStreetItemNotEquipedRequirement NewRequirement = new SorcererStreetItemNotEquipedRequirement(Params);
 
             NewRequirement._Target = _Target;
 

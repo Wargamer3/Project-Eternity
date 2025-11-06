@@ -15,8 +15,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetAgainstActivationChanceRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Activation Chance", GlobalContext)
+        public SorcererStreetAgainstActivationChanceRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Activation Chance", Params)
         {
         }
 
@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetAgainstActivationChanceRequirement NewRequirement = new SorcererStreetAgainstActivationChanceRequirement(GlobalContext);
+            SorcererStreetAgainstActivationChanceRequirement NewRequirement = new SorcererStreetAgainstActivationChanceRequirement(Params);
 
             NewRequirement._ActivationChance = _ActivationChance;
 

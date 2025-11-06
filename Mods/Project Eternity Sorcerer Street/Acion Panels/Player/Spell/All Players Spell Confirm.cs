@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             continue;
                         }
-                        EnchantHelper.ActivateOnPlayer(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, null);
+                        EnchantHelper.ActivateOnPlayer(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, P, null);
                     }
 
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);

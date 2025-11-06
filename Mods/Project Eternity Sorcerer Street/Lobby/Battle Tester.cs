@@ -149,7 +149,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
             sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
-            Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
+            SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
             Context.ListSummonedCreature = new List<TerrainSorcererStreet>();
             Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
             Context.ActiveTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);

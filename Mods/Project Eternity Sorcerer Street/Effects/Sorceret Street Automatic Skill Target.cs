@@ -4,12 +4,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class SorcererStreetAutomaticTargetType : AutomaticSkillTargetType
     {
-        protected readonly SorcererStreetBattleContext GlobalContext;
+        protected readonly SorcererStreetBattleParams Params;
 
-        public SorcererStreetAutomaticTargetType(string TargetType, SorcererStreetBattleContext GlobalContext)
+        public SorcererStreetAutomaticTargetType(string TargetType, SorcererStreetBattleParams Params)
             : base(TargetType)
         {
-            this.GlobalContext = GlobalContext;
+            this.Params = Params;
         }
     }
 }

@@ -368,6 +368,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!SorcererStreetBattleParams.DicParams.TryGetValue(ParamsID, out Params))
             {
                 Params = new SorcererStreetBattleParams();
+                Params.ActiveParser = new SorcererStreetFormulaParser(Params);
                 SorcererStreetBattleParams.DicParams.TryAdd(ParamsID, Params);
                 Params.Reload(this.Params, ParamsID);
             }

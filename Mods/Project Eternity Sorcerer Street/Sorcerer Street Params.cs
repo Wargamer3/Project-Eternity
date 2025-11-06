@@ -158,8 +158,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public AnimationBackground Background;
 
-        public FormulaParser ActiveParser;
-
         public SorcererStreetBattleContext()
         {
             CanUseEffectsOrAbilities = true;
@@ -420,7 +418,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadSkillRequirements()
         {
-            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetRequirement), GlobalContext);
+            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetRequirement), this);
             foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCore)
             {
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
@@ -429,7 +427,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetRequirement), GlobalContext);
+                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetRequirement), this);
                 foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCoreAssembly)
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
@@ -439,7 +437,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadAutomaticSkillActivation()
         {
-            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetAutomaticTargetType), GlobalContext))
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetAutomaticTargetType), this))
             {
                 DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
             }
@@ -447,7 +445,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", " *.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetAutomaticTargetType), GlobalContext))
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetAutomaticTargetType), this))
                 {
                     DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
                 }

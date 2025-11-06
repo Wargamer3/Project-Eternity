@@ -40,41 +40,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return Spell.CanActivate;
         }
 
-        public static void ActivateEnchant(SorcererStreetPlayerContext GlobalPlayerContext, ManualSkill Spell)
-        {
-            for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
-            {
-                BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
-
-                ActiveEffect.ExecuteEffect();
-            }
-
-            foreach (BaseSkillActivation Activation in GlobalPlayerContext.ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
-            {
-                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
-                {
-                    BaseEffect ActiveEffect = Activation.ListEffect[E];
-
-                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
-                    {
-                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
-                        {
-                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + GlobalPlayerContext.ActivePlayerIndex;
-                        }
-
-                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
-                    }
-                }
-            }
-
-            List<BaseSkillActivation> DicSkillActivation = GlobalPlayerContext.ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
-
-            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
-            {
-                ActiveSkill.Activate(GlobalPlayerContext.ActivePlayer.Enchant.Skill.Name);
-            }
-        }
-
         public static void ActivateEnchantOnCreature(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, Map.GetTerrain(SelfCreature.GamePiece.Position), SelfCreature, PlayerIndex);
@@ -136,6 +101,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, null, SelfCreature, PlayerIndex);
 
+            Spell.UpdateSkillActivation();
+            bool IsValid = Spell.CanActivateEffectsOnTarget(ActivePlayer.Effects);
+
+            if (!IsValid)
+            {
+                return;
+            }
+
             for (int E = Spell.ListEffect.Count - 1; E >= 0; --E)
             {
                 BaseEffect ActiveEffect = Spell.ListEffect[E].Copy();
@@ -143,29 +116,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActiveEffect.ExecuteEffect();
             }
 
-            foreach (BaseSkillActivation Activation in ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
+            if (ActivePlayer.Enchant != null)
             {
-                for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
+                foreach (BaseSkillActivation Activation in ActivePlayer.Enchant.Skill.CurrentSkillLevel.ListActivation)
                 {
-                    BaseEffect ActiveEffect = Activation.ListEffect[E];
-
-                    foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                    for (int E = Activation.ListEffect.Count - 1; E >= 0; --E)
                     {
-                        if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
-                        {
-                            ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + PlayerIndex;
-                        }
+                        BaseEffect ActiveEffect = Activation.ListEffect[E];
 
-                        ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                        foreach (BaseEffectLifetime ActiveLifetime in ActiveEffect.Lifetime)
+                        {
+                            if (ActiveLifetime.LifetimeType == SkillEffect.LifetimeTypeTurns)
+                            {
+                                ActiveLifetime.LifetimeType = SkillEffect.LifetimeTypeTurns + PlayerIndex;
+                            }
+
+                            ActiveLifetime.Lifetime = ActiveLifetime.LifetimeTypeValue;
+                        }
                     }
                 }
-            }
 
-            List<BaseSkillActivation> DicSkillActivation = ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
+                List<BaseSkillActivation> DicSkillActivation = ActivePlayer.Enchant.Skill.GetAvailableActivation(ActionPanelBattleEnchantModifierPhase.RequirementName);
 
-            foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
-            {
-                ActiveSkill.Activate(ActivePlayer.Enchant.Skill.Name);
+                foreach (BaseSkillActivation ActiveSkill in DicSkillActivation)
+                {
+                    ActiveSkill.Activate(ActivePlayer.Enchant.Skill.Name);
+                }
             }
         }
 
@@ -430,8 +406,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetOnCreateRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street On Load", GlobalContext)
+        public SorcererStreetOnCreateRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street On Load", Params)
         {
         }
 
@@ -450,7 +426,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetOnCreateRequirement(GlobalContext);
+            return new SorcererStreetOnCreateRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
@@ -465,8 +441,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetEnchantPhaseRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleEnchantModifierPhase.RequirementName, GlobalContext)
+        public SorcererStreetEnchantPhaseRequirement(SorcererStreetBattleParams Params)
+            : base(ActionPanelBattleEnchantModifierPhase.RequirementName, Params)
         {
         }
 
@@ -485,7 +461,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetEnchantPhaseRequirement(GlobalContext);
+            return new SorcererStreetEnchantPhaseRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

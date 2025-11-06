@@ -106,15 +106,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             throw new Exception(Input + " is invalid");
                         return StatsFromCreature(Params.GlobalContext.OpponentCreature,  Expression[1]);
 
-                    case "self":
                     case "owner":
                     case "ownercreature":
+                    case "selfcreature":
                         return StatsFromCreature(Params.GlobalContext.SelfCreature, Expression[1]);
 
                     case "opponent":
                     case "opponentcreature":
                         return StatsFromCreature(Params.GlobalContext.OpponentCreature, Expression[1]);
 
+                    case "self":
                     case "selfplayer":
                     case "ownerplayer":
                         return PlayerStatsFromPlayer(Params.GlobalContext.SelfCreature.Owner, Expression[1]);
@@ -422,6 +423,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case "neutralsymbols":
                     ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Neutral].ToString();
+                    break;
+
+                case "symbols":
+                    int Total = 0;
+                    foreach (int TotalSymbol in ActivePlayer.DicOwnedSymbols.Values)
+                    {
+                        Total += TotalSymbol;
+                    }
+                    ReturnExpression = Total.ToString();
                     break;
             }
 

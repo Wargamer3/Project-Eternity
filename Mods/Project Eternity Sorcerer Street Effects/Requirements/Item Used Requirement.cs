@@ -45,8 +45,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetUsedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Item Used", GlobalContext)
+        public SorcererStreetUsedRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Item Used", Params)
         {
             _CardName = string.Empty;
         }
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetUsedRequirement NewRequirement = new SorcererStreetUsedRequirement(GlobalContext);
+            SorcererStreetUsedRequirement NewRequirement = new SorcererStreetUsedRequirement(Params);
 
             NewRequirement._CardName = _CardName;
             NewRequirement._Target = _Target;

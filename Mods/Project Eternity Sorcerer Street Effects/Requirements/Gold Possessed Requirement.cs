@@ -22,8 +22,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetGoldPossessedRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Gold Possessed", GlobalContext)
+        public SorcererStreetGoldPossessedRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Gold Possessed", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = LogicOperators.Lower;
@@ -49,17 +49,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            string EvaluationResult = GlobalContext.ActiveParser.Evaluate(_Value);
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
 
             Player FinalTarget;
 
             if (_Target == Targets.Self)
             {
-                FinalTarget = GlobalContext.SelfCreature.Owner;
+                FinalTarget = Params.GlobalContext.SelfCreature.Owner;
             }
             else
             {
-                FinalTarget = GlobalContext.OpponentCreature.Owner;
+                FinalTarget = Params.GlobalContext.OpponentCreature.Owner;
             }
 
             if (_SignOperator == NumberTypes.Absolute)
@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetGoldPossessedRequirement NewRequirement = new SorcererStreetGoldPossessedRequirement(GlobalContext);
+            SorcererStreetGoldPossessedRequirement NewRequirement = new SorcererStreetGoldPossessedRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

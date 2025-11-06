@@ -114,6 +114,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
         {
+            SorcererStreetParams.ActiveParser = new SorcererStreetFormulaParser(SorcererStreetParams);
             SorcererStreetBattleParams.DicParams.TryAdd(string.Empty, SorcererStreetParams);
         }
 
@@ -158,6 +159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CursorPositionVisible = CursorPosition;
 
             TerrainHolder = new SorcererStreetTerrainHolder();
+            GlobalSorcererStreetBattleContext.TerrainHolder = TerrainHolder;
 
             ListTileSet = new List<Texture2D>();
             this.Camera2DPosition = Vector3.Zero;

@@ -185,6 +185,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case SignOperators.DividedEqual:
                         RealTarget.Creature.MaxHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         RealTarget.Creature.CurrentHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        if (RealTarget.FinalHP < 0 || RealTarget.Creature.CurrentHP < 0 || RealTarget.Creature.MaxHP < 0)
+                        {
+                            RealTarget.LandHP = 0;
+                            RealTarget.BonusHP = 0;
+                            RealTarget.Creature.CurrentHP = 0;
+                        }
                         break;
 
                     case SignOperators.MinusEqual:
@@ -195,7 +201,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RealTarget.LandHP = 0;
                             RealTarget.BonusHP = 0;
                             RealTarget.Creature.CurrentHP = 0;
-                            RealTarget.Creature.MaxHP = 0;
                         }
                         return "HP-" + EvaluationResult;
 
@@ -226,7 +231,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     case SignOperators.DividedEqual:
                         RealTarget.Creature.MaxHP -= RealTarget.Creature.MaxHP - RealTarget.Creature.MaxHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
-                        break;
+                        if (RealTarget.Creature.MaxHP < RealTarget.Creature.CurrentHP)
+                        {
+                            RealTarget.Creature.CurrentHP = RealTarget.Creature.MaxHP;
+                        }
+                        if (RealTarget.FinalHP < 0)
+                        {
+                            RealTarget.LandHP = 0;
+                            RealTarget.BonusHP = 0;
+                            RealTarget.Creature.CurrentHP = 0;
+                        }
+                        return "Max HP-" + EvaluationResult;
 
                     case SignOperators.MinusEqual:
                         RealTarget.Creature.MaxHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
@@ -253,6 +268,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 return "Max HP+" + EvaluationResult;
             }
+
+            ActionPanelBattleDefenderDefeatedPhase.DestroyDeadCreatures(Params.Map);
 
             return "ST+" + EvaluationResult;
         }

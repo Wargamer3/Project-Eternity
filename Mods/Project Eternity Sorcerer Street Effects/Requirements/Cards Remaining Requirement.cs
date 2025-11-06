@@ -22,8 +22,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetCardsRemainingRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Cards Remaining", GlobalContext)
+        public SorcererStreetCardsRemainingRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Cards Remaining", Params)
         {
             _Target = Targets.SelfHand;
             _LogicOperator = LogicOperators.LowerOrEqual;
@@ -49,25 +49,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            string EvaluationResult = GlobalContext.ActiveParser.Evaluate(_Value);
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
 
             int CurrentCards = 0;
 
             if (_Target == Targets.SelfHand)
             {
-                CurrentCards = GlobalContext.SelfCreature.Owner.ListCardInHand.Count;
+                CurrentCards = Params.GlobalContext.SelfCreature.Owner.ListCardInHand.Count;
             }
             else if (_Target == Targets.SelfDeck)
             {
-                CurrentCards = GlobalContext.SelfCreature.Owner.ListCardInDeck.Count;
+                CurrentCards = Params.GlobalContext.SelfCreature.Owner.ListCardInDeck.Count;
             }
             else if (_Target == Targets.OpponentHand)
             {
-                CurrentCards = GlobalContext.OpponentCreature.Owner.ListCardInHand.Count;
+                CurrentCards = Params.GlobalContext.OpponentCreature.Owner.ListCardInHand.Count;
             }
             else if (_Target == Targets.OpponentDeck)
             {
-                CurrentCards = GlobalContext.OpponentCreature.Owner.ListCardInDeck.Count;
+                CurrentCards = Params.GlobalContext.OpponentCreature.Owner.ListCardInDeck.Count;
             }
 
             if (_SignOperator == NumberTypes.Absolute)
@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetCardsRemainingRequirement NewRequirement = new SorcererStreetCardsRemainingRequirement(GlobalContext);
+            SorcererStreetCardsRemainingRequirement NewRequirement = new SorcererStreetCardsRemainingRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;

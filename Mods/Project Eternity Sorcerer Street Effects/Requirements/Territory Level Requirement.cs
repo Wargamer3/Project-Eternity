@@ -19,8 +19,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public SorcererStreetTerriotryLevelRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Territory Level", GlobalContext)
+        public SorcererStreetTerriotryLevelRequirement(SorcererStreetBattleParams Params)
+            : base("Sorcerer Street Territory Level", Params)
         {
             _Target = Targets.Self;
             _LogicOperator = Operators.LogicOperators.GreaterOrEqual;
@@ -43,14 +43,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            int TerritoryLevel = GlobalContext.ActiveTerrain.LandLevel;
+            int TerritoryLevel = Params.GlobalContext.ActiveTerrain.LandLevel;
 
             return Operators.CompareValue(LogicOperator, TerritoryLevel, _TerritoryLevel);
         }
 
         public override BaseSkillRequirement Copy()
         {
-            SorcererStreetTerriotryLevelRequirement NewRequirement = new SorcererStreetTerriotryLevelRequirement(GlobalContext);
+            SorcererStreetTerriotryLevelRequirement NewRequirement = new SorcererStreetTerriotryLevelRequirement(Params);
 
             NewRequirement._Target = _Target;
             NewRequirement._LogicOperator = _LogicOperator;
