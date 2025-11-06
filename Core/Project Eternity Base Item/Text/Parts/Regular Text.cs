@@ -85,17 +85,27 @@ namespace ProjectEternity.Core.Item
                             if (LastSpace > 1)//Try to split the text on spaces, don't count the space if it's the first character of the text
                             {
                                 CurrentChar = LastSpace;
+
+                                TestString = WorkingString.Substring(0, CurrentChar);
+                                DicTextByPosition.Add(ActivePosition, TestString);
+                                WorkingString = WorkingString.Remove(0, CurrentChar);
+                                if (WorkingString.StartsWith(" "))//If the next line start with a space, ignore it
+                                {
+                                    WorkingString = WorkingString.Remove(0, 1);
+                                    TextWidth = MeasureString(WorkingString);
+                                }
+                                CurrentChar = 0;
+                            }
+                            else//Can't find a space to split the text on
+                            {
+                                if (WorkingString.Length > 0 && WorkingString[0] == ' ')//Ignore first space on new line
+                                {
+                                    WorkingString = WorkingString.Remove(0, 1);
+                                    TextWidth = MeasureString(WorkingString);
+                                }
+                                CurrentChar = WorkingString.Length;
                             }
 
-                            TestString = WorkingString.Substring(0, CurrentChar);
-                            DicTextByPosition.Add(ActivePosition, TestString);
-                            WorkingString = WorkingString.Remove(0, CurrentChar);
-                            if (WorkingString.StartsWith(" "))//If the next line start with a space, ignore it
-                            {
-                                WorkingString = WorkingString.Remove(0, 1);
-                                TextWidth = MeasureString(WorkingString);
-                            }
-                            CurrentChar = 0;
                             ActivePosition.Y += Owner.LineHeight;
                             ActivePosition.X = 0;
                             ActivePosition.X = GetStartingXPositionOnLine(ActivePosition);
