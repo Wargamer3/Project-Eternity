@@ -34,12 +34,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
     public static class EnchantHelper
     {
-        public static bool CanActivate(ManualSkill Spell)
-        {
-            Spell.UpdateSkillActivation();
-            return Spell.CanActivate;
-        }
-
         public static void ActivateEnchantOnCreature(SorcererStreetMap Map, SorcererStreetBattleContext GlobalContext, ManualSkill Spell, int PlayerIndex, CreatureCard SelfCreature)
         {
             GlobalContext.SetCreatures(Map, SelfCreature, PlayerIndex, Map.GetTerrain(SelfCreature.GamePiece.Position), SelfCreature, PlayerIndex);

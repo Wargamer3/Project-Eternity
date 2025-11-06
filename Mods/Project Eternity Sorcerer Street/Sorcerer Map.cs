@@ -15,6 +15,7 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.AnimationScreen;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -101,6 +102,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<TerrainSorcererStreet> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public int TotalCreaturesDestroyed;
+        public Dictionary<ElementalAffinity, int> DicSymbolValue;
         public readonly MovementAlgorithm Pathfinder;
         public readonly SorcererStreetPlayerContext GlobalPlayerContext;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
@@ -149,11 +151,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCheckpoint = new List<Checkpoints>();
             ListSummonedCreature = new List<TerrainSorcererStreet>();
             DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();
-            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Air, 0);
-            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Earth, 0);
-            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Fire, 0);
-            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Water, 0);
-            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Neutral, 0);
+            DicCreatureCountByElementType.Add(ElementalAffinity.Air, 0);
+            DicCreatureCountByElementType.Add(ElementalAffinity.Earth, 0);
+            DicCreatureCountByElementType.Add(ElementalAffinity.Fire, 0);
+            DicCreatureCountByElementType.Add(ElementalAffinity.Water, 0);
+            DicCreatureCountByElementType.Add(ElementalAffinity.Neutral, 0);
+
+            DicSymbolValue = new Dictionary<ElementalAffinity, int>();
+            DicSymbolValue.Add(ElementalAffinity.Air, 0);
+            DicSymbolValue.Add(ElementalAffinity.Earth, 0);
+            DicSymbolValue.Add(ElementalAffinity.Fire, 0);
+            DicSymbolValue.Add(ElementalAffinity.Water, 0);
+            DicSymbolValue.Add(ElementalAffinity.Neutral, 0);
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;

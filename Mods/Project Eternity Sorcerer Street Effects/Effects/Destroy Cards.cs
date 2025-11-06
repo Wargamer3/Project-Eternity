@@ -41,8 +41,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             _Target = (Targets)BR.ReadByte();
             _CardDestroyType = (CardDestroyTypes)BR.ReadByte();
-            _RedrawCards = BR.ReadBoolean();
             _CardType = (CardTypes)BR.ReadByte();
+            _CardLocation = (CardLocations)BR.ReadByte();
+            _RedrawCards = BR.ReadBoolean();
 
             if (_CardDestroyType == CardDestroyTypes.Random && _CardDestroyType == CardDestroyTypes.Specific)
             {
@@ -172,7 +173,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (_CardDestroyType == CardDestroyTypes.All)
             {
-                for (int I = ListCard.Count - 1; I > 0; --I)
+                for (int I = ListCard.Count - 1; I >= 0; --I)
                 {
                     RealTarget.Owner.ListCardInHand.Remove(ListCard[I]);
                 }
@@ -180,7 +181,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (_CardDestroyType == CardDestroyTypes.Random)
             {
-                for (int C = 0; C < _NumberOfCards && RealTarget.Owner.ListCardInHand.Count > 0; ++C)
+                for (int C = 0; C < _NumberOfCards && RealTarget.Owner.ListCardInHand.Count >= 0; ++C)
                 {
                     int RandomIndex = RandomHelper.Next(ListCard.Count);
                     RealTarget.Owner.ListCardInHand.Remove(ListCard[RandomIndex]);
@@ -236,7 +237,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             NewEffect._Target = _Target;
             NewEffect._CardDestroyType = _CardDestroyType;
+            NewEffect._CardType = _CardType;
+            NewEffect._CardLocation = _CardLocation;
+            NewEffect._RedrawCards = _RedrawCards;
             NewEffect._NumberOfCards = _NumberOfCards;
+            NewEffect._LogicOperator = _LogicOperator;
+            NewEffect._MagicCost = _MagicCost;
 
             return NewEffect;
         }
@@ -247,7 +253,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             _Target = NewEffect._Target;
             _CardDestroyType = NewEffect._CardDestroyType;
+            _CardType = NewEffect._CardType;
+            _CardLocation = NewEffect._CardLocation;
+            _RedrawCards = NewEffect._RedrawCards;
             _NumberOfCards = NewEffect._NumberOfCards;
+            _LogicOperator = NewEffect._LogicOperator;
+            _MagicCost = NewEffect._MagicCost;
         }
 
         #region Properties

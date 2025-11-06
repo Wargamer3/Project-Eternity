@@ -48,6 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
             int FinalResult = int.Parse(EvaluationResult);
             Params.GlobalContext.SelfCreature.Owner.Gold += FinalResult;
+            Params.Map.UpdateTotalMagic(Params.GlobalPlayerContext.ActivePlayer);
             if (FinalResult < 0)
             {
                 return "Lost " + (-FinalResult) + " Gold";

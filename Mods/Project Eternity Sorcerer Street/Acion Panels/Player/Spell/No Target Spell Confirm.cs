@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
@@ -9,16 +8,16 @@ using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelAllCreatureInAreaSpellConfirm : ActionPanelSorcererStreet
+    public class ActionPanelNoTargetSpellConfirm : ActionPanelSorcererStreet
     {
-        private ManualSkill EnchantToAdd;
-        private int ActivePlayerIndex;
+        public enum CreatureTypes { All, Defensive }
 
-        public ActionPanelAllCreatureInAreaSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex)
-            : base("All Creatures In Area Spell Confirm", Map, true)
+        private ManualSkill ActiveSpell;
+
+        public ActionPanelNoTargetSpellConfirm(SorcererStreetMap Map, ManualSkill ActiveSpell)
+            : base("No Target Spell Confirm", Map, true)
         {
-            this.EnchantToAdd = EnchantToAdd;
-            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSpell = ActiveSpell;
         }
 
         public override void OnSelect()
@@ -33,12 +32,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.GlobalSorcererStreetBattleContext.Reset();
 
-                    List<TerrainSorcererStreet> ListSummonedCreature = GetCreatures();
-
-                    for (int C = ListSummonedCreature.Count - 1; C >= 0; C--)
+                    for (int E = ActiveSpell.ListEffect.Count - 1; E >= 0; --E)
                     {
-                        TerrainSorcererStreet ActiveTerrain = ListSummonedCreature[C];
-                        EnchantHelper.ActivateEnchantOnCreature(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, ActiveTerrain.DefendingCreature);
+                        BaseEffect ActiveEffect = ActiveSpell.ListEffect[E].Copy();
+
+                        ActiveEffect.ExecuteEffect();
                     }
 
                     Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
@@ -73,26 +71,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private List<TerrainSorcererStreet> GetCreatures()
-        {
-            List<TerrainSorcererStreet> ListSummonedCreature = Map.ListSummonedCreature;
-
-            if (Map.ListArea.Count > 0)
-            {
-                TerrainSorcererStreet ActivePlayerTerrain = Map.GetTerrain(Map.ListPlayer[ActivePlayerIndex].GamePiece.Position);
-
-                foreach (Area ActiveArea in Map.ListArea)
-                {
-                    if (ActiveArea.ListTerrainInArea.Contains(ActivePlayerTerrain))
-                    {
-                        ListSummonedCreature.Add(ActivePlayerTerrain);
-                    }
-                }
-            }
-
-            return ListSummonedCreature;
-        }
-
         public override void DoRead(ByteReader BR)
         {
         }
@@ -103,7 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelAllCreatureInAreaSpellConfirm(Map, EnchantToAdd, ActivePlayerIndex);
+            return new ActionPanelNoTargetSpellConfirm(Map, ActiveSpell);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -115,7 +93,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxY = Constants.Height - BoxHeight - (int)(74 * Ratio);
             MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
-            g.DrawStringMiddleAligned(Map.fntMenuText, "Use spell on all creatures?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Use spell?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, "Yes", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio)), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, "No", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 90 * Ratio)), Color.White);
             MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 150, (int)(BoxY + 54 * Ratio + ActionMenuCursor * 36 * Ratio)));
@@ -123,7 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override string ToString()
         {
-            return "Confirm All Creatures Spell.";
+            return "Confirm No Target Spell.";
         }
     }
 }

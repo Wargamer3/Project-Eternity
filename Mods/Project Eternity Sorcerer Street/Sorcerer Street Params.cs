@@ -142,7 +142,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public EffectActivationPhases EffectActivationPhase;
         public List<BaseEffect> ListActivatedEffect;
 
-        public BattleCreatureInfo SelfCreature;
+        private BattleCreatureInfo _SelfCreature;
+        public BattleCreatureInfo SelfCreature { get { return _SelfCreature; }
+            set { _SelfCreature = value; } }
         public BattleCreatureInfo OpponentCreature;
 
         public bool CanUseEffectsOrAbilities;
@@ -388,6 +390,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             GlobalContext.SelfCreature.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             GlobalContext.SelfCreature.Creature.InitBattleBonuses();
+
+            if (!IsTemporary)
+            {
+                if (GlobalContext.ActiveTerrain.DefendingCreature == GlobalContext.OriginalDefenderCreature)
+                {
+                    GlobalContext.ActiveTerrain.DefendingCreature = GlobalContext.SelfCreature.Creature;
+                }
+            }
         }
 
         public void ReplaceOtherCreature(CreatureCard TransformationCreature, bool IsTemporary)
@@ -397,6 +407,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             GlobalContext.OpponentCreature.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             GlobalContext.OpponentCreature.Creature.InitBattleBonuses();
+
+            if (!IsTemporary)
+            {
+                if (GlobalContext.ActiveTerrain.DefendingCreature == GlobalContext.OriginalDefenderCreature)
+                {
+                    GlobalContext.ActiveTerrain.DefendingCreature = GlobalContext.OpponentCreature.Creature;
+                    GlobalContext.ActiveTerrain.DefendingCreature.GamePiece.SetPosition(GlobalContext.OriginalDefenderCreature.GamePiece.Position);
+                }
+            }
         }
 
         protected override void LoadEffects()
