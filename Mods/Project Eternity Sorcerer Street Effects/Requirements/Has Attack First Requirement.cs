@@ -36,15 +36,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (_Target == Targets.Self)
             {
-                return Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).AttackFirst;
             }
             else if (_Target == Targets.Opponent)
             {
-                return Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).AttackFirst;
             }
             else
             {
-                return Params.GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AttackFirst;
+                return Params.GlobalContext.ActiveTerrain.DefendingCreature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).AttackFirst;
             }
         }
 
