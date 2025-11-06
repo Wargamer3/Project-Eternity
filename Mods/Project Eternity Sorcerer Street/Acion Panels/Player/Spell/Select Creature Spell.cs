@@ -19,10 +19,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.AllowSelfPlayer = AllowSelfPlayer;
         }
 
-        public override void OnSelect()
-        {
-        }
-
         public override void DoUpdate(GameTime gameTime)
         {
             base.DoUpdate(gameTime);
@@ -37,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelPlayerSpellConfirm(Map, EnchantToAdd, Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner)));
+                    AddToPanelListAndSelect(new ActionPanelCreatureSpellConfirm(Map, EnchantToAdd, Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner), ActiveTerrain.PlayerOwner.ListSummonedCreature.IndexOf(ActiveTerrain)));
                 }
             }
             else if (ActiveInputManager.InputCancelPressed())

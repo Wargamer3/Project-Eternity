@@ -73,43 +73,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D1) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad1))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 1));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 1, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D2) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad2))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 2));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 2, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D3) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad3))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 3));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 3, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D4) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad4))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 4));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 4, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D5) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad5))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 5));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 5, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D6) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad6))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 6));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 6, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D7) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad7))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 7));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 7, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D8) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad8))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 8));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 8, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D9) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad9))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 9));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 9, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D0) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad0))
             {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 0));
+                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 0, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
             }
             else if (InputHelper.InputConfirmPressed())
             {
@@ -137,14 +137,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void RollDice()
         {
             RemoveFromPanelList(this);
-            if (ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward)
-            {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, -VisibleDiceValue));
-            }
-            else
-            {
-                AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
-            }
+            AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).Backward));
         }
 
         protected override void OnCancelPanel()

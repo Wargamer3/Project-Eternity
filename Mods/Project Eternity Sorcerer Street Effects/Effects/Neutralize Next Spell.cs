@@ -3,7 +3,7 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{////Neutralizes the next spell or territory ability that targets target Player (except those that dispel Enchantments).
+{//Neutralizes the next spell or territory ability that targets target Player (except those that dispel Enchantments).
     public sealed class NeutralizeNextSpellEffect : SorcererStreetEffect
     {
         public static string Name = "Sorcerer Street Neutralize Next Spell";
@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalPlayerContext.ActivePlayer.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).NeutralizeNextSpell = true;
             return "Neutralize Next Spell";
         }
 

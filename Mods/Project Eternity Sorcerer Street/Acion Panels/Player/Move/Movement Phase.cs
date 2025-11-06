@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private int Movement;
+        private bool Backward;
         private float RotationValue;
         private TerrainSorcererStreet NextTerrain;
         private ActionPanelChooseDirection DirectionPicker;
@@ -27,12 +28,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelMovementPhase(SorcererStreetMap Map, int ActivePlayerIndex, int Movement)
+        public ActionPanelMovementPhase(SorcererStreetMap Map, int ActivePlayerIndex, int Movement, bool Backward)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             this.Movement = Movement;
+            this.Backward = Backward;
         }
 
         public override void OnSelect()
@@ -46,6 +48,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (DirectionPicker != null && DirectionPicker.ChosenTerrain != null)
             {
+                if (Backward)
+                {
+                    Map.MovementAnimation.DicMovingMapUnitByNextPosition.Clear();
+                    Map.MovementAnimation.DicMovingMapUnitByPosition.Clear();
+                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
+                    DirectionPicker = null;
+                    return;
+                }
                 NextTerrain = DirectionPicker.ChosenTerrain;
                 MoveToNextTerrain();
                 DirectionPicker = null;
@@ -210,12 +220,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return;
             }
 
-            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, PlayerPosition, ActivePlayer.GamePiece.Direction);
+            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, PlayerPosition, ActivePlayer.GamePiece.Direction, Backward);
 
             if (DicNextTerrain.Count == 1)
             {
                 KeyValuePair<float, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
                 ActivePlayer.GamePiece.Direction = NextTerrainHolder.Key;
+                if (Backward)
+                {
+                    ActivePlayer.GamePiece.Direction = (ActivePlayer.GamePiece.Direction + 180) % 360;
+                }
                 NextTerrain = NextTerrainHolder.Value;
                 MoveToNextTerrain();
             }
@@ -249,8 +263,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private static Dictionary<float, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, Vector3 CurrentPosition, float PlayerDirection)
+        private static Dictionary<float, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, Vector3 CurrentPosition, float PlayerDirection, bool Backward)
         {
+            if (Backward && PlayerDirection != DirectionNone)
+            {
+                PlayerDirection = (PlayerDirection + 180) % 360;
+            }
             Dictionary<float, TerrainSorcererStreet> DicNextTerrain = new Dictionary<float, TerrainSorcererStreet>();
 
             if (Map.IsInsideMap(new Vector3(CurrentPosition.X, CurrentPosition.Y - Map.TileSize.Y, CurrentPosition.Z)))

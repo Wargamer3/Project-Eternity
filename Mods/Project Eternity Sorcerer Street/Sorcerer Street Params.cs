@@ -142,9 +142,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public EffectActivationPhases EffectActivationPhase;
         public List<BaseEffect> ListActivatedEffect;
 
-        private BattleCreatureInfo _SelfCreature;
-        public BattleCreatureInfo SelfCreature { get { return _SelfCreature; }
-            set { _SelfCreature = value; } }
+        public BattleCreatureInfo SelfCreature;
         public BattleCreatureInfo OpponentCreature;
 
         public bool CanUseEffectsOrAbilities;
