@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using ProjectEternity.Core.Editor;
-using static ProjectEternity.Core.Units.MultiForm.UnitMultiForm;
+using static ProjectEternity.Core.Units.Unit;
 
 namespace ProjectEternity.Editors.UnitTransformingEditor
 {

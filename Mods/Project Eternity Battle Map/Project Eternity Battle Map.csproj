@@ -403,11 +403,6 @@
       <Name>Roslyn</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Units\Project Eternity Unit Multi-Form\Project Eternity Unit Multi-Form.csproj">
-      <Project>{fa0bb5b5-c4e9-4e5c-be70-c859c2699cd6}</Project>
-      <Name>Project Eternity Unit Multi-Form</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Editor\Battle Map Viewer.resx">

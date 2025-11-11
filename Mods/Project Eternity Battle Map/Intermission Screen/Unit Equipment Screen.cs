@@ -6,7 +6,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Units.MultiForm;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -42,14 +41,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int CurrentMaxMobility;
         private int CurrentMaxMV;
         private Dictionary<byte, byte> DicTerrainLetterAttribute;
-        private List<UnitMultiForm> ListUnit;
+        private List<Unit> ListUnit;
 
         private DrawableMenu UnitSelectionMenu;
         private DrawableMenu EquipmentSelectionMenu;
 
         private List<Unit> ListPresentUnit;
 
-        public UnitMultiForm SelectedUnit { get { return ListUnit[UnitSelectionMenu.SelectedIndex]; } }
+        public Unit SelectedUnit { get { return ListUnit[UnitSelectionMenu.SelectedIndex]; } }
 
         public UnitEquipmentScreen(Roster PlayerRoster)
             : base()
@@ -82,13 +81,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 
-            ListUnit = new List<UnitMultiForm>();
+            ListUnit = new List<Unit>();
             for (int U = 0; U < ListPresentUnit.Count; ++U)
             {
-                var ActiveUnit = ListPresentUnit[U] as UnitMultiForm;
-                if (ActiveUnit != null)
+                if (ListPresentUnit[U].ArrayUnitStat != null)
                 {
-                    ListUnit.Add(ActiveUnit);
+                    ListUnit.Add(ListPresentUnit[U]);
                 }
             }
 
@@ -282,7 +280,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void DrawMenuEquipment(CustomSpriteBatch g, int ItemIndex, int X, int Y)
         {
-            UnitMultiForm.EquipmentInformations ActiveEquipement = SelectedUnit.ArrayUnitStat[ItemIndex];
+            Unit.EquipmentInformations ActiveEquipement = SelectedUnit.ArrayUnitStat[ItemIndex];
 
             g.DrawString(fntFinlanderFont, ActiveEquipement.EquipmentName, new Vector2(X, Y), Color.White);
         }

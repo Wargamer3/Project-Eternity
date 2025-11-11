@@ -13,32 +13,6 @@ namespace ProjectEternity.Core.Units.MultiForm
     {
         public override string UnitTypeName => "Multi-Form";
 
-        public struct EquipmentInformations
-        {
-            public UnitNormal UnitForm;
-            public string EquipmentUnitPath;
-            public string EquipmentName;
-
-            public EquipmentInformations(string EquipmentUnitPath, string EquipmentName)
-            {
-                UnitForm = null;
-                this.EquipmentUnitPath = EquipmentUnitPath;
-                this.EquipmentName = EquipmentName;
-            }
-
-            public override string ToString()
-            {
-                return EquipmentUnitPath;
-            }
-        }
-
-        public EquipmentInformations[] ArrayUnitStat;
-        public int ActiveUnitIndex;
-
-        private double HPPercentage;
-        private double ENPercentage;
-        private string OriginalName;
-
         public UnitMultiForm()
         { }
 
@@ -47,9 +21,6 @@ namespace ProjectEternity.Core.Units.MultiForm
             : base(Name)
         {
             this.ItemName = Name;
-            this.OriginalName = Name;
-            HPPercentage = 1;
-            ENPercentage = 1;
             ActiveUnitIndex = 0;
             ArrayCharacterActive = new Character[0];
             MaxCharacter = 1;
@@ -88,23 +59,6 @@ namespace ProjectEternity.Core.Units.MultiForm
         {
         }
 
-        public void ChangeUnit(int ActiveUnit)
-        {//Used to avoid updating HP, EN on Init.
-            if (this.ActiveUnitIndex != ActiveUnit)
-            {
-                HPPercentage = HP / (double)MaxHP;
-                ENPercentage = EN / (double)MaxEN;
-                this.ActiveUnitIndex = ActiveUnit;
-            }
-            
-            _UnitStat = ArrayUnitStat[ActiveUnit].UnitForm.UnitStat;
-            SpriteMap = ArrayUnitStat[ActiveUnit].UnitForm.SpriteMap;
-            SpriteUnit = ArrayUnitStat[ActiveUnit].UnitForm.SpriteUnit;
-
-            _HP = (int)(MaxHP * HPPercentage);
-            _EN = (int)(MaxEN * ENPercentage);
-        }
-
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
@@ -113,13 +67,10 @@ namespace ProjectEternity.Core.Units.MultiForm
 
         protected override void DoQuickSave(BinaryWriter BW)
         {
-            BW.Write(ActiveUnitIndex);
         }
 
         protected override void DoQuickLoad(BinaryReader BR, ContentManager Content)
         {
-            ActiveUnitIndex = BR.ReadInt32();
-            
             ChangeUnit(ActiveUnitIndex);
         }
 

@@ -17,6 +17,25 @@ namespace ProjectEternity.Core.Units
 {
     public abstract partial class Unit : ShopItem
     {
+        public struct EquipmentInformations
+        {
+            public Unit UnitForm;
+            public string EquipmentUnitPath;
+            public string EquipmentName;
+
+            public EquipmentInformations(string EquipmentUnitPath, string EquipmentName)
+            {
+                UnitForm = null;
+                this.EquipmentUnitPath = EquipmentUnitPath;
+                this.EquipmentName = EquipmentName;
+            }
+
+            public override string ToString()
+            {
+                return EquipmentUnitPath;
+            }
+        }
+
         public static readonly Dictionary<string, Unit> DicDefaultUnitType = new Dictionary<string, Unit>();//When you just need a placeholder outside of a game.
 
         public static char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
@@ -54,6 +73,9 @@ namespace ProjectEternity.Core.Units
         public UnitMap3D Unit3DSprite;
         public string Model3DPath;
         public AnimatedModel Unit3DModel;
+
+        public EquipmentInformations[] ArrayUnitStat;
+        public int ActiveUnitIndex;
 
         protected int _HP;
         protected int _EN;
@@ -319,6 +341,27 @@ namespace ProjectEternity.Core.Units
             _UnitStat.ShareStats(UnitToShareFrom._UnitStat, UnitLinkType);
         }
 
+        public void ChangeUnit(int ActiveUnit)
+        {
+            double HPPercentage = 1;
+            double ENPercentage = 1;
+
+            //Used to avoid updating HP, EN on Init.
+            if (this.ActiveUnitIndex != ActiveUnit)
+            {
+                HPPercentage = HP / (double)MaxHP;
+                ENPercentage = EN / (double)MaxEN;
+                this.ActiveUnitIndex = ActiveUnit;
+            }
+
+            _UnitStat = ArrayUnitStat[ActiveUnit].UnitForm.UnitStat;
+            SpriteMap = ArrayUnitStat[ActiveUnit].UnitForm.SpriteMap;
+            SpriteUnit = ArrayUnitStat[ActiveUnit].UnitForm.SpriteUnit;
+
+            _HP = (int)(MaxHP * HPPercentage);
+            _EN = (int)(MaxEN * ENPercentage);
+        }
+
         public static Dictionary<string, Unit> LoadAllUnits()
         {
             Dictionary<string, Unit> DicUnitType = new Dictionary<string, Unit>();
@@ -395,11 +438,12 @@ namespace ProjectEternity.Core.Units
 
             BW.Write(HP);
             BW.Write(EN);
-            BW.Write(_UnitStat.HPUpgrades.Value);
-            BW.Write(_UnitStat.ENUpgrades.Value);
-            BW.Write(_UnitStat.ArmorUpgrades.Value);
-            BW.Write(_UnitStat.MobilityUpgrades.Value);
-            BW.Write(_UnitStat.AttackUpgrades.Value);
+            BW.Write((byte)ActiveUnitIndex);
+            BW.Write((byte)_UnitStat.HPUpgrades.Value);
+            BW.Write((byte)_UnitStat.ENUpgrades.Value);
+            BW.Write((byte)_UnitStat.ArmorUpgrades.Value);
+            BW.Write((byte)_UnitStat.MobilityUpgrades.Value);
+            BW.Write((byte)_UnitStat.AttackUpgrades.Value);
 
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
@@ -442,11 +486,12 @@ namespace ProjectEternity.Core.Units
         {
             _HP = BR.ReadInt32();
             _EN = BR.ReadInt32();
-            _UnitStat.HPUpgrades.Value = BR.ReadInt32();
-            _UnitStat.ENUpgrades.Value = BR.ReadInt32();
-            _UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
-            _UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
-            _UnitStat.AttackUpgrades.Value = BR.ReadInt32();
+            ActiveUnitIndex = BR.ReadByte();
+            _UnitStat.HPUpgrades.Value = BR.ReadByte();
+            _UnitStat.ENUpgrades.Value = BR.ReadByte();
+            _UnitStat.ArmorUpgrades.Value = BR.ReadByte();
+            _UnitStat.MobilityUpgrades.Value = BR.ReadByte();
+            _UnitStat.AttackUpgrades.Value = BR.ReadByte();
 
             for (int P = 0; P < ArrayParts.Length; ++P)
             {

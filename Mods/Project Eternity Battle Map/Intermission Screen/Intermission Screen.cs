@@ -11,7 +11,6 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Units.MultiForm;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -99,8 +98,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int U = 0; U < ListPresentUnit.Count; ++U)
             {
-                var ActiveUnit = ListPresentUnit[U] as UnitMultiForm;
-                if (ActiveUnit != null)
+                if (ListPresentUnit[U].ArrayUnitStat != null)
                 {
                     UnitEquipmentAvailable = true;
                 }
