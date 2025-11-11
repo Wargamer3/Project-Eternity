@@ -84,6 +84,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         AddToPanelListAndSelect(new ActionPanelCreatureExchange(Map));
                         break;
                     case 4:
+                        if (!HasTerritoryAbility)
+                        {
+                            RemoveFromPanelList(this);
+                        }
+                        break;
+                    case 5:
                         RemoveFromPanelList(this);
                         break;
                 }

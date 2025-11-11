@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             base.LoadUnits();
 
-            foreach (KeyValuePair<string, Unit> ActiveUnit in Unit.LoadFromAssemblyFiles(Directory.GetFiles("Units/Conquest", "*.dll"), this))
+            foreach (KeyValuePair<string, Unit> ActiveUnit in Unit.LoadFromAssemblyFiles(Directory.GetFiles("Units/Conquest", "*.dll")))
             {
                 DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
             }

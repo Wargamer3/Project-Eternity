@@ -612,16 +612,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                TilesetPreset LoadedTileset = ReadTileset(BR.ReadString(), BR.ReadBoolean(), T);
+                TilesetPreset LoadedTileset = ReadTileset(BR.ReadString(), BR.ReadBoolean(), ListTilesetPreset.Count);
                 ListTilesetPreset.Add(LoadedTileset);
 
                 #region Load Tilesets
 
-                string SpritePath = ListTilesetPreset[T].ArrayTilesetInformation[0].TilesetName;
+                string SpritePath = LoadedTileset.ArrayTilesetInformation[0].TilesetName;
 
                 if (Content != null)
                 {
-                    if (ListTilesetPreset[T].TilesetType == TilesetPreset.TilesetTypes.Regular)
+                    if (LoadedTileset.TilesetType == TilesetPreset.TilesetTypes.Regular)
                     {
                         if (File.Exists("Content/Assets/Tilesets/" + SpritePath + ".xnb"))
                             ListTileSet.Add(Content.Load<Texture2D>("Assets/Tilesets/" + SpritePath));
@@ -639,10 +639,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 #endregion
 
-
                 for (int i = 1; i < LoadedTileset.ArrayTilesetInformation.Length; i++)
                 {
-                    SpritePath = ListTilesetPreset[T].ArrayTilesetInformation[i].TilesetName;
+                    SpritePath = LoadedTileset.ArrayTilesetInformation[i].TilesetName;
                     TilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
                     ListTilesetPreset.Add(ExtraTileset);
 

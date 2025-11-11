@@ -132,9 +132,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             List<int> Whitelist = ListTilesetPreset[NewTile.TilesetIndex].ArrayTilesetInformation[0].ListAllowedTerrainTypeIndex;
 
-            if (Whitelist.Count > 0 && !Whitelist.Contains(ArrayTerrain[GridX, GridY].TerrainTypeIndex))
+            if (Whitelist.Count > 0 && !Whitelist.Contains(ArrayTerrain[GridX, GridY].TerrainTypeIndex) && ArrayTile[GridX, GridY].TilesetIndex != NewTile.TilesetIndex)
             {
-                return false;
+                if (ListTilesetPreset[NewTile.TilesetIndex].TilesetType == TilesetTypes.Road)
+                {
+                    Whitelist = ListTilesetPreset[NewTile.TilesetIndex].ArrayTilesetInformation[1].ListAllowedTerrainTypeIndex;
+                    if (Whitelist.Count > 0 && !Whitelist.Contains(ArrayTerrain[GridX, GridY].TerrainTypeIndex))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
@@ -226,7 +237,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             switch (TilesetType)
             {
                 case TilesetTypes.Road:
-                case TilesetTypes.Bridge:
                     return UpdtateSmartTileRoad(NewTile, CurrentTerrain, GridX, GridY, TileSizeX, TileSizeY, ArrayTile, ListTilesetPreset);
 
                 case TilesetTypes.Ocean:
@@ -262,10 +272,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
 
-            bool LeftTileValid = false;
-            bool UpTileValid = false;
-            bool RightTileValid = false;
-            bool DownTileValid = false;
+            bool LeftTileValid = true;
+            bool UpTileValid = true;
+            bool RightTileValid = true;
+            bool DownTileValid = true;
 
             bool UpLeftTileValid = false;
             bool UpRightTileValid = false;
@@ -413,10 +423,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             ArrayTile[GridX, GridY].ArraySubTile = new Rectangle[]
                             {
-                                    new Rectangle(0 * TileSizeX,                        1 * TileSizeY, TileSizeX / 2, TopHalf),
-                                    new Rectangle(2 * TileSizeX + TileSizeX / 2,        2 * TileSizeY, TileSizeX / 2, TopHalf),
-                                    new Rectangle(0 * TileSizeX,                        3 * TileSizeY + TopHalf, TileSizeX / 2, BottomHalf),
-                                    new Rectangle(2 * TileSizeX + TileSizeX / 2,        3 * TileSizeY + TopHalf, TileSizeX / 2, BottomHalf),
+                                    new Rectangle(0 * TileSizeX,                        2 * TileSizeY, TileSizeX / 2, TopHalf),
+                                    new Rectangle(0 * TileSizeX + TileSizeX / 2,        3 * TileSizeY, TileSizeX / 2, TopHalf),
+                                    new Rectangle(0 * TileSizeX,                        2 * TileSizeY + TopHalf, TileSizeX / 2, BottomHalf),
+                                    new Rectangle(0 * TileSizeX + TileSizeX / 2,        1 * TileSizeY + TopHalf, TileSizeX / 2, BottomHalf),
                             };
                         }
                         else//Nothing Down

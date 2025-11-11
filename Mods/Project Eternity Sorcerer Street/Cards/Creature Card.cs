@@ -101,6 +101,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListSpellName.Add(SpellName);
                     ListSpellActivationAnimationPath.Add(SpellActivationAnimationPath);
                 }
+
+                TerritoryAbility = ListSpell[0];
             }
 
             int ArrayAffinityLength = BR.ReadInt32();
