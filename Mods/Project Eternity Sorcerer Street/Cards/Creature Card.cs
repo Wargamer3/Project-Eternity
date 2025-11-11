@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private CardAbilities BattleAbilities;//Based on EnchantAbilities
 
         public Enchant Enchant;
-        public BaseSkillActivation TerritoryAbility;
+        public ManualSkill TerritoryAbility;
 
         public CreatureCard(string Path)
             : base(Path, CreatureCardType)
@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public CreatureCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             : this(Path)
         {
             FileStream FS = new FileStream("Content/Sorcerer Street/Creature Cards/" + Path + ".pec", FileMode.Open, FileAccess.Read);
@@ -85,6 +85,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             OriginalST = CurrentST = BR.ReadInt32();
             Subtype = BR.ReadString();
             SkillChainName = BR.ReadString();
+
+            byte ListSpellCount = BR.ReadByte();
+            ListSpell = new List<ManualSkill>(ListSpellCount);
+            ListSpellName = new List<string>(ListSpellCount);
+            ListSpellActivationAnimationPath = new List<string>(ListSpellCount);
+            for (int S = 0; S < ListSpellCount; ++S)
+            {
+                string SpellName = BR.ReadString();
+                string SpellActivationAnimationPath = BR.ReadString();
+
+                if (!string.IsNullOrEmpty(SpellName))
+                {
+                    ListSpell.Add(new ManualSkill("Content/Sorcerer Street/Spells/" + SpellName + ".pes", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
+                    ListSpellName.Add(SpellName);
+                    ListSpellActivationAnimationPath.Add(SpellActivationAnimationPath);
+                }
+            }
 
             int ArrayAffinityLength = BR.ReadInt32();
             Abilities.ArrayElementAffinity = new ElementalAffinity[ArrayAffinityLength];
@@ -124,28 +141,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
                 for (int N = 0; N < tvSkillsNodesCount; ++N)
                 {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                     InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
 
                     ListActiveSkill.Add(ActiveSkill);
-
-                    foreach (BaseSkillActivation ActiveAcivation in ActiveSkill.CurrentSkillLevel.ListActivation)
-                    {
-                        if (TerritoryAbility != null)
-                        {
-                            break;
-                        }
-
-                        foreach (BaseSkillRequirement ActiveRequirement in ActiveAcivation.ListRequirement)
-                        {
-                            if (ActiveRequirement.SkillRequirementName == TerritoryRequirementName)
-                            {
-                                TerritoryAbility = ActiveAcivation;
-                                break;
-                            }
-                        }
-                    }
                 }
 
                 BRSkillChain.Close();

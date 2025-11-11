@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _CreatureName = BR.ReadString();
                 if (Params != null && _CreatureName != "Random")
                 {
-                    TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                    TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string[] ArrayCreatureFile = Directory.GetFiles(CreatureFolder, "*.pec", SearchOption.AllDirectories);
                 string SelectedCreature = ArrayCreatureFile[RandomHelper.Next(ArrayCreatureFile.Length)];
                 SelectedCreature = SelectedCreature.Remove(SelectedCreature.Length - 4, 4).Remove(0, CreatureFolder.Length);
-                TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
 
             return "Summon " + TransformationCreature.Name;

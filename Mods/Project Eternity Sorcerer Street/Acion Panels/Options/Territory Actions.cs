@@ -14,8 +14,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private TerrainSorcererStreet ActiveTerrain;
+        private bool HasTerritoryAbility;
         private bool AllTerritory;
-
 
         public ActionPanelTerritoryActions(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -33,7 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex, AllTerritory));
+            if (ActiveTerrain.DefendingCreature != null && ActiveTerrain.DefendingCreature.TerritoryAbility != null)
+            {
+                HasTerritoryAbility = true;
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -147,6 +150,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             CurrentY += LineHeight;
             g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
+
+            if (HasTerritoryAbility)
+            {
+                CurrentY += LineHeight;
+                g.DrawString(Map.fntMenuText, "Creature Ability", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            }
+
             CurrentY += LineHeight;
             g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 

@@ -66,8 +66,16 @@ namespace ProjectEternity.Editors.CardEditor
             BW.Write((byte)cboRarity.SelectedIndex);
             BW.Write((byte)cboType.SelectedIndex);
 
-            BW.Write(txtSkill.Text);
-            BW.Write(txtActivationAnimation.Text);
+            if (string.IsNullOrEmpty(txtSkill.Text))
+            {
+                BW.Write((byte)0);
+            }
+            else
+            {
+                BW.Write((byte)1);
+                BW.Write(txtSkill.Text);
+                BW.Write(txtActivationAnimation.Text);
+            }
 
             FS.Close();
             BW.Close();
@@ -91,8 +99,11 @@ namespace ProjectEternity.Editors.CardEditor
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
             cboType.SelectedIndex = (int)LoadedCard.SpellType;
 
-            txtSkill.Text = LoadedCard.SkillChainName;
-            txtActivationAnimation.Text = LoadedCard.SpellActivationAnimationPath;
+            if (LoadedCard.ListSpellName.Count > 0)
+            {
+                txtSkill.Text = LoadedCard.ListSpellName[0];
+                txtActivationAnimation.Text = LoadedCard.ListSpellActivationAnimationPath[0];
+            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

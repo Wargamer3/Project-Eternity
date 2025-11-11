@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _IsTemporary = BR.ReadBoolean();
             if (Params != null && _CreatureName != "Random" && _CreatureName != "Opponent")
             {
-                TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
         }
 
@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string[] ArrayCreatureFile = Directory.GetFiles(CreatureFolder, "*.pec", SearchOption.AllDirectories);
                 string SelectedCreature = ArrayCreatureFile[RandomHelper.Next(ArrayCreatureFile.Length)];
                 SelectedCreature = SelectedCreature.Remove(SelectedCreature.Length - 4, 4).Remove(0, CreatureFolder.Length);
-                TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
             else if (_CreatureName == "Opponent")
             {

@@ -26,11 +26,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string SpellCardType = "Spell";
 
         public SpellTypes SpellType;
-        public ManualSkill Spell;
 
         public bool Doublecast;
         public int DiscardCost;
-        public string SpellActivationAnimationPath;
 
         public SpellCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
@@ -50,12 +48,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Rarity = (CardRarities)BR.ReadByte();
             SpellType = (SpellTypes)BR.ReadByte();
 
-            SkillChainName = BR.ReadString();
-            SpellActivationAnimationPath = BR.ReadString();
-
-            if (!string.IsNullOrEmpty(SkillChainName))
+            byte ListSpellCount = BR.ReadByte();
+            ListSpell = new List<ManualSkill>(ListSpellCount);
+            ListSpellName = new List<string>(ListSpellCount);
+            ListSpellActivationAnimationPath = new List<string>(ListSpellCount);
+            for (int S = 0; S < ListSpellCount; ++S)
             {
-                Spell = new ManualSkill("Content/Sorcerer Street/Spells/" + SkillChainName + ".pes", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                string SpellName = BR.ReadString();
+                string SpellActivationAnimationPath = BR.ReadString();
+
+                if (!string.IsNullOrEmpty(SpellName))
+                {
+                    ListSpell.Add(new ManualSkill("Content/Sorcerer Street/Spells/" + SpellName + ".pes", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
+                    ListSpellName.Add(SpellName);
+                    ListSpellActivationAnimationPath.Add(SpellActivationAnimationPath);
+                }
             }
 
             ListActiveSkill = new List<BaseAutomaticSkill>();
@@ -79,11 +86,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SpellType = Clone.SpellType;
 
             SkillChainName = Clone.SkillChainName;
-            
-            if (!string.IsNullOrEmpty(SkillChainName))
+            ListSpell = new List<ManualSkill>(Clone.ListSpell.Count);
+
+            for (int S = 0; S < Clone.ListSpell.Count; ++S)
             {
-                Spell = new ManualSkill(Clone.Spell);
+                ManualSkill Spell = new ManualSkill(Clone.ListSpell[S]);
                 Spell.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                ListSpell.Add(Spell);
+                ListSpellName.Add(Clone.ListSpellName[S]);
+                ListSpellActivationAnimationPath.Add(Clone.ListSpellActivationAnimationPath[S]);
             }
 
             sprCard = Clone.sprCard;
@@ -130,7 +142,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Player ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             Map.GlobalPlayerContext.SetActiveCard(ActivePlayer.ListCardInHand.IndexOf(this), this);
-            Spell.ActiveSkillFromMenu();
+            ListSpell[0].ActiveSkillFromMenu();
             return null;
         }
 

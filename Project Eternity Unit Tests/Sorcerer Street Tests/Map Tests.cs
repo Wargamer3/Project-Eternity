@@ -112,7 +112,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             SorcererStreetMap DummyMap = CreateDummyMap();
             Player DummyPlayer = DummyMap.ListAllPlayer[0];
             DummyPlayer.GamePiece.Direction = DirectionRight;
-            ActionPanelMovementPhase MovementPhase = new ActionPanelMovementPhase(DummyMap, 0, 3);
+            ActionPanelMovementPhase MovementPhase = new ActionPanelMovementPhase(DummyMap, 0, 3, false);
 
             DummyMap.ListActionMenuChoice.AddToPanelListAndSelect(MovementPhase);
 

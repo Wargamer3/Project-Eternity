@@ -355,7 +355,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BaseSkillActivation DefaultActivation = new BaseSkillActivation();
             DefaultSkillLevel.ListActivation.Add(DefaultActivation);
 
-            DefaultActivation.ListRequirement.Add(new SorcererStreetEnchantPhaseRequirement());
+            DefaultActivation.ListRequirement.Add(new SorcererStreetBeforeBattleStartRequirement());
             DefaultActivation.ListEffect.Add(EffectToUse);
 
             DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
@@ -376,7 +376,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BaseSkillActivation DefaultActivation = new BaseSkillActivation();
             DefaultSkillLevel.ListActivation.Add(DefaultActivation);
 
-            DefaultActivation.ListRequirement.Add(new SorcererStreetEnchantPhaseRequirement());
+            DefaultActivation.ListRequirement.Add(new SorcererStreetBeforeBattleStartRequirement());
             DefaultActivation.ListEffect.AddRange(ListEffect);
 
             DefaultActivation.ListEffectTarget.Add(new List<string>() { EffectActivationExecuteOnly.Name });
@@ -470,6 +470,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override BaseSkillRequirement Copy()
         {
             return new SorcererStreetEnchantPhaseRequirement(Params);
+        }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
+    }
+
+    public sealed class SorcererStreetBeforeBattleStartRequirement : SorcererStreetRequirement
+    {
+        public SorcererStreetBeforeBattleStartRequirement()
+            : this(null)
+        {
+        }
+
+        public SorcererStreetBeforeBattleStartRequirement(SorcererStreetBattleParams Params)
+            : base(ActionPanelBattleAttackPhase.BeforeBattleStartRequirement, Params)
+        {
+        }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+        }
+
+        public override bool CanActivatePassive()
+        {
+            return false;
+        }
+
+        public override BaseSkillRequirement Copy()
+        {
+            return new SorcererStreetBeforeBattleStartRequirement(Params);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

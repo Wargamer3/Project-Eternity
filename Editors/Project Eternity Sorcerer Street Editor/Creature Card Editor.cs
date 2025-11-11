@@ -13,7 +13,7 @@ namespace ProjectEternity.Editors.CardEditor
 {
     public partial class CreatureCardEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { Animation, Skill };
+        private enum ItemSelectionChoices { SkillAnimation, Skill, Spell, SpellAnimation };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -68,6 +68,17 @@ namespace ProjectEternity.Editors.CardEditor
             BW.Write((int)txtMaxST.Value);
             BW.Write(cboSubtype.Text);
             BW.Write(txtSkill.Text);
+
+            if (string.IsNullOrEmpty(txtSpell.Text))
+            {
+                BW.Write((byte)0);
+            }
+            else
+            {
+                BW.Write((byte)1);
+                BW.Write(txtSpell.Text);
+                BW.Write(txtSpellAnimation.Text);
+            }
 
             #region Affinities
 
@@ -181,7 +192,7 @@ namespace ProjectEternity.Editors.CardEditor
         private void LoadCard(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(39);
-            CreatureCard LoadedCard = new CreatureCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+            CreatureCard LoadedCard = new CreatureCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, Core.Skill.ManualSkillTarget.DicDefaultTarget);
 
             this.Text = LoadedCard.Name + " - Project Eternity Creature Card Editor";
 
@@ -297,7 +308,7 @@ namespace ProjectEternity.Editors.CardEditor
 
         private void btnSetAttackAnimation_Click(object sender, EventArgs e)
         {
-            ItemSelectionChoice = ItemSelectionChoices.Animation;
+            ItemSelectionChoice = ItemSelectionChoices.SkillAnimation;
             ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
@@ -305,6 +316,18 @@ namespace ProjectEternity.Editors.CardEditor
         {
             ItemSelectionChoice = ItemSelectionChoices.Skill;
             ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetSkillChains));
+        }
+
+        private void btnSetSpell_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Spell;
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetSpells));
+        }
+
+        private void btnSetActivationAnimation_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.SkillAnimation;
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -317,7 +340,7 @@ namespace ProjectEternity.Editors.CardEditor
             {
                 switch (ItemSelectionChoice)
                 {
-                    case ItemSelectionChoices.Animation:
+                    case ItemSelectionChoices.SkillAnimation:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
                         txtAttackAnimation.Text = Name;
                         break;
@@ -332,6 +355,23 @@ namespace ProjectEternity.Editors.CardEditor
                             Name = Items[I].Substring(0, Items[I].Length - 5).Substring(37);
                             txtSkill.Text = Name;
                         }
+                        break;
+
+                    case ItemSelectionChoices.Spell:
+                        if (Items[I] == null)
+                        {
+                            txtSkill.Text = string.Empty;
+                        }
+                        else
+                        {
+                            Name = Items[I].Substring(0, Items[I].Length - 4).Substring(31);
+                            txtSkill.Text = Name;
+                        }
+                        break;
+
+                    case ItemSelectionChoices.SpellAnimation:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
+                        txtSpellAnimation.Text = Name;
                         break;
                 }
             }

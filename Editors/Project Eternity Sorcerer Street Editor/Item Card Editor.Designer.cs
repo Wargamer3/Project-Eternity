@@ -35,10 +35,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cboCategory = new System.Windows.Forms.ComboBox();
             this.lblCategory = new System.Windows.Forms.Label();
-            this.txtActivationAnimation = new System.Windows.Forms.TextBox();
+            this.txtAttackAnimation = new System.Windows.Forms.TextBox();
             this.lblActivationAnimation = new System.Windows.Forms.Label();
-            this.btnSetActivationAnimation = new System.Windows.Forms.Button();
-            this.lblSkill = new System.Windows.Forms.Label();
+            this.btnSetAttackAnimation = new System.Windows.Forms.Button();
+            this.lblPassiveSkill = new System.Windows.Forms.Label();
             this.txtSkill = new System.Windows.Forms.TextBox();
             this.btnSetSkill = new System.Windows.Forms.Button();
             this.cboRarity = new System.Windows.Forms.ComboBox();
@@ -49,10 +49,17 @@
             this.lblName = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.gbDescription = new System.Windows.Forms.GroupBox();
+            this.gbSpell = new System.Windows.Forms.GroupBox();
+            this.txtSpellAnimation = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnSetActivationAnimation = new System.Windows.Forms.Button();
+            this.txtSpell = new System.Windows.Forms.TextBox();
+            this.btnSetSpell = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).BeginInit();
             this.gbDescription.SuspendLayout();
+            this.gbSpell.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -78,10 +85,10 @@
             this.gbCardInformation.Controls.Add(this.label1);
             this.gbCardInformation.Controls.Add(this.cboCategory);
             this.gbCardInformation.Controls.Add(this.lblCategory);
-            this.gbCardInformation.Controls.Add(this.txtActivationAnimation);
+            this.gbCardInformation.Controls.Add(this.txtAttackAnimation);
             this.gbCardInformation.Controls.Add(this.lblActivationAnimation);
-            this.gbCardInformation.Controls.Add(this.btnSetActivationAnimation);
-            this.gbCardInformation.Controls.Add(this.lblSkill);
+            this.gbCardInformation.Controls.Add(this.btnSetAttackAnimation);
+            this.gbCardInformation.Controls.Add(this.lblPassiveSkill);
             this.gbCardInformation.Controls.Add(this.txtSkill);
             this.gbCardInformation.Controls.Add(this.btnSetSkill);
             this.gbCardInformation.Controls.Add(this.cboRarity);
@@ -92,7 +99,7 @@
             this.gbCardInformation.Controls.Add(this.lblName);
             this.gbCardInformation.Location = new System.Drawing.Point(12, 27);
             this.gbCardInformation.Name = "gbCardInformation";
-            this.gbCardInformation.Size = new System.Drawing.Size(204, 269);
+            this.gbCardInformation.Size = new System.Drawing.Size(204, 275);
             this.gbCardInformation.TabIndex = 28;
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
@@ -142,42 +149,42 @@
             this.lblCategory.TabIndex = 49;
             this.lblCategory.Text = "Category:";
             // 
-            // txtActivationAnimation
+            // txtAttackAnimation
             // 
-            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 242);
-            this.txtActivationAnimation.Name = "txtActivationAnimation";
-            this.txtActivationAnimation.Size = new System.Drawing.Size(148, 20);
-            this.txtActivationAnimation.TabIndex = 48;
-            this.txtActivationAnimation.TabStop = false;
+            this.txtAttackAnimation.Location = new System.Drawing.Point(6, 242);
+            this.txtAttackAnimation.Name = "txtAttackAnimation";
+            this.txtAttackAnimation.Size = new System.Drawing.Size(148, 20);
+            this.txtAttackAnimation.TabIndex = 48;
+            this.txtAttackAnimation.TabStop = false;
             // 
             // lblActivationAnimation
             // 
             this.lblActivationAnimation.AutoSize = true;
             this.lblActivationAnimation.Location = new System.Drawing.Point(6, 196);
             this.lblActivationAnimation.Name = "lblActivationAnimation";
-            this.lblActivationAnimation.Size = new System.Drawing.Size(106, 13);
+            this.lblActivationAnimation.Size = new System.Drawing.Size(136, 13);
             this.lblActivationAnimation.TabIndex = 47;
-            this.lblActivationAnimation.Text = "Activation Animation:";
+            this.lblActivationAnimation.Text = "Battle Activation Animation:";
             // 
-            // btnSetActivationAnimation
+            // btnSetAttackAnimation
             // 
-            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 240);
-            this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
-            this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
-            this.btnSetActivationAnimation.TabIndex = 46;
-            this.btnSetActivationAnimation.TabStop = false;
-            this.btnSetActivationAnimation.Text = "Set";
-            this.btnSetActivationAnimation.UseVisualStyleBackColor = true;
-            this.btnSetActivationAnimation.Click += new System.EventHandler(this.btnSetActivationAnimation_Click);
+            this.btnSetAttackAnimation.Location = new System.Drawing.Point(160, 240);
+            this.btnSetAttackAnimation.Name = "btnSetAttackAnimation";
+            this.btnSetAttackAnimation.Size = new System.Drawing.Size(38, 23);
+            this.btnSetAttackAnimation.TabIndex = 46;
+            this.btnSetAttackAnimation.TabStop = false;
+            this.btnSetAttackAnimation.Text = "Set";
+            this.btnSetAttackAnimation.UseVisualStyleBackColor = true;
+            this.btnSetAttackAnimation.Click += new System.EventHandler(this.btnSetAttackAnimation_Click);
             // 
-            // lblSkill
+            // lblPassiveSkill
             // 
-            this.lblSkill.AutoSize = true;
-            this.lblSkill.Location = new System.Drawing.Point(6, 128);
-            this.lblSkill.Name = "lblSkill";
-            this.lblSkill.Size = new System.Drawing.Size(29, 13);
-            this.lblSkill.TabIndex = 45;
-            this.lblSkill.Text = "Skill:";
+            this.lblPassiveSkill.AutoSize = true;
+            this.lblPassiveSkill.Location = new System.Drawing.Point(6, 128);
+            this.lblPassiveSkill.Name = "lblPassiveSkill";
+            this.lblPassiveSkill.Size = new System.Drawing.Size(69, 13);
+            this.lblPassiveSkill.TabIndex = 45;
+            this.lblPassiveSkill.Text = "Passive Skill:";
             // 
             // txtSkill
             // 
@@ -265,7 +272,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(192, 144);
+            this.txtDescription.Size = new System.Drawing.Size(192, 125);
             this.txtDescription.TabIndex = 4;
             // 
             // gbDescription
@@ -273,16 +280,78 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(222, 27);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(200, 169);
+            this.gbDescription.Size = new System.Drawing.Size(200, 150);
             this.gbDescription.TabIndex = 32;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
+            // 
+            // gbSpell
+            // 
+            this.gbSpell.Controls.Add(this.txtSpellAnimation);
+            this.gbSpell.Controls.Add(this.label2);
+            this.gbSpell.Controls.Add(this.btnSetActivationAnimation);
+            this.gbSpell.Controls.Add(this.txtSpell);
+            this.gbSpell.Controls.Add(this.btnSetSpell);
+            this.gbSpell.Location = new System.Drawing.Point(222, 183);
+            this.gbSpell.Name = "gbSpell";
+            this.gbSpell.Size = new System.Drawing.Size(200, 119);
+            this.gbSpell.TabIndex = 33;
+            this.gbSpell.TabStop = false;
+            this.gbSpell.Text = "Spell";
+            // 
+            // txtActivationAnimation
+            // 
+            this.txtSpellAnimation.Location = new System.Drawing.Point(6, 87);
+            this.txtSpellAnimation.Name = "txtActivationAnimation";
+            this.txtSpellAnimation.Size = new System.Drawing.Size(148, 20);
+            this.txtSpellAnimation.TabIndex = 54;
+            this.txtSpellAnimation.TabStop = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 71);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 13);
+            this.label2.TabIndex = 53;
+            this.label2.Text = "Activation Animation:";
+            // 
+            // btnSetActivationAnimation
+            // 
+            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 85);
+            this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
+            this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
+            this.btnSetActivationAnimation.TabIndex = 52;
+            this.btnSetActivationAnimation.TabStop = false;
+            this.btnSetActivationAnimation.Text = "Set";
+            this.btnSetActivationAnimation.UseVisualStyleBackColor = true;
+            this.btnSetActivationAnimation.Click += new System.EventHandler(this.btnSetActivationAnimation_Click);
+            // 
+            // txtSpell
+            // 
+            this.txtSpell.Location = new System.Drawing.Point(6, 19);
+            this.txtSpell.Name = "txtSpell";
+            this.txtSpell.Size = new System.Drawing.Size(192, 20);
+            this.txtSpell.TabIndex = 50;
+            this.txtSpell.TabStop = false;
+            // 
+            // btnSetSpell
+            // 
+            this.btnSetSpell.Location = new System.Drawing.Point(6, 45);
+            this.btnSetSpell.Name = "btnSetSpell";
+            this.btnSetSpell.Size = new System.Drawing.Size(130, 23);
+            this.btnSetSpell.TabIndex = 49;
+            this.btnSetSpell.TabStop = false;
+            this.btnSetSpell.Text = "Set Skill";
+            this.btnSetSpell.UseVisualStyleBackColor = true;
+            this.btnSetSpell.Click += new System.EventHandler(this.btnSetSpell_Click);
             // 
             // ItemCardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 308);
+            this.ClientSize = new System.Drawing.Size(434, 314);
+            this.Controls.Add(this.gbSpell);
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbCardInformation);
@@ -296,6 +365,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).EndInit();
             this.gbDescription.ResumeLayout(false);
             this.gbDescription.PerformLayout();
+            this.gbSpell.ResumeLayout(false);
+            this.gbSpell.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,16 +384,22 @@
         private System.Windows.Forms.NumericUpDown txtMagicCost;
         private System.Windows.Forms.Label lblRarity;
         private System.Windows.Forms.ComboBox cboRarity;
-        private System.Windows.Forms.Label lblSkill;
+        private System.Windows.Forms.Label lblPassiveSkill;
         private System.Windows.Forms.TextBox txtSkill;
         private System.Windows.Forms.Button btnSetSkill;
-        private System.Windows.Forms.TextBox txtActivationAnimation;
+        private System.Windows.Forms.TextBox txtAttackAnimation;
         private System.Windows.Forms.Label lblActivationAnimation;
-        private System.Windows.Forms.Button btnSetActivationAnimation;
+        private System.Windows.Forms.Button btnSetAttackAnimation;
         private System.Windows.Forms.GroupBox gbDescription;
         private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.Label lblCategory;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox gbSpell;
+        private System.Windows.Forms.TextBox txtSpellAnimation;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnSetActivationAnimation;
+        private System.Windows.Forms.TextBox txtSpell;
+        private System.Windows.Forms.Button btnSetSpell;
     }
 }

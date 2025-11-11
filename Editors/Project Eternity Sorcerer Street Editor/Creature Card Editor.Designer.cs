@@ -45,9 +45,15 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.gbCreatureInformation = new System.Windows.Forms.GroupBox();
+            this.btnSetActivationAnimation = new System.Windows.Forms.Button();
+            this.txtSpellAnimation = new System.Windows.Forms.TextBox();
+            this.lblActivationAnimation = new System.Windows.Forms.Label();
+            this.lblSpell = new System.Windows.Forms.Label();
+            this.txtSpell = new System.Windows.Forms.TextBox();
+            this.btnSetSpell = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cboSubtype = new System.Windows.Forms.ComboBox();
-            this.lblSkill = new System.Windows.Forms.Label();
+            this.lblPassiveSkill = new System.Windows.Forms.Label();
             this.txtSkill = new System.Windows.Forms.TextBox();
             this.btnSetSkill = new System.Windows.Forms.Button();
             this.txtMaxST = new System.Windows.Forms.NumericUpDown();
@@ -270,9 +276,15 @@
             // 
             // gbCreatureInformation
             // 
+            this.gbCreatureInformation.Controls.Add(this.btnSetActivationAnimation);
+            this.gbCreatureInformation.Controls.Add(this.txtSpellAnimation);
+            this.gbCreatureInformation.Controls.Add(this.lblActivationAnimation);
+            this.gbCreatureInformation.Controls.Add(this.lblSpell);
+            this.gbCreatureInformation.Controls.Add(this.txtSpell);
+            this.gbCreatureInformation.Controls.Add(this.btnSetSpell);
             this.gbCreatureInformation.Controls.Add(this.label1);
             this.gbCreatureInformation.Controls.Add(this.cboSubtype);
-            this.gbCreatureInformation.Controls.Add(this.lblSkill);
+            this.gbCreatureInformation.Controls.Add(this.lblPassiveSkill);
             this.gbCreatureInformation.Controls.Add(this.txtSkill);
             this.gbCreatureInformation.Controls.Add(this.btnSetSkill);
             this.gbCreatureInformation.Controls.Add(this.txtMaxST);
@@ -281,10 +293,66 @@
             this.gbCreatureInformation.Controls.Add(this.lblMaxHP);
             this.gbCreatureInformation.Location = new System.Drawing.Point(222, 27);
             this.gbCreatureInformation.Name = "gbCreatureInformation";
-            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 183);
+            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 306);
             this.gbCreatureInformation.TabIndex = 29;
             this.gbCreatureInformation.TabStop = false;
             this.gbCreatureInformation.Text = "Creature Information";
+            // 
+            // btnSetActivationAnimation
+            // 
+            this.btnSetActivationAnimation.Location = new System.Drawing.Point(98, 264);
+            this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
+            this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
+            this.btnSetActivationAnimation.TabIndex = 54;
+            this.btnSetActivationAnimation.TabStop = false;
+            this.btnSetActivationAnimation.Text = "Set";
+            this.btnSetActivationAnimation.UseVisualStyleBackColor = true;
+            this.btnSetActivationAnimation.Click += new System.EventHandler(this.btnSetActivationAnimation_Click);
+            // 
+            // txtActivationAnimation
+            // 
+            this.txtSpellAnimation.Location = new System.Drawing.Point(6, 264);
+            this.txtSpellAnimation.Name = "txtActivationAnimation";
+            this.txtSpellAnimation.Size = new System.Drawing.Size(86, 20);
+            this.txtSpellAnimation.TabIndex = 53;
+            this.txtSpellAnimation.TabStop = false;
+            // 
+            // lblActivationAnimation
+            // 
+            this.lblActivationAnimation.AutoSize = true;
+            this.lblActivationAnimation.Location = new System.Drawing.Point(6, 248);
+            this.lblActivationAnimation.Name = "lblActivationAnimation";
+            this.lblActivationAnimation.Size = new System.Drawing.Size(106, 13);
+            this.lblActivationAnimation.TabIndex = 52;
+            this.lblActivationAnimation.Text = "Activation Animation:";
+            // 
+            // lblSpell
+            // 
+            this.lblSpell.AutoSize = true;
+            this.lblSpell.Location = new System.Drawing.Point(6, 180);
+            this.lblSpell.Name = "lblSpell";
+            this.lblSpell.Size = new System.Drawing.Size(33, 13);
+            this.lblSpell.TabIndex = 51;
+            this.lblSpell.Text = "Spell:";
+            // 
+            // txtSpell
+            // 
+            this.txtSpell.Location = new System.Drawing.Point(6, 196);
+            this.txtSpell.Name = "txtSpell";
+            this.txtSpell.Size = new System.Drawing.Size(130, 20);
+            this.txtSpell.TabIndex = 50;
+            this.txtSpell.TabStop = false;
+            // 
+            // btnSetSpell
+            // 
+            this.btnSetSpell.Location = new System.Drawing.Point(6, 222);
+            this.btnSetSpell.Name = "btnSetSpell";
+            this.btnSetSpell.Size = new System.Drawing.Size(130, 23);
+            this.btnSetSpell.TabIndex = 49;
+            this.btnSetSpell.TabStop = false;
+            this.btnSetSpell.Text = "Set Spell";
+            this.btnSetSpell.UseVisualStyleBackColor = true;
+            this.btnSetSpell.Click += new System.EventHandler(this.btnSetSpell_Click);
             // 
             // label1
             // 
@@ -308,14 +376,14 @@
             this.cboSubtype.Size = new System.Drawing.Size(130, 21);
             this.cboSubtype.TabIndex = 7;
             // 
-            // lblSkill
+            // lblPassiveSkill
             // 
-            this.lblSkill.AutoSize = true;
-            this.lblSkill.Location = new System.Drawing.Point(6, 112);
-            this.lblSkill.Name = "lblSkill";
-            this.lblSkill.Size = new System.Drawing.Size(29, 13);
-            this.lblSkill.TabIndex = 42;
-            this.lblSkill.Text = "Skill:";
+            this.lblPassiveSkill.AutoSize = true;
+            this.lblPassiveSkill.Location = new System.Drawing.Point(6, 112);
+            this.lblPassiveSkill.Name = "lblPassiveSkill";
+            this.lblPassiveSkill.Size = new System.Drawing.Size(69, 13);
+            this.lblPassiveSkill.TabIndex = 42;
+            this.lblPassiveSkill.Text = "Passive Skill:";
             // 
             // txtSkill
             // 
@@ -776,10 +844,16 @@
         private System.Windows.Forms.Button btnSetAttackAnimation;
         private System.Windows.Forms.NumericUpDown txtCardSacrificed;
         private System.Windows.Forms.Label lblCardSacrificed;
-        private System.Windows.Forms.Label lblSkill;
+        private System.Windows.Forms.Label lblPassiveSkill;
         private System.Windows.Forms.TextBox txtSkill;
         private System.Windows.Forms.Button btnSetSkill;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cboSubtype;
+        private System.Windows.Forms.Label lblSpell;
+        private System.Windows.Forms.TextBox txtSpell;
+        private System.Windows.Forms.Button btnSetSpell;
+        private System.Windows.Forms.TextBox txtSpellAnimation;
+        private System.Windows.Forms.Label lblActivationAnimation;
+        private System.Windows.Forms.Button btnSetActivationAnimation;
     }
 }

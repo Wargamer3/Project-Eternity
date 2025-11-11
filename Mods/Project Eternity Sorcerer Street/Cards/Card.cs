@@ -247,7 +247,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public TagSystem TeamTags;
         public EffectHolder Effects;
         public string SkillChainName;
-        public List<BaseAutomaticSkill> ListActiveSkill;
+        public List<BaseAutomaticSkill> ListActiveSkill;//Passive abilities
+        public List<string> ListSpellName;
+        public List<string> ListSpellActivationAnimationPath;
+        public List<ManualSkill> ListSpell;
 
         public const int BoxWidth = 620;
 
@@ -296,7 +299,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "Creature Cards":
                     if (!DicCardsByType[CreatureCard.CreatureCardType].TryGetValue(Path, out LoadedCard))
                     {
-                        LoadedCard = new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                        LoadedCard = new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
                         DicCardsByType[CreatureCard.CreatureCardType].Add(Path, LoadedCard);
                     }
                     break;
@@ -305,7 +308,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "Item Cards":
                     if (!DicCardsByType[ItemCard.ItemCardType].TryGetValue(Path, out LoadedCard))
                     {
-                        LoadedCard = new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                        LoadedCard = new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
                         DicCardsByType[ItemCard.ItemCardType].Add(Path, LoadedCard);
                     }
                     break;

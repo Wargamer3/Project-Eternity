@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string ItemActivationAnimationPath;
 
         public ItemCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             :base(Path, ItemCardType)
         {
             FileStream FS = new FileStream("Content/Sorcerer Street/Item Cards/" + Path + ".pec", FileMode.Open, FileAccess.Read);
@@ -39,6 +39,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SkillChainName = BR.ReadString();
             ItemActivationAnimationPath = BR.ReadString();
 
+            byte ListSpellCount = BR.ReadByte();
+            ListSpell = new List<ManualSkill>(ListSpellCount);
+            ListSpellName = new List<string>(ListSpellCount);
+            ListSpellActivationAnimationPath = new List<string>(ListSpellCount);
+            for (int S = 0; S < ListSpellCount; ++S)
+            {
+                string SpellName = BR.ReadString();
+                string SpellActivationAnimationPath = BR.ReadString();
+
+                if (!string.IsNullOrEmpty(SpellName))
+                {
+                    ListSpell.Add(new ManualSkill("Content/Sorcerer Street/Spells/" + SpellName + ".pes", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
+                    ListSpellName.Add(SpellName);
+                    ListSpellActivationAnimationPath.Add(SpellActivationAnimationPath);
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
             {
                 FileStream FSSkillChain = new FileStream("Content/Sorcerer Street/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
@@ -49,7 +66,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
                 for (int N = 0; N < tvSkillsNodesCount; ++N)
                 {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                     InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
 
@@ -63,7 +80,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ListActiveSkill = new List<BaseAutomaticSkill>();
             }
-
             BR.Close();
             FS.Close();
 

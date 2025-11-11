@@ -10,7 +10,7 @@ namespace ProjectEternity.Editors.CardEditor
 {
     public partial class ItemCardEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { Skill, Animation };
+        private enum ItemSelectionChoices { SkillAnimation, Skill, Spell, SpellAnimation };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -62,7 +62,18 @@ namespace ProjectEternity.Editors.CardEditor
             BW.Write((byte)cboCategory.SelectedIndex);
 
             BW.Write(txtSkill.Text);
-            BW.Write(txtActivationAnimation.Text);
+            BW.Write(txtAttackAnimation.Text);
+
+            if (string.IsNullOrEmpty(txtSpell.Text))
+            {
+                BW.Write((byte)0);
+            }
+            else
+            {
+                BW.Write((byte)1);
+                BW.Write(txtSpell.Text);
+                BW.Write(txtSpellAnimation.Text);
+            }
 
             FS.Close();
             BW.Close();
@@ -71,14 +82,14 @@ namespace ProjectEternity.Editors.CardEditor
         private void LoadCard(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(35);
-            ItemCard LoadedCard = new ItemCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+            ItemCard LoadedCard = new ItemCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, Core.Skill.ManualSkillTarget.DicDefaultTarget);
 
             this.Text = LoadedCard.Name + " - Project Eternity Item Card Editor";
 
             txtName.Text = LoadedCard.Name;
             txtDescription.Text = LoadedCard.Description;
             txtSkill.Text = LoadedCard.SkillChainName;
-            txtActivationAnimation.Text = LoadedCard.ItemActivationAnimationPath;
+            txtAttackAnimation.Text = LoadedCard.ItemActivationAnimationPath;
 
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
@@ -96,10 +107,20 @@ namespace ProjectEternity.Editors.CardEditor
             ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetSkillChains));
         }
 
+        private void btnSetAttackAnimation_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.SkillAnimation;
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
+        }
+
+        private void btnSetSpell_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void btnSetActivationAnimation_Click(object sender, EventArgs e)
         {
-            ItemSelectionChoice = ItemSelectionChoices.Animation;
-            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathAnimations));
+
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -124,9 +145,26 @@ namespace ProjectEternity.Editors.CardEditor
                         }
                         break;
 
-                    case ItemSelectionChoices.Animation:
+                    case ItemSelectionChoices.SkillAnimation:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
-                        txtActivationAnimation.Text = Name;
+                        txtAttackAnimation.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.Spell:
+                        if (Items[I] == null)
+                        {
+                            txtSkill.Text = string.Empty;
+                        }
+                        else
+                        {
+                            Name = Items[I].Substring(0, Items[I].Length - 4).Substring(31);
+                            txtSkill.Text = Name;
+                        }
+                        break;
+
+                    case ItemSelectionChoices.SpellAnimation:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
+                        txtSpellAnimation.Text = Name;
                         break;
                 }
             }

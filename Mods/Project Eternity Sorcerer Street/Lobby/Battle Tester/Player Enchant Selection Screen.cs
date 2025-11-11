@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
@@ -22,14 +23,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private SorcererStreetBattleContext Context;
         private BattleCreatureInfo Invader;
         private BattleCreatureInfo Defender;
-        private SpellCard ActiveSpellCard;
+        private ManualSkill ActiveSpell;
 
-        public PlayerEnchantSelectionScreen(SorcererStreetBattleContext Context, BattleCreatureInfo Invader, BattleCreatureInfo Defender, SpellCard ActiveSpellCard)
+        public PlayerEnchantSelectionScreen(SorcererStreetBattleContext Context, BattleCreatureInfo Invader, BattleCreatureInfo Defender, ManualSkill ActiveSpell)
         {
             this.Context = Context;
             this.Invader = Invader;
             this.Defender = Defender;
-            this.ActiveSpellCard = ActiveSpellCard;
+            this.ActiveSpell = ActiveSpell;
         }
 
         public override void Load()
@@ -44,9 +45,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Context.SelfCreature = Invader;
                 Context.OpponentCreature = Defender;
 
-                for (int E = ActiveSpellCard.Spell.ListEffect.Count - 1; E >= 0; --E)
+                for (int E = ActiveSpell.ListEffect.Count - 1; E >= 0; --E)
                 {
-                    BaseEffect ActiveEffect = ActiveSpellCard.Spell.ListEffect[E].Copy();
+                    BaseEffect ActiveEffect = ActiveSpell.ListEffect[E].Copy();
 
                     ActiveEffect.ExecuteEffect();
                 }

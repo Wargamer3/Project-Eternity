@@ -722,7 +722,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case SetupChoices.DefenderEnchant:
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
-                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
+                    if (ActiveSpellCard.ListSpell[0].Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                     {
                         ActiveSpellCard.GetAvailableActivation(null);
                     }
@@ -730,17 +730,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case SetupChoices.InvaderPlayerEnchant:
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
-                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
+                    if (ActiveSpellCard.ListSpell[0].Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                     {
-                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.SelfCreature, Context.OpponentCreature, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.SelfCreature, Context.OpponentCreature, ActiveSpellCard.ListSpell[0]));
                     }
                     break;
 
                 case SetupChoices.DefenderPlayerEnchant:
                     ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
-                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
+                    if (ActiveSpellCard.ListSpell[0].Target.TargetType == ManualSkillActivationSorcererStreet.AllPlayerTargetType)
                     {
-                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.OpponentCreature, Context.SelfCreature, ActiveSpellCard));
+                        PushScreen(new PlayerEnchantSelectionScreen(Context, Context.OpponentCreature, Context.SelfCreature, ActiveSpellCard.ListSpell[0]));
                     }
                     break;
             }
