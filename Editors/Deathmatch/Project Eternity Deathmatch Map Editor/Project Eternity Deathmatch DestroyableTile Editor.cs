@@ -58,7 +58,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
 
             public string GetEditorPath()
             {
-                return EditorHelper.GUIRootPathMaDestroyableTilesImages;
+                return EditorHelper.GUIRootPathMapDestroyableTilesImages;
             }
         }
 
@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaDestroyableTilesPresetsDeathmatch, EditorHelper.GUIRootPathMaDestroyableTilesPresets }, "Deathmatch/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityDeathmatchProjectEternityDestroyableTileEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapDestroyableTilesPresetsDeathmatch, EditorHelper.GUIRootPathMapDestroyableTilesPresets }, "Deathmatch/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityDeathmatchProjectEternityDestroyableTileEditor), true)
             };
 
             return Info;

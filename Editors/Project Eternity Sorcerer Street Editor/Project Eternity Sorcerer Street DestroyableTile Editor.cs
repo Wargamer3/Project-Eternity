@@ -83,7 +83,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaDestroyableTilesPresetsSorcererStreet, EditorHelper.GUIRootPathMaDestroyableTilesPresets }, "Sorcerer Street/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternitySorcererStreetDestroyableTileEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapDestroyableTilesPresetsSorcererStreet, EditorHelper.GUIRootPathMapDestroyableTilesPresets }, "Sorcerer Street/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternitySorcererStreetDestroyableTileEditor), true)
             };
 
             return Info;

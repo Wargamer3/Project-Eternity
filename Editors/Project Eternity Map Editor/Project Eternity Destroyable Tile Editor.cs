@@ -153,6 +153,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             }
 
             BW.Write(TilesetTypeIndex);
+            BW.Write((int)txtHP.Value);
             BW.Write((byte)ListActiveTab.Count);
 
             foreach (TabContent ActiveTab in ListActiveTab)
@@ -192,6 +193,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             BR.Close();
             FS.Close();
 
+            txtHP.Value = NewTilesetPreset.HP;
             cboBattleAnimationBackground.Items.Clear();
             cboBattleAnimationBackground.Items.Add("None");
             cboBattleAnimationForeground.Items.Clear();
@@ -220,6 +222,10 @@ namespace ProjectEternity.Editors.TilesetEditor
 
                 TabContent ActiveTab = ListActiveTab[i];
                 ActiveTab.TilesetInfo.TilesetName = ActiveTileset.TilesetName;
+
+                ActiveTab.TilesetInfo.AnimationFrames = ActiveTileset.AnimationFrames;
+
+                ActiveTab.TilesetInfo.ListAllowedTerrainTypeIndex = ActiveTileset.ListAllowedTerrainTypeIndex;
 
                 ActiveTab.TilesetInfo.ArrayTerrain = ActiveTileset.ArrayTerrain;
                 ActiveTab.TilesetInfo.ArrayTiles = ActiveTileset.ArrayTiles;
@@ -251,6 +257,8 @@ namespace ProjectEternity.Editors.TilesetEditor
                     tabControl1.TabPages[0].Text = "Main";
                 }
             }
+
+            txtAnimationFrame.Value = ActiveTab.TilesetInfo.AnimationFrames;
 
             AllowEvent = true;
 
@@ -306,6 +314,8 @@ namespace ProjectEternity.Editors.TilesetEditor
             if (tabControl1.SelectedIndex >= 0)
             {
                 SelectTile(ActiveTab.viewerTilesetTab.ListTileBrush[0].X, ActiveTab.viewerTilesetTab.ListTileBrush[0].Y);
+
+                txtAnimationFrame.Value = ActiveTab.TilesetInfo.AnimationFrames;
             }
         }
 
@@ -497,6 +507,26 @@ namespace ProjectEternity.Editors.TilesetEditor
             SelectTile(0, 0);
         }
 
+        private void txtHP_ValueChanged(object sender, EventArgs e)
+        {
+            if (!AllowEvent)
+            {
+                return;
+            }
+
+            ActiveTab.TilesetInfo.AnimationFrames = (int)txtAnimationFrame.Value;
+        }
+
+        private void txtAnimationFrame_ValueChanged(object sender, EventArgs e)
+        {
+            if (!AllowEvent)
+            {
+                return;
+            }
+
+            ActiveTab.TilesetInfo.AnimationFrames = (int)txtAnimationFrame.Value;
+        }
+
         #region Backgrounds
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
@@ -552,7 +582,7 @@ namespace ProjectEternity.Editors.TilesetEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(23), ActiveTab, true);
+                            InitTileset(TilePath.Substring(0, TilePath.Length - 4).Substring(33), ActiveTab, true);
                         }
                         break;
 

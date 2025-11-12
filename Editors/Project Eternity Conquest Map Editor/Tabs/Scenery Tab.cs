@@ -8,7 +8,7 @@ namespace ProjectEternity.Editors.MapEditor
         protected override void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMaDestroyableTilesPresetsConquest));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapDestroyableTilesPresetsConquest));
         }
     }
 }

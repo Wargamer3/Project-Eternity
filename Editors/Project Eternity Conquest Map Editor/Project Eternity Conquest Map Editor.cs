@@ -175,6 +175,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 DestructibleTerrain NewTemporaryTerrain = new DestructibleTerrain();
                 NewTemporaryTerrain.ReplacementTerrain = NewTerrain;
                 NewTemporaryTerrain.ReplacementTile = Preset.ArrayTilesetInformation[0].ArrayTiles[0, 0];
+                NewTemporaryTerrain.RemainingHP = Preset.HP;
 
                 if (ActiveMap.DicTemporaryTerrain.ContainsKey(Position))
                 {

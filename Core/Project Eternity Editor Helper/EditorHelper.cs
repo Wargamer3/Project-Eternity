@@ -89,11 +89,11 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathMapAutotilesPresetsConquest = "Maps/Autotiles Presets/Conquest";
         public const string GUIRootPathMapAutotilesPresetsDeathmatch = "Maps/Autotiles Presets/Deathmatch";
         public const string GUIRootPathMapAutotilesPresetsSorcererStreet = "Maps/Autotiles Presets/Sorcerer Street";
-        public const string GUIRootPathMaDestroyableTilesImages = "Maps/Destroyable Tiles Images";
-        public const string GUIRootPathMaDestroyableTilesPresets = "Maps/Destroyable Tiles Presets";
-        public const string GUIRootPathMaDestroyableTilesPresetsConquest = "Maps/Destroyable Tiles Presets/Conquest";
-        public const string GUIRootPathMaDestroyableTilesPresetsDeathmatch = "Maps/Destroyable Tiles Presets/Deathmatch";
-        public const string GUIRootPathMaDestroyableTilesPresetsSorcererStreet = "Maps/Destroyable Tiles Presets/Sorcerer Street";
+        public const string GUIRootPathMapDestroyableTilesImages = "Maps/Destroyable Tiles Images";
+        public const string GUIRootPathMapDestroyableTilesPresets = "Maps/Destroyable Tiles Presets";
+        public const string GUIRootPathMapDestroyableTilesPresetsConquest = "Maps/Destroyable Tiles Presets/Conquest";
+        public const string GUIRootPathMapDestroyableTilesPresetsDeathmatch = "Maps/Destroyable Tiles Presets/Deathmatch";
+        public const string GUIRootPathMapDestroyableTilesPresetsSorcererStreet = "Maps/Destroyable Tiles Presets/Sorcerer Street";
         public const string GUIRootPathMapModels = "Maps/Models";
         public const string GUIRootPathMapBGM = "Maps/BGM";
         public const string GUIRootPathCutscenes = "Cutscenes";

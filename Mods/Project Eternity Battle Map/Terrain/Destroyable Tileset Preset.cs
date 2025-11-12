@@ -10,11 +10,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public class DestructibleTilesetPreset
     {
         public DestructibleTilesAttackAttributes.DestructibleTypes TilesetType;
+        public int HP;
         public DestructibleTilesetPreset Master;
         public int SlaveIndex;
         public TilesetPresetInformation[] ArrayTilesetInformation;
         public List<string> ListBattleBackgroundAnimationPath;
         public string RelativePath;
+        private int AnimationFrames => ArrayTilesetInformation[0].AnimationFrames;
 
         private DestructibleTilesetPreset(DestructibleTilesetPreset Clone, int Index)
         {
@@ -35,6 +37,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public DestructibleTilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int TilesetIndex, bool LoadBackgroundPaths = true)
         {
             TilesetType = (DestructibleTilesAttackAttributes.DestructibleTypes)BR.ReadByte();
+            HP = BR.ReadInt32();
             byte ArrayTilesetInformationLength = BR.ReadByte();
             ArrayTilesetInformation = new TilesetPresetInformation[ArrayTilesetInformationLength];
 
@@ -64,12 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public int GetAnimationFrames()
         {
-            if (TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.River)
-            {
-                return 4;
-            }
-
-            return 0;
+            return AnimationFrames;
         }
 
         protected virtual TilesetPresetInformation CreateTerrain(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
@@ -85,6 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Write(BinaryWriter BW)
         {
             BW.Write((byte)TilesetType);
+            BW.Write(HP);
             BW.Write((byte)ArrayTilesetInformation.Length);
             for (int i = 0; i < ArrayTilesetInformation.Length; ++i)
             {

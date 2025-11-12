@@ -66,12 +66,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public int GetAnimationFrames()
         {
-            if (TilesetType == TilesetTypes.River)
-            {
-                return 4;
-            }
-
-            return 0;
+            return AnimationFrames;
         }
 
         protected virtual TilesetPresetInformation CreateTerrain(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)

@@ -56,7 +56,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public string GetEditorPath()
             {
-                return EditorHelper.GUIRootPathMapAutotilesImages;
+                return EditorHelper.GUIRootPathMapDestroyableTilesImages;
             }
         }
 
@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMaDestroyableTilesPresetsConquest, EditorHelper.GUIRootPathMaDestroyableTilesPresets }, "Conquest/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityConquestDestroyableTileEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapDestroyableTilesPresetsConquest, EditorHelper.GUIRootPathMapDestroyableTilesPresets }, "Conquest/Destroyable Tiles Presets/", new string[] { ".pedt" }, typeof(ProjectEternityConquestDestroyableTileEditor), true)
             };
 
             return Info;

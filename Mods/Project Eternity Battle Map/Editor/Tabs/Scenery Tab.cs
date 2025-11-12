@@ -113,7 +113,7 @@ namespace ProjectEternity.Editors.MapEditor
         protected virtual void btnAddTile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Tile;
-            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapTilesetPresetsDeathmatch));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapDestroyableTilesPresetsDeathmatch));
         }
 
         private void btnRemoveTile_Click(object sender, EventArgs e)

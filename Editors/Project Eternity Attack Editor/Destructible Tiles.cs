@@ -98,7 +98,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private void btnAddUniqueType_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Preset;
-            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMaDestroyableTilesPresets));
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathMapDestroyableTilesPresets));
         }
 
         private void btnRemoveUniqueType_Click(object sender, EventArgs e)
