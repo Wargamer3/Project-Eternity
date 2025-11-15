@@ -5,20 +5,20 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class ReturnToHandEffect : SorcererStreetEffect
+    public sealed class ReturnToGoldEffect : SorcererStreetEffect
     {
         public enum Targets { Self, Opponent, LastDestroyed }
 
-        public static string Name = "Sorcerer Street Return To Hand";
+        public static string Name = "Sorcerer Street Return To Gold";
 
         private Targets _Target;
 
-        public ReturnToHandEffect()
+        public ReturnToGoldEffect()
             : base(Name, false)
         {
         }
 
-        public ReturnToHandEffect(SorcererStreetBattleParams Params)
+        public ReturnToGoldEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -40,12 +40,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Return To Hand";
+            return "Return To Gold";
         }
 
         protected override BaseEffect DoCopy()
         {
-            ReturnToHandEffect NewEffect = new ReturnToHandEffect(Params);
+            ReturnToGoldEffect NewEffect = new ReturnToGoldEffect(Params);
 
             NewEffect._Target = _Target;
 
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            ReturnToHandEffect NewEffect = (ReturnToHandEffect)Copy;
+            ReturnToGoldEffect NewEffect = (ReturnToGoldEffect)Copy;
 
             _Target = NewEffect._Target;
         }

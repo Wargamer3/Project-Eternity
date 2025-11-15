@@ -2,17 +2,17 @@
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetEnemyCreatureTargetType : ManualSkillActivationSorcererStreet
+    public sealed class SorcererStreetSelfCreatureTargetType : ManualSkillActivationSorcererStreet
     {
-        public static string Name = "Sorcerer Street Enemy Creature";
+        public static string Name = "Sorcerer Street Self Creature";
 
-        public SorcererStreetEnemyCreatureTargetType()
+        public SorcererStreetSelfCreatureTargetType()
             : this(null)
         {
 
         }
 
-        public SorcererStreetEnemyCreatureTargetType(SorcererStreetBattleParams Context)
+        public SorcererStreetSelfCreatureTargetType(SorcererStreetBattleParams Context)
             : base(Name, true, Context)
         {
         }
@@ -24,12 +24,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelSelectCreatureSpell(Params.Map, ActiveSkill, false, true));
         }
 
         public override ManualSkillTarget Copy()
         {
-            return new SorcererStreetEnemyCreatureTargetType(Params);
+            return new SorcererStreetSelfCreatureTargetType(Params);
         }
 
         public override void CopyMembers(ManualSkillTarget Copy)

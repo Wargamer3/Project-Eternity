@@ -262,7 +262,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             string TilesetName = NewTileset.ArrayTilesetInformation[0].TilesetName;
 
-            Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Maps/Autotiles/" + TilesetName);
+            Texture2D NewTilesetSprite = BattleMapViewer.TilesetViewer.content.Load<Texture2D>("Assets/Destroyable Tiles/" + TilesetName);
             ActiveMap.ListTemporaryTileSet.Add(NewTilesetSprite);
             AddSceneryImage(TilesetName, NewTilesetSprite);
 
@@ -291,7 +291,7 @@ namespace ProjectEternity.Editors.MapEditor
                         string TilePath = Items[I];
                         if (TilePath != null)
                         {
-                            string Name = TilePath.Substring(0, TilePath.Length - 5).Substring(39);
+                            string Name = TilePath.Substring(0, TilePath.Length - 5).Substring(43);
                             if (cboTiles.Items.Contains(Name))
                             {
                                 MessageBox.Show("This tile is already listed.\r\n" + Name);

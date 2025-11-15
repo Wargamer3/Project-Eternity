@@ -11,12 +11,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private ManualSkill EnchantToAdd;
         private bool AllowSelfPlayer;
+        private bool AllowEnemyPlayers;
 
-        public ActionPanelSelectCreatureSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelfPlayer)
+        public ActionPanelSelectCreatureSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelfPlayer, bool AllowEnemyPlayers)
             : base("Select Creature Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
             this.AllowSelfPlayer = AllowSelfPlayer;
+            this.AllowEnemyPlayers = AllowEnemyPlayers;
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -28,6 +30,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 && ActiveTerrain.TerrainTypeIndex != 0)
             {
                 if (!AllowSelfPlayer && ActiveTerrain.PlayerOwner == Map.ListPlayer[Map.ActivePlayerIndex])
+                {
+                    return;
+                }
+                else if (!AllowEnemyPlayers && ActiveTerrain.PlayerOwner != Map.ListPlayer[Map.ActivePlayerIndex])
                 {
                     return;
                 }
@@ -53,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelSelectCreatureSpell(Map, EnchantToAdd, AllowSelfPlayer);
+            return new ActionPanelSelectCreatureSpell(Map, EnchantToAdd, AllowSelfPlayer, AllowEnemyPlayers);
         }
 
         public override void Draw(CustomSpriteBatch g)

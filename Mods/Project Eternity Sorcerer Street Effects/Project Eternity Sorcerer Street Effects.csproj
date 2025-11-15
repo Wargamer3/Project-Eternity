@@ -57,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Automatic Skills\Self Target Type.cs" />
+    <Compile Include="Effects\Change Terrain Element.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Force Stop.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Free Travel.cs" />
+    <Compile Include="Effects\Remove Enchant.cs" />
     <Compile Include="Effects\Enchants\Enchant Mutation.cs" />
     <Compile Include="Effects\Player Enchant Effect\Enchant Protection Player.cs" />
     <Compile Include="Effects\Creature Enchant Effect\Invasion Protection.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Effects\Player Enchant Effect\Set Creature Cost.cs" />
     <Compile Include="Effects\Player Enchant Effect\Set Dice Value.cs" />
     <Compile Include="Effects\Reset Stats.cs" />
+    <Compile Include="Effects\Return To Gold.cs" />
     <Compile Include="Effects\Territory Command.cs" />
     <Compile Include="Effects\Player Enchant Effect\Toll Immunity.cs" />
     <Compile Include="Effects\Toll Steal.cs" />
@@ -120,6 +123,8 @@
     <Compile Include="Effects\Creature Enchant Effect\Land Bonus Limit.cs" />
     <Compile Include="Effects\Neutralize Next Spell.cs" />
     <Compile Include="Manual Skills\All Creatures Area Target Type.cs" />
+    <Compile Include="Manual Skills\Owned Creature Target Type.cs" />
+    <Compile Include="Manual Skills\Self Creature Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Creature Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Cepter Target Type.cs" />
     <Compile Include="Manual Skills\Player Target Type.cs" />
@@ -224,6 +229,7 @@
     <Compile Include="Requirements\Has No Enchant Requirement.cs" />
     <Compile Include="Requirements\Has Support Requirement.cs" />
     <Compile Include="Requirements\Has Enchant Requirement.cs" />
+    <Compile Include="Requirements\Damage Taken Requirement.cs" />
     <Compile Include="Requirements\Is Invdading Requirement.cs" />
     <Compile Include="Requirements\Item Used Requirement.cs" />
     <Compile Include="Requirements\Damage Dealt Requirement.cs" />

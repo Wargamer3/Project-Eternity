@@ -79,10 +79,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetCreaturesNameRequirement CopyRequirement = (SorcererStreetCreaturesNameRequirement)Copy;
+            SorcererStreetCreaturesNameRequirement CopyRequirement = Copy as SorcererStreetCreaturesNameRequirement;
 
-            _CreatureName = CopyRequirement._CreatureName;
-            _Target = CopyRequirement._Target;
+            if (CopyRequirement != null)
+            {
+                _CreatureName = CopyRequirement._CreatureName;
+                _Target = CopyRequirement._Target;
+            }
         }
 
         #region Properties

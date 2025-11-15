@@ -401,6 +401,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ReturnExpression = ActivePlayer.ListCardInHand.Count.ToString();
                     break;
 
+                case "items":
+                    int TotalItemCards = 0;
+                    foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+                    {
+                        if (ActiveCard.CardType == ItemCard.ItemCardType)
+                        {
+                            ++TotalItemCards;
+                        }
+                    }
+                    ReturnExpression = TotalItemCards.ToString();
+                    break;
+
+                case "spells":
+                    int TotalSpellCards = 0;
+                    foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+                    {
+                        if (ActiveCard.CardType == SpellCard.SpellCardType)
+                        {
+                            ++TotalSpellCards;
+                        }
+                    }
+                    ReturnExpression = TotalSpellCards.ToString();
+                    break;
+
                 case "deck":
                     ReturnExpression = ActivePlayer.ListCardInDeck.Count.ToString();
                     break;

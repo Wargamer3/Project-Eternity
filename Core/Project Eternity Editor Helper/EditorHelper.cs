@@ -115,7 +115,7 @@ namespace ProjectEternity.Core.Editor
 
         #region Create Item selection menu
 
-        public static List<string> ShowContextMenuWithItem(string RootPath, string MenuText = null, bool MutipleSelection = true)
+        public static List<string> ShowContextMenuWithItem(string RootPath, string MenuText = null, bool MutipleSelection = true, params string[] ArrayExtraItems)
         {
             ItemSelectorMenu = null;
 
@@ -125,6 +125,8 @@ namespace ProjectEternity.Core.Editor
 
             if (MenuText != null)
                 ItemSelectorMenu.Text = MenuText;
+
+            ItemSelectorMenu.AddExtraItems(ArrayExtraItems);
             ItemSelectorMenu.TopMost = true;
             ItemSelectorMenu.ShowDialog();
             //Item selected, call the ItemsSelected method.

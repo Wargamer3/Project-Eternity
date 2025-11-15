@@ -208,6 +208,11 @@ namespace ProjectEternity.Editors.CardEditor
             txtMaxST.Value = LoadedCard.CurrentST;
             cboSubtype.SelectedIndex = 0;
             txtSkill.Text = LoadedCard.SkillChainName;
+            if (LoadedCard.ListSpellName.Count > 0)
+            {
+                txtSpell.Text = LoadedCard.ListSpellName[0];
+                txtSpellAnimation.Text = LoadedCard.ListSpellActivationAnimationPath[0];
+            }
 
             #region Affinities
 
@@ -365,7 +370,7 @@ namespace ProjectEternity.Editors.CardEditor
                         else
                         {
                             Name = Items[I].Substring(0, Items[I].Length - 4).Substring(31);
-                            txtSkill.Text = Name;
+                            txtSpell.Text = Name;
                         }
                         break;
 

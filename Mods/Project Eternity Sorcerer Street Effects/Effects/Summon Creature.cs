@@ -37,8 +37,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string Name = "Sorcerer Street Summon Creature";
 
-        public enum EmplacementTypes { OldMovementPosition, PlayerPosition, Random }
-        public enum SummonTypes { Clone, Specific }
+        public enum EmplacementTypes { OldMovementPosition, PlayerPosition, RandomVacant, ChoseVacant }
+        public enum SummonTypes { Clone, Specific }//Clone stats of user
 
         public EmplacementTypes _EmplacementType;
         public SummonTypes _SummonType;
@@ -48,12 +48,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SummonCreatureEffect()
             : base(Name, false)
         {
+            _CreatureName = string.Empty;
+            _SummonType = SummonTypes.Specific;
         }
 
         public SummonCreatureEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
             _CreatureName = string.Empty;
+            _SummonType = SummonTypes.Specific;
         }
 
         protected override void Load(BinaryReader BR)

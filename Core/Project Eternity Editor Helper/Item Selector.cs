@@ -43,6 +43,24 @@ namespace ProjectEternity.Core.Editor
             }
         }
 
+        public void AddExtraItems(string[] ArrayExtraItems)
+        {
+            ListViewGroup ActiveNode = null;
+
+            if (lvItems.Groups.Count > 0)
+            {
+                ActiveNode = lvItems.Groups[0];
+            }
+
+            foreach (string ActiveExtraItem in ArrayExtraItems)
+            {
+                ListViewItem NewItem = new ListViewItem(ActiveExtraItem);
+                NewItem.Group = ActiveNode;
+                NewItem.Tag = ActiveExtraItem;
+                lvItems.Items.Insert(0, NewItem);
+            }
+        }
+
         public List<string> GetResult()
         {
             if (SelectedItem.Count == 0)

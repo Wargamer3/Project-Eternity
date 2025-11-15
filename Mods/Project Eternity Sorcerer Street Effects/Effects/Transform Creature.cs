@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class TransformCreatureEffect : SorcererStreetEffect
     {
+        public const string HighestMHPCreature = "Highest MHP creature in play";
         public class CreatureSelector : UITypeEditor
         {
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
@@ -25,10 +26,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsCreatures);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsCreatures, "Select a creature", false, HighestMHPCreature);
                     if (Items != null)
                     {
-                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(39);
+                        if (Items[0] == HighestMHPCreature)
+                        {
+                            value = Items[0];
+                        }
+                        else
+                        {
+                            value = Items[0].Substring(0, Items[0].Length - 4).Substring(39);
+                        }
                     }
                 }
                 return value;
@@ -61,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CreatureName = BR.ReadString();
             _Target = (Targets)BR.ReadByte();
             _IsTemporary = BR.ReadBoolean();
-            if (Params != null && _CreatureName != "Random" && _CreatureName != "Opponent")
+            if (Params != null && _CreatureName != "Random" && _CreatureName != "Opponent" && _CreatureName != HighestMHPCreature)
             {
                 TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
@@ -94,6 +102,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (_CreatureName == "Opponent")
             {
                 TransformationCreature = Params.GlobalContext.OpponentCreature.Creature;
+            }
+            else if (_CreatureName == HighestMHPCreature)
+            {
             }
 
             if (_Target == Targets.Self)
