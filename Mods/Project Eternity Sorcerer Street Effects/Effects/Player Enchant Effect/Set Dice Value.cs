@@ -58,5 +58,4 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DiceValue = SetDiceValueEffectCopy.DiceValue;
         }
     }
-
 }

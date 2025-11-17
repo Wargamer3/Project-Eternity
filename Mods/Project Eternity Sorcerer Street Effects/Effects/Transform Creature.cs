@@ -12,6 +12,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class TransformCreatureEffect : SorcererStreetEffect
     {
+        public const string Random = "Random";
+        public const string RandomDragon = "Random Dragon";
+        public const string Opponent = "Opponent";
         public const string HighestMHPCreature = "Highest MHP creature in play";
         public class CreatureSelector : UITypeEditor
         {
@@ -26,10 +29,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsCreatures, "Select a creature", false, HighestMHPCreature);
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathSorcererStreetCardsCreatures, "Select a creature", false, Random, RandomDragon, Opponent, HighestMHPCreature);
                     if (Items != null)
                     {
-                        if (Items[0] == HighestMHPCreature)
+                        if (Items[0] == Random || Items[0] == RandomDragon || Items[0] == Opponent || Items[0] == HighestMHPCreature)
                         {
                             value = Items[0];
                         }
@@ -69,7 +72,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CreatureName = BR.ReadString();
             _Target = (Targets)BR.ReadByte();
             _IsTemporary = BR.ReadBoolean();
-            if (Params != null && _CreatureName != "Random" && _CreatureName != "Opponent" && _CreatureName != HighestMHPCreature)
+            if (Params != null && _CreatureName != Random && _CreatureName != RandomDragon && _CreatureName != Opponent && _CreatureName != HighestMHPCreature)
             {
                 TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
