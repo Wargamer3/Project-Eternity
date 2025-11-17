@@ -36,7 +36,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             viewerMapSprite.Preload();
             viewerBattleSprite.Preload();
 
-            LoadUnit(this.FilePath);
+            LoadBuilding(this.FilePath);
         }
 
         public override EditorInfo[] LoadEditors()
@@ -53,7 +53,6 @@ namespace ProjectEternity.Editors.UnitHubEditor
         {
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
-
 
             BW.Write(lstUnits.Items.Count);
             for (int U = 0; U < lstUnits.Items.Count; ++U)
@@ -72,7 +71,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             BW.Close();
         }
 
-        private void LoadUnit(string BuildingPath)
+        private void LoadBuilding(string BuildingPath)
         {
             ConquestTerrainHolder TerrainHolder = new ConquestTerrainHolder();
             TerrainHolder.LoadData();
@@ -84,28 +83,28 @@ namespace ProjectEternity.Editors.UnitHubEditor
             }
 
             string FilePath = BuildingPath.Substring(0, BuildingPath.Length - 4).Substring(27);
-            BuildingConquest NewUnit = new BuildingConquest(FilePath, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+            BuildingConquest NewBuilding = new BuildingConquest(FilePath, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
-            for (int U = 0; U < NewUnit.ListUnitToSpawn.Count; ++U)
+            for (int U = 0; U < NewBuilding.ListUnitToSpawn.Count; ++U)
             {
-                lstUnits.Items.Add(NewUnit.ListUnitToSpawn[U]);
+                lstUnits.Items.Add(NewBuilding.ListUnitToSpawn[U]);
             }
 
-            cboTerrainType.SelectedIndex = NewUnit.TerrainType;
-            ckCapture.Checked = NewUnit.CanBeCaptured;
-            txtVision.Value = NewUnit.VisionRange;
-            txtHealth.Value = NewUnit.MaxHP;
-            txtCreditPerTurn.Value = NewUnit.CreditPerTurn;
-            ckResupply.Checked = NewUnit.Resupply;
+            cboTerrainType.SelectedIndex = NewBuilding.TerrainType;
+            ckCapture.Checked = NewBuilding.CanBeCaptured;
+            txtVision.Value = NewBuilding.VisionRange;
+            txtHealth.Value = NewBuilding.MaxHP;
+            txtCreditPerTurn.Value = NewBuilding.CreditPerTurn;
+            ckResupply.Checked = NewBuilding.Resupply;
 
-            if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + NewUnit.RelativePath + ".xnb"))
+            if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + NewBuilding.RelativePath + ".xnb"))
             {
-                viewerMapSprite.ChangeTexture("Buildings/Conquest/Map Sprites/" + NewUnit.RelativePath);
+                viewerMapSprite.ChangeTexture("Buildings/Conquest/Map Sprites/" + NewBuilding.RelativePath);
             }
 
-            if (File.Exists("Content/Buildings/Conquest/Menu Sprites/" + NewUnit.RelativePath + ".xnb"))
+            if (File.Exists("Content/Buildings/Conquest/Menu Sprites/" + NewBuilding.RelativePath + ".xnb"))
             {
-                viewerBattleSprite.ChangeTexture("Buildings/Conquest/Unit Sprites/" + NewUnit.RelativePath);
+                viewerBattleSprite.ChangeTexture("Buildings/Conquest/Unit Sprites/" + NewBuilding.RelativePath);
             }
         }
         

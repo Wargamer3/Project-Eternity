@@ -776,8 +776,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                                       null,
                                         Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
-                        ActiveSpawn.BuildingToSpawn.SpriteMap.Draw(g, new Vector2((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + Map.TileSize.X / 2,
-                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + Map.TileSize.Y / 2), Color.White);
+                        ActiveSpawn.BuildingToSpawn.SpriteMap.Draw(g, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + Map.TileSize.X / 2,
+                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + Map.TileSize.Y / 2, Map.TileSize.X, Map.TileSize.Y), Color.White);
 
                         int OffsetX = 18;
                         int OffsetY = 6;

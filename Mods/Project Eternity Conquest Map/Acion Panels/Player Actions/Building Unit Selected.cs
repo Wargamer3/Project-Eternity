@@ -6,6 +6,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -14,6 +15,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ActivePlayerIndex;
         private int ActiveBuildingIndex;
         private BuildingConquest ActiveBuilding;
+        int FactoryMenuWidth;
+        int FactoruMenuHeight;
 
         public ActionPanelPlayerBuildingUnitSelected(ConquestMap Map, int ActivePlayerIndex, int ActiveBuildingIndex)
             : base("Player Building Selected", Map)
@@ -26,19 +29,31 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void OnSelect()
         {
+            FactoruMenuHeight = (ActiveBuilding.ListUnitToSpawn.Count) * PannelHeight + 6 * 2;
+            FactoryMenuWidth = 0;
+            for (int U = 0; U < ActiveBuilding.ListUnitToSpawn.Count; U++)
+            {
+                string RealName = ActiveBuilding.ListUnitToSpawn[U].ItemName;
+                int CurrentWidth = (int)TextHelper.fntShadowFont.MeasureString(RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Cost + "$").X;
+
+                if (CurrentWidth > FactoryMenuWidth)
+                {
+                    FactoryMenuWidth = CurrentWidth;
+                }
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ActionMenuCursor += (ActionMenuCursor < ActiveBuilding.ListUnitToSpawn.Count - 1) ? 1 : 0;
             }
-            else if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            else if (ActiveInputManager.InputConfirmPressed())
             {
                 UnitConquest NewUnit = new UnitConquest(ActiveBuilding.ListUnitToSpawn[ActionMenuCursor].RelativePath, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect);
                 //Make sure to give the Squad an unused ID.
@@ -49,7 +64,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Map.SpawnUnit(Map.ActivePlayerIndex, NewUnit, 0, ActiveBuilding.Position - new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0));
                 RemoveAllSubActionPanels();
             }
-            else if (InputHelper.InputCancelPressed() || MouseHelper.InputRightButtonReleased())
+            else if (ActiveInputManager.InputCancelPressed())
             {
                 //Reset the cursor.
                 Map.sndCancel.Play();
@@ -75,13 +90,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.Draw(GameScreen.sprPixel, new Rectangle((int)(Map.CursorPosition.X + 1), (int)Map.CursorPosition.Y, 100, ActiveBuilding.ListUnitToSpawn.Count * 20), Color.Navy);
-            g.Draw(GameScreen.sprPixel, new Rectangle((int)(Map.CursorPosition.X + 1), (int)Map.CursorPosition.Y + ActionMenuCursor * 20, 100, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
-            for (int i = 0; i < ActiveBuilding.ListUnitToSpawn.Count; i++)
+            //Draw the action panel.
+            int X = FinalMenuX;
+            int Y = FinalMenuY;
+            X += 20;
+            GameScreen.DrawBox(g, new Vector2(X, Y), FactoryMenuWidth + 50, FactoruMenuHeight, Color.White);
+            X += 10;
+            Y += 14;
+
+            //Draw the choices.
+            for (int U = 0; U < ActiveBuilding.ListUnitToSpawn.Count; U++)
             {
-                string RealName = ActiveBuilding.ListUnitToSpawn[i].ItemName;
-                g.DrawString(Map.fntArial12, RealName + " " + ActiveBuilding.ListUnitToSpawn[i].Cost + "$", new Vector2((Map.CursorPosition.X + 1), Map.CursorPosition.Y + i * 20), Color.White);
+                string RealName = ActiveBuilding.ListUnitToSpawn[U].ItemName;
+                TextHelper.DrawText(g, RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Cost + "$", new Vector2(X, Y), Color.White);
+                Y += PannelHeight;
             }
+
+            Y = BaseMenuY;
+            if (Y + FactoruMenuHeight >= Constants.Height)
+                Y = Constants.Height - FactoruMenuHeight;
+            //Draw the menu cursor.
+            g.Draw(GameScreen.sprPixel, new Rectangle(X, 9 + Y + ActionMenuCursor * PannelHeight, FactoryMenuWidth - 20, PannelHeight - 5), Color.FromNonPremultiplied(255, 255, 255, 200));
         }
     }
 }

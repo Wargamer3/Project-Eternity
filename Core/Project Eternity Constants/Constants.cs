@@ -5,6 +5,7 @@ namespace ProjectEternity.Core
     public class Constants
     {
         public enum UnitRepresentationStates { NonColoredWithBorder = 0, NonColored = 1, Colored = 2 };
+        public enum BoxStyles { ClassicGreen, PureBlack, PureWhite };
         public enum WindowTypes { Original, Streched, KeeptAspectRatio, Extend };
         public static string[] ScreenSizes = new string[] { "640 x 480", "800 x 600", "1024 x 768", "1920 x 1080" };
 
@@ -20,5 +21,6 @@ namespace ProjectEternity.Core
         public static UnitRepresentationStates UnitRepresentationState = UnitRepresentationStates.NonColoredWithBorder;
         public static bool ShowHealthBar = false;
         public static double TotalGameTime;
+        public static BoxStyles BoxStyle = BoxStyles.PureWhite;
     }
 }

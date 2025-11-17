@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens
@@ -10,12 +11,15 @@ namespace ProjectEternity.GameScreens
     {
         private static Texture2D _sprPixel;
 
-        private static Texture2D sprBox;
-        private static Texture2D sprBoxBackground;
-        private static Texture2D sprBoxBackgroundRed;
-        private static Texture2D sprBoxBackgroundBlue;
-        private static Texture2D sprBoxBackgroundGray;
-        private static Texture2D sprBoxBackgroundBlack;
+        private static Texture2D sprClassicBox;
+        private static Texture2D sprClassicBoxBackground;
+        private static Texture2D sprClassicBoxBackgroundRed;
+        private static Texture2D sprClassicBoxBackgroundBlue;
+        private static Texture2D sprClassicBoxBackgroundGray;
+        private static Texture2D sprClassicBoxBackgroundBlack;
+
+        private static Texture2D sprPureBlack;
+        private static Texture2D sprPureWhite;
 
         public static Texture2D sprPixel { get { return _sprPixel; } }
 
@@ -26,12 +30,15 @@ namespace ProjectEternity.GameScreens
             ContentFallback = Content;
             _sprPixel = Content.Load<Texture2D>("Pixel");
 
-            sprBox = Content.Load<Texture2D>("Title Screen/Main Menu/Box");
-            sprBoxBackground = Content.Load<Texture2D>("Title Screen/Main Menu/Background");
-            sprBoxBackgroundRed = Content.Load<Texture2D>("Title Screen/Main Menu/Background Red");
-            sprBoxBackgroundBlue = Content.Load<Texture2D>("Title Screen/Main Menu/Background Blue");
-            sprBoxBackgroundGray = Content.Load<Texture2D>("Title Screen/Main Menu/Background Gray");
-            sprBoxBackgroundBlack = Content.Load<Texture2D>("Title Screen/Main Menu/Background Black");
+            sprClassicBox = Content.Load<Texture2D>("Title Screen/Main Menu/Box");
+            sprClassicBoxBackground = Content.Load<Texture2D>("Title Screen/Main Menu/Background");
+            sprClassicBoxBackgroundRed = Content.Load<Texture2D>("Title Screen/Main Menu/Background Red");
+            sprClassicBoxBackgroundBlue = Content.Load<Texture2D>("Title Screen/Main Menu/Background Blue");
+            sprClassicBoxBackgroundGray = Content.Load<Texture2D>("Title Screen/Main Menu/Background Gray");
+            sprClassicBoxBackgroundBlack = Content.Load<Texture2D>("Title Screen/Main Menu/Background Black");
+
+            sprPureBlack = Content.Load<Texture2D>("Title Screen/Main Menu/Popup Pure Black");
+            sprPureWhite = Content.Load<Texture2D>("Title Screen/Main Menu/Popup Pure White");
 
             Debug = new DebugScreen();
         }
@@ -60,39 +67,137 @@ namespace ProjectEternity.GameScreens
 
         public static void DrawBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height, Color BackgroundColor)
         {
-            int CornerSize = 7;
+            Texture2D Background;
+            Texture2D BackgroundBorder;
+            bool SameColorForBorder = true;
+            bool DrawBackgroundUnderBorder = false;
 
-            if (BackgroundColor == Color.White || BackgroundColor == Color.Green)
-                g.Draw(sprBoxBackground, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), Color.White);
-            else if (BackgroundColor == Color.Red)
-                g.Draw(sprBoxBackgroundRed, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), Color.White);
-            else if (BackgroundColor == Color.Blue)
-                g.Draw(sprBoxBackgroundBlue, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), Color.White);
-            else if (BackgroundColor == Color.Gray)
-                g.Draw(sprBoxBackgroundGray, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), Color.White);
-            else if (BackgroundColor == Color.Black)
-                g.Draw(sprBoxBackgroundBlack, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), Color.White);
+            int CornerSizeTopOriginWidth = 7;
+            int CornerSizeTopOriginHeight = 7;
+            int CornerSizeBottomOriginWidth = 7;
+            int CornerSizeBottomOriginHeight = 7;
+
+            if (Constants.BoxStyle == Constants.BoxStyles.PureBlack)
+            {
+                Background = sprPureBlack;
+                BackgroundBorder = sprPureBlack;
+
+                CornerSizeTopOriginWidth = 25;
+                CornerSizeTopOriginHeight = 25;
+                CornerSizeBottomOriginWidth = 56;
+                CornerSizeBottomOriginHeight = 25;
+            }
+            else if (Constants.BoxStyle == Constants.BoxStyles.PureWhite)
+            {
+                Background = sprPureWhite;
+                BackgroundBorder = sprPureWhite;
+
+                CornerSizeTopOriginWidth = 25;
+                CornerSizeTopOriginHeight = 25;
+                CornerSizeBottomOriginWidth = 56;
+                CornerSizeBottomOriginHeight = 25;
+            }
             else
-                g.Draw(sprBoxBackground, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), BackgroundColor);
+            {
+                SameColorForBorder = false;
+                DrawBackgroundUnderBorder = true;
+                BackgroundBorder = sprClassicBox;
+
+                if (BackgroundColor == Color.White || BackgroundColor == Color.Green)
+                {
+                    BackgroundColor = Color.White;
+                    Background = sprClassicBoxBackground;
+                }
+                else if (BackgroundColor == Color.Red)
+                {
+                    BackgroundColor = Color.White;
+                    Background = sprClassicBoxBackgroundRed;
+                }
+                else if (BackgroundColor == Color.Blue)
+                {
+                    BackgroundColor = Color.White;
+                    Background = sprClassicBoxBackgroundBlue;
+                }
+                else if (BackgroundColor == Color.Gray)
+                {
+                    BackgroundColor = Color.White;
+                    Background = sprClassicBoxBackgroundGray;
+                }
+                else if (BackgroundColor == Color.Black)
+                {
+                    BackgroundColor = Color.White;
+                    Background = sprClassicBoxBackgroundBlack;
+                }
+                else
+                {
+                    Background = sprClassicBox;
+                }
+            }
+
+            int BackgroundWidth = BackgroundBorder.Width;
+            int BackgroundHeight = BackgroundBorder.Height;
+            int CornerSizeTopWidth = CornerSizeTopOriginWidth;
+            int CornerSizeTopHeight = CornerSizeTopOriginHeight;
+            int CornerSizeBottomWidth = CornerSizeBottomOriginWidth;
+            int CornerSizeBottomHeight = CornerSizeBottomOriginHeight;
+
+            if (Width < BackgroundBorder.Width)
+            {
+                float ScaleX = Width / (float)BackgroundBorder.Width;
+
+                CornerSizeTopWidth = (int)(CornerSizeTopWidth * ScaleX);
+                CornerSizeBottomWidth = (int)(CornerSizeBottomWidth * ScaleX);
+            }
+            if (Height < BackgroundBorder.Height)
+            {
+                float ScaleY = Height / (float)BackgroundBorder.Height;
+
+                CornerSizeTopHeight = (int)(CornerSizeTopWidth * ScaleY);
+                CornerSizeBottomHeight = (int)(CornerSizeBottomWidth * ScaleY);
+            }
+
+            if (DrawBackgroundUnderBorder)
+            {
+                g.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, Width, Height),
+                    new Rectangle(0, 0, Background.Width, Background.Height), BackgroundColor);
+            }
+            else
+            {
+                g.Draw(Background, new Rectangle((int)Position.X + CornerSizeTopWidth, (int)Position.Y + CornerSizeTopHeight, Width - CornerSizeTopWidth * 2, Height - CornerSizeTopHeight  * 2),
+                    new Rectangle(CornerSizeTopOriginWidth, CornerSizeTopOriginHeight, Background.Width - CornerSizeTopOriginWidth * 2, Background.Height - CornerSizeTopOriginHeight * 2), BackgroundColor);
+            }
+            if (!SameColorForBorder)
+            {
+                BackgroundColor = Color.White;
+            }
+
             //Top Center.
-            g.Draw(sprBox, new Rectangle((int)Position.X + CornerSize, (int)Position.Y, Width - CornerSize * 2, CornerSize),
-                new Rectangle(CornerSize, 0, sprBox.Width - CornerSize * 2, CornerSize), Color.White);
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X + CornerSizeTopWidth, (int)Position.Y, Width - CornerSizeTopWidth * 2, CornerSizeTopHeight),
+                new Rectangle(CornerSizeTopOriginWidth, 0, BackgroundWidth - CornerSizeTopOriginWidth * 2, CornerSizeTopOriginHeight), BackgroundColor);
             //Bottom Center.
-            g.Draw(sprBox, new Rectangle((int)Position.X + CornerSize, (int)Position.Y + Height - CornerSize, Width - CornerSize * 2, CornerSize),
-                new Rectangle(CornerSize, sprBox.Height - CornerSize, sprBox.Width - CornerSize * 2, CornerSize), Color.White);
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X + CornerSizeBottomWidth, (int)Position.Y + Height - CornerSizeBottomHeight, Width - CornerSizeBottomWidth * 2, CornerSizeBottomHeight),
+                new Rectangle(CornerSizeBottomOriginWidth, BackgroundHeight - CornerSizeBottomOriginHeight, BackgroundWidth - CornerSizeBottomOriginWidth * 2, CornerSizeBottomOriginHeight), BackgroundColor);
 
-            g.Draw(sprBox, new Rectangle((int)Position.X, (int)Position.Y + CornerSize, CornerSize, Height - CornerSize * 2),
-                new Rectangle(0, CornerSize, CornerSize, sprBox.Height - CornerSize * 2), Color.White);
-            g.Draw(sprBox, new Rectangle((int)Position.X + Width - CornerSize, (int)Position.Y + CornerSize, CornerSize, Height - CornerSize * 2),
-                new Rectangle(sprBox.Width - CornerSize, CornerSize, CornerSize, sprBox.Height - CornerSize * 2), Color.White);
-
+            //Left Center
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X, (int)Position.Y + CornerSizeTopHeight, CornerSizeTopWidth, Height - CornerSizeTopHeight - CornerSizeBottomHeight),
+                new Rectangle(0, CornerSizeTopOriginHeight, CornerSizeTopOriginHeight, BackgroundHeight - CornerSizeTopOriginHeight - CornerSizeBottomOriginHeight), BackgroundColor);
+            //Right Center
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X + Width - CornerSizeTopWidth, (int)Position.Y + CornerSizeTopHeight, CornerSizeTopWidth, Height - CornerSizeTopHeight - CornerSizeBottomHeight),
+                new Rectangle(BackgroundWidth - CornerSizeTopOriginWidth, CornerSizeTopOriginHeight, CornerSizeTopOriginWidth, BackgroundHeight - CornerSizeTopOriginHeight - CornerSizeBottomOriginHeight), BackgroundColor);
+            
             //Top Left Corner.
-            g.Draw(sprBox, new Vector2(Position.X, Position.Y), new Rectangle(0, 0, CornerSize, CornerSize), Color.White);
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X, (int)Position.Y, CornerSizeTopWidth, CornerSizeTopHeight),
+                new Rectangle(0, 0, CornerSizeTopOriginWidth, CornerSizeTopOriginHeight), BackgroundColor);
             //Bottom Left Corner.
-            g.Draw(sprBox, new Vector2(Position.X, Position.Y + Height - CornerSize), new Rectangle(0, sprBox.Height - CornerSize, CornerSize, CornerSize), Color.White);
-
-            g.Draw(sprBox, new Vector2(Position.X + Width - CornerSize, Position.Y), new Rectangle(sprBox.Width - CornerSize, 0, CornerSize, CornerSize), Color.White);
-            g.Draw(sprBox, new Vector2(Position.X + Width - CornerSize, Position.Y + Height - CornerSize), new Rectangle(sprBox.Width - CornerSize, sprBox.Height - CornerSize, CornerSize, CornerSize), Color.White);
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X, (int)(Position.Y) + Height - CornerSizeBottomHeight, CornerSizeBottomWidth, CornerSizeBottomHeight),
+                new Rectangle(0, BackgroundHeight - CornerSizeBottomOriginHeight, CornerSizeBottomOriginWidth, CornerSizeBottomOriginHeight), BackgroundColor);
+            
+            //Right Top
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X + Width - CornerSizeTopWidth, (int)Position.Y, CornerSizeTopWidth, CornerSizeTopHeight),
+                new Rectangle(BackgroundWidth - CornerSizeTopOriginWidth, 0, CornerSizeTopOriginWidth, CornerSizeTopOriginWidth), BackgroundColor);
+            //Right Bottom
+            g.Draw(BackgroundBorder, new Rectangle((int)Position.X + Width - CornerSizeBottomWidth, (int)Position.Y + Height - CornerSizeBottomHeight, CornerSizeBottomWidth, CornerSizeBottomHeight),
+                new Rectangle(BackgroundWidth - CornerSizeBottomOriginWidth, BackgroundHeight - CornerSizeBottomOriginHeight, CornerSizeBottomOriginWidth, CornerSizeBottomOriginHeight), BackgroundColor);
         }
 
         public static void DrawEmptyBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height)
