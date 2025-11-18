@@ -61,13 +61,13 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 
             BW.Write(txtWeapon1Name.Text);
             BW.Write(cbWeapon1PostMovement.Checked);
-            BW.Write((Int32)txtWeapon1MinimumRange.Value);
-            BW.Write((Int32)txtWeapon1MaximumRange.Value);
+            BW.Write((byte)txtWeapon1MinimumRange.Value);
+            BW.Write((byte)txtWeapon1MaximumRange.Value);
 
             BW.Write(txtWeapon2Name.Text);
             BW.Write(cbWeapon2PostMovement.Checked);
-            BW.Write((Int32)txtWeapon2MinimumRange.Value);
-            BW.Write((Int32)txtWeapon2MaximumRange.Value);
+            BW.Write((byte)txtWeapon2MinimumRange.Value);
+            BW.Write((byte)txtWeapon2MaximumRange.Value);
 
             FS.Close();
             BW.Close();
@@ -86,11 +86,11 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 
             cbMovementType.SelectedItem = LoadedUnit.MovementType;
             cbArmourType.SelectedItem = LoadedUnit.ArmourType;
-            txtHP.Value = LoadedUnit.MaxHP / 10;
+            txtHP.Value = LoadedUnit.MaxHP;
             txtMovement.Value = LoadedUnit.MaxMovement;
-            txtAmmo.Value = LoadedUnit.Ammo;
-            txtGaz.Value = LoadedUnit.Gaz;
-            txtCost.Value = LoadedUnit.Cost;
+            txtAmmo.Value = LoadedUnit.MaxAmmo;
+            txtGaz.Value = LoadedUnit.MaxGaz;
+            txtCost.Value = LoadedUnit.Price;
             txtGazCostPerTurn.Value = LoadedUnit.GazCostPerTurn;
             txtVisionRange.Value = LoadedUnit.VisionRange;
 

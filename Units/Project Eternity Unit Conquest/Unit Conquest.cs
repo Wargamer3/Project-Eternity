@@ -73,7 +73,6 @@ namespace ProjectEternity.Core.Units.Conquest
         public int MaxAmmo;
         public int Gaz;
         public int MaxGaz;
-        public int Cost;
         public string MovementType;
         public string ArmourType;
         public int GazCostPerTurn;
@@ -118,7 +117,7 @@ namespace ProjectEternity.Core.Units.Conquest
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            MaxHP = BR.ReadInt32() * 10;
+            MaxHP = BR.ReadInt32();
             MaxMovement = BR.ReadInt32();
             MaxAmmo = BR.ReadInt32();
             MaxGaz = BR.ReadInt32();

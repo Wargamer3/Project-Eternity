@@ -85,7 +85,7 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
-      <Project>{ef17745e-1116-499c-94d0-5d3607ee8fa4}</Project>
+      <Project>{EF17745E-1116-499C-94D0-5D3607EE8FA4}</Project>
       <Name>Project Eternity Unit Conquest</Name>
       <Private>False</Private>
     </ProjectReference>

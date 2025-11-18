@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
-using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -34,7 +33,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int U = 0; U < ActiveBuilding.ListUnitToSpawn.Count; U++)
             {
                 string RealName = ActiveBuilding.ListUnitToSpawn[U].ItemName;
-                int CurrentWidth = (int)TextHelper.fntShadowFont.MeasureString(RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Cost + "$").X;
+                int CurrentWidth = (int)TextHelper.fntShadowFont.MeasureString(RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Price + "$").X;
 
                 if (CurrentWidth > FactoryMenuWidth)
                 {
@@ -102,7 +101,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int U = 0; U < ActiveBuilding.ListUnitToSpawn.Count; U++)
             {
                 string RealName = ActiveBuilding.ListUnitToSpawn[U].ItemName;
-                TextHelper.DrawText(g, RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Cost + "$", new Vector2(X, Y), Color.White);
+                TextHelper.DrawText(g, RealName + " " + ActiveBuilding.ListUnitToSpawn[U].Price + "$", new Vector2(X, Y), Color.White);
                 Y += PannelHeight;
             }
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.cbArmourType = new System.Windows.Forms.ComboBox();
             this.lblArmourType = new System.Windows.Forms.Label();
             this.txtVisionRange = new System.Windows.Forms.NumericUpDown();
@@ -73,8 +74,8 @@
             this.btnImportBattleSprite = new System.Windows.Forms.Button();
             this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.btnImportMapSprite = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCost)).BeginInit();
@@ -92,7 +93,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.bgSpritePreview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -122,6 +122,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Statistics";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(178, 235);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
+            this.numericUpDown1.TabIndex = 20;
             // 
             // cbArmourType
             // 
@@ -302,7 +314,7 @@
             // 
             this.txtHP.Location = new System.Drawing.Point(75, 22);
             this.txtHP.Maximum = new decimal(new int[] {
-            10,
+            1000,
             0,
             0,
             0});
@@ -570,18 +582,6 @@
             this.btnImportMapSprite.UseVisualStyleBackColor = true;
             this.btnImportMapSprite.Click += new System.EventHandler(this.btnImportMapSprite_Click);
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(178, 235);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
-            this.numericUpDown1.TabIndex = 20;
-            // 
             // UnitConquestEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -598,6 +598,7 @@
             this.Text = "UnitConquestEditor";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCost)).EndInit();
@@ -618,7 +619,6 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.bgSpritePreview.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
