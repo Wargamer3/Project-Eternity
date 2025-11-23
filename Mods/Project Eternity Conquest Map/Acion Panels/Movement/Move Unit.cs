@@ -34,13 +34,15 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
         }
 
-        public ActionPanelMoveUnit(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex, MovementAlgorithmTile LastPosition)
+        public ActionPanelMoveUnit(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex, MovementAlgorithmTile LastPosition, float LastDirection, Vector3 LastCameraPosition)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveUnitIndex = ActiveUnitIndex;
-
             this.LastPosition = LastPosition;
+            this.LastDirection = LastDirection;
+            this.LastCameraPosition = LastCameraPosition;
+
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
             ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];

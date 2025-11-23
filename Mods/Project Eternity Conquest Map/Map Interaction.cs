@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (CursorMoved)
             {
-                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X * TileSize.X, GridOffset.Y * TileSize.Y, 1f, 15f, out _);
+                Vector3 NextTerrain = GetNextLayerTile(ActiveMap.CursorTerrain, GridOffset.X, GridOffset.Y, 1f, 15f, out _);
 
                 if (NextTerrain == ActiveMap.CursorTerrain.WorldPosition)//Force movement
                 {

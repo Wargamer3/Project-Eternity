@@ -6,11 +6,14 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Conquest;
 using Microsoft.Xna.Framework.Content.Builder;
+using ProjectEternity.GameScreens.ConquestMapScreen;
 
 namespace ProjectEternity.Editors.UnitConquestEditor
 {
     public partial class UnitConquestEditor : BaseEditor
     {
+        private ConquestTerrainHolder TerrainHolder;
+
         public UnitConquestEditor()
         {
             InitializeComponent();
@@ -29,6 +32,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 
             viewerMapSprite.Preload();
             viewerBattleSprite.Preload();
+            TerrainHolder = new ConquestTerrainHolder();
 
             LoadUnit(this.FilePath);
         }
@@ -54,8 +58,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             BW.Write((Int32)txtAmmo.Value);
             BW.Write((Int32)txtGaz.Value);
             BW.Write((Int32)txtCost.Value);
-            BW.Write(cbMovementType.Text);
-            BW.Write(cbArmourType.Text);
+            BW.Write((byte)cbMovementType.SelectedIndex);
             BW.Write((Int32)txtGazCostPerTurn.Value);
             BW.Write((Int32)txtVisionRange.Value);
 
@@ -68,6 +71,14 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             BW.Write(cbWeapon2PostMovement.Checked);
             BW.Write((byte)txtWeapon2MinimumRange.Value);
             BW.Write((byte)txtWeapon2MaximumRange.Value);
+
+            BW.Write((byte)(dgvTransport.Rows.Count - 1));
+            BW.Write((byte)(dgvUniqueVisionRange.Rows.Count - 1));
+            for (int V = 0; V < dgvUniqueVisionRange.Rows.Count - 1; ++V)
+            {
+                BW.Write((byte)((DataGridViewComboBoxCell)dgvUniqueVisionRange.Rows[V].Cells[0]).Items.IndexOf(dgvUniqueVisionRange.Rows[V].Cells[0].Value));
+                BW.Write(int.Parse(dgvUniqueVisionRange.Rows[V].Cells[1].EditedFormattedValue.ToString()));
+            }
 
             FS.Close();
             BW.Close();
@@ -85,7 +96,6 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             this.Text = LoadedUnit.RelativePath + " - Project Eternity Conquest Unit Editor";
 
             cbMovementType.SelectedItem = LoadedUnit.MovementType;
-            cbArmourType.SelectedItem = LoadedUnit.ArmourType;
             txtHP.Value = LoadedUnit.MaxHP;
             txtMovement.Value = LoadedUnit.MaxMovement;
             txtAmmo.Value = LoadedUnit.MaxAmmo;
@@ -112,6 +122,19 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             if (File.Exists("Content\\Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath + ".xnb"))
             {
                 viewerBattleSprite.ChangeTexture("Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath);
+            }
+
+            TerrainHolder.LoadData();
+
+            cbMovementType.Items.Clear();
+            for (int M = 0; M < TerrainHolder.ListMoveType.Count; ++M)
+            {
+                cbMovementType.Items.Add(TerrainHolder.ListMoveType[M]);
+            }
+
+            for (int T = 0; T < TerrainHolder.ListConquestTerrainType.Count; ++T)
+            {
+                dgvTerrainTypeColumn.Items.Add(TerrainHolder.ListConquestTerrainType[T].TerrainName);
             }
         }
 

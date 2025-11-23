@@ -155,6 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public string CameraType;
         public Vector3 Camera2DPosition;//Position in the grid
+        public Vector3 Camera2DPositionStart;//Position in the grid
         public Camera3D Camera3D;
         public Camera3D Camera3DOverride;//Used by vehicles.
         public float Camera3DDistance = 255;
@@ -338,8 +339,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(CameraType);
 
-            BW.Write((int)Math.Max(0, Camera2DPosition.X));
-            BW.Write((int)Math.Max(0, Camera2DPosition.Y));
+            BW.Write((int)Math.Max(0, Camera2DPositionStart.X));
+            BW.Write((int)Math.Max(0, Camera2DPositionStart.Y));
 
             BW.Write(ListBackgroundsPath.Count);
             for (int B = 0; B < ListBackgroundsPath.Count; B++)
@@ -579,8 +580,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             CameraType = BR.ReadString();
 
-            Camera2DPosition.X = BR.ReadInt32();
-            Camera2DPosition.Y = BR.ReadInt32();
+            Camera2DPositionStart.X = BR.ReadInt32();
+            Camera2DPositionStart.Y = BR.ReadInt32();
+            Camera2DPosition = Camera2DPositionStart;
             CursorPosition = Camera2DPosition;
             CursorPositionVisible = CursorPosition;
 
@@ -1087,7 +1089,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (IsMovingUp && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
+                if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
                     Camera2DPosition.Y -= CameraSpeed;
 
                 GridOffset.Y -= (CursorPosition.Y > 0) ? 1 : 0;

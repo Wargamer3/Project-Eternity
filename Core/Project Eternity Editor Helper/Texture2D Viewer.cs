@@ -84,6 +84,10 @@ namespace ProjectEternity.Core.Editor
 
                 Thread.Sleep(15);
             }
+            else
+            {
+                Thread.Sleep(100);
+            }
         }
     }
 }

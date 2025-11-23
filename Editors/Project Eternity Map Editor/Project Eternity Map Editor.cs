@@ -378,7 +378,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             ActiveMap.MapName = MS.txtMapName.Text;
             ActiveMap.CameraType = MS.cbCameraType.Text;
-            ActiveMap.Camera2DPosition = CameraPosition;
+            ActiveMap.Camera2DPositionStart = ActiveMap.Camera2DPosition = CameraPosition;
             ActiveMap.OrderNumber = (uint)MS.txtOrderNumber.Value;
             ActiveMap.PlayersMin = (byte)MS.frmDefaultGameModesConditions.txtPlayersMin.Value;
             ActiveMap.PlayersMax = (byte)MS.frmDefaultGameModesConditions.txtPlayersMax.Value;

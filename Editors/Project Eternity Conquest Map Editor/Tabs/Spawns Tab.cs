@@ -165,7 +165,7 @@ namespace ProjectEternity.Editors.MapEditor
             int ImageIndex = 0;
             foreach (UnitConquest ActiveUnit in ListFactionUnit)
             {
-                if (cbMoveType.Text == "All" || ActiveUnit.MovementType == cbMoveType.Text)
+                if (cbMoveType.Text == "All" || ActiveUnit.MovementType == cbMoveType.SelectedIndex)
                 {
                     lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex);
                     lvUnits.Items[ImageIndex++].Text = ActiveUnit.ItemName;

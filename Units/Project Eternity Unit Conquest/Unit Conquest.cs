@@ -73,7 +73,7 @@ namespace ProjectEternity.Core.Units.Conquest
         public int MaxAmmo;
         public int Gaz;
         public int MaxGaz;
-        public string MovementType;
+        public byte MovementType;
         public string ArmourType;
         public int GazCostPerTurn;
         public int VisionRange;
@@ -111,7 +111,7 @@ namespace ProjectEternity.Core.Units.Conquest
             MapComponents = new ConquestMapComponent(this, Content);
             ArrayCharacterActive = new Character[0];
             string[] ArrayFileParts = Name.Split('/', '\\');
-            ItemName = ArrayFileParts[ArrayFileParts.Length - 1];
+            ArmourType = ItemName = ArrayFileParts[ArrayFileParts.Length - 1];
 
             FileStream FS = new FileStream("Content/Conquest/Units/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -122,8 +122,7 @@ namespace ProjectEternity.Core.Units.Conquest
             MaxAmmo = BR.ReadInt32();
             MaxGaz = BR.ReadInt32();
             Price = BR.ReadInt32();
-            MovementType = BR.ReadString();
-            ArmourType = BR.ReadString();
+            MovementType = BR.ReadByte();
             GazCostPerTurn = BR.ReadInt32();
             VisionRange = BR.ReadInt32();
 
@@ -137,14 +136,28 @@ namespace ProjectEternity.Core.Units.Conquest
             Weapon2MinimumRange = BR.ReadByte();
             Weapon2MaximumRange = BR.ReadByte();
 
+            byte TransportCount = BR.ReadByte();
+            for (int i = 0; i < TransportCount; ++i)
+            {
+            }
+            byte UniqueVisionRangeCount = BR.ReadByte();
+            for (int i = 0; i < UniqueVisionRangeCount; ++i)
+            {
+                BR.ReadByte();
+                BR.ReadInt32();
+            }
+
             if (Content != null)
             {
                 if (File.Exists("Content/Conquest/Units/Map Sprite/" + Name + ".xnb"))
                     SpriteMap = Content.Load<Texture2D>("Conquest/Units/Map Sprite/" + Name);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Units/Default");
+                    SpriteMap = Content.Load<Texture2D>("Conquest/Units/Default");
 
-                SpriteUnit = Content.Load<Texture2D>("Conquest/Units/Unit Sprite/" + Name);
+                if (File.Exists("Content/Conquest/Units/Unit Sprite/" + Name + ".xnb"))
+                    SpriteUnit = Content.Load<Texture2D>("Conquest/Units/Unit Sprite/" + Name);
+                else
+                    SpriteUnit = Content.Load<Texture2D>("Conquest/Units/Default");
             }
 
             FS.Close();

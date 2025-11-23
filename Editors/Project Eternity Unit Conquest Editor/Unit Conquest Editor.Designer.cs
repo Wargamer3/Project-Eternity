@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.lblUniqueVisionRnage = new System.Windows.Forms.Label();
+            this.dgvUniqueVisionRange = new System.Windows.Forms.DataGridView();
+            this.dgvTerrainTypeColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dgvVisionRangeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cbArmourType = new System.Windows.Forms.ComboBox();
             this.lblArmourType = new System.Windows.Forms.Label();
             this.txtVisionRange = new System.Windows.Forms.NumericUpDown();
@@ -65,7 +68,7 @@
             this.lblWeaponName2 = new System.Windows.Forms.Label();
             this.txtWeapon2Name = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dgvTransport = new System.Windows.Forms.DataGridView();
             this.clCanTransport = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +78,7 @@
             this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.btnImportMapSprite = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUniqueVisionRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCost)).BeginInit();
@@ -90,14 +93,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtWeapon2MaximumRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWeapon2MinimumRange)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTransport)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.bgSpritePreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.numericUpDown1);
+            this.groupBox1.Controls.Add(this.lblUniqueVisionRnage);
+            this.groupBox1.Controls.Add(this.dgvUniqueVisionRange);
             this.groupBox1.Controls.Add(this.cbArmourType);
             this.groupBox1.Controls.Add(this.lblArmourType);
             this.groupBox1.Controls.Add(this.txtVisionRange);
@@ -118,22 +122,46 @@
             this.groupBox1.Controls.Add(this.lblHP);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(239, 264);
+            this.groupBox1.Size = new System.Drawing.Size(239, 405);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Statistics";
             // 
-            // numericUpDown1
+            // lblUniqueVisionRnage
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(178, 235);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
-            this.numericUpDown1.TabIndex = 20;
+            this.lblUniqueVisionRnage.AutoSize = true;
+            this.lblUniqueVisionRnage.Location = new System.Drawing.Point(6, 270);
+            this.lblUniqueVisionRnage.Name = "lblUniqueVisionRnage";
+            this.lblUniqueVisionRnage.Size = new System.Drawing.Size(110, 13);
+            this.lblUniqueVisionRnage.TabIndex = 39;
+            this.lblUniqueVisionRnage.Text = "Unique Vision Range:";
+            // 
+            // dgvUniqueVisionRange
+            // 
+            this.dgvUniqueVisionRange.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUniqueVisionRange.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvTerrainTypeColumn,
+            this.dgvVisionRangeColumn});
+            this.dgvUniqueVisionRange.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dgvUniqueVisionRange.Location = new System.Drawing.Point(6, 286);
+            this.dgvUniqueVisionRange.MultiSelect = false;
+            this.dgvUniqueVisionRange.Name = "dgvUniqueVisionRange";
+            this.dgvUniqueVisionRange.RowHeadersVisible = false;
+            this.dgvUniqueVisionRange.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvUniqueVisionRange.Size = new System.Drawing.Size(227, 110);
+            this.dgvUniqueVisionRange.TabIndex = 38;
+            // 
+            // dgvTerrainTypeColumn
+            // 
+            this.dgvTerrainTypeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvTerrainTypeColumn.HeaderText = "Terrain Type";
+            this.dgvTerrainTypeColumn.Name = "dgvTerrainTypeColumn";
+            this.dgvTerrainTypeColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // dgvVisionRangeColumn
+            // 
+            this.dgvVisionRangeColumn.HeaderText = "VisionRange";
+            this.dgvVisionRangeColumn.Name = "dgvVisionRangeColumn";
             // 
             // cbArmourType
             // 
@@ -208,7 +236,7 @@
             // 
             this.txtCost.Location = new System.Drawing.Point(75, 126);
             this.txtCost.Maximum = new decimal(new int[] {
-            10,
+            10000,
             0,
             0,
             0});
@@ -387,6 +415,8 @@
             // cbWeapon1PostMovement
             // 
             this.cbWeapon1PostMovement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbWeapon1PostMovement.Checked = true;
+            this.cbWeapon1PostMovement.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbWeapon1PostMovement.Location = new System.Drawing.Point(6, 45);
             this.cbWeapon1PostMovement.Name = "cbWeapon1PostMovement";
             this.cbWeapon1PostMovement.Size = new System.Drawing.Size(160, 17);
@@ -461,6 +491,8 @@
             // cbWeapon2PostMovement
             // 
             this.cbWeapon2PostMovement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbWeapon2PostMovement.Checked = true;
+            this.cbWeapon2PostMovement.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbWeapon2PostMovement.Location = new System.Drawing.Point(6, 45);
             this.cbWeapon2PostMovement.Name = "cbWeapon2PostMovement";
             this.cbWeapon2PostMovement.Size = new System.Drawing.Size(160, 17);
@@ -486,7 +518,7 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.dataGridView2);
+            this.groupBox4.Controls.Add(this.dgvTransport);
             this.groupBox4.Location = new System.Drawing.Point(257, 158);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(238, 138);
@@ -494,17 +526,17 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Transport";
             // 
-            // dataGridView2
+            // dgvTransport
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvTransport.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTransport.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clCanTransport});
-            this.dataGridView2.Location = new System.Drawing.Point(6, 19);
-            this.dataGridView2.MultiSelect = false;
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersVisible = false;
-            this.dataGridView2.Size = new System.Drawing.Size(226, 110);
-            this.dataGridView2.TabIndex = 37;
+            this.dgvTransport.Location = new System.Drawing.Point(6, 19);
+            this.dgvTransport.MultiSelect = false;
+            this.dgvTransport.Name = "dgvTransport";
+            this.dgvTransport.RowHeadersVisible = false;
+            this.dgvTransport.Size = new System.Drawing.Size(226, 110);
+            this.dgvTransport.TabIndex = 37;
             // 
             // clCanTransport
             // 
@@ -586,7 +618,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(752, 304);
+            this.ClientSize = new System.Drawing.Size(752, 504);
             this.Controls.Add(this.bgSpritePreview);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -598,7 +630,7 @@
             this.Text = "UnitConquestEditor";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUniqueVisionRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVisionRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGazCostPerTurn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCost)).EndInit();
@@ -615,7 +647,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtWeapon2MaximumRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWeapon2MinimumRange)).EndInit();
             this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTransport)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.bgSpritePreview.ResumeLayout(false);
@@ -658,7 +690,7 @@
         private System.Windows.Forms.Label lblVisionRange;
         private System.Windows.Forms.ComboBox cbArmourType;
         private System.Windows.Forms.Label lblArmourType;
-        public System.Windows.Forms.DataGridView dataGridView2;
+        public System.Windows.Forms.DataGridView dgvTransport;
         private System.Windows.Forms.DataGridViewComboBoxColumn clCanTransport;
         private System.Windows.Forms.NumericUpDown txtWeapon1MinimumRange;
         private System.Windows.Forms.NumericUpDown txtWeapon1MaximumRange;
@@ -671,6 +703,9 @@
         private System.Windows.Forms.Button btnImportMapSprite;
         private Core.Editor.Texture2DViewerControl viewerBattleSprite;
         private System.Windows.Forms.Button btnImportBattleSprite;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        public System.Windows.Forms.DataGridView dgvUniqueVisionRange;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dgvTerrainTypeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvVisionRangeColumn;
+        private System.Windows.Forms.Label lblUniqueVisionRnage;
     }
 }

@@ -84,6 +84,11 @@
       <Name>Microsoft Content Builder</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mods\Project Eternity Conquest Map\Project Eternity Conquest Map.csproj">
+      <Project>{E91E70D4-DA94-403B-952B-8E3EB630E8E0}</Project>
+      <Name>Project Eternity Conquest Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
       <Project>{EF17745E-1116-499C-94D0-5D3607EE8FA4}</Project>
       <Name>Project Eternity Unit Conquest</Name>
