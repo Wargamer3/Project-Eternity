@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int BoxY = Constants.Height / 2 - BoxHeight / 2;
                 MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
 
-                g.DrawString(Map.fntMenuText, "Passed checkpoint", new Vector2(BoxX + 60, BoxY + 30), Color.White);
+                g.DrawString(Map.fntMenuText, "Passed checkpoint", new Vector2(BoxX + 60, BoxY + 30), SorcererStreetMap.TextColor);
                 switch (Map.TerrainHolder.ListTerrainType[TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.EastTower:
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         break;
                 }
 
-                g.DrawString(Map.fntMenuText, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 60, BoxY + Map.fntMenuText.LineSpacing + 40), Color.White);
+                g.DrawString(Map.fntMenuText, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 60, BoxY + Map.fntMenuText.LineSpacing + 40), SorcererStreetMap.TextColor);
 
                 MenuHelper.DrawConfirmIcon(g, new Vector2(BoxX + BoxWidth - 70, BoxY + BoxHeight - 80));
             }

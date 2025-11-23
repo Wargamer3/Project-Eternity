@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Button Tab");
             sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Inactive");
-            sprButtonBackToLobby = Content.Load<Texture2D>("Menus/Lobby/Button Back To Lobby");
+            sprButtonBackToLobby = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive");
             sprMoney = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Money");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(Constants.Width - 502 * Ratio);
             int DrawY = (int)(100 * Ratio);
-            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Deathmatch/Lobby Menu/Interactive", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
 
             DrawX = 280;
             DrawY = 342;

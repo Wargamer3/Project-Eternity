@@ -142,44 +142,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 float InfoBoxX = Constants.Width / 2 - BoxWidth / 2;
                 float InfoBoxY = Constants.Height / 4;
 
-                GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-                g.DrawString(Map.fntMenuText, "Information", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
-                GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
+                float Ratio = Constants.Height / 720f;
+                MenuHelper.DrawNamedBox(g, "Information", new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
 
-                float CurrentX = InfoBoxX + 10;
+                float CurrentX = (int)(InfoBoxX + 30 * Ratio);
                 float CurrentY = InfoBoxY - 10;
 
-                CurrentY += 20;
+                CurrentY += (int)(20 * Ratio);
 
-                g.DrawStringMiddleAligned(Map.fntMenuText, "Lap #" + ActivePlayer.CompletedLaps + " Bonus", new Vector2(Constants.Width / 2, CurrentY), Color.White);
-                CurrentY += 20;
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Lap #" + ActivePlayer.CompletedLaps + " Bonus", new Vector2(Constants.Width / 2, CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(20 * Ratio);
 
-                g.DrawString(Map.fntMenuText, "Basic Bonus", new Vector2(CurrentX, CurrentY), Color.White);
-                g.DrawStringRightAligned(Map.fntMenuText, BasicBonus + "G", new Vector2(CurrentX + BoxWidth - 20, CurrentY), Color.White);
-                CurrentY += 20;
+                g.DrawString(Map.fntMenuText, "Basic Bonus", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringRightAligned(Map.fntMenuText, BasicBonus + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(30 * Ratio);
 
-                g.DrawString(Map.fntMenuText, "Territory Bonus", new Vector2(CurrentX, CurrentY), Color.White);
-                g.DrawStringRightAligned(Map.fntMenuText, TerritoryBonus + "G", new Vector2(CurrentX + BoxWidth - 20, CurrentY), Color.White);
-                CurrentY += 20;
+                g.DrawString(Map.fntMenuText, "Territory Bonus", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringRightAligned(Map.fntMenuText, TerritoryBonus + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(30 * Ratio);
 
-                g.DrawString(Map.fntMenuText, "Symbol Bonus", new Vector2(CurrentX, CurrentY), Color.White);
-                g.DrawStringRightAligned(Map.fntMenuText, SymbolBonus + "G", new Vector2(CurrentX + BoxWidth - 20, CurrentY), Color.White);
-                CurrentY += 20;
+                g.DrawString(Map.fntMenuText, "Symbol Bonus", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringRightAligned(Map.fntMenuText, SymbolBonus + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(30 * Ratio);
 
-                g.DrawString(Map.fntMenuText, "Fluctuation", new Vector2(CurrentX, CurrentY), Color.White);
-                g.DrawStringRightAligned(Map.fntMenuText, Fluctuation + "G", new Vector2(CurrentX + BoxWidth - 20, CurrentY), Color.White);
-                CurrentY += 25;
-                g.DrawLine(GameScreen.sprPixel, new Vector2(CurrentX, CurrentY - 3), new Vector2(CurrentX + BoxWidth - 20, CurrentY -3), Color.White);
+                g.DrawString(Map.fntMenuText, "Fluctuation", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringRightAligned(Map.fntMenuText, Fluctuation + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(35 * Ratio);
+                g.DrawLine(GameScreen.sprPixel, new Vector2(CurrentX, CurrentY), new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(5 * Ratio);
+                g.DrawString(Map.fntMenuText, "Total", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringRightAligned(Map.fntMenuText, Total + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(60 * Ratio);
 
-                g.DrawString(Map.fntMenuText, "Total", new Vector2(CurrentX, CurrentY), Color.White);
-                g.DrawStringRightAligned(Map.fntMenuText, Total + "G", new Vector2(CurrentX + BoxWidth - 20, CurrentY), Color.White);
-                CurrentY += 40;
+                g.DrawString(Map.fntMenuText, ActivePlayer.Name + "'s creatures", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
+                CurrentY += (int)(30 * Ratio);
+                g.DrawString(Map.fntMenuText, "recovered 20% of MHP.", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
 
-                g.DrawString(Map.fntMenuText, ActivePlayer.Name + "'s creatures", new Vector2(CurrentX, CurrentY), Color.White);
-                CurrentY += 20;
-                g.DrawString(Map.fntMenuText, "recovered 20% of MHP.", new Vector2(CurrentX, CurrentY), Color.White);
-
-                MenuHelper.DrawConfirmIcon(g, new Vector2(InfoBoxX + BoxWidth - 20, InfoBoxY + BoxHeight - 35));
+                MenuHelper.DrawConfirmIcon(g, new Vector2((int)(InfoBoxX + BoxWidth - 40 * Ratio), (int)(InfoBoxY + BoxHeight - 50 * Ratio)));
             }
         }
     }

@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             int DrawX = (int)(Constants.Width - 502 * Ratio);
             int DrawY = (int)(100 * Ratio);
-            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Menus/Lobby/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Deathmatch/Lobby Menu/Interactive/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
 
             InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
             InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListCharacter.Count * BoxHeight - BattleMapInventoryScreen.MiddleSectionHeight);
@@ -95,7 +95,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprSelectAUnitToBuy = Content.Load<Texture2D>("Menus/Lobby/Frame Outline");
+            sprSelectAUnitToBuy = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Frame Outline");
 
             CubeBackground.Load(Content);
         }

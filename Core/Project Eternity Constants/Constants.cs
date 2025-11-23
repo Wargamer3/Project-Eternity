@@ -21,6 +21,6 @@ namespace ProjectEternity.Core
         public static UnitRepresentationStates UnitRepresentationState = UnitRepresentationStates.NonColoredWithBorder;
         public static bool ShowHealthBar = false;
         public static double TotalGameTime;
-        public static BoxStyles BoxStyle = BoxStyles.PureWhite;
+        public static BoxStyles BoxStyle = BoxStyles.ClassicGreen;
     }
 }

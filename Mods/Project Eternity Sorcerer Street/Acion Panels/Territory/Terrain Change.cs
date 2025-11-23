@@ -89,14 +89,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float InfoBoxY = Constants.Height / 10;
 
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
+            g.DrawString(Map.fntMenuText, "Menu", new Vector2(InfoBoxX + 10, InfoBoxY - 20), SorcererStreetMap.TextColor);
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY - 10;
 
             CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Make it what terrain?", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Make it what terrain?", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
 
             CurrentY += 20;
             g.Draw(Map.Symbols.sprElementFire, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringRightAligned(Map.fntMenuText, ChangeCost, new Vector2(CurrentX + 190, CurrentY), Color.White);
 
             CurrentY += 20;
-            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), SorcererStreetMap.TextColor);
         }
     }
 }

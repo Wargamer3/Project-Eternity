@@ -20,13 +20,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         #region Ressources
 
         private SpriteFont fntMenuText;
+        private SpriteFont fntOxanimumRegular;
+        private SpriteFont fntOxanimumBoldTitle;
 
         private Texture2D sprInfoBand;
         private Texture2D sprExtraFrame;
+        private Texture2D sprScrollbarBackground;
+        private Texture2D sprScrollbar;
 
         #endregion
 
-        private BoxScrollbar MissionScrollbar;
+        private Scrollbar MissionScrollbar;
 
         private const int CardSpacing = 7;
         private const int CardWidth = 85;
@@ -59,6 +63,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RequireDrawFocus = true;
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
+            DrawBackground = true;
             GlobalBook = ActivePlayer.Inventory.GlobalBook;
             ListFilteredCard = new List<CardInfo>();
             FillCardList(Filter, null);
@@ -328,16 +333,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / CardsPerLine);
-            MissionScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height / 6), Constants.Height - Constants.Height / 3, MaxY, OnMissionScrollbarChange);
+            float Ratio = Constants.Height / 2160f;
+            float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / 7);
 
-            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial30");
+            sprExtraFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame 2");
+
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Background");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Scrollbar Bar");
+
+            MissionScrollbar = new Scrollbar(sprScrollbar, new Vector2(3780 * Ratio, 360 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnScrollbarChange);
+
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
+            fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
             sprInfoBand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Info Band");
             sprExtraFrame = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Extra Frame 2");
         }
 
-        private void OnMissionScrollbarChange(float ScrollbarValue)
+        private void OnScrollbarChange(float ScrollbarValue)
         {
             ScrollbarIndex = (int)ScrollbarValue;
         }
@@ -517,54 +531,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (DrawBackground)
             {
-                DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
+                SorcererStreetInventoryScreen.CubeBackground.Draw(g, true);
             }
+
+            float Ratio = Constants.Height / 2160f;
+            Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
             DrawBookCards(g, Constants.Height / 6 - ScrollbarIndex);
 
-            int Y = 56;
-            g.Draw(sprInfoBand, new Rectangle(0, Y, Constants.Width, (int)(sprInfoBand.Height * 1.5)), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            float DrawX = (int)(210 * Ratio);
+            float DrawY = (int)(58 * Ratio);
+            g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            int X = 180;
-            Y = 80;
-            g.DrawString(fntMenuText, "Book Edit", new Vector2(X, Y), Color.White);
-            if (ActivePlayer != null)
-            {
-                SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
-            }
+            SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
 
-            int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7) - 50;
-            int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);
+            int CursorX = (int)(1150 * Ratio) + (CardWidth + CardSpacing) * (CursorIndex % 7);
+            int CursorY = Constants.Height / 6 + CardHeight / 2 + (CardHeight + 20) * (CursorIndex / 7);
             MenuHelper.DrawFingerIcon(g, new Vector2(CursorX, CursorY - ScrollbarIndex));
 
+            SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
 
-            Y = 934;
-            g.Draw(sprInfoBand, new Rectangle(0, Y, Constants.Width, (int)(sprInfoBand.Height * 1.5)), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
-
-            X = 180;
-            Y = 958;
-            g.DrawString(fntMenuText, ListFilteredCard[CursorIndex].Card.Name, new Vector2(X, Y), Color.White);
-
-            if (ActivePlayer != null)
-            {
-                SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
-            }
+            DrawX = (int)(212 * Ratio);
+            DrawY = (int)(2008 * Ratio);
+            g.DrawString(fntOxanimumRegular, "Edit this Book's contents", new Vector2(DrawX, DrawY), ColorText);
 
             MissionScrollbar.Draw(g);
         }
 
-        private void DrawBookCards(CustomSpriteBatch g, float StartY)
+        private void DrawBookCards(CustomSpriteBatch g, int StartY)
         {
+            Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             int CardNumberBoxWidth = (int)(CardWidth / 3.2f);
 
-            for (int C = 0; C < ListFilteredCard.Count; ++C)
+            for (int C = 0; C < ActiveBook.ListCard.Count; ++C)
             {
-                float X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % CardsPerLine);
-                float Y = StartY + (CardHeight + 20) * (C / CardsPerLine);
+                int X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % 7);
+                int Y = StartY + (CardHeight + 20) * (C / 7);
 
-                g.Draw(ListFilteredCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ListFilteredCard[C].Card.sprCard.Width, ListFilteredCard[C].Card.sprCard.Height), Color.White);
-                DrawBox(g, new Vector2(X + CardWidth / 2 - CardNumberBoxWidth / 2, Y + CardHeight - CardNumberBoxWidth / 2), CardNumberBoxWidth, CardNumberBoxWidth, Color.White);
-                TextHelper.DrawTextMiddleAligned(g, ListFilteredCard[C].QuantityOwned.ToString(), new Vector2(X + CardWidth / 2, Y + 3 + CardHeight - CardNumberBoxWidth / 2), Color.White);
+                g.Draw(ActiveBook.ListCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ActiveBook.ListCard[C].Card.sprCard.Width, ActiveBook.ListCard[C].Card.sprCard.Height), Color.White);
+                g.Draw(sprPixel, new Rectangle(X + CardWidth / 2 - CardNumberBoxWidth / 2, Y + CardHeight - CardNumberBoxWidth / 2, CardNumberBoxWidth, CardNumberBoxWidth), ColorBox);
+                TextHelper.DrawTextMiddleAligned(g, ActiveBook.ListCard[C].QuantityOwned.ToString(), new Vector2(X + CardWidth / 2, Y + 3 + CardHeight - CardNumberBoxWidth / 2), Color.White);
             }
         }
     }

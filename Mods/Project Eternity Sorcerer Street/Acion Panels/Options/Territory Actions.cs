@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int CurrentX = InfoBoxX + (int)(40 * Ratio);
             int CurrentY = InfoBoxY + (int)(10 * Ratio);
 
-            g.DrawString(Map.fntMenuText, "What would you like to do?", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "What would you like to do?", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             CurrentX += 50;
             CurrentY += LineHeight;
             if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LandLevelLock)
@@ -144,27 +144,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX, CurrentY), Color.White);
+                g.DrawString(Map.fntMenuText, "Land Level Up", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             }
             CurrentY += LineHeight;
-            g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Terrain Change", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             CurrentY += LineHeight;
-            g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Creature Movement", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
             if (ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).IsDefensive)
             {
-                g.DrawString(Map.fntMenuText, "X", new Vector2(CurrentX + 150, CurrentY), Color.White);
+                g.DrawString(Map.fntMenuText, "X", new Vector2(CurrentX + 150, CurrentY), SorcererStreetMap.TextColor);
             }
             CurrentY += LineHeight;
-            g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Creature Exchange", new Vector2(CurrentX + 10, CurrentY), SorcererStreetMap.TextColor);
 
             if (HasTerritoryAbility)
             {
                 CurrentY += LineHeight;
-                g.DrawString(Map.fntMenuText, "Creature Ability", new Vector2(CurrentX + 10, CurrentY), Color.White);
+                g.DrawString(Map.fntMenuText, "Creature Ability", new Vector2(CurrentX + 10, CurrentY), SorcererStreetMap.TextColor);
             }
 
             CurrentY += LineHeight;
-            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), SorcererStreetMap.TextColor);
 
             MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX, InfoBoxY + (int)(50 * Ratio) + LineHeight * ActionMenuCursor));
 

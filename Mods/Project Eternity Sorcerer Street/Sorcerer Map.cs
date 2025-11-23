@@ -308,7 +308,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
                 sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
 
-                if (Card.TextParser == null)
+                if (Card.TextParser == null && Symbols != null)
                 {
                     Card.TextParser = new DynamicText();
                     Card.TextParser.TextMaxWidthInPixel = Card.BoxWidth - 100;
@@ -322,36 +322,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Card.TextParser.SetDefaultProcessor(new DefaultTextProcessor(Card.TextParser, fntMenuText));
                     Card.TextParser.Load(Content);
 
-                    IconParser.PreloadImage("rarityE", CardSymbols.Symbols.sprRarityE);
-                    IconParser.PreloadImage("rarityN", CardSymbols.Symbols.sprRarityN);
-                    IconParser.PreloadImage("rarityR", CardSymbols.Symbols.sprRarityR);
-                    IconParser.PreloadImage("rarityS", CardSymbols.Symbols.sprRarityS);
+                    IconParser.PreloadImage("rarityE", Symbols.sprRarityE);
+                    IconParser.PreloadImage("rarityN", Symbols.sprRarityN);
+                    IconParser.PreloadImage("rarityR", Symbols.sprRarityR);
+                    IconParser.PreloadImage("rarityS", Symbols.sprRarityS);
 
-                    IconParser.PreloadImage("MenuG", CardSymbols.Symbols.sprMenuG);
-                    IconParser.PreloadImage("MenuTG", CardSymbols.Symbols.sprMenuTG);
-                    IconParser.PreloadImage("MenuST", CardSymbols.Symbols.sprMenuST);
-                    IconParser.PreloadImage("MenuHP", CardSymbols.Symbols.sprMenuHP);
-                    IconParser.PreloadImage("MenuMHP", CardSymbols.Symbols.sprMenuMHP);
+                    IconParser.PreloadImage("MenuG", Symbols.sprMenuG);
+                    IconParser.PreloadImage("MenuTG", Symbols.sprMenuTG);
+                    IconParser.PreloadImage("MenuST", Symbols.sprMenuST);
+                    IconParser.PreloadImage("MenuHP", Symbols.sprMenuHP);
+                    IconParser.PreloadImage("MenuMHP", Symbols.sprMenuMHP);
 
-                    IconParser.PreloadImage("water", CardSymbols.Symbols.sprElementWater);
-                    IconParser.PreloadImage("fire", CardSymbols.Symbols.sprElementFire);
-                    IconParser.PreloadImage("earth", CardSymbols.Symbols.sprElementEarth);
-                    IconParser.PreloadImage("air", CardSymbols.Symbols.sprElementAir);
-                    IconParser.PreloadImage("neutral", CardSymbols.Symbols.sprElementNeutral);
-                    IconParser.PreloadImage("multi", CardSymbols.Symbols.sprElementMulti);
+                    IconParser.PreloadImage("water", Symbols.sprElementWater);
+                    IconParser.PreloadImage("fire", Symbols.sprElementFire);
+                    IconParser.PreloadImage("earth", Symbols.sprElementEarth);
+                    IconParser.PreloadImage("air", Symbols.sprElementAir);
+                    IconParser.PreloadImage("neutral", Symbols.sprElementNeutral);
+                    IconParser.PreloadImage("multi", Symbols.sprElementMulti);
 
-                    IconParser.PreloadImage("weapon", CardSymbols.Symbols.sprItemsWeapon);
-                    IconParser.PreloadImage("armor", CardSymbols.Symbols.sprItemsArmor);
-                    IconParser.PreloadImage("tool", CardSymbols.Symbols.sprItemsTool);
-                    IconParser.PreloadImage("scroll", CardSymbols.Symbols.sprItemsScroll);
+                    IconParser.PreloadImage("weapon", Symbols.sprItemsWeapon);
+                    IconParser.PreloadImage("armor", Symbols.sprItemsArmor);
+                    IconParser.PreloadImage("tool", Symbols.sprItemsTool);
+                    IconParser.PreloadImage("scroll", Symbols.sprItemsScroll);
 
-                    IconParser.PreloadImage("spellsingle", CardSymbols.Symbols.sprSpellsSingle);
-                    IconParser.PreloadImage("spellmultiple", CardSymbols.Symbols.sprSpellsMultiple);
+                    IconParser.PreloadImage("spellsingle", Symbols.sprSpellsSingle);
+                    IconParser.PreloadImage("spellmultiple", Symbols.sprSpellsMultiple);
 
-                    IconParser.PreloadImage("enchantsingle", CardSymbols.Symbols.sprEnchantSingle);
-                    IconParser.PreloadImage("enchantmultiple", CardSymbols.Symbols.sprEnchantMultiple);
+                    IconParser.PreloadImage("enchantsingle", Symbols.sprEnchantSingle);
+                    IconParser.PreloadImage("enchantmultiple", Symbols.sprEnchantMultiple);
 
-                    IconParser.PreloadImage("creature", CardSymbols.Symbols.sprCreature);
+                    IconParser.PreloadImage("creature", Symbols.sprCreature);
                 }
             }
 

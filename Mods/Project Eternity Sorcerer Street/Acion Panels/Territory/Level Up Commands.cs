@@ -120,10 +120,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float CurrentY = InfoBoxY - 20 * Ratio;
 
             CurrentY += Map.fntMenuText.LineSpacing;
-            g.DrawString(Map.fntMenuText, "Raise to how much?", new Vector2(CurrentX, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Raise to how much?", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
 
             CurrentY += Map.fntMenuText.LineSpacing;
-            Color TextColor = Color.White;
+            Color TextColor = SorcererStreetMap.TextColor;
 
             if (ActiveTerrain.LandLevel < 2)
             {
@@ -188,7 +188,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CurrentY += Map.fntMenuText.LineSpacing;
             }
 
-            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
+            g.DrawString(Map.fntMenuText, "Return", new Vector2(CurrentX + 10, CurrentY), SorcererStreetMap.TextColor);
 
             MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, (int)(InfoBoxY + 44 * Ratio + Map.fntMenuText.LineSpacing * ActionMenuCursor)));
         }

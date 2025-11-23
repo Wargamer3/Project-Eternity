@@ -87,6 +87,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             SkillChainName = Clone.SkillChainName;
             ListSpell = new List<ManualSkill>(Clone.ListSpell.Count);
+            ListSpellName = new List<string>(Clone.ListSpell.Count);
+            ListSpellActivationAnimationPath = new List<string>(Clone.ListSpell.Count);
 
             for (int S = 0; S < Clone.ListSpell.Count; ++S)
             {
