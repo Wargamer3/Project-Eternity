@@ -95,7 +95,6 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 
             this.Text = LoadedUnit.RelativePath + " - Project Eternity Conquest Unit Editor";
 
-            cbMovementType.SelectedItem = LoadedUnit.MovementType;
             txtHP.Value = LoadedUnit.MaxHP;
             txtMovement.Value = LoadedUnit.MaxMovement;
             txtAmmo.Value = LoadedUnit.MaxAmmo;
@@ -135,6 +134,11 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             for (int T = 0; T < TerrainHolder.ListConquestTerrainType.Count; ++T)
             {
                 dgvTerrainTypeColumn.Items.Add(TerrainHolder.ListConquestTerrainType[T].TerrainName);
+            }
+
+            if (LoadedUnit.MovementType < cbMovementType.Items.Count)
+            {
+                cbMovementType.SelectedIndex = LoadedUnit.MovementType;
             }
         }
 

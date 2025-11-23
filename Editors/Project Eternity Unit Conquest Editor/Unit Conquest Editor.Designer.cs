@@ -33,8 +33,6 @@
             this.dgvUniqueVisionRange = new System.Windows.Forms.DataGridView();
             this.dgvTerrainTypeColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvVisionRangeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cbArmourType = new System.Windows.Forms.ComboBox();
-            this.lblArmourType = new System.Windows.Forms.Label();
             this.txtVisionRange = new System.Windows.Forms.NumericUpDown();
             this.lblVisionRange = new System.Windows.Forms.Label();
             this.txtGazCostPerTurn = new System.Windows.Forms.NumericUpDown();
@@ -102,8 +100,6 @@
             // 
             this.groupBox1.Controls.Add(this.lblUniqueVisionRnage);
             this.groupBox1.Controls.Add(this.dgvUniqueVisionRange);
-            this.groupBox1.Controls.Add(this.cbArmourType);
-            this.groupBox1.Controls.Add(this.lblArmourType);
             this.groupBox1.Controls.Add(this.txtVisionRange);
             this.groupBox1.Controls.Add(this.lblVisionRange);
             this.groupBox1.Controls.Add(this.txtGazCostPerTurn);
@@ -162,33 +158,6 @@
             // 
             this.dgvVisionRangeColumn.HeaderText = "VisionRange";
             this.dgvVisionRangeColumn.Name = "dgvVisionRangeColumn";
-            // 
-            // cbArmourType
-            // 
-            this.cbArmourType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbArmourType.FormattingEnabled = true;
-            this.cbArmourType.Items.AddRange(new object[] {
-            "Infantry",
-            "Bazooka",
-            "TireA",
-            "TireB",
-            "Tank",
-            "Air",
-            "Ship",
-            "Transport"});
-            this.cbArmourType.Location = new System.Drawing.Point(99, 182);
-            this.cbArmourType.Name = "cbArmourType";
-            this.cbArmourType.Size = new System.Drawing.Size(121, 21);
-            this.cbArmourType.TabIndex = 18;
-            // 
-            // lblArmourType
-            // 
-            this.lblArmourType.AutoSize = true;
-            this.lblArmourType.Location = new System.Drawing.Point(6, 185);
-            this.lblArmourType.Name = "lblArmourType";
-            this.lblArmourType.Size = new System.Drawing.Size(70, 13);
-            this.lblArmourType.TabIndex = 19;
-            this.lblArmourType.Text = "Armour Type:";
             // 
             // txtVisionRange
             // 
@@ -688,8 +657,6 @@
         private System.Windows.Forms.CheckBox cbWeapon2PostMovement;
         private System.Windows.Forms.NumericUpDown txtVisionRange;
         private System.Windows.Forms.Label lblVisionRange;
-        private System.Windows.Forms.ComboBox cbArmourType;
-        private System.Windows.Forms.Label lblArmourType;
         public System.Windows.Forms.DataGridView dgvTransport;
         private System.Windows.Forms.DataGridViewComboBoxColumn clCanTransport;
         private System.Windows.Forms.NumericUpDown txtWeapon1MinimumRange;
