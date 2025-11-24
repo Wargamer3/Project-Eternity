@@ -88,6 +88,8 @@ namespace ProjectEternity.Core.Units.Conquest
         public byte Weapon2MinimumRange;
         public byte Weapon2MaximumRange;
 
+        public Dictionary<byte, int> DicUniqueVisionRange;
+
         private UnitMapComponent MapComponents;
         public AIContainer SquadAI;
 
@@ -140,11 +142,16 @@ namespace ProjectEternity.Core.Units.Conquest
             for (int i = 0; i < TransportCount; ++i)
             {
             }
+
             byte UniqueVisionRangeCount = BR.ReadByte();
+            DicUniqueVisionRange = new Dictionary<byte, int>(UniqueVisionRangeCount);
             for (int i = 0; i < UniqueVisionRangeCount; ++i)
             {
-                BR.ReadByte();
-                BR.ReadInt32();
+                byte TerrainIndex = BR.ReadByte();
+                if (!DicUniqueVisionRange.ContainsKey(TerrainIndex))
+                {
+                    DicUniqueVisionRange.Add(TerrainIndex, BR.ReadInt32());
+                }
             }
 
             if (Content != null)

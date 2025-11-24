@@ -7,6 +7,7 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Conquest;
 using Microsoft.Xna.Framework.Content.Builder;
 using ProjectEternity.GameScreens.ConquestMapScreen;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Editors.UnitConquestEditor
 {
@@ -140,6 +141,11 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             {
                 cbMovementType.SelectedIndex = LoadedUnit.MovementType;
             }
+
+            foreach (KeyValuePair<byte, int> ActiveVisionRange in LoadedUnit.DicUniqueVisionRange)
+            {
+                dgvUniqueVisionRange.Rows.Add(new string[] { TerrainHolder.ListConquestTerrainType[ActiveVisionRange.Key].TerrainName, ActiveVisionRange.Value.ToString() });
+            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
@@ -160,8 +166,9 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             {
                 var filePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
+                fileName = fileName.Substring(0, fileName.Length - 4);
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(filePath, fileName, "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
@@ -186,8 +193,9 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             {
                 var filePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
+                fileName = fileName.Substring(0, fileName.Length - 4);
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(filePath, fileName, "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
