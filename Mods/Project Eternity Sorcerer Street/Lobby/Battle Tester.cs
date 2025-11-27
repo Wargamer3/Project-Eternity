@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private BoxButton DefenderMapCreaturesButton;
         private TextInput DefenderLapInput;
         private TextInput DefenderRoundInput;
-        private DropDownButton DefenderTerrainType;
+        private BoxDropDownButton DefenderTerrainType;
 
         private BoxButton InvaderCreatureButton;
         private BoxButton InvaderItemButton;
@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefenderRoundInput = new TextInput(fntMenuText, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetRoundInput, true);
             DefenderRoundInput.SetText("1");
 
-            DefenderTerrainType = new DropDownButton(new Rectangle(X, Y += ButtonHeight, 95, 30), fntMenuText, TerrainSorcererStreet.FireElement,
+            DefenderTerrainType = new BoxDropDownButton(new Rectangle(X, Y += ButtonHeight, 95, 30), fntMenuText, TerrainSorcererStreet.FireElement,
                 new string[] { TerrainSorcererStreet.FireElement, TerrainSorcererStreet.WaterElement, TerrainSorcererStreet.EarthElement, TerrainSorcererStreet.AirElement, TerrainSorcererStreet.NeutralElement }, OnButtonOver, (SelectedItem) => { SetDefenderTerrainTerrainTypeIndex(SelectedItem); });
 
             #endregion

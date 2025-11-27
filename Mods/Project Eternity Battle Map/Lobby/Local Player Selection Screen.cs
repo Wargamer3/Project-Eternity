@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Large");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Popup/Popup Large");
 
             ArrayPlayerControlDropDown = new DropDownButton[4];
             ArrayPlayerLoadProfileButton = new TextButton[4];
@@ -51,25 +51,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MenuX = Constants.Width / 2 - MenuWidth / 2;
             int MenuY = Constants.Height / 2 - MenuHeight / 2;
 
-            CloseButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
+            CloseButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Deathmatch/Lobby Menu/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
 
             for (int P = 0; P < 4; P++)
             {
                 int LocalPlayerIndex = P;
                 int ActivePlayerY = (int)(MenuY + 330 * Ratio + P * 120 * Ratio);
 
-                ArrayPlayerControlDropDown[P] = new DropDownButton(new Rectangle((int)(MenuX + 450 * Ratio), ActivePlayerY, 95, 30), fntArial12, "M&K",
-                    new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, (SelectedItem) => { OnPlayerControlChange(LocalPlayerIndex, SelectedItem); });
+                ArrayPlayerControlDropDown[P] = new DropDownButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}M&K}}", 
+                    new string[] { "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}M&K}}",
+                        "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 1}}",
+                        "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 2}}",
+                        "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 3}}",
+                        "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 4}}" },
+                     "Deathmatch/Lobby Menu/Interactive/Button Grey",
+                    new Vector2((int)(MenuX + 636 * Ratio), ActivePlayerY), 4, 1, Ratio, OnButtonOver, (SelectedItem) => { OnPlayerControlChange(LocalPlayerIndex, SelectedItem); });
 
-                ArrayPlayerLoadProfileButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Load}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
+                ArrayPlayerLoadProfileButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Load}}", "Deathmatch/Lobby Menu/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
             }
 
             for (int P = 0; P < 3; P++)
             {
                 int ActivePlayerY = (int)(MenuY + 450 * Ratio + P * 120 * Ratio);
 
-                ArrayAddPlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Add}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, OnAddPlayerPressed);
-                ArrayRemovePlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light}{Centered}{Color:243, 243, 243, 255}Remove}}", "Menus/Lobby/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY + 120 * Ratio), 4, 1, Ratio, OnButtonOver, OnRemovePlayerPressed);
+                ArrayAddPlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Add}}", "Deathmatch/Lobby Menu/Interactive/Button Grey", new Vector2(MenuX + 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, OnAddPlayerPressed);
+                ArrayRemovePlayerButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Remove}}", "Deathmatch/Lobby Menu/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY + 120 * Ratio), 4, 1, Ratio, OnButtonOver, OnRemovePlayerPressed);
             }
 
             UpdateUIElements();

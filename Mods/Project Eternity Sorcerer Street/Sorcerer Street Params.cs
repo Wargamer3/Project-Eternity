@@ -177,8 +177,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CanUseEffectsOrAbilities = true;
 
-            SelfCreature.Reset();
-            OpponentCreature.Reset();
+            if (SelfCreature != null)
+            {
+                SelfCreature.Reset();
+            }
+            if (OpponentCreature != null)
+            {
+                OpponentCreature.Reset();
+            }
             ListBoostCreature.Clear();
             ListActivatedEffect.Clear();
             ListBattlePanelHolder = null;

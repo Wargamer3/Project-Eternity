@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -50,11 +49,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprBackground = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Large");
-            sprSelector = Content.Load<Texture2D>("Menus/Lobby/Popup/Popup Selector");
+            sprBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Popup/Popup Large");
+            sprSelector = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Popup/Popup Selector");
 
-            sprScrollbarBackground = Content.Load<Texture2D>("Menus/Lobby/Interactive/Scrollbar Frame");
-            sprScrollbar = Content.Load<Texture2D>("Menus/Lobby/Interactive/Scrollbar Bar");
+            sprScrollbarBackground = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Scrollbar Frame");
+            sprScrollbar = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Scrollbar Bar");
 
             ListPlayerProfile = ActivePlayer.GetProfileNames();
 
@@ -66,9 +65,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ProfilesScrollbar = new Scrollbar(sprScrollbar, new Vector2(MenuX + MenuWidth - 120 * Ratio, MenuY + 250 * Ratio), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnProfileScrollbarChange);
 
-            ConfirmButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Confirm}}", "Menus/Lobby/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
+            ConfirmButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Confirm}}", "Deathmatch/Lobby Menu/Popup/Button Small Blue", new Vector2((int)(MenuX + MenuWidth - 700 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnConfirmButtonPressed);
 
-            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Menus/Lobby/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCancelButtonPressed);
+            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Close}}", "Deathmatch/Lobby Menu/Popup/Button Small Grey", new Vector2((int)(MenuX + MenuWidth - 300 * Ratio), (int)(MenuY + MenuHeight - 150 * Ratio)), 4, 1, Ratio, OnButtonOver, OnCancelButtonPressed);
 
             ArrayUIElement = new IUIElement[]
             {

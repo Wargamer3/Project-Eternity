@@ -6,7 +6,7 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class DropDownButton: IUIElement
+    public class BoxDropDownButton : IUIElement
     {
         public enum ButtonStates { Idle, Disabled, Hover, Open }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public ButtonStates ButtonState;
 
-        public bool IsIdle { get { return ButtonState == ButtonStates.Idle  ; } }
+        public bool IsIdle { get { return ButtonState == ButtonStates.Idle; } }
         public bool IsDisabled { get { return ButtonState == ButtonStates.Disabled; } }
         public bool IsHover { get { return ButtonState == ButtonStates.Hover; } }
         public bool IsOpen { get { return ButtonState == ButtonStates.Open; } }
 
-        public DropDownButton(Rectangle ButtonCollsionBox, SpriteFont fntText, string Text, string[] Choices, OnOver OnOverDelegate, OnClick OnClickDelegate)
+        public BoxDropDownButton(Rectangle ButtonCollsionBox, SpriteFont fntText, string Text, string[] Choices, OnOver OnOverDelegate, OnClick OnClickDelegate)
         {
             this.ButtonCollsionBox = ButtonCollsionBox;
             this.fntText = fntText;
