@@ -12,7 +12,7 @@ namespace ProjectEternity.Core.Item
         public delegate void OnOver();
         private readonly OnOver OnOverDelegate;
 
-        public delegate void OnClick(string SelectedItem);
+        public delegate void OnClick(int SelectedIndex, string SelectedItem);
         private readonly OnClick OnClickDelegate;
 
         public static Texture2D sprArrow;
@@ -102,7 +102,7 @@ namespace ProjectEternity.Core.Item
                             Select();
                             if (OnClickDelegate != null)
                             {
-                                OnClickDelegate(null);
+                                OnClickDelegate(-1, null);
                             }
                         }
                     }
@@ -125,7 +125,7 @@ namespace ProjectEternity.Core.Item
                             Text = ArrayTextChoice[Index];
                             if (OnClickDelegate != null)
                             {
-                                OnClickDelegate(SelectedItem);
+                                OnClickDelegate(Index, SelectedItem);
                             }
                         }
 

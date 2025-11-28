@@ -424,7 +424,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 foreach (OnlinePlayerBase ActivePlayer in Room.ListRoomPlayer)
                 {
-                    if (!ActivePlayer.IsHost() && !ActivePlayer.IsReady())
+                    if (!ActivePlayer.IsHost() && !ActivePlayer.IsReady() && ActivePlayer.IsOnline)
                     {
                         IsEveryoneReady = false;
                     }

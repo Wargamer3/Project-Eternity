@@ -628,27 +628,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawY = 26;
             g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(DrawX + 30, DrawY + 2), TextColorDark);
 
-            DrawX = 870;
-            DrawY = 6;
-            g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBold, "1", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
-            DrawX += 110;
-            g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBold, "2", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
-            DrawX += 110;
-            g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBold, "3", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
-            DrawX += 110;
-            g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
-            g.DrawString(fntOxanimumBold, "4", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
+            DrawPlayerIcons(g);
 
             DrawX = Constants.Width - 540;
             DrawY = 350;
-            g.Draw(sprFriendsList, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprFriendsList, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
             DrawX = 30;
             DrawY = 780;
-            g.Draw(sprChatBox, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprChatBox, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
 
             g.DrawString(fntArial12, "Lv." + PlayerManager.OnlinePlayerLevel, new Vector2(LeftSideWidth + 38, 17), Color.White);
             g.DrawString(fntArial12, PlayerManager.OnlinePlayerName, new Vector2(LeftSideWidth + 98, 15), Color.White);
@@ -668,6 +656,48 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
             }
+        }
+
+        private void DrawPlayerIcons(CustomSpriteBatch g)
+        {
+            float Ratio = Constants.Height / 2160f;
+            int DrawX = 870;
+            int DrawY = 6;
+            Color TextColorLight = Color.FromNonPremultiplied(243, 243, 243, 255);
+
+            g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            g.DrawString(fntOxanimumBold, "1", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
+            DrawX += 110;
+            if (PlayerManager.ListLocalPlayer.Count >= 2)
+            {
+                g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            else
+            {
+                g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            g.DrawString(fntOxanimumBold, "2", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
+            DrawX += 110;
+            if (PlayerManager.ListLocalPlayer.Count >= 3)
+            {
+                g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            else
+            {
+                g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            g.DrawString(fntOxanimumBold, "3", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
+            DrawX += 110;
+            if (PlayerManager.ListLocalPlayer.Count >= 4)
+            {
+                g.Draw(sprIconPlayerActive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            else
+            {
+                g.Draw(sprIconPlayerInactive, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            }
+            g.DrawString(fntOxanimumBold, "4", new Vector2(DrawX + 70, DrawY + 12), TextColorLight);
+
         }
 
         private void DrawRooms(CustomSpriteBatch g)

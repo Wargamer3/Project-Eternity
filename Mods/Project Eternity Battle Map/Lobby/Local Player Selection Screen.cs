@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 3}}",
                         "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Gamepad 4}}" },
                      "Deathmatch/Lobby Menu/Interactive/Button Grey",
-                    new Vector2((int)(MenuX + 636 * Ratio), ActivePlayerY), 4, 1, Ratio, OnButtonOver, (SelectedItem) => { OnPlayerControlChange(LocalPlayerIndex, SelectedItem); });
+                    new Vector2((int)(MenuX + 636 * Ratio), ActivePlayerY), 4, 1, Ratio, OnButtonOver, (SelectedIndex, SelectedItem) => { OnControlChange(LocalPlayerIndex, SelectedIndex, SelectedItem); });
 
                 ArrayPlayerLoadProfileButton[P] = new TextButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}Load}}", "Deathmatch/Lobby Menu/Interactive/Button Grey", new Vector2(MenuX + MenuWidth - 300 * Ratio, ActivePlayerY), 4, 1, Ratio, OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
             }
@@ -182,7 +182,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateUIElements();
         }
 
-        private void OnPlayerControlChange(int Index, string SelectedItem)
+        private void OnControlChange(int LocalPlayerIndex, int SelectedIndex, string SelectedItem)
         {
             sndButtonClick.Play();
         }

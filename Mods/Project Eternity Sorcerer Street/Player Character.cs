@@ -335,11 +335,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (!string.IsNullOrEmpty(SpriteMapPath))
                     FinalSpriteMapPath = "/Map Sprites/" + SpriteMapPath;
 
-                string FinalSpriteUnitPath = "/Shop Sprites/" + CharacterPath;
+                string FinalSpriteUnitPath = "/Shop Sprites/Characters/" + CharacterPath;
                 if (!string.IsNullOrEmpty(SpriteShopPath))
-                    FinalSpriteUnitPath = "/Shop Sprites/" + SpriteShopPath;
+                    FinalSpriteUnitPath = "/Shop Sprites/Characters/" + SpriteShopPath;
 
-                string UnitDirectory = Path.GetDirectoryName("Content/Sorcerer Street/Characters/");
+                string UnitDirectory = Path.GetDirectoryName("Content/Sorcerer Street/");
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + FinalSpriteMapPath + ".xnb"))

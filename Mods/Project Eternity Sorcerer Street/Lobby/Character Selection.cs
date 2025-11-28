@@ -29,6 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private TextButton ReturnToLobbyButton;
         private EmptyBoxScrollbar InventoryScrollbar;
+        private DropDownButton PlayerControlDropDown;
 
         private CubeBackgroundSmall CubeBackground;
 
@@ -51,7 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int SkinBoxHeight = 74;
         private int SkinSectionY = 800;
 
-        private readonly Player ActivePlayer;
+        private Player ActivePlayer;
 
         private int SelectionIndex;
         private int InventoryScrollbarValue;
@@ -62,10 +63,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CharacterSelectionScreen(CardSymbols Symbols, Player ActivePlayer)
         {
             this.Symbols = Symbols;
-            this.ActivePlayer = ActivePlayer;
-
-            CurrentContainer = ActivePlayer.Inventory.RootCharacterContainer;
             ListLastContainer = new List<CharacterInventoryContainer>();
+            SetPlayer(ActivePlayer);
 
             CubeBackground = new CubeBackgroundSmall();
         }
@@ -86,9 +85,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
             InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListCharacter.Count * BoxHeight - BattleMapInventoryScreen.MiddleSectionHeight);
 
+            string[] ArrayPlayerName = new string[PlayerManager.ListLocalPlayer.Count];
+            for (int P = 0; P < PlayerManager.ListLocalPlayer.Count; P++)
+            {
+                ArrayPlayerName[P] = "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}" + PlayerManager.ListLocalPlayer[P].Name + "}}";
+            }
+
+            PlayerControlDropDown = new DropDownButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}" + ActivePlayer.Name + "}}",
+                ArrayPlayerName,
+                "Deathmatch/Lobby Menu/Interactive/Button Grey",
+                new Vector2((int)(2400 * Ratio), (int)(120 * Ratio)), 4, 1, Ratio, OnButtonOver, (SelectedIndex, SelectedItem) => { OnPlayerControlChange(SelectedIndex, SelectedItem); });
+
             ArrayUIElement = new IUIElement[]
             {
-                ReturnToLobbyButton,
+                PlayerControlDropDown, ReturnToLobbyButton,
             };
 
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -116,6 +126,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        private void SetPlayer(Player ActivePlayer)
+        {
+            this.ActivePlayer = ActivePlayer;
+            CurrentContainer = ActivePlayer.Inventory.RootCharacterContainer;
+            ListLastContainer.Clear();
+
+            int ActiveIndex = CurrentContainer.ListCharacter.IndexOf(ActivePlayer.Inventory.Character);
+            if (ActiveIndex >= 0)
+            {
+                this.SelectionIndex = ActiveIndex;
+            }
+        }
+
         private void OnButtonOver()
         {
             sndButtonOver.Play();
@@ -125,6 +148,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             sndButtonClick.Play();
             RemoveScreen(this);
+        }
+
+        private void OnPlayerControlChange(int SelectedIndex, string _)
+        {
+            sndButtonClick.Play();
+            if (SelectedIndex >= 0)
+            {
+                SetPlayer((Player)PlayerManager.ListLocalPlayer[SelectedIndex]);
+            }
         }
 
         private void UpdateCharacterSelection()
