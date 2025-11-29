@@ -205,7 +205,7 @@
             // 
             this.txtCost.Location = new System.Drawing.Point(75, 126);
             this.txtCost.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
