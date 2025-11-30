@@ -96,6 +96,8 @@ namespace ProjectEternity.Editors.MapEditor
 
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
                     BuildingSpawn NewBuilding = new BuildingSpawn(new BuildingConquest(ListFactionBuilding[BuildingIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
+                    NewBuilding.BuildingToSpawn.SpriteMap.Origin = new Microsoft.Xna.Framework.Vector2(NewBuilding.BuildingToSpawn.SpriteMap.SpriteWidth / 2, NewBuilding.BuildingToSpawn.SpriteMap.SpriteHeight - ActiveMap.TileSize.Y / 2);
+
                     pgBuilding.SelectedObject = NewBuilding;
 
                     NewSpawn(GridX, GridY, TopLayer, NewBuilding);

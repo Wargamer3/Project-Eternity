@@ -67,6 +67,14 @@ namespace ProjectEternity.Editors.UnitHubEditor
             BW.Write((int)txtCreditPerTurn.Value);
             BW.Write(ckResupply.Checked);
 
+            BW.Write((byte)txtMapSpriteFPS.Value);
+            BW.Write((byte)txtMapSpriteFramesPerRow.Value);
+            BW.Write((byte)txtMapSpriteNumberOfRow.Value);
+
+            BW.Write((byte)txtMenuSpriteFPS.Value);
+            BW.Write((byte)txtMenuSpriteFramesPerRow.Value);
+            BW.Write((byte)txtMenuSpriteNumberOfRow.Value);
+
             FS.Close();
             BW.Close();
         }
@@ -97,14 +105,22 @@ namespace ProjectEternity.Editors.UnitHubEditor
             txtCreditPerTurn.Value = NewBuilding.CreditPerTurn;
             ckResupply.Checked = NewBuilding.Resupply;
 
-            if (File.Exists("Content/Buildings/Conquest/Map Sprites/" + NewBuilding.RelativePath + ".xnb"))
+            txtMapSpriteFPS.Value = NewBuilding.MapSpriteFramesPerSecond;
+            txtMapSpriteFramesPerRow.Value = NewBuilding.MapSpriteFramesPerLine;
+            txtMapSpriteNumberOfRow.Value = NewBuilding.MapSpriteNumberOfLines;
+
+            txtMenuSpriteFPS.Value = NewBuilding.MenuSpriteFramesPerSecond;
+            txtMenuSpriteFramesPerRow.Value = NewBuilding.MenuSpriteFramesPerLine;
+            txtMenuSpriteNumberOfRow.Value = NewBuilding.MenuSpriteNumberOfLines;
+
+                if (File.Exists("Content/Conquest/Buildings/Map Sprites/" + NewBuilding.RelativePath + ".xnb"))
             {
-                viewerMapSprite.ChangeTexture("Buildings/Conquest/Map Sprites/" + NewBuilding.RelativePath);
+                viewerMapSprite.ChangeTexture("Conquest/Buildings/Map Sprites/" + NewBuilding.RelativePath);
             }
 
-            if (File.Exists("Content/Buildings/Conquest/Menu Sprites/" + NewBuilding.RelativePath + ".xnb"))
+            if (File.Exists("Content/Conquest/Buildings/Menu Sprites/" + NewBuilding.RelativePath + ".xnb"))
             {
-                viewerBattleSprite.ChangeTexture("Buildings/Conquest/Unit Sprites/" + NewBuilding.RelativePath);
+                viewerBattleSprite.ChangeTexture("Conquest/Buildings/Unit Sprites/" + NewBuilding.RelativePath);
             }
         }
         

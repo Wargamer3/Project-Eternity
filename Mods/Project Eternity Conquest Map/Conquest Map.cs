@@ -1806,6 +1806,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Position = Position + new Vector3(TileSize.X / 2, TileSize.Y / 2, 0);
 
+            NewBuilding.SpriteMap.Origin = new Vector2(NewBuilding.SpriteMap.SpriteWidth / 2, NewBuilding.SpriteMap.SpriteHeight - TileSize.Y / 2);
+
             NewBuilding.InitStats();
 
             while (ListPlayer.Count <= PlayerIndex)

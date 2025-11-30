@@ -33,12 +33,27 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public int CreditPerTurn;
         public bool Resupply;
 
+        public byte MapSpriteFramesPerSecond;
+        public byte MapSpriteFramesPerLine;
+        public byte MapSpriteNumberOfLines;
+
+        public byte MenuSpriteFramesPerSecond;
+        public byte MenuSpriteFramesPerLine;
+        public byte MenuSpriteNumberOfLines;
+
         public Vector3 Position;
         public uint SpawnID;
         public int CapturedTeamIndex;
 
         public BuildingConquest()
         {
+            MapSpriteFramesPerSecond = 1;
+            MapSpriteFramesPerLine = 4;
+            MapSpriteNumberOfLines = 1;
+
+            MenuSpriteFramesPerSecond = 1;
+            MenuSpriteFramesPerLine = 1;
+            MenuSpriteNumberOfLines = 1;
         }
 
         public BuildingConquest(string FilePath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -68,20 +83,26 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             CreditPerTurn = BR.ReadInt32();
             Resupply = BR.ReadBoolean();
 
+            MapSpriteFramesPerSecond = BR.ReadByte();
+            MapSpriteFramesPerLine = BR.ReadByte();
+            MapSpriteNumberOfLines = BR.ReadByte();
+
+            MenuSpriteFramesPerSecond = BR.ReadByte();
+            MenuSpriteFramesPerLine = BR.ReadByte();
+            MenuSpriteNumberOfLines = BR.ReadByte();
+
             FS.Close();
             BR.Close();
 
             if (Content != null)
             {
                 if (File.Exists("Content/Conquest/Buildings/Map Sprites/" + RelativePath + ".xnb"))
-                    SpriteMap = new AnimatedSprite(Content, "Conquest/Buildings/Map Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
+                    SpriteMap = new AnimatedSprite(Content, "Conquest/Buildings/Map Sprites/" + RelativePath, Vector2.Zero, MapSpriteFramesPerSecond, MapSpriteNumberOfLines, MapSpriteFramesPerLine);
                 else
                     SpriteMap = new AnimatedSprite(Content, "Conquest/Units/Default", Vector2.Zero, 1);
 
-                SpriteMap.Origin = new Vector2(16, 48);
-
                 if (File.Exists("Content/Conquest/Buildings/Menu Sprites/" + RelativePath + ".xnb"))
-                    SpriteUnit = new AnimatedSprite(Content, "Conquest/Buildings/Menu Sprites/" + RelativePath, Vector2.Zero, 4, 1, 4);
+                    SpriteUnit = new AnimatedSprite(Content, "Conquest/Buildings/Menu Sprites/" + RelativePath, Vector2.Zero, MenuSpriteFramesPerSecond, MenuSpriteNumberOfLines, MenuSpriteFramesPerLine);
                 else
                     SpriteUnit = new AnimatedSprite(Content, "Conquest/Units/Default", Vector2.Zero, 1);
             }

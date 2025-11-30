@@ -40,6 +40,8 @@
             this.viewerMapSprite = new ProjectEternity.Core.Editor.Texture2DViewerControl();
             this.btnImportMapSprite = new System.Windows.Forms.Button();
             this.gbOption = new System.Windows.Forms.GroupBox();
+            this.lblCreditPerTurn = new System.Windows.Forms.Label();
+            this.txtCreditPerTurn = new System.Windows.Forms.NumericUpDown();
             this.ckResupply = new System.Windows.Forms.CheckBox();
             this.lblHealth = new System.Windows.Forms.Label();
             this.txtHealth = new System.Windows.Forms.NumericUpDown();
@@ -48,15 +50,31 @@
             this.ckCapture = new System.Windows.Forms.CheckBox();
             this.lblTerrainType = new System.Windows.Forms.Label();
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
-            this.lblCreditPerTurn = new System.Windows.Forms.Label();
-            this.txtCreditPerTurn = new System.Windows.Forms.NumericUpDown();
+            this.txtMapSpriteFPS = new System.Windows.Forms.NumericUpDown();
+            this.lblMapSpriteFPS = new System.Windows.Forms.Label();
+            this.lblMapSpriteFramesPerRow = new System.Windows.Forms.Label();
+            this.txtMapSpriteFramesPerRow = new System.Windows.Forms.NumericUpDown();
+            this.lblMapSpriteNumberOfRow = new System.Windows.Forms.Label();
+            this.txtMapSpriteNumberOfRow = new System.Windows.Forms.NumericUpDown();
+            this.lblMenuSpriteNumberOfRow = new System.Windows.Forms.Label();
+            this.txtMenuSpriteNumberOfRow = new System.Windows.Forms.NumericUpDown();
+            this.lblMenuSpriteFramesPerRow = new System.Windows.Forms.Label();
+            this.txtMenuSpriteFramesPerRow = new System.Windows.Forms.NumericUpDown();
+            this.lblMenuSpriteFPS = new System.Windows.Forms.Label();
+            this.txtMenuSpriteFPS = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.bgSpritePreview.SuspendLayout();
             this.gbOption.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVision)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteFPS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteFramesPerRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteNumberOfRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteNumberOfRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteFramesPerRow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteFPS)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -66,14 +84,14 @@
             this.groupBox1.Controls.Add(this.lstUnits);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(177, 240);
+            this.groupBox1.Size = new System.Drawing.Size(177, 248);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Units to build";
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(96, 211);
+            this.btnRemove.Location = new System.Drawing.Point(96, 219);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 2;
@@ -83,7 +101,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(6, 211);
+            this.btnAdd.Location = new System.Drawing.Point(6, 219);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 1;
@@ -105,7 +123,7 @@
             this.tsmSave});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(506, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(744, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -118,13 +136,25 @@
             // 
             // bgSpritePreview
             // 
+            this.bgSpritePreview.Controls.Add(this.lblMenuSpriteNumberOfRow);
+            this.bgSpritePreview.Controls.Add(this.txtMenuSpriteNumberOfRow);
+            this.bgSpritePreview.Controls.Add(this.lblMenuSpriteFramesPerRow);
+            this.bgSpritePreview.Controls.Add(this.txtMenuSpriteFramesPerRow);
+            this.bgSpritePreview.Controls.Add(this.lblMenuSpriteFPS);
+            this.bgSpritePreview.Controls.Add(this.txtMenuSpriteFPS);
+            this.bgSpritePreview.Controls.Add(this.lblMapSpriteNumberOfRow);
+            this.bgSpritePreview.Controls.Add(this.txtMapSpriteNumberOfRow);
+            this.bgSpritePreview.Controls.Add(this.lblMapSpriteFramesPerRow);
+            this.bgSpritePreview.Controls.Add(this.txtMapSpriteFramesPerRow);
+            this.bgSpritePreview.Controls.Add(this.lblMapSpriteFPS);
+            this.bgSpritePreview.Controls.Add(this.txtMapSpriteFPS);
             this.bgSpritePreview.Controls.Add(this.viewerBattleSprite);
             this.bgSpritePreview.Controls.Add(this.btnImportMenuSprite);
             this.bgSpritePreview.Controls.Add(this.viewerMapSprite);
             this.bgSpritePreview.Controls.Add(this.btnImportMapSprite);
             this.bgSpritePreview.Location = new System.Drawing.Point(195, 27);
             this.bgSpritePreview.Name = "bgSpritePreview";
-            this.bgSpritePreview.Size = new System.Drawing.Size(237, 132);
+            this.bgSpritePreview.Size = new System.Drawing.Size(237, 248);
             this.bgSpritePreview.TabIndex = 20;
             this.bgSpritePreview.TabStop = false;
             this.bgSpritePreview.Text = "Sprite Preview";
@@ -177,12 +207,28 @@
             this.gbOption.Controls.Add(this.ckCapture);
             this.gbOption.Controls.Add(this.lblTerrainType);
             this.gbOption.Controls.Add(this.cboTerrainType);
-            this.gbOption.Location = new System.Drawing.Point(196, 166);
+            this.gbOption.Location = new System.Drawing.Point(438, 27);
             this.gbOption.Name = "gbOption";
-            this.gbOption.Size = new System.Drawing.Size(298, 211);
+            this.gbOption.Size = new System.Drawing.Size(298, 248);
             this.gbOption.TabIndex = 21;
             this.gbOption.TabStop = false;
             this.gbOption.Text = "Option";
+            // 
+            // lblCreditPerTurn
+            // 
+            this.lblCreditPerTurn.AutoSize = true;
+            this.lblCreditPerTurn.Location = new System.Drawing.Point(3, 100);
+            this.lblCreditPerTurn.Name = "lblCreditPerTurn";
+            this.lblCreditPerTurn.Size = new System.Drawing.Size(74, 13);
+            this.lblCreditPerTurn.TabIndex = 10;
+            this.lblCreditPerTurn.Text = "Credit Per turn";
+            // 
+            // txtCreditPerTurn
+            // 
+            this.txtCreditPerTurn.Location = new System.Drawing.Point(80, 98);
+            this.txtCreditPerTurn.Name = "txtCreditPerTurn";
+            this.txtCreditPerTurn.Size = new System.Drawing.Size(77, 20);
+            this.txtCreditPerTurn.TabIndex = 9;
             // 
             // ckResupply
             // 
@@ -264,27 +310,197 @@
             this.cboTerrainType.Size = new System.Drawing.Size(143, 21);
             this.cboTerrainType.TabIndex = 0;
             // 
-            // lblCreditPerTurn
+            // txtMapSpriteFPS
             // 
-            this.lblCreditPerTurn.AutoSize = true;
-            this.lblCreditPerTurn.Location = new System.Drawing.Point(3, 100);
-            this.lblCreditPerTurn.Name = "lblCreditPerTurn";
-            this.lblCreditPerTurn.Size = new System.Drawing.Size(74, 13);
-            this.lblCreditPerTurn.TabIndex = 10;
-            this.lblCreditPerTurn.Text = "Credit Per turn";
+            this.txtMapSpriteFPS.Location = new System.Drawing.Point(7, 144);
+            this.txtMapSpriteFPS.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMapSpriteFPS.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMapSpriteFPS.Name = "txtMapSpriteFPS";
+            this.txtMapSpriteFPS.Size = new System.Drawing.Size(77, 20);
+            this.txtMapSpriteFPS.TabIndex = 5;
+            this.txtMapSpriteFPS.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // txtCreditPerTurn
+            // lblMapSpriteFPS
             // 
-            this.txtCreditPerTurn.Location = new System.Drawing.Point(80, 98);
-            this.txtCreditPerTurn.Name = "txtCreditPerTurn";
-            this.txtCreditPerTurn.Size = new System.Drawing.Size(77, 20);
-            this.txtCreditPerTurn.TabIndex = 9;
+            this.lblMapSpriteFPS.AutoSize = true;
+            this.lblMapSpriteFPS.Location = new System.Drawing.Point(6, 128);
+            this.lblMapSpriteFPS.Name = "lblMapSpriteFPS";
+            this.lblMapSpriteFPS.Size = new System.Drawing.Size(99, 13);
+            this.lblMapSpriteFPS.TabIndex = 11;
+            this.lblMapSpriteFPS.Text = "Frames per Second";
+            // 
+            // lblMapSpriteFramesPerRow
+            // 
+            this.lblMapSpriteFramesPerRow.AutoSize = true;
+            this.lblMapSpriteFramesPerRow.Location = new System.Drawing.Point(6, 167);
+            this.lblMapSpriteFramesPerRow.Name = "lblMapSpriteFramesPerRow";
+            this.lblMapSpriteFramesPerRow.Size = new System.Drawing.Size(84, 13);
+            this.lblMapSpriteFramesPerRow.TabIndex = 13;
+            this.lblMapSpriteFramesPerRow.Text = "Frames per Row";
+            // 
+            // txtMapSpriteFramesPerRow
+            // 
+            this.txtMapSpriteFramesPerRow.Location = new System.Drawing.Point(7, 183);
+            this.txtMapSpriteFramesPerRow.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMapSpriteFramesPerRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMapSpriteFramesPerRow.Name = "txtMapSpriteFramesPerRow";
+            this.txtMapSpriteFramesPerRow.Size = new System.Drawing.Size(77, 20);
+            this.txtMapSpriteFramesPerRow.TabIndex = 12;
+            this.txtMapSpriteFramesPerRow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblMapSpriteNumberOfRow
+            // 
+            this.lblMapSpriteNumberOfRow.AutoSize = true;
+            this.lblMapSpriteNumberOfRow.Location = new System.Drawing.Point(6, 206);
+            this.lblMapSpriteNumberOfRow.Name = "lblMapSpriteNumberOfRow";
+            this.lblMapSpriteNumberOfRow.Size = new System.Drawing.Size(86, 13);
+            this.lblMapSpriteNumberOfRow.TabIndex = 15;
+            this.lblMapSpriteNumberOfRow.Text = "Number of Rows";
+            // 
+            // txtMapSpriteNumberOfRow
+            // 
+            this.txtMapSpriteNumberOfRow.Location = new System.Drawing.Point(7, 222);
+            this.txtMapSpriteNumberOfRow.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMapSpriteNumberOfRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMapSpriteNumberOfRow.Name = "txtMapSpriteNumberOfRow";
+            this.txtMapSpriteNumberOfRow.Size = new System.Drawing.Size(77, 20);
+            this.txtMapSpriteNumberOfRow.TabIndex = 14;
+            this.txtMapSpriteNumberOfRow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblMenuSpriteNumberOfRow
+            // 
+            this.lblMenuSpriteNumberOfRow.AutoSize = true;
+            this.lblMenuSpriteNumberOfRow.Location = new System.Drawing.Point(121, 206);
+            this.lblMenuSpriteNumberOfRow.Name = "lblMenuSpriteNumberOfRow";
+            this.lblMenuSpriteNumberOfRow.Size = new System.Drawing.Size(81, 13);
+            this.lblMenuSpriteNumberOfRow.TabIndex = 21;
+            this.lblMenuSpriteNumberOfRow.Text = "Number of Row";
+            // 
+            // txtMenuSpriteNumberOfRow
+            // 
+            this.txtMenuSpriteNumberOfRow.Location = new System.Drawing.Point(122, 222);
+            this.txtMenuSpriteNumberOfRow.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteNumberOfRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteNumberOfRow.Name = "txtMenuSpriteNumberOfRow";
+            this.txtMenuSpriteNumberOfRow.Size = new System.Drawing.Size(77, 20);
+            this.txtMenuSpriteNumberOfRow.TabIndex = 20;
+            this.txtMenuSpriteNumberOfRow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblMenuSpriteFramesPerRow
+            // 
+            this.lblMenuSpriteFramesPerRow.AutoSize = true;
+            this.lblMenuSpriteFramesPerRow.Location = new System.Drawing.Point(121, 167);
+            this.lblMenuSpriteFramesPerRow.Name = "lblMenuSpriteFramesPerRow";
+            this.lblMenuSpriteFramesPerRow.Size = new System.Drawing.Size(84, 13);
+            this.lblMenuSpriteFramesPerRow.TabIndex = 19;
+            this.lblMenuSpriteFramesPerRow.Text = "Frames per Row";
+            // 
+            // txtMenuSpriteFramesPerRow
+            // 
+            this.txtMenuSpriteFramesPerRow.Location = new System.Drawing.Point(122, 183);
+            this.txtMenuSpriteFramesPerRow.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteFramesPerRow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteFramesPerRow.Name = "txtMenuSpriteFramesPerRow";
+            this.txtMenuSpriteFramesPerRow.Size = new System.Drawing.Size(77, 20);
+            this.txtMenuSpriteFramesPerRow.TabIndex = 18;
+            this.txtMenuSpriteFramesPerRow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblMenuSpriteFPS
+            // 
+            this.lblMenuSpriteFPS.AutoSize = true;
+            this.lblMenuSpriteFPS.Location = new System.Drawing.Point(121, 128);
+            this.lblMenuSpriteFPS.Name = "lblMenuSpriteFPS";
+            this.lblMenuSpriteFPS.Size = new System.Drawing.Size(99, 13);
+            this.lblMenuSpriteFPS.TabIndex = 17;
+            this.lblMenuSpriteFPS.Text = "Frames per Second";
+            // 
+            // txtMenuSpriteFPS
+            // 
+            this.txtMenuSpriteFPS.Location = new System.Drawing.Point(122, 144);
+            this.txtMenuSpriteFPS.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteFPS.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtMenuSpriteFPS.Name = "txtMenuSpriteFPS";
+            this.txtMenuSpriteFPS.Size = new System.Drawing.Size(77, 20);
+            this.txtMenuSpriteFPS.TabIndex = 16;
+            this.txtMenuSpriteFPS.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // UnitBuilderEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 389);
+            this.ClientSize = new System.Drawing.Size(744, 283);
             this.Controls.Add(this.gbOption);
             this.Controls.Add(this.bgSpritePreview);
             this.Controls.Add(this.groupBox1);
@@ -296,11 +512,18 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.bgSpritePreview.ResumeLayout(false);
+            this.bgSpritePreview.PerformLayout();
             this.gbOption.ResumeLayout(false);
             this.gbOption.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtHealth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtVision)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtCreditPerTurn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteFPS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteFramesPerRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMapSpriteNumberOfRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteNumberOfRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteFramesPerRow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMenuSpriteFPS)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,5 +553,17 @@
         private System.Windows.Forms.CheckBox ckCapture;
         private System.Windows.Forms.Label lblCreditPerTurn;
         private System.Windows.Forms.NumericUpDown txtCreditPerTurn;
+        private System.Windows.Forms.Label lblMapSpriteFramesPerRow;
+        private System.Windows.Forms.NumericUpDown txtMapSpriteFramesPerRow;
+        private System.Windows.Forms.Label lblMapSpriteFPS;
+        private System.Windows.Forms.NumericUpDown txtMapSpriteFPS;
+        private System.Windows.Forms.Label lblMapSpriteNumberOfRow;
+        private System.Windows.Forms.NumericUpDown txtMapSpriteNumberOfRow;
+        private System.Windows.Forms.Label lblMenuSpriteNumberOfRow;
+        private System.Windows.Forms.NumericUpDown txtMenuSpriteNumberOfRow;
+        private System.Windows.Forms.Label lblMenuSpriteFramesPerRow;
+        private System.Windows.Forms.NumericUpDown txtMenuSpriteFramesPerRow;
+        private System.Windows.Forms.Label lblMenuSpriteFPS;
+        private System.Windows.Forms.NumericUpDown txtMenuSpriteFPS;
     }
 }

@@ -770,47 +770,49 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                     foreach (BuildingSpawn ActiveSpawn in Owner.ListBuildingSpawn)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                        int PosX = (int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X;
+                        int PosY = (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y;
+
+                        g.Draw(GameScreen.sprPixel, new Rectangle(PosX,
+                                                      PosY,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
                                         Color.FromNonPremultiplied(255, 255, 255, 180), 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
-                        ActiveSpawn.BuildingToSpawn.SpriteMap.Draw(g, new Rectangle((int)(ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + Map.TileSize.X / 2,
-                                                      (int)(ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + Map.TileSize.Y / 2, Map.TileSize.X, Map.TileSize.Y), Color.White);
+                        ActiveSpawn.BuildingToSpawn.SpriteMap.Draw(g, new Vector2(PosX + Map.TileSize.X / 2, PosY + Map.TileSize.Y / 2), Color.White, 0f, 0.99f, Vector2.One, SpriteEffects.None);
 
                         int OffsetX = 18;
                         int OffsetY = 6;
                         g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            new Vector2(PosX + OffsetX - 2,
+                                        PosY + OffsetY - 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
                         g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
-                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-
-                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX - 2,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
-                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
-                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX + 2,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            new Vector2(PosX + OffsetX + 2,
+                                        PosY + OffsetY - 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
 
                         g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY - 2),
+                            new Vector2(PosX + OffsetX - 2,
+                                        PosY + OffsetY + 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
                         g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY + 2),
+                            new Vector2(PosX + OffsetX + 2,
+                                        PosY + OffsetY + 2),
                             Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
 
                         g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
-                            new Vector2((ActiveSpawn.SpawnPositionX - Map.Camera2DPosition.X) * Map.TileSize.X + OffsetX,
-                                        (ActiveSpawn.SpawnPositionY - Map.Camera2DPosition.Y) * Map.TileSize.Y + OffsetY),
+                            new Vector2(PosX + OffsetX,
+                                        PosY + OffsetY - 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2(PosX + OffsetX,
+                                        PosY + OffsetY + 2),
+                            Color.Black, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.22f);
+
+                        g.DrawString(Map.fntArial8, ActiveSpawn.SpawnPlayer.ToString(),
+                            new Vector2(PosX + OffsetX,
+                                        PosY + OffsetY),
                             Color.White, 0f, Vector2.Zero, 1.8f, SpriteEffects.None, 0.2f);
                     }
                 }
