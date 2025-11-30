@@ -141,8 +141,9 @@ namespace ProjectEternity.Editors.UnitHubEditor
             {
                 var filePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
+                fileName = fileName.Substring(0, fileName.Length - 4);
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(filePath, fileName, "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
@@ -167,8 +168,9 @@ namespace ProjectEternity.Editors.UnitHubEditor
             {
                 var filePath = SpriteFileDialog.FileName;
                 var fileName = SpriteFileDialog.SafeFileName;
+                fileName = fileName.Substring(0, fileName.Length - 4);
                 var Builder = new ContentBuilder();
-                Builder.Add(filePath, fileName.Substring(0, fileName.Length - 4), "TextureImporter", "TextureProcessor");
+                Builder.Add(filePath, fileName, "TextureImporter", "TextureProcessor");
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
