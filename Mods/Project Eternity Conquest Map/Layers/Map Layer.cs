@@ -195,6 +195,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int S = 0; S < ListBuildingSpawnsCount; S++)
             {
                 BuildingSpawn NewBuildingSpawn = new BuildingSpawn(BR);
+                NewBuildingSpawn.BuildingToSpawn.SpriteMap.Origin = new Vector2(NewBuildingSpawn.BuildingToSpawn.SpriteMap.SpriteWidth / 2, NewBuildingSpawn.BuildingToSpawn.SpriteMap.SpriteHeight - Map.TileSize.Y / 2);
                 ListBuildingSpawn.Add(NewBuildingSpawn);
             }
             

@@ -394,7 +394,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             DrawPERAttacks(g);
 
-            DrawBuildings(g);
+            if (!Map.IsEditor || Map.ShowUnits)
+            {
+                DrawBuildings(g);
+            }
 
             DrawPlayers(g);
 
