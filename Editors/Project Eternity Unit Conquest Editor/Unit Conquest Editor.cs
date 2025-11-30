@@ -114,14 +114,14 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             txtWeapon2MinimumRange.Value = LoadedUnit.Weapon2MinimumRange;
             txtWeapon2MaximumRange.Value = LoadedUnit.Weapon2MaximumRange;
 
-            if (File.Exists("Content\\Units\\Conquest\\Map Sprite\\" + LoadedUnit.RelativePath + ".xnb"))
+            if (File.Exists("Content/Conquest/Map Sprite/" + LoadedUnit.RelativePath + ".xnb"))
             {
-                viewerMapSprite.ChangeTexture("Units\\Conquest\\Map Sprite\\" + LoadedUnit.RelativePath);
+                viewerMapSprite.ChangeTexture("Conquest/Units/Map Sprite/" + LoadedUnit.RelativePath);
             }
 
-            if (File.Exists("Content\\Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath + ".xnb"))
+            if (File.Exists("Content/Conquest/Units/Unit Sprite/" + LoadedUnit.RelativePath + ".xnb"))
             {
-                viewerBattleSprite.ChangeTexture("Units\\Conquest\\Unit Sprite\\" + LoadedUnit.RelativePath);
+                viewerBattleSprite.ChangeTexture("Conquest/Units/Unit Sprite/" + LoadedUnit.RelativePath);
             }
 
             TerrainHolder.LoadData();
@@ -172,11 +172,11 @@ namespace ProjectEternity.Editors.UnitConquestEditor
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string MapSpriteFolder = "Content\\Units\\Conquest\\Map Sprite";
+                string MapSpriteFolder = "Content/Conquest/Units/Map Sprite";
                 string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(23);
                 Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "\\" + NewSpriteFileFolder);
 
-                viewerMapSprite.ChangeTexture("Units\\Conquest\\Map Sprite\\" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
+                viewerMapSprite.ChangeTexture("Conquest/Units/Map Sprite/" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
             }
         }
 
@@ -199,11 +199,11 @@ namespace ProjectEternity.Editors.UnitConquestEditor
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string MapSpriteFolder = "Content\\Units\\Conquest\\Unit Sprite";
+                string MapSpriteFolder = "Content/Conquest/Units/Unit Sprite";
                 string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(23);
                 Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "\\" + NewSpriteFileFolder);
 
-                viewerBattleSprite.ChangeTexture("Units\\Conquest\\Unit Sprite\\" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
+                viewerBattleSprite.ChangeTexture("Conquest/Units/Unit Sprite\\" + NewSpriteFileFolder + " \\" + NewSpriteFileName);
             }
         }
     }
