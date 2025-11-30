@@ -73,7 +73,7 @@ namespace ProjectEternity.Core.Units.Conquest
         public int MaxAmmo;
         public int Gaz;
         public int MaxGaz;
-        public byte MovementType;
+        public byte MovementTypeIndex;
         public string ArmourType;
         public int GazCostPerTurn;
         public int VisionRange;
@@ -124,7 +124,7 @@ namespace ProjectEternity.Core.Units.Conquest
             MaxAmmo = BR.ReadInt32();
             MaxGaz = BR.ReadInt32();
             Price = BR.ReadInt32();
-            MovementType = BR.ReadByte();
+            MovementTypeIndex = BR.ReadByte();
             GazCostPerTurn = BR.ReadInt32();
             VisionRange = BR.ReadInt32();
 

@@ -95,16 +95,39 @@ namespace ProjectEternity.Editors.MapEditor
                     int BuildingIndex = lvBuildings.SelectedIndices[0];
 
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-                    BuildingSpawn NewBuilding = new BuildingSpawn(new BuildingConquest(ListFactionBuilding[BuildingIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
-                    NewBuilding.BuildingToSpawn.SpriteMap.Origin = new Microsoft.Xna.Framework.Vector2(NewBuilding.BuildingToSpawn.SpriteMap.SpriteWidth / 2, NewBuilding.BuildingToSpawn.SpriteMap.SpriteHeight - ActiveMap.TileSize.Y / 2);
+
+                    BuildingSpawn NewBuilding = null;
+
+                    for (int S = 0; S < TopLayer.ListBuildingSpawn.Count; S++)
+                    {
+                        if (TopLayer.ListBuildingSpawn[S].SpawnPositionX == GridX && TopLayer.ListBuildingSpawn[S].SpawnPositionY == GridY)
+                        {
+                            NewBuilding = TopLayer.ListBuildingSpawn[S];
+                        }
+                    }
+                    if (NewBuilding == null)
+                    {
+                        NewBuilding = new BuildingSpawn(new BuildingConquest(ListFactionBuilding[BuildingIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
+                        NewBuilding.BuildingToSpawn.SpriteMap.Origin = new Microsoft.Xna.Framework.Vector2(NewBuilding.BuildingToSpawn.SpriteMap.SpriteWidth / 2, NewBuilding.BuildingToSpawn.SpriteMap.SpriteHeight - ActiveMap.TileSize.Y / 2);
+                        TopLayer.ListBuildingSpawn.Add(NewBuilding);
+                    }
 
                     pgBuilding.SelectedObject = NewBuilding;
-
-                    NewSpawn(GridX, GridY, TopLayer, NewBuilding);
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
+                int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+                int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+                MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
+
+                for (int S = 0; S < TopLayer.ListBuildingSpawn.Count; S++)
+                {
+                    if (TopLayer.ListBuildingSpawn[S].SpawnPositionX == GridX && TopLayer.ListBuildingSpawn[S].SpawnPositionY == GridY)
+                    {
+                        TopLayer.ListBuildingSpawn.RemoveAt(S);
+                    }
+                }
             }
         }
 
@@ -157,14 +180,12 @@ namespace ProjectEternity.Editors.MapEditor
 
         }
 
-        private void NewSpawn(int X, int Y, MapLayer TopLayer, BuildingSpawn Spawn)
+        private void NewSpawn(int GridX, int GridY, MapLayer TopLayer, BuildingSpawn Spawn)
         {
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListBuildingSpawn.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListBuildingSpawn[S].SpawnPositionX == X && TopLayer.ListBuildingSpawn[S].SpawnPositionY == Y)
+            {
+                if (TopLayer.ListBuildingSpawn[S].SpawnPositionX == GridX && TopLayer.ListBuildingSpawn[S].SpawnPositionY == GridY)
                 {
-                    //Delete it.
                     TopLayer.ListBuildingSpawn.RemoveAt(S);
                 }
             }

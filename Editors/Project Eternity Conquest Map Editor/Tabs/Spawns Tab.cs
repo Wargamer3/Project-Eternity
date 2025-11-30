@@ -99,14 +99,40 @@ namespace ProjectEternity.Editors.MapEditor
                     int UnitIndex = lvUnits.SelectedIndices[0];
 
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
-                    UnitSpawn NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
-                    pgUnit.SelectedObject = NewUnit;
 
-                    NewSpawn(GridX, GridY, TopLayer, NewUnit);
+                    UnitSpawn NewUnit = null;
+
+                    //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
+                    for (int S = 0; S < TopLayer.ListUnitSpawn.Count; S++)
+                    {
+                        if (TopLayer.ListUnitSpawn[S].SpawnPositionX == GridX && TopLayer.ListUnitSpawn[S].SpawnPositionY == GridY)
+                        {
+                            NewUnit = TopLayer.ListUnitSpawn[S];
+                        }
+                    }
+
+                    if (NewUnit == null)
+                    {
+                        NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
+                        TopLayer.ListUnitSpawn.Add(NewUnit);
+                    }
+
+                    pgUnit.SelectedObject = NewUnit;
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
+                int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
+                int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+                MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
+
+                for (int S = 0; S < TopLayer.ListUnitSpawn.Count; S++)
+                {
+                    if (TopLayer.ListUnitSpawn[S].SpawnPositionX == GridX && TopLayer.ListUnitSpawn[S].SpawnPositionY == GridY)
+                    {
+                        TopLayer.ListUnitSpawn.RemoveAt(S);
+                    }
+                }
             }
         }
 
@@ -147,7 +173,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             foreach (UnitConquest ActiveUnit in ListFactionUnit)
             {
-                cbMoveType.Items.Add(ActiveUnit.MovementType);
+                cbMoveType.Items.Add(ActiveUnit.MovementTypeIndex);
             }
 
             cbMoveType.SelectedIndex = 0;
@@ -165,7 +191,7 @@ namespace ProjectEternity.Editors.MapEditor
             int ImageIndex = 0;
             foreach (UnitConquest ActiveUnit in ListFactionUnit)
             {
-                if (cbMoveType.Text == "All" || ActiveUnit.MovementType == cbMoveType.SelectedIndex)
+                if (cbMoveType.Text == "All" || ActiveUnit.MovementTypeIndex == cbMoveType.SelectedIndex)
                 {
                     lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex);
                     lvUnits.Items[ImageIndex++].Text = ActiveUnit.ItemName;
@@ -177,24 +203,6 @@ namespace ProjectEternity.Editors.MapEditor
         private void lvUnits_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void NewSpawn(int X, int Y, MapLayer TopLayer, UnitSpawn Spawn)
-        {
-            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListUnitSpawn.Count; S++)
-            {//If it exist.
-                if (TopLayer.ListUnitSpawn[S].SpawnPositionX == X && TopLayer.ListUnitSpawn[S].SpawnPositionY == Y)
-                {
-                    //Delete it.
-                    TopLayer.ListUnitSpawn.RemoveAt(S);
-                }
-            }
-            if (Spawn != null)
-            {
-                //Add the new SpawnPoint.
-                TopLayer.ListUnitSpawn.Add(Spawn);
-            }
         }
 
         public static Image Texture2Image(Texture2D sprTexture2D)

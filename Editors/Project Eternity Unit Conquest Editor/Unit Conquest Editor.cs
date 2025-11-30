@@ -137,9 +137,9 @@ namespace ProjectEternity.Editors.UnitConquestEditor
                 dgvTerrainTypeColumn.Items.Add(TerrainHolder.ListConquestTerrainType[T].TerrainName);
             }
 
-            if (LoadedUnit.MovementType < cbMovementType.Items.Count)
+            if (LoadedUnit.MovementTypeIndex < cbMovementType.Items.Count)
             {
-                cbMovementType.SelectedIndex = LoadedUnit.MovementType;
+                cbMovementType.SelectedIndex = LoadedUnit.MovementTypeIndex;
             }
 
             foreach (KeyValuePair<byte, int> ActiveVisionRange in LoadedUnit.DicUniqueVisionRange)
