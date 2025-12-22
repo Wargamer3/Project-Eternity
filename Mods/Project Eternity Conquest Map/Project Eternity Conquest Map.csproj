@@ -95,7 +95,10 @@
     <Compile Include="Battle Animation Screen.cs" />
     <Compile Include="Conquest Map.cs" />
     <Compile Include="Battle Formulas.cs" />
-    <Compile Include="Terrain Conquest Holder.cs" />
+    <Compile Include="Terrain\ConquestDestructibleTilesetPreset.cs" />
+    <Compile Include="Terrain\ConquestTilesetPreset.cs" />
+    <Compile Include="Terrain\DestructibleTerrain.cs" />
+    <Compile Include="Terrain\Terrain Conquest Holder.cs" />
     <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Conquest Params.cs" />
     <Compile Include="Conquest Mutator.cs" />
@@ -130,7 +133,7 @@
     <Compile Include="Rules\Lobby MP Game Rule.cs" />
     <Compile Include="Rules\Lobby Victory Screen.cs" />
     <Compile Include="Rules\Single Player Game Rule.cs" />
-    <Compile Include="Terrain Conquest.cs" />
+    <Compile Include="Terrain\Terrain Conquest.cs" />
     <Compile Include="Layers\Default Weather.cs" />
     <Compile Include="Layers\Environment Manager.cs" />
     <Compile Include="Layers\Layer Holder.cs" />

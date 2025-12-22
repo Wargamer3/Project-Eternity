@@ -600,12 +600,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual TilesetPreset ReadTileset(string TilesetPresetPath, bool IsAutotile, int Index)
         {
-            return TilesetPreset.FromFile("/Tilesets presets/" + TilesetPresetPath + ".pet", TilesetPresetPath, Index);
+            return TilesetPreset.FromFile("/Tilesets Presets/" + TilesetPresetPath + ".pet", TilesetPresetPath, Index);
         }
 
-        protected virtual DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)
+        protected virtual DestructibleTilesetPreset ReadDestructibleTilesetPreset(string TilesetPresetPath, int Index)
         {
-            return new DestructibleTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+            return DestructibleTilesetPreset.FromFile("/Destroyable Tiles Presets/" + TilesetPresetPath + ".pedt", TilesetPresetPath, Index);
         }
 
         protected void LoadTilesets(BinaryReader BR)
@@ -670,7 +670,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                DestructibleTilesetPreset LoadedTileset = ReadDestructibleTilesetPreset(BR, T);
+                DestructibleTilesetPreset LoadedTileset = ReadDestructibleTilesetPreset(BR.ReadString(), T);
                 ListTemporaryTilesetPreset.Add(LoadedTileset);
 
                 #region Load Tilesets
@@ -679,20 +679,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Content != null)
                 {
-                    if (ListTemporaryTilesetPreset[T].TilesetType == DestructibleTilesAttackAttributes.DestructibleTypes.Regular)
-                    {
-                        if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
-                        else
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
-                    }
+                    if (File.Exists("Content/Assets/Destroyable Tiles/" + SpritePath + ".xnb"))
+                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Assets/Destroyable Tiles/" + SpritePath));
                     else
-                    {
-                        if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
-                        else
-                            ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/Default"));
-                    }
+                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Assets/Destroyable Tiles/Default"));
                 }
 
                 #endregion
@@ -703,8 +693,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DestructibleTilesetPreset ExtraTileset = LoadedTileset.CreateSlave(i);
                     ListTemporaryTilesetPreset.Add(ExtraTileset);
 
-                    if (File.Exists("Content/Maps/Autotiles/" + SpritePath + ".xnb"))
-                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Maps/Autotiles/" + SpritePath));
+                    if (File.Exists("Content/Assets/Destroyable Tiles/" + SpritePath + ".xnb"))
+                        ListTemporaryTileSet.Add(Content.Load<Texture2D>("Assets/Destroyable Tiles/" + SpritePath));
                     else
                         ListTemporaryTileSet.Add(null);
                 }

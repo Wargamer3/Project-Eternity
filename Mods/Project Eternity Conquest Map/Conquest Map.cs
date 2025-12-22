@@ -271,9 +271,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-        protected override DestructibleTilesetPreset ReadDestructibleTilesetPreset(BinaryReader BR, int Index)
+        protected override DestructibleTilesetPreset ReadDestructibleTilesetPreset(string TilesetPresetPath, int Index)
         {
-            return new DestructibleTilesetPreset(BR, TileSize.X, TileSize.Y, Index, false);
+            return ConquestDestructibleTilesetPreset.FromFile(this, "Conquest/Destroyable Tiles Presets/" + TilesetPresetPath + ".pedt", TilesetPresetPath, Index);
         }
 
         private void LoadTemporaryTerrain(BinaryReader BR)

@@ -153,7 +153,7 @@ namespace ProjectEternity.Editors.DeathmatchMapEditor
             }
         }
 
-        public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+        public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DrawableTile TilePreset, Terrain TerrainPreset, DestructibleTilesetPreset Preset)
         {
             Terrain NewTerrain = new Terrain(Preset.ArrayTilesetInformation[0].ArrayTerrain[0, 0], new Point(GridX, GridY), LayerIndex);
             NewTerrain.Owner = ActiveMap;

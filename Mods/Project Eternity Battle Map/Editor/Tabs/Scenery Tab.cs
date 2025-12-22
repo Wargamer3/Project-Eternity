@@ -95,16 +95,23 @@ namespace ProjectEternity.Editors.MapEditor
 
         public void OnMouseMove(MouseEventArgs e)
         {
-            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
-            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+            if (lvInfrastructure.SelectedIndices.Count > 0)
+            {
+                int GridX = (int)(ActiveMap.CursorPosition.X / ActiveMap.TileSize.X);
+                int GridY = (int)(ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y);
 
-            if (e.Button == MouseButtons.Left)
-            {
-                Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]]);
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, null);
+                DestructibleTilesetPreset ActiveTileset = ActiveMap.ListTemporaryTilesetPreset[lvInfrastructure.SelectedIndices[0]];
+
+                Terrain SmartPresetTerrain = ActiveTileset.ArrayTilesetInformation[0].ArrayTerrain[0, 0];
+                DrawableTile SmartPresetTile = ActiveTileset.ArrayTilesetInformation[0].ArrayTiles[0, 0];
+                if (e.Button == MouseButtons.Left)
+                {
+                    Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, SmartPresetTile, SmartPresetTerrain, ActiveTileset);
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    Helper.ReplaceDestructibleTileset(GridX, GridY, BattleMapViewer.SelectedListLayerIndex, SmartPresetTile, SmartPresetTerrain, null);
+                }
             }
         }
 
@@ -299,6 +306,7 @@ namespace ProjectEternity.Editors.MapEditor
                             }
 
                             DestructibleTilesetPreset NewTileset = Helper.LoadDestructibleTilesetPreset("Destroyable Tiles Presets", Name, ActiveMap.ListTemporaryTilesetPreset.Count);
+                            NewTileset.RelativePath = Name;
 
                             AddTilesetPreset(NewTileset);
 

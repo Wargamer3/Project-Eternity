@@ -158,7 +158,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 }
             }
 
-            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DrawableTile TilePreset, Terrain TerrainPreset, DestructibleTilesetPreset Preset)
             {
                 var Position = new Vector3(GridX, GridY, LayerIndex);
                 if (Preset == null)
@@ -168,23 +168,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                     return;
                 }
 
-                TerrainConquest NewTerrain = new TerrainConquest(Preset.ArrayTilesetInformation[0].ArrayTerrain[0, 0], new Point(GridX, GridY), LayerIndex);
-                NewTerrain.Owner = ActiveMap;
-                NewTerrain.WorldPosition = new Vector3(GridX * ActiveMap.TileSize.X, GridY * ActiveMap.TileSize.Y, (LayerIndex + NewTerrain.Height) * ActiveMap.LayerHeight);
-
-                DestructibleTerrain NewTemporaryTerrain = new DestructibleTerrain();
-                NewTemporaryTerrain.ReplacementTerrain = NewTerrain;
-                NewTemporaryTerrain.ReplacementTile = Preset.ArrayTilesetInformation[0].ArrayTiles[0, 0];
-                NewTemporaryTerrain.RemainingHP = Preset.HP;
-
-                if (ActiveMap.DicTemporaryTerrain.ContainsKey(Position))
-                {
-                    ActiveMap.DicTemporaryTerrain[Position] = NewTemporaryTerrain;
-                }
-                else
-                {
-                    ActiveMap.DicTemporaryTerrain.Add(Position, NewTemporaryTerrain);
-                }
+                Preset.UpdateAutotTile(TilePreset, TerrainPreset, GridX, GridY, LayerIndex, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTemporaryTilesetPreset);
 
                 ActiveMap.Reset();
             }
@@ -340,7 +324,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 int TileSizeX = BR.ReadInt32();
                 int TileSizeY = BR.ReadInt32();
 
-                DestructibleTilesetPreset NewTilesetPreset = new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, TilesetIndex);
+                DestructibleTilesetPreset NewTilesetPreset = new ConquestDestructibleTilesetPreset(ActiveMap, BR, TileSizeX, TileSizeY, TilesetIndex);
 
                 BR.Close();
                 FS.Close();

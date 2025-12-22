@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return TileWasReplaced;
         }
 
-        public bool UpdateAutotTileParse(TilesetTypes TilesetType, DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        public static bool UpdateAutotTileParse(TilesetTypes TilesetType, DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetPreset CurrentPreset = ListTilesetPreset[NewTile.TilesetIndex];
 
@@ -252,7 +252,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return true;
         }
 
-        private bool UpdtateSmartTileRoad(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static bool UpdtateSmartTileRoad(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetPreset Self = ListTilesetPreset[NewTile.TilesetIndex];
 
@@ -495,7 +495,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return true;
         }
 
-        private bool UpdtateSmartTileBridge(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static bool UpdtateSmartTileBridge(DrawableTile NewTile, Terrain CurrentTerrain, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetPreset Self = ListTilesetPreset[NewTile.TilesetIndex];
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
@@ -571,7 +571,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return true;
         }
 
-        private void UpdtateSmartTileWater(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static void UpdtateSmartTileWater(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
 
@@ -973,7 +973,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void UpdtateSmartTileRiver(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static void UpdtateSmartTileRiver(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
@@ -1214,7 +1214,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private bool UpdateSmartTileShoal(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static bool UpdateSmartTileShoal(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             if (ListTilesetPreset[ArrayTile[GridX, GridY].TilesetIndex] == ListTilesetPreset[NewTile.TilesetIndex].Master)//Ocean type master
             {
@@ -1232,7 +1232,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return false;
         }
 
-        private void UpdtateSmartTileWaterfall(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
+        private static void UpdtateSmartTileWaterfall(DrawableTile NewTile, int GridX, int GridY, int TileSizeX, int TileSizeY, DrawableTile[,] ArrayTile, List<TilesetPreset> ListTilesetPreset)
         {
             //River type
             bool SelfTileValid = ListTilesetPreset[ArrayTile[GridX, GridY].TilesetIndex].TilesetType == TilesetTypes.Slave && ListTilesetPreset[ArrayTile[GridX, GridY].TilesetIndex].SlaveIndex == 1;

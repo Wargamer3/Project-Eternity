@@ -148,7 +148,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 }
             }
 
-            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DestructibleTilesetPreset Preset)
+            public void ReplaceDestructibleTileset(int GridX, int GridY, int LayerIndex, DrawableTile TilePreset, Terrain TerrainPreset, DestructibleTilesetPreset Preset)
             {
             }
 

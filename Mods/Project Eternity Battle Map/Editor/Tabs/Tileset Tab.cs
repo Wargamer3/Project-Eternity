@@ -158,8 +158,8 @@ namespace ProjectEternity.Editors.MapEditor
             if (cboTiles.Items.Count == 0)
                 return;
 
-            int GridX = (int)(ActiveMap.CursorPosition.X) / ActiveMap.TileSize.X;
-            int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
+            int GridX = (int)(ActiveMap.CursorPosition.X / ActiveMap.TileSize.X);
+            int GridY = (int)(ActiveMap.CursorPosition.Y / ActiveMap.TileSize.Y);
 
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {

@@ -190,6 +190,8 @@ namespace ProjectEternity.Editors.TilesetEditor
 
             DestructibleTilesetPreset NewTilesetPreset = Helper.LoadDestructiblePreset(BR, TileSize.X, TileSize.Y, 0);
 
+            NewTilesetPreset.RelativePath = Name;
+
             BR.Close();
             FS.Close();
 

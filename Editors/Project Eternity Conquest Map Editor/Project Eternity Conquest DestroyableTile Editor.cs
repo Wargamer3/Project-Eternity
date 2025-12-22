@@ -41,12 +41,12 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             public DestructibleTilesetPreset LoadDestructiblePreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
             {
-                return new DestructibleTilesetPreset(BR, TileSizeX, TileSizeY, 0);
+                return new ConquestDestructibleTilesetPreset(null, BR, TileSizeX, TileSizeY, 0);
             }
 
             public TilesetPresetInformation CreateDestructiblePreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
-                return new TilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
+                return new ConquestTilesetPreset.ConquestTilesetPresetInformation(TilesetName, TilesetWidth, TilesetHeight, TileSizeX, TileSizeY, TilesetIndex);
             }
 
             public void OnTerrainSelected(Terrain SelectedTerrain)

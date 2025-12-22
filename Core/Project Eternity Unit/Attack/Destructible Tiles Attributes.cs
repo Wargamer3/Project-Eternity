@@ -6,7 +6,7 @@ namespace ProjectEternity.Core.Attacks
 {
     public class DestructibleTilesAttackAttributes
     {
-        public enum DestructibleTypes { Regular, Forest, Road, Rubble, River, Ocean, Shoal, Waterfall, Pipes, Slave /*Only used during loading to fill the tilesets created by multi tileset presets*/ }
+        public enum DestructibleTypes { Regular, Forest, Road, Bridge, Rubble, River, Ocean, Shoal, Waterfall, Pipes, Slave /*Only used during loading to fill the tilesets created by multi tileset presets*/ }
 
         public struct GenericAttribute
         {
