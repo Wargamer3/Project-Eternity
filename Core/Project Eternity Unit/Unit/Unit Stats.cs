@@ -10,12 +10,12 @@ namespace ProjectEternity.Core.Units
 {
     public class UnitStats
     {
-        public const byte TerrainAirIndex = 0;
-        public const byte TerrainLandIndex = 1;
-        public const byte TerrainSeaIndex = 2;
-        public const byte TerrainSpaceIndex = 3;
-        public const byte TerrainWallIndex = 4;
-        public const byte TerrainVoidIndex = 5;
+        public const byte TerrainWallIndex = 0;
+        public const byte TerrainVoidIndex = 1;
+        public const byte TerrainAirIndex = 2;
+        public const byte TerrainLandIndex = 3;
+        public const byte TerrainSeaIndex = 4;
+        public const byte TerrainSpaceIndex = 5;
         public const byte TerrainUnderwaterIndex = 6;
         public const byte TerrainUndergroundIndex = 7;
 

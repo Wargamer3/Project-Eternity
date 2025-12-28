@@ -231,6 +231,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 case DestructibleTypes.Road:
                     return UpdtateSmartTileRoad(NewTile, NewTerrain, CurrentTerrain, GridX, GridY, LayerIndex, TileSizeX, TileSizeY, ListTilesetPreset);
+
+                default:
+                    CreateTerrain(GridX, GridY, LayerIndex, NewTile, NewTerrain);
+                    break;
             }
 
             return true;

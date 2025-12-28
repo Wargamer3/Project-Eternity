@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
         private void Save()
         {
-            FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Create);
+            FileStream FS = new FileStream("Content/Conquest/Conquest Terrains And Movements.bin", FileMode.Create);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.Unicode);
 
             BW.Write(TerrainHolder.ListMoveType.Count);

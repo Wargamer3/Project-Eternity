@@ -500,10 +500,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TilesetPreset Self = ListTilesetPreset[NewTile.TilesetIndex];
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
 
-            bool LeftTileValid = false;
-            bool UpTileValid = false;
-            bool RightTileValid = false;
-            bool DownTileValid = false;
+            bool LeftTileValid = true;
+            bool UpTileValid = true;
+            bool RightTileValid = true;
+            bool DownTileValid = true;
 
             bool UpLeftTileValid = false;
             bool UpRightTileValid = false;
@@ -978,10 +978,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TilesetTypes TilesetType = ListTilesetPreset[NewTile.TilesetIndex].TilesetType;
             TilesetPreset Master = ListTilesetPreset[NewTile.TilesetIndex].Master;
 
-            bool LeftTileValid = false;
-            bool UpTileValid = false;
-            bool RightTileValid = false;
-            bool DownTileValid = false;
+            bool LeftTileValid = true;
+            bool UpTileValid = true;
+            bool RightTileValid = true;
+            bool DownTileValid = true;
 
             bool UpLeftTileValid = false;
             bool UpRightTileValid = false;
@@ -1245,10 +1245,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TilesetPreset Master = ListTilesetPreset[ArrayTile[GridX, GridY].TilesetIndex].Master;
             NewTile = Master.ArrayTilesetInformation[3].ArrayTiles[0, 0];
 
-            bool LeftRiverTileValid = false;
-            bool UpRiverTileValid = false;
-            bool RightRiverTileValid = false;
-            bool DownRiverTileValid = false;
+            bool LeftRiverTileValid = true;
+            bool UpRiverTileValid = true;
+            bool RightRiverTileValid = true;
+            bool DownRiverTileValid = true;
 
             bool LeftOceanTileValid = false;
             bool UpOceanTileValid = false;

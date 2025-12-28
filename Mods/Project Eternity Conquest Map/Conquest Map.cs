@@ -286,6 +286,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 int GridY = BR.ReadInt32();
                 int LayerIndex = BR.ReadInt32();
                 TerrainConquest ReplacementTerrain = new TerrainConquest(BR, GridX, GridY, TileSize.X, TileSize.Y, LayerIndex, LayerHeight, LayerIndex);
+                ReplacementTerrain.Owner = this;
                 DrawableTile ReplacementTile = new DrawableTile(BR, TileSize.X, TileSize.Y);
 
                 var NewTerrain = new DestructibleTerrain();

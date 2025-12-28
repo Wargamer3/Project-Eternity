@@ -6,7 +6,6 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -61,8 +60,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             ListMVChoice = Map.GetMVChoice(ActiveUnit, (ConquestMap)LastPosition.Owner);
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
-            ListMovedOverPoint = new List<Vector3>();
             ListMovedOverTerrain.Add(Map.GetTerrain(ActiveUnit.Position));
+            ListMovedOverPoint = new List<Vector3>();
             ListMovedOverPoint.Add(ActiveUnit.Position);
             ActiveUnit.CurrentAttack = null;
         }

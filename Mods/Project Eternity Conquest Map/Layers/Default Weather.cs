@@ -15,22 +15,30 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 		protected readonly Dictionary<int, Tile2DHolder> DicTile2DByTileset;
         protected readonly Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
 
+        private Dictionary<int, Tile2DHolder> DicTemporaryTile2DByLayerByTileset;
+
         public DefaultWeather(ConquestMap Map, ZoneShape Shape)
 		{
 			this.Map = Map;
 			DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
             DicTile2DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile2DHolder>>();
 
-            if (Map.ListTilesetPreset.Count > 0)
-			{
-				for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
-				{
-					CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
-				}
-			}
-		}
+            DicTemporaryTile2DByLayerByTileset = new Dictionary<int, Tile2DHolder>();
 
-		public void CreateMap(ConquestMap Map, MapLayer Owner, int LayerIndex, Effect WetEffect)
+            CreateMap(Map, Map.LayerManager);
+        }
+
+        private void CreateMap(ConquestMap Map, LayerHolderConquest LayerManager)
+        {
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
+            }
+
+            CreateTemporaryTiles(Map);
+        }
+
+        public void CreateMap(ConquestMap Map, MapLayer Owner, int LayerIndex, Effect WetEffect)
         {
             foreach (SubMapLayer ActiveSubLayer in Owner.ListSubLayer)
             {
@@ -97,20 +105,57 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
+        private void CreateTemporaryTiles(ConquestMap Map)
+        {
+            foreach (KeyValuePair<Vector3, DestructibleTerrain> ActiveTemporaryTerrain in Map.DicTemporaryTerrain)
+            {
+                var ActiveTile = ActiveTemporaryTerrain.Value.ReplacementTile;
+
+                if (!DicTemporaryTile2DByLayerByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                {
+                    Tile2DHolder NewTile = new Tile2DHolder(Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].GetAnimationFrames(), Map.Content, null, "Autotiles/" + Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName);
+
+                    DicTemporaryTile2DByLayerByTileset.Add(ActiveTile.TilesetIndex, NewTile);
+                }
+
+
+                if (ActiveTile.ArraySubTile.Length == 0)
+                {
+                    DicTemporaryTile2DByLayerByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.Origin, ActiveTemporaryTerrain.Value.ReplacementTerrain.WorldPosition);
+                }
+                else
+                {
+                    float OffsetSizeX = ActiveTile.ArraySubTile[0].Width;
+                    float OffsetSizeY = ActiveTile.ArraySubTile[0].Height;
+
+                    for (int T = 0; T < ActiveTile.ArraySubTile.Length; T++)
+                    {
+                        Vector3 TilePosition = ActiveTemporaryTerrain.Value.ReplacementTerrain.WorldPosition;
+                        int IndexX = (T % (ActiveTile.ArraySubTile.Length / 2));
+                        int IndexY = (T / (ActiveTile.ArraySubTile.Length / 2));
+                        TilePosition.X += OffsetSizeX * IndexX;
+                        TilePosition.Y += OffsetSizeY * IndexY;
+                        DicTemporaryTile2DByLayerByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile.ArraySubTile[T], TilePosition);
+                    }
+                }
+            }
+        }
+
         public void Reset()
         {
             DicTile2DByTileset.Clear();
             DicTile2DByLayerByTileset.Clear();
+            DicTemporaryTile2DByLayerByTileset.Clear();
 
-            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
-            {
-                CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
-            }
+            CreateMap(Map, Map.LayerManager);
         }
 
         public virtual void Update(GameTime gameTime)
         {
-
+            foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
+            {
+                ActiveTileSet.Value.Update(gameTime);
+            }
         }
 
         public virtual void BeginDraw(CustomSpriteBatch g)
@@ -151,6 +196,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     ActiveTileSet.Value.Draw(g, Map, 0);
                 }
+            }
+
+            foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTemporaryTile2DByLayerByTileset)
+            {
+                ActiveTileSet.Value.Draw(g, Map, 0);
             }
 
             g.Begin();

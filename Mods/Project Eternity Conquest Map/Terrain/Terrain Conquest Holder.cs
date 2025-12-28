@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void LoadData()
         {
-            FileStream FS = new FileStream("Content/Conquest Terrains And Movements.bin", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Conquest/Conquest Terrains And Movements.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.Unicode);
 
             int ListMoveTypeCount = BR.ReadInt32();
