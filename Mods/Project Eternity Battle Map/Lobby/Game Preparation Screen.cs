@@ -229,12 +229,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
             }
-
-            HandleLoadoutSelection();
-            HandleTeamSelection();
         }
 
-        private void HandleLoadoutSelection()
+        protected void HandleLoadoutSelection()
         {
             if (ActiveDropdownType ==  ActiveDropdownTypes.None && MouseHelper.InputLeftButtonPressed())
             {
@@ -294,7 +291,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void HandleTeamSelection()
+        protected void HandleTeamSelection()
         {
             if (ActiveDropdownType == ActiveDropdownTypes.None && Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0 && MouseHelper.InputLeftButtonPressed())
             {
@@ -424,6 +421,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 foreach (OnlinePlayerBase ActivePlayer in Room.ListRoomPlayer)
                 {
+                    if (ActivePlayer == null)
+                    {
+                        continue;
+                    }
                     if (!ActivePlayer.IsHost() && !ActivePlayer.IsReady() && ActivePlayer.IsOnline)
                     {
                         IsEveryoneReady = false;

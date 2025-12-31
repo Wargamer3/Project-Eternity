@@ -11,6 +11,31 @@ using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
+    public sealed class ClosedPlayer : Player
+    {
+        public override string SaveFileFolder => throw new NotImplementedException();
+
+        public override List<MissionInfo> GetUnlockedMissions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InitFirstTimeInventory()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DoSaveLocally(BinaryWriter BW)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class Player : OnlinePlayerBase
     {
         public class PlayerAbilities

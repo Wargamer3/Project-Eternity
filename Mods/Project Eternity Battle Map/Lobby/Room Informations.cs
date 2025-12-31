@@ -148,6 +148,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void AddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
+            NewPlayer.LocalPlayerIndex = (byte)ListRoomPlayer.Count;
             ListRoomPlayer.Add(NewPlayer);
             ListOnlinePlayer.Add(NewPlayer.OnlineClient);
             ListLocalPlayerID.Add(NewPlayer.ConnectionID);
@@ -218,6 +219,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (OnlinePlayerBase LocalPlayer in ListRoomPlayer)
             {
+                if (LocalPlayer == null)
+                {
+                    continue;
+                }
                 if (ListLocalPlayerID.Contains(LocalPlayer.ConnectionID))
                 {
                     ListLocalPlayer.Add(LocalPlayer);

@@ -184,6 +184,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public List<GameRuleError> Validate(RoomInformations Room)
         {
+            while (Room.ListRoomBot.Count <= Room.MaxNumberOfPlayer)
+            {
+                Player NewBot = new Player(PlayerManager.OnlinePlayerID, "Bot " + (Room.ListRoomBot.Count + 1), OnlinePlayerBase.PlayerTypes.Bot, false, 0, false, Color.Blue);
+                NewBot.InitFirstTimeInventory();
+                Room.ListRoomBot.Add(NewBot);
+            }
+
+            while (Room.ListRoomBot.Count > Room.MaxNumberOfPlayer)
+            {
+                Room.ListRoomBot.RemoveAt(Room.ListRoomBot.Count - 1);
+            }
+
+            while (Room.ListRoomPlayer.Count <= Room.MaxNumberOfPlayer)
+            {
+                Room.ListRoomPlayer.Add(null);
+            }
+
+            while (Room.ListRoomPlayer.Count > Room.MaxNumberOfPlayer)
+            {
+                Room.ListRoomPlayer.RemoveAt(Room.ListRoomPlayer.Count - 1);
+            }
+
             return new List<GameRuleError>();
         }
     }

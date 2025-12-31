@@ -53,6 +53,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int SkinSectionY = 800;
 
         private Player ActivePlayer;
+        private readonly bool CanChangePlayer;
 
         private int SelectionIndex;
         private int InventoryScrollbarValue;
@@ -60,9 +61,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private CharacterInventoryContainer CurrentContainer;
         private List<CharacterInventoryContainer> ListLastContainer;
 
-        public CharacterSelectionScreen(CardSymbols Symbols, Player ActivePlayer)
+        public CharacterSelectionScreen(CardSymbols Symbols, Player ActivePlayer, bool CanChangePlayer)
         {
             this.Symbols = Symbols;
+            this.CanChangePlayer = CanChangePlayer;
+
             ListLastContainer = new List<CharacterInventoryContainer>();
             SetPlayer(ActivePlayer);
 
@@ -91,15 +94,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ArrayPlayerName[P] = "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}" + PlayerManager.ListLocalPlayer[P].Name + "}}";
             }
 
-            PlayerControlDropDown = new DropDownButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}" + ActivePlayer.Name + "}}",
-                ArrayPlayerName,
-                "Deathmatch/Lobby Menu/Interactive/Button Grey",
-                new Vector2((int)(2400 * Ratio), (int)(120 * Ratio)), 4, 1, Ratio, OnButtonOver, (SelectedIndex, SelectedItem) => { OnPlayerControlChange(SelectedIndex, SelectedItem); });
-
-            ArrayUIElement = new IUIElement[]
+            if (CanChangePlayer)
             {
-                PlayerControlDropDown, ReturnToLobbyButton,
-            };
+                PlayerControlDropDown = new DropDownButton(Content, "{{Text:{Font:Oxanium Light Bigger}{Centered}{Color:243, 243, 243, 255}" + ActivePlayer.Name + "}}",
+                    ArrayPlayerName,
+                    "Deathmatch/Lobby Menu/Interactive/Button Grey",
+                    new Vector2((int)(2400 * Ratio), (int)(120 * Ratio)), 4, 1, Ratio, OnButtonOver, (SelectedIndex, SelectedItem) => { OnPlayerControlChange(SelectedIndex, SelectedItem); });
+
+                ArrayUIElement = new IUIElement[]
+                {
+                    PlayerControlDropDown, ReturnToLobbyButton,
+                };
+            }
+            else
+            {
+                ArrayUIElement = new IUIElement[]
+                {
+                    ReturnToLobbyButton,
+                };
+            }
 
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
             fntOxanimumBold = Content.Load<SpriteFont>("Fonts/Oxanium Bold");

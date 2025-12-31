@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Color Color;
         public GameplayTypes GameplayType;
         public PlayerInput InputManager;
-        public byte LocalPlayerIndex;
+        public byte LocalPlayerIndex;//Index in PlayerManager.ListLocalPlayer
 
         public string OnlinePlayerType;
         public IOnlineConnection OnlineClient;//Used by the server

@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case 1:
                         break;
                     case 2:
-                        PushScreen(new CharacterSelectionScreen(Symbols, ActivePlayer));
+                        PushScreen(new CharacterSelectionScreen(Symbols, ActivePlayer, true));
                         break;
                     case 3:
                         break;

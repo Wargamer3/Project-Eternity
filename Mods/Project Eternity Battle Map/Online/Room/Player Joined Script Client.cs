@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {

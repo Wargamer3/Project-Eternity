@@ -113,7 +113,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 if (!DicTemporaryTile2DByLayerByTileset.ContainsKey(ActiveTile.TilesetIndex))
                 {
-                    Tile2DHolder NewTile = new Tile2DHolder(Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].GetAnimationFrames(), Map.Content, null, "Autotiles/" + Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName);
+                    Tile2DHolder NewTile = new Tile2DHolder(Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].GetAnimationFrames(), Map.Content, null, "Destroyable Tiles/" + Map.ListTemporaryTilesetPreset[ActiveTile.TilesetIndex].ArrayTilesetInformation[0].TilesetName);
 
                     DicTemporaryTile2DByLayerByTileset.Add(ActiveTile.TilesetIndex, NewTile);
                 }
