@@ -163,11 +163,11 @@ namespace ProjectEternity.Editors.UnitHubEditor
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string MapSpriteFolder = "Content/Buildings/Conquest/Map Sprites";
+                string MapSpriteFolder = "Content/Conquest/Buildings/Map Sprites";
                 string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(27);
                 Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "/" + NewSpriteFileFolder);
 
-                viewerMapSprite.ChangeTexture("Buildings/Conquest/Map Sprites/" + NewSpriteFileFolder + " /" + NewSpriteFileName);
+                viewerMapSprite.ChangeTexture("Conquest/Buildings/Map Sprites/" + NewSpriteFileFolder + " /" + NewSpriteFileName);
             }
         }
 
@@ -190,11 +190,11 @@ namespace ProjectEternity.Editors.UnitHubEditor
                 string buildError = Builder.Build();
 
                 string NewSpriteFileName = Path.GetFileNameWithoutExtension(FilePath);
-                string MapSpriteFolder = "Content/Buildings/Conquest/Menu Sprite";
+                string MapSpriteFolder = "Content/Conquest/Buildings/Menu Sprite";
                 string NewSpriteFileFolder = Path.GetDirectoryName(FilePath).Substring(23);
                 Builder.CopyBuildOutput(fileName, NewSpriteFileName, MapSpriteFolder + "/" + NewSpriteFileFolder);
 
-                viewerBattleSprite.ChangeTexture("Buildings/Conquest/Menu Sprite/" + NewSpriteFileFolder + " /" + NewSpriteFileName);
+                viewerBattleSprite.ChangeTexture("Conquest/Buildings/Menu Sprite/" + NewSpriteFileFolder + " /" + NewSpriteFileName);
             }
         }
 

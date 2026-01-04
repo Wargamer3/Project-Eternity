@@ -114,7 +114,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             txtWeapon2MinimumRange.Value = LoadedUnit.Weapon2MinimumRange;
             txtWeapon2MaximumRange.Value = LoadedUnit.Weapon2MaximumRange;
 
-            if (File.Exists("Content/Conquest/Map Sprite/" + LoadedUnit.RelativePath + ".xnb"))
+            if (File.Exists("Content/Conquest/Units/Map Sprite/" + LoadedUnit.RelativePath + ".xnb"))
             {
                 viewerMapSprite.ChangeTexture("Conquest/Units/Map Sprite/" + LoadedUnit.RelativePath);
             }
