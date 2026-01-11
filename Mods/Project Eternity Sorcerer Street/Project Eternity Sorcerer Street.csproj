@@ -134,6 +134,7 @@
     <Compile Include="Effects\Squad PER Context.cs" />
     <Compile Include="Effects\Squad PER Params.cs" />
     <Compile Include="Effects\Squad PER Requirement.cs" />
+    <Compile Include="Lobby\Game Preparation Screen\Configure Player Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Player Preparation Default.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Change Player Type Popup.cs" />
     <Compile Include="Lobby\Shop\Character Screen.cs" />

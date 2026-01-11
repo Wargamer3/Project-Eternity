@@ -21,6 +21,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private static DynamicText Text;
 
+        private Player ActivePlayer;
+        private double AITimer;
+
         public ActionPanelDialogPhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
@@ -30,6 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(PanelName, Map, false)
         {
             this.QuoteSet = ListQuoteSet;
+            ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
 
             if (Text == null)
             {
@@ -65,7 +69,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Text.ParseText(ActiveQuoteSet.ListQuote[RandomIndex]);
                 }
             }
-
         }
 
         public static void AddIntrodctionIfAvailable(SorcererStreetMap Map)
@@ -237,6 +240,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoUpdate(GameTime gameTime)
         {
             Text.Update(gameTime);
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    RemoveFromPanelList(this);
+                }
+
+                return;
+            }
 
             if (ActiveInputManager.InputConfirmPressed())
             {

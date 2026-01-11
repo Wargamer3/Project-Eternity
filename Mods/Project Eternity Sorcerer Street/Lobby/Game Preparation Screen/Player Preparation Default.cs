@@ -18,16 +18,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Texture2D sprIconBot;
 
         protected readonly RoomInformations Room;
+        private readonly GameScreen Owner;
         private readonly int BoxWidth;
         private readonly int BoxHeight;
         private int DrawY = 120;
         private int SelectedPlayerIndex = -1;
 
-        public PlayerPreparationDefaultActionPanel(ActionPanelHolder ListActionMenuChoice, SpriteFont fntText, RoomInformations Room)
+        public PlayerPreparationDefaultActionPanel(ActionPanelHolder ListActionMenuChoice, SpriteFont fntText, RoomInformations Room, GameScreen Owner)
             : base("Player Preparation Default", ListActionMenuChoice, false)
         {
             this.fntText = fntText;
             this.Room = Room;
+            this.Owner = Owner;
 
             sprArrowDown = SorcererStreetGamePreparationScreen.sprArrowDown;
             sprIconHuman = SorcererStreetGamePreparationScreen.sprIconHuman;
@@ -44,7 +46,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoUpdate(GameTime gameTime)
         {
             SelectedPlayerIndex = -1;
-            for (int P = 0; P < Math.Max(Room.ListRoomPlayer.Count, Room.MaxNumberOfPlayer); P++)
+            for (int P = 0; P < Room.ListRoomPlayer.Count; P++)
             {
                 int X = 15 + P * BoxWidth;
 
@@ -54,17 +56,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     SelectedPlayerIndex = P;
 
                     if (MouseHelper.InputLeftButtonPressed() && Room.ListRoomBot.Count > 0)
-                    {
+                    {//Change player type to Bot/Closed/Open
                         ListActionMenuChoice.AddToPanelListAndSelect(new GamePreparationChangePlayerTypePopup(ListActionMenuChoice, fntText, Room, SelectedPlayerIndex));
                     }
                 }
-                else if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
-                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 260 && MouseHelper.MouseStateCurrent.Y <= DrawY + 385)
+                else if (Room.ListRoomPlayer[P] != null
+                    && MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 265 && MouseHelper.MouseStateCurrent.Y <= DrawY + 385)
                 {
                     SelectedPlayerIndex = P;
 
                     if (MouseHelper.InputLeftButtonPressed())
                     {//Configure player
+                        ListActionMenuChoice.AddToPanelListAndSelect(new GamePreparationConfigurePlayerPopup(ListActionMenuChoice, fntText, Room, SelectedPlayerIndex, Owner));
                     }
                 }
             }
@@ -82,9 +86,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (SelectedPlayerIndex >= 0 && Room.ListRoomBot.Count > 0)
             {
-                if (MouseHelper.MouseStateCurrent.Y >= DrawY + 260)
+                if (MouseHelper.MouseStateCurrent.Y >= DrawY + 265)
                 {
-                    g.Draw(GameScreen.sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 260, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(GameScreen.sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 265, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
                 else
                 {
@@ -95,7 +99,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new PlayerPreparationDefaultActionPanel(ListActionMenuChoice, fntText, Room);
+            return new PlayerPreparationDefaultActionPanel(ListActionMenuChoice, fntText, Room, Owner);
         }
 
         protected override void OnCancelPanel()

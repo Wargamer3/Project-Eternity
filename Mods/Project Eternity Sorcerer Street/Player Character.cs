@@ -138,6 +138,68 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
+    public class PlayerCharacterAIParameters
+    {
+        public byte InvasionAggressiveness;//Aggressive 1 - 9 Careful
+        public byte InvasionElement;//Anywhere 1 - 9 Elemental-focused
+        public byte DefenceElement;//Anywhere 1 - 9 Elemental-focused
+        public byte SummonElement;//Anywhere 1 - 9 Elemental-focused
+        public byte CreatureSummonCost;//Anywhere 1 - 9 Elemental-focused
+
+        public byte RemainingMagic;//Don't worry 1 - 9 Worry
+        public byte SpellEffectiveness;//Don't worry 1 - 9 Worry
+        public byte SpellDamage;//Don't worry 1 - 9 Worry
+        public byte CardsInHand;//Don't worry 1 - 6 Worry
+        public byte SpellsOnCepters;//Emotional 1 - 3 Calm
+        public byte Symbols;//Don't worry 1 - 9 Worry
+        public byte SymbolChainBuy;//Little 1 - 9 A lot
+        public byte SymbolBuy;//Just a little 1 - 9 Lots
+        public byte SymbolSell;//Just a little 1 - 9 Lots
+
+        public byte CreatureCardsImportance;//Unimportant 1 - 9 Important
+        public byte ItemCardsImportance;//Unimportant 1 - 9 Important
+        public byte SpellCardsImportance;//Unimportant 1 - 9 Important
+        public byte LevelingUpLand;//Just a little 1 - 9 Lots
+        public byte LandLevelUpCommand;//Just a little 1 - 9 Lots
+        public byte CreatureExchangeCommand;//Sometimes 1 - 9 All the time
+        public byte CreatureMovement;//Sometimes 1 - 9 All the time
+        public byte CreatureAbility;//Sometimes 1 - 9 All the time
+        public byte ElementToStopOn;//Anywhere 1 - 9 Element-focused
+        public byte AvoidExpensiveLand;//Don't worry 1 - 9 Avoid
+        public byte PlayerAlliances;//Ignore 1 - 9 Take good care of
+
+        public PlayerCharacterAIParameters(BinaryReader BR)
+        {
+            InvasionAggressiveness = BR.ReadByte();
+            InvasionElement = BR.ReadByte();
+            DefenceElement = BR.ReadByte();
+            SummonElement = BR.ReadByte();
+            CreatureSummonCost = BR.ReadByte();
+
+            RemainingMagic = BR.ReadByte();
+            SpellEffectiveness = BR.ReadByte();
+            SpellDamage = BR.ReadByte();
+            CardsInHand = BR.ReadByte();
+            SpellsOnCepters = BR.ReadByte();
+            Symbols = BR.ReadByte();
+            SymbolChainBuy = BR.ReadByte();
+            SymbolBuy = BR.ReadByte();
+            SymbolSell = BR.ReadByte();
+
+            CreatureCardsImportance = BR.ReadByte();
+            ItemCardsImportance = BR.ReadByte();
+            SpellCardsImportance = BR.ReadByte();
+            LevelingUpLand = BR.ReadByte();
+            LandLevelUpCommand = BR.ReadByte();
+            CreatureExchangeCommand = BR.ReadByte();
+            CreatureMovement = BR.ReadByte();
+            CreatureAbility = BR.ReadByte();
+            ElementToStopOn = BR.ReadByte();
+            AvoidExpensiveLand = BR.ReadByte();
+            PlayerAlliances = BR.ReadByte();
+        }
+    }
+
     public class PlayerCharacter
     {
         public string SpriteMapPath;
@@ -157,6 +219,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<string> ListWhitelist;
         public List<string> ListBlacklist;
         public List<string> ListAIBook;
+
+        public PlayerCharacterAIParameters PlayerCharacterAIParameter;
 
         public ManualSkill[] ArraySpell;
         public BaseAutomaticSkill[] ArraySkill;
@@ -304,6 +368,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
+            PlayerCharacterAIParameter = new PlayerCharacterAIParameters(BR);
+
             #region Quotes
 
             int ListQuoteSetMapNameCount = BR.ReadInt32();
@@ -361,6 +427,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Walking", "Walking", Content);
                     Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
+                    Unit3DModel.DisableLights();
                 }
             }
         }

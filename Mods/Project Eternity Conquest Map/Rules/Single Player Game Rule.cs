@@ -43,6 +43,22 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             SPRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "SPRegenPerTurnPercent"));
             AmmoRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "AmmoRegenPerTurnPercent"));
 
+            for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
+
+                if (!Owner.IsEditor)
+                {
+                    for (int S = 0; S < ActiveLayer.ListUnitSpawn.Count; S++)
+                    {
+                        while  (ActiveLayer.ListUnitSpawn[S].SpawnPlayer >= Owner.ListPlayer.Count)
+                        {
+                            Player NewPlayer = new Player("Enemy", "CPU", false, false, Owner.ListPlayer.Count, Color.Red);
+                            Owner.ListPlayer.Add(NewPlayer);
+                        }
+                    }
+                }
+            }
             int PlayerIndex = 0;
             foreach (Player ActivePlayer in Owner.ListPlayer)
             {
@@ -66,7 +82,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         for (int S = 0; S < ActiveLayer.ListUnitSpawn.Count; S++)
                         {
-                            if (ActiveLayer.ListUnitSpawn[S].SpawnPlayer == ActivePlayer.TeamIndex)
+                            if (ActiveLayer.ListUnitSpawn[S].SpawnPlayer == PlayerIndex)
                             {
                                 UnitConquest NewUnit = new UnitConquest(ActiveLayer.ListUnitSpawn[S].UnitPath, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect);
 
@@ -75,6 +91,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                                 Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX * Owner.TileSize.X, ActiveLayer.ListUnitSpawn[S].SpawnPositionY * Owner.TileSize.Y, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
                                 ++SpawnSquadIndex;
+
+                                if (!ActivePlayer.IsPlayerControlled || !NewUnit.IsPlayerControlled)
+                                {
+                                    InitBot(NewUnit);
+                                }
                             }
                         }
                     }
@@ -129,6 +150,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     Owner.SpawnBuilding(PlayerIndex, NewBuilding, 0, SpawnPosition);
                 }
             }
+        }
+
+        protected virtual void InitBot(UnitConquest NewSquad)
+        {
+            NewSquad.SquadAI = new ConquestScripAIContainer(new ConquestAIInfo(Owner, NewSquad));
+            NewSquad.SquadAI.Load("Default AI");
         }
 
         public int GetRemainingResapwn(int PlayerIndex)

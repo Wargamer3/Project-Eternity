@@ -546,12 +546,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 for (int P = 0; P < 10; P++)
                 {
-                    if (P < PlayerManager.ListLocalPlayer.Count && PlayerManager.ListLocalPlayer[P].OnlinePlayerType != OnlinePlayerBase.PlayerTypeNA)
+                    if (P < Room.ListRoomPlayer.Count)
                     {
-                        OnlinePlayerBase ActivePlayer = PlayerManager.ListLocalPlayer[P];
+                        OnlinePlayerBase ActivePlayer = Room.ListRoomPlayer[P];
                         NewMap.AddLocalPlayer(ActivePlayer);
                     }
-                    else if (P < Room.MaxNumberOfBots)
+                    else if (P < Room.ListRoomBot.Count)
                     {
                         OnlinePlayerBase ActivePlayer = Room.ListRoomBot[P - PlayerManager.ListLocalPlayer.Count];
                         NewMap.AddLocalPlayer(ActivePlayer);

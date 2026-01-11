@@ -13,11 +13,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private ManualSkill EnchantToAdd;
         private int ActivePlayerIndex;
 
+        private Player ActivePlayer;
+        private double AITimer;
+
         public ActionPanelPlayerSpellConfirm(SorcererStreetMap Map, ManualSkill EnchantToAdd, int ActivePlayerIndex)
             : base("Confirm Player Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
             this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
         }
 
         public override void OnSelect()
@@ -26,6 +30,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    EnchantHelper.ActivateOnPlayer(Map, Map.GlobalSorcererStreetBattleContext, EnchantToAdd, ActivePlayerIndex, null);
+                    Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
+                    RemoveAllSubActionPanels();
+                }
+
+                return;
+            }
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (ActionMenuCursor == 0)

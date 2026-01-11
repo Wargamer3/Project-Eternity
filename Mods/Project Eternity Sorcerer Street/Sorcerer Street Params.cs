@@ -267,10 +267,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.CurrentTurn = Map.GameTurn;
             this.ActiveTerrain = ActiveTerrain;
 
-            this.SelfCreature.Creature = SelfCreature;
-            this.SelfCreature.Owner = Map.ListPlayer[SelfPlayerIndex];
-            this.SelfCreature.PlayerIndex = SelfPlayerIndex;
-            this.SelfCreature.OwnerTeam = Map.DicTeam[this.SelfCreature.Owner.TeamIndex];
+            if (this.SelfCreature != null)
+            {
+                this.SelfCreature.Creature = SelfCreature;
+                this.SelfCreature.Owner = Map.ListPlayer[SelfPlayerIndex];
+                this.SelfCreature.PlayerIndex = SelfPlayerIndex;
+                this.SelfCreature.OwnerTeam = Map.DicTeam[this.SelfCreature.Owner.TeamIndex];
+            }
 
             if (OpponentCreature != null)
             {

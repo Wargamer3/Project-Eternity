@@ -16,16 +16,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private List<Player> ListPlayer;
         private bool AllowSelf;
 
+        private Player ActivePlayer;
+        private double AITimer;
+
         public ActionPanelSelectPlayerSpell(SorcererStreetMap Map, ManualSkill EnchantToAdd, bool AllowSelf)
             : base("Select Player Spell", Map, true)
         {
             this.EnchantToAdd = EnchantToAdd;
             this.AllowSelf = AllowSelf;
             ListPlayer = new List<Player>();
+            ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
         }
 
         public override void OnSelect()
         {
+            ListPlayer.Add(ActivePlayer);
+
             for (int P = 0; P < Map.ListPlayer.Count; ++P)
             {
                 if (Map.ListPlayer[P].TeamIndex == -1)
@@ -33,21 +39,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
                 }
 
-                ListPlayer.Add(Map.ListPlayer[P]);
+                if (!ListPlayer.Contains(ListPlayer[P]))
+                {
+                    ListPlayer.Add(Map.ListPlayer[P]);
+                }
             }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    AddToPanelListAndSelect(new ActionPanelPlayerSpellConfirm(Map, EnchantToAdd, Map.ListPlayer.IndexOf(ListPlayer[ActionMenuCursor])));
+                }
+
+                return;
+            }
+
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (ActionMenuCursor < ListPlayer.Count)
                 {
                     AddToPanelListAndSelect(new ActionPanelPlayerSpellConfirm(Map, EnchantToAdd, Map.ListPlayer.IndexOf(ListPlayer[ActionMenuCursor])));
                 }
-                else if (ActionMenuCursor == 1)
+                else
                 {
-                    RemoveAllSubActionPanels();
+                    RemoveFromPanelList(this);
                 }
             }
             else if (ActiveInputManager.InputUpPressed())
@@ -91,7 +112,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             float Ratio = Constants.Height / 720f;
             int BoxWidth = (int)(400 * Ratio);
-            int BoxHeight = (int)(134 * Ratio);
+            int BoxHeight = (int)(67 * (ListPlayer.Count + 1) * Ratio);
             int BoxX = (Constants.Width - BoxWidth) / 2;
             int BoxY = Constants.Height - BoxHeight - (int)(74 * Ratio);
             MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
@@ -101,6 +122,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 g.DrawStringMiddleAligned(Map.fntMenuText, ListPlayer[P].Name, new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio + 36 * P * Ratio)), Color.White);
             }
+
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Return", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio + 36 * ListPlayer.Count * Ratio)), Color.White);
+
             MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 150, (int)(BoxY + 54 * Ratio + ActionMenuCursor * 36 * Ratio)));
         }
 

@@ -72,10 +72,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CreatureName = BR.ReadString();
             _Target = (Targets)BR.ReadByte();
             _IsTemporary = BR.ReadBoolean();
-            if (Params != null && _CreatureName != Random && _CreatureName != RandomDragon && _CreatureName != Opponent && _CreatureName != HighestMHPCreature)
-            {
-                TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
-            }
         }
 
         protected override void Save(BinaryWriter BW)
@@ -108,6 +104,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (_CreatureName == HighestMHPCreature)
             {
+            }
+
+            if (TransformationCreature == null)
+            {
+                TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
 
             if (_Target == Targets.Self)

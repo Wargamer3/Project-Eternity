@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        private PlayerCharacterAIParameters PlayerAIParameter;
 
         private readonly Random Random;
         private readonly Vector2 DicePosition;
@@ -21,6 +22,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int MinimumDiceValue;
         private int MaximumDiceValue;
         private int ForcedDiceValue;
+
+        private double AnimationTimer;
+        private double AITimer;
 
         public ActionPanelRollDicePhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -34,6 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            PlayerAIParameter = ActivePlayer.Inventory.Character.Character.PlayerCharacterAIParameter;
 
             Random = new Random();
             DicePosition = new Vector2(Constants.Width / 2, Constants.Height / 2);
@@ -62,13 +67,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
             if (ForcedDiceValue >= 0)
             {
                 VisibleDiceValue = ForcedDiceValue;
             }
             else
             {
-                VisibleDiceValue = Random.Next(MinimumDiceValue, MaximumDiceValue);
+                AnimationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AnimationTimer >= 0.05)
+                {
+                    VisibleDiceValue = Random.Next(MinimumDiceValue, MaximumDiceValue);
+                    AnimationTimer = 0;
+                }
+            }
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                if (AITimer > 2)
+                {
+                    RollDice();
+                }
+                return;
             }
 
             if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D1) || KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.NumPad1))

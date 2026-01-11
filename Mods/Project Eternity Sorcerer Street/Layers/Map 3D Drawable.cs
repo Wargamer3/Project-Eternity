@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!Map.IsServer)
             {
-                MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
+                MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D Flat");
                 ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
                 ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
 
@@ -83,44 +83,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
 
                 MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
-
-                // Key light.
-                MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
-                MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-                MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-
-                // Fill light.
-                MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
-                MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
-                MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
-
-                // Back light.
-                MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
-                MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-                MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-
-                Vector3 diffuseColor = Vector3.One;
-                Vector3 emissiveColor = Vector3.Zero;
-                Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
-                Vector4 diffuse = new Vector4();
-                Vector3 emissive = new Vector3();
-                float alpha = 1;
-                diffuse.X = diffuseColor.X * alpha;
-                diffuse.Y = diffuseColor.Y * alpha;
-                diffuse.Z = diffuseColor.Z * alpha;
-                diffuse.W = alpha;
-
-                emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
-                emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
-                emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
-
-                MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
-                MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
-                MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
-                MapEffect.Parameters["SpecularPower"].SetValue(64);
-
-                MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
-                MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
 
                 CreateMap(Map, LayerManager);
             }
@@ -993,12 +955,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     for (int L = 0; L < MaxLayerIndex; L++)
                     {
-                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
+                        if (Map.IsEditor)
                         {
-                            ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
-                            ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
+                            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
+                            {
+                                ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                                ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
-                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                                ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                            }
                         }
 
                         DrawItems(g, View, Map.LayerManager.ListLayer[L], false);
@@ -1166,7 +1131,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
-                        ActivePlayer.Inventory.Character.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+                        //ActivePlayer.Inventory.Character.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
                         ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
                     }
@@ -1223,7 +1188,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
 
-                        ActivePlayer.Inventory.Character.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+                        //ActivePlayer.Inventory.Character.Character.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
                         ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                             * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
                     }

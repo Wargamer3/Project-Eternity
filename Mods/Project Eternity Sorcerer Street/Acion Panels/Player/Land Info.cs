@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private TerrainSorcererStreet ActiveTerrain;
+        private double AITimer;
 
         public ActionPanelLandInfoPhase(SorcererStreetMap Map)
                 : base(PanelName, Map, false)
@@ -38,7 +39,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputDownPressed())
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (InputHelper.InputDownPressed() || AITimer >= 1)
             {
                 RemoveFromPanelList(this);
                 switch (Map.TerrainHolder.ListTerrainType[ActiveTerrain.TerrainTypeIndex])

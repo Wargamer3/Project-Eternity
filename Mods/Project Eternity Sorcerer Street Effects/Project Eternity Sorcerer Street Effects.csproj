@@ -223,7 +223,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\Ability Used Requirement.cs" />
     <Compile Include="Requirements\Activation Chance Requirement.cs" />
-    <Compile Include="Requirements\Before Battle Start Requirement.cs" />
     <Compile Include="Requirements\Battle Start Requirement.cs" />
     <Compile Include="Requirements\Destroyed By Spell Requirement.cs" />
     <Compile Include="Requirements\Has Attack First Requirement.cs" />

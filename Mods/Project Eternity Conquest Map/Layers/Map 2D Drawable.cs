@@ -127,90 +127,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
-        public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveSquad, bool IsGreyed)
-        {
-            //If it's dead, don't draw it.
-            if (!ActiveSquad.IsActive)
-                return;
-
-            float PosZ = ActiveSquad.Z;
-
-            if (Map.MovementAnimation.Contains(ActiveSquad))
-            {
-                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
-                float PosX = CurrentPosition.X - CameraPosition.X;
-                float PosY = CurrentPosition.Y - CameraPosition.Y;
-
-                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
-                {
-                    g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
-                    PosY -= 7;
-                }
-
-                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
-                g.End();
-                g.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
-                g.End();
-                g.Begin();
-            }
-            else
-            {
-                Color UnitColor;
-                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                    UnitColor = PlayerColor;
-                else
-                    UnitColor = Color.White;
-
-                float PosX = ActiveSquad.X - CameraPosition.X;
-                float PosY = ActiveSquad.Y - CameraPosition.Y;
-
-                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
-                {
-                    g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
-                    PosY -= 7;
-                }
-                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColoredWithBorder)
-                {
-                    Vector2 TextureRealSize = new Vector2(ActiveSquad.Width, ActiveSquad.Height);
-                    Vector2 TextureOuputSize = new Vector2(TextureRealSize.X + 2, TextureRealSize.Y + 2);
-
-                    Vector2 PixelSize = new Vector2(1 / TextureOuputSize.X, 1 / TextureOuputSize.Y);
-                    Vector2 TextureScale = TextureOuputSize / TextureRealSize;
-
-                    Map.fxOutline.Parameters["TextureScale"].SetValue(TextureScale);
-                    Map.fxOutline.Parameters["OffsetScale"].SetValue(PixelSize * TextureScale);
-
-                    g.End();
-                    g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxOutline);
-
-                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX - 1, PosY - 1, PosZ), (int)TextureOuputSize.X, (int)TextureOuputSize.Y, PlayerColor);
-                    g.End();
-                    g.Begin();
-                }
-                //Unit can't move, grayed.
-                if (IsGreyed)
-                {
-                    g.End();
-                    g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxGrayscale);
-
-                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
-
-                    g.End();
-                    g.Begin();
-
-                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.FromNonPremultiplied(UnitColor.R, UnitColor.G, UnitColor.B, 140));
-                }
-                else
-                {
-                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), UnitColor);
-                }
-
-                ActiveSquad.DrawExtraOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
-            }
-        }
-
         private void DrawCursor(CustomSpriteBatch g)
         {
             //Draw cursor.
@@ -342,6 +258,90 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
+        public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveSquad, bool IsGreyed)
+        {
+            //If it's dead, don't draw it.
+            if (!ActiveSquad.IsActive)
+                return;
+
+            float PosZ = ActiveSquad.Z;
+
+            if (Map.MovementAnimation.Contains(ActiveSquad))
+            {
+                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
+                float PosX = CurrentPosition.X - CameraPosition.X;
+                float PosY = CurrentPosition.Y - CameraPosition.Y;
+
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
+                {
+                    g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
+                    PosY -= 7;
+                }
+
+                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                g.End();
+                g.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+                ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+                g.End();
+                g.Begin();
+            }
+            else
+            {
+                Color UnitColor;
+                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                    UnitColor = PlayerColor;
+                else
+                    UnitColor = Color.White;
+
+                float PosX = ActiveSquad.X - CameraPosition.X;
+                float PosY = ActiveSquad.Y - CameraPosition.Y;
+
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
+                {
+                    g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
+                    PosY -= 7;
+                }
+                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColoredWithBorder)
+                {
+                    Vector2 TextureRealSize = new Vector2(ActiveSquad.Width, ActiveSquad.Height);
+                    Vector2 TextureOuputSize = new Vector2(TextureRealSize.X + 2, TextureRealSize.Y + 2);
+
+                    Vector2 PixelSize = new Vector2(1 / TextureOuputSize.X, 1 / TextureOuputSize.Y);
+                    Vector2 TextureScale = TextureOuputSize / TextureRealSize;
+
+                    Map.fxOutline.Parameters["TextureScale"].SetValue(TextureScale);
+                    Map.fxOutline.Parameters["OffsetScale"].SetValue(PixelSize * TextureScale);
+
+                    g.End();
+                    g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxOutline);
+
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX - 1, PosY - 1, PosZ), (int)TextureOuputSize.X, (int)TextureOuputSize.Y, PlayerColor);
+                    g.End();
+                    g.Begin();
+                }
+                //Unit can't move, grayed.
+                if (IsGreyed)
+                {
+                    g.End();
+                    g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, Map.fxGrayscale);
+
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+
+                    g.End();
+                    g.Begin();
+
+                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                        ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), Color.FromNonPremultiplied(UnitColor.R, UnitColor.G, UnitColor.B, 140));
+                }
+                else
+                {
+                    ActiveSquad.Draw2DOnMap(g, new Vector3(PosX, PosY, PosZ), UnitColor);
+                }
+
+                ActiveSquad.DrawExtraOnMap(g, new Vector3(PosX, PosY, PosZ), Color.White);
+            }
+        }
+
         public void DrawBuildings(CustomSpriteBatch g)
         {
             for (int B = 0; B < Map.ListBuilding.Count; B++)
@@ -349,7 +349,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 float PosX = Map.ListBuilding[B].Position.X - CameraPosition.X;
                 float PosY = Map.ListBuilding[B].Position.Y - CameraPosition.Y;
 
-                Map.ListBuilding[B].SpriteMap.Draw(g, new Vector2(PosX, PosY), Color.White, 0f, 0.99f, Vector2.One, SpriteEffects.None);
+                Map.ListBuilding[B].SpriteMap.Draw(g, new Vector2(PosX, PosY), Color.White, 0f, 1 / PosY, Vector2.One, SpriteEffects.None);
             }
         }
 

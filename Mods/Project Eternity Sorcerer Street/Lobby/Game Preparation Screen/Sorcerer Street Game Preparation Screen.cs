@@ -7,7 +7,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
@@ -15,29 +14,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetGamePreparationScreen : GamePreparationScreen
     {
-        private enum ActiveDropdownTypes { None, PlayerType, SelectPlayerType, Team, SelectTeam, ConfigurePlayer, SelectConfigurePlayer }
-
         public static Texture2D sprArrowDown;
         public static Texture2D sprIconHuman;
         public static Texture2D sprIconBot;
 
         private Matrix Projection;
-        private CardSymbols Symbols;
-        private IconHolder Icons;
         
         private ActionPanelHolder ListActionMenuChoice;
-        private ActiveDropdownTypes ActiveDropdownType;
-        private int SelectedPlayerIndex;
-        private int SelectedMenuIndex;
-
-        private double HoverProgression;
 
         public const int BoxWidth = 185;
-        public const int BoxHeight = 280;
+        public const int BoxHeight = 296;
         private int DrawY = 35;
         public static List<Player> ListAvailablePlayer;//If a player is replaced by a bot
-
-        private int PlayerTypeItemCount => ListAvailablePlayer.Count + 3;
 
         public SorcererStreetGamePreparationScreen(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
             : base(OnlineGameClient, OnlineCommunicationClient, Room)
@@ -54,14 +42,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             base.Load();
 
-            Symbols = CardSymbols.Symbols;
-            Icons = IconHolder.Icons;
-
             sprArrowDown = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Arrow Down");
             sprIconHuman = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Icon Human");
             sprIconBot = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Buttons/Icon Bot");
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new PlayerPreparationDefaultActionPanel(ListActionMenuChoice, fntText, Room));
+            ListActionMenuChoice.AddToPanelListAndSelect(new PlayerPreparationDefaultActionPanel(ListActionMenuChoice, fntText, Room, this));
         }
 
         public override GameOptionsScreen OpenRoomSettingsScreen()
@@ -74,7 +59,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Update(GameTime gameTime)
         {
-            HoverProgression += gameTime.ElapsedGameTime.TotalSeconds;
             base.Update(gameTime);
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
             {
@@ -83,43 +67,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActivePlayer.Inventory.Character.Character.Unit3DModel.Update(gameTime);
                 }
             }
+
             if (ListActionMenuChoice.HasMainPanel)
             {
                 ListActionMenuChoice.Last().Update(gameTime);
-                return;
-            }
-            
-            if (ActiveDropdownType == ActiveDropdownTypes.SelectConfigurePlayer)
-            {
-                int X = 15 + SelectedPlayerIndex * BoxWidth;
-
-                for (int I = 0; I < 2; ++I)
-                {
-                    int Y = DrawY + 218 + I * 25;
-                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
-                        && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + 25)
-                    {
-                        SelectedMenuIndex = I;
-
-                        if (MouseHelper.InputLeftButtonPressed())
-                        {
-                            if (I == 0)
-                            {
-                                PushScreen(new CharacterSelectionScreen(Symbols, ListAvailablePlayer[SelectedPlayerIndex], false));
-                            }
-                            else if (I == 1)
-                            {
-                                PushScreen(new ChooseBookScreen(Symbols, Icons, ListAvailablePlayer[SelectedPlayerIndex]));
-                            }
-                            ActiveDropdownType = ActiveDropdownTypes.None;
-                            return;
-                        }
-                    }
-                }
-                if (MouseHelper.InputLeftButtonPressed())
-                {
-                    ActiveDropdownType = ActiveDropdownTypes.None;
-                }
             }
         }
 
@@ -129,8 +80,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 int X = 5 + P * BoxWidth;
 
+                g.Draw(GameScreen.sprPixel, new Rectangle(X + 5, DrawY, BoxWidth - 10, BoxHeight + 1), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
                 GameScreen.DrawEmptyBox(g, new Vector2(X, DrawY), BoxWidth, BoxHeight);
-                g.Draw(GameScreen.sprPixel, new Rectangle(X + 5, DrawY, BoxWidth - 10, BoxHeight), Color.FromNonPremultiplied(Lobby.BackgroundColor.R, Lobby.BackgroundColor.G, Lobby.BackgroundColor.B, 200));
 
                 if (Room.ListRoomPlayer[P] == null)
                 {
@@ -151,7 +102,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         g.DrawStringCentered(fntText, "Blue Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
                     }
-                    g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 275), Color.White);
+                    g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 280), Color.White);
                 }
                 else if (Room.ListRoomPlayer[P].OnlinePlayerType == OnlinePlayerBase.PlayerTypeBot)
                 {
@@ -165,7 +116,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         g.DrawStringCentered(fntText, "Blue Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
                     }
-                    g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 275), Color.White);
+                    g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 280), Color.White);
                 }
                 else
                 {
@@ -182,30 +133,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             DrawY = 120;
             Matrix View = Matrix.Identity;
-
-            if (ActiveDropdownType == ActiveDropdownTypes.PlayerType)
-            {
-                g.Draw(sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 215, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
-            }
-            else if (ActiveDropdownType == ActiveDropdownTypes.ConfigurePlayer)
-            {
-                g.Draw(sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 260, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
-            }
-            else if (ActiveDropdownType == ActiveDropdownTypes.SelectConfigurePlayer)
-            {
-                int X = 5 + SelectedPlayerIndex * BoxWidth;
-                int NumberOfItems = ListAvailablePlayer.Count + 3;
-                int Y = DrawY + 213;
-                g.Draw(sprPixel, new Rectangle(X + 15, Y, BoxWidth - 30, NumberOfItems * 25 + 10), Lobby.BackgroundColor);
-                DrawEmptyBox(g, new Vector2(X + 15, Y), BoxWidth - 30, NumberOfItems * 25 + 10, 10, HoverProgression);
-                Y += 5;
-                g.Draw(sprPixel, new Rectangle(X + 20, Y + SelectedMenuIndex * 25, BoxWidth - 40, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
-
-                Y += 13;
-                g.DrawStringCentered(fntText, "Select Character", new Vector2(X + BoxWidth / 2, Y), Color.White);
-                Y += 25;
-                g.DrawStringCentered(fntText, "Edit Book", new Vector2(X + BoxWidth / 2, Y), Color.White);
-            }
 
             g.End();
             g.Begin();

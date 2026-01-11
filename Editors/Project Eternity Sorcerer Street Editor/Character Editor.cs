@@ -19,6 +19,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         private DetailsEditor frmDetailsEditor;
         private CharacterQuotesEditor frmQuoteEditor;
         private RelationshipEditor frmRelationshipEditor;
+        private AIEditor frmAIEditor;
 
         public CharacterEditor()
         {
@@ -32,6 +33,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             this.FilePath = FilePath;
             if (!File.Exists(FilePath))
             {
+                frmAIEditor = new AIEditor();
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 SaveItem(FilePath, FilePath);
@@ -121,9 +123,15 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             }
 
             if (frmRelationshipEditor == null)
+            {
                 BW.Write(0);
+            }
             else
+            {
                 frmRelationshipEditor.Save(BW);
+            }
+
+            frmAIEditor.Save(BW);
 
             #region Quotes
 
@@ -183,6 +191,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
             frmQuoteEditor = new CharacterQuotesEditor();
             frmDetailsEditor = new DetailsEditor();
             frmRelationshipEditor = new RelationshipEditor(LoadedCharacter.ArrayRelationshipBonus);
+            frmAIEditor = new AIEditor(LoadedCharacter);
 
             frmDetailsEditor.txtMapSprite.Text = LoadedCharacter.SpriteMapPath;
             frmDetailsEditor.txtShopSprite.Text = LoadedCharacter.SpriteShopPath;
@@ -240,6 +249,11 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
         private void tsmRelationships_Click(object sender, EventArgs e)
         {
             frmRelationshipEditor.ShowDialog();
+        }
+
+        private void tsmAI_Click(object sender, EventArgs e)
+        {
+            frmAIEditor.ShowDialog();
         }
 
         #region Skills

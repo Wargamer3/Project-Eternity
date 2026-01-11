@@ -2,6 +2,7 @@
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -10,7 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "CreatureCardSelection";
         private const string EndCardText = "End turn";
 
-        private double ArrowAnimationTime;
+        private double AITimer;
 
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
             : base(PanelName, Map, CreatureCard.CreatureCardType, EndCardText)
@@ -26,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            ArrowAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+            AITimer += gameTime.ElapsedGameTime.TotalSeconds;
 
             base.DoUpdate(gameTime);
 
@@ -40,6 +41,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 RemoveFromPanelList(this);
                 AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).AllowTerrainCommands));
             }
+        }
+
+        protected override void FinaliseCardSelection(List<Card> ListCardToUseInHand)
+        {
+            base.FinaliseCardSelection(ListCardToUseInHand);
         }
 
         public override void OnEndCardSelected()

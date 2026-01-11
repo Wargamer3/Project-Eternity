@@ -13,11 +13,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public enum CreatureTypes { All, Defensive }
 
         private ManualSkill ActiveSpell;
+        private Player ActivePlayer;
+        private double AITimer;
 
         public ActionPanelNoTargetSpellConfirm(SorcererStreetMap Map, ManualSkill ActiveSpell)
             : base("No Target Spell Confirm", Map, true)
         {
             this.ActiveSpell = ActiveSpell;
+            ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
         }
 
         public override void OnSelect()
@@ -26,21 +29,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    UseCard();
+                }
+                return;
+            }
+
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (ActionMenuCursor == 0)
                 {
-                    Map.GlobalSorcererStreetBattleContext.Reset();
-
-                    for (int E = ActiveSpell.ListEffect.Count - 1; E >= 0; --E)
-                    {
-                        BaseEffect ActiveEffect = ActiveSpell.ListEffect[E].Copy();
-
-                        ActiveEffect.ExecuteEffect();
-                    }
-
-                    Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
-                    RemoveAllSubActionPanels();
+                    UseCard();
                 }
                 else if (ActionMenuCursor == 1)
                 {
@@ -69,6 +73,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
+        }
+
+        private void UseCard()
+        {
+            Map.GlobalSorcererStreetBattleContext.Reset();
+
+            for (int E = ActiveSpell.ListEffect.Count - 1; E >= 0; --E)
+            {
+                BaseEffect ActiveEffect = ActiveSpell.ListEffect[E].Copy();
+
+                ActiveEffect.ExecuteEffect();
+            }
+
+            Map.GlobalPlayerContext.ActivePlayer.ListCardInHand.Remove(Map.GlobalPlayerContext.ActiveCard);
+            RemoveAllSubActionPanels();
         }
 
         public override void DoRead(ByteReader BR)

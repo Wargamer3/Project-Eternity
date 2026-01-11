@@ -78,6 +78,7 @@
             this.btnSetSkill = new System.Windows.Forms.Button();
             this.tabRestrictions = new System.Windows.Forms.TabPage();
             this.tabBooks = new System.Windows.Forms.TabPage();
+            this.tsmAI = new System.Windows.Forms.ToolStripMenuItem();
             this.gbWhitelist.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbSpells.SuspendLayout();
@@ -318,7 +319,8 @@
             this.tsmSave,
             this.tsmDetails,
             this.tsmQuotes,
-            this.tsmRelationships});
+            this.tsmRelationships,
+            this.tsmAI});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(954, 24);
@@ -597,6 +599,13 @@
             this.tabBooks.Text = "Books";
             this.tabBooks.UseVisualStyleBackColor = true;
             // 
+            // tsmAI
+            // 
+            this.tsmAI.Name = "tsmAI";
+            this.tsmAI.Size = new System.Drawing.Size(30, 20);
+            this.tsmAI.Text = "AI";
+            this.tsmAI.Click += new System.EventHandler(this.tsmAI_Click);
+            // 
             // CharacterEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -684,5 +693,6 @@
         private System.Windows.Forms.Button btnDeleteSkill;
         private System.Windows.Forms.Button btnDeleteWhitelist;
         private System.Windows.Forms.Button btnDeleteBlacklist;
+        private System.Windows.Forms.ToolStripMenuItem tsmAI;
     }
 }

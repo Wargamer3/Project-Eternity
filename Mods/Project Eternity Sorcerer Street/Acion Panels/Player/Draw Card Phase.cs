@@ -73,14 +73,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
-            else if (AnimationPhase == AnimationPhases.CardSummary && InputHelper.InputConfirmPressed())
+            else if (AnimationPhase == AnimationPhases.CardSummary)
             {
-                RotationTimer = 0f;
-                AnimationPhase = AnimationPhases.Outro;
-
-                if (Map.OnlineClient != null)
+                if (!ActivePlayer.IsPlayerControlled)
                 {
-                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    RotationTimer += 0.1f;
+                }
+
+                if (InputHelper.InputConfirmPressed() || RotationTimer >= AnimationTime + 1)
+                {
+                    RotationTimer = 0f;
+                    AnimationPhase = AnimationPhases.Outro;
+
+                    if (Map.OnlineClient != null)
+                    {
+                        Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    }
                 }
             }
             else if (AnimationPhase == AnimationPhases.Outro)

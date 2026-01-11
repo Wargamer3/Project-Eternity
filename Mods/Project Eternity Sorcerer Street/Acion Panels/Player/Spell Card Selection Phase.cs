@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -30,6 +31,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             base.DoUpdate(gameTime);
 
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                return;
+            }
+
             if (InputHelper.InputUpPressed())
             {
                 //Move menu downward and then open the dice menu
@@ -38,6 +44,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputDownPressed())
             {
                 SwitchToMainMenu();
+            }
+        }
+
+        protected override void FinaliseCardSelection(List<Card> ListCardToUseInHand)
+        {
+            for (int C = ListCardToUseInHand.Count - 1; C >= 0; C--)
+            {
+                SpellCard ActiveCard = (SpellCard)ListCardToUseInHand[C];
+
+                if (!ActiveCard.ListSpell[0].CanActivateEffectsOnTarget(ActivePlayer.Effects))
+                {
+                    ListCardToUseInHand.RemoveAt(C);
+                }
+            }
+            base.FinaliseCardSelection(ListCardToUseInHand);
+        }
+
+        protected override void HandleCardSelectionAI(GameTime gameTime)
+        {
+            if (PlayerAICardToUseIndex == -1 || PlayerAICardToUseIndex >= ActivePlayer.ListCardInHand.Count)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    PrepareToRollDice();
+                }
+            }
+            else
+            {
+                base.HandleCardSelectionAI(gameTime);
             }
         }
 

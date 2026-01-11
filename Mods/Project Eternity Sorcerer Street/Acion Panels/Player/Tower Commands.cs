@@ -120,7 +120,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (ItemAnimationTime < 5)
             {
-                ItemAnimationTime = 2f;
                 int IconWidth = (int)(32 * 1.5);
                 int IconHeight = (int)(32 * 1.5);
                 int BoxWidth = 650;

@@ -26,6 +26,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.MaximumCardsAllowed = MaximumCardsAllowed;
         }
 
+        public override void OnSelect()
+        {
+            PlayerAICardToUseIndex = RandomHelper.Next(ActivePlayer.ListCardInHand.Count);
+        }
+
         public override void OnCardSelected(Card CardSelected)
         {
             ActivePlayer.ListCardInHand.Remove(CardSelected);

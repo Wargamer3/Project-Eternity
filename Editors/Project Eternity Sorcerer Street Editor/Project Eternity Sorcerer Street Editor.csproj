@@ -52,6 +52,12 @@
     <Compile Include="Batch Quote Form.Designer.cs">
       <DependentUpon>Batch Quote Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Character AI Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character AI Editor.Designer.cs">
+      <DependentUpon>Character AI Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Character Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +167,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Batch Quote Form.resx">
       <DependentUpon>Batch Quote Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character AI Editor.resx">
+      <DependentUpon>Character AI Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Character Editor.resx">
       <DependentUpon>Character Editor.cs</DependentUpon>

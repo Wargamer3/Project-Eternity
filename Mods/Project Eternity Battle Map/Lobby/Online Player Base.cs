@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int TeamIndex;
         public int EXP;
         public int Level;
-        public bool IsPlayerControlled;
+        public bool IsPlayerControlled;//Controlled by a player or a bot
         public Color Color;
         public GameplayTypes GameplayType;
         public PlayerInput InputManager;

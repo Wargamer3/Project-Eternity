@@ -8,6 +8,7 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -18,6 +19,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected readonly SorcererStreetMap Map;
         protected int ActivePlayerIndex;
         protected Player ActivePlayer;
+        protected PlayerCharacterAIParameters PlayerAIParameter;
+        protected int PlayerAICardToUseIndex;
+        protected double AITimer;
         private readonly string CardType;
         protected AnimationPhases AnimationPhase;
         private float AnimationTimer;
@@ -41,12 +45,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.EndCardText = EndCardText;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            PlayerAIParameter = ActivePlayer.Inventory.Character.Character.PlayerCharacterAIParameter;
         }
 
         public override void OnSelect()
         {
             AnimationPhase = AnimationPhases.IntroAnimation;
             AnimationTimer = 0;
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                ChooseCardForAI();
+            }
+        }
+
+        private void ChooseCardForAI()
+        {
+            PlayerAICardToUseIndex = -1;
+            List<Card> ListCardToUseInHand = WillAIUseCard();
+            FinaliseCardSelection(ListCardToUseInHand);
+        }
+
+        protected virtual void FinaliseCardSelection(List<Card> ListCardToUseInHand)
+        {
+            if (ListCardToUseInHand.Count > 0)
+            {
+                PlayerAICardToUseIndex = ActivePlayer.ListCardInHand.IndexOf(ListCardToUseInHand[RandomHelper.Next(ListCardToUseInHand.Count)]);
+            }
+            else
+            {
+                PlayerAICardToUseIndex = ActivePlayer.ListCardInHand.Count;
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -62,7 +91,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (AnimationPhase == AnimationPhases.CardSelection)
             {
-                HandleCardSelection();
+                HandleCardSelection(gameTime);
             }
         }
 
@@ -78,9 +107,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 AnimationTimer -= 300;
         }
 
-        private void HandleCardSelection()
+        private void HandleCardSelection(GameTime gameTime)
         {
             UpdateAnimationTimer();
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                HandleCardSelectionAI(gameTime);
+                return;
+            }
 
             if (InputHelper.InputLeftPressed() && --ActionMenuCursor < 0)
             {
@@ -116,7 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (CanUseCard())
+                if (CanUseCard(ActionMenuCursor))
                 {
                     OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
                 }
@@ -127,21 +162,92 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private bool CanUseCard()
+        protected virtual void HandleCardSelectionAI(GameTime gameTime)
         {
-            if (ActionMenuCursor >= ActivePlayer.ListCardInHand.Count)
+            AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (AITimer >= 0.6)
+            {
+                AITimer -= 0.6;
+
+                if (PlayerAICardToUseIndex < ActionMenuCursor)
+                {
+                    --ActionMenuCursor;
+
+                    if (Map.OnlineClient != null)
+                    {
+                        Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    }
+                }
+                if (PlayerAICardToUseIndex > ActionMenuCursor)
+                {
+                    ++ActionMenuCursor;
+
+                    if (Map.OnlineClient != null)
+                    {
+                        Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    }
+                }
+                else if (PlayerAICardToUseIndex == ActionMenuCursor)
+                {
+                    if (CanUseCard(ActionMenuCursor))
+                    {
+                        OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
+                        ChooseCardForAI();//In case the card return to this menu
+                    }
+                    else if (ActionMenuCursor == ActivePlayer.ListCardInHand.Count)
+                    {
+                        OnEndCardSelected();
+                    }
+                }
+            }
+        }
+
+        private List<Card> WillAIUseCard()
+        {
+            List<Card> ListCardToUseInHand = new List<Card>();
+            bool AIWantToUseCard = false;
+            if (CardType == SpellCard.SpellCardType)
+            {
+                AIWantToUseCard = PlayerAIParameter.SpellCardsImportance >= RandomHelper.Next(10);
+            }
+            else if (CardType == CreatureCard.CreatureCardType)
+            {
+                AIWantToUseCard = PlayerAIParameter.CreatureCardsImportance >= RandomHelper.Next(10);
+            }
+            else if (CardType == ItemCard.ItemCardType)
+            {
+                AIWantToUseCard = PlayerAIParameter.ItemCardsImportance >= RandomHelper.Next(10);
+            }
+
+            if (AIWantToUseCard)
+            {
+                for (int C = 0; C < ActivePlayer.ListCardInHand.Count; ++C)
+                {
+                    if (ActivePlayer.ListCardInHand[C].CardType == CardType && CanUseCard(C))
+                    {
+                        ListCardToUseInHand.Add(ActivePlayer.ListCardInHand[C]);
+                    }
+                }
+            }
+            return ListCardToUseInHand;
+        }
+
+        private bool CanUseCard(int CardIndex)
+        {
+            if (CardIndex >= ActivePlayer.ListCardInHand.Count)
             {
                 return false;
             }
 
-            if (CardType == null || ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType)
+            if (CardType == null || ActivePlayer.ListCardInHand[CardIndex].CardType == CardType)
             {
-                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
+                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[CardIndex]);
             }
 
             if (CardType == "Support Creature")
             {
-                if (ActivePlayer.ListCardInHand[ActionMenuCursor].CardType != CreatureCard.CreatureCardType && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType != ItemCard.ItemCardType)
+                if (ActivePlayer.ListCardInHand[CardIndex].CardType != CreatureCard.CreatureCardType && ActivePlayer.ListCardInHand[CardIndex].CardType != ItemCard.ItemCardType)
                 {
                     return false;
                 }
@@ -156,13 +262,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     CanUseSupportCreature = Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).SupportCreature;
                 }
 
-                CreatureCard ActiveCard = (CreatureCard)ActivePlayer.ListCardInHand[ActionMenuCursor];
+                CreatureCard ActiveCard = (CreatureCard)ActivePlayer.ListCardInHand[CardIndex];
                 if (!CanUseSupportCreature && !ActiveCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).ItemCreature)
                 {
                     return false;
                 }
 
-                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[ActionMenuCursor]);
+                return ActivePlayer.CanUseCard(ActivePlayer.ListCardInHand[CardIndex]);
             }
 
             return false;

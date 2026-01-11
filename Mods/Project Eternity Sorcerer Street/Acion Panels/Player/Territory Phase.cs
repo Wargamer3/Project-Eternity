@@ -15,6 +15,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        protected PlayerCharacterAIParameters PlayerAIParameter;
+        private int AICursorIndex;
+        private double AItimer;
         private TerrainSorcererStreet ActiveTerrain;
         private bool AllTerritory;
 
@@ -32,6 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.AllTerritory = AllTerritory;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            PlayerAIParameter = ActivePlayer.Inventory.Character.Character.PlayerCharacterAIParameter;
             ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
         }
 
@@ -43,6 +47,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AddChoiceToCurrentPanel(new ActionPanelOptions(Map));
             AddChoiceToCurrentPanel(new ActionPanelHelp(Map));
             AddChoiceToCurrentPanel(new ActionPanelEndPlayerPhase(Map));
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AICursorIndex = ListNextChoice.Count - 1;
+
+                if (Map.ListPassedTerrain.Count == 0 || AllTerritory)
+                {
+                    bool AIWantToLevelUpLand = PlayerAIParameter.LevelingUpLand >= RandomHelper.Next(10);
+                    if (AIWantToLevelUpLand)
+                    {
+                        //AICursorIndex = 0;
+                    }
+                }
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -52,6 +70,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (AnimationTime > Math.PI)
             {
                 AnimationTime -= Math.PI;
+            }
+
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                DoUpdateAI(gameTime);
+                return;
             }
 
             if (InputHelper.InputLeftPressed() && --ActionMenuCursor < 0)
@@ -84,6 +108,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputConfirmPressed())
             {
                 if (ActionMenuCursor > 0 || (ActionMenuCursor == 0 && Map.ListPassedTerrain.Count > 0) || AllTerritory)
+                {
+                    AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
+                }
+            }
+        }
+
+        private void DoUpdateAI(GameTime gameTime)
+        {
+            AItimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (AItimer >= 0.6)
+            {
+                AItimer -= 0.6;
+
+                if (ActionMenuCursor < AICursorIndex)
+                {
+                    ++ActionMenuCursor;
+                }
+                else if (ActionMenuCursor > AICursorIndex)
+                {
+                    --ActionMenuCursor;
+                }
+                else
                 {
                     AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
                 }

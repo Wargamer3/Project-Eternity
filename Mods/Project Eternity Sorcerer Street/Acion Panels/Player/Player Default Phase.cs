@@ -14,12 +14,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "PlayerDefault";
 
-        int OriginalPlayerIndex;
+        private int OriginalPlayerIndex;
+        protected Player ActivePlayer;
+        private double AITimer;
 
         public ActionPanelPlayerDefault(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
             OriginalPlayerIndex = Map.ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[OriginalPlayerIndex];
         }
 
         public override void OnSelect()
@@ -174,6 +177,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    ConfirmStartOfTurn();
+                }
+                return;
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 ConfirmStartOfTurn();

@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        private double AITimer;
         private CreatureCard SelectedCard;
 
         private int CursorIndex;
@@ -37,11 +38,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    UseCard();
+                }
+                return;
+            }
+
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (CursorIndex == 0)
                 {
-                    AddToPanelListAndSelect(new ActionPanelCreatureSummon(Map, ActivePlayerIndex, SelectedCard));
+                    UseCard();
                 }
                 else if (CursorIndex == 1)
                 {
@@ -70,6 +82,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
+        }
+
+        private void UseCard()
+        {
+            AddToPanelListAndSelect(new ActionPanelCreatureSummon(Map, ActivePlayerIndex, SelectedCard));
         }
 
         protected override void OnCancelPanel()

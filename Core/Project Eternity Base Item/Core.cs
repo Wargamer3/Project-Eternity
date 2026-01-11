@@ -62,6 +62,11 @@ namespace ProjectEternity.Core
     {
         public static Random Random = new Random();
 
+        /// <summary>
+        /// Return a number equal or greater than 0 and lower but not equeal than MaxValue
+        /// </summary>
+        /// <param name="MaxValue"></param>
+        /// <returns></returns>
         public static int Next(int MaxValue)
         {
             return Random.Next(MaxValue);

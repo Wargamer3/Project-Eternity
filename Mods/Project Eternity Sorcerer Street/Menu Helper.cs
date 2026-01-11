@@ -220,7 +220,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Y = Constants.Height - Constants.Height / 6;
             float Scale = Constants.Width / 3764.70581f;
 
-            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, Y - 340 * Scale + (float)Math.Sin(AnimationTimer * 10) * 3f), Color.White);
+            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, Y - 400 * Scale + (float)Math.Sin(AnimationTimer * 10) * 3f), Color.White);
         }
 
         public static void DrawDownArrow(CustomSpriteBatch g)
