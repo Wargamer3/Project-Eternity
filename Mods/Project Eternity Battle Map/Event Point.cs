@@ -14,16 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte ColorRed;
         public byte ColorGreen;
         public byte ColorBlue;
-
-        public string LeaderTypeName;
-        public string LeaderName;
-        public string LeaderPilot;
-        public string WingmanATypeName;
-        public string WingmanAName;
-        public string WingmanAPilot;
-        public string WingmanBTypeName;
-        public string WingmanBName;
-        public string WingmanBPilot;
+        public bool HasBeenUsed;
 
         public EventPoint(EventPoint Copy)
             : this(Copy.Position, Copy.Tag, Copy.ColorRed, Copy.ColorGreen, Copy.ColorBlue)
@@ -51,6 +42,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(Position.Y);
             BW.Write(Position.Z);
             BW.Write(Tag);
+        }
+    }
+
+    public class PlayerEventPoint : EventPoint
+    {
+        public string LeaderTypeName;
+        public string LeaderName;
+        public string LeaderPilot;
+        public string WingmanATypeName;
+        public string WingmanAName;
+        public string WingmanAPilot;
+        public string WingmanBTypeName;
+        public string WingmanBName;
+        public string WingmanBPilot;
+
+        public PlayerEventPoint(EventPoint Copy)
+            : base(Copy)
+        {
+        }
+
+        public PlayerEventPoint(BinaryReader BR)
+            : base(BR)
+        {
+        }
+
+        public PlayerEventPoint(Vector3 Position, string Tag, byte ColorRed, byte ColorGreen, byte ColorBlue)
+            : base(Position, Tag, ColorRed, ColorGreen, ColorBlue)
+        {
         }
     }
 

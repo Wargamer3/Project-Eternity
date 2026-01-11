@@ -9,22 +9,20 @@ using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.Editors.ConquestMapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
-using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    public class SpawnsTab : IMapEditorTab
+    public class UnitsTab : IMapEditorTab
     {
         private TabPage tabSpawns;
-        private NumericUpDown txtFactions;
+        private ComboBox cbFactions;
+        private ComboBox cbMoveType;
         private ListView lvUnits;
-        private ListView lvBuildings;
+        private PropertyGrid pgUnit;
 
-        private ImageList UnitImageList;
-        private ImageList BuildingImageList;
+        private ImageList imageList;
 
         private List<UnitConquest> ListFactionUnit;
-        private List<BuildingConquest> ListFactionBuilding;
 
         public BattleMapViewerControl BattleMapViewer { get; set; }
         public IMapHelper Helper { get; set; }
@@ -33,25 +31,21 @@ namespace ProjectEternity.Editors.MapEditor
         public TabPage InitTab(MenuStrip mnuToolBar)
         {
             ListFactionUnit = new List<UnitConquest>();
-            ListFactionBuilding = new List<BuildingConquest>();
 
             ExtraTabsUserControl SpawnControl = new ExtraTabsUserControl();
-            tabSpawns = SpawnControl.tabControl1.TabPages[3];
+            tabSpawns = SpawnControl.tabControl1.TabPages[0];
 
-            txtFactions = SpawnControl.txtSpawnsPlayer;
+            cbFactions = SpawnControl.cbUnitsFactions;
+            cbMoveType = SpawnControl.cbUnitsMoveType;
+            lvUnits = SpawnControl.lvUnitsUnits;
+            pgUnit = SpawnControl.pgUnit;
+            imageList = new ImageList();
+            imageList.ImageSize = new Size(32, 32);
+            imageList.ColorDepth = ColorDepth.Depth32Bit;
+            lvUnits.LargeImageList = imageList;
 
-            lvUnits = SpawnControl.lvSpawnsUnits;
-            UnitImageList = new ImageList();
-            UnitImageList.ImageSize = new Size(32, 32);
-            UnitImageList.ColorDepth = ColorDepth.Depth32Bit;
-            lvUnits.LargeImageList = UnitImageList;
-
-            lvBuildings = SpawnControl.lvSpawnsBuildings;
-            BuildingImageList = new ImageList();
-            BuildingImageList.ImageSize = new Size(32, 32);
-            BuildingImageList.ColorDepth = ColorDepth.Depth32Bit;
-            lvBuildings.LargeImageList = BuildingImageList;
-
+            cbFactions.SelectedIndexChanged += cbFactions_SelectedIndexChanged;
+            cbMoveType.SelectedIndexChanged += cbMoveType_SelectedIndexChanged;
             lvUnits.SelectedIndexChanged += lvUnits_SelectedIndexChanged;
 
             return tabSpawns;
@@ -61,36 +55,21 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
 
-            string[] ArrayUnitTypes = Directory.GetFiles("Content/Conquest/Units/Neutral", "*.peu*", SearchOption.TopDirectoryOnly);
-
-            foreach (var ActiveUnit in ArrayUnitTypes)
+            string[] ArrayFactions = Directory.GetDirectories("Content/Conquest/Units", "*.*", SearchOption.TopDirectoryOnly);
+            foreach (var ActiveFaction in ArrayFactions)
             {
-                ListFactionUnit.Add(new UnitConquest(ActiveUnit.Substring(0, ActiveUnit.Length - 4).Substring(23), GameScreens.GameScreen.ContentFallback, null, null));
+                string FactionName = ActiveFaction.Substring(23);
+                if (FactionName == "Map Sprite" || FactionName == "Unit Sprite")
+                {
+                    continue;
+                }
+
+                cbFactions.Items.Add(FactionName);
             }
 
-            int ImageIndex = 0;
-            foreach (UnitConquest ActiveUnit in ListFactionUnit)
+            if (cbFactions.Items.Count > 0)
             {
-                lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex);
-                lvUnits.Items[ImageIndex++].Text = ActiveUnit.ItemName;
-                UnitImageList.Images.Add("itemImageKey", Texture2Image(ActiveUnit.SpriteMap));
-            }
-
-            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Conquest/Buildings/Neutral", "*.peb*", SearchOption.TopDirectoryOnly);
-
-            foreach (var ActiveBuilding in ArrayBuildingTypes)
-            {
-                ListFactionBuilding.Add(new BuildingConquest(ActiveBuilding.Substring(0, ActiveBuilding.Length - 4).Substring(27), GameScreens.GameScreen.ContentFallback, null, null, null));
-            }
-
-            lvBuildings.Items.Clear();
-
-            ImageIndex = 0;
-            foreach (BuildingConquest ActiveUnit in ListFactionBuilding)
-            {
-                lvBuildings.Items.Add(ActiveUnit.Name, ImageIndex);
-                lvBuildings.Items[ImageIndex++].Text = ActiveUnit.Name;
-                BuildingImageList.Images.Add("itemImageKey", Texture2Image(ActiveUnit.SpriteMap.ActiveSprite));
+                cbFactions.SelectedIndex = 0;
             }
         }
 
@@ -134,8 +113,11 @@ namespace ProjectEternity.Editors.MapEditor
 
                     if (NewUnit == null)
                     {
-                        TopLayer.ListMultiplayerSpawns.Add(new ConquestEventPoint(new Vector3(GridX, GridY, BattleMapViewer.SelectedListLayerIndex), "", 0, 0, 0, "Unit", ListFactionUnit[UnitIndex].RelativePath));
+                        NewUnit = new UnitSpawn(new UnitConquest(ListFactionUnit[UnitIndex].RelativePath, GameScreens.GameScreen.ContentFallback, null, null), new Microsoft.Xna.Framework.Point(GridX, GridY), (byte)BattleMapViewer.SelectedListLayerIndex);
+                        TopLayer.ListUnitSpawn.Add(NewUnit);
                     }
+
+                    pgUnit.SelectedObject = NewUnit;
                 }
             }
             else if (e.Button == MouseButtons.Right)
@@ -167,6 +149,55 @@ namespace ProjectEternity.Editors.MapEditor
         public void DrawMap(CustomSpriteBatch g, GraphicsDevice GraphicsDevice)
         {
             BattleMapViewer.DrawMap();
+        }
+
+        private void cbFactions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbFactions.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            ListFactionUnit.Clear();
+            lvUnits.Items.Clear();
+            cbMoveType.Items.Clear();
+            cbMoveType.Items.Add("All");
+            imageList.Images.Clear();
+
+            string[] ArrayUnitTypes = Directory.GetFiles("Content/Conquest/Units/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
+
+            foreach (var ActiveUnit in ArrayUnitTypes)
+            {
+                ListFactionUnit.Add(new UnitConquest(ActiveUnit.Substring(0, ActiveUnit.Length - 4).Substring(23), GameScreens.GameScreen.ContentFallback, null, null));
+            }
+
+            foreach (UnitConquest ActiveUnit in ListFactionUnit)
+            {
+                cbMoveType.Items.Add(ActiveUnit.MovementTypeIndex);
+            }
+
+            cbMoveType.SelectedIndex = 0;
+        }
+
+        private void cbMoveType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbMoveType.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            lvUnits.Items.Clear();
+
+            int ImageIndex = 0;
+            foreach (UnitConquest ActiveUnit in ListFactionUnit)
+            {
+                if (cbMoveType.Text == "All" || ActiveUnit.MovementTypeIndex == cbMoveType.SelectedIndex)
+                {
+                    lvUnits.Items.Add(ActiveUnit.ItemName, ImageIndex);
+                    lvUnits.Items[ImageIndex++].Text = ActiveUnit.ItemName;
+                    imageList.Images.Add("itemImageKey", Texture2Image(ActiveUnit.SpriteMap));
+                }
+            }
         }
 
         private void lvUnits_SelectedIndexChanged(object sender, EventArgs e)

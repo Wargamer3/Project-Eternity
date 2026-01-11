@@ -187,10 +187,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     EventPoint NewPoint = new EventPoint(BR);
                 }
 
-                int ListSpawnsCount = BR.ReadInt32();
-                List<EventPoint> ListSpawns = new List<EventPoint>(ListSpawnsCount);
+                int ListMultiplayerSpawnsCount = BR.ReadInt32();
+                List<EventPoint> ListSpawns = new List<EventPoint>(ListMultiplayerSpawnsCount);
 
-                for (int S = 0; S < ListSpawnsCount; S++)
+                for (int S = 0; S < ListMultiplayerSpawnsCount; S++)
                 {
                     EventPoint NewPoint = new EventPoint(BR);
                     int ColorIndex = 0;
@@ -263,24 +263,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Player NewPlayer = new Player("Player " + (Autoplay.ListPlayer.Count + 1), "AI", false, false, Autoplay.ListPlayer.Count, ActiveMapAttributes.ArrayColor[Autoplay.ListPlayer.Count]);
                 NewPlayer.IsAlive = false;
                 Autoplay.ListPlayer.Add(NewPlayer);
-            }
-
-            for (int P = ActiveMapAttributes.MaxNumberOfPlayers - 1; P >= 0; --P)
-            {
-                Autoplay.ListPlayer[P].ListSpawnPoint.Clear();
-                for (int S = ActiveMapAttributes.ListSpawns.Count - 1; S >= 0; --S)
-                {
-                    if (Convert.ToInt32(ActiveMapAttributes.ListSpawns[S].Tag) == P + 1)
-                    {
-                        EventPoint NewSpawnPoint = ActiveMapAttributes.ListSpawns[S];
-                        Autoplay.ListPlayer[P].ListSpawnPoint.Add(NewSpawnPoint);
-                        NewSpawnPoint.LeaderPilot = ListPilot[Random.Next(ListPilot.Count)];
-
-                        int NewUnitIndex = Random.Next(ArrayUnit.Length);
-                        NewSpawnPoint.LeaderTypeName = ArrayUnit[NewUnitIndex].Item1;
-                        NewSpawnPoint.LeaderName = ArrayUnit[NewUnitIndex].Item2;
-                    }
-                }
             }
 
             return Autoplay;
@@ -474,7 +456,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 if (Convert.ToInt32(ListMap[CursorMap].ListSpawns[S].Tag) == P + 1)
                                 {
-                                    NewMap.ListPlayer[P].ListSpawnPoint.Add(ListMap[CursorMap].ListSpawns[S]);
+                                    NewMap.ListPlayer[P].ListSpawnPoint.Add(new PlayerEventPoint(ListMap[CursorMap].ListSpawns[S]));
                                 }
                             }
                         }

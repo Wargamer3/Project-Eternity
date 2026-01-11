@@ -95,6 +95,7 @@
     <Compile Include="Battle Animation Screen.cs" />
     <Compile Include="Conquest Map.cs" />
     <Compile Include="Battle Formulas.cs" />
+    <Compile Include="Layers\ConquestEventPoint.cs" />
     <Compile Include="Terrain\ConquestDestructibleTilesetPreset.cs" />
     <Compile Include="Terrain\ConquestTilesetPreset.cs" />
     <Compile Include="Terrain\DestructibleTerrain.cs" />

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProjectEternity.Editors.ConquestBuildingEditor.Properties {
+namespace ProjectEternity.Editors.ConquestFactionEditor.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

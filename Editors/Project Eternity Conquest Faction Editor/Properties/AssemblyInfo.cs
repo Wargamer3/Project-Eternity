@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("Project Eternity Conquest Building Editor")]
+[assembly: AssemblyTitle("Project Eternity Conquest Faction Editor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Project Eternity Conquest Building Editor")]
-[assembly: AssemblyCopyright("Copyright ©  2024")]
+[assembly: AssemblyProduct("Project Eternity Conquest Faction Editor")]
+[assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-[assembly: Guid("0b790036-3dcb-4f54-bbe4-ae3220d33ac8")]
+[assembly: Guid("ca6f091f-5d9c-48a6-9015-9bdd0fe45eff")]
 
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 //

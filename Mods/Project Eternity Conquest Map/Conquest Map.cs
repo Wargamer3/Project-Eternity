@@ -1767,6 +1767,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
 
+            DicGameType.Add(CampaignGameInfo.ModeName, new CampaignGameInfo(true, null));
+
             return DicGameType;
         }
 

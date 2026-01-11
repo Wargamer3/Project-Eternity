@@ -35,7 +35,7 @@ namespace ProjectEternity.Core.Units.Conquest
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
-            g.Draw(Unit.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(Unit.SpriteMap.Width / 2, Unit.SpriteMap.Height / 2), SpriteEffects.None, 0.2f);
+            g.Draw(Unit.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(Unit.SpriteMap.Width / 2, Unit.SpriteMap.Height / 2), SpriteEffects.None, 1 / Position.Y);
         }
 
         public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
@@ -73,7 +73,7 @@ namespace ProjectEternity.Core.Units.Conquest
         public int MaxAmmo;
         public int Gaz;
         public int MaxGaz;
-        public byte MovementTypeIndex;
+        public byte MovementTypeIndex => _UnitStat.UnitTypeIndex;
         public string ArmourType;
         public int GazCostPerTurn;
         public int VisionRange;
@@ -124,7 +124,7 @@ namespace ProjectEternity.Core.Units.Conquest
             MaxAmmo = BR.ReadInt32();
             MaxGaz = BR.ReadInt32();
             Price = BR.ReadInt32();
-            MovementTypeIndex = BR.ReadByte();
+            _UnitStat.UnitTypeIndex = BR.ReadByte();
             GazCostPerTurn = BR.ReadInt32();
             VisionRange = BR.ReadInt32();
 

@@ -30,15 +30,15 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         private void InitializeComponent()
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabSpawns = new System.Windows.Forms.TabPage();
+            this.tabUnits = new System.Windows.Forms.TabPage();
             this.pgUnit = new System.Windows.Forms.PropertyGrid();
-            this.gbUnits = new System.Windows.Forms.GroupBox();
-            this.lvUnits = new System.Windows.Forms.ListView();
-            this.gbFilter = new System.Windows.Forms.GroupBox();
+            this.gbUnitsUnits = new System.Windows.Forms.GroupBox();
+            this.lvUnitsUnits = new System.Windows.Forms.ListView();
+            this.gbUnitsFilter = new System.Windows.Forms.GroupBox();
             this.lblMoveType = new System.Windows.Forms.Label();
-            this.cbMoveType = new System.Windows.Forms.ComboBox();
-            this.lblFactions = new System.Windows.Forms.Label();
-            this.cbFactions = new System.Windows.Forms.ComboBox();
+            this.cbUnitsMoveType = new System.Windows.Forms.ComboBox();
+            this.lblUnitsFactions = new System.Windows.Forms.Label();
+            this.cbUnitsFactions = new System.Windows.Forms.ComboBox();
             this.tabBuildings = new System.Windows.Forms.TabPage();
             this.pgBuilding = new System.Windows.Forms.PropertyGrid();
             this.gbBuildings = new System.Windows.Forms.GroupBox();
@@ -60,43 +60,55 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.btnSceneryAddAutotile = new System.Windows.Forms.Button();
             this.lblAutotile = new System.Windows.Forms.Label();
             this.cboSceneryAutotile = new System.Windows.Forms.ComboBox();
+            this.tabSpawns = new System.Windows.Forms.TabPage();
+            this.txtSpawnsPlayer = new System.Windows.Forms.NumericUpDown();
+            this.gbSpawnsBuildings = new System.Windows.Forms.GroupBox();
+            this.lvSpawnsBuildings = new System.Windows.Forms.ListView();
+            this.gbSpawnsUnits = new System.Windows.Forms.GroupBox();
+            this.lvSpawnsUnits = new System.Windows.Forms.ListView();
+            this.lblSpawnsPlayer = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
-            this.tabSpawns.SuspendLayout();
-            this.gbUnits.SuspendLayout();
-            this.gbFilter.SuspendLayout();
+            this.tabUnits.SuspendLayout();
+            this.gbUnitsUnits.SuspendLayout();
+            this.gbUnitsFilter.SuspendLayout();
             this.tabBuildings.SuspendLayout();
             this.gbBuildings.SuspendLayout();
             this.tabScenery.SuspendLayout();
             this.gbSceneryTiletset.SuspendLayout();
             this.gbSceneryViewer.SuspendLayout();
             this.gbSceneryAutotile.SuspendLayout();
+            this.tabSpawns.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSpawnsPlayer)).BeginInit();
+            this.gbSpawnsBuildings.SuspendLayout();
+            this.gbSpawnsUnits.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabSpawns);
+            this.tabControl1.Controls.Add(this.tabUnits);
             this.tabControl1.Controls.Add(this.tabBuildings);
             this.tabControl1.Controls.Add(this.tabScenery);
+            this.tabControl1.Controls.Add(this.tabSpawns);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(339, 620);
+            this.tabControl1.Size = new System.Drawing.Size(339, 632);
             this.tabControl1.TabIndex = 0;
             // 
-            // tabSpawns
+            // tabUnits
             // 
-            this.tabSpawns.Controls.Add(this.pgUnit);
-            this.tabSpawns.Controls.Add(this.gbUnits);
-            this.tabSpawns.Controls.Add(this.gbFilter);
-            this.tabSpawns.Controls.Add(this.lblFactions);
-            this.tabSpawns.Controls.Add(this.cbFactions);
-            this.tabSpawns.Location = new System.Drawing.Point(4, 22);
-            this.tabSpawns.Name = "tabSpawns";
-            this.tabSpawns.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSpawns.Size = new System.Drawing.Size(331, 594);
-            this.tabSpawns.TabIndex = 0;
-            this.tabSpawns.Text = "Spawns";
-            this.tabSpawns.UseVisualStyleBackColor = true;
+            this.tabUnits.Controls.Add(this.pgUnit);
+            this.tabUnits.Controls.Add(this.gbUnitsUnits);
+            this.tabUnits.Controls.Add(this.gbUnitsFilter);
+            this.tabUnits.Controls.Add(this.lblUnitsFactions);
+            this.tabUnits.Controls.Add(this.cbUnitsFactions);
+            this.tabUnits.Location = new System.Drawing.Point(4, 22);
+            this.tabUnits.Name = "tabUnits";
+            this.tabUnits.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUnits.Size = new System.Drawing.Size(331, 606);
+            this.tabUnits.TabIndex = 0;
+            this.tabUnits.Text = "Units";
+            this.tabUnits.UseVisualStyleBackColor = true;
             // 
             // pgUnit
             // 
@@ -109,42 +121,42 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.pgUnit.TabIndex = 7;
             this.pgUnit.ToolbarVisible = false;
             // 
-            // gbUnits
+            // gbUnitsUnits
             // 
-            this.gbUnits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbUnitsUnits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbUnits.Controls.Add(this.lvUnits);
-            this.gbUnits.Location = new System.Drawing.Point(6, 107);
-            this.gbUnits.Name = "gbUnits";
-            this.gbUnits.Size = new System.Drawing.Size(319, 248);
-            this.gbUnits.TabIndex = 6;
-            this.gbUnits.TabStop = false;
-            this.gbUnits.Text = "Units";
+            this.gbUnitsUnits.Controls.Add(this.lvUnitsUnits);
+            this.gbUnitsUnits.Location = new System.Drawing.Point(6, 107);
+            this.gbUnitsUnits.Name = "gbUnitsUnits";
+            this.gbUnitsUnits.Size = new System.Drawing.Size(319, 248);
+            this.gbUnitsUnits.TabIndex = 6;
+            this.gbUnitsUnits.TabStop = false;
+            this.gbUnitsUnits.Text = "Units";
             // 
-            // lvUnits
+            // lvUnitsUnits
             // 
-            this.lvUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lvUnitsUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvUnits.HideSelection = false;
-            this.lvUnits.Location = new System.Drawing.Point(6, 19);
-            this.lvUnits.Name = "lvUnits";
-            this.lvUnits.Size = new System.Drawing.Size(307, 223);
-            this.lvUnits.TabIndex = 0;
-            this.lvUnits.UseCompatibleStateImageBehavior = false;
+            this.lvUnitsUnits.HideSelection = false;
+            this.lvUnitsUnits.Location = new System.Drawing.Point(6, 19);
+            this.lvUnitsUnits.Name = "lvUnitsUnits";
+            this.lvUnitsUnits.Size = new System.Drawing.Size(307, 223);
+            this.lvUnitsUnits.TabIndex = 0;
+            this.lvUnitsUnits.UseCompatibleStateImageBehavior = false;
             // 
-            // gbFilter
+            // gbUnitsFilter
             // 
-            this.gbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbUnitsFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbFilter.Controls.Add(this.lblMoveType);
-            this.gbFilter.Controls.Add(this.cbMoveType);
-            this.gbFilter.Location = new System.Drawing.Point(6, 36);
-            this.gbFilter.Name = "gbFilter";
-            this.gbFilter.Size = new System.Drawing.Size(319, 65);
-            this.gbFilter.TabIndex = 5;
-            this.gbFilter.TabStop = false;
-            this.gbFilter.Text = "Filter";
+            this.gbUnitsFilter.Controls.Add(this.lblMoveType);
+            this.gbUnitsFilter.Controls.Add(this.cbUnitsMoveType);
+            this.gbUnitsFilter.Location = new System.Drawing.Point(6, 36);
+            this.gbUnitsFilter.Name = "gbUnitsFilter";
+            this.gbUnitsFilter.Size = new System.Drawing.Size(319, 65);
+            this.gbUnitsFilter.TabIndex = 5;
+            this.gbUnitsFilter.TabStop = false;
+            this.gbUnitsFilter.Text = "Filter";
             // 
             // lblMoveType
             // 
@@ -155,34 +167,34 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.lblMoveType.TabIndex = 4;
             this.lblMoveType.Text = "Move Type";
             // 
-            // cbMoveType
+            // cbUnitsMoveType
             // 
-            this.cbMoveType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbMoveType.FormattingEnabled = true;
-            this.cbMoveType.Location = new System.Drawing.Point(6, 32);
-            this.cbMoveType.Name = "cbMoveType";
-            this.cbMoveType.Size = new System.Drawing.Size(61, 21);
-            this.cbMoveType.TabIndex = 3;
+            this.cbUnitsMoveType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbUnitsMoveType.FormattingEnabled = true;
+            this.cbUnitsMoveType.Location = new System.Drawing.Point(6, 32);
+            this.cbUnitsMoveType.Name = "cbUnitsMoveType";
+            this.cbUnitsMoveType.Size = new System.Drawing.Size(61, 21);
+            this.cbUnitsMoveType.TabIndex = 3;
             // 
-            // lblFactions
+            // lblUnitsFactions
             // 
-            this.lblFactions.AutoSize = true;
-            this.lblFactions.Location = new System.Drawing.Point(6, 9);
-            this.lblFactions.Name = "lblFactions";
-            this.lblFactions.Size = new System.Drawing.Size(47, 13);
-            this.lblFactions.TabIndex = 2;
-            this.lblFactions.Text = "Factions";
+            this.lblUnitsFactions.AutoSize = true;
+            this.lblUnitsFactions.Location = new System.Drawing.Point(6, 9);
+            this.lblUnitsFactions.Name = "lblUnitsFactions";
+            this.lblUnitsFactions.Size = new System.Drawing.Size(47, 13);
+            this.lblUnitsFactions.TabIndex = 2;
+            this.lblUnitsFactions.Text = "Factions";
             // 
-            // cbFactions
+            // cbUnitsFactions
             // 
-            this.cbFactions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbUnitsFactions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbFactions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFactions.FormattingEnabled = true;
-            this.cbFactions.Location = new System.Drawing.Point(59, 9);
-            this.cbFactions.Name = "cbFactions";
-            this.cbFactions.Size = new System.Drawing.Size(266, 21);
-            this.cbFactions.TabIndex = 1;
+            this.cbUnitsFactions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbUnitsFactions.FormattingEnabled = true;
+            this.cbUnitsFactions.Location = new System.Drawing.Point(59, 9);
+            this.cbUnitsFactions.Name = "cbUnitsFactions";
+            this.cbUnitsFactions.Size = new System.Drawing.Size(266, 21);
+            this.cbUnitsFactions.TabIndex = 1;
             // 
             // tabBuildings
             // 
@@ -193,7 +205,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabBuildings.Location = new System.Drawing.Point(4, 22);
             this.tabBuildings.Name = "tabBuildings";
             this.tabBuildings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBuildings.Size = new System.Drawing.Size(331, 594);
+            this.tabBuildings.Size = new System.Drawing.Size(331, 606);
             this.tabBuildings.TabIndex = 1;
             this.tabBuildings.Text = "Buildings";
             this.tabBuildings.UseVisualStyleBackColor = true;
@@ -261,7 +273,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.tabScenery.Location = new System.Drawing.Point(4, 22);
             this.tabScenery.Name = "tabScenery";
             this.tabScenery.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScenery.Size = new System.Drawing.Size(331, 594);
+            this.tabScenery.Size = new System.Drawing.Size(331, 606);
             this.tabScenery.TabIndex = 2;
             this.tabScenery.Text = "Scenery";
             this.tabScenery.UseVisualStyleBackColor = true;
@@ -276,7 +288,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbSceneryTiletset.Controls.Add(this.btnSceneryAddTileset);
             this.gbSceneryTiletset.Controls.Add(this.lblTileset);
             this.gbSceneryTiletset.Controls.Add(this.cboSceneryTilesets);
-            this.gbSceneryTiletset.Location = new System.Drawing.Point(6, 366);
+            this.gbSceneryTiletset.Location = new System.Drawing.Point(6, 378);
             this.gbSceneryTiletset.Name = "gbSceneryTiletset";
             this.gbSceneryTiletset.Size = new System.Drawing.Size(315, 122);
             this.gbSceneryTiletset.TabIndex = 12;
@@ -345,7 +357,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbSceneryViewer.Controls.Add(this.lvIScenery);
             this.gbSceneryViewer.Location = new System.Drawing.Point(6, 6);
             this.gbSceneryViewer.Name = "gbSceneryViewer";
-            this.gbSceneryViewer.Size = new System.Drawing.Size(319, 354);
+            this.gbSceneryViewer.Size = new System.Drawing.Size(319, 366);
             this.gbSceneryViewer.TabIndex = 11;
             this.gbSceneryViewer.TabStop = false;
             this.gbSceneryViewer.Text = "Scenery";
@@ -358,7 +370,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.lvIScenery.HideSelection = false;
             this.lvIScenery.Location = new System.Drawing.Point(6, 19);
             this.lvIScenery.Name = "lvIScenery";
-            this.lvIScenery.Size = new System.Drawing.Size(307, 329);
+            this.lvIScenery.Size = new System.Drawing.Size(307, 341);
             this.lvIScenery.TabIndex = 0;
             this.lvIScenery.UseCompatibleStateImageBehavior = false;
             // 
@@ -370,7 +382,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbSceneryAutotile.Controls.Add(this.btnSceneryAddAutotile);
             this.gbSceneryAutotile.Controls.Add(this.lblAutotile);
             this.gbSceneryAutotile.Controls.Add(this.cboSceneryAutotile);
-            this.gbSceneryAutotile.Location = new System.Drawing.Point(6, 494);
+            this.gbSceneryAutotile.Location = new System.Drawing.Point(6, 506);
             this.gbSceneryAutotile.Name = "gbSceneryAutotile";
             this.gbSceneryAutotile.Size = new System.Drawing.Size(319, 94);
             this.gbSceneryAutotile.TabIndex = 5;
@@ -413,17 +425,105 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.cboSceneryAutotile.Size = new System.Drawing.Size(279, 21);
             this.cboSceneryAutotile.TabIndex = 0;
             // 
-            // ConquestSpawnUserControl
+            // tabSpawns
+            // 
+            this.tabSpawns.Controls.Add(this.txtSpawnsPlayer);
+            this.tabSpawns.Controls.Add(this.gbSpawnsBuildings);
+            this.tabSpawns.Controls.Add(this.gbSpawnsUnits);
+            this.tabSpawns.Controls.Add(this.lblSpawnsPlayer);
+            this.tabSpawns.Location = new System.Drawing.Point(4, 22);
+            this.tabSpawns.Name = "tabSpawns";
+            this.tabSpawns.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSpawns.Size = new System.Drawing.Size(331, 606);
+            this.tabSpawns.TabIndex = 3;
+            this.tabSpawns.Text = "Spawns";
+            this.tabSpawns.UseVisualStyleBackColor = true;
+            // 
+            // txtSpawnsPlayer
+            // 
+            this.txtSpawnsPlayer.Location = new System.Drawing.Point(48, 7);
+            this.txtSpawnsPlayer.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtSpawnsPlayer.Name = "txtSpawnsPlayer";
+            this.txtSpawnsPlayer.Size = new System.Drawing.Size(60, 20);
+            this.txtSpawnsPlayer.TabIndex = 5;
+            this.txtSpawnsPlayer.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // gbSpawnsBuildings
+            // 
+            this.gbSpawnsBuildings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSpawnsBuildings.Controls.Add(this.lvSpawnsBuildings);
+            this.gbSpawnsBuildings.Location = new System.Drawing.Point(6, 290);
+            this.gbSpawnsBuildings.Name = "gbSpawnsBuildings";
+            this.gbSpawnsBuildings.Size = new System.Drawing.Size(319, 248);
+            this.gbSpawnsBuildings.TabIndex = 11;
+            this.gbSpawnsBuildings.TabStop = false;
+            this.gbSpawnsBuildings.Text = "Buildings";
+            // 
+            // lvSpawnsBuildings
+            // 
+            this.lvSpawnsBuildings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvSpawnsBuildings.HideSelection = false;
+            this.lvSpawnsBuildings.Location = new System.Drawing.Point(6, 19);
+            this.lvSpawnsBuildings.Name = "lvSpawnsBuildings";
+            this.lvSpawnsBuildings.Size = new System.Drawing.Size(307, 223);
+            this.lvSpawnsBuildings.TabIndex = 0;
+            this.lvSpawnsBuildings.UseCompatibleStateImageBehavior = false;
+            // 
+            // gbSpawnsUnits
+            // 
+            this.gbSpawnsUnits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSpawnsUnits.Controls.Add(this.lvSpawnsUnits);
+            this.gbSpawnsUnits.Location = new System.Drawing.Point(6, 36);
+            this.gbSpawnsUnits.Name = "gbSpawnsUnits";
+            this.gbSpawnsUnits.Size = new System.Drawing.Size(319, 248);
+            this.gbSpawnsUnits.TabIndex = 10;
+            this.gbSpawnsUnits.TabStop = false;
+            this.gbSpawnsUnits.Text = "Units";
+            // 
+            // lvSpawnsUnits
+            // 
+            this.lvSpawnsUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvSpawnsUnits.HideSelection = false;
+            this.lvSpawnsUnits.Location = new System.Drawing.Point(6, 19);
+            this.lvSpawnsUnits.Name = "lvSpawnsUnits";
+            this.lvSpawnsUnits.Size = new System.Drawing.Size(307, 223);
+            this.lvSpawnsUnits.TabIndex = 0;
+            this.lvSpawnsUnits.UseCompatibleStateImageBehavior = false;
+            // 
+            // lblSpawnsPlayer
+            // 
+            this.lblSpawnsPlayer.AutoSize = true;
+            this.lblSpawnsPlayer.Location = new System.Drawing.Point(6, 9);
+            this.lblSpawnsPlayer.Name = "lblSpawnsPlayer";
+            this.lblSpawnsPlayer.Size = new System.Drawing.Size(36, 13);
+            this.lblSpawnsPlayer.TabIndex = 8;
+            this.lblSpawnsPlayer.Text = "Player";
+            // 
+            // ExtraTabsUserControl
             // 
             this.Controls.Add(this.tabControl1);
-            this.Name = "ConquestSpawnUserControl";
+            this.Name = "ExtraTabsUserControl";
             this.Size = new System.Drawing.Size(349, 635);
             this.tabControl1.ResumeLayout(false);
-            this.tabSpawns.ResumeLayout(false);
-            this.tabSpawns.PerformLayout();
-            this.gbUnits.ResumeLayout(false);
-            this.gbFilter.ResumeLayout(false);
-            this.gbFilter.PerformLayout();
+            this.tabUnits.ResumeLayout(false);
+            this.tabUnits.PerformLayout();
+            this.gbUnitsUnits.ResumeLayout(false);
+            this.gbUnitsFilter.ResumeLayout(false);
+            this.gbUnitsFilter.PerformLayout();
             this.tabBuildings.ResumeLayout(false);
             this.tabBuildings.PerformLayout();
             this.gbBuildings.ResumeLayout(false);
@@ -433,20 +533,25 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             this.gbSceneryViewer.ResumeLayout(false);
             this.gbSceneryAutotile.ResumeLayout(false);
             this.gbSceneryAutotile.PerformLayout();
+            this.tabSpawns.ResumeLayout(false);
+            this.tabSpawns.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSpawnsPlayer)).EndInit();
+            this.gbSpawnsBuildings.ResumeLayout(false);
+            this.gbSpawnsUnits.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Label lblFactions;
+        private System.Windows.Forms.Label lblUnitsFactions;
         private System.Windows.Forms.Label lblMoveType;
-        private System.Windows.Forms.GroupBox gbUnits;
-        private System.Windows.Forms.GroupBox gbFilter;
-        public System.Windows.Forms.TabPage tabSpawns;
+        private System.Windows.Forms.GroupBox gbUnitsUnits;
+        private System.Windows.Forms.GroupBox gbUnitsFilter;
+        public System.Windows.Forms.TabPage tabUnits;
         public System.Windows.Forms.TabControl tabControl1;
-        public System.Windows.Forms.ListView lvUnits;
-        public System.Windows.Forms.ComboBox cbFactions;
-        public System.Windows.Forms.ComboBox cbMoveType;
+        public System.Windows.Forms.ListView lvUnitsUnits;
+        public System.Windows.Forms.ComboBox cbUnitsFactions;
+        public System.Windows.Forms.ComboBox cbUnitsMoveType;
         public System.Windows.Forms.PropertyGrid pgUnit;
         private System.Windows.Forms.TabPage tabBuildings;
         public System.Windows.Forms.PropertyGrid pgBuilding;
@@ -469,5 +574,12 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         public System.Windows.Forms.Button btnSceneryAddAutotile;
         private System.Windows.Forms.Label lblAutotile;
         public System.Windows.Forms.ComboBox cboSceneryAutotile;
+        private System.Windows.Forms.TabPage tabSpawns;
+        private System.Windows.Forms.GroupBox gbSpawnsBuildings;
+        public System.Windows.Forms.ListView lvSpawnsBuildings;
+        private System.Windows.Forms.GroupBox gbSpawnsUnits;
+        public System.Windows.Forms.ListView lvSpawnsUnits;
+        private System.Windows.Forms.Label lblSpawnsPlayer;
+        public System.Windows.Forms.NumericUpDown txtSpawnsPlayer;
     }
 }

@@ -147,6 +147,28 @@ namespace ProjectEternity.Core.Graphics
             }
         }
 
+        public void DisableLights()
+        {
+            foreach (ModelMesh ActiveMesh in OriginalModel.Meshes)
+            {
+                foreach (Effect ActiveEffect in ActiveMesh.Effects)
+                {
+                    if (ActiveEffect is BasicEffect)
+                    {
+                        BasicEffect BaseEffect = ActiveEffect as BasicEffect;
+                        BaseEffect.LightingEnabled = false;
+                        BaseEffect.VertexColorEnabled = false;
+                        BaseEffect.FogEnabled = false;
+                    }
+                    else if (ActiveEffect is SkinnedEffect)
+                    {
+                        SkinnedEffect SkinEffect = ActiveEffect as SkinnedEffect;
+                        SkinEffect.FogEnabled = false;
+                    }
+                }
+            }
+        }
+
         public Matrix[] PrepareForCustomDraw()
         {
             Matrix[] ArrayBoneTransform = new Matrix[AnimationInformation.ListBoneIndex.Count];

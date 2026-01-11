@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public List<Squad> ListSquad;
         public List<Commander> ListCommander;
-        public List<EventPoint> ListSpawnPoint;
+        public List<PlayerEventPoint> ListSpawnPoint;
         public bool IsAlive;//If the player can play (always true if it still have any active units).
         public int Kills;
         public int Death;
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListSquad = new List<Squad>();
             ListCommander = new List<Commander>();
-            ListSpawnPoint = new List<EventPoint>();
+            ListSpawnPoint = new List<PlayerEventPoint>();
             this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
             this.IsAlive = false;
@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListSquad = new List<Squad>();
             ListCommander = new List<Commander>();
-            ListSpawnPoint = new List<EventPoint>();
+            ListSpawnPoint = new List<PlayerEventPoint>();
             this.IsAlive = false;
         }
 

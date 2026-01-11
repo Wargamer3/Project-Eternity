@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int S = 0; S < ListSingleplayerSpawnsCount; S++)
             {
-                EventPoint NewPoint = new EventPoint(BR);
+                ConquestEventPoint NewPoint = new ConquestEventPoint(BR);
                 NewPoint.ColorRed = Color.Blue.R;
                 NewPoint.ColorGreen = Color.Blue.G;
                 NewPoint.ColorBlue = Color.Blue.B;
@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int S = 0; S < ListMultiplayerSpawnsCount; S++)
             {
-                EventPoint NewPoint = new EventPoint(BR);
+                ConquestEventPoint NewPoint = new ConquestEventPoint(BR);
                 int ColorIndex = Convert.ToInt32(NewPoint.Tag) - 1;
                 /*NewPoint.ColorRed = Map.ListMultiplayerColor[ColorIndex].R;
                 NewPoint.ColorGreen = Map.ListMultiplayerColor[ColorIndex].G;

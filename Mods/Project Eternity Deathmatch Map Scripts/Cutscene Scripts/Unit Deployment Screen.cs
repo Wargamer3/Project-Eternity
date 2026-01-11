@@ -128,9 +128,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         foreach (EventPoint Spawn in PlayerSpawnPoint)
                         {
-                            if (Spawn.LeaderName == null)
+                            if (!Spawn.HasBeenUsed)
                             {
-                                Spawn.LeaderName = CurrentUnit.RelativePath;
+                                Spawn.HasBeenUsed = true;
                                 AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + SpawnTexturePath,
                                     new Vector2((Spawn.Position.X - Map.Camera2DPosition.X) * Map.TileSize.X, (Spawn.Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y),
                                     0.5f);
