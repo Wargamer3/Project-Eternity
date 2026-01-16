@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -12,67 +14,82 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class CampaignGameInfo : GameModeInfo
     {
+        #region Selector
+
+        public class ConquestFactionSelector : UITypeEditor
+        {
+            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+            {
+                return UITypeEditorEditStyle.Modal;
+            }
+
+            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            {
+                IWindowsFormsEditorService svc = (IWindowsFormsEditorService)
+                    provider.GetService(typeof(IWindowsFormsEditorService));
+                if (svc != null)
+                {
+                    List<string> Items = EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathFactionsConquest);
+                    if (Items != null)
+                    {
+                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(26);
+                    }
+                }
+                return value;
+            }
+        }
+
+        #endregion
+
         public const string ModeName = "Campaign";
 
-        private int _ResapwnLimit;
-        private int _UnitValueLimit;
-
-        private int _HPRegenPerTurnFixed;
-        private int _ENRegenPerTurnFixed;
-        private int _SPRegenPerTurnFixed;
-        private int _AmmoRegenPerTurnFixed;
-        private float _HPRegenPerTurnPercent;
-        private float _ENRegenPerTurnPercent;
-        private float _SPRegenPerTurnPercent;
-        private float _AmmoRegenPerTurnPercent;
+        private string _FactionPlayer1;
+        private string _FactionPlayer2;
+        private string _FactionPlayer3;
+        private string _FactionPlayer4;
+        private string _BehaviorPlayer1;
+        private string _BehaviorPlayer2;
+        private string _BehaviorPlayer3;
+        private string _BehaviorPlayer4;
 
         public CampaignGameInfo(bool IsUnlocked, Texture2D sprPreview)
             : base(ModeName, "Classic mission based mode, no respawn.", CategoryPVE, IsUnlocked, sprPreview)
         {
-            _ResapwnLimit = 3000;
-            _UnitValueLimit = 1000;
+            _FactionPlayer1 = "Red";
+            _FactionPlayer2 = "Blue";
+            _FactionPlayer3 = string.Empty;
+            _FactionPlayer4 = string.Empty;
 
-            _HPRegenPerTurnFixed = 0;
-            _ENRegenPerTurnFixed = 5;
-            _SPRegenPerTurnFixed = 10;
-            _AmmoRegenPerTurnFixed = 0;
-
-            _HPRegenPerTurnPercent = 0;
-            _ENRegenPerTurnPercent = 0;
-            _SPRegenPerTurnPercent = 0;
-            _AmmoRegenPerTurnPercent = 0;
+            _BehaviorPlayer1 = "Human";
+            _BehaviorPlayer2 = "Default AI";
+            _BehaviorPlayer3 = string.Empty;
+            _BehaviorPlayer4 = string.Empty;
         }
 
         protected override void DoSave(BinaryWriter BW)
         {
-            BW.Write(_ResapwnLimit);
-            BW.Write(_UnitValueLimit);
+            BW.Write(_FactionPlayer1);
+            BW.Write(_FactionPlayer2);
+            BW.Write(_FactionPlayer3);
+            BW.Write(_FactionPlayer4);
 
-            BW.Write(_HPRegenPerTurnFixed);
-            BW.Write(_ENRegenPerTurnFixed);
-            BW.Write(_SPRegenPerTurnFixed);
-            BW.Write(_AmmoRegenPerTurnFixed);
-
-            BW.Write(_HPRegenPerTurnPercent);
-            BW.Write(_ENRegenPerTurnPercent);
-            BW.Write(_SPRegenPerTurnPercent);
-            BW.Write(_AmmoRegenPerTurnPercent);
+            BW.Write(_BehaviorPlayer1);
+            BW.Write(_BehaviorPlayer2);
+            BW.Write(_BehaviorPlayer3);
+            BW.Write(_BehaviorPlayer4);
         }
 
         public override void Load(BinaryReader BR)
         {
-            _ResapwnLimit = BR.ReadInt32();
-            _UnitValueLimit = BR.ReadInt32();
+            _FactionPlayer1 = BR.ReadString();
+            _FactionPlayer2 = BR.ReadString();
+            _FactionPlayer3 = BR.ReadString();
+            _FactionPlayer4 = BR.ReadString();
 
-            _HPRegenPerTurnFixed = BR.ReadInt32();
-            _ENRegenPerTurnFixed = BR.ReadInt32();
-            _SPRegenPerTurnFixed = BR.ReadInt32();
-            _AmmoRegenPerTurnFixed = BR.ReadInt32();
-
-            _HPRegenPerTurnPercent = BR.ReadSingle();
-            _ENRegenPerTurnPercent = BR.ReadSingle();
-            _SPRegenPerTurnPercent = BR.ReadSingle();
-            _AmmoRegenPerTurnPercent = BR.ReadSingle();
+            _BehaviorPlayer1 = BR.ReadString();
+            _BehaviorPlayer2 = BR.ReadString();
+            _BehaviorPlayer3 = BR.ReadString();
+            _BehaviorPlayer4 = BR.ReadString();
         }
 
         public override IGameRule GetRule(BattleMap Map)
@@ -92,171 +109,127 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         #region Properties
 
-        [DisplayNameAttribute("Resapwn Limit"),
-        CategoryAttribute("Respawn"),
-        DescriptionAttribute("How many points are allowed to respawn."),
-        EditableInGame(false)]
-        public int ResapwnLimit
+        [Editor(typeof(ConquestFactionSelector), typeof(UITypeEditor)),
+        DisplayNameAttribute("Player 1 Faction"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string FactionPlayer1
         {
             get
             {
-                return _ResapwnLimit;
+                return _FactionPlayer1;
             }
             set
             {
-                _ResapwnLimit = value;
+                _FactionPlayer1 = value;
             }
         }
 
-        [DisplayNameAttribute("Unit Value Limit"),
-        CategoryAttribute("Respawn"),
-        DescriptionAttribute("Maximum value of a unit allowed to spawn in the game."),
-        EditableInGame(false)]
-        public int UnitValueLimit
+        [Editor(typeof(ConquestFactionSelector), typeof(UITypeEditor)),
+        DisplayNameAttribute("Player 2 Faction"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string FactionPlayer2
         {
             get
             {
-                return _UnitValueLimit;
+                return _FactionPlayer2;
             }
             set
             {
-                _UnitValueLimit = value;
+                _FactionPlayer2 = value;
             }
         }
 
-        [DisplayNameAttribute("HP Regen Per Turn Fixed"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Fixed quantity of HP regeneated every turn."),
-        DefaultValueAttribute(0),
-        EditableInGame(false)]
-        public int HPRegenPerTurnFixed
+        [Editor(typeof(ConquestFactionSelector), typeof(UITypeEditor)),
+        DisplayNameAttribute("Player 3 Faction"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string FactionPlayer3
         {
             get
             {
-                return _HPRegenPerTurnFixed;
+                return _FactionPlayer3;
             }
             set
             {
-                _HPRegenPerTurnFixed = value;
+                _FactionPlayer3 = value;
             }
         }
 
-        [DisplayNameAttribute("EN Regen Per Turn Fixed"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Fixed quantity of EN regeneated every turn."),
-        DefaultValueAttribute(5),
-        EditableInGame(false)]
-        public int ENRegenPerTurnFixed
+        [Editor(typeof(ConquestFactionSelector), typeof(UITypeEditor)),
+        DisplayNameAttribute("Player 4 Faction"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string FactionPlayer4
         {
             get
             {
-                return _ENRegenPerTurnFixed;
+                return _FactionPlayer4;
             }
             set
             {
-                _ENRegenPerTurnFixed = value;
+                _FactionPlayer4 = value;
             }
         }
 
-        [DisplayNameAttribute("SP Regen Per Turn Fixed"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Fixed quantity of SP regeneated every turn."),
-        DefaultValueAttribute(10),
-        EditableInGame(false)]
-        public int SPRegenPerTurnFixed
+        [DisplayNameAttribute("Player 1 Behavior"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string BehaviorPlayer1
         {
             get
             {
-                return _SPRegenPerTurnFixed;
+                return _BehaviorPlayer1;
             }
             set
             {
-                _SPRegenPerTurnFixed = value;
+                _BehaviorPlayer1 = value;
             }
         }
 
-        [DisplayNameAttribute("Ammo Regen Per Turn Fixed"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Fixed quantity of ammunition regeneated every turn."),
-        DefaultValueAttribute(0),
-        EditableInGame(false)]
-        public int AmmoRegenPerTurnFixed
+        [DisplayNameAttribute("Player 2 Behavior"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string BehaviorPlayer2
         {
             get
             {
-                return _AmmoRegenPerTurnFixed;
+                return _BehaviorPlayer2;
             }
             set
             {
-                _AmmoRegenPerTurnFixed = value;
+                _BehaviorPlayer2 = value;
             }
         }
 
-        [DisplayNameAttribute("HP Regen Per Turn Percent"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Percentage quantity of HP regeneated every turn."),
-        DefaultValueAttribute(0f),
-        EditableInGame(false)]
-        public float HPRegenPerTurnPercent
+        [DisplayNameAttribute("Player 3 Behavior"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string BehaviorPlayer3
         {
             get
             {
-                return _HPRegenPerTurnPercent;
+                return _BehaviorPlayer3;
             }
             set
             {
-                _HPRegenPerTurnPercent = value;
+                _BehaviorPlayer3 = value;
             }
         }
 
-        [DisplayNameAttribute("EN Regen Per Turn Percent"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Percentage quantity of EN regeneated every turn."),
-        DefaultValueAttribute(0f),
-        EditableInGame(false)]
-        public float ENRegenPerTurnPercent
+        [DisplayNameAttribute("Player 4 Behavior"),
+        CategoryAttribute("Faction Attributes"),
+        DescriptionAttribute(".")]
+        public string BehaviorPlayer4
         {
             get
             {
-                return _ENRegenPerTurnPercent;
+                return _BehaviorPlayer4;
             }
             set
             {
-                _ENRegenPerTurnPercent = value;
-            }
-        }
-
-        [DisplayNameAttribute("SP Regen Per Turn Percent"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Percentage quantity of SP regeneated every turn."),
-        DefaultValueAttribute(0f),
-        EditableInGame(false)]
-        public float SPRegenPerTurnPercent
-        {
-            get
-            {
-                return _SPRegenPerTurnPercent;
-            }
-            set
-            {
-                _SPRegenPerTurnPercent = value;
-            }
-        }
-
-        [DisplayNameAttribute("Ammo Regen Per Turn Percent"),
-        CategoryAttribute("Regen"),
-        DescriptionAttribute("Percentage quantity of ammunition regeneated every turn."),
-        DefaultValueAttribute(0f),
-        EditableInGame(false)]
-        public float AmmoRegenPerTurnPercent
-        {
-            get
-            {
-                return _AmmoRegenPerTurnPercent;
-            }
-            set
-            {
-                _AmmoRegenPerTurnPercent = value;
+                _BehaviorPlayer4 = value;
             }
         }
 
@@ -278,26 +251,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             CheckForGameOver = false;
             UseTeamsForSpawns = false;
-
-            HPRegenPerTurnFixed = GameInfo.HPRegenPerTurnFixed;
-            ENRegenPerTurnFixed = GameInfo.ENRegenPerTurnFixed;
-            SPRegenPerTurnFixed = GameInfo.SPRegenPerTurnFixed;
-            AmmoRegenPerTurnFixed = GameInfo.AmmoRegenPerTurnFixed;
-
-            HPRegenPerTurnPercent = GameInfo.HPRegenPerTurnPercent;
-            ENRegenPerTurnPercent = GameInfo.ENRegenPerTurnPercent;
-            SPRegenPerTurnPercent = GameInfo.SPRegenPerTurnPercent;
-            AmmoRegenPerTurnPercent = GameInfo.AmmoRegenPerTurnPercent;
-        }
-
-        public override void Init()
-        {
-            base.Init();
-
-            for (int P = 20; P >= 0; --P)
-            {
-                ListRemainingResapwn.Add(GameInfo.ResapwnLimit);
-            }
         }
 
         protected override List<Vector3> GetSpawnLocations(int ActivePlayerIndex)
@@ -337,21 +290,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override List<GameRuleError> Validate(RoomInformations Room)
         {
             List<GameRuleError> ListGameRuleError = new List<GameRuleError>();
-
-            foreach (Player ActivePlayer in Room.GetLocalPlayers())
-            {
-                foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad)
-                {
-                    for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
-                    {
-                        Unit ActiveUnit = ActiveSquad.At(U);
-                        if (ActiveUnit.UnitStat.SpawnCost > GameInfo.UnitValueLimit)
-                        {
-                            ListGameRuleError.Add(new GameRuleError("Unit Value is too high", ActiveUnit));
-                        }
-                    }
-                }
-            }
 
             return ListGameRuleError;
         }

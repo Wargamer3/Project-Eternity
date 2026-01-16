@@ -12,11 +12,25 @@ namespace ProjectEternity.Editors.RosterEditor
             InitializeComponent();
         }
 
+        public ProjectEternityFactionEditor(string FilePath, object[] Params)
+            : this()
+        {
+            this.FilePath = FilePath;
+            if (!File.Exists(FilePath))
+            {
+                FileStream fs = File.Create(FilePath);
+                fs.Close();
+                SaveItem(FilePath, FilePath);
+            }
+
+            LoadFaction(this.FilePath);
+        }
+
         public override EditorInfo[] LoadEditors()
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[0], "Conquest Faction Editor", new string[0], typeof(ProjectEternityFactionEditor))
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathFactionsConquest }, "Conquest/Factions/", new string[] { ".pef" }, typeof(ProjectEternityFactionEditor))
             };
 
             return Info;
@@ -24,31 +38,21 @@ namespace ProjectEternity.Editors.RosterEditor
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
+            FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
+            BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
+
+            FS.Close();
+            BW.Close();
+        }
+
+        private void LoadFaction(string FactionPath)
+        {
+            string FilePath = FactionPath.Substring(0, FactionPath.Length - 4).Substring(27);
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
         {
-            FileStream FS = new FileStream("Content/Conquest/Factions.bin", FileMode.Create);
-            BinaryWriter BW = new BinaryWriter(FS, Encoding.ASCII);
-
-
-            BW.Close();
-            FS.Close();
-        }
-
-        public void LoadRoster()
-        {
-            if (!File.Exists("Content/Roster.bin"))
-            {
-                return;
-            }
-
-            FileStream FS = new FileStream("Content/Conquest/Factions.bin", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS);
-
-
-            BR.Close();
-            FS.Close();
+            SaveItem(FilePath, Path.GetFileName(FilePath));
         }
     }
 }

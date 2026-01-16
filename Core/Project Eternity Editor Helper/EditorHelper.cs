@@ -63,6 +63,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathCharacterSpirits = "Character/Spirits";
         public const string GUIRootPathCharacterRelationships = "Character/Relationships";
         public const string GUIRootPathCharacterPersonalities = "Character/Personalities";
+        public const string GUIRootPathFactionsConquest = "Conquest/Factions";
         public const string GUIRootPathVisualNovel = "Visual Novels";
         public const string GUIRootPathVisualNovelCharacters = "Visual Novels/Characters";
         public const string GUIRootPathVisualNovelBustPortraits = "Visual Novels/Bust Portraits";

@@ -51,14 +51,10 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
 
-            string[] ArrayFactions = Directory.GetDirectories("Content/Conquest/Buildings/", "*.*", SearchOption.TopDirectoryOnly);
+            string[] ArrayFactions = Directory.GetFiles("Content/Conquest/Factions", "*.pef*", SearchOption.TopDirectoryOnly);
             foreach (var ActiveFaction in ArrayFactions)
             {
-                string FactionName = ActiveFaction.Substring(27);
-                if (FactionName == "Map Sprites" || FactionName == "Menu Sprites")
-                {
-                    continue;
-                }
+                string FactionName = ActiveFaction.Substring(0, ActiveFaction.Length - 4).Substring(26);
 
                 cbFactions.Items.Add(FactionName);
             }
@@ -157,11 +153,14 @@ namespace ProjectEternity.Editors.MapEditor
             lvBuildings.Items.Clear();
             imageList.Images.Clear();
 
-            string[] ArrayBuildingTypes = Directory.GetFiles("Content/Conquest/Buildings/" + cbFactions.Text, "*.peb*", SearchOption.TopDirectoryOnly);
-
-            foreach (var ActiveBuilding in ArrayBuildingTypes)
+            if (Directory.Exists("Content/Conquest/Buildings/" + cbFactions.Text))
             {
-                ListFactionBuilding.Add(new BuildingConquest(ActiveBuilding.Substring(0, ActiveBuilding.Length - 4).Substring(27), GameScreens.GameScreen.ContentFallback, null, null, null));
+                string[] ArrayBuildingTypes = Directory.GetFiles("Content/Conquest/Buildings/" + cbFactions.Text, "*.peb*", SearchOption.TopDirectoryOnly);
+
+                foreach (var ActiveBuilding in ArrayBuildingTypes)
+                {
+                    ListFactionBuilding.Add(new BuildingConquest(ActiveBuilding.Substring(0, ActiveBuilding.Length - 4).Substring(27), GameScreens.GameScreen.ContentFallback, null, null, null));
+                }
             }
 
             lvBuildings.Items.Clear();
@@ -178,22 +177,6 @@ namespace ProjectEternity.Editors.MapEditor
         private void lvBuildings_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void NewSpawn(int GridX, int GridY, MapLayer TopLayer, BuildingSpawn Spawn)
-        {
-            for (int S = 0; S < TopLayer.ListBuildingSpawn.Count; S++)
-            {
-                if (TopLayer.ListBuildingSpawn[S].SpawnPositionX == GridX && TopLayer.ListBuildingSpawn[S].SpawnPositionY == GridY)
-                {
-                    TopLayer.ListBuildingSpawn.RemoveAt(S);
-                }
-            }
-            if (Spawn != null)
-            {
-                //Add the new SpawnPoint.
-                TopLayer.ListBuildingSpawn.Add(Spawn);
-            }
         }
 
         public Image Texture2Image(Texture2D sprTexture2D)

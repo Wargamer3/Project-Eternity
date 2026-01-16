@@ -55,14 +55,10 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ActiveMap = (ConquestMap)BattleMapViewer.ActiveMap;
 
-            string[] ArrayFactions = Directory.GetDirectories("Content/Conquest/Units", "*.*", SearchOption.TopDirectoryOnly);
+            string[] ArrayFactions = Directory.GetFiles("Content/Conquest/Factions", "*.pef*", SearchOption.TopDirectoryOnly);
             foreach (var ActiveFaction in ArrayFactions)
             {
-                string FactionName = ActiveFaction.Substring(23);
-                if (FactionName == "Map Sprite" || FactionName == "Unit Sprite")
-                {
-                    continue;
-                }
+                string FactionName = ActiveFaction.Substring(0, ActiveFaction.Length - 4).Substring(26);
 
                 cbFactions.Items.Add(FactionName);
             }
@@ -164,11 +160,14 @@ namespace ProjectEternity.Editors.MapEditor
             cbMoveType.Items.Add("All");
             imageList.Images.Clear();
 
-            string[] ArrayUnitTypes = Directory.GetFiles("Content/Conquest/Units/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
-
-            foreach (var ActiveUnit in ArrayUnitTypes)
+            if (Directory.Exists("Content/Conquest/Units/" + cbFactions.Text))
             {
-                ListFactionUnit.Add(new UnitConquest(ActiveUnit.Substring(0, ActiveUnit.Length - 4).Substring(23), GameScreens.GameScreen.ContentFallback, null, null));
+                string[] ArrayUnitTypes = Directory.GetFiles("Content/Conquest/Units/" + cbFactions.Text, "*.peu*", SearchOption.TopDirectoryOnly);
+
+                foreach (var ActiveUnit in ArrayUnitTypes)
+                {
+                    ListFactionUnit.Add(new UnitConquest(ActiveUnit.Substring(0, ActiveUnit.Length - 4).Substring(23), GameScreens.GameScreen.ContentFallback, null, null));
+                }
             }
 
             foreach (UnitConquest ActiveUnit in ListFactionUnit)

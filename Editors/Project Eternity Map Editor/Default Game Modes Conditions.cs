@@ -46,6 +46,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnAddGameMode_Click(object sender, EventArgs e)
         {
             lstGameModes.Items.Add(new GameModeInfoHolder(cbGameMode.Items[0].ToString(), ((GameModeInfo)cbGameMode.Items[0]).Copy()));
+            lstGameModes.SelectedIndex = lstGameModes.Items.Count - 1;
         }
 
         private void btnRemoveGameMode_Click(object sender, EventArgs e)
