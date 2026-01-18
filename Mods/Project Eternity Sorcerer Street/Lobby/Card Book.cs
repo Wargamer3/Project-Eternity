@@ -110,10 +110,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Tags = string.Empty;
             DicCardsByType = new Dictionary<string, Dictionary<string, CardInfo>>();
 
-            BookName = BR.ReadString();
-            BookModel = BR.ReadString();
-            LastModification = DateTime.FromFileTimeUtc(BR.ReadInt64());
-
             Wins = BR.ReadInt32();
             Matches = BR.ReadInt32();
 
@@ -123,9 +119,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 string CardType = BR.ReadString();
                 string CardPath = BR.ReadString();
-                byte QuantityOwned = BR.ReadByte();
                 Card LoadedCard = Card.FromType(CardType, CardPath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                AddCard(new CardInfo(LoadedCard, QuantityOwned));
+                AddCard(new CardInfo(BR, LoadedCard));
             }
         }
 
@@ -148,59 +143,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 string CardType = BR.ReadString();
                 string CardPath = BR.ReadString();
-                byte QuantityOwned = BR.ReadByte();
-                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Card.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                AddCard(new CardInfo(CopyCard, QuantityOwned));
-            }
-        }
-
-        public CardBook(ByteReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
-        {
-            Tags = string.Empty;
-            DicCardsByType = new Dictionary<string, Dictionary<string, CardInfo>>();
-
-            BookName = BR.ReadString();
-            BookModel = BR.ReadString();
-            LastModification = DateTime.FromFileTimeUtc(BR.ReadInt64());
-
-            Wins = BR.ReadInt32();
-            Matches = BR.ReadInt32();
-
-            int ListCardCount = BR.ReadInt32();
-            ListCard = new List<CardInfo>(ListCardCount);
-            for (int C = 0; C < ListCardCount; ++C)
-            {
-                string CardType = BR.ReadString();
-                string CardPath = BR.ReadString();
-                byte QuantityOwned = BR.ReadByte();
-                Card LoadedCard = Card.FromType(CardType, CardPath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                AddCard(new CardInfo(LoadedCard, QuantityOwned));
-            }
-        }
-
-        public CardBook(ByteReader BR, CardBook GlobalBook, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
-        {
-            Tags = string.Empty;
-            DicCardsByType = new Dictionary<string, Dictionary<string, CardInfo>>();
-
-            BookName = BR.ReadString();
-            BookModel = BR.ReadString();
-            LastModification = DateTime.FromFileTimeUtc(BR.ReadInt64());
-
-            Wins = BR.ReadInt32();
-            Matches = BR.ReadInt32();
-
-            int ListCardCount = BR.ReadInt32();
-            ListCard = new List<CardInfo>(ListCardCount);
-            for (int C = 0; C < ListCardCount; ++C)
-            {
-                string CardType = BR.ReadString();
-                string CardPath = BR.ReadString();
-                byte QuantityOwned = BR.ReadByte();
-                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Card.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                AddCard(new CardInfo(CopyCard, QuantityOwned));
+                var GlobalCard = GlobalBook.DicCardsByType[CardType][CardPath];
+                Card CopyCard = GlobalCard.Card.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                AddCard(new CardInfo(CopyCard, GlobalCard.QuantityOwned));
             }
         }
 
@@ -245,6 +190,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return AllCardsBook;
         }
 
+        public void SaveGlobalBook(BinaryWriter BW)
+        {
+            BW.Write(Wins);
+            BW.Write(Matches);
+
+            BW.Write(ListCard.Count);
+            for (int C = 0; C < ListCard.Count; ++C)
+            {
+                ListCard[C].Save(BW);
+            }
+        }
+
         public void Save(BinaryWriter BW)
         {
             BW.Write(BookName);
@@ -258,7 +215,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 BW.Write(ListCard[C].Card.CardType);
                 BW.Write(ListCard[C].Card.Path);
-                BW.Write(ListCard[C].QuantityOwned);
             }
         }
 

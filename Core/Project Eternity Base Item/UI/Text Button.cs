@@ -71,7 +71,7 @@ namespace ProjectEternity.Core.Item
                 {
                     Hover();
 
-                    if (MouseHelper.InputLeftButtonPressed())
+                    if (MouseHelper.InputLeftButtonReleased())
                     {
                         Select();
                         if (OnClickDelegate != null)

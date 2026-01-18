@@ -36,7 +36,9 @@ namespace Microsoft.Xna.Framework.Content.Builder
         static string[] pipelineAssemblies =
         {
             //"Microsoft.Xna.Framework.Content.Pipeline.TextureImporter" + xnaVersion
-            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll"
+            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll",
+            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll",
+            Directory.GetCurrentDirectory() + "\\Core\\Project Eternity Content Processors.dll",
             // If you want to use custom importers or processors from
             // a Content Pipeline Extension Library, add them here.
             //
@@ -128,22 +130,44 @@ namespace Microsoft.Xna.Framework.Content.Builder
             buildProject = new Project(projectRootElement);
 
             buildProject.SetProperty("XnaPlatform", "Windows");
-            buildProject.SetProperty("XnaProfile", "Reach");
+            buildProject.SetProperty("XnaProfile", "HiDef");
             buildProject.SetProperty("XnaFrameworkVersion", "v4.0");
+            buildProject.SetProperty("TargetFrameworkVersion", "v4.6.1");
             buildProject.SetProperty("Configuration", "Release");
             buildProject.SetProperty("OutputPath", buildDirectory);
-
-            // Register any custom importers or processors.
-            foreach (string pipelineAssembly in pipelineAssemblies)
-            {
-                buildProject.AddItem("Reference", pipelineAssembly);
-            }
 
             // Hook up our custom error logger.
             errorLogger = new ErrorLogger();
 
             buildParameters = new BuildParameters(ProjectCollection.GlobalProjectCollection);
             buildParameters.Loggers = new ILogger[] { errorLogger };
+
+            // Register any custom importers or processors.
+            foreach (string pipelineAssembly in pipelineAssemblies)
+            {
+                buildProject.AddItem("Reference", pipelineAssembly);
+            }
+        }
+
+        public void CopyBuildOutput(string FolderToCopyTo)
+        {
+            if (!Directory.Exists(FolderToCopyTo))
+            {
+                Directory.CreateDirectory(FolderToCopyTo);
+            }
+
+            foreach (string OriginalPath in Directory.GetFiles(projectRootElement.FullPath))
+            {
+                string FileName = Path.GetFileName(OriginalPath);
+                string CompleteFilePathOutput = FolderToCopyTo + "/" + FileName;
+
+                if (File.Exists(CompleteFilePathOutput))
+                {
+                    File.Delete(CompleteFilePathOutput);
+                }
+
+                File.Move(OriginalPath, CompleteFilePathOutput);
+            }
         }
 
         public void CopyBuildOutput(string OriginalSpriteFileName, string SpriteFileName, string FolderToCopyTo)

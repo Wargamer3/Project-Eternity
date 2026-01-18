@@ -111,6 +111,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 InitCard(ActiveBook.ListCard[CardIndex]);
             }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.E))
+            {
+                PushScreen(new EditBookCardSkinScreen(ActivePlayer, ActiveCard));
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.A) && (ActiveCard.ListOwnedCardSkin.Count > 0 || ActiveCard.ListOwnedCardAlt.Count > 0))
+            {
+                ActiveCard.SelectedSkinIndex++;
+
+                if (ActiveCard.SelectedSkinIndex < ActiveCard.ListOwnedCardSkin.Count)
+                {
+                    ActiveCard.CardSkin = ActiveCard.ListOwnedCardSkin[ActiveCard.SelectedSkinIndex].CardSkin;
+                }
+                else if (ActiveCard.SelectedSkinIndex < ActiveCard.ListOwnedCardSkin.Count + ActiveCard.ListOwnedCardAlt.Count)
+                {
+                    ActiveCard.CardSkin = ActiveCard.ListOwnedCardAlt[ActiveCard.SelectedSkinIndex - ActiveCard.ListOwnedCardSkin.Count].CardSkin;
+                }
+                else
+                {
+                    ActiveCard.SelectedSkinIndex = -1;
+                    ActiveCard.CardSkin = ActiveCard.Card;
+                }
+            }
+            else if (KeyboardHelper.KeyReleased(Microsoft.Xna.Framework.Input.Keys.D) && (ActiveCard.ListOwnedCardSkin.Count > 0 || ActiveCard.ListOwnedCardAlt.Count > 0))
+            {
+                ActiveCard.SelectedSkinIndex--;
+
+                if (ActiveCard.SelectedSkinIndex < ActiveCard.ListOwnedCardSkin.Count)
+                {
+                    ActiveCard.CardSkin = ActiveCard.ListOwnedCardSkin[ActiveCard.SelectedSkinIndex].CardSkin;
+                }
+                else if (ActiveCard.SelectedSkinIndex < ActiveCard.ListOwnedCardSkin.Count + ActiveCard.ListOwnedCardAlt.Count)
+                {
+                    ActiveCard.CardSkin = ActiveCard.ListOwnedCardAlt[ActiveCard.SelectedSkinIndex - ActiveCard.ListOwnedCardSkin.Count].CardSkin;
+                }
+                else
+                {
+                    ActiveCard.SelectedSkinIndex = ActiveCard.ListOwnedCardSkin.Count + ActiveCard.ListOwnedCardAlt.Count - 1;
+                    ActiveCard.CardSkin = ActiveCard.Card;
+                }
+            }
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
@@ -130,17 +170,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float DrawY = (int)(58 * Ratio);
             g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            g.Draw(ActiveCard.Card.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.Card.sprCard.Width / 2, ActiveCard.Card.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
+            g.Draw(ActiveCard.CardSkin.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.CardSkin.sprCard.Width / 2, ActiveCard.CardSkin.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
             g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, (int)(1800 * Ratio)), ColorText);
-            ActiveCard.Card.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0, (int)(300 * Ratio));
+            ActiveCard.CardSkin.DrawCardInfo(g, Symbols, fntMenuTextBigger, ActivePlayer, 0, (int)(300 * Ratio));
 
             DrawX = (int)(212 * Ratio);
             DrawY = (int)(2008 * Ratio);
             g.DrawString(fntOxanimumRegular, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
                 + " [Arrows] Adjust Card Count"
                 + " [Q] Toggle Info"
+                + " [A-D] Change Skin"
+                + " [E] Edit Skins"
                 + " [X] Confirm Card Count"
                 + " [Z] Return", new Vector2(DrawX, DrawY), ColorText);
+
+            DrawX = Constants.Width / 2;
+            DrawY = (int)(1708 * Ratio);
+
+            if (ActiveCard.SelectedSkinIndex < 0)
+            {
+                g.DrawStringCentered(fntOxanimumRegular, "Current Skin: Default", new Vector2(DrawX, DrawY), ColorText);
+            }
+            else
+            {
+                g.DrawStringCentered(fntOxanimumRegular, "Current Skin " + (ActiveCard.SelectedSkinIndex + 1) + ":" + ActiveCard.CardSkin.Name, new Vector2(DrawX, DrawY), ColorText);
+            }
 
             g.End();
             g.Begin();

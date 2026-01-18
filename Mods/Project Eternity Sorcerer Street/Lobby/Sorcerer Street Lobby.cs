@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MenuHelper.Init(Content);
             CardSymbols.Load(Content);
             IconHolder.Load(Content);
+            Card.InitTextParser(null, Content, CardSymbols.Symbols, Content.Load<Microsoft.Xna.Framework.Graphics.SpriteFont>("Fonts/Arial30"), SorcererStreetMap.TextColor);
         }
 
         protected override void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)

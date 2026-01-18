@@ -23,6 +23,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #endregion
 
+        private enum MenuChoices { EditBook, ChangeBookCover, EditProfile, Copy, NameChange, ResetBook, Return}
+
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
 
@@ -69,23 +71,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (InputHelper.InputConfirmPressed())
             {
-                switch (CursorIndex)
+                switch ((MenuChoices)CursorIndex)
                 {
-                    case 0:
+                    case MenuChoices.EditBook:
                         PushScreen(new EditBookCardListScreen(Symbols, Icons, ActivePlayer, ActiveBook));
                         break;
-                    case 1:
+                    case MenuChoices.ChangeBookCover:
                         break;
-                    case 2:
+                    case MenuChoices.EditProfile:
                         break;
-                    case 3:
+                    case MenuChoices.Copy:
                         break;
-                    case 4:
+                    case MenuChoices.NameChange:
                         PushScreen(new EditBookNameScreen(ActivePlayer, ActiveBook));
                         break;
-                    case 5:
+                    case MenuChoices.ResetBook:
                         break;
-                    case 6:
+                    case MenuChoices.Return:
                         RemoveScreen(this);
                         break;
                 }
@@ -152,7 +154,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawY += EntryHeight;
             g.DrawString(fntOxanimumRegular, "Name Change", new Vector2(DrawX, DrawY), ColorText);
             DrawY += EntryHeight;
-            g.DrawString(fntOxanimumRegular, "Reset", new Vector2(DrawX, DrawY), ColorText);
+            g.DrawString(fntOxanimumRegular, "Reset Book", new Vector2(DrawX, DrawY), ColorText);
             DrawY += EntryHeight;
             g.DrawString(fntOxanimumRegular, "Return", new Vector2(DrawX, DrawY), ColorText);
 

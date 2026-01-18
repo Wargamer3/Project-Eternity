@@ -45,6 +45,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Effects\Squad PER Context.cs" />
     <Compile Include="Effects\Squad PER Params.cs" />
     <Compile Include="Effects\Squad PER Requirement.cs" />
+    <Compile Include="Lobby\Cards\Edit Book Card Skin Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Configure Player Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Player Preparation Default.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Change Player Type Popup.cs" />
@@ -177,10 +179,10 @@
     <Compile Include="Formula Parser.cs" />
     <Compile Include="Lobby\Sorcerer Street Room Informations.cs" />
     <Compile Include="Lobby\Card Book.cs" />
-    <Compile Include="Lobby\Edit Book Card List Filter Screen.cs" />
+    <Compile Include="Lobby\Cards\Edit Book Card List Filter Screen.cs" />
     <Compile Include="Lobby\Edit Book Name Screen.cs" />
-    <Compile Include="Lobby\Edit Book Card Screen.cs" />
-    <Compile Include="Lobby\Edit Book Card List Screen.cs" />
+    <Compile Include="Lobby\Cards\Edit Book Card Screen.cs" />
+    <Compile Include="Lobby\Cards\Edit Book Card List Screen.cs" />
     <Compile Include="Lobby\Choose Book Screen.cs" />
     <Compile Include="Lobby\Edit Book Screen.cs" />
     <Compile Include="Lobby\Sorcerer Street Create Room Screen.cs" />
@@ -275,6 +277,11 @@
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
+      <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
+      <Name>Microsoft Content Builder</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">

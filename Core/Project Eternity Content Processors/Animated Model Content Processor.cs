@@ -21,6 +21,10 @@ namespace ProjectEternity.ContentProcessor
         private Matrix[] ArrayBoneTransforms;
         private Dictionary<string, int> DicBoneIndexByName = new Dictionary<string, int>();
 
+        public AnimationProcessor()
+        {
+        }
+
         public override ModelContent Process(NodeContent Input, ContentProcessorContext Context)
         {
             ProcessSkeleton(Input);

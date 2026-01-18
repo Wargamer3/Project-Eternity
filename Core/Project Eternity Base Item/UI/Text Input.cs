@@ -97,7 +97,7 @@ namespace ProjectEternity.Core.Item
                     UpdateMessengerCursor(false);
                 }
             }
-            else if (MouseHelper.InputLeftButtonPressed())
+            else if (MouseHelper.InputLeftButtonReleased())
             {
                 Unselect();
             }
@@ -149,6 +149,7 @@ namespace ProjectEternity.Core.Item
         {
             Text = NewText;
             TextVisible = Text;
+            MessageStartIndex = 0;
             MessageCursorIndex = Text.Length;
             UpdateMessengerCursor();
         }

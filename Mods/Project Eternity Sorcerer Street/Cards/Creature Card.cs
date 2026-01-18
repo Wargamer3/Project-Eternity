@@ -243,6 +243,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 GamePiece.Unit3DModel = new AnimatedModelTransparent(Clone.GamePiece.Unit3DModel);
             }
+
+            if (TextParser != null)
+            {
+                DescriptionText = TextParser.Copy();
+            }
+
         }
 
         public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)

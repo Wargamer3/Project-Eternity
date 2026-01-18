@@ -2,13 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Graphics;
@@ -308,50 +306,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
                 sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
 
-                if (Card.TextParser == null && Symbols != null)
+                if (Symbols != null)
                 {
-                    Card.TextParser = new DynamicText();
-                    Card.TextParser.TextMaxWidthInPixel = Card.BoxWidth - 100;
-                    Card.TextParser.LineHeight = fntMenuText.LineSpacing;
-                    Card.TextParser.TextColor = TextColor;
-                    Card.TextParser.ListProcessor.Add(new RegularTextProcessor(Card.TextParser, fntMenuText));
-                    IconProcessor IconParser = new IconProcessor(Card.TextParser);
-                    Card.TextParser.ListProcessor.Add(IconParser);
-                    Card.TextParser.ListProcessor.Add(new PlayerNameProcessor(Card.TextParser, fntMenuText, this));
-                    Card.TextParser.ListProcessor.Add(new DefaultTextProcessor(Card.TextParser, fntMenuText));
-                    Card.TextParser.SetDefaultProcessor(new DefaultTextProcessor(Card.TextParser, fntMenuText));
-                    Card.TextParser.Load(Content);
-
-                    IconParser.PreloadImage("rarityE", Symbols.sprRarityE);
-                    IconParser.PreloadImage("rarityN", Symbols.sprRarityN);
-                    IconParser.PreloadImage("rarityR", Symbols.sprRarityR);
-                    IconParser.PreloadImage("rarityS", Symbols.sprRarityS);
-
-                    IconParser.PreloadImage("MenuG", Symbols.sprMenuG);
-                    IconParser.PreloadImage("MenuTG", Symbols.sprMenuTG);
-                    IconParser.PreloadImage("MenuST", Symbols.sprMenuST);
-                    IconParser.PreloadImage("MenuHP", Symbols.sprMenuHP);
-                    IconParser.PreloadImage("MenuMHP", Symbols.sprMenuMHP);
-
-                    IconParser.PreloadImage("water", Symbols.sprElementWater);
-                    IconParser.PreloadImage("fire", Symbols.sprElementFire);
-                    IconParser.PreloadImage("earth", Symbols.sprElementEarth);
-                    IconParser.PreloadImage("air", Symbols.sprElementAir);
-                    IconParser.PreloadImage("neutral", Symbols.sprElementNeutral);
-                    IconParser.PreloadImage("multi", Symbols.sprElementMulti);
-
-                    IconParser.PreloadImage("weapon", Symbols.sprItemsWeapon);
-                    IconParser.PreloadImage("armor", Symbols.sprItemsArmor);
-                    IconParser.PreloadImage("tool", Symbols.sprItemsTool);
-                    IconParser.PreloadImage("scroll", Symbols.sprItemsScroll);
-
-                    IconParser.PreloadImage("spellsingle", Symbols.sprSpellsSingle);
-                    IconParser.PreloadImage("spellmultiple", Symbols.sprSpellsMultiple);
-
-                    IconParser.PreloadImage("enchantsingle", Symbols.sprEnchantSingle);
-                    IconParser.PreloadImage("enchantmultiple", Symbols.sprEnchantMultiple);
-
-                    IconParser.PreloadImage("creature", Symbols.sprCreature);
+                    Card.InitTextParser(this, Content, Symbols, fntMenuText, TextColor);
                 }
             }
 

@@ -33,19 +33,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private bool CreateNewBook;
 
+        public EditBookNameScreen(Player ActivePlayer)
+        {
+            this.ActivePlayer = ActivePlayer;
+            OriginalBookName = "New Book";
+            CreateNewBook = true;
+        }
+
         public EditBookNameScreen(Player ActivePlayer, CardBook ActiveBook)
         {
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
             OriginalBookName = ActiveBook.BookName;
             CreateNewBook = false;
-        }
-
-        public EditBookNameScreen(Player ActivePlayer)
-        {
-            this.ActivePlayer = ActivePlayer;
-            OriginalBookName = "New Book";
-            CreateNewBook = true;
         }
 
         public override void Load()

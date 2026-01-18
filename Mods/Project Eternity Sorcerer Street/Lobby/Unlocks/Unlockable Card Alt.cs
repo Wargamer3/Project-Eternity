@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (UnlockQuantity > 0)
             {
-                ConditionsOwner.Inventory.DicOwnedCardAlt.Add(AltTypeAndPath, new CardSkinInfo(Path, AltTypeAndPath, CardToBuy));
+                ConditionsOwner.Inventory.DicOwnedCardAlt.Add(AltTypeAndPath, new CardAltInfo(Path, AltTypeAndPath, CardToBuy));
 
                 ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + CardToBuy.Name + "!");
             }

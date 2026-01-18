@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public CardBook GlobalBook;//Just using a regular Book to store player owned cards;
         public Dictionary<string, CardSkinInfo> DicOwnedCardSkin;//Skins for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
-        public Dictionary<string, CardSkinInfo> DicOwnedCardAlt;//Alts for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
+        public Dictionary<string, CardAltInfo> DicOwnedCardAlt;//Alts for Character the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
 
         public BookInventoryContainer RootBookContainer;
         public CharacterInventoryContainer RootCharacterContainer;
@@ -177,7 +177,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Dictionary<string, CardBook> DicBotOwnedBook = new Dictionary<string, CardBook>(ListBotBookCount);
                 for (int B = 0; B < ListBotBookCount; ++B)
                 {
+                    string BookName = BR.ReadString();
+                    string BookModel = BR.ReadString();
                     CardBook LoadedBook = new CardBook(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                    LoadedBook.BookName = BookName;
+                    LoadedBook.BookModel = BookModel;
 
                     DicBotOwnedBook.Add(LoadedBook.BookName, LoadedBook);
                 }
@@ -195,7 +200,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void Save(BinaryWriter BW)
         {
-            GlobalBook.Save(BW);
+            GlobalBook.SaveGlobalBook(BW);
             BW.Write(ActiveBook.BookName);
 
             BW.Write(Character.Character.CharacterPath);
@@ -228,6 +233,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 BW.Write(ActiveBot.Value.DicOwnedBook.Count);
                 foreach (CardBook ActiveBook in ActiveBot.Value.DicOwnedBook.Values)
                 {
+                    BW.Write(ActiveBook.BookName);
+                    BW.Write(ActiveBook.BookModel);
                     ActiveBook.Save(BW);
                 }
             }

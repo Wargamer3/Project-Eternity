@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public Card CardToBuy;
         public string SkinTypeAndPath;
+        public string ModelPath;
 
         public UnlockableCardSkin(string UnitPath, string SkinPath)
             : base(UnitSkinType)
@@ -24,6 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Path = UnitPath;
             Load(ActiveHeaderValues);
             SkinTypeAndPath = ActiveHeaderValues["SkinPath"];
+            ModelPath = ActiveHeaderValues["ModelPath"];
         }
 
         public UnlockableCardSkin(string UnitPath, byte UnlockQuantity, bool IsInShop)
@@ -47,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (UnlockQuantity > 0)
             {
-                ConditionsOwner.Inventory.DicOwnedCardSkin.Add(SkinTypeAndPath, new CardSkinInfo(Path, SkinTypeAndPath, CardToBuy));
+                ConditionsOwner.Inventory.DicOwnedCardSkin.Add(SkinTypeAndPath, new CardSkinInfo(Path, SkinTypeAndPath, ModelPath, CardToBuy, false));
 
                 ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + CardToBuy.Name + "!");
             }
