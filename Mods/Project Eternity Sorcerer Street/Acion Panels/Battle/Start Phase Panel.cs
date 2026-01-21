@@ -40,8 +40,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Ensure something will look off if the Invader.Animation is not properly disposed at the end of a battle
             if (Map.GlobalSorcererStreetBattleContext.SelfCreature == null)
             {
-                Map.GlobalSorcererStreetBattleContext.SelfCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
+                SorcererStreetBattleContext.BattleCreatureInfo InvaderCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
+                SorcererStreetBattleContext.BattleCreatureInfo DefenderCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
+
+                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
 
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
 
@@ -49,39 +51,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.ListSummonedCreature = Map.ListSummonedCreature;
                 Map.GlobalSorcererStreetBattleContext.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
                 Map.GlobalSorcererStreetBattleContext.CurrentTurn = Map.GameTurn;
-
-                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece.Position);
-
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature = Invader;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature = ActiveTerrain.DefendingCreature;
-
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner = ActivePlayer;
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex = ActivePlayerIndex;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner = ActiveTerrain.PlayerOwner;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
                 Map.GlobalSorcererStreetBattleContext.ActiveTerrain = ActiveTerrain;
 
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature.InitBattleBonuses();
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.InitBattleBonuses();
 
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusHP = 0;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusHP = 0;
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.BonusST = 0;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.BonusST = 0;
+                InvaderCreature.Creature = Invader;
+                DefenderCreature.Creature = ActiveTerrain.DefendingCreature;
 
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Scale = new Vector2(1);
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.StaticSprite.Width - Constants.Width / 9, Constants.Height / 12);
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Scale = new Vector2(1);
+                InvaderCreature.Owner = ActivePlayer;
+                InvaderCreature.PlayerIndex = ActivePlayerIndex;
+                DefenderCreature.Owner = ActiveTerrain.PlayerOwner;
+                DefenderCreature.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
+
+                InvaderCreature.BonusHP = 0;
+                DefenderCreature.BonusHP = 0;
+                InvaderCreature.BonusST = 0;
+                DefenderCreature.BonusST = 0;
+
+                InvaderCreature.Animation = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
+                InvaderCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                InvaderCreature.Animation.Scale = new Vector2(1);
+                DefenderCreature.Animation = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
+                DefenderCreature.Animation.Position = new Vector2(Constants.Width - DefenderCreature.Animation.StaticSprite.Width - Constants.Width / 9, Constants.Height / 12);
+                DefenderCreature.Animation.Scale = new Vector2(1);
 
                 Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Map.Content, GameScreen.GraphicsDevice);
 
-                InvaderHPBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP;
-                InvaderSTBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalST;
-                DefenderHPBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP;
-                DefenderSTBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalST;
+                InvaderHPBar = InvaderCreature.FinalHP;
+                InvaderSTBar = InvaderCreature.FinalST;
+                DefenderHPBar = DefenderCreature.FinalHP;
+                DefenderSTBar = DefenderCreature.FinalST;
+
+                Map.GlobalSorcererStreetBattleContext.SetBeforeBattle(InvaderCreature, DefenderCreature);
             }
             else
             {

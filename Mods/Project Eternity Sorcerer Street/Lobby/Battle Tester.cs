@@ -13,6 +13,7 @@ using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.AnimationScreen;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattle;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -124,6 +125,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private EditBookCardListFilterScreen CardSelectionScreen;
         private SorcererStreetBattleContext Context;
 
+        private BattleCreatureInfo InvaderCreature;
+        private BattleCreatureInfo DefenderCreature;
+
         private List<SimpleAnimation> ListAttackAnimation;
 
         private Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
@@ -157,6 +161,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.ActiveTerrain.LandLevel = 1;
             Context.ActiveTerrain.TerrainTypeIndex = 2;
             Context.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;
+            InvaderCreature = Context.SelfCreature;
+            DefenderCreature = Context.OpponentCreature;
 
             ButtonHeight = fntMenuText.LineSpacing + 2;
 
@@ -333,7 +339,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Update(GameTime gameTime)
         {
-            ActionPanelBattle.HasFinishedUpdatingBars(gameTime, Context);
+
+            GetMenuResponse();
+
+            if (InputHelper.InputConfirmPressed())
+            {
+            }
+            else if (InputHelper.InputCancelPressed())
+            {
+            }
+            else if (InputHelper.InputUpPressed())
+            {
+                if (--CursorIndex < 0)
+                {
+                    CursorIndex = ActivePlayer.Inventory.DicOwnedBook.Count + 1;
+                }
+            }
+            else if (InputHelper.InputDownPressed())
+            {
+                if (++CursorIndex > ActivePlayer.Inventory.DicOwnedBook.Count + 1)
+                {
+                    CursorIndex = 0;
+                }
+            }
+
+            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            {
+                ActiveButton.Update(gameTime);
+            }
+
+            if (!ActionPanelBattle.HasFinishedUpdatingBars(gameTime, Context))
+            {
+                return;
+            }
 
             switch (PhasesChoice)
             {
@@ -437,15 +475,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.BoostModifierPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        Context.ListActivatedEffect.Clear();
-
-                        if (!Context.SelfCreature.Creature.UseCardAnimation)
+                        if (PhasesEnd == PhasesChoices.BoostModifierPhase)
                         {
-                            ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.SelfCreature.Creature.IdleAnimationPath, Context.SelfCreature, true);
-                            Context.SelfCreature.Animation.Position = new Vector2(1750, 190);
+                            PhasesChoice = PhasesChoices.Idle;
                         }
+                        else
+                        {
+                            Context.ListActivatedEffect.Clear();
 
-                        PhasesChoice = PhasesChoices.PrepareAttackPhase;
+                            if (!Context.SelfCreature.Creature.UseCardAnimation)
+                            {
+                                ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.SelfCreature.Creature.IdleAnimationPath, Context.SelfCreature, true);
+                                Context.SelfCreature.Animation.Position = new Vector2(1750, 190);
+                            }
+
+                            PhasesChoice = PhasesChoices.PrepareAttackPhase;
+                        }
                     }
                     break;
 
@@ -651,34 +696,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 default:
                     break;
-            }
-
-            GetMenuResponse();
-
-            if (InputHelper.InputConfirmPressed())
-            {
-            }
-            else if (InputHelper.InputCancelPressed())
-            {
-            }
-            else if (InputHelper.InputUpPressed())
-            {
-                if (--CursorIndex < 0)
-                {
-                    CursorIndex = ActivePlayer.Inventory.DicOwnedBook.Count + 1;
-                }
-            }
-            else if (InputHelper.InputDownPressed())
-            {
-                if (++CursorIndex > ActivePlayer.Inventory.DicOwnedBook.Count + 1)
-                {
-                    CursorIndex = 0;
-                }
-            }
-
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
-            {
-                ActiveButton.Update(gameTime);
             }
         }
 
@@ -1121,8 +1138,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             PhasesChoice = PhasesChoices.IntroPhase;
 
-            Context.SelfCreature.Creature.InitBattleBonuses();
-            Context.OpponentCreature.Creature.InitBattleBonuses();
+            Context.SetBeforeBattle(InvaderCreature, DefenderCreature);
 
             Context.SelfCreature.Animation = new SimpleAnimation("Invader", "Invader", Context.SelfCreature.Creature.sprCard);
             Context.SelfCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);

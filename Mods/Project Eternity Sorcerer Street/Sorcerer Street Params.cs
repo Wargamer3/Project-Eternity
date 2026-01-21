@@ -145,6 +145,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BattleCreatureInfo SelfCreature;
         public BattleCreatureInfo OpponentCreature;//Defender
 
+        public BattleCreatureInfo InvaderCreature => _InvaderCreature;
+        public BattleCreatureInfo DefenderCreature => _DefenderCreature;
+        private BattleCreatureInfo _InvaderCreature;
+        private BattleCreatureInfo _DefenderCreature;
+
         public bool CanUseEffectsOrAbilities;
         public SorcererStreetTerrainHolder TerrainHolder;
         public List<TerrainSorcererStreet> ListSummonedCreature;
@@ -192,11 +197,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Background = null;
         }
 
-        public void ActivateSkill(BattleCreatureInfo SelfCreature, BattleCreatureInfo OpponentCreature, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
+        public void SetBeforeBattle(BattleCreatureInfo InvaderCreature, BattleCreatureInfo DefenderCreature)
+        {
+            this._InvaderCreature = InvaderCreature;
+            this._DefenderCreature = DefenderCreature;
+
+            SelfCreature = InvaderCreature;
+            OpponentCreature = DefenderCreature;
+
+            SelfCreature.Creature.InitBattleBonuses();
+            OpponentCreature.Creature.InitBattleBonuses();
+        }
+
+        public void SetCreatures(BattleCreatureInfo SelfCreature, BattleCreatureInfo OpponentCreature)
         {
             this.SelfCreature = SelfCreature;
             this.OpponentCreature = OpponentCreature;
+        }
 
+        public void ActivateSkill(Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
+        {
             foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicSkillActivation)
             {
                 foreach (BaseSkillActivation SkillActivation in ActiveSkill.Value)
@@ -206,23 +226,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public List<SkillActivationContext> GetAvailableActivation(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        public List<SkillActivationContext> GetAvailableActivation(string RequirementName)
         {
-            SelfCreature = Invader;
-            OpponentCreature = Defender;
-
             List<SkillActivationContext> ListSkillActivation = new List<SkillActivationContext>();
 
-            Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Invader.Creature.GetAvailableActivation(RequirementName);
+            Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = SelfCreature.Creature.GetAvailableActivation(RequirementName);
 
-            if (Invader.Owner.Enchant != null)
+            if (SelfCreature.Owner.Enchant != null)
             {
-                List<BaseSkillActivation> ListEnchantActivation = Invader.Owner.Enchant.Skill.GetAvailableActivation(RequirementName);
+                List<BaseSkillActivation> ListEnchantActivation = SelfCreature.Owner.Enchant.Skill.GetAvailableActivation(RequirementName);
                 if (ListEnchantActivation.Count > 0)
                 {
                     if (ListEnchantActivation != null && ListEnchantActivation.Count > 0)
                     {
-                        DicSkillActivation.Add(Invader.Owner.Enchant.Skill, ListEnchantActivation);
+                        DicSkillActivation.Add(SelfCreature.Owner.Enchant.Skill, ListEnchantActivation);
                     }
                 }
             }
@@ -232,9 +249,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListSkillActivation.Add(new SkillActivationContext(false, DicSkillActivation));
             }
 
-            if (Invader.Item != null)
+            if (SelfCreature.Item != null)
             {
-                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicItemSkillActivation = Invader.Item.GetAvailableActivation(RequirementName);
+                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicItemSkillActivation = SelfCreature.Item.GetAvailableActivation(RequirementName);
                 if (DicItemSkillActivation.Count > 0)
                 {
                     ListSkillActivation.Add(new SkillActivationContext(true, DicItemSkillActivation));

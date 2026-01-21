@@ -51,7 +51,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
-                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.SelfCreature, GlobalSorcererStreetBattleContext.OpponentCreature, RequirementName);
+                GlobalSorcererStreetBattleContext.SetCreatures(GlobalSorcererStreetBattleContext.InvaderCreature, GlobalSorcererStreetBattleContext.DefenderCreature);
+                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(RequirementName);
+
                 if (ListSkillActivation.Count > 0)
                 {
                     ItemAnimationTime = 0;
@@ -62,7 +64,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (GlobalSorcererStreetBattleContext.OpponentCreature.Item != null)
             {
-                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.OpponentCreature, GlobalSorcererStreetBattleContext.SelfCreature, RequirementName);
+                GlobalSorcererStreetBattleContext.SetCreatures(GlobalSorcererStreetBattleContext.DefenderCreature, GlobalSorcererStreetBattleContext.InvaderCreature);
+                ListSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(RequirementName);
+
                 if (ListSkillActivation.Count > 0)
                 {
                     ItemAnimationTime = 0;
@@ -98,11 +102,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<SkillActivationContext> ListSkillActivation;
             if (InvaderSide)
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.SelfCreature, Context.OpponentCreature, RequirementName);
+                Context.SetCreatures(Context.InvaderCreature, Context.DefenderCreature);
+
+                ListSkillActivation = Context.GetAvailableActivation(RequirementName);
             }
             else
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, RequirementName);
+                Context.SetCreatures(Context.DefenderCreature, Context.InvaderCreature);
+
+                ListSkillActivation = Context.GetAvailableActivation(RequirementName);
             }
 
             if (ListSkillActivation.Count > 0)
@@ -115,14 +123,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActionPanelBattleItemModifierPhase.ActivePhase = RequirementName;
 
-            List<SkillActivationContext> ListSkillActivation = Context.GetAvailableActivation(Context.SelfCreature, Context.OpponentCreature, RequirementName);
+            List<SkillActivationContext> ListSkillActivation = Context.GetAvailableActivation(RequirementName);
             if (ListSkillActivation.Count > 0)
             {
+                Context.SetCreatures(Context.InvaderCreature, Context.DefenderCreature);
+
                 StartAnimation(true, ListSkillActivation);
             }
             else
             {
-                ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, RequirementName);
+                Context.SetCreatures(Context.DefenderCreature, Context.InvaderCreature);
+
+                ListSkillActivation = Context.GetAvailableActivation(RequirementName);
+
                 if (ListSkillActivation.Count > 0)
                 {
                     StartAnimation(false, ListSkillActivation);
@@ -150,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Context.ListActivatedEffect.Clear();
 
-                    Context.ActivateSkill(Context.SelfCreature, Context.OpponentCreature, ListSkillActivation[0].DicSkillActivation);
+                    Context.ActivateSkill(ListSkillActivation[0].DicSkillActivation);
 
                     AnimationPhase = AnimationPhases.InvaderActivation;
                 }
@@ -161,7 +174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Context.ListActivatedEffect.Clear();
 
-                    Context.ActivateSkill(Context.OpponentCreature, Context.SelfCreature, ListSkillActivation[0].DicSkillActivation);
+                    Context.ActivateSkill(ListSkillActivation[0].DicSkillActivation);
 
                     AnimationPhase = AnimationPhases.DefenderActivation;
                 }
@@ -176,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         if (Context.OpponentCreature.FinalHP > 0)
                         {
-                            ListSkillActivation = Context.GetAvailableActivation(Context.OpponentCreature, Context.SelfCreature, ActivePhase);
+                            ListSkillActivation = Context.GetAvailableActivation(ActivePhase);
                             if (ListSkillActivation.Count > 0)
                             {
                                 ItemAnimationTime = 0;
@@ -212,12 +225,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         Context.ListActivatedEffect.Clear();
                         AnimationPhase = AnimationPhases.Finished;
+                        Context.SetCreatures(Context.InvaderCreature, Context.DefenderCreature);
                         return false;
                     }
                 }
             }
             else if (AnimationPhase == AnimationPhases.Finished)
             {
+                Context.SetCreatures(Context.InvaderCreature, Context.DefenderCreature);
                 Context.ListActivatedEffect.Clear();
                 return false;
             }

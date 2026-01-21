@@ -287,7 +287,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (SecondAttacker.DamageReceived > 0)
             {
-                List<SkillActivationContext> ListSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(FirstAttacker, SecondAttacker, AttackBonusRequirement);
+                Map.GlobalSorcererStreetBattleContext.SetCreatures(FirstAttacker, SecondAttacker);
+                List<SkillActivationContext> ListSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(AttackBonusRequirement);
 
                 if (ListSkillActivation.Count > 0 && ListSkillActivation[0].DicSkillActivation.Count > 0)
                 {
