@@ -514,15 +514,18 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                     for (int i = 0; i < Owner.ListMultiplayerSpawns.Count; i++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListMultiplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListMultiplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                        Vector2 SpawnPosition = new Vector2((int)(Owner.ListMultiplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(Owner.ListMultiplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y);
+
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)SpawnPosition.X,
+                                                      (int)SpawnPosition.Y,
                                                        Map.TileSize.X, Map.TileSize.Y), null,
                                         BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
 
-                        g.DrawString(Map.fntArial9, Owner.ListMultiplayerSpawns[i].Tag,
-                            new Vector2((Owner.ListMultiplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListMultiplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
+                        g.DrawString(Map.fntArial9, Owner.ListMultiplayerSpawns[i].Tag, new Vector2(SpawnPosition.X + 10, SpawnPosition.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                        Owner.ListMultiplayerSpawns[i].Draw(g, SpawnPosition);
                     }
 
                     for (int S = 0; S < Owner.ListMapSwitchPoint.Count; S++)

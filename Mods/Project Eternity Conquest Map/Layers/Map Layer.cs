@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -139,6 +140,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 ConquestEventPoint NewPoint = new ConquestEventPoint(BR);
                 int ColorIndex = Convert.ToInt32(NewPoint.Tag) - 1;
+                if (Map.IsEditor && NewPoint.SpawnTypeName == "Unit")
+                {
+                    NewPoint.sprMapPreview = GameScreen.ContentFallback.Load<Texture2D>("Conquest/Units/Map Sprite/" + NewPoint.SpawnName);
+                }
                 /*NewPoint.ColorRed = Map.ListMultiplayerColor[ColorIndex].R;
                 NewPoint.ColorGreen = Map.ListMultiplayerColor[ColorIndex].G;
                 NewPoint.ColorBlue = Map.ListMultiplayerColor[ColorIndex].B;*/

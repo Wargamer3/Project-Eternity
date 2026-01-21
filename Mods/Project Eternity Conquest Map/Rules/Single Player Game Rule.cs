@@ -100,26 +100,51 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         }
                     }
 
-                    for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
+                    if (!Owner.IsEditor)
                     {
-                        if (ActiveLayer.ListCampaignSpawns[S].Tag == PlayerTag)
+                        for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
                         {
-                            UnitConquest NewUnit = (UnitConquest)ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex].CurrentLeader;
-                            if (NewUnit == null)
+                            if (ActiveLayer.ListCampaignSpawns[S].Tag == PlayerTag)
                             {
+                                UnitConquest NewUnit = (UnitConquest)ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex].CurrentLeader;
+                                if (NewUnit == null)
+                                {
+                                    ++SpawnSquadIndex;
+                                    continue;
+                                }
+
+                                NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
+
+                                NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
+                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, ActiveLayer.ListCampaignSpawns[S].Position);
                                 ++SpawnSquadIndex;
-                                continue;
+
+                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
+                                {
+                                    break;
+                                }
                             }
+                        }
 
-                            NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
-
-                            NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                            Owner.SpawnUnit(PlayerIndex, NewUnit, 0, ActiveLayer.ListCampaignSpawns[S].Position);
-                            ++SpawnSquadIndex;
-
-                            if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
+                        for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
+                        {
+                            if (!ActiveLayer.ListMultiplayerSpawns[S].HasBeenUsed && ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                             {
-                                break;
+                                ConquestEventPoint ActiveEventPoint = (ConquestEventPoint)ActiveLayer.ListMultiplayerSpawns[S];
+                                ActiveEventPoint.HasBeenUsed = true;
+
+                                UnitConquest NewUnit = new UnitConquest(ActiveEventPoint.SpawnName, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect);
+
+                                NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
+
+                                NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
+                                Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X * Owner.TileSize.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y * Owner.TileSize.Y, ActiveLayer.ListMultiplayerSpawns[S].Position.Z * Owner.LayerHeight));
+                                ++SpawnSquadIndex;
+
+                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -154,6 +179,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         protected virtual void InitBot(UnitConquest NewSquad)
         {
+            return;
             NewSquad.SquadAI = new ConquestScripAIContainer(new ConquestAIInfo(Owner, NewSquad));
             NewSquad.SquadAI.Load("Default AI");
         }

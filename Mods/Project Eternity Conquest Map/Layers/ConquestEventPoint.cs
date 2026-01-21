@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -9,6 +11,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     {
         public string SpawnTypeName;
         public string SpawnName;
+        public Texture2D sprMapPreview;
 
         public ConquestEventPoint(BinaryReader BR)
             : base(BR)
@@ -22,6 +25,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             this.SpawnTypeName = SpawnTypeName;
             this.SpawnName = SpawnName;
+            if (SpawnTypeName == "Unit")
+            {
+                sprMapPreview = GameScreen.ContentFallback.Load<Texture2D>("Conquest/Units/Map Sprite/" + SpawnName);
+            }
         }
 
         public override void Save(BinaryWriter BW)
@@ -30,6 +37,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             BW.Write(SpawnTypeName);
             BW.Write(SpawnName);
+        }
+
+        public override void Draw(CustomSpriteBatch g, Vector2 Position)
+        {
+            if (sprMapPreview != null)
+            {
+                g.Draw(sprMapPreview, Position, Color.FromNonPremultiplied(215, 215, 215, 200));
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.IO;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -42,6 +43,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(Position.Y);
             BW.Write(Position.Z);
             BW.Write(Tag);
+        }
+
+        public virtual void Draw(CustomSpriteBatch g, Vector2 Position)
+        {
         }
     }
 

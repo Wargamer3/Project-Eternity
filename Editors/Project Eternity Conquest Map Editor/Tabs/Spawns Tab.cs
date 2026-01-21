@@ -16,7 +16,7 @@ namespace ProjectEternity.Editors.MapEditor
     public class SpawnsTab : IMapEditorTab
     {
         private TabPage tabSpawns;
-        private NumericUpDown txtFactions;
+        private NumericUpDown txtSpawnsPlayer;
         private ListView lvUnits;
         private ListView lvBuildings;
 
@@ -38,7 +38,7 @@ namespace ProjectEternity.Editors.MapEditor
             ExtraTabsUserControl SpawnControl = new ExtraTabsUserControl();
             tabSpawns = SpawnControl.tabControl1.TabPages[3];
 
-            txtFactions = SpawnControl.txtSpawnsPlayer;
+            txtSpawnsPlayer = SpawnControl.txtSpawnsPlayer;
 
             lvUnits = SpawnControl.lvSpawnsUnits;
             UnitImageList = new ImageList();
@@ -121,20 +121,20 @@ namespace ProjectEternity.Editors.MapEditor
 
                     MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
-                    UnitSpawn NewUnit = null;
+                    EventPoint NewUnit = null;
 
                     //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-                    for (int S = 0; S < TopLayer.ListUnitSpawn.Count; S++)
+                    for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
                     {
-                        if (TopLayer.ListUnitSpawn[S].SpawnPositionX == GridX && TopLayer.ListUnitSpawn[S].SpawnPositionY == GridY)
+                        if (TopLayer.ListMultiplayerSpawns[S].Position.X == GridX && TopLayer.ListMultiplayerSpawns[S].Position.Y == GridY)
                         {
-                            NewUnit = TopLayer.ListUnitSpawn[S];
+                            NewUnit = TopLayer.ListMultiplayerSpawns[S];
                         }
                     }
 
                     if (NewUnit == null)
                     {
-                        TopLayer.ListMultiplayerSpawns.Add(new ConquestEventPoint(new Vector3(GridX, GridY, BattleMapViewer.SelectedListLayerIndex), "", 0, 0, 0, "Unit", ListFactionUnit[UnitIndex].RelativePath));
+                        TopLayer.ListMultiplayerSpawns.Add(new ConquestEventPoint(new Vector3(GridX, GridY, BattleMapViewer.SelectedListLayerIndex), txtSpawnsPlayer.Text, 0, 0, 0, "Unit", ListFactionUnit[UnitIndex].RelativePath));
                     }
                 }
             }
@@ -144,11 +144,11 @@ namespace ProjectEternity.Editors.MapEditor
                 int GridY = (int)(ActiveMap.CursorPosition.Y) / ActiveMap.TileSize.Y;
                 MapLayer TopLayer = (MapLayer)Helper.GetLayersAndSubLayers()[BattleMapViewer.SelectedListLayerIndex];
 
-                for (int S = 0; S < TopLayer.ListUnitSpawn.Count; S++)
+                for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
                 {
-                    if (TopLayer.ListUnitSpawn[S].SpawnPositionX == GridX && TopLayer.ListUnitSpawn[S].SpawnPositionY == GridY)
+                    if (TopLayer.ListMultiplayerSpawns[S].Position.X == GridX && TopLayer.ListMultiplayerSpawns[S].Position.Y == GridY)
                     {
-                        TopLayer.ListUnitSpawn.RemoveAt(S);
+                        TopLayer.ListMultiplayerSpawns.RemoveAt(S);
                     }
                 }
             }
