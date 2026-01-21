@@ -50,7 +50,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool LandLevelDowngradeLock;//Territory level cannot be lowered.
 
         public ElementalAffinity[] ArrayElementAffinity;
-
         public ElementalAffinity[] ArrayPenetrateAffinity;//HP from Land Bonus is negated, attack with creature ST
 
         public bool ScrollAttack;//HP from Land Bonus is negated, attack with scroll, can't be reflected or negated
@@ -67,7 +66,53 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public CardAbilities()
         {
+            AttackFirst = false;
+            AttackLast = false;
+            AttackTwice = false;
+            CriticalHit = false;
             DamageMultiplier = 1f;
+            DamageModifier = -1;
+
+            IsDefensive = false;
+            FreeTravel = false;
+
+            SupportCreature = false;
+            ItemCreature = false;
+            Immediate = false;
+            ForceStop = false;
+            Regenerate = false;
+
+            ItemProtection = false;
+            TargetProtection = false;
+            InvasionProtection = false;
+
+            HPProtection = false;
+            Recycle = false;
+            LapRegenerationLimit = false;
+
+            TollOverride = -1;
+
+            Paralysis = false;
+            EffectLimit = false;
+            LandEffectLimit = false;
+            LandEffectNoLimit = false;
+            LandLevelLock = false;
+            LandLevelDowngradeLock = false;
+
+            ArrayElementAffinity = new ElementalAffinity[0];
+            ArrayPenetrateAffinity = new ElementalAffinity[0];
+
+            ScrollAttack = false;
+            ScrollCriticalHit = false;
+            ScrollValue = 0;
+
+            ListNeutralizeType = new List<AttackTypes>();
+            NeutralizeSignOperator = NumberTypes.Absolute;
+            NeutralizeValue = string.Empty;
+
+            ListReflectType = new List<AttackTypes>();
+            ReflectSignOperator = NumberTypes.Absolute;
+            ReflectValue = string.Empty;
         }
 
         public CardAbilities(CardAbilities Other)
@@ -81,14 +126,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             IsDefensive = Other.IsDefensive;
             FreeTravel = Other.FreeTravel;
+
             SupportCreature = Other.SupportCreature;
             ItemCreature = Other.ItemCreature;
             Immediate = Other.Immediate;
             ForceStop = Other.ForceStop;
             Regenerate = Other.Regenerate;
+
             ItemProtection = Other.ItemProtection;
             TargetProtection = Other.TargetProtection;
             InvasionProtection = Other.InvasionProtection;
+
             HPProtection = Other.HPProtection;
             Recycle = Other.Recycle;
             LapRegenerationLimit = Other.LapRegenerationLimit;
@@ -103,7 +151,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LandLevelDowngradeLock = Other.LandLevelDowngradeLock;
 
             ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
-
             ArrayElementAffinity = Other.ArrayElementAffinity;
 
             ScrollAttack = Other.ScrollAttack;

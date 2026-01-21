@@ -52,8 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
             Map.OnCreatureSummon(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature, ActiveTerrain);
 
-            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner);
-            Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner);
+            Map.UpdateTotalMagic();
         }
 
         public static void DestroyDeadCreatures(SorcererStreetMap Map)
@@ -73,8 +72,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.GlobalSorcererStreetBattleContext.SelfCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
 
                     Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature);
-
-                    Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner);
                 }
             }
             if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP <= 0)
@@ -93,9 +90,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
 
-                    Map.UpdateTotalMagic(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner);
                 }
             }
+
+            Map.UpdateTotalMagic();
         }
 
         public override void DoUpdate(GameTime gameTime)

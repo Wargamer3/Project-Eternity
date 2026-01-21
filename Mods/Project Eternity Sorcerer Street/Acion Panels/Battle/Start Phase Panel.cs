@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Player ActivePlayer;
         protected CreatureCard Invader;
         private static AnimationScreen InvaderAnimation;
+        BattleContent BattleAssets;
 
         public ActionPanelBattleStartPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -31,13 +32,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             this.Invader = Invader;
+            BattleAssets = new BattleContent(Map.Content);
         }
 
         public override void OnSelect()
         {
             //Ensure something will look off if the Invader.Animation is not properly disposed at the end of a battle
-            if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation == null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature == null)
             {
+                Map.GlobalSorcererStreetBattleContext.SelfCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
+
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
 
                 Map.GlobalSorcererStreetBattleContext.DicCreatureCountByElementType = Map.DicCreatureCountByElementType;
@@ -77,6 +82,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 InvaderSTBar = Map.GlobalSorcererStreetBattleContext.SelfCreature.FinalST;
                 DefenderHPBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP;
                 DefenderSTBar = Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalST;
+            }
+            else
+            {
+
             }
         }
 
@@ -162,10 +171,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
             Map.GlobalSorcererStreetBattleContext.Background.Draw(g, Constants.Width, Constants.Height);
 
-            DrawAnimation(g, Map.GlobalSorcererStreetBattleContext, Map.fntMenuText, Map.sprVS);
+            DrawAnimation(g, BattleAssets, Map.GlobalSorcererStreetBattleContext);
         }
 
-        public static void DrawAnimation(CustomSpriteBatch g, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, SpriteFont fntMenuText, Texture2D sprVS)
+        public static void DrawAnimation(CustomSpriteBatch g, BattleContent BattleAssets, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
             if (AnimationTime >= 2)
             {
@@ -182,7 +191,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     IntroduceInvader(g, GlobalSorcererStreetBattleContext);
                     IntroduceDefender(g, GlobalSorcererStreetBattleContext);
-                    DisplayVersusText(g, GlobalSorcererStreetBattleContext, fntMenuText, sprVS);
+                    DisplayVersusText(g, BattleAssets, GlobalSorcererStreetBattleContext);
                 }
             }
         }

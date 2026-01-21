@@ -68,8 +68,8 @@
             this.txtOrderNumber = new System.Windows.Forms.NumericUpDown();
             this.lblOrderNumber = new System.Windows.Forms.Label();
             this.btnSetDefaultGameModesConditions = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.cbMapType = new System.Windows.Forms.ComboBox();
+            this.lblMapType = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtBGM = new System.Windows.Forms.TextBox();
@@ -536,27 +536,27 @@
             this.btnSetDefaultGameModesConditions.UseVisualStyleBackColor = true;
             this.btnSetDefaultGameModesConditions.Click += new System.EventHandler(this.btnSetDefaultGameModesConditions_Click);
             // 
-            // comboBox1
+            // cbMapType
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.cbMapType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMapType.FormattingEnabled = true;
+            this.cbMapType.Items.AddRange(new object[] {
             "Grid",
             "Spots",
             "3D Model"});
-            this.comboBox1.Location = new System.Drawing.Point(64, 62);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 28;
+            this.cbMapType.Location = new System.Drawing.Point(64, 62);
+            this.cbMapType.Name = "cbMapType";
+            this.cbMapType.Size = new System.Drawing.Size(121, 21);
+            this.cbMapType.TabIndex = 28;
             // 
-            // label1
+            // lblMapType
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 65);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 29;
-            this.label1.Text = "Map Type";
+            this.lblMapType.AutoSize = true;
+            this.lblMapType.Location = new System.Drawing.Point(3, 65);
+            this.lblMapType.Name = "lblMapType";
+            this.lblMapType.Size = new System.Drawing.Size(55, 13);
+            this.lblMapType.TabIndex = 29;
+            this.lblMapType.Text = "Map Type";
             // 
             // label2
             // 
@@ -571,8 +571,8 @@
             // 
             this.groupBox1.Controls.Add(this.txtBGM);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.lblMapType);
+            this.groupBox1.Controls.Add(this.cbMapType);
             this.groupBox1.Controls.Add(this.btnSetBackgrounds);
             this.groupBox1.Controls.Add(this.btnSetForegrounds);
             this.groupBox1.Location = new System.Drawing.Point(12, 235);
@@ -699,8 +699,8 @@
         protected System.Windows.Forms.Button btnAccept;
         protected System.Windows.Forms.Button btnClose;
         protected System.Windows.Forms.Button btnOpenTranslationFile;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbMapType;
+        private System.Windows.Forms.Label lblMapType;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnChangeBGM;

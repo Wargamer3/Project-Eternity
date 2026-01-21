@@ -148,8 +148,8 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                         else
                         {
                             AllowEvents = false;
-                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(33);
-                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Characters/Relationships/" + Name + ".pecr", Name, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(44);
+                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Deathmatch/Characters/Relationships/" + Name + ".pecr", Name, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
                             NewRelationshipSkill.CurrentSkillLevel.ListActivation[0].ListRequirement.Add(BaseSkillRequirement.DicDefaultRequirement["Relationship Requirement"].Copy());
                             ListRelationshipSkill[lstCharacters.SelectedIndex] = NewRelationshipSkill;
 

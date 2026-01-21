@@ -12,6 +12,7 @@ using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.AnimationScreen;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattle;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -34,8 +35,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private CardSymbols Symbols;
 
+        private BattleContent BattleAssets;
         private SpriteFont fntMenuText;
-        private Texture2D sprVS;
 
         private FMODSound sndButtonOver;
         protected FMODSound sndButtonClick;
@@ -146,8 +147,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
+            BattleAssets = new BattleContent(Content);
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
-            sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
             SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
             Context.ListSummonedCreature = new List<TerrainSorcererStreet>();
@@ -1261,12 +1262,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (PhasesChoice)
             {
                 case PhasesChoices.Idle:
-                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(g, BattleAssets, Context);
+                    ActionPanelBattle.DrawDefenderBattle(g, BattleAssets, Context);
                     break;
 
                 case PhasesChoices.IntroPhase:
-                    ActionPanelBattleStartPhase.DrawAnimation(g, Context, fntMenuText, sprVS);
+                    ActionPanelBattleStartPhase.DrawAnimation(g, BattleAssets, Context);
                     break;
 
                 case PhasesChoices.CreatureModifierPhase:
@@ -1280,8 +1281,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.InvaderBattleEnd:
                 case PhasesChoices.UponDefeat:
                 case PhasesChoices.UponVictory:
-                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(g, BattleAssets, Context);
+                    ActionPanelBattle.DrawDefenderBattle(g, BattleAssets, Context);
                     ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntMenuText, Context);
                     break;
 
@@ -1289,13 +1290,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.InvaderAttackPhase2:
                 case PhasesChoices.CounterPhase1:
                 case PhasesChoices.CounterPhase2:
-                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(g, BattleAssets, Context);
+                    ActionPanelBattle.DrawDefenderBattle(g, BattleAssets, Context);
                     break;
 
                 default:
-                    ActionPanelBattle.DrawInvaderBattle(fntMenuText, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntMenuText, Context, g);
+                    ActionPanelBattle.DrawInvaderBattle(g, BattleAssets, Context);
+                    ActionPanelBattle.DrawDefenderBattle(g, BattleAssets, Context);
                     break;
             }
 

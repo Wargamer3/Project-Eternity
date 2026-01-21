@@ -378,6 +378,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             ActiveSorcererStreetMap.MagicGainPerLap = (int)PropertiesEditor.txtMagicPerLap.Value;
             ActiveSorcererStreetMap.TowerMagicGain = (int)PropertiesEditor.txtMagicPerTower.Value;
             ActiveSorcererStreetMap.MagicGoal = (int)PropertiesEditor.txtMagicGoal.Value;
+            ActiveSorcererStreetMap.LowestDieRoll = (int)PropertiesEditor.txtLowestDieRoll.Value;
             ActiveSorcererStreetMap.HighestDieRoll = (int)PropertiesEditor.txtHighestDieRoll.Value;
         }
     }

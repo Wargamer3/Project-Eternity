@@ -136,6 +136,7 @@
     <Compile Include="Effects\Squad PER Params.cs" />
     <Compile Include="Effects\Squad PER Requirement.cs" />
     <Compile Include="Lobby\Cards\Edit Book Card Skin Screen.cs" />
+    <Compile Include="Lobby\Game Preparation Screen\Change Player Team Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Configure Player Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Player Preparation Default.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Change Player Type Popup.cs" />

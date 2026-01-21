@@ -39,6 +39,8 @@
             this.txtMagicPerLap = new System.Windows.Forms.NumericUpDown();
             this.lblMagicAtStart = new System.Windows.Forms.Label();
             this.txtMagicAtStart = new System.Windows.Forms.NumericUpDown();
+            this.lblLowestDieRoll = new System.Windows.Forms.Label();
+            this.txtLowestDieRoll = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).BeginInit();
@@ -56,6 +58,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicPerTower)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicPerLap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicAtStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtLowestDieRoll)).BeginInit();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -80,6 +83,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtLowestDieRoll);
+            this.groupBox1.Controls.Add(this.lblLowestDieRoll);
             this.groupBox1.Controls.Add(this.lblHigestDieRoll);
             this.groupBox1.Controls.Add(this.txtHighestDieRoll);
             this.groupBox1.Controls.Add(this.lblMagicGoal);
@@ -100,7 +105,7 @@
             // lblHigestDieRoll
             // 
             this.lblHigestDieRoll.AutoSize = true;
-            this.lblHigestDieRoll.Location = new System.Drawing.Point(305, 49);
+            this.lblHigestDieRoll.Location = new System.Drawing.Point(315, 47);
             this.lblHigestDieRoll.Name = "lblHigestDieRoll";
             this.lblHigestDieRoll.Size = new System.Drawing.Size(83, 13);
             this.lblHigestDieRoll.TabIndex = 9;
@@ -108,14 +113,14 @@
             // 
             // txtHighestDieRoll
             // 
-            this.txtHighestDieRoll.Location = new System.Drawing.Point(394, 47);
+            this.txtHighestDieRoll.Location = new System.Drawing.Point(409, 45);
             this.txtHighestDieRoll.Maximum = new decimal(new int[] {
             8,
             0,
             0,
             0});
             this.txtHighestDieRoll.Name = "txtHighestDieRoll";
-            this.txtHighestDieRoll.Size = new System.Drawing.Size(60, 20);
+            this.txtHighestDieRoll.Size = new System.Drawing.Size(45, 20);
             this.txtHighestDieRoll.TabIndex = 8;
             // 
             // lblMagicGoal
@@ -222,6 +227,27 @@
             this.txtMagicAtStart.Size = new System.Drawing.Size(60, 20);
             this.txtMagicAtStart.TabIndex = 0;
             // 
+            // lblLowestDieRoll
+            // 
+            this.lblLowestDieRoll.AutoSize = true;
+            this.lblLowestDieRoll.Location = new System.Drawing.Point(162, 47);
+            this.lblLowestDieRoll.Name = "lblLowestDieRoll";
+            this.lblLowestDieRoll.Size = new System.Drawing.Size(81, 13);
+            this.lblLowestDieRoll.TabIndex = 11;
+            this.lblLowestDieRoll.Text = "Lowest Die Roll";
+            // 
+            // txtLowestDieRoll
+            // 
+            this.txtLowestDieRoll.Location = new System.Drawing.Point(249, 45);
+            this.txtLowestDieRoll.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.txtLowestDieRoll.Name = "txtLowestDieRoll";
+            this.txtLowestDieRoll.Size = new System.Drawing.Size(45, 20);
+            this.txtLowestDieRoll.TabIndex = 12;
+            // 
             // SorcererStreetMapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -259,6 +285,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicPerTower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicPerLap)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicAtStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtLowestDieRoll)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -277,5 +304,7 @@
         public System.Windows.Forms.NumericUpDown txtMagicPerTower;
         public System.Windows.Forms.NumericUpDown txtMagicGoal;
         public System.Windows.Forms.NumericUpDown txtHighestDieRoll;
+        public System.Windows.Forms.NumericUpDown txtLowestDieRoll;
+        private System.Windows.Forms.Label lblLowestDieRoll;
     }
 }

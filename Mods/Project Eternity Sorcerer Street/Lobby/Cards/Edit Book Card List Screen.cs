@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private Texture2D sprScrollbarBackground;
         private Texture2D sprScrollbar;
+        private RenderTarget2D CardsRenderTarget;
 
         #endregion
 
@@ -65,6 +66,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
             fntOxanimumRegular = Content.Load<SpriteFont>("Fonts/Oxanium Regular");
             fntOxanimumBoldTitle = GameScreen.ContentFallback.Load<SpriteFont>("Fonts/Oxanium Bold Title");
+
+            int CubeTargetHeight = 900;
+            CardsRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, (int)(CubeTargetHeight * 1.777777f), CubeTargetHeight, false,
+                GameScreen.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 16, RenderTargetUsage.DiscardContents);
         }
 
         private void OnScrollbarChange(float ScrollbarValue)
@@ -231,6 +236,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            g.GraphicsDevice.SetRenderTarget(CardsRenderTarget);
+            g.GraphicsDevice.Clear(Color.Transparent);
+            g.Begin();
+            DrawCategoryCards(g);
+            DrawBookCards(g, (CardHeight + 20) * 2 - ScrollbarIndex);
+            g.End();
+            SorcererStreetInventoryScreen.CubeBackground.BeginDraw(g);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             float Ratio = Constants.Height / 2160f;
@@ -238,8 +254,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             SorcererStreetInventoryScreen.CubeBackground.Draw(g, true);
 
-            DrawCategoryCards(g);
-            DrawBookCards(g, Constants.Height / 6 + (CardHeight + 20) * 2 - ScrollbarIndex);
+            int X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3;
+            int Y = Constants.Height / 6;
+
+            g.Draw(CardsRenderTarget, new Vector2(X, Y), Color.White);
 
             float DrawX = (int)(210 * Ratio);
             float DrawY = (int)(58 * Ratio);
@@ -263,8 +281,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DrawCategoryCards(CustomSpriteBatch g)
         {
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
-            int X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3;
-            int Y = Constants.Height / 6 - ScrollbarIndex;
+            int X = 0;
+            int Y = 0 - ScrollbarIndex;
 
             g.Draw(sprPixel, new Rectangle(X, Y, CardWidth, CardHeight), ColorBox);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
@@ -305,7 +323,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(Symbols.sprElementMulti, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
-            X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3;
+            X = 0;
             Y += CardHeight + 20;
 
             g.Draw(sprPixel, new Rectangle(X, Y, CardWidth, CardHeight), ColorBox);
@@ -342,7 +360,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int C = 0; C <  ActiveBook.ListCard.Count; ++C)
             {
-                int X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % 7);
+                int X = 0 + (CardWidth + CardSpacing) * (C % 7);
                 int Y = StartY + (CardHeight + 20) * (C / 7);
 
                 g.Draw(ActiveBook.ListCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ActiveBook.ListCard[C].Card.sprCard.Width, ActiveBook.ListCard[C].Card.sprCard.Height), Color.White);

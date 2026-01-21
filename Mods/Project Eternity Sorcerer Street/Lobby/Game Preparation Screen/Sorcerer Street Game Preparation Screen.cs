@@ -98,9 +98,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     GameScreen.DrawEmptyBox(g, new Vector2(X + BoxWidth / 2 - sprIconHuman.Width / 2 - 5, DrawY + 177), sprIconHuman.Width + 5, sprIconHuman.Height + 5);
                     g.Draw(sprIconHuman, new Vector2(X + BoxWidth / 2 - sprIconHuman.Width / 2, DrawY + 180), Color.White);
                     g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212), Color.White);
+                    g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212 + 25), Color.White);
+                    g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212 + 25 * 2), Color.White);
                     if (ActivePlayer.TeamIndex == 0)
                     {
+                        g.DrawStringCentered(fntText, "Red Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 1)
+                    {
                         g.DrawStringCentered(fntText, "Blue Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 2)
+                    {
+                        g.DrawStringCentered(fntText, "Yellow Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 3)
+                    {
+                        g.DrawStringCentered(fntText, "Green Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
                     }
                     g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 280), Color.White);
                 }
@@ -112,9 +126,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     GameScreen.DrawEmptyBox(g, new Vector2(X + BoxWidth / 2 - sprIconHuman.Width / 2 - 5, DrawY + 177), sprIconHuman.Width + 5, sprIconHuman.Height + 5);
                     g.Draw(sprIconHuman, new Vector2(X + BoxWidth / 2 - sprIconHuman.Width / 2, DrawY + 180), Color.White);
                     g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212), Color.White);
+                    g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212 + 25), Color.White);
+                    g.Draw(sprArrowDown, new Vector2(X + BoxWidth - 40, DrawY + 212 + 25 * 2), Color.White);
                     if (ActivePlayer.TeamIndex == 0)
                     {
+                        g.DrawStringCentered(fntText, "Red Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 1)
+                    {
                         g.DrawStringCentered(fntText, "Blue Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 2)
+                    {
+                        g.DrawStringCentered(fntText, "Yellow Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
+                    }
+                    else if (ActivePlayer.TeamIndex == 3)
+                    {
+                        g.DrawStringCentered(fntText, "Green Team", new Vector2(X + BoxWidth / 2, DrawY + 255), Color.White);
                     }
                     g.DrawStringCentered(fntText, "Configure", new Vector2(X + BoxWidth / 2, DrawY + 280), Color.White);
                 }

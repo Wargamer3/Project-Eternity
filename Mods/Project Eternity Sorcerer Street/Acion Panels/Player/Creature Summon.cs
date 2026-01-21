@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Map.OnCreatureSummon(SelectedCard, ActiveTerrain);
 
-            Map.UpdateTotalMagic(ActivePlayer);
+            Map.UpdateTotalMagic();
             Map.LayerManager.TogglePreview(true);
         }
 

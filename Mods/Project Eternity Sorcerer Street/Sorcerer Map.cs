@@ -526,22 +526,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UpdateMapEvent(EventTypeTurn, 0);
         }
 
-        public void UpdateTotalMagic(Player ActivePlayer)
+        public void UpdateTotalMagic()
         {
             foreach (Team ActiveTeam in DicTeam.Values)
             {
-                ActiveTeam.TotalMagic = ActivePlayer.Gold;
+                ActiveTeam.TotalMagic = 0;
+            }
 
-                foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+            foreach (TerrainSorcererStreet ActiveTerrain in ListSummonedCreature)
+            {
+                Team ActiveTeam = DicTeam[ActiveTerrain.PlayerOwner.TeamIndex];
+
+                ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
+            }
+
+            foreach (Player ActivePlayer in ListPlayer)
+            {
+                if (ActivePlayer.TeamIndex >= 0)
                 {
-                    if (ActiveTerrain.PlayerOwner == ActivePlayer)
-                    {
-                        ActiveTerrain.UpdateValue(ActiveTeam.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
-                        ActiveTeam.TotalMagic += ActiveTerrain.CurrentValue;
-                    }
-                }
+                    Team ActiveTeam = DicTeam[ActivePlayer.TeamIndex];
+                    ActiveTeam.TotalMagic += ActivePlayer.Gold;
 
-                UpdatePlayersRank();
+                    UpdatePlayersRank();
+                }
             }
         }
 

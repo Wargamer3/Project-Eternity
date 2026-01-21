@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public QuoteSet()
         {
             ListMapQuote = new List<QuoteSetMap>();
+            ListMapQuote.Add(new QuoteSetMap());//Any Map
         }
 
         public QuoteSet(BinaryReader BR)
@@ -27,6 +28,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int I = 0; I < ListQuoteCount; I++)
             {
                 ListMapQuote.Add(new QuoteSetMap(BR));
+            }
+
+            if (ListQuoteCount == 0)
+            {
+                ListMapQuote.Add(new QuoteSetMap());//Any Map
             }
         }
 
@@ -47,6 +53,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public QuoteSetMap()
         {
             ListQuoteVersus = new List<QuoteSetVersus>();
+            ListQuoteVersus.Add(new QuoteSetVersus());//Any Map
         }
 
         public QuoteSetMap(BinaryReader BR)
@@ -57,6 +64,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int I = 0; I < ListQuoteCount; I++)
             {
                 ListQuoteVersus.Add(new QuoteSetVersus(BR));
+            }
+
+            if (ListQuoteCount == 0)
+            {
+                ListQuoteVersus.Add(new QuoteSetVersus());//Any Map
             }
         }
 

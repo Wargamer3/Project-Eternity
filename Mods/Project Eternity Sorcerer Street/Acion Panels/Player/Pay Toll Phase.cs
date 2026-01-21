@@ -41,8 +41,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ActivePlayer.Gold -= Toll;
                 ActiveTerrain.PlayerOwner.Gold += Toll;
-                Map.UpdateTotalMagic(ActivePlayer);
-                Map.UpdateTotalMagic(ActiveTerrain.PlayerOwner);
             }
 
             foreach (Player TollSharePlayer in Map.ListPlayer)
@@ -50,9 +48,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier > 0)
                 {
                     TollSharePlayer.Gold += (int)(ActiveTerrain.CurrentToll * TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier);
-                    Map.UpdateTotalMagic(TollSharePlayer);
                 }
             }
+
+            Map.UpdateTotalMagic();
 
             Map.EndPlayerPhase();
         }

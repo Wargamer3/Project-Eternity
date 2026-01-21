@@ -20,6 +20,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             txtMagicPerLap.Value = Map.MagicGainPerLap;
             txtMagicPerTower.Value = Map.TowerMagicGain;
             txtMagicGoal.Value = Map.MagicGoal;
+            txtLowestDieRoll.Value = Map.LowestDieRoll;
             txtHighestDieRoll.Value = Map.HighestDieRoll;
         }
     }

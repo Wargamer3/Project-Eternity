@@ -129,6 +129,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Draw(sprBottomRight, new Rectangle((int)Position.X + Width - sprBottomRight.Width - 1, (int)Position.Y + Height, sprBottomRight.Width, sprBottomRight.Height), Color.White);
         }
 
+        public static void DrawBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height, float Ratio)
+        {
+            g.Draw(sprTopLeft, new Rectangle((int)Position.X + 1, (int)Position.Y - sprTopLeft.Height, (int)(sprTopLeft.Width * Ratio), (int)(sprTopLeft.Height * Ratio)), Color.White);
+            g.Draw(sprTopMiddle, new Rectangle((int)Position.X + sprTopLeft.Width, (int)Position.Y - sprTopMiddle.Height, Width - sprTopLeft.Width - sprMiddleRight.Width, sprTopMiddle.Height), Color.White);
+            g.Draw(sprTopRight, new Rectangle((int)Position.X + Width - sprTopRight.Width - 1, (int)Position.Y - sprTopRight.Height, sprTopRight.Width, sprTopRight.Height), Color.White);
+
+            g.Draw(sprMiddleLeft, new Rectangle((int)Position.X + 1, (int)Position.Y, sprMiddleLeft.Width, Height), Color.White);
+            g.Draw(sprMiddleMiddle, new Rectangle((int)Position.X + sprMiddleLeft.Width, (int)Position.Y, Width - sprMiddleLeft.Width - sprMiddleRight.Width, Height), Color.White);
+            g.Draw(sprMiddleRight, new Rectangle((int)Position.X + Width - sprMiddleRight.Width - 1, (int)Position.Y, sprMiddleRight.Width, Height), Color.White);
+
+            g.Draw(sprBottomLeft, new Rectangle((int)Position.X + 1, (int)Position.Y + Height, sprBottomLeft.Width, sprBottomLeft.Height), Color.White);
+            g.Draw(sprBottomMiddle, new Rectangle((int)Position.X + sprBottomLeft.Width, (int)Position.Y + Height, Width - sprBottomLeft.Width - sprBottomRight.Width, sprBottomMiddle.Height), Color.White);
+            g.Draw(sprBottomRight, new Rectangle((int)Position.X + Width - sprBottomRight.Width - 1, (int)Position.Y + Height, sprBottomRight.Width, sprBottomRight.Height), Color.White);
+        }
+
         public static void DrawBorderlessBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height)
         {
             g.Draw(sprMiddleLeft, new Rectangle((int)Position.X + 1, (int)Position.Y, sprMiddleLeft.Width, Height), Color.White);

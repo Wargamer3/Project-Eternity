@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawX = (int)(150 * Ratio);
             DrawY = (int)(400 * Ratio);
 
-            int EntryHeight = (int)(128 * Ratio);
+            int EntryHeight = (int)(108 * Ratio);
             int BoxHeight = (int)(994 * Ratio);
 
             g.Draw(sprFrameTop, new Vector2(DrawX, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);

@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int X = 15 + P * BoxWidth;
 
                 if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
-                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 215 && MouseHelper.MouseStateCurrent.Y <= DrawY + 240)
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 215 && MouseHelper.MouseStateCurrent.Y < DrawY + 240)
                 {
                     SelectedPlayerIndex = P;
 
@@ -62,7 +62,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 else if (Room.ListRoomPlayer[P] != null
                     && MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
-                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 265 && MouseHelper.MouseStateCurrent.Y <= DrawY + 385)
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 240 && MouseHelper.MouseStateCurrent.Y < DrawY + 265)
+                {
+                    SelectedPlayerIndex = P;
+
+                    if (MouseHelper.InputLeftButtonPressed())
+                    {//Configure team
+                        ListActionMenuChoice.AddToPanelListAndSelect(new GamePreparationChangePlayerTeamPopup(ListActionMenuChoice, fntText, Room, SelectedPlayerIndex));
+                    }
+                }
+                else if (Room.ListRoomPlayer[P] != null
+                    && MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth - 20
+                    && MouseHelper.MouseStateCurrent.Y >= DrawY + 265 && MouseHelper.MouseStateCurrent.Y < DrawY + 290)
                 {
                     SelectedPlayerIndex = P;
 
@@ -89,6 +100,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (MouseHelper.MouseStateCurrent.Y >= DrawY + 265)
                 {
                     g.Draw(GameScreen.sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 265, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+                else if (MouseHelper.MouseStateCurrent.Y >= DrawY + 240)
+                {
+                    g.Draw(GameScreen.sprPixel, new Rectangle(15 + SelectedPlayerIndex * BoxWidth, DrawY + 240, BoxWidth - 20, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
                 else
                 {

@@ -43,6 +43,8 @@ namespace ProjectEternity.Editors.MapEditor
             ListForegroundsPath = new List<string>();
             txtTimeStart.Value = (decimal)ActiveMap.MapEnvironment.TimeStart;
             txtHoursInDay.Value = (decimal)ActiveMap.MapEnvironment.HoursInDay;
+            cbMapType.SelectedIndex = 2;
+            cbMapType.Enabled = false;
 
             if (ActiveMap.MapEnvironment.TimeLoopType == EnvironmentManager.TimeLoopTypes.FirstDay)
             {

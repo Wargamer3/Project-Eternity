@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<BaseEffect> ListActivatedEffect;
 
         public BattleCreatureInfo SelfCreature;
-        public BattleCreatureInfo OpponentCreature;
+        public BattleCreatureInfo OpponentCreature;//Defender
 
         public bool CanUseEffectsOrAbilities;
         public SorcererStreetTerrainHolder TerrainHolder;
@@ -449,6 +449,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
             }
+
+            DicRequirement.Add(SorcererStreetOnCreateRequirement.OnCreatedRequirementName, new SorcererStreetOnCreateRequirement());
+            DicRequirement.Add(ActionPanelBattleEnchantModifierPhase.RequirementName, new SorcererStreetEnchantPhaseRequirement());
+            DicRequirement.Add(ActionPanelBattleAttackPhase.BeforeBattleStartRequirement, new SorcererStreetBeforeBattleStartRequirement());
 
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)

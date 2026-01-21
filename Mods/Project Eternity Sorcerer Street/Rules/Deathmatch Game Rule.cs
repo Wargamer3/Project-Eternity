@@ -186,7 +186,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             while (Room.ListRoomBot.Count <= Room.MaxNumberOfPlayer)
             {
-                Player NewBot = new Player(PlayerManager.OnlinePlayerID, "Bot " + (Room.ListRoomBot.Count + 1), OnlinePlayerBase.PlayerTypes.Bot, false, 0, false, Color.Blue);
+                Player NewBot = new Player(PlayerManager.OnlinePlayerID, "Bot " + (Room.ListRoomBot.Count + 1), OnlinePlayerBase.PlayerTypes.Bot, false, Room.ListRoomBot.Count, false, Color.Blue);
                 NewBot.InitFirstTimeInventory();
                 Room.ListRoomBot.Add(NewBot);
             }

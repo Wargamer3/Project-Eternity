@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private CreatureCard SelectedCard;
+        private double AITimer;
 
         private int CursorIndex;
 
@@ -37,6 +38,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    FinishPhase();
+                }
+                return;
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 if (CursorIndex == 0)

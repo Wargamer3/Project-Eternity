@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                 && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + LineOffsetY
                                 && Owner.IsOnTop))
                         {
-                            g.Draw(sprHighlight, new Vector2(LeftPanelX - 20 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
+                            g.Draw(sprHighlight, new Vector2(400 * Ratio, DrawY), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.8f);
                         }
 
                         g.DrawString(fntOxanimumRegular, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), ColorText);

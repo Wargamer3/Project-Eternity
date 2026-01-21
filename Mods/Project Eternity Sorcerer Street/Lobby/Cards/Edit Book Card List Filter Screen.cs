@@ -38,6 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int HeaderHeight = Constants.Height / 16;
 
         private readonly Player ActivePlayer;
+        private readonly string ActivePlayerName;
         private readonly CardBook ActiveBook;
         private readonly CardBook GlobalBook;
         private readonly List<CardInfo> ListFilteredCard;
@@ -63,6 +64,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RequireDrawFocus = true;
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
+            ActivePlayerName = ActivePlayer.Name;
             DrawBackground = true;
             GlobalBook = ActivePlayer.Inventory.GlobalBook;
             ListFilteredCard = new List<CardInfo>();
@@ -84,6 +86,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RequireDrawFocus = true;
             this.GlobalBook = ActiveBook = GlobalBook;
             this.DrawBackground = DrawBackground;
+            ActivePlayerName = string.Empty;
             ListFilteredCard = new List<CardInfo>();
             ListSelectedCard = new List<Card>();
             FillCardList(Filter, LastCard);
@@ -543,13 +546,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float DrawY = (int)(58 * Ratio);
             g.DrawString(fntOxanimumBoldTitle, "BOOK EDIT", new Vector2(DrawX, DrawY), ColorText);
 
-            SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayer.Name, ActiveBook);
+            SorcererStreetInventoryScreen.DrawBookIsReady(g, fntMenuText, ActivePlayerName, ActiveBook);
 
             int CursorX = (int)(1150 * Ratio) + (CardWidth + CardSpacing) * (CursorIndex % 7);
             int CursorY = Constants.Height / 6 + CardHeight / 2 + (CardHeight + 20) * (CursorIndex / 7);
             MenuHelper.DrawFingerIcon(g, new Vector2(CursorX, CursorY - ScrollbarIndex));
 
-            SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, ActivePlayer.Inventory.GlobalBook);
+            SorcererStreetInventoryScreen.DrawBookInformationSmall(g, sprExtraFrame, fntMenuText, "Book Information", Symbols, Icons, GlobalBook);
 
             DrawX = (int)(212 * Ratio);
             DrawY = (int)(2008 * Ratio);

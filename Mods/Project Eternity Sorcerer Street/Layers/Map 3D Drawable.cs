@@ -309,11 +309,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             {
                                 Color PlayerColor = Map.ListPlayer[OwnerIndex].Color;
 
-                                if (PlayerColor == Color.Red)
+                                if (Map.ListPlayer[OwnerIndex].TeamIndex == 0)
                                 {
                                     DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderRed));
                                 }
-                                else if (PlayerColor == Color.Blue)
+                                else if (Map.ListPlayer[OwnerIndex].TeamIndex == 1)
                                 {
                                     DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderBlue));
                                 }

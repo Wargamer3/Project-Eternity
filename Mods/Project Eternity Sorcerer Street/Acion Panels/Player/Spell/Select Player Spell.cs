@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
                 }
 
-                if (!ListPlayer.Contains(ListPlayer[P]))
+                if (!ListPlayer.Contains(Map.ListPlayer[P]))
                 {
                     ListPlayer.Add(Map.ListPlayer[P]);
                 }

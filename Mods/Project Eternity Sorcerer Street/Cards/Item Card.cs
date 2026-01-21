@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public ItemCard(ItemCard Clone, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Clone.Path, ItemCardType)
         {
             Name = Clone.Name;
@@ -105,7 +105,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 for (int N = 0; N < Clone.ListActiveSkill.Count; ++N)
                 {
-                    ListActiveSkill.Add(new BaseAutomaticSkill(Clone.ListActiveSkill[N]));
+                    BaseAutomaticSkill CloneSkill = new BaseAutomaticSkill(Clone.ListActiveSkill[N]);
+                    CloneSkill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+
+                    ListActiveSkill.Add(CloneSkill);
                 }
             }
             else

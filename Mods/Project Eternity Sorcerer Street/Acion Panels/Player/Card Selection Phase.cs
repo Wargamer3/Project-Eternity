@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private float AnimationTimer;
         private string EndCardText;//Card on the far right used to close the pannel.
         public bool DrawDrawInfo;
+        private bool CardSelected;
 
         public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map, string CardType, string EndCardText = "")
             : base(Name, Map.ListActionMenuChoice, null, false)
@@ -170,6 +171,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 AITimer -= 0.6;
 
+                if (CardSelected)
+                {
+                    ChooseCardForAI();//In case the card return to this menu
+                    CardSelected = false;
+                }
+
                 if (PlayerAICardToUseIndex < ActionMenuCursor)
                 {
                     --ActionMenuCursor;
@@ -192,8 +199,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (CanUseCard(ActionMenuCursor))
                     {
+                        CardSelected = true;
                         OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
-                        ChooseCardForAI();//In case the card return to this menu
                     }
                     else if (ActionMenuCursor == ActivePlayer.ListCardInHand.Count)
                     {
