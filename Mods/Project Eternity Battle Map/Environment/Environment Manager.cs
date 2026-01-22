@@ -31,6 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Map = Map;
 
             TimeLoopType = TimeLoopTypes.FirstDay;
+            TimeStart = 12;
             HoursInDay = 24;
 
             TimePeriodType = TimePeriods.RealTime;

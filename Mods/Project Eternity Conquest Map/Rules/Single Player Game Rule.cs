@@ -141,7 +141,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-
             for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
             {
                 MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
