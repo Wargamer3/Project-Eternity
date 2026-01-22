@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ActivePlayer.ListCommander.AddRange(ActivePlayer.Inventory.ActiveLoadout.ListSpawnCommander);
 
                 string PlayerTag = (ActivePlayer.TeamIndex + 1).ToString();
-                int SpawnSquadIndex = 0;
+
                 for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
                 {
                     MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
@@ -90,7 +90,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                                 Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX * Owner.TileSize.X, ActiveLayer.ListUnitSpawn[S].SpawnPositionY * Owner.TileSize.Y, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
-                                ++SpawnSquadIndex;
 
                                 if (!ActivePlayer.IsPlayerControlled || !NewUnit.IsPlayerControlled)
                                 {
@@ -106,23 +105,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         {
                             if (ActiveLayer.ListCampaignSpawns[S].Tag == PlayerTag)
                             {
-                                UnitConquest NewUnit = (UnitConquest)ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex].CurrentLeader;
-                                if (NewUnit == null)
-                                {
-                                    ++SpawnSquadIndex;
-                                    continue;
-                                }
+                                ConquestEventPoint ActiveEventPoint = (ConquestEventPoint)ActiveLayer.ListCampaignSpawns[S];
+                                UnitConquest NewUnit = new UnitConquest(ActiveEventPoint.SpawnName, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect);
 
                                 NewUnit.ReinitializeMembers(Owner.Params.DicUnitType[NewUnit.UnitTypeName]);
 
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                                 Owner.SpawnUnit(PlayerIndex, NewUnit, 0, ActiveLayer.ListCampaignSpawns[S].Position);
-                                ++SpawnSquadIndex;
-
-                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
-                                {
-                                    break;
-                                }
                             }
                         }
 
@@ -139,19 +128,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                                 Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X * Owner.TileSize.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y * Owner.TileSize.Y, ActiveLayer.ListMultiplayerSpawns[S].Position.Z * Owner.LayerHeight));
-                                ++SpawnSquadIndex;
-
-                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
-                                {
-                                    break;
-                                }
                             }
                         }
-                    }
-
-                    if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
-                    {
-                        break;
                     }
                 }
 

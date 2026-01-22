@@ -161,6 +161,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             : this(GameInfo, Params)
         {
             this.BattleMapPath = BattleMapPath;
+
+            MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
         }
 
         public override void Save(string FilePath)
@@ -240,8 +242,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             FileStream FS = new FileStream("Content/Conquest/Maps/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
 
