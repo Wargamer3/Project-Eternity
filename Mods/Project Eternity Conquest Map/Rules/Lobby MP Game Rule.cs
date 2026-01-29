@@ -165,6 +165,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return ListRemainingResapwn[PlayerIndex];
         }
 
+        public void OnTurnEnd(int ActivePlayerIndex)
+        {
+        }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
             if (Owner.ListPlayer[ActivePlayerIndex].ListUnit.Count > 0)

@@ -11,24 +11,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "Territory Actions";
 
-        private int ActivePlayerIndex;
-        private Player ActivePlayer;
-        private TerrainSorcererStreet ActiveTerrain;
-        private bool HasTerritoryAbility;
-        private bool AllTerritory;
+        protected int ActivePlayerIndex;
+        protected Player ActivePlayer;
+        protected TerrainSorcererStreet ActiveTerrain;
+        protected bool HasTerritoryAbility;
 
         public ActionPanelTerritoryActions(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelTerritoryActions(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain, bool AllTerritory)
+        public ActionPanelTerritoryActions(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain)
+            : this(PanelName, Map, ActivePlayerIndex, ActiveTerrain)
+        {
+        }
+
+        public ActionPanelTerritoryActions(string PanelName, SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             this.ActiveTerrain = ActiveTerrain;
-            this.AllTerritory = AllTerritory;
         }
 
         public override void OnSelect()

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
@@ -10,6 +12,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string RequirementName = "Sorcerer Street Creature Phase";
 
+
+        public static List<SkillActivationContext> ListSkillActivation;
+
         public ActionPanelBattleCreatureModifierPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
         {
@@ -17,13 +22,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            Init();
-
-            ContinueBattlePhase();
+            if (!ActionPanelBattleItemModifierPhase.InitAnimations(Map.GlobalSorcererStreetBattleContext, RequirementName))
+            {
+                ContinueBattlePhase();
+            }
         }
 
-        private void Init()
+        public override void DoUpdate(GameTime gameTime)
         {
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
+
+            if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext))
+            {
+                ContinueBattlePhase();
+            }
         }
 
         private void ContinueBattlePhase()
@@ -39,7 +52,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoRead(ByteReader BR)
         {
             ReadPlayerInfo(BR, Map);
-            Init();
         }
 
         public override void DoWrite(ByteWriter BW)

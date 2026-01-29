@@ -10,7 +10,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class DeathmatchGameInfo : GameModeInfo
+    public class CampaignGameInfo : GameModeInfo
     {
         public const string ModeName = "Deathmatch";
 
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int _UnitValueLimitMin;
         private int _UnitValueLimitMax;
 
-        public DeathmatchGameInfo(bool IsUnlocked, Texture2D sprPreview)
+        public CampaignGameInfo(bool IsUnlocked, Texture2D sprPreview)
             : base(ModeName, "Gain points for kills and assists, respawn on death.", CategoryPVP, IsUnlocked, sprPreview)
         {
             _ResapwnLimit = 3000;
@@ -58,17 +58,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (Map == null)
             {
-                return new DeathmatchGameRule(null, this);
+                return new CampaignGameRule(null, this);
             }
             else
             {
-                return new DeathmatchGameRule((SorcererStreetMap)Map, this);
+                return new CampaignGameRule((SorcererStreetMap)Map, this);
             }
         }
 
         public override GameModeInfo Copy()
         {
-            return new DeathmatchGameInfo(IsUnlocked, sprPreview);
+            return new CampaignGameInfo(IsUnlocked, sprPreview);
         }
 
         #region Properties
@@ -77,13 +77,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         #endregion
     }
 
-    class DeathmatchGameRule : IGameRule
+    class CampaignGameRule : IGameRule
     {
         private readonly SorcererStreetMap Owner;
 
-        public string Name => "Deathmatch";
+        public string Name => "Campaign";
 
-        public DeathmatchGameRule(SorcererStreetMap Owner, DeathmatchGameInfo GameInfo)
+        public CampaignGameRule(SorcererStreetMap Owner, CampaignGameInfo GameInfo)
         {
             this.Owner = Owner;
         }
@@ -240,6 +240,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void OnManualVictory(int EXP, uint Money)
         {
+            string FullMapPath = Owner.GetMapType() + "/" + Owner.BattleMapPath;
+            List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
+            foreach (Player ActivePlayer in Owner.ListLocalPlayer)
+            {
+                LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
+                NewGains.EXP = EXP;
+                NewGains.Money = Money;
+
+                if (!ActivePlayer.Records.DicCampaignLevelInformation.ContainsKey(FullMapPath))
+                {
+                    ActivePlayer.Records.DicCampaignLevelInformation.Add(FullMapPath, new CampaignRecord(Owner.BattleMapPath, 0));
+                }
+
+                ListGains.Add(NewGains);
+            }
+
+            LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(Owner, ListGains);
+            Owner.PushScreen(NewLobbyVictoryScreen);
         }
 
         public void OnManualDefeat(int EXP, uint Money)

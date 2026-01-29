@@ -1213,10 +1213,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 Matrix RotationMatrix = Matrix.Identity;
 
-                DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.SetLightDirection(new Vector3(-0.1f, 0.5f, 0.9f));
+                //DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.SetLightDirection(new Vector3(-0.1f, 0.5f, 0.9f));
+                DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.DisableLights();
 
                 DefendingTerrain.DefendingCreature.GamePiece.Unit3DModel.Draw3D(g.GraphicsDevice, View, PolygonEffect.Projection, Matrix.CreateScale(Scale) * RotationMatrix
                     * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
+
             }
 
             g.End();

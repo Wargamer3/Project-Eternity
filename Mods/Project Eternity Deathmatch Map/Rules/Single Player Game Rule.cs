@@ -107,6 +107,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             throw new NotImplementedException();
         }
 
+        public void OnTurnEnd(int ActivePlayerIndex)
+        {
+        }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
             for (int S = 0; S < Owner.ListPlayer[Owner.ActivePlayerIndex].ListSquad.Count; S++)

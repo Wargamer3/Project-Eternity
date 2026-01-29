@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
@@ -11,6 +12,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string RequirementName = "Sorcerer Street Boosts Phase";
 
+        private enum AnimationPhases { Finished, InvaderIntro, InvaderActivation, DefenderIntro, DefenderActivation }
+
+        public static List<SkillActivationContext> ListSkillActivation;
+
         public ActionPanelBattleBoostsModifierPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
         {
@@ -19,21 +24,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            Init(Map.GlobalSorcererStreetBattleContext);
-
-            ContinueBattlePhase();
-        }
-
-        public static void Init(SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
-        {
-            foreach (TerrainSorcererStreet ActiveBoostCreature in GlobalSorcererStreetBattleContext.ListBoostCreature)
+            if (!ActionPanelBattleItemModifierPhase.InitAnimations(Map.GlobalSorcererStreetBattleContext, RequirementName))
             {
+                ContinueBattlePhase();
             }
         }
 
-        public static List<CreatureCard> GetListBoostCreatures(SorcererStreetMap Map)
+        public override void DoUpdate(GameTime gameTime)
         {
-            List<CreatureCard> ListBoostCreature = new List<CreatureCard>();
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
+
+            if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext))
+            {
+                ContinueBattlePhase();
+            }
+        }
+
+        public static List<TerrainSorcererStreet> GetListBoostCreatures(SorcererStreetMap Map)
+        {
+            List<TerrainSorcererStreet> ListBoostCreature = new List<TerrainSorcererStreet>();
 
             foreach (TerrainSorcererStreet DefendingTerrain in Map.ListSummonedCreature)
             {
@@ -56,7 +66,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (ActiveRequirement.SkillRequirementName == RequirementName)
                             {
-                                ListBoostCreature.Add(DefendingTerrain.DefendingCreature);
+                                ListBoostCreature.Add(DefendingTerrain);
                                 BoostSkillFound = true;
                                 break;
                             }
@@ -86,7 +96,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoRead(ByteReader BR)
         {
             ReadPlayerInfo(BR, Map);
-            Init(Map.GlobalSorcererStreetBattleContext);
         }
 
         public override void DoWrite(ByteWriter BW)

@@ -7,6 +7,7 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -158,6 +159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public byte SummonElement;//Anywhere 1 - 9 Elemental-focused
         public byte CreatureSummonCost;//Anywhere 1 - 9 Elemental-focused
 
+        private int RiskTaker = RandomHelper.Next(10);
         public byte RemainingMagic;//Don't worry 1 - 9 Worry
         public byte SpellEffectiveness;//Don't worry 1 - 9 Worry
         public byte SpellDamage;//Don't worry 1 - 9 Worry
@@ -171,8 +173,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public byte CreatureCardsImportance;//Unimportant 1 - 9 Important
         public byte ItemCardsImportance;//Unimportant 1 - 9 Important
         public byte SpellCardsImportance;//Unimportant 1 - 9 Important
-        public byte LevelingUpLand;//Just a little 1 - 9 Lots
-        public byte LandLevelUpCommand;//Just a little 1 - 9 Lots
+        public byte LevelingUpLand;//Just a little 1 - 9 Lots | level up from skills
+        public byte LandLevelUpCommand;//Just a little 1 - 9 Lots || level up from menu
         public byte CreatureExchangeCommand;//Sometimes 1 - 9 All the time
         public byte CreatureMovement;//Sometimes 1 - 9 All the time
         public byte CreatureAbility;//Sometimes 1 - 9 All the time
@@ -209,6 +211,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ElementToStopOn = BR.ReadByte();
             AvoidExpensiveLand = BR.ReadByte();
             PlayerAlliances = BR.ReadByte();
+        }
+
+        public bool IsWillingToPurchase(int CurrentMagic, int AskingPrice)
+        {
+            if (CurrentMagic < AskingPrice)
+            {
+                return false;
+            }
+
+            if (RemainingMagic == 1)
+            {
+                return true;
+            }
+
+            int ExpectedRemainingMagic = CurrentMagic - AskingPrice;
+
+            int Willingness = (ExpectedRemainingMagic / 100) - RemainingMagic; //100 magic = 1, 1000 magic = 10
+            if (Willingness > 2)//Rich
+            {
+                return true;
+            }
+            else if (Willingness >= 0)//Modestly rich, take a risk
+            {
+                int Roll = RandomHelper.Next(20) + RiskTaker;
+                return Roll > 8;
+            }
+            else if (Willingness > -1)//Modestly poor, take a risk
+            {
+                int Roll = RandomHelper.Next(20) + RiskTaker;
+                return Roll > 15;
+            }
+            else if (Willingness > -3)//Poor, take a huge risk
+            {
+                int Roll = RandomHelper.Next(20) + RiskTaker;
+                return Roll > 18;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

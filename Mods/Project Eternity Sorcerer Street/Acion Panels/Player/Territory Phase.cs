@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -52,12 +53,75 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 AICursorIndex = ListNextChoice.Count - 1;
 
-                if (Map.ListPassedTerrain.Count == 0 || AllTerritory)
+                if (Map.ListPassedTerrain.Count > 0 || AllTerritory)
                 {
-                    bool AIWantToLevelUpLand = PlayerAIParameter.LevelingUpLand >= RandomHelper.Next(10);
+                    bool AIWantToLevelUpLand = PlayerAIParameter.LandLevelUpCommand >= RandomHelper.Next(10);
+                    bool AIWantToCreatureExchangeCommand = PlayerAIParameter.CreatureExchangeCommand >= RandomHelper.Next(10);
+                    bool AIWantToCreatureMovement = PlayerAIParameter.CreatureMovement >= RandomHelper.Next(10);
+                    bool AIWantToCreatureAbility = PlayerAIParameter.CreatureAbility >= RandomHelper.Next(10);
+
                     if (AIWantToLevelUpLand)
                     {
-                        //AICursorIndex = 0;
+                        List<TerrainSorcererStreet> ListUpgradableTerritory = ActionPanelChooseTerritory.GetAllUpgradableTerritories(Map, ActivePlayer, AllTerritory);
+
+                        if (ListUpgradableTerritory.Count > 0)
+                        {
+                            foreach (TerrainSorcererStreet ActiveTerritory in ListUpgradableTerritory)
+                            {
+                                AddToPanelListAndSelect(new ActionPanelAIChooseTerritory(Map, ActivePlayerIndex, ActiveTerritory, ActionPanelAIChooseTerritory.AITerritoryActions.LevelUp));
+                            }
+
+                            AICursorIndex = 0;
+                            return;
+                        }
+                    }
+                    return;
+                    if (AIWantToCreatureExchangeCommand)
+                    {
+                        List<TerrainSorcererStreet> ListUpgradableTerritory = ActionPanelChooseTerritory.GetAllAccessibleTerritories(Map, ActivePlayer, AllTerritory);
+
+                        if (ListUpgradableTerritory.Count > 0)
+                        {
+                            foreach (TerrainSorcererStreet ActiveTerritory in ListUpgradableTerritory)
+                            {
+                                AddToPanelListAndSelect(new ActionPanelAIChooseTerritory(Map, ActivePlayerIndex, ActiveTerritory, ActionPanelAIChooseTerritory.AITerritoryActions.CreatureExchange));
+                            }
+
+                            AICursorIndex = 0;
+                            return;
+                        }
+                    }
+
+                    if (AIWantToCreatureMovement)
+                    {
+                        List<TerrainSorcererStreet> ListUpgradableTerritory = ActionPanelChooseTerritory.GetAllAccessibleTerritories(Map, ActivePlayer, AllTerritory);
+
+                        if (ListUpgradableTerritory.Count > 0)
+                        {
+                            foreach (TerrainSorcererStreet ActiveTerritory in ListUpgradableTerritory)
+                            {
+                                AddToPanelListAndSelect(new ActionPanelAIChooseTerritory(Map, ActivePlayerIndex, ActiveTerritory, ActionPanelAIChooseTerritory.AITerritoryActions.CreatureMovement));
+                            }
+
+                            AICursorIndex = 0;
+                            return;
+                        }
+                    }
+
+                    if (AIWantToCreatureAbility)
+                    {
+                        List<TerrainSorcererStreet> ListUpgradableTerritory = ActionPanelChooseTerritory.GetAllAccessibleTerritories(Map, ActivePlayer, AllTerritory);
+
+                        if (ListUpgradableTerritory.Count > 0)
+                        {
+                            foreach (TerrainSorcererStreet ActiveTerritory in ListUpgradableTerritory)
+                            {
+                                AddToPanelListAndSelect(new ActionPanelAIChooseTerritory(Map, ActivePlayerIndex, ActiveTerritory, ActionPanelAIChooseTerritory.AITerritoryActions.TerritoryAbility));
+                            }
+
+                            AICursorIndex = 0;
+                            return;
+                        }
                     }
                 }
             }

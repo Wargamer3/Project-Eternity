@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 && ActiveTerrain.TerrainTypeIndex != 0
                 && ((AllTerritory && ActivePlayer.ListSummonedCreature.Contains(ActiveTerrain)) || Map.ListPassedTerrain.Contains(ActiveTerrain)))
             {
-                AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, ActiveTerrain, AllTerritory));
+                AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, ActiveTerrain));
 
             }
             else if (ActiveInputManager.InputCancelPressed())
@@ -42,6 +43,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 RemoveFromPanelList(this);
                 Map.Camera3DOverride = null;
             }
+        }
+
+        public static List<TerrainSorcererStreet> GetAllAccessibleTerritories(SorcererStreetMap Map, Player ActivePlayer, bool AllTerritory)
+        {
+            if (AllTerritory)
+            {
+                return ActivePlayer.ListSummonedCreature;
+            }
+
+            return Map.ListPassedTerrain;
+        }
+
+        public static List<TerrainSorcererStreet> GetAllUpgradableTerritories(SorcererStreetMap Map, Player ActivePlayer, bool AllTerritory)
+        {
+            List<TerrainSorcererStreet> ListAllAccessibleTerritory = GetAllAccessibleTerritories(Map, ActivePlayer, AllTerritory);
+            List<TerrainSorcererStreet> ListAllUpgradableTerritories = new List<TerrainSorcererStreet>(ListAllAccessibleTerritory.Count);
+
+            foreach (TerrainSorcererStreet ActiveTerrain in ListAllAccessibleTerritory)
+            {
+                int NextUpgradePrice = ActionPanelTerrainLevelUpCommands.GetFinalUpgradePrice(ActiveTerrain, ActiveTerrain.LandLevel);
+                bool IsWillingToPurchase = ActivePlayer.Inventory.Character.Character.PlayerCharacterAIParameter.IsWillingToPurchase(ActivePlayer.Gold, NextUpgradePrice);
+
+                if (IsWillingToPurchase)
+                {
+                    ListAllUpgradableTerritories.Add(ActiveTerrain);
+                }
+            }
+
+            return ListAllUpgradableTerritories;
         }
 
         protected override ActionPanel Copy()

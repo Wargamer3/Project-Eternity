@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int Gold;
         public int CompletedLaps;
 
-        private PlayerAbilities Abilities;//Base abilities that cannot be modified.
+        private readonly PlayerAbilities Abilities;//Base abilities that cannot be modified.
         private PlayerAbilities EnchantAbilities;//Based on Abilities
 
         private PlayerAbilities BattleAbilities;//Based on EnchantAbilities
@@ -151,6 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListSummonedCreature = new List<TerrainSorcererStreet>();
             Effects = new EffectHolder();
 
+            Abilities = new PlayerAbilities();
             Init();
         }
 
@@ -170,6 +171,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListSummonedCreature = new List<TerrainSorcererStreet>();
             Effects = new EffectHolder();
 
+            Abilities = new PlayerAbilities();
             Init();
         }
 
@@ -198,6 +200,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Inventory.UseBook(NewCardBook);
 
+            Abilities = new PlayerAbilities();
             Init();
         }
 
@@ -217,6 +220,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListSummonedCreature = new List<TerrainSorcererStreet>();
             Effects = new EffectHolder();
 
+            Abilities = new PlayerAbilities();
             Init();
         }
 
@@ -241,6 +245,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListSummonedCreature = new List<TerrainSorcererStreet>();
             Effects = new EffectHolder();
 
+            Abilities = new PlayerAbilities();
             Init();
             FillDeck(Params);
             Refill();
@@ -248,7 +253,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void Init()
         {
-            Abilities = new PlayerAbilities();
             EnchantAbilities = new PlayerAbilities();
             BattleAbilities = new PlayerAbilities();
 

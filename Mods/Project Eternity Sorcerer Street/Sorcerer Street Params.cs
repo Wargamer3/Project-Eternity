@@ -190,6 +190,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 OpponentCreature.Reset();
             }
+            SelfCreature = null;
+            OpponentCreature = null;
             ListBoostCreature.Clear();
             ListActivatedEffect.Clear();
             ListBattlePanelHolder = null;
@@ -256,6 +258,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ListSkillActivation.Add(new SkillActivationContext(true, DicItemSkillActivation));
                 }
+            }
+
+            return ListSkillActivation;
+        }
+
+        public List<SkillActivationContext> GetBoostActivation(string RequirementName)
+        {
+            List<SkillActivationContext> ListSkillActivation = new List<SkillActivationContext>();
+
+            foreach (TerrainSorcererStreet ActiveCreature in ListBoostCreature)
+            {
+                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = ActiveCreature.DefendingCreature.GetAvailableActivation(RequirementName);
+                ListSkillActivation.Add(new SkillActivationContext(false, DicSkillActivation));
             }
 
             return ListSkillActivation;

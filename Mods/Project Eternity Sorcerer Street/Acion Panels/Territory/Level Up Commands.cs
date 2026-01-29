@@ -17,6 +17,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private TerrainSorcererStreet ActiveTerrain;
+        private double AITimer;
+        private int PlayerAIChoiceIndex;
+        int SelectedUpgradeLevel => ActiveTerrain.LandLevel + ActionMenuCursor;
 
         public ActionPanelTerrainLevelUpCommands(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -33,10 +36,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
+            PlayerAIChoiceIndex = 0;
+
+            for (int i = ActiveTerrain.LandLevel + 1; i <= 5; i++)
+            {
+                int NextUpgradePrice = ActionPanelTerrainLevelUpCommands.GetFinalUpgradePrice(ActiveTerrain, i);
+
+                if (ActivePlayer.Inventory.Character.Character.PlayerCharacterAIParameter.IsWillingToPurchase(ActivePlayer.Gold, NextUpgradePrice))
+                {
+                    PlayerAIChoiceIndex = i - ActiveTerrain.LandLevel;
+                }
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+                if (AITimer > 0.6f)
+                {
+                    AITimer = 0;
+                    if (ActionMenuCursor < PlayerAIChoiceIndex)
+                    {
+                        ++ActionMenuCursor;
+                    }
+                    else if (ActionMenuCursor > PlayerAIChoiceIndex)
+                    {
+                        --ActionMenuCursor;
+                    }
+                    else
+                    {
+                        int UpgradePrice = GetFinalUpgradePrice(ActiveTerrain, SelectedUpgradeLevel);
+                        if (UpgradePrice <= ActivePlayer.Gold)
+                        {
+                            BuyUpgrade(UpgradePrice);
+                        }
+                    }
+                }
+                return;
+            }
+
             if (InputHelper.InputUpPressed())
             {
                 if (--ActionMenuCursor < 0)
@@ -55,13 +95,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (ActionMenuCursor < 5 - ActiveTerrain.LandLevel)
                 {
-                    int UpgradePrice = GetUpgradePrice(ActionMenuCursor + ActiveTerrain.LandLevel) - GetUpgradePrice(ActiveTerrain.LandLevel - 1);
+                    int UpgradePrice = GetFinalUpgradePrice(ActiveTerrain, ActiveTerrain.LandLevel + ActionMenuCursor);
                     if (UpgradePrice <= ActivePlayer.Gold)
                     {
-                        ActivePlayer.Gold -= UpgradePrice;
-                        ActiveTerrain.LandLevel += ActionMenuCursor + 1;
-                        ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
-                        Map.EndPlayerPhase();
+                        BuyUpgrade(UpgradePrice);
                     }
                 }
                 else
@@ -73,6 +110,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RemoveFromPanelList(this);
             }
+        }
+
+        private void BuyUpgrade(int UpgradePrice)
+        {
+            ActivePlayer.Gold -= UpgradePrice;
+            ActiveTerrain.LandLevel += ActionMenuCursor + 1;
+            ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+            Map.EndPlayerPhase();
         }
 
         protected override void OnCancelPanel()
@@ -99,9 +144,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new ActionPanelTerrainLevelUpCommands(Map);
         }
 
-        private int GetUpgradePrice(int Level)
+        public static int GetUpgradePrice(TerrainSorcererStreet ActiveTerrain, int Level)
         {
             return (int)(ActiveTerrain.BaseValue * Math.Pow(2, Level) - ActiveTerrain.BaseValue);
+        }
+
+        public static int GetFinalUpgradePrice(TerrainSorcererStreet ActiveTerrain, int Level)
+        {
+            return GetUpgradePrice(ActiveTerrain, Level) - GetUpgradePrice(ActiveTerrain, Math.Max(0, ActiveTerrain.LandLevel - 1));
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -127,7 +177,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveTerrain.LandLevel < 2)
             {
-                int UpgradePrice = GetUpgradePrice(1);
+                int UpgradePrice = GetUpgradePrice(ActiveTerrain, 1);
                 if (ActivePlayer.Gold < UpgradePrice)
                 {
                     TextColor = Color.Gray;
@@ -142,7 +192,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveTerrain.LandLevel < 3)
             {
-                int UpgradePrice = GetUpgradePrice(2) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                int UpgradePrice = GetFinalUpgradePrice(ActiveTerrain, 2);
                 if (ActivePlayer.Gold < UpgradePrice)
                 {
                     TextColor = Color.Gray;
@@ -158,7 +208,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveTerrain.LandLevel < 4)
             {
-                int UpgradePrice = GetUpgradePrice(3) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                int UpgradePrice = GetFinalUpgradePrice(ActiveTerrain, 3);
                 if (ActivePlayer.Gold < UpgradePrice)
                 {
                     TextColor = Color.Gray;
@@ -174,7 +224,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActiveTerrain.LandLevel < 5)
             {
-                int UpgradePrice = GetUpgradePrice(4) - GetUpgradePrice(Math.Max(0, ActiveTerrain.LandLevel - 1));
+                int UpgradePrice = GetFinalUpgradePrice(ActiveTerrain, 4);
                 if (ActivePlayer.Gold < UpgradePrice)
                 {
                     TextColor = Color.Gray;

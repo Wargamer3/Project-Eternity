@@ -130,6 +130,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemePath;
             }
 
+            Map.GameRule.OnTurnEnd(Map.ActivePlayerIndex);
+
             do
             {
                 Map.ActivePlayerIndex++;

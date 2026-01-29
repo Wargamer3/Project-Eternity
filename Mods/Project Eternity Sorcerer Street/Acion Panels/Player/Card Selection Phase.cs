@@ -233,7 +233,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ActivePlayer.ListCardInHand[C].CardType == CardType && CanUseCard(C))
                     {
-                        ListCardToUseInHand.Add(ActivePlayer.ListCardInHand[C]);
+                        bool IsWillingToUse = PlayerAIParameter.IsWillingToPurchase(ActivePlayer.Gold, ActivePlayer.ListCardInHand[C].MagicCost);
+
+                        if (IsWillingToUse)
+                        {
+                            ListCardToUseInHand.Add(ActivePlayer.ListCardInHand[C]);
+                        }
                     }
                 }
             }

@@ -36,6 +36,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemePath;
             }
 
+            Map.Camera3DOverride = null;
+            Map.GameRule.OnTurnEnd(Map.ActivePlayerIndex);
+
             do
             {
                 Map.ActivePlayerIndex++;

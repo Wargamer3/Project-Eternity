@@ -9,9 +9,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelViewMap : ActionPanelSorcererStreet
     {
-        private Vector3 CursorPosition;
-        private Vector3 CameraPosition;
-        private Camera3D Camera;
+        protected Vector3 CursorPosition;
+        protected Vector3 CameraPosition;
+        protected Camera3D Camera;
         protected TerrainSorcererStreet ActiveTerrain;
 
         public ActionPanelViewMap(SorcererStreetMap Map)
@@ -29,37 +29,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);
             Map.Camera3DOverride = Camera;
 
-            CursorPosition = new Vector3(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y);
-            CameraPosition = CursorPosition;
+            Vector3 PlayerPosition = new Vector3(Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y);
+            CameraPosition = PlayerPosition;
+
+            SetTarget();
+            Vector3 PlayerPositionOnScreen = GameScreen.GraphicsDevice.Viewport.Project(PlayerPosition, Camera.Projection, Camera.View, Matrix.Identity);
+            CursorPosition = PlayerPositionOnScreen;
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            float MaxCursorSpeed = 5;
-            int BorderWidth = Constants.Width / 10;
-            int BorderHeight = Constants.Height / 10;
-
-            if (CursorPosition.X > 0 && CameraPosition.X > 0 && CursorPosition.X < BorderWidth)
-            {
-                float FinalSpeed = ((BorderWidth - CursorPosition.X) / BorderWidth) * MaxCursorSpeed;
-                CameraPosition.X -= FinalSpeed;
-            }
-            else if (CursorPosition.X < Constants.Width && CameraPosition.X < (Map.MapSize.X - 3) * Map.TileSize.X && CursorPosition.X > Constants.Width - BorderWidth)
-            {
-                float FinalSpeed = ((CursorPosition.X - (Constants.Width - BorderWidth)) / BorderWidth) * MaxCursorSpeed;
-                CameraPosition.X += FinalSpeed;
-            }
-
-            if (CursorPosition.Y > 0 && CameraPosition.Y > 0 && CursorPosition.Y < BorderHeight)
-            {
-                float FinalSpeed = ((BorderHeight - CursorPosition.Y) / BorderHeight) * MaxCursorSpeed;
-                CameraPosition.Y -= FinalSpeed;
-            }
-            else if (CursorPosition.Y < Constants.Height && CameraPosition.Y < (Map.MapSize.Y - 3) * Map.TileSize.Y && CursorPosition.Y > Constants.Height - BorderHeight)
-            {
-                float FinalSpeed = ((CursorPosition.Y - (Constants.Height - BorderHeight)) / BorderHeight) * MaxCursorSpeed;
-                CameraPosition.Y += FinalSpeed;
-            }
+            UpdateCamera();
 
             if (MouseHelper.MouseMoved())
             {
@@ -113,6 +93,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             SetTarget();
+        }
+
+        public void UpdateCamera()
+        {
+            float MaxCursorSpeed = 5;
+            int BorderWidth = Constants.Width / 10;
+            int BorderHeight = Constants.Height / 10;
+
+            if (CameraPosition.X > 0 && CursorPosition.X < BorderWidth)
+            {
+                float FinalSpeed = ((BorderWidth - CursorPosition.X) / BorderWidth) * MaxCursorSpeed;
+                CameraPosition.X -= FinalSpeed;
+            }
+            else if (CameraPosition.X < (Map.MapSize.X - 3) * Map.TileSize.X && CursorPosition.X > Constants.Width - BorderWidth)
+            {
+                float FinalSpeed = ((CursorPosition.X - (Constants.Width - BorderWidth)) / BorderWidth) * MaxCursorSpeed;
+                CameraPosition.X += FinalSpeed;
+            }
+
+            if (CameraPosition.Y > 0 && CursorPosition.Y < BorderHeight)
+            {
+                float FinalSpeed = ((BorderHeight - CursorPosition.Y) / BorderHeight) * MaxCursorSpeed;
+                CameraPosition.Y -= FinalSpeed;
+            }
+            else if (CameraPosition.Y < (Map.MapSize.Y - 3) * Map.TileSize.Y && CursorPosition.Y > Constants.Height - BorderHeight)
+            {
+                float FinalSpeed = ((CursorPosition.Y - (Constants.Height - BorderHeight)) / BorderHeight) * MaxCursorSpeed;
+                CameraPosition.Y += FinalSpeed;
+            }
         }
 
         public void SetTarget()

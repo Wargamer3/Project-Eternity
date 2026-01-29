@@ -70,6 +70,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     CreatureToHeal.DefendingCreature.CurrentHP = Math.Min(CreatureToHeal.DefendingCreature.MaxHP, (int)(CreatureToHeal.DefendingCreature.CurrentHP + CreatureToHeal.DefendingCreature.MaxHP * 0.10f));
                 }
             }
+
+            if (Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic > Map.MagicGoal)
+            {
+                Map.RemoveScreen(Map);
+            }
             /*Symbol Bonus = Value of symbols owned / 10G
             (One is only awarded the symbol bonus if they own the most symbols of a particular color in an area)*/
         }

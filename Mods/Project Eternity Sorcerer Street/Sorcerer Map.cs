@@ -50,8 +50,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprSuspend;
         public Texture2D sprCheat;
 
-        public Texture2D sprVS;
-
         public Texture2D sprDirectionNorth;
         public Texture2D sprDirectionEast;
         public Texture2D sprDirectionWest;
@@ -279,8 +277,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprPlayerBlue2 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Blue 2");
                 sprPlayerRed1 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Red 1");
                 sprPlayerRed2 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Red 2");
-
-                sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
                 sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Black");
                 sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West Black");

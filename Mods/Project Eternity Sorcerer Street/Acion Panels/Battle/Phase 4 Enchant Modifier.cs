@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
@@ -9,7 +11,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "BattleEnchantModifierPhase";
 
         public static string RequirementName = "Sorcerer Street Enchant Phase";
-        
+
+        public static string ActivePhase;
+        public static List<SkillActivationContext> ListSkillActivation;
+
         public ActionPanelBattleEnchantModifierPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
         {
@@ -18,12 +23,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            ContinueBattlePhase();
+            if (!ActionPanelBattleItemModifierPhase.InitAnimations(Map.GlobalSorcererStreetBattleContext, RequirementName))
+            {
+                ContinueBattlePhase();
+            }
         }
 
-        public void FinishPhase()
+        public override void DoUpdate(GameTime gameTime)
         {
-            ContinueBattlePhase();
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
+
+            if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext))
+            {
+                ContinueBattlePhase();
+            }
         }
 
         private void ContinueBattlePhase()

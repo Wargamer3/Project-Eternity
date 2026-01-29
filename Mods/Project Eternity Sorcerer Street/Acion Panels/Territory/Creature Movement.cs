@@ -20,6 +20,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base("Creature Movement", Map, false)
         {
         }
+
         public ActionPanelCreatureMovement(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain)
             : base("Creature Movement", Map, false)
         {

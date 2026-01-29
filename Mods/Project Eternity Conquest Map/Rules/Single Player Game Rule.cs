@@ -166,6 +166,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
+        public void OnTurnEnd(int ActivePlayerIndex)
+        {
+        }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
             for (int S = 0; S < Owner.ListPlayer[Owner.ActivePlayerIndex].ListUnit.Count; S++)

@@ -9,7 +9,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleLandModifierPhase";
 
-        private bool HasTerrainBonus;
+        private bool HasDefenderTerrainBonus;
+        private int InvaderSTBonus;
+        private int DefenderSTBonus;
 
         public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -18,9 +20,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            HasTerrainBonus = false;
+            HasDefenderTerrainBonus = false;
 
-            CardAbilities Abilities = Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature.GetCurrentAbilities(Map.GlobalSorcererStreetBattleContext.EffectActivationPhase);
+            CardAbilities Abilities = Map.GlobalSorcererStreetBattleContext.DefenderCreature.Creature.GetCurrentAbilities(Map.GlobalSorcererStreetBattleContext.EffectActivationPhase);
 
             if (Abilities.LandEffectLimit)
             {
@@ -30,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Abilities.LandEffectNoLimit)
             {
-                HasTerrainBonus = true;
+                HasDefenderTerrainBonus = true;
             }
             else
             {
@@ -39,41 +41,71 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case TerrainSorcererStreet.MultiElement:
                         if (Abilities.ArrayElementAffinity.Length != 1 || Abilities.ArrayElementAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
                         {
-                            HasTerrainBonus = true;
+                            HasDefenderTerrainBonus = true;
                         }
                         break;
 
                     case TerrainSorcererStreet.FireElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
                         {
-                            HasTerrainBonus = true;
+                            HasDefenderTerrainBonus = true;
                         }
                         break;
 
                     case TerrainSorcererStreet.WaterElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
                         {
-                            HasTerrainBonus = true;
+                            HasDefenderTerrainBonus = true;
                         }
                         break;
 
                     case TerrainSorcererStreet.EarthElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
                         {
-                            HasTerrainBonus = true;
+                            HasDefenderTerrainBonus = true;
                         }
                         break;
 
                     case TerrainSorcererStreet.AirElement:
                         if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                         {
-                            HasTerrainBonus = true;
+                            HasDefenderTerrainBonus = true;
                         }
                         break;
                 }
             }
 
+            InvaderSTBonus = CheckSTBonus(Map.GlobalSorcererStreetBattleContext.InvaderCreature.Owner.TeamIndex);
+            DefenderSTBonus = CheckSTBonus(Map.GlobalSorcererStreetBattleContext.DefenderCreature.Owner.TeamIndex);
+
             FinishPhase();
+        }
+
+        private int CheckSTBonus(int PlayerTeamIndex)
+        {
+            Vector3 StartingPosition = Map.GlobalSorcererStreetBattleContext.ActiveTerrain.WorldPosition;
+            int STBonus = 0;
+
+            Vector2[] ArrayPositionToCheck = new Vector2[4] { new Vector2(-1, 0), new Vector2(1, 0), new Vector2(0, -1), new Vector2(0, 1) };
+
+            foreach (TerrainSorcererStreet ActiveCreature in Map.ListSummonedCreature)
+            {
+                if (ActiveCreature.PlayerOwner.TeamIndex != PlayerTeamIndex)
+                {
+                    continue;
+                }
+
+                foreach (Vector2 ActivePosition in ArrayPositionToCheck)
+                {
+                    Vector3 NewPosition = StartingPosition + new Vector3(ActivePosition, 0);
+                    if (ActiveCreature.WorldPosition == NewPosition)
+                    {
+                        ++STBonus;
+                    }
+                }
+            }
+
+            return STBonus;
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -86,10 +118,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void FinishPhase()
         {
-            if (HasTerrainBonus)
+            if (HasDefenderTerrainBonus)
             {
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature.LandHP = 10 *  Map.GlobalSorcererStreetBattleContext.ActiveTerrain.LandLevel;
+                Map.GlobalSorcererStreetBattleContext.DefenderCreature.LandHP = 10 *  Map.GlobalSorcererStreetBattleContext.ActiveTerrain.LandLevel;
             }
+
+            Map.GlobalSorcererStreetBattleContext.DefenderCreature.BonusST = DefenderSTBonus * 10;
+            Map.GlobalSorcererStreetBattleContext.InvaderCreature.BonusST = InvaderSTBonus * 10;
 
             ContinueBattlePhase();
         }

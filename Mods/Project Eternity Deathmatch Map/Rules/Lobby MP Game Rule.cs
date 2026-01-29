@@ -168,6 +168,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListRemainingResapwn[PlayerIndex];
         }
 
+        public void OnTurnEnd(int ActivePlayerIndex)
+        {
+        }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
             if (Owner.ListPlayer[ActivePlayerIndex].ListSquad.Count > 0)

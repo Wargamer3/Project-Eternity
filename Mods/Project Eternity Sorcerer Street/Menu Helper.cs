@@ -245,7 +245,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawRightArrow(CustomSpriteBatch g)
         {
-            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 6f), null, Color.White, MathHelper.ToRadians(90), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            g.Draw(sprArrowUp, new Vector2(Constants.Width / 2, 910), null, Color.White, MathHelper.ToRadians(90), new Vector2(sprArrowUp.Width / 2, sprArrowUp.Height / 2), 1f, SpriteEffects.None, 0f);
         }
 
         public static void DrawDiceHolder(CustomSpriteBatch g, Vector2 DicePosition, int VisibleDiceValue)

@@ -11,8 +11,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "CreatureCardSelection";
         private const string EndCardText = "End turn";
 
-        private double AITimer;
-
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
             : base(PanelName, Map, CreatureCard.CreatureCardType, EndCardText)
         {
@@ -27,8 +25,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            AITimer += gameTime.ElapsedGameTime.TotalSeconds;
-
             base.DoUpdate(gameTime);
 
             if (InputHelper.InputUpPressed())

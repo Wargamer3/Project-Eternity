@@ -14,6 +14,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string RequirementName = "Sorcerer Street Battle Defender Win";
 
+        private Player ActivePlayer;
+        private double AITimer;
+
+        private int TollPaid;
+
         public ActionPanelBattleDefenderWinPhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
@@ -22,6 +27,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
+            ActivePlayer = Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.SelfCreature.PlayerIndex];
+
             if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
@@ -32,10 +39,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
                 Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Gold -= Map.ListPlayer[Map.GlobalSorcererStreetBattleContext.OpponentCreature.PlayerIndex].GetFinalCardCost(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Item);
             }
+
+            TollPaid = ActionPanelPayTollPhase.PayToll(Map, ActivePlayer, Map.GlobalSorcererStreetBattleContext.ActiveTerrain);
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    RemoveFromPanelList(this);
+                    Map.EndPlayerPhase();
+                }
+                return;
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);
@@ -66,16 +87,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             int Y = Constants.Height - Constants.Height / 4;
-            MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 8);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, 170);
             Y += 10;
             g.DrawStringMiddleAligned(Map.fntMenuText, "Toll", new Vector2(Constants.Width / 2, Y), Color.White);
             Y = Constants.Height - Constants.Height / 5;
             Y += 20;
             g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
-            Y += 20;
-            g.DrawStringMiddleAligned(Map.fntMenuText, "-20", new Vector2(Constants.Width / 2 - 80, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntMenuText, "+20", new Vector2(Constants.Width / 2 + 80, Y), Color.White);
+            Y += 40;
+            g.DrawStringMiddleAligned(Map.fntMenuText, "-" + TollPaid, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "+" + TollPaid, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
             Y += 10;
             MenuHelper.DrawRightArrow(g);
             MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 4 + Constants.Width / 2 - 40, Y - 20));

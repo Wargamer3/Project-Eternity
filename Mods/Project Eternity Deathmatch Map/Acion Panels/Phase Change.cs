@@ -129,6 +129,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemePath;
             }
 
+            Map.GameRule.OnTurnEnd(Map.ActivePlayerIndex);
+
             do
             {
                 Map.ActivePlayerIndex++;

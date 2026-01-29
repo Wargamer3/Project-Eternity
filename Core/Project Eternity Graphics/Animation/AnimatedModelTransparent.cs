@@ -42,6 +42,7 @@ namespace ProjectEternity.Core.Graphics
                         NewEffect.Parameters["AmbienceColor"].SetValue(AmbienceColor);
                         NewEffect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
                         NewEffect.Parameters["DiffuseLightDirection"].SetValue(DiffuseLightDirection);
+                        NewEffect.Parameters["UseLights"].SetValue(0f);
                         part.Effect = NewEffect;
                     }
                 }
@@ -61,6 +62,11 @@ namespace ProjectEternity.Core.Graphics
                     part.Effect.Parameters["DiffuseLightDirection"].SetValue(DiffuseLightDirection);
                 }
             }
+        }
+
+        public void DisableLights()
+        {
+            ModelToDraw.DisableLights();
         }
 
         public void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection, Matrix World)

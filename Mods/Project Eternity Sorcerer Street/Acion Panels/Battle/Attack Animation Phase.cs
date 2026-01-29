@@ -41,6 +41,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             AttackAnimation = InitAnimation(LeftSideAttackRightSide, AttackAnimationPath, Defender, Map.Content != null);
+            if (LeftSideAttackRightSide)
+            {
+                Map.GlobalSorcererStreetBattleContext.DefenderCreature.Animation = AttackAnimation;
+                Map.GlobalSorcererStreetBattleContext.DefenderCreature.Animation.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.DefenderCreature.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.DefenderCreature.Animation.Scale = new Vector2(1f);
+            }
+            else
+            {
+                Map.GlobalSorcererStreetBattleContext.InvaderCreature.Animation = AttackAnimation;
+                Map.GlobalSorcererStreetBattleContext.InvaderCreature.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.InvaderCreature.Animation.Scale = new Vector2(1f);
+            }
         }
 
         public static SimpleAnimation InitAnimation(bool AnimationOnRight, string AttackAnimationPath, BattleCreatureInfo User, bool PreloadAnimation)
@@ -76,6 +88,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
+
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature != null)
+            {
+                Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Update(gameTime);
+            }
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature != null)
+            {
+                Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Update(gameTime);
+            }
 
             if (AttackAnimation.HasEnded)
             {

@@ -27,6 +27,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnEndCardSelected()
         {
+            PayToll(Map, ActivePlayer, ActiveTerrain);
+
+            Map.EndPlayerPhase();
+        }
+
+        public static int PayToll(SorcererStreetMap Map, Player PayingPlayer, TerrainSorcererStreet ActiveTerrain)
+        {
             int Toll = ActiveTerrain.CurrentToll;
 
             int TollOverride = ActiveTerrain.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollOverride;
@@ -36,15 +43,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Toll = TollOverride;
             }
 
-            if (!ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).TollProtection
+            if (!PayingPlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).TollProtection
                 && !ActiveTerrain.PlayerOwner.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Battle).TollLimit)
             {
-                ActivePlayer.Gold -= Toll;
+                PayingPlayer.Gold -= Toll;
                 ActiveTerrain.PlayerOwner.Gold += Toll;
             }
 
             foreach (Player TollSharePlayer in Map.ListPlayer)
             {
+                if (TollSharePlayer.TeamIndex < 0)
+                {
+                    continue;
+                }
+
                 if (TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier > 0)
                 {
                     TollSharePlayer.Gold += (int)(ActiveTerrain.CurrentToll * TollSharePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).TollGainShareMultiplier);
@@ -53,7 +65,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Map.UpdateTotalMagic();
 
-            Map.EndPlayerPhase();
+            return Toll;
         }
 
         public override void Draw(CustomSpriteBatch g)

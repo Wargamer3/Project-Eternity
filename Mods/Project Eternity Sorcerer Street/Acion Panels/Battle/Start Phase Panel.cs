@@ -52,6 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
                 Map.GlobalSorcererStreetBattleContext.CurrentTurn = Map.GameTurn;
                 Map.GlobalSorcererStreetBattleContext.ActiveTerrain = ActiveTerrain;
+                Map.GlobalSorcererStreetBattleContext.ListBoostCreature = ActionPanelBattleBoostsModifierPhase.GetListBoostCreatures(Map);
 
 
                 InvaderCreature.Creature = Invader;
@@ -61,6 +62,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 InvaderCreature.PlayerIndex = ActivePlayerIndex;
                 DefenderCreature.Owner = ActiveTerrain.PlayerOwner;
                 DefenderCreature.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
+
+                InvaderCreature.OwnerTeam = Map.DicTeam[ActivePlayer.TeamIndex];
+                DefenderCreature.OwnerTeam = Map.DicTeam[ActiveTerrain.PlayerOwner.TeamIndex];
 
                 InvaderCreature.BonusHP = 0;
                 DefenderCreature.BonusHP = 0;

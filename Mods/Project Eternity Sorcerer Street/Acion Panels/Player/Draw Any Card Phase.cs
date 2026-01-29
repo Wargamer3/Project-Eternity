@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             AllCardsBook = CardBook.LoadGlobalBook();
-            CardSelectionScreen = new EditBookCardListFilterScreen(AllCardsBook, EditBookCardListFilterScreen.Filters.Spell, null, true, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(AllCardsBook, EditBookCardListFilterScreen.Filters.Spell, null, false, Map.Params.DicUnitType, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget, Map.Params.DicManualSkillTarget);
             CardSelectionScreen.DicUnitType = SorcererStreetBattleParams.DicParams[string.Empty].DicUnitType;
             CardSelectionScreen.DicRequirement = SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement;
             CardSelectionScreen.DicEffect = SorcererStreetBattleParams.DicParams[string.Empty].DicEffect;

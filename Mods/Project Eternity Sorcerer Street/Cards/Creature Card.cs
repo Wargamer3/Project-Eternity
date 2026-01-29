@@ -166,6 +166,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/" + Path);
 
                 GamePiece.Unit3DModel = AnimatedModelTransparent.Load(Content, "Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
+                GamePiece.Unit3DModel.DisableLights();
             }
         }
 

@@ -80,7 +80,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicManualSkillTarget = PlayerManager.DicManualSkillTarget;
         }
 
-        public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, Card LastCard, bool MultipleSelection, bool DrawBackground = true)
+        public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, Card LastCard, bool DrawBackground,
+                                            Dictionary<string, Unit> DicUnitType,
+                                            Dictionary<string, BaseSkillRequirement> DicRequirement,
+                                            Dictionary<string, BaseEffect> DicEffect,
+                                            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget,
+                                            Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             RequireFocus = true;
             RequireDrawFocus = true;
@@ -105,11 +110,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
             }
 
-            DicUnitType = PlayerManager.DicUnitType;
-            DicRequirement = PlayerManager.DicRequirement;
-            DicEffect = PlayerManager.DicEffect;
-            DicAutomaticSkillTarget = PlayerManager.DicAutomaticSkillTarget;
-            DicManualSkillTarget = PlayerManager.DicManualSkillTarget;
+            this.DicUnitType = DicUnitType;
+            this.DicRequirement = DicRequirement;
+            this.DicEffect = DicEffect;
+            this.DicAutomaticSkillTarget = DicAutomaticSkillTarget;
+            this.DicManualSkillTarget = DicManualSkillTarget;
         }
 
         private void FillCardList(Filters Filter, Card LastCard)
@@ -566,14 +571,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             int CardNumberBoxWidth = (int)(CardWidth / 3.2f);
 
-            for (int C = 0; C < ActiveBook.ListCard.Count; ++C)
+            for (int C = 0; C < ListFilteredCard.Count; ++C)
             {
                 int X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % 7);
                 int Y = StartY + (CardHeight + 20) * (C / 7);
 
-                g.Draw(ActiveBook.ListCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ActiveBook.ListCard[C].Card.sprCard.Width, ActiveBook.ListCard[C].Card.sprCard.Height), Color.White);
+                g.Draw(ListFilteredCard[C].Card.sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ListFilteredCard[C].Card.sprCard.Width, ListFilteredCard[C].Card.sprCard.Height), Color.White);
                 g.Draw(sprPixel, new Rectangle(X + CardWidth / 2 - CardNumberBoxWidth / 2, Y + CardHeight - CardNumberBoxWidth / 2, CardNumberBoxWidth, CardNumberBoxWidth), ColorBox);
-                TextHelper.DrawTextMiddleAligned(g, ActiveBook.ListCard[C].QuantityOwned.ToString(), new Vector2(X + CardWidth / 2, Y + 3 + CardHeight - CardNumberBoxWidth / 2), Color.White);
+                TextHelper.DrawTextMiddleAligned(g, ListFilteredCard[C].QuantityOwned.ToString(), new Vector2(X + CardWidth / 2, Y + 3 + CardHeight - CardNumberBoxWidth / 2), Color.White);
             }
         }
     }

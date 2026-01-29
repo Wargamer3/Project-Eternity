@@ -14,6 +14,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string RequirementName = "Sorcerer Street Battle Defender Defeated";
 
+        private Player ActivePlayer;
+        private double AITimer;
+
         public ActionPanelBattleDefenderDefeatedPhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
@@ -22,6 +25,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
+            ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
+
             if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
@@ -98,6 +103,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    RemoveFromPanelList(this);
+                    AddToPanelListAndSelect(new ActionPanelLandChainUpdate(Map));
+                }
+                return;
+            }
+
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);

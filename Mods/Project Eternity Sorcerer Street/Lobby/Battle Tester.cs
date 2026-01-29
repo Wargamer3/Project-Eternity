@@ -124,6 +124,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private PhasesChoices PhasesEnd;
         private EditBookCardListFilterScreen CardSelectionScreen;
         private SorcererStreetBattleContext Context;
+        private SorcererStreetBattleParams Params;
 
         private BattleCreatureInfo InvaderCreature;
         private BattleCreatureInfo DefenderCreature;
@@ -153,8 +154,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             BattleAssets = new BattleContent(Content);
             fntMenuText = Content.Load<SpriteFont>("Fonts/Arial12");
-            Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
-            SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
+            Params = SorcererStreetBattleParams.DicParams[string.Empty];
+            Context = Params.GlobalContext;
+            Params.ActiveParser = new SorcererStreetFormulaParser(Params);
             Context.ListSummonedCreature = new List<TerrainSorcererStreet>();
             Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
             Context.ActiveTerrain = new TerrainSorcererStreet(0, 0, 0, 0, 0, 0, 0);
@@ -335,6 +337,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Context.ListActivatedEffect.Clear();
             }
+
+            Context.SetBeforeBattle(InvaderCreature, DefenderCreature);
         }
 
         public override void Update(GameTime gameTime)
@@ -701,7 +705,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void GetMenuResponse()
         {
-            if (CardSelectionScreen == null || CardSelectionScreen.ListSelectedCard.Count == 0)
+            if (CardSelectionScreen == null || CardSelectionScreen.ListSelectedCard == null)
             {
                 return;
             }
@@ -826,7 +830,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.DefenderCreature;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.OpponentCreature.Creature, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.OpponentCreature.Creature, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -835,7 +839,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.DefenderItem;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.OpponentCreature.Item, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.OpponentCreature.Item, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -843,7 +847,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderEnchantSelection()
         {
             SetupChoice = SetupChoices.DefenderEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -851,7 +855,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderPlayerEnchantSelection()
         {
             SetupChoice = SetupChoices.DefenderPlayerEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -859,7 +863,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderMapCreaturesSelection()
         {
             SetupChoice = SetupChoices.DefenderMapCreatures;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, null, true);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -996,7 +1000,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.InvaderCreature;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.SelfCreature.Creature, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, Context.SelfCreature.Creature, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1005,7 +1009,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SetupChoice = SetupChoices.InvaderItem;
             PhasesChoice = PhasesChoices.Idle;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.SelfCreature.Item, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, Context.SelfCreature.Item, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1013,7 +1017,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderEnchantSelection()
         {
             SetupChoice = SetupChoices.InvaderEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1021,7 +1025,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderPlayerEnchantSelection()
         {
             SetupChoice = SetupChoices.InvaderPlayerEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1029,7 +1033,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderMapCreaturesSelection()
         {
             SetupChoice = SetupChoices.InvaderMapCreatures;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, null, true);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, null, true, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }

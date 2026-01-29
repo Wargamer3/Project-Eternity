@@ -301,6 +301,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 ((CreatureCard)ActiveCard.CardSkin).GamePiece.Unit3DModel = AnimatedModelTransparent.Load(Content, "Sorcerer Street/Models/Creatures/" + NewSkinFileFolder + "/" + ModelFileName);
                 Map3DModel = new AnimatedModelTransparent(((CreatureCard)ActiveCard.CardSkin).GamePiece.Unit3DModel);
+                Map3DModel.DisableLights();
             }
         }
 

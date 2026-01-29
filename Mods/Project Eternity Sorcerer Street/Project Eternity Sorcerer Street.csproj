@@ -73,7 +73,9 @@
     <Compile Include="Acion Panels\MAP Attack\MAP Spread.cs" />
     <Compile Include="Acion Panels\MAP Attack\MAP Targeted.cs" />
     <Compile Include="Acion Panels\MAP Attack\Use MAP Attack.cs" />
+    <Compile Include="Acion Panels\Options\AI Choose Territory.cs" />
     <Compile Include="Acion Panels\Options\Suspend.cs" />
+    <Compile Include="Acion Panels\Options\AI Territory Actions.cs" />
     <Compile Include="Acion Panels\Player\Spell\No Target Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\All Creatures Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\All Players Spell Confirm.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Lobby\Game Preparation Screen\Configure Player Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Player Preparation Default.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Change Player Type Popup.cs" />
+    <Compile Include="Lobby\Lobby Victory Screen.cs" />
     <Compile Include="Lobby\Shop\Character Screen.cs" />
     <Compile Include="Lobby\Shop\Confirm Card Buy.cs" />
     <Compile Include="Lobby\Shop\Confirm Chracter Buy.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="Lobby\Unlocks\Unlockable Character Alt.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Card Skin.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Character Skin.cs" />
+    <Compile Include="Rules\Campaign Game Rule.cs" />
     <Compile Include="Sorcerer Street Text Processor.cs" />
     <Compile Include="Lobby\Bot.cs" />
     <Compile Include="Lobby\Unlocks\Sorcerer Street Unlock Inventory.cs" />
