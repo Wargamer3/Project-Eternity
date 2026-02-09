@@ -44,6 +44,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string BookModel;
         public DateTime LastModification;
         public string Tags;
+        public string Category;//null for any category, otherwise limit card selection to only the card from that category
 
         public int Wins;
         public int Matches;

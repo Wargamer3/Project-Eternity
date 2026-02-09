@@ -289,6 +289,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DefaultBook.AddCard(Inventory.GlobalBook.ListCard[C]);
             }
 
+            DefaultBook.Category = Inventory.GlobalBook.ListCard[0].Card.Category;
+
             Inventory.ActiveBook = DefaultBook;
             Inventory.AddBook(DefaultBook);
 

@@ -45,16 +45,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             TerrainSorcererStreet ActiveTerrain = Map.GlobalSorcererStreetBattleContext.ActiveTerrain;
 
-            Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListSummonedCreature.Remove(ActiveTerrain);
+            KillCreature(Map, ActiveTerrain);
+
             Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListSummonedCreature.Add(ActiveTerrain);
 
             ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature;
             ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner;
 
             Map.GlobalSorcererStreetBattleContext.SelfCreature.OwnerTeam.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.GlobalSorcererStreetBattleContext.OpponentCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
 
-            Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
             Map.OnCreatureSummon(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature, ActiveTerrain);
 
             Map.UpdateTotalMagic();
@@ -68,15 +67,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (ActiveTerrain.DefendingCreature == Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature)
                 {
-                    Map.ListSummonedCreature.Remove(ActiveTerrain);
-                    Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListSummonedCreature.Remove(ActiveTerrain);
-
-                    ActiveTerrain.DefendingCreature = null;
-                    ActiveTerrain.PlayerOwner = null;
-
-                    Map.GlobalSorcererStreetBattleContext.SelfCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-
-                    Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature);
+                    KillCreature(Map, ActiveTerrain);
                 }
             }
             if (Map.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP <= 0)
@@ -85,20 +76,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (ActiveTerrain.DefendingCreature == Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature)
                 {
-                    Map.ListSummonedCreature.Remove(ActiveTerrain);
-                    Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.ListSummonedCreature.Remove(ActiveTerrain);
-
-                    ActiveTerrain.DefendingCreature = null;
-                    ActiveTerrain.PlayerOwner = null;
-
-                    Map.GlobalSorcererStreetBattleContext.OpponentCreature.OwnerTeam.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-
-                    Map.OnCreatureDeath(Map.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
-
+                    KillCreature(Map, ActiveTerrain);
                 }
             }
 
             Map.UpdateTotalMagic();
+        }
+
+        public static void KillCreature(SorcererStreetMap Map, TerrainSorcererStreet ActiveTerrain)
+        {
+            Map.ListSummonedCreature.Remove(ActiveTerrain);
+
+            ActiveTerrain.PlayerOwner.ListSummonedCreature.Remove(ActiveTerrain);
+            Map.DicTeam[ActiveTerrain.PlayerOwner.TeamIndex].DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.OnCreatureDeath(ActiveTerrain.DefendingCreature);
+
+            ActiveTerrain.DefendingCreature = null;
+            ActiveTerrain.PlayerOwner = null;
         }
 
         public override void DoUpdate(GameTime gameTime)

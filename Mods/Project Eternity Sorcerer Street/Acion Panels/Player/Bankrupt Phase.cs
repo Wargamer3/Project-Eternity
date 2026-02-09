@@ -8,16 +8,13 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelCastlePhase : ActionPanelSorcererStreet
+    public class ActionPanelBankruptPhase : ActionPanelSorcererStreet
     {
         public const string CastleReached = "Castle Reached";
-        private const string PanelName = "CastlePhase";
-
-        private enum Commands { Territory, Map, Info, Options, Help, End }
+        private const string PanelName = "BankruptPhase";
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
-        private int MovementRemaining;
 
         private double ItemAnimationTime;
 
@@ -27,32 +24,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int Fluctuation;
         private int Total;
 
-        public ActionPanelCastlePhase(SorcererStreetMap Map)
+        public ActionPanelBankruptPhase(SorcererStreetMap Map)
                 : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelCastlePhase(SorcererStreetMap Map, int ActivePlayerIndex, int MovementRemaining)
+        public ActionPanelBankruptPhase(SorcererStreetMap Map, int ActivePlayerIndex)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.MovementRemaining = MovementRemaining;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
         {
-            AddToPanelListAndSelect(new ActionPanelAllTerritoryAvailalblePopup(Map, ActivePlayerIndex));
-            ++ActivePlayer.CompletedLaps;
-
+            AddToPanelListAndSelect(new ActionPanelBankruptPopup(Map, ActivePlayerIndex));
             BasicBonus = Map.MagicGainPerLap + Map.MagicGainPerLap / 10 * ActivePlayer.CompletedLaps;
 
             int NumberOfLandPossessed = 0;
-            foreach (byte NumberOfLand in Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType.Values)
-            {
-                NumberOfLandPossessed += NumberOfLand;
-            }
             TerritoryBonus = NumberOfLandPossessed * 20;
             SymbolBonus = 0;
             Fluctuation = 0;
@@ -60,24 +50,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Total = (int)(Total * ActivePlayer.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).CastleValueMultiplier);
 
-            ActivePlayer.Gold += Total;
+            ActivePlayer.Gold = Total;
             ActivePlayer.ListPassedCheckpoint.Clear();
             Map.UpdateTotalMagic();
-
-            foreach (TerrainSorcererStreet CreatureToHeal in Map.ListSummonedCreature)
-            {
-                if (!CreatureToHeal.DefendingCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.Enchant).LapRegenerationLimit && CreatureToHeal.PlayerOwner == ActivePlayer)
-                {
-                    CreatureToHeal.DefendingCreature.CurrentHP = Math.Min(CreatureToHeal.DefendingCreature.MaxHP, (int)(CreatureToHeal.DefendingCreature.CurrentHP + CreatureToHeal.DefendingCreature.MaxHP * 0.10f));
-                }
-            }
-
-            if (Map.DicTeam[ActivePlayer.TeamIndex].TotalMagic > Map.MagicGoal)
-            {
-                Map.RemoveScreen(Map);
-            }
-            /*Symbol Bonus = Value of symbols owned / 10G
-            (One is only awarded the symbol bonus if they own the most symbols of a particular color in an area)*/
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -92,22 +67,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                RemoveFromPanelList(this);
-
-                if (MovementRemaining <= 0)
-                {
-                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
-                }
+                Map.EndPlayerPhase();
             }
 
             if (InputHelper.InputConfirmPressed())
             {
-                RemoveFromPanelList(this);
-
-                if (MovementRemaining <= 0)
-                {
-                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
-                }
+                Map.EndPlayerPhase();
             }
         }
 
@@ -128,13 +93,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelCastlePhase(Map);
+            return new ActionPanelBankruptPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
-            MenuHelper.DrawDiceHolder(g, new Vector2(Constants.Width / 8, Constants.Height / 4), MovementRemaining);
-
             if (ItemAnimationTime < 1)
             {
                 int Size = Constants.Width / 4;

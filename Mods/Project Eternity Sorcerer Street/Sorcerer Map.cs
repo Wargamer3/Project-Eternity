@@ -106,6 +106,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public LayerHolderSorcererStreet LayerManager;
         public List<Area> ListArea;
         public List<TerrainSorcererStreet> ListPassedTerrain;
+        public List<TerrainSorcererStreet> ListHighlightedTerrain;
         public Dictionary<Vector3, TerrainSorcererStreet> DicTemporaryTerrain;//Temporary obstacles
         public SorcererStreetTerrainHolder TerrainHolder;
 
@@ -139,6 +140,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPERAttack = new List<PERAttack>();
             ListArea = new List<Area>();
             ListPassedTerrain = new List<TerrainSorcererStreet>();
+            ListHighlightedTerrain = new List<TerrainSorcererStreet>();
 
             ListTilesetPreset = new List<TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
@@ -511,7 +513,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListActionMenuChoice.RemoveAllActionPanels();
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this));
+            if (ListPlayer[ActivePlayerIndex].Gold < 0)
+            {
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelSellTerritory(this, ActivePlayerIndex));
+            }
+            else
+            {
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this));
+            }
         }
 
         public void OnNewTurn()
@@ -659,6 +668,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (IsChatOpen)
                 {
                     ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
+                }
+            }
+
+            if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.K))
+            {
+                ListPlayer[ActivePlayerIndex].Gold -= 100;
+
+                if (ListPlayer[ActivePlayerIndex].Gold < 0)
+                {
+                    ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelSellTerritory(this, ActivePlayerIndex));
                 }
             }
 

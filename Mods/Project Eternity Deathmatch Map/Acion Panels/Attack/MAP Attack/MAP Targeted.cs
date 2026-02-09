@@ -191,7 +191,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                if (Map.CursorControl(ActiveInputManager))
+                if (Map.CursorControl(gameTime, ActiveInputManager))
                 {
                     UpdateExplosionPositions();
                 }

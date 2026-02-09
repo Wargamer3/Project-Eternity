@@ -110,7 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                bool CursorMoved = Map.CursorControl(ActiveInputManager);
+                bool CursorMoved = Map.CursorControl(gameTime, ActiveInputManager);
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);

@@ -76,6 +76,11 @@
     <Compile Include="Acion Panels\Options\AI Choose Territory.cs" />
     <Compile Include="Acion Panels\Options\Suspend.cs" />
     <Compile Include="Acion Panels\Options\AI Territory Actions.cs" />
+    <Compile Include="Acion Panels\Player\Bankrupt Popup.cs" />
+    <Compile Include="Acion Panels\Player\Bankrupt Phase.cs" />
+    <Compile Include="Acion Panels\Player\All Territory Available Popup.cs" />
+    <Compile Include="Acion Panels\Player\Sell Territory Confirm.cs" />
+    <Compile Include="Acion Panels\Player\Sell Territory Phase.cs" />
     <Compile Include="Acion Panels\Player\Spell\No Target Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\All Creatures Spell Confirm.cs" />
     <Compile Include="Acion Panels\Player\Spell\All Players Spell Confirm.cs" />

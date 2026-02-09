@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
-                ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                Map.UpdateTotalMagic();
                 Map.EndPlayerPhase();
             }
         }

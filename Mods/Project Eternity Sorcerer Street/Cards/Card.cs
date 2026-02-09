@@ -361,6 +361,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public readonly string Path;
         public readonly string CardType;
+        public string Category;//null for any category, otherwise limit card selection to only the card from that category
         public string Name;
         public string Description;
         public static DynamicText TextParser;
@@ -420,6 +421,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Card LoadedCard = null;
 
+            string Category = Path.Split('/')[0];
+
             switch (CardType)
             {
                 case "Creature":
@@ -450,6 +453,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
             }
 
+            LoadedCard.Category = Category;
             return LoadedCard.Copy(DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 

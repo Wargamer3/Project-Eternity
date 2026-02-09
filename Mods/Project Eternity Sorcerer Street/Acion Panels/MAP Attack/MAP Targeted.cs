@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                if (Map.CursorControl(ActiveInputManager))
+                if (Map.CursorControl(gameTime, ActiveInputManager))
                 {
                     UpdateExplosionPositions();
                 }

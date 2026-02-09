@@ -858,40 +858,40 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void UpdateCursorVisiblePosition(GameTime gameTime)
         {
+            float CursorSpeedMultiplier = 0.05f;
+
+            if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
+                CursorSpeedMultiplier *= 2;
+
             if (CursorPositionVisible.X < CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
-                if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
-                    CursorSpeed *= 2;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * CursorSpeedMultiplier;
                 CursorPositionVisible.X += CursorSpeed;
+
                 if (CursorPositionVisible.X > CursorPosition.X)
                     CursorPositionVisible.X = CursorPosition.X;
             }
             else if (CursorPositionVisible.X > CursorPosition.X)
             {
-                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
-                if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
-                    CursorSpeed *= 2;
+                float CursorSpeed = TileSize.X * gameTime.ElapsedGameTime.Milliseconds * CursorSpeedMultiplier;
                 CursorPositionVisible.X -= CursorSpeed;
+
                 if (CursorPositionVisible.X < CursorPosition.X)
                     CursorPositionVisible.X = CursorPosition.X;
             }
             if (CursorPositionVisible.Y < CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
-                if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
-                    CursorSpeed *= 2;
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * CursorSpeedMultiplier;
                 CursorPositionVisible.Y += CursorSpeed;
+
                 if (CursorPositionVisible.Y > CursorPosition.Y)
                     CursorPositionVisible.Y = CursorPosition.Y;
             }
             else if (CursorPositionVisible.Y > CursorPosition.Y)
             {
-                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.05f;
-                if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.S))
-                    CursorSpeed *= 2;
-
+                float CursorSpeed = TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * CursorSpeedMultiplier;
                 CursorPositionVisible.Y -= CursorSpeed;
+
                 if (CursorPositionVisible.Y < CursorPosition.Y)
                     CursorPositionVisible.Y = CursorPosition.Y;
             }
@@ -991,7 +991,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Move the cursor on the map.
         /// </summary>
         /// <returns>Returns true if the cursor was moved</returns>
-        public bool CursorControlGrid(PlayerInput ActiveInputManager, out Point GridOffset, out BattleMap ActiveMap)
+        public bool CursorControlGrid(GameTime gameTime, PlayerInput ActiveInputManager, out Point GridOffset, out BattleMap ActiveMap)
         {
             GridOffset = Point.Zero;
             bool CursorMoved = false;
@@ -1055,47 +1055,68 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            float CameraSpeed = 23;
+            UpdateCamera(gameTime);
+
             //X
             if (IsMovingLeft && CanKeyboardMove)
             {
-                //Update the camera if needed.
-                if (CursorPosition.X - Camera2DPosition.X - 3 * TileSize.X < 0 && Camera2DPosition.X > -3 * TileSize.X)
-                    Camera2DPosition.X -= CameraSpeed;
-
                 GridOffset.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (IsMovingRight && CanKeyboardMove)
             {
-                //Update the camera if needed.
-                if (CursorPosition.X - Camera2DPosition.X + 3 * TileSize.X >= ScreenSize.X * TileSize.X && Camera2DPosition.X + ScreenSize.X * TileSize.X < (MapSize.X + 3) * TileSize.X)
-                    Camera2DPosition.X += CameraSpeed;
-
                 GridOffset.X += (CursorPosition.X < (MapSize.X - 1) * TileSize.X) ? 1 : 0;
                 CursorMoved = true;
             }
             //Y
             if (IsMovingUp && CanKeyboardMove)
             {
-                //Update the camera if needed.
-                if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
-                    Camera2DPosition.Y -= CameraSpeed;
-
                 GridOffset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (IsMovingDown && CanKeyboardMove)
             {
-                //Update the camera if needed.
-                if (CursorPosition.Y - Camera2DPosition.Y + 3 * TileSize.Y >= ScreenSize.Y * TileSize.Y && Camera2DPosition.Y + ScreenSize.Y * TileSize.Y < (MapSize.Y + 3) * TileSize.Y)
-                    Camera2DPosition.Y += CameraSpeed;
-
                 GridOffset.Y += (CursorPosition.Y < (MapSize.Y - 1) * TileSize.Y) ? 1 : 0;
                 CursorMoved = true;
             }
 
             return CursorMoved;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <returns>Has Moved</returns>
+        public bool UpdateCamera(GameTime gameTime)
+        {
+            float CameraSpeed = 23;
+            bool HasMoved = false;
+
+            //X
+            if (CursorPosition.X - Camera2DPosition.X - 3 * TileSize.X < 0 && Camera2DPosition.X > -3 * TileSize.X)
+            {
+                Camera2DPosition.X -= CameraSpeed;
+                HasMoved = true;
+            }
+            else if (CursorPosition.X - Camera2DPosition.X + 3 * TileSize.X >= ScreenSize.X * TileSize.X && Camera2DPosition.X + ScreenSize.X * TileSize.X < (MapSize.X + 3) * TileSize.X)
+            {
+                Camera2DPosition.X += CameraSpeed;
+                HasMoved = true;
+            }
+            //Y
+            if (CursorPosition.Y - Camera2DPosition.Y - 3 * TileSize.Y < 0 && Camera2DPosition.Y > -3 * TileSize.Y)
+            {
+                Camera2DPosition.Y -= CameraSpeed;
+                HasMoved = true;
+            }
+            else if (CursorPosition.Y - Camera2DPosition.Y + 3 * TileSize.Y >= ScreenSize.Y * TileSize.Y && Camera2DPosition.Y + ScreenSize.Y * TileSize.Y < (MapSize.Y + 3) * TileSize.Y)
+            {
+                Camera2DPosition.Y += CameraSpeed;
+                HasMoved = true;
+            }
+
+            return HasMoved;
         }
 
         public MovementAlgorithmTile GetTerrainUnderCursor()

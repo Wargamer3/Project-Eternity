@@ -86,7 +86,7 @@ namespace ProjectEternity.Core.Units.Builder
             }
             else
             {
-                Map.CursorControl(ActiveInputManager);
+                Map.CursorControl(gameTime, ActiveInputManager);
             }
 
             Map.LayerManager.AddDrawablePoints(ListBuildTerrain, Color.Coral);

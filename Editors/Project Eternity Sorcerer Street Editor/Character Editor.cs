@@ -124,7 +124,7 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
 
             if (frmRelationshipEditor == null)
             {
-                BW.Write(0);
+                BW.Write((byte)0);
             }
             else
             {

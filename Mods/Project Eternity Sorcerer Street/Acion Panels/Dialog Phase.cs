@@ -296,8 +296,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            PlayerCharacter ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex].Inventory.Character.Character;
-            ActivePlayer.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(7f) * Matrix.CreateTranslation(150, 2000, 0), Projection, Matrix.Identity);
+            AnimatedModelTransparent ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Unit3DModel;
+            ActivePlayer.Draw3D(g.GraphicsDevice, Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(7f) * Matrix.CreateTranslation(150, 2000, 0), Projection, Matrix.Identity);
 
             g.End();
             g.Begin();

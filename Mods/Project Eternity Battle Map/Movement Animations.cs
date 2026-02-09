@@ -45,6 +45,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void MoveSquad(GameTime gameTime, BattleMap Map, float MovementSpeed = 2f)
         {
+            if (Map.UpdateCamera(gameTime))
+            {
+                return;
+            }
+
             MovementSpeed = (float)(MovementSpeed * gameTime.ElapsedGameTime.TotalSeconds);
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 

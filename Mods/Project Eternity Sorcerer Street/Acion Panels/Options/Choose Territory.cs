@@ -82,9 +82,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             base.Draw(g);
-            foreach (TerrainSorcererStreet ActiveTerrain in Map.ListPassedTerrain)
-            {
-            }
         }
 
         public override string ToString()

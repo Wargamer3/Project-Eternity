@@ -189,6 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (NextTerrain.PlayerOwner == ActivePlayer)
             {
                 Map.ListPassedTerrain.Add(NextTerrain);
+                Map.ListHighlightedTerrain.Add(NextTerrain);
             }
 
             if (NextTerrain.DefendingCreature != null

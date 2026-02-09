@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (Map.CursorControl(ActiveInputManager))
+            if (Map.CursorControl(gameTime, ActiveInputManager))
             {
                 Vector3 StartPosition = Map.GetFinalPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
                 Vector3 TargetPosition = Map.GetFinalPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;

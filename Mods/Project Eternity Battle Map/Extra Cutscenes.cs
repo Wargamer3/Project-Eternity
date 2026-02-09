@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(GameTime gameTime)
             {
-                bool IsFinished = true;
+                bool IsFinished = !Map.UpdateCamera(gameTime);
                 if (Map.CursorPosition.X < _CursorPosition.X)
                 {
                     Map.CursorPosition.X++;
@@ -217,34 +217,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     Map.CursorPosition.Y--;
                     IsFinished = false;
 
-
                     if (Map.CursorPosition.Y < _CursorPosition.Y)
                     {
                         Map.CursorPosition.Y = _CursorPosition.Y;
                     }
-                }
-
-                //Update the camera if needed.
-                if (Map.CursorPosition.X - Map.Camera2DPosition.X - 3 < 0 && Map.Camera2DPosition.X >  -3)
-                {
-                    --Map.Camera2DPosition.X;
-                    IsFinished = false;
-                }
-                else if (Map.CursorPosition.X - Map.Camera2DPosition.X >= Map.ScreenSize.X / 2 && Map.Camera2DPosition.X + Map.ScreenSize.X < Map.MapSize.X + 3)
-                {
-                    ++Map.Camera2DPosition.X;
-                    IsFinished = false;
-                }
-
-                if (Map.CursorPosition.Y - Map.Camera2DPosition.Y - 3 < 0 && Map.Camera2DPosition.Y > -3)
-                {
-                    --Map.Camera2DPosition.Y;
-                    IsFinished = false;
-                }
-                else if (Map.CursorPosition.Y - Map.Camera2DPosition.Y >= Map.ScreenSize.Y / 2 && Map.Camera2DPosition.Y + Map.ScreenSize.Y < Map.MapSize.Y + 3)
-                {
-                    ++Map.Camera2DPosition.Y;
-                    IsFinished = false;
                 }
 
                 if (IsFinished)

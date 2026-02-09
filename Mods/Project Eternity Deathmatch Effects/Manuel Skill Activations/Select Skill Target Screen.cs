@@ -36,7 +36,7 @@ namespace ProjectEternity.Core.Skill
 
         public override void Update(GameTime gameTime)
         {
-            Map.CursorControl(Map.ListPlayer[Map.ActivePlayerIndex].InputManager);
+            Map.CursorControl(gameTime, Map.ListPlayer[Map.ActivePlayerIndex].InputManager);
             Map.UpdateCursorVisiblePosition(gameTime);
             //Loop through the players to find a Unit to control.
             for (int P = 0; P < Map.ListPlayer.Count; P++)

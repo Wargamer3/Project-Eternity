@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayer.Gold -= UpgradePrice;
             ActiveTerrain.LandLevel += ActionMenuCursor + 1;
-            ActiveTerrain.UpdateValue(Map.DicTeam[ActivePlayer.TeamIndex].DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+            Map.UpdateTotalMagic();
             Map.EndPlayerPhase();
         }
 

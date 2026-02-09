@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else
                     {
-                        Map.CursorControl(ActiveInputManager);//Move the cursor
+                        Map.CursorControl(gameTime, ActiveInputManager);//Move the cursor
                     }
                     break;
 
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else
                     {
-                        Map.CursorControl(ActiveInputManager);//Move the cursor
+                        Map.CursorControl(gameTime, ActiveInputManager);//Move the cursor
                     }
                     break;
             }

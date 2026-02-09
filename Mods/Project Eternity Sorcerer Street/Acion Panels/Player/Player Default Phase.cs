@@ -79,6 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             while (Map.ListPlayer[Map.ActivePlayerIndex].TeamIndex < 0);
 
             Map.ListPassedTerrain.Clear();
+            Map.ListHighlightedTerrain.Clear();
             DeleteBattleInformation();
         }
 

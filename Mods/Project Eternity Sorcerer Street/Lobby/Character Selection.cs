@@ -328,6 +328,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxPerLine = (Constants.Width - Constants.Width / 3 - X) / BoxWidth;
 
             int TotalItem = CurrentContainer.ListCharacter.Count + CurrentContainer.ListFolder.Count;
+            TotalItem = 35;
 
             if (ListLastContainer.Count > 0)
             {
@@ -477,10 +478,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.End();
             g.Begin();
 
-            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            CharacterToDraw.Character.Unit3DModel.Draw(Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1500, 750, 0), Projection, Matrix.Identity);
+            if (CharacterToDraw.Character.Unit3DModel != null)
+            {
+                g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                CharacterToDraw.Character.Unit3DModel.Draw3D(g.GraphicsDevice, Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(2.5f) * Matrix.CreateTranslation(1500, 750, 0), Projection, Matrix.Identity);
+            }
+            else if (CharacterToDraw.Character.SpriteMap != null)
+            {
+                X = (int)(2650 * Ratio);
+                Y = (int)(500 * Ratio);
+                int SpriteWidth = CharacterToDraw.Character.SpriteMap.Width;
+                int SpriteHeight = CharacterToDraw.Character.SpriteMap.Height;
+                int SpriteHeightMax = (int)(1000 * Ratio);
+
+                g.Draw(CharacterToDraw.Character.SpriteMap, new Rectangle(X, Y, SpriteWidth, SpriteHeightMax), new Rectangle(0, 0, SpriteWidth, SpriteHeightMax), Color.White);
+            }
         }
     }
 }

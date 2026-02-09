@@ -53,6 +53,11 @@ namespace ProjectEternity.Core.Graphics
             return NewModelTransparent;
         }
 
+        public void Update(GameTime gameTime)
+        {
+            ModelToDraw.Update(gameTime);
+        }
+
         public void SetLightDirection(Vector3 DiffuseLightDirection)
         {
             foreach (ModelMesh mesh in ModelToDraw.Model.Meshes)

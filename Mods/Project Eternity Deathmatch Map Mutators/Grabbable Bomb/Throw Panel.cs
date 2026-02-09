@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                if (Map.CursorControl(ActiveInputManager))
+                if (Map.CursorControl(gameTime, ActiveInputManager))
                 {
                     Vector3 StartPosition = ActiveSquad.Position;
                     Vector3 TargetPosition = Map.CursorPosition;

@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Params.Map.Reset();
-            Params.GlobalContext.ActiveTerrain.UpdateValue(Params.Map.DicTeam[Params.GlobalPlayerContext.ActivePlayer.TeamIndex].DicCreatureCountByElementType[Params.GlobalContext.ActiveTerrain.TerrainTypeIndex], Params.GlobalContext.ActiveTerrain.DefendingCreature);
+            Params.Map.UpdateTotalMagic();
             return "Terrain element changed to " + Element;
         }
 

@@ -41,14 +41,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly string ActivePlayerName;
         private readonly CardBook ActiveBook;
         private readonly CardBook GlobalBook;
+        private string Category;
+        private readonly List<CardInfo> ListAvailableCard;
         private readonly List<CardInfo> ListFilteredCard;
+        public List<Card> ListSelectedCard;
 
         private int CursorIndex;
         private int ScrollbarIndex;
         private bool DrawBackground;
         int CardsPerLine = 7;
 
-        public List<Card> ListSelectedCard;
         private CardSymbols Symbols;
         private IconHolder Icons;
 
@@ -91,9 +93,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RequireDrawFocus = true;
             this.GlobalBook = ActiveBook = GlobalBook;
             this.DrawBackground = DrawBackground;
+            this.Category = ActiveBook.Category;
             ActivePlayerName = string.Empty;
+            ListAvailableCard = new List<CardInfo>();
             ListFilteredCard = new List<CardInfo>();
             ListSelectedCard = new List<Card>();
+            SetAvailableCards();
             FillCardList(Filter, LastCard);
 
             Symbols = CardSymbols.Symbols;
@@ -117,13 +122,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.DicManualSkillTarget = DicManualSkillTarget;
         }
 
+        private void SetAvailableCards()
+        {
+            if (string.IsNullOrEmpty(Category))
+            {
+                ListAvailableCard.AddRange(GlobalBook.ListCard);
+            }
+            else
+            {
+                foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                {
+                    if (ActiveCard.Card.Category != Category)
+                    {
+                        continue;
+                    }
+
+                    ListAvailableCard.Add(ActiveCard);
+                }
+            }
+        }
+
         private void FillCardList(Filters Filter, Card LastCard)
         {
             switch (Filter)
             {
                 case Filters.All:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
+                        if (!string.IsNullOrEmpty(Category) && ActiveCard.Card.Category != Category)
+                        {
+                            continue;
+                        }
+
                         if (LastCard != null && ActiveCard.Card.Name == LastCard.Name)
                         {
                             CursorIndex = ListFilteredCard.Count;
@@ -136,7 +166,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 #region Creatures
 
                 case Filters.Creatures:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -152,7 +182,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Neutral:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -171,7 +201,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Fire:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -190,7 +220,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Water:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -209,7 +239,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Earth:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -228,7 +258,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Air:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -247,7 +277,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Dual:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard.Card as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -266,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.Item:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         ItemCard ActiveItemCard = ActiveCard.Card as ItemCard;
                         if (ActiveItemCard != null)
@@ -284,7 +314,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 #endregion
 
                 case Filters.Spell:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
@@ -300,7 +330,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.EnchantPlayer:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)
@@ -319,7 +349,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case Filters.EnchantCreature:
-                    foreach (CardInfo ActiveCard in GlobalBook.ListCard)
+                    foreach (CardInfo ActiveCard in ListAvailableCard)
                     {
                         SpellCard ActiveSpellCard = ActiveCard.Card as SpellCard;
                         if (ActiveSpellCard != null)

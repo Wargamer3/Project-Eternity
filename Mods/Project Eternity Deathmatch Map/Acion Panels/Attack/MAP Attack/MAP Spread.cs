@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                Map.CursorControl(ActiveInputManager);//Move the cursor
+                Map.CursorControl(gameTime, ActiveInputManager);//Move the cursor
                 BattlePreview.UpdateUnitDisplay();
             }
 

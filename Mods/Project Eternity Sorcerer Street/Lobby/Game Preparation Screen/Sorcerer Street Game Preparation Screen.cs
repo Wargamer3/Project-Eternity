@@ -187,8 +187,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     float X = 5 + P * BoxWidth;
                     Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.6f) * Matrix.CreateTranslation(X + BoxWidth / 2, DrawY + 170, 0);
 
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.PlayAnimation("Walking");
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw(View, Projection, World);
+                    ActivePlayer.Inventory.Character.Character.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
+                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw3D(g.GraphicsDevice, View, Projection, World);
 
                 }
                 else if (Room.ListRoomPlayer[P].OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
@@ -202,8 +202,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     float X = 5 + P * BoxWidth;
                     Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.6f) * Matrix.CreateTranslation(X + BoxWidth / 2, DrawY + 170, 0);
 
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.PlayAnimation("Walking");
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw(View, Projection, World);
+                    ActivePlayer.Inventory.Character.Character.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
+                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw3D(g.GraphicsDevice, View, Projection, World);
                 }
             }
         }

@@ -45,12 +45,12 @@ namespace ProjectEternity.Editors.SorcererStreetCharacterEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.ShopSprite:
-                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(37);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(48);
                         txtShopSprite.Text = Name;
                         break;
 
                     case ItemSelectionChoices.MapSprite:
-                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(32);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(36);
                         txtMapSprite.Text = Name;
                         break;
 

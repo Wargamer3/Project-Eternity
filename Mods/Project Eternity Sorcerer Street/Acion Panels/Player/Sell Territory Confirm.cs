@@ -1,0 +1,140 @@
+﻿using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
+
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
+{
+    public class ActionPanelSellTerritoryConfirm: ActionPanelSorcererStreet
+    {
+        private const string PanelName = "SellTerritoryConfirm";
+
+        private int ActivePlayerIndex;
+        private Player ActivePlayer;
+        private double AITimer;
+        private TerrainSorcererStreet ActiveTerrain;
+
+        private int CursorIndex;
+
+        public ActionPanelSellTerritoryConfirm(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
+        {
+        }
+
+        public ActionPanelSellTerritoryConfirm(SorcererStreetMap Map, int ActivePlayerIndex, TerrainSorcererStreet ActiveTerrain)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveTerrain = ActiveTerrain;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+        }
+
+        public override void OnSelect()
+        {
+            CursorIndex = 0;
+        }
+
+        public override void DoUpdate(GameTime gameTime)
+        {
+            if (!ActivePlayer.IsPlayerControlled)
+            {
+                AITimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (AITimer >= 1)
+                {
+                    SellTerritory();
+                    RemoveFromPanelList(this);
+                }
+                return;
+            }
+
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if (CursorIndex == 0)
+                {
+                    SellTerritory();
+                    RemoveFromPanelList(this);
+                }
+                else if (CursorIndex == 1)
+                {
+                    RemoveFromPanelList(this);
+                }
+            }
+            else if (ActiveInputManager.InputUpPressed())
+            {
+                ++CursorIndex;
+                if (CursorIndex > 1)
+                    CursorIndex = 0;
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                --CursorIndex;
+                if (CursorIndex < 0)
+                    CursorIndex = 1;
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
+            }
+        }
+
+        private void SellTerritory()
+        {
+            ActivePlayer.Gold += ActiveTerrain.CurrentValue;
+            ActionPanelBattleDefenderDefeatedPhase.KillCreature(Map, ActiveTerrain);
+        }
+
+        protected override void OnCancelPanel()
+        {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            CursorIndex = ArrayUpdateData[0];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            return new byte[] { (byte)CursorIndex };
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelSellTerritoryConfirm(Map);
+        }
+
+        public override void Draw(CustomSpriteBatch g)
+        {
+            float Ratio = Constants.Height / 720f;
+            int BoxWidth = (int)(400 * Ratio);
+            int BoxHeight = (int)(134 * Ratio);
+            int BoxX = (Constants.Width - BoxWidth) / 2;
+            int BoxY = Constants.Height - BoxHeight - (int)(74 * Ratio);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeight);
+
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Sell this territory for " + ActiveTerrain.CurrentValue + "?", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 16 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "Yes", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 54 * Ratio)), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "No", new Vector2(BoxX + BoxWidth / 2, (int)(BoxY + 90 * Ratio)), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 150, (int)(BoxY + 54 * Ratio + CursorIndex * 36 * Ratio)));
+        }
+    }
+}

@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                Map.CursorControl(ActiveInputManager);//Move the cursor
+                Map.CursorControl(gameTime, ActiveInputManager);//Move the cursor
             }
 
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));

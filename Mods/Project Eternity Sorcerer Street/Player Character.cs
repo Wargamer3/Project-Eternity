@@ -261,7 +261,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string SpriteShopPath;
         public Texture2D SpriteShop;
         public string Model3DPath;
-        public AnimatedModel Unit3DModel;
+        public AnimatedModelTransparent Unit3DModel;
 
         public string Tags;//Used to categorize Characters
 
@@ -476,11 +476,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     string ModelFolder = Model3DPath.Substring(0, Model3DPath.Length - ArrayModelFolder[ArrayModelFolder.Length - 1].Length);
-                    Unit3DModel = new AnimatedModel("Sorcerer Street/Models/Characters/" + Model3DPath);
-                    Unit3DModel.LoadContent(Content);
+                    Unit3DModel = AnimatedModelTransparent.Load(Content, "Sorcerer Street/Models/Characters/" + Model3DPath);
 
-                    Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Walking", "Walking", Content);
-                    Unit3DModel.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
+                    Unit3DModel.ModelToDraw.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Walking", "Walking", Content);
+                    Unit3DModel.ModelToDraw.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
                     Unit3DModel.DisableLights();
                 }
             }

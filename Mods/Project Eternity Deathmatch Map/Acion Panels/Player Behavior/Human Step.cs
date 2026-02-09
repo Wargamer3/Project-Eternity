@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            bool CursorMoved = Map.CursorControl(ActiveInputManager);
+            bool CursorMoved = Map.CursorControl(gameTime, ActiveInputManager);
             if (CursorMoved)
             {
                 BattlePreview = null;
