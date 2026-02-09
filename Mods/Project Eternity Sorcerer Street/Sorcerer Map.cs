@@ -499,6 +499,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void AddPlayer(Player NewPlayer)
         {
+            if (NewPlayer.TeamIndex >= 0)
+            {
+                if (NewPlayer.Inventory.Character.Character.SpriteMap != null)
+                {
+                    NewPlayer.GamePiece.Unit3DSprite = new Core.Units.UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.Inventory.Character.Character.SpriteMap, 1);
+                }
+                if (NewPlayer.Inventory.Character.Character.Unit3DModel != null)
+                {
+                    NewPlayer.GamePiece.Unit3DModel = NewPlayer.Inventory.Character.Character.Unit3DModel;
+                }
+            }
+
             ListPlayer.Add(NewPlayer);
             ListLocalPlayerInfo.Add(NewPlayer);
         }

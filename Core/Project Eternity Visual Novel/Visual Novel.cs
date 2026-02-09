@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
         }
 
-        private SimpleAnimation LeftCharacter
+        protected SimpleAnimation LeftCharacter
         {
             get
             {
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
         }
 
-        private SimpleAnimation RightCharacter
+        protected SimpleAnimation RightCharacter
         {
             get
             {
@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
         }
 
-        private Dialog.ActiveBustCharacterStates ActiveChar
+        protected Dialog.ActiveBustCharacterStates ActiveChar
         {
             get
             {
@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         #endregion
 
         private SpriteFont fntMultiDialogFont;
-        private SpriteFont fntFinlanderFont;
+        public SpriteFont fntFinlanderFont;
 
         public bool IsPaused = false;
         public bool HasEnded = false;
@@ -108,10 +108,10 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         public string VisualNovelPath;
         private readonly Dictionary<string, CutsceneScript> DicCutsceneScript;
 
-        private Vector2 LeftPosition;
-        private Vector2 RightPosition;
+        protected Vector2 LeftPosition;
+        protected Vector2 RightPosition;
 
-        public const int VNBoxHeight = 128;
+        public static int VNBoxHeight = 128;
 
         private BoxScrollbar ChoicesScrollbar;
 
@@ -1006,7 +1006,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             DrawBox(g, new Vector2(X, Y), Constants.Width, VNBoxHeight, Color.White);
         }
 
-        private void DrawText(CustomSpriteBatch g, Vector2 Position, string Text)
+        protected void DrawText(CustomSpriteBatch g, Vector2 Position, string Text)
         {
             //If there's no linked dialogs.
             if (CurrentDialog.ListNextDialog.Count == 0 || ListDialog[CurrentDialog.ListNextDialog[0]].TextPreview == "")
@@ -1046,7 +1046,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
         }
 
-        private static void DrawCharacter(CustomSpriteBatch g, SimpleAnimation DrawnCharacter, Vector2 Position, SpriteEffects ActiveSpriteEffects, bool IsShadowed)
+        protected static void DrawCharacter(CustomSpriteBatch g, SimpleAnimation DrawnCharacter, Vector2 Position, SpriteEffects ActiveSpriteEffects, bool IsShadowed)
         {
             if (DrawnCharacter.IsAnimated)
             {
