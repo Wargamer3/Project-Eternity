@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        private TerrainSorcererStreet Castle;
 
         private double ItemAnimationTime;
 
@@ -39,7 +40,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddToPanelListAndSelect(new ActionPanelBankruptPopup(Map, ActivePlayerIndex));
             BasicBonus = Map.MagicGainPerLap + Map.MagicGainPerLap / 10 * ActivePlayer.CompletedLaps;
 
             int NumberOfLandPossessed = 0;
@@ -53,6 +53,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.Gold = Total;
             ActivePlayer.ListPassedCheckpoint.Clear();
             Map.UpdateTotalMagic();
+
+            Castle = FindCastle();
+
+            Vector3 FinalPosition = Castle.WorldPosition + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0);
+            FinalPosition = Map.GetFinalPosition(FinalPosition);
+
+            ActivePlayer.GamePiece.SetPosition(FinalPosition);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -74,6 +81,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.EndPlayerPhase();
             }
+        }
+
+        private TerrainSorcererStreet FindCastle()
+        {
+            for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
+            {
+                for (int X = 0; X < Map.MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < Map.MapSize.Y; ++Y)
+                    {
+                        if (Map.TerrainHolder.ListTerrainType[Map.LayerManager.ListLayer[L].ArrayTerrain[X, Y].TerrainTypeIndex] == TerrainSorcererStreet.Castle)
+                        {
+                            return Map.LayerManager.ListLayer[L].ArrayTerrain[X, Y];
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         protected override void OnCancelPanel()
@@ -119,7 +145,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 CurrentY += (int)(20 * Ratio);
 
-                g.DrawStringMiddleAligned(Map.fntMenuText, "Lap #" + ActivePlayer.CompletedLaps + " Bonus", new Vector2(Constants.Width / 2, CurrentY), SorcererStreetMap.TextColor);
+                g.DrawStringMiddleAligned(Map.fntMenuText, "Out of mana, returning to castle", new Vector2(Constants.Width / 2, CurrentY), SorcererStreetMap.TextColor);
                 CurrentY += (int)(20 * Ratio);
 
                 g.DrawString(Map.fntMenuText, "Basic Bonus", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
@@ -142,10 +168,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawString(Map.fntMenuText, "Total", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
                 g.DrawStringRightAligned(Map.fntMenuText, Total + "G", new Vector2((int)(CurrentX + BoxWidth - 60 * Ratio), CurrentY), SorcererStreetMap.TextColor);
                 CurrentY += (int)(60 * Ratio);
-
-                g.DrawString(Map.fntMenuText, ActivePlayer.Name + "'s creatures", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
-                CurrentY += (int)(30 * Ratio);
-                g.DrawString(Map.fntMenuText, "recovered 20% of MHP.", new Vector2(CurrentX, CurrentY), SorcererStreetMap.TextColor);
 
                 MenuHelper.DrawConfirmIcon(g, new Vector2((int)(InfoBoxX + BoxWidth - 40 * Ratio), (int)(InfoBoxY + BoxHeight - 50 * Ratio)));
             }

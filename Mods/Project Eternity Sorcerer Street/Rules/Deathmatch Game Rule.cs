@@ -108,7 +108,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     int SpawnSquadIndex = 0;
                     foreach (Vector3 ActiveSpawn in ListPossibleSpawnPoint)
                     {
-                        ActivePlayer.GamePiece.SetPosition(Owner.GetFinalPosition(new Vector3(ActiveSpawn.X * Owner.TileSize.X, ActiveSpawn.Y * Owner.TileSize.Y, ActiveSpawn.Z)) + new Vector3(Owner.TileSize.X / 2, Owner.TileSize.Y / 2, 0));
+                        TerrainSorcererStreet SpawnTerrain = Owner.GetTerrain(new Vector3(ActiveSpawn.X * Owner.TileSize.X, ActiveSpawn.Y * Owner.TileSize.Y, ActiveSpawn.Z * Owner.LayerHeight));
+                        Vector3 FinalPosition = SpawnTerrain.WorldPosition + new Vector3(Owner.TileSize.X / 2, Owner.TileSize.Y / 2, 0);
+                        ActivePlayer.GamePiece.SetPosition(Owner.GetFinalPosition(FinalPosition));
 
                         ++SpawnSquadIndex;
 

@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             base.OnSelect();
-            AddToPanelListAndSelect(new ActionPanelAllTerritoryAvailalblePopup(Map, ActivePlayerIndex));
+            AddToPanelListAndSelect(new ActionPanelBankruptPopup(Map, ActivePlayerIndex));
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 AddToPanelListAndSelect(new ActionPanelPlayerDefault(Map));
                 Map.ListHighlightedTerrain.Clear();
             }
-            else if (ActivePlayer.ListSummonedCreature.Count < 0)
+            else if (ActivePlayer.ListSummonedCreature.Count <= 0)
             {
                 AddToPanelListAndSelect(new ActionPanelBankruptPhase(Map, ActivePlayerIndex));
                 Map.ListHighlightedTerrain.Clear();

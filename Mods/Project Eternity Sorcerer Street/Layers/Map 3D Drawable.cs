@@ -1106,9 +1106,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
 
                         ActivePlayer.GamePiece.Unit3DSprite.SetPosition(
-                            CurrentPosition.X * Map.TileSize.X,
-                            (CurrentPosition.Z + 0.5f) * Map.LayerHeight,
-                            CurrentPosition.Y * Map.TileSize.Y);
+                            CurrentPosition.X,
+                            CurrentPosition.Z + 0.5f * Map.LayerHeight,
+                            CurrentPosition.Y);
 
                         ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
 
@@ -1167,7 +1167,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             CurrentPosition.Z + 0.5f * Map.LayerHeight,
                             CurrentPosition.Y);
 
-                        ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActivePlayer.GamePiece.CanMove && P == Map.ActivePlayerIndex);
+                        ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
 
                         ActivePlayer.GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                     }

@@ -164,6 +164,7 @@
     <Compile Include="Lobby\Unlocks\Unlockable Card Skin.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Character Skin.cs" />
     <Compile Include="Rules\Campaign Game Rule.cs" />
+    <Compile Include="Sorcerer Street VisualNovel.cs" />
     <Compile Include="Sorcerer Street Text Processor.cs" />
     <Compile Include="Lobby\Bot.cs" />
     <Compile Include="Lobby\Unlocks\Sorcerer Street Unlock Inventory.cs" />

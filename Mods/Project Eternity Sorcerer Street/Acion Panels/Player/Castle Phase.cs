@@ -43,7 +43,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddToPanelListAndSelect(new ActionPanelAllTerritoryAvailalblePopup(Map, ActivePlayerIndex));
             ++ActivePlayer.CompletedLaps;
 
             BasicBonus = Map.MagicGainPerLap + Map.MagicGainPerLap / 10 * ActivePlayer.CompletedLaps;
@@ -97,6 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (MovementRemaining <= 0)
                 {
                     AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
+                    AddToPanelListAndSelect(new ActionPanelAllTerritoryAvailalblePopup(Map, ActivePlayerIndex));
                 }
             }
 
@@ -107,6 +107,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (MovementRemaining <= 0)
                 {
                     AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex, true));
+                    AddToPanelListAndSelect(new ActionPanelAllTerritoryAvailalblePopup(Map, ActivePlayerIndex));
                 }
             }
         }
