@@ -36,26 +36,32 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             int TotalDamage = 0;
             int TotalEnemyDamage = 0;
 
+            TerrainConquest SquadTerrain = Map.GetTerrain(EnemyUnit.Components);
+
             if (AttackIndex == 1)
             {
-                TotalDamage = Map.GetAttackDamageWithWeapon1(ActiveUnit, EnemyUnit, ActiveUnit.HP);
+                TotalDamage = Map.GetFinalDamage(ActiveUnit.HP, EnemyUnit.HP, Map.DicUnitDamageWeapon1[ActiveUnit.ArmourType][EnemyUnit.ArmourType], SquadTerrain);
+                //TotalDamage = Map.GetAttackDamageWithWeapon1(ActiveUnit, EnemyUnit, ActiveUnit.HP);
             }
             else if (AttackIndex == 2)
             {
-                TotalDamage = Map.GetAttackDamageWithWeapon2(ActiveUnit, EnemyUnit, ActiveUnit.HP);
+                TotalDamage = Map.GetFinalDamage(ActiveUnit.HP, EnemyUnit.HP, Map.DicUnitDamageWeapon2[ActiveUnit.ArmourType][EnemyUnit.ArmourType], SquadTerrain);
+                //TotalDamage = Map.GetAttackDamageWithWeapon2(ActiveUnit, EnemyUnit, ActiveUnit.HP);
             }
 
             List<Tuple<int, int>> ListSquadFoundEnemy = Map.CanSquadAttackWeapon1((int)EnemyUnit.X, (int)EnemyUnit.Y, ListSquadFound[0].Item1, EnemyUnit.ArmourType, EnemyUnit.ListAttack[0]);
             if (ListSquadFoundEnemy != null && ListSquadFoundEnemy.Count > 0 && ListSquadFoundEnemy.Contains(new Tuple<int, int>(Map.ActivePlayerIndex, Map.ListPlayer[Map.ActivePlayerIndex].ListUnit.IndexOf(ActiveUnit))))
             {
-                TotalEnemyDamage = Map.GetAttackDamageWithWeapon1(EnemyUnit, ActiveUnit, EnemyUnit.HP - TotalDamage);
+                TotalEnemyDamage = Map.GetFinalDamage(EnemyUnit.HP - TotalDamage, ActiveUnit.HP, Map.DicUnitDamageWeapon1[ActiveUnit.ArmourType][EnemyUnit.ArmourType], SquadTerrain);
+                //TotalEnemyDamage = Map.GetAttackDamageWithWeapon1(EnemyUnit, ActiveUnit, EnemyUnit.HP - TotalDamage);
             }
             else if (ListSquadFoundEnemy == null || ListSquadFoundEnemy.Count == 0)
             {
                 ListSquadFoundEnemy = Map.CanSquadAttackWeapon2((int)EnemyUnit.X, (int)EnemyUnit.Y, ListSquadFound[0].Item1, EnemyUnit.ArmourType, EnemyUnit.ListAttack[1]);
                 if (ListSquadFoundEnemy != null && ListSquadFoundEnemy.Count > 0 && ListSquadFoundEnemy.Contains(new Tuple<int, int>(Map.ActivePlayerIndex, Map.ListPlayer[Map.ActivePlayerIndex].ListUnit.IndexOf(ActiveUnit))))
                 {
-                    TotalEnemyDamage = Map.GetAttackDamageWithWeapon2(EnemyUnit, ActiveUnit, EnemyUnit.HP - TotalDamage);
+                    TotalEnemyDamage = Map.GetFinalDamage(EnemyUnit.HP - TotalDamage, ActiveUnit.HP, Map.DicUnitDamageWeapon2[ActiveUnit.ArmourType][EnemyUnit.ArmourType], SquadTerrain);
+                    //TotalEnemyDamage = Map.GetAttackDamageWithWeapon2(EnemyUnit, ActiveUnit, EnemyUnit.HP - TotalDamage);
                 }
             }
 

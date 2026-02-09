@@ -796,7 +796,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public byte GetPostMovementLevel()
+        public virtual byte GetPostMovementLevel()
         {
             return (byte)((_UnitStat.PostMVLevel + Pilot.PostMVLevel) / 2);
         }

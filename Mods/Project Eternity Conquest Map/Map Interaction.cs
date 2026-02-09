@@ -13,12 +13,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// Move the cursor on the map.
         /// </summary>
         /// <returns>Returns true if the cursor was moved</returns>
-        public override bool CursorControl(PlayerInput ActiveInputManager)
+        public override bool CursorControl(GameTime gameTime, PlayerInput ActiveInputManager)
         {
             Point GridOffset;
             BattleMap ActiveMap;
 
-            bool CursorMoved = CursorControlGrid(ActiveInputManager, out GridOffset, out ActiveMap);
+            bool CursorMoved = CursorControlGrid(gameTime, ActiveInputManager, out GridOffset, out ActiveMap);
 
             if (CursorMoved)
             {

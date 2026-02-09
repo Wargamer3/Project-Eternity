@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                bool CursorMoved = Map.CursorControl(ActiveInputManager);
+                bool CursorMoved = Map.CursorControl(gameTime, ActiveInputManager);
                 if (CursorMoved)
                 {
                     ListAttackDirectionHelper = PERAttack.PredictAttackMovement(Map, ActiveUnit.Position + new Vector3(0.5f, 0.5f, 0.5f), Map.CursorPosition + new Vector3(0.5f, 0.5f, 0.5f));

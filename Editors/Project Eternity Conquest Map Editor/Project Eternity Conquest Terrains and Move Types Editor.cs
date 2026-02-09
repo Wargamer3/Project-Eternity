@@ -99,7 +99,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             AllowEvent = false;
 
             txtTerrainName.Text = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].TerrainName.ToString();
-            TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue = (byte)txtTerrainDefenceValue.Value;
+            txtTerrainDefenceValue.Value = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue;
 
             UpdateGridView();
 
@@ -130,7 +130,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
             AllowEvent = false;
 
-            txtTerrainDefenceValue.Value = TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue;
+            TerrainHolder.ListConquestTerrainType[lsTerrains.SelectedIndex].DefenceValue = (byte)txtTerrainDefenceValue.Value;
 
             AllowEvent = true;
         }

@@ -44,7 +44,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 ActiveBuilding.CurrentHP = Math.Max(0, ActiveBuilding.CurrentHP - ActiveUnit.HP);
                 if (ActiveBuilding.CurrentHP == 0)
+                {
                     ActiveBuilding.CapturedTeamIndex = Map.ActivePlayerIndex;
+                    string RootPathBuilding = ActiveBuilding.RelativePath.Split('/', '\\')[0];
+                    string RootPathUnit = ActiveUnit.RelativePath.Split('/', '\\')[0];
+                    string NewBuildingPath = RootPathUnit + "/" + ActiveBuilding.RelativePath.Substring(RootPathBuilding.Length + 1);
+                    var NewBuilding = new BuildingConquest(NewBuildingPath, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
+                    NewBuilding.CapturedTeamIndex = Map.ActivePlayerIndex;
+
+                    Map.ListBuilding.RemoveAt(ActiveBuildingIndex);
+                    Map.SpawnBuilding(ActivePlayerIndex, NewBuilding, 0, ActiveBuilding.Position - new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0));
+                }
             }
 
             RemoveAllSubActionPanels();

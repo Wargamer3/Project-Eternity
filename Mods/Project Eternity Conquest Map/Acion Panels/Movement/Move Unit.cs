@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
             Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
 
-            if (Map.CursorControl(ActiveInputManager))
+            if (Map.CursorControl(gameTime, ActiveInputManager))
             {
                 foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ListTeleportPoint)
                 {

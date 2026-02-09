@@ -45,11 +45,11 @@ namespace ProjectEternity.Core.Units.Conquest
 
         public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
         {
-            if (Unit.HP < 91)
+            if (Unit.HP < 10)
             {
-                int VisibleHP = (int)Math.Ceiling(Unit.HP / 10d);
-                g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)Position.X + Width - 15, (int)Position.Y + Height - 15, 15, 15), Color.Black);
-                g.DrawStringMiddleAligned(fntHPNumber, VisibleHP.ToString(), new Vector2(Position.X + Width - 9, Position.Y + Height - 15), Color.White);
+                int VisibleHP = Unit.HP;
+                g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)Position.X, (int)Position.Y, 15, 15), Color.Black);
+                g.DrawStringMiddleAligned(fntHPNumber, VisibleHP.ToString(), new Vector2(Position.X + 9, Position.Y), Color.White);
             }
         }
 
@@ -96,10 +96,13 @@ namespace ProjectEternity.Core.Units.Conquest
         public Vector3 Position { get { return MapComponents.Position; } }
 
         public uint SpawnID { get { return MapComponents.ID; } set { MapComponents.ID = value; } }
-        
+
         public bool CanMove { get { return MapComponents.CanMove; } }
 
         public byte CurrentMovement { get { return MapComponents.CurrentTerrainIndex; } set { MapComponents.CurrentTerrainIndex = value; } }
+
+        public bool IsPlayerControlled { get; set; }
+        public bool IsEventSquad { get; set; }
 
         public UnitConquest()
             : base()
@@ -234,6 +237,11 @@ namespace ProjectEternity.Core.Units.Conquest
             MapComponents.EndTurn();
         }
 
+        public override byte GetPostMovementLevel()
+        {
+            return (byte)_UnitStat.PostMVLevel;
+        }
+
         public bool IsUnitAtPosition(Vector3 PositionToCheck, Point TerrainSize)
         {
             return UnitStat.IsUnitAtPosition(Position, PositionToCheck, TerrainSize);
@@ -263,9 +271,6 @@ namespace ProjectEternity.Core.Units.Conquest
         {
             get { return MapComponents; }
         }
-
-        public bool IsPlayerControlled { get; set; }
-        public bool IsEventSquad { get; set; }
 
         public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {

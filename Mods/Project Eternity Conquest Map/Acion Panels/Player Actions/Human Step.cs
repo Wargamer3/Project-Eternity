@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.CursorControl(ActiveInputManager);
+            Map.CursorControl(gameTime, ActiveInputManager);
             if (ActiveInputManager.InputConfirmPressed())
             {
                 UnitConquest ActiveUnit = null;

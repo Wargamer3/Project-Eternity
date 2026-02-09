@@ -143,12 +143,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return CanSquadAttackWeapon(PosX, PosY, ActivePlayerIndex, UnitName, ActiveWeapon, DicUnitDamageWeapon1);
         }
 
-        public List<Tuple<int, int>> CanSquadAttackWeapon2(int PosX, int PosY, int ActivePlayerIndex, string UnitName, Attack ActiveWeapon)
+        public List<Tuple<int, int>> CanSquadAttackWeapon2(int WorldPositionX, int WorldPositionY, int ActivePlayerIndex, string UnitName, Attack ActiveWeapon)
         {
-            return CanSquadAttackWeapon(PosX, PosY, ActivePlayerIndex, UnitName, ActiveWeapon, DicUnitDamageWeapon2);
+            return CanSquadAttackWeapon(WorldPositionX, WorldPositionY, ActivePlayerIndex, UnitName, ActiveWeapon, DicUnitDamageWeapon2);
         }
 
-        public List<Tuple<int, int>> CanSquadAttackWeapon(int PosX, int PosY, int ActivePlayerIndex, string UnitName, Attack ActiveWeapon, Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon)
+        public List<Tuple<int, int>> CanSquadAttackWeapon(int WorldPositionX, int WorldPositionY, int ActivePlayerIndex, string UnitName, Attack ActiveWeapon, Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon)
         {
             if (ActiveWeapon.RelativePath == "" || !DicUnitDamageWeapon.ContainsKey(UnitName))
                 return new List<Tuple<int, int>>();
@@ -164,16 +164,40 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 for (int TargetSelect = 0; TargetSelect < ListPlayer[P].ListUnit.Count; TargetSelect++)
                 {
                     //Calculate is the Target is in attack range.
-                    Distance = Math.Abs(PosX - ListPlayer[P].ListUnit[TargetSelect].X) + Math.Abs(PosY - ListPlayer[P].ListUnit[TargetSelect].Y);
+                    Distance = Math.Abs(WorldPositionX - ListPlayer[P].ListUnit[TargetSelect].X) / TileSize.X + Math.Abs(WorldPositionY - ListPlayer[P].ListUnit[TargetSelect].Y) / TileSize.Y;
                     if (Distance >= ActiveWeapon.RangeMinimum && Distance <= ActiveWeapon.RangeMaximum)
                     {
-                        if (DicUnitDamageWeapon[UnitName].ContainsKey(ListPlayer[P].ListUnit[TargetSelect].ArmourType))
+                        if (DicUnitDamageWeapon[UnitName].ContainsKey(ListPlayer[P].ListUnit[TargetSelect].ArmourType) && DicUnitDamageWeapon[UnitName][ListPlayer[P].ListUnit[TargetSelect].ArmourType] > 0)
                             ListSquadFound.Add(new Tuple<int, int>(P, TargetSelect));
                     }
                 }
             }
 
             return ListSquadFound;
+        }
+
+        public int GetFinalDamage(int AttackerHP, int DefenderHP, int Damage, TerrainConquest DefenderTerrain)
+        {
+            float CO_Attack = 100;
+            float CO_GoodLuck = 5;
+            float CO_BadLuck = 5;
+            float CO_Defense = 100;
+            ConquestTerrainTypeAttributes CurrentTerrainType = TerrainHolder.ListConquestTerrainType[DefenderTerrain.TerrainTypeIndex];
+
+            float TotalDamage = (Damage * CO_Attack) / 100;
+            TotalDamage = TotalDamage + CO_GoodLuck + CO_BadLuck;
+
+            float ATK = AttackerHP / 10f;
+
+            float DEF = 200 - (CurrentTerrainType.DefenceValue * DefenderHP + CO_Defense);
+            DEF = DEF / 100f;
+
+            TotalDamage = TotalDamage * ATK * DEF;
+            TotalDamage /= 10f;
+
+            int FinalDamage = (int)Math.Floor(Math.Ceiling(TotalDamage / 0.05) * 0.05);
+
+            return FinalDamage;
         }
 
         public int GetAttackDamageWithWeapon(UnitConquest Attacker, UnitConquest Defender, int AttackerHP)
@@ -214,6 +238,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             float TotalDamage = (AttackerHP / 10f) * AttackValue * DefenseValue;
             return (int)Math.Floor(TotalDamage);
         }
+
         public int GetAttackDamageWithWeapon1(UnitConquest Attacker, UnitConquest Defender, int AttackerHP)
         {
             int ActualHP = (int)Math.Ceiling(AttackerHP / 10d);

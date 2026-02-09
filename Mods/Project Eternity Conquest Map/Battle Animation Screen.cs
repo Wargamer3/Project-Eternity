@@ -56,10 +56,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             BackgroundRight = Content.Load<Texture2D>("Animations/Background Sprites/AW/Countryside road");
             BackgroundLeft = Content.Load<Texture2D>("Animations/Background Sprites/AW/Countryside road");
 
-            int ActiveUnitHP = (int)Math.Ceiling(ActiveUnit.HP / 10d);
-            int ActiveUnitHPAfterDamage = (int)Math.Ceiling((ActiveUnit.HP - DamageTakenSelf) / 10d);
-            int EnemyUnitHP = (int)Math.Ceiling(EnemyUnit.HP / 10d);
-            int EnemyUnitHPAfterDamage = (int)Math.Ceiling((EnemyUnit.HP - DamageTakenEnemy) / 10d);
+            int ActiveUnitHP = ActiveUnit.HP;
+            int ActiveUnitHPAfterDamage = ActiveUnit.HP - DamageTakenSelf;
+            int EnemyUnitHP = EnemyUnit.HP;
+            int EnemyUnitHPAfterDamage = EnemyUnit.HP - DamageTakenEnemy;
 
             ActiveUnitAnimation = new AnimationScreen("Conquest/" + ActiveUnit.ArmourType + "/Attack by HP/" + ActiveUnitHP + " HP", ActiveUnit, ActiveTerrain, HorizontalMirror);
             ActiveUnitAnimation.Load();

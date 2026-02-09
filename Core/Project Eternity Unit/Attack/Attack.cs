@@ -99,6 +99,7 @@ namespace ProjectEternity.Core.Attacks
             ListChargedAttack = new List<Attack>();
             ListSecondaryAttack = new List<Attack>();
             Visibility = string.Empty;
+            ArrayAttackAttributes = new BaseAutomaticSkill[0];
         }
 
         public Attack(string Name, string Description, int Price, string PowerFormula, byte RangeMin, byte RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,

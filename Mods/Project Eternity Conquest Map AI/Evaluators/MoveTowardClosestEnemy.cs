@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
@@ -75,11 +74,11 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     if (DistanceMax < Math.Abs(Info.ActiveUnit.X - TargetSquad.X) + Math.Abs(Info.ActiveUnit.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
-                        Info.Map.CursorPosition.X = ListMVTile[FinalMV].GridPosition.X;
-                        Info.Map.CursorPosition.Y = ListMVTile[FinalMV].GridPosition.Y;
+                        Info.Map.CursorPosition.X = ListMVTile[FinalMV].WorldPosition.X;
+                        Info.Map.CursorPosition.Y = ListMVTile[FinalMV].WorldPosition.Y;
                         Info.Map.CursorPositionVisible = ListMVPoints[FinalMV];
                         //Move the Unit to the target position;
-                        Info.ActiveUnit.SetPosition(ListMVPoints[FinalMV]);
+                        Info.ActiveUnit.SetPosition(ListMVPoints[FinalMV] - new Vector3(Info.Map.TileSize.X / 2, Info.Map.TileSize.Y / 2, 0));
                         Info.Map.FinalizeMovement(Info.ActiveUnit, (int)Info.Map.GetTerrain(Info.ActiveUnit.Components).MovementCost, new List<Vector3>());
                     }
                     else

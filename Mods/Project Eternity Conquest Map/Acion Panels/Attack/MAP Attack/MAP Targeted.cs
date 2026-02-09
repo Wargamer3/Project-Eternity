@@ -218,7 +218,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                if (Map.CursorControl(ActiveInputManager))
+                if (Map.CursorControl(gameTime, ActiveInputManager))
                 {
                     UpdateExplosionPositions();
                 }

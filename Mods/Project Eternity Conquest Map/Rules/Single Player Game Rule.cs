@@ -91,7 +91,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                                 NewUnit.ReloadSkills(Owner.Params.DicUnitType[NewUnit.UnitTypeName], Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                                 Owner.SpawnUnit(PlayerIndex, NewUnit, 0, new Vector3(ActiveLayer.ListUnitSpawn[S].SpawnPositionX * Owner.TileSize.X, ActiveLayer.ListUnitSpawn[S].SpawnPositionY * Owner.TileSize.Y, ActiveLayer.ListUnitSpawn[S].SpawnLayer));
 
-                                if (!ActivePlayer.IsPlayerControlled || !NewUnit.IsPlayerControlled)
+                                NewUnit.Components.IsOnGround = true;
+
+                                if (!ActivePlayer.IsPlayerControlled)
                                 {
                                     InitBot(NewUnit);
                                 }
@@ -156,9 +158,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         protected virtual void InitBot(UnitConquest NewSquad)
         {
-            return;
             NewSquad.SquadAI = new ConquestScripAIContainer(new ConquestAIInfo(Owner, NewSquad));
-            NewSquad.SquadAI.Load("Default AI");
+            NewSquad.SquadAI.Load("Conquest/Default AI");
         }
 
         public int GetRemainingResapwn(int PlayerIndex)

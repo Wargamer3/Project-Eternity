@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 float PosX = ActiveSquad.X - CameraPosition.X;
                 float PosY = ActiveSquad.Y - CameraPosition.Y;
 
-                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
+                if (!ActiveSquad.IsOnGround)
                 {
                     g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
                     PosY -= 7;

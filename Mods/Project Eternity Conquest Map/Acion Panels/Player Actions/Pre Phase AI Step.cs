@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 if (ActiveUnit.X < Map.Camera2DPosition.X || ActiveUnit.Y < Map.Camera2DPosition.Y ||
                     ActiveUnit.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || ActiveUnit.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
-                    Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, ActiveUnit.Position));
+                    Map.PushScreen(new CenterOnSquadCutscene(null, Map, ActiveUnit.Position));
                 }
 
                 Map.TargetSquadIndex = -1;
