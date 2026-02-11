@@ -519,7 +519,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
                         ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
 
-                        ActionPanelBattleAttackPhase.ProcessAttack(FirstAttacker, SecondAttacker);
+                        ActionPanelBattleAttackPhase.ComputeDamage(FirstAttacker, SecondAttacker);
                         if (SecondAttacker.DamageReceived > 0)
                         {
                             ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, FirstAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
@@ -594,7 +594,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     }
                                     else
                                     {
-                                        ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
+                                        ActionPanelBattleAttackPhase.ComputeDamage(SecondAttacker, FirstAttacker);
                                         if (FirstAttacker.DamageReceived > 0)
                                         {
                                             ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
@@ -604,7 +604,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                 }
                                 else if (PhasesChoice == PhasesChoices.InvaderAttackPhase2)
                                 {
-                                    ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
+                                    ActionPanelBattleAttackPhase.ComputeDamage(SecondAttacker, FirstAttacker);
                                     if (FirstAttacker.DamageReceived > 0)
                                     {
                                         ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.SelfCreature, ActionPanelBattleAttackPhase.AttackBonusRequirement);
@@ -633,7 +633,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             }
                             else
                             {
-                                if (Context.SelfCreature.Creature.CurrentHP <= 0)
+                                if (Context.InvaderCreature.Creature.CurrentHP <= 0)
                                 {
                                     ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.UponVictoryRequirement);
                                 }

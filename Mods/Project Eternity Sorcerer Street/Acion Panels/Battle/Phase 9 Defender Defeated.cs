@@ -27,6 +27,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayer = Map.ListPlayer[Map.ActivePlayerIndex];
 
+            Map.GlobalSorcererStreetBattleContext.SetCreatures(Map.GlobalSorcererStreetBattleContext.InvaderCreature, Map.GlobalSorcererStreetBattleContext.DefenderCreature);
+
             if (Map.GlobalSorcererStreetBattleContext.SelfCreature.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.SelfCreature.Item);
@@ -48,6 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             KillCreature(Map, ActiveTerrain);
 
             Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.ListSummonedCreature.Add(ActiveTerrain);
+            Map.ListSummonedCreature.Add(ActiveTerrain);
 
             ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.SelfCreature.Creature;
             ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner;

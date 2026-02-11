@@ -48,11 +48,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxHeight = 70;
+            float Ratio = Constants.Height / 720f;
+            int BoxWidth = (int)(353 * Ratio);
+            int BoxHeight = (int)(40 * Ratio);
+            int X = (int)(93 * Ratio);
+            int Y = (int)(300 * Ratio);
+
             base.Draw(g);
             ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer);
-            GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
-            g.DrawStringCentered(Map.fntMenuText, "Discard a card", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
+            MenuHelper.DrawBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
+            g.DrawStringCentered(Map.fntMenuText, "Discard a card", new Vector2(X + BoxWidth / 2, Y + BoxHeight / 2), Color.White);
         }
     }
 }

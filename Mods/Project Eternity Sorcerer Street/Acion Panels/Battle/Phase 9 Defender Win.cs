@@ -92,14 +92,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringMiddleAligned(Map.fntMenuText, "Toll", new Vector2(Constants.Width / 2, Y), Color.White);
             Y = Constants.Height - Constants.Height / 5;
             Y += 20;
-            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.SelfCreature.Owner.Name, new Vector2(Constants.Width / 2 - 120, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, Map.GlobalSorcererStreetBattleContext.OpponentCreature.Owner.Name, new Vector2(Constants.Width / 2 + 120, Y), Color.White);
             Y += 40;
-            g.DrawStringMiddleAligned(Map.fntMenuText, "-" + TollPaid, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntMenuText, "+" + TollPaid, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "-" + TollPaid, new Vector2(Constants.Width / 2 - 120, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntMenuText, "+" + TollPaid, new Vector2(Constants.Width / 2 + 120, Y), Color.White);
             Y += 10;
             MenuHelper.DrawRightArrow(g);
-            MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 4 + Constants.Width / 2 - 40, Y - 20));
+            MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 4 + Constants.Width / 2 - 90, Y - 40));
         }
     }
 }

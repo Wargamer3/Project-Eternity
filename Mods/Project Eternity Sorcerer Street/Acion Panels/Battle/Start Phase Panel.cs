@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Player ActivePlayer;
         protected CreatureCard Invader;
         private static AnimationScreen InvaderAnimation;
-        BattleContent BattleAssets;
+        private BattleContent BattleAssets;
 
         public ActionPanelBattleStartPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -40,6 +40,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Ensure something will look off if the Invader.Animation is not properly disposed at the end of a battle
             if (Map.GlobalSorcererStreetBattleContext.SelfCreature == null)
             {
+                Map.GlobalSorcererStreetBattleContext.Reset();
+                Map.GlobalSorcererStreetBattleContext.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;
                 SorcererStreetBattleContext.BattleCreatureInfo InvaderCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
                 SorcererStreetBattleContext.BattleCreatureInfo DefenderCreature = new SorcererStreetBattleContext.BattleCreatureInfo();
 
@@ -121,7 +123,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
-                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(Map, ActivePlayerIndex));
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(Map, ActivePlayerIndex, BattleAssets));
             }
         }
 

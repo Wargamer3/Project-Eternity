@@ -9,13 +9,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleLandModifierPhase";
 
+        private readonly BattleContent BattleAssets;
+
         private bool HasDefenderTerrainBonus;
         private int InvaderSTBonus;
         private int DefenderSTBonus;
 
-        public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map)
+        public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map, BattleContent BattleAssets)
             : base(Map, PanelName)
         {
+            this.BattleAssets = BattleAssets;
         }
 
         public override void OnSelect()
@@ -132,7 +135,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleCreatureModifierPhase(Map));
+            AddToPanelListAndSelect(new ActionPanelBattleCreatureModifierPhase(Map, BattleAssets));
         }
 
         protected override void OnCancelPanel()
@@ -153,7 +156,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelBattleLandModifierPhase(Map);
+            return new ActionPanelBattleLandModifierPhase(Map, BattleAssets);
         }
     }
 }

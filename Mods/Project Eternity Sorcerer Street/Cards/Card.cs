@@ -157,13 +157,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ScrollCriticalHit = Other.ScrollCriticalHit;
             ScrollValue = Other.ScrollValue;
 
-            ListNeutralizeType = new List<AttackTypes>();
-            NeutralizeSignOperator = NumberTypes.Relative;
-            NeutralizeValue = null;
+            ListNeutralizeType = new List<AttackTypes>(Other.ListNeutralizeType.Count);
+            foreach (AttackTypes ActiveType in Other.ListNeutralizeType)
+            {
+                ListNeutralizeType.Add(ActiveType);
+            }
+            NeutralizeSignOperator = Other.NeutralizeSignOperator;
+            NeutralizeValue = Other.NeutralizeValue;
 
-            ListReflectType = new List<AttackTypes>();
-            ReflectSignOperator = NumberTypes.Relative;
-            ReflectValue = null;
+            ListReflectType = new List<AttackTypes>(Other.ListReflectType.Count);
+            foreach (AttackTypes ActiveType in Other.ListReflectType)
+            {
+                ListReflectType.Add(ActiveType);
+            }
+            ReflectSignOperator = Other.ReflectSignOperator;
+            ReflectValue = Other.ReflectValue;
         }
     }
 
@@ -668,6 +676,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public virtual ActionPanelSorcererStreet ActivateInBattle(SorcererStreetMap Map, int ActivePlayerIndex)
         {
             return null;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

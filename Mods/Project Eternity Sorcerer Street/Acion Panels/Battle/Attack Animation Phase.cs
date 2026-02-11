@@ -89,11 +89,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
-            if (Map.GlobalSorcererStreetBattleContext.SelfCreature != null)
+            if (Map.GlobalSorcererStreetBattleContext.SelfCreature != null && !Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.HasEnded)
             {
                 Map.GlobalSorcererStreetBattleContext.SelfCreature.Animation.Update(gameTime);
             }
-            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature != null)
+            if (Map.GlobalSorcererStreetBattleContext.OpponentCreature != null && !Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.HasEnded)
             {
                 Map.GlobalSorcererStreetBattleContext.OpponentCreature.Animation.Update(gameTime);
             }

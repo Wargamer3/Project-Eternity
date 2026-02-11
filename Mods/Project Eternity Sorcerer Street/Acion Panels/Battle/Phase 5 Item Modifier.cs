@@ -25,10 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static string ActivePhase;
         public static List<SkillActivationContext> ListSkillActivation;
 
-        public ActionPanelBattleItemModifierPhase(SorcererStreetMap Map)
+        private BattleContent BattleAssets;
+
+        public ActionPanelBattleItemModifierPhase(SorcererStreetMap Map, BattleContent BattleAssets)
             : base(Map, PanelName)
         {
-            this.Map = Map;
+            this.BattleAssets = BattleAssets;
 
             ItemAnimationTime = 0;
         }
@@ -106,6 +108,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             return false;
         }
+
         public static void StartAnimation(bool InvaderSide, List<SkillActivationContext> ListSkillActivation)
         {
             ActionPanelBattleItemModifierPhase.ListSkillActivation = ListSkillActivation;
@@ -195,7 +198,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     AnimationPhase = AnimationPhases.InvaderActivation;
                 }
             }
-            if (AnimationPhase == AnimationPhases.DefenderIntro)
+            else if (AnimationPhase == AnimationPhases.DefenderIntro)
             {
                 if (ItemAnimationTime > 2.5)
                 {
@@ -271,7 +274,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleBoostsModifierPhase(Map));
+            AddToPanelListAndSelect(new ActionPanelBattleBoostsModifierPhase(Map, BattleAssets));
         }
 
         protected override void OnCancelPanel()
@@ -293,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelBattleItemModifierPhase(Map);
+            return new ActionPanelBattleItemModifierPhase(Map, BattleAssets);
         }
 
         public override void Draw(CustomSpriteBatch g)

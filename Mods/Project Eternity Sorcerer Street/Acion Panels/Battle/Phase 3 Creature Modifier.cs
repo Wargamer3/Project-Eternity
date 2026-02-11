@@ -15,9 +15,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static List<SkillActivationContext> ListSkillActivation;
 
-        public ActionPanelBattleCreatureModifierPhase(SorcererStreetMap Map)
+        private BattleContent BattleAssets;
+
+        public ActionPanelBattleCreatureModifierPhase(SorcererStreetMap Map, BattleContent BattleAssets)
             : base(Map, PanelName)
         {
+            this.BattleAssets = BattleAssets;
         }
 
         public override void OnSelect()
@@ -42,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleEnchantModifierPhase(Map));
+            AddToPanelListAndSelect(new ActionPanelBattleEnchantModifierPhase(Map, BattleAssets));
         }
 
         protected override void OnCancelPanel()
@@ -61,7 +64,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelBattleCreatureModifierPhase(Map);
+            return new ActionPanelBattleCreatureModifierPhase(Map, BattleAssets);
         }
     }
 }

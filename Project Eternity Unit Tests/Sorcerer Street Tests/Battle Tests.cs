@@ -67,21 +67,16 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.OnSelect();
 
-            ActionPanelBattleAttackPhase BattleAttackPhase = new ActionPanelBattleAttackPhase(DummyMap);
+            ActionPanelBattleAttackPhase BattleAttackPhase = new ActionPanelBattleAttackPhase(DummyMap, null);
             BattleAttackPhase.OnSelect();
 
             Assert.AreEqual(DummyInvaderCard, BattleAttackPhase.FirstAttacker);
             Assert.AreEqual(DummyDefenderCard, BattleAttackPhase.SecondAttacker);
 
-            BattleAttackPhase.ProcessAttack();
 
             Assert.AreEqual(40, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
             Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);
 
-            ActionPanelFirstCounterAttackPhase BattleCounterPhase = new ActionPanelFirstCounterAttackPhase(DummyMap);
-            BattleAttackPhase.OnSelect();
-
-            BattleCounterPhase.ProcessAttack();
 
             Assert.AreEqual(20, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
             Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);

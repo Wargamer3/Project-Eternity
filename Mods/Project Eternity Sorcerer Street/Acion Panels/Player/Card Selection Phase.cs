@@ -407,7 +407,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     DrawCardMiniature(g, Map.sprEndTurn, Color.White, ActionMenuCursor == ActivePlayer.ListCardInHand.Count, 6 * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.05f);
                 }
 
-                MenuHelper.DrawFingerIcon(g, new Vector2(DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor, Constants.Height - Constants.Height / 6));
+                int CursorPositionX = DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor;
+                if (ActionMenuCursor == ActivePlayer.ListCardInHand.Count)
+                {
+                    CursorPositionX = DistanceBetweenCard / 2 + DistanceBetweenCard * 6;
+                }
+
+                MenuHelper.DrawFingerIcon(g, new Vector2(CursorPositionX, Constants.Height - Constants.Height / 6));
             }
         }
 

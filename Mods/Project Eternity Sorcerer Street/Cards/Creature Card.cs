@@ -262,7 +262,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void InitBattleBonuses()
         {
-            BattleAbilities = new CardAbilities(Abilities);
+            BattleAbilities = new CardAbilities(EnchantAbilities);
         }
 
         public CardAbilities GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases EffectActivationPhase)
@@ -279,7 +279,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (BattleAbilities == null)
                 {
-                    BattleAbilities = new CardAbilities(Abilities);
+                    BattleAbilities = new CardAbilities(EnchantAbilities);
                 }
                 return BattleAbilities;
             }

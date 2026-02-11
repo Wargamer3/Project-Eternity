@@ -200,7 +200,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListGains.Add(NewGains);
                 }
 
-                Owner.PushScreen(new LobbyVictoryScreen(Owner, null));
+                Owner.PushScreen(new LobbyVictoryScreen(Owner, ListGains));
                 Owner.RemoveScreen(Owner);
             }
         }
