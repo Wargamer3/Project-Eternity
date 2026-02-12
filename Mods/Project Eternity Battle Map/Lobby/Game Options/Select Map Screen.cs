@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -11,11 +12,12 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class GameOptionsSelectMapScreen : GameScreen
+    public class GameOptionsSelectMapScreen : GameScreen
     {
         private class MapCache
         {
             public readonly string GameMode;
+            public static ContentManager Content;
 
             public Dictionary<string, MapInfo> DicMapInfoByPath;
 
@@ -53,7 +55,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
                             FileName = FileName.Substring(0, FileName.Length - 4);
 
-                            DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapFolder, FilePath));
+                            MapInfo NewMapInfo = MapInfo.MapInfoTemplate.Clone(FileName, MapFolder, FilePath);
+
+                            DicMapInfoByPath.Add(FilePath, NewMapInfo);
                         }
                     }
                 }
@@ -121,8 +125,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private class MapInfo
+        public class MapInfo
         {
+            public static MapInfo MapInfoTemplate;
+
             public bool IsLoaded;
             public readonly string MapName;
             public readonly string MapModName;
@@ -138,11 +144,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public GameModeInfo GameInfo;
             public List<string> ListMandatoryMutator;
 
-            public MapInfo(string MapName, string MapModName, string MapPath)
+            public MapInfo()
             {
-                this.MapName = MapName;
-                this.MapModName = MapModName;
-                this.MapPath = MapPath;
+                MapName = string.Empty;
+                MapModName = string.Empty;
+                MapPath = string.Empty;
+                MapImage = null;
                 MapSize = Point.Zero;
                 ListMapTeam = new List<Color>();
                 MinNumberOfPlayer = 0;
@@ -151,8 +158,81 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 MapDescription = string.Empty;
                 ListMandatoryMutator = new List<string>();
                 GameInfo = null;
-                MapImage = null;
                 IsLoaded = false;
+            }
+
+            protected MapInfo(string MapName, string MapModName, string MapPath)
+            {
+                this.MapName = MapName;
+                this.MapModName = MapModName;
+                this.MapPath = MapPath;
+                this.MapImage = null;
+                MapSize = Point.Zero;
+                ListMapTeam = new List<Color>();
+                MinNumberOfPlayer = 0;
+                MaxNumberOfPlayer = 0;
+                MaxSquadPerPlayer = 0;
+                MapDescription = string.Empty;
+                ListMandatoryMutator = new List<string>();
+                GameInfo = null;
+                IsLoaded = false;
+            }
+
+            public virtual void ReadInfo(BinaryReader BR, string GameMode)
+            {
+
+                OrderNumber = BR.ReadUInt32();
+
+                MapSize.X = BR.ReadInt32();
+                MapSize.Y = BR.ReadInt32();
+
+                MinNumberOfPlayer = BR.ReadByte();
+                MaxNumberOfPlayer = BR.ReadByte();
+                MaxSquadPerPlayer = BR.ReadByte();
+
+                MapDescription = BR.ReadString();
+                string sndBattleThemePath = BR.ReadString();
+
+                ListMandatoryMutator.Clear();
+                int ListMandatoryMutatorCount = BR.ReadByte();
+                for (int M = 0; M < ListMandatoryMutatorCount; M++)
+                {
+                    ListMandatoryMutator.Add(BR.ReadString());
+                }
+
+                int NumberOfTeams = BR.ReadByte();
+                ListMapTeam = new List<Color>(NumberOfTeams);
+                //Deathmatch colors
+                for (int D = 0; D < NumberOfTeams; D++)
+                {
+                    ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
+                }
+
+                Dictionary<string, GameModeInfo> DicAvailableGameType = BattleMap.DicBattmeMapType[MapModName].GetAvailableGameModes();
+
+                int ListGameTypeCount = BR.ReadByte();
+                for (int G = 0; G < ListGameTypeCount; G++)
+                {
+                    string GameTypeCategoryName = BR.ReadString();
+                    string GameTypeName = BR.ReadString();
+                    GameModeInfo LoadedGameInfo = DicAvailableGameType[GameTypeName].Copy();
+                    LoadedGameInfo.Load(BR);
+                    if (GameMode == GameTypeCategoryName)
+                    {
+                        GameInfo = LoadedGameInfo;
+                        break;
+                    }
+                }
+
+                if (GameInfo == null && DicAvailableGameType.ContainsKey(GameMode))
+                {
+                    GameInfo = DicAvailableGameType[GameMode];
+                }
+            }
+
+            public virtual MapInfo Clone(string MapName, string MapModName, string MapPath)
+            {
+                return new MapInfo(MapName, MapModName, MapPath);
             }
         }
 
@@ -223,6 +303,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FirstLineOffsetY = (int)(30 * Ratio);
             LineOffsetY = (int)(76 * Ratio);
 
+            if (MapCache.Content == null)
+            {
+                MapCache.Content = new ContentManager(serviceProvider);
+                MapCache.Content.RootDirectory = "Content";
+            }
+
             MapScrollbar = new Scrollbar(sprScrollbar, new Vector2(LeftPanelX + PanelWidth - 20, PanelY), Ratio, (int)(sprScrollbarBackground.Height * Ratio), 10, OnGametypeScrollbarChange);
         }
 
@@ -259,10 +345,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ActiveMapInfo = MapInfoToSelect;
             LoadMapInfo(MapInfoToSelect, Room.GameMode);
-            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode,
-                ActiveMapInfo.MapSize, ActiveMapInfo.MapDescription,
-                ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer,
-                ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator, ActiveMapInfo.ListMapTeam);
+            Owner.UpdateSelectedMap(ActiveMapInfo);
             OptionsScreen.OnMapUpdate();
         }
 
@@ -277,57 +360,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (MapInfoToSelect.IsLoaded)
                 return;
 
-            FileStream FS = new FileStream("Content/" + MapInfoToSelect.MapModName + "/Maps/Multiplayer/" + MapInfoToSelect.MapPath + ".pem", FileMode.Open, FileAccess.Read);
+            string MapPath = MapInfoToSelect.MapModName + "/Maps/Multiplayer/" + MapInfoToSelect.MapPath;
+            Texture2D MapImage = null;
+
+            if (File.Exists("Content/" + MapPath + ".xnb"))
+            {
+                MapImage = MapCache.Content.Load<Texture2D>(MapPath);
+            }
+
+            MapInfoToSelect.MapImage = MapImage;
+
+            FileStream FS = new FileStream("Content/" + MapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            MapInfoToSelect.OrderNumber = BR.ReadUInt32();
-
-            MapInfoToSelect.MapSize.X = BR.ReadInt32();
-            MapInfoToSelect.MapSize.Y = BR.ReadInt32();
-
-            MapInfoToSelect.MinNumberOfPlayer = BR.ReadByte();
-            MapInfoToSelect.MaxNumberOfPlayer = BR.ReadByte();
-            MapInfoToSelect.MaxSquadPerPlayer = BR.ReadByte();
-
-            MapInfoToSelect.MapDescription = BR.ReadString();
-            string sndBattleThemePath = BR.ReadString();
-
-            MapInfoToSelect.ListMandatoryMutator.Clear();
-            int ListMandatoryMutatorCount = BR.ReadByte();
-            for (int M = 0; M < ListMandatoryMutatorCount; M++)
-            {
-                MapInfoToSelect.ListMandatoryMutator.Add(BR.ReadString());
-            }
-
-            int NumberOfTeams = BR.ReadByte();
-            MapInfoToSelect.ListMapTeam = new List<Color>(NumberOfTeams);
-            //Deathmatch colors
-            for (int D = 0; D < NumberOfTeams; D++)
-            {
-                MapInfoToSelect.ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
-            }
-
-            Dictionary<string, GameModeInfo> DicAvailableGameType = BattleMap.DicBattmeMapType[MapInfoToSelect.MapModName].GetAvailableGameModes();
-
-            int ListGameTypeCount = BR.ReadByte();
-            for (int G = 0; G < ListGameTypeCount; G++)
-            {
-                string GameTypeCategoryName = BR.ReadString();
-                string GameTypeName = BR.ReadString();
-                GameModeInfo LoadedGameInfo = DicAvailableGameType[GameTypeName].Copy();
-                LoadedGameInfo.Load(BR);
-                if (GameMode == GameTypeCategoryName)
-                {
-                    MapInfoToSelect.GameInfo = LoadedGameInfo;
-                    break;
-                }
-            }
-
-            if (MapInfoToSelect.GameInfo == null && DicAvailableGameType.ContainsKey(GameMode))
-            {
-                MapInfoToSelect.GameInfo = DicAvailableGameType[GameMode];
-            }
+            MapInfoToSelect.ReadInfo(BR, GameMode);
 
             FS.Close();
             BR.Close();
@@ -353,10 +400,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Color ColorBox = Color.FromNonPremultiplied(204, 204, 204, 255);
             Color ColorText = Color.FromNonPremultiplied(65, 70, 65, 255);
 
+            int RightPanelContentWidth = (int)(sprFrameDescription.Width * Ratio);
+            int RightPanelX = (int)(2280 * Ratio);
+            int RightPanelContentX = RightPanelX + RightPanelContentWidth / 2;
             float DrawY = PanelY;
             //MapScrollbar.Draw(g);
 
-            g.Draw(sprFrameDescription, new Vector2(2280 * Ratio, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
+            g.Draw(sprFrameDescription, new Vector2(RightPanelX, DrawY + 78 * Ratio), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
             int BoxHeight = (DicMapInfoByPath.Values.Count * LineOffsetY + FirstLineOffsetY);
 
@@ -387,21 +437,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ++CurrentIndex;
             }
             
-            int RightPanelX = Constants.Width - LeftPanelX - PanelWidth;
-            int RightPanelContentOffset = (int)(PanelWidth * 0.05);
-            int RightPanelContentX = RightPanelX + RightPanelContentOffset;
-            int RightPanelContentWidth = PanelWidth - RightPanelContentOffset - RightPanelContentOffset;
-
-            int PreviewBoxY = PanelY + 10;
-            int PreviewBoxHeight = (int)(500 * Ratio);
-
-            int DescriptionBoxY = (int)(PreviewBoxY + PreviewBoxHeight + 150 * Ratio);
-
-            int DescriptionBoxNameOffset = (int)(RightPanelContentWidth * 0.25);
-            int DescriptionBoxNameX = RightPanelContentX + DescriptionBoxNameOffset;
-            int DescriptionBoxNameWidth = RightPanelContentWidth - DescriptionBoxNameOffset - DescriptionBoxNameOffset;
-            int DescriptionBoxNameHeight = 30;
-
             if (ActiveMapInfo != null && ActiveMapInfo.MapName != null)
             {
                 string MapPlayers;
@@ -414,22 +449,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     MapPlayers = ActiveMapInfo.MinNumberOfPlayer + " Players";
                 }
 
-                g.DrawStringCentered(fntOxanimumRegular, MapPlayers,
-                    new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
-                        PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), ColorText);
-
-                g.DrawStringCentered(fntOxanimumRegular, "Size: " + ActiveMapInfo.MapSize.X + " x " + ActiveMapInfo.MapSize.Y,
-                    new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
-                        PreviewBoxY + PreviewBoxHeight + 70 * Ratio + DescriptionBoxNameHeight / 2), ColorText);
-
-                g.DrawStringCentered(fntOxanimumRegular, ActiveMapInfo.MapName, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
-                    DescriptionBoxY + DescriptionBoxNameHeight / 2), ColorText);
-
-                float DescriptionY = DescriptionBoxY + DescriptionBoxNameHeight;
-                foreach (string ActiveLine in TextHelper.FitToWidth(fntText, ActiveMapInfo.MapDescription, RightPanelContentWidth - 5))
+                if (ActiveMapInfo.MapImage != null)
                 {
-                    g.DrawString(fntOxanimumRegular, ActiveLine, new Vector2(RightPanelContentX + 5, DescriptionY), ColorText);
-                    DescriptionY += 20;
+                    g.DrawUnstretched(ActiveMapInfo.MapImage, RightPanelContentX, (int)(700 * Ratio), (int)(600 * Ratio), (int)(340 * Ratio), new Vector2(ActiveMapInfo.MapImage.Width / 2, 0));
+                }
+
+                DrawY = 560;
+                g.DrawStringCentered(fntOxanimumRegular, MapPlayers,
+                    new Vector2(RightPanelContentX,
+                        DrawY), ColorText);
+
+                DrawY += (int)(70 * Ratio);
+                g.DrawStringCentered(fntOxanimumRegular, "Size: " + ActiveMapInfo.MapSize.X + " x " + ActiveMapInfo.MapSize.Y,
+                    new Vector2(RightPanelContentX,
+                        DrawY ), ColorText);
+
+                DrawY += (int)(70 * Ratio);
+                g.DrawStringCentered(fntOxanimumRegular, ActiveMapInfo.MapName, new Vector2(RightPanelContentX,
+                    DrawY), ColorText);
+
+                int DescriptionBoxNameWidth = (int)(RightPanelContentWidth * 0.9f);
+                DrawY += (int)(70 * Ratio);
+                foreach (string ActiveLine in TextHelper.FitToWidth(fntOxanimumRegular, ActiveMapInfo.MapDescription, DescriptionBoxNameWidth))
+                {
+                    g.DrawStringCentered(fntOxanimumRegular, ActiveLine, new Vector2(RightPanelContentX, DrawY), ColorText);
+                    DrawY += (int)(70 * Ratio);
                 }
             }
         }

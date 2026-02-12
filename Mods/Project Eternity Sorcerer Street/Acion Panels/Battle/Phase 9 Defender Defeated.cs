@@ -143,6 +143,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int Y = Constants.Height - Constants.Height / 4;
             MenuHelper.DrawBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 6);
+            //defender achieved chain level
         }
     }
 }

@@ -4,6 +4,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static ProjectEternity.GameScreens.BattleMapScreen.GameOptionsSelectMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -50,10 +51,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly List<string> ListLocalPlayerID;
 
-        public RoomInformations(string RoomID, bool IsDead)
+        public RoomInformations(string RoomID)
         {
             this.RoomID = RoomID;
-            this.IsDead = IsDead;
+            this.IsDead = true;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
             ListUniqueOnlineConnection = new List<IOnlineConnection>();
@@ -144,6 +145,80 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListMapTeam = new List<Color>();
             CurrentDifficulty = "Easy";
             MaxSquadsPerBot = 1;
+        }
+
+        public virtual void ReadFromMapInfo(MapInfo SelectedMapInfo)
+        {
+            MapName = SelectedMapInfo.MapName;
+            MapModName = SelectedMapInfo.MapModName;
+            MapPath = SelectedMapInfo.MapPath;
+            MapDescription = SelectedMapInfo.MapDescription;
+            MapSize = SelectedMapInfo.MapSize;
+            MapImage = SelectedMapInfo.MapImage;
+            GameInfo = SelectedMapInfo.GameInfo;
+            MinNumberOfPlayer = SelectedMapInfo.MinNumberOfPlayer;
+            MaxNumberOfPlayer = SelectedMapInfo.MaxNumberOfPlayer;
+            MaxSquadPerPlayer = SelectedMapInfo.MaxSquadPerPlayer;
+            ListMandatoryMutator = SelectedMapInfo.ListMandatoryMutator;
+            ListMapTeam = SelectedMapInfo.ListMapTeam;
+        }
+
+        public virtual void ReadSelectedMap(OnlineReader Sender)
+        {
+            MapName = Sender.ReadString();
+            string MapType = Sender.ReadString();
+            MapPath = Sender.ReadString();
+            GameMode = Sender.ReadString();
+            MapSize = new Point(Sender.ReadByte(), Sender.ReadByte());
+            MapDescription = Sender.ReadString();
+            MinNumberOfPlayer = Sender.ReadByte();
+            MaxNumberOfPlayer = Sender.ReadByte();
+            MaxSquadPerPlayer = Sender.ReadByte();
+
+            string GameInfoName = Sender.ReadString();
+            GameInfo = BattleMap.DicBattmeMapType[MapType].GetAvailableGameModes()[GameInfoName].Copy();
+            GameInfo.Read(Sender);
+
+            int ListMandatoryMutatorCount = Sender.ReadInt32();
+            ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);
+            for (int M = 0; M < ListMandatoryMutatorCount; M++)
+            {
+                ListMandatoryMutator.Add(Sender.ReadString());
+            }
+
+            int ListMapTeamCount = Sender.ReadInt32();
+            ListMapTeam = new List<Color>(ListMapTeamCount);
+            for (int M = 0; M < ListMapTeamCount; M++)
+            {
+                ListMapTeam.Add(Color.FromNonPremultiplied(Sender.ReadByte(), Sender.ReadByte(), Sender.ReadByte(), 255));
+            }
+        }
+
+        public virtual void WriteSelectedMap(OnlineWriter WriteBuffer)
+        {
+            WriteBuffer.AppendString(MapName);
+            WriteBuffer.AppendString(MapModName);
+            WriteBuffer.AppendString(MapPath);
+            WriteBuffer.AppendString(GameMode);
+            WriteBuffer.AppendByte(MinNumberOfPlayer);
+            WriteBuffer.AppendByte(MaxNumberOfPlayer);
+            WriteBuffer.AppendByte(MaxSquadPerPlayer);
+
+            GameInfo.Write(WriteBuffer);
+
+            WriteBuffer.AppendInt32(ListMandatoryMutator.Count);
+            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            {
+                WriteBuffer.AppendString(ListMandatoryMutator[M]);
+            }
+
+            WriteBuffer.AppendInt32(ListMapTeam.Count);
+            for (int T = 0; T < ListMapTeam.Count; T++)
+            {
+                WriteBuffer.AppendByte(ListMapTeam[T].R);
+                WriteBuffer.AppendByte(ListMapTeam[T].G);
+                WriteBuffer.AppendByte(ListMapTeam[T].B);
+            }
         }
 
         public void AddLocalPlayer(OnlinePlayerBase NewPlayer)

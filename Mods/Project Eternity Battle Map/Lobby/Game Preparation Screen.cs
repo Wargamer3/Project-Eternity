@@ -9,6 +9,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using static ProjectEternity.GameScreens.BattleMapScreen.GameOptionsSelectMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -38,7 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected SpriteFont fntText;
         private SpriteFont fntOxanimumRegular;
         private SpriteFont fntOxanimumBold;
-        private SpriteFont fntOxanimumBoldSmall;
+        protected SpriteFont fntOxanimumBoldSmall;
         private SpriteFont fntOxanimumBoldBig;
         private SpriteFont fntOxanimumBoldTitle;
 
@@ -95,6 +96,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         private bool IsHost;
+
+        protected Color TextColorLight = Color.FromNonPremultiplied(243, 243, 243, 255);
+        protected Color TextColorDark = Color.FromNonPremultiplied(65, 70, 65, 255);
+        protected Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
         public GamePreparationScreen(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
         {
@@ -387,25 +392,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string MapName, string MapModName, string MapPath, string GameMode, Point MapSize, string MapDescription, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator, List<Color> ListMapTeam)
+        public void UpdateSelectedMap(MapInfo NewMapInfo)
         {
-            Room.MapName = MapName;
-            Room.MapModName = MapModName;
-            Room.MapPath = MapPath;
-            Room.MapDescription = MapDescription;
-            Room.GameMode = GameMode;
-            Room.MapSize = MapSize;
-            Room.GameInfo = GameInfo;
-            Room.MinNumberOfPlayer = MinNumberOfPlayer;
-            Room.MaxNumberOfPlayer = MaxNumberOfPlayer;
-            Room.MaxSquadPerPlayer = MaxSquadPerPlayer;
-            Room.ListMandatoryMutator = ListMandatoryMutator;
-            Room.ListMapTeam = ListMapTeam;
+            Room.ReadFromMapInfo(NewMapInfo);
+
             ListGameRuleError.Clear();
             ReadyButton.Enable();
             StartButton.Enable();
         }
 
+        public void ReadSelectedMap(OnlineReader Sender)
+        {
+            Room.ReadSelectedMap(Sender);
+
+            ListGameRuleError.Clear();
+            ReadyButton.Enable();
+            StartButton.Enable();
+        }
         private void OnButtonOver()
         {
             sndButtonOver.Play();
@@ -590,9 +593,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             float Ratio = Constants.Height / 2160f;
-            Color TextColorLight = Color.FromNonPremultiplied(243, 243, 243, 255);
-            Color TextColorDark = Color.FromNonPremultiplied(65, 70, 65, 255);
-            Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(BackgroundColor);
@@ -600,6 +600,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CubeBackground.Draw(g, false);
             g.DrawString(fntOxanimumBoldTitle, "Lobby", new Vector2(120, 28), TextColorDark);
             g.Draw(sprRoomNameFrame, new Vector2(385, 24), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 1f);
+            g.DrawStringRightAligned(fntOxanimumBoldSmall, "001", new Vector2(1000 * Ratio, 90 * Ratio), TextColorDark);
+            g.DrawString(fntOxanimumBoldSmall, Room.RoomName, new Vector2(1140 * Ratio, 90 * Ratio), TextColorLight);
 
             g.Draw(sprPlayerInfo, new Vector2(Constants.Width - 559, 34), null, Color.White, 0f, Vector2.Zero, Ratio, SpriteEffects.None, 0.9f);
 
@@ -607,24 +609,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Room.MapName != null)
             {
-                int DrawY = 920;
+                int DrawY = (int)(1840 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, "Game Mode:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
                 g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.GameMode, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-                DrawY += 74;
+                DrawY += (int)(148 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, "Players:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
                 g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MinNumberOfPlayer + " - " + Room.MaxNumberOfPlayer, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-                DrawY += 74;
+                DrawY += (int)(148 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, "Map Size:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
                 g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MapSize.X + " X " + Room.MapSize.Y, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
-                DrawY += 150;
+
+                DrawY += (int)(300 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, "Map:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
                 g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MapName, new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
 
-                DrawY += 74;
+                DrawY += (int)(148 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, "Details:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
-                DrawY += 74;
+                DrawY += (int)(148 * Ratio);
                 g.DrawString(fntOxanimumBoldSmall, Room.MapDescription, new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
             }
 

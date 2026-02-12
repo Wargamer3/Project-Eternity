@@ -14,6 +14,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using static ProjectEternity.GameScreens.BattleMapScreen.GameOptionsSelectMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -109,6 +110,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayLobbyFriends = new OnlinePlayerBase[0];
 
             CubeBackground = new CubeBackgroundBig();
+
+            MapInfo.MapInfoTemplate = new MapInfo();
 
             /*if (UseOnline)
             {

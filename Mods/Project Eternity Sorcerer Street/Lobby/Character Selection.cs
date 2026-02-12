@@ -487,13 +487,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (CharacterToDraw.Character.SpriteMap != null)
             {
-                X = (int)(2650 * Ratio);
-                Y = (int)(500 * Ratio);
-                int SpriteWidth = CharacterToDraw.Character.SpriteMap.Width;
-                int SpriteHeight = CharacterToDraw.Character.SpriteMap.Height;
-                int SpriteHeightMax = (int)(1000 * Ratio);
+                X = (int)(2990 * Ratio);
+                Y = (int)(1500 * Ratio);
+                int SpriteWidthMax = (int)(1000 * Ratio);
+                int SpriteHeightMax = (int)(2000 * Ratio);
 
-                g.Draw(CharacterToDraw.Character.SpriteMap, new Rectangle(X, Y, SpriteWidth, SpriteHeightMax), new Rectangle(0, 0, SpriteWidth, SpriteHeightMax), Color.White);
+                g.DrawUnstretched(CharacterToDraw.Character.SpriteMap, X, Y, SpriteWidthMax, SpriteHeightMax, new Vector2(CharacterToDraw.Character.SpriteMap.Width / 2, CharacterToDraw.Character.SpriteMap.Height));
             }
         }
     }

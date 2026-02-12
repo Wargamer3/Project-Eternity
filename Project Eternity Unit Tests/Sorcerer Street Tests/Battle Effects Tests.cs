@@ -104,7 +104,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             DummyInvaderCard.ListActiveSkill.Add(HPIncreaseSkill);
 
-            ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap);
+            ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap, null);
             CreaturePhase.OnSelect();
 
             Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP);

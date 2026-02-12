@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
                 if (IsDead)
                 {
-                    ListRoomUpdates.Add(new BattleMapRoomInformations(RoomID, IsDead));
+                    ListRoomUpdates.Add(new BattleMapRoomInformations(RoomID));
                 }
                 else
                 {

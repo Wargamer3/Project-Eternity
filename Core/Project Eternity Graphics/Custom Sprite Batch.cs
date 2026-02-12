@@ -86,6 +86,40 @@ namespace ProjectEternity.Core.Graphics
             g.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, layerDepth);
         }
 
+        public void DrawUnstretched(Texture2D SpriteToDraw, int X, int Y, int Width, int Height, Vector2 Origin)
+        {
+            int SpriteWidth = SpriteToDraw.Width;
+            int SpriteHeight = SpriteToDraw.Height;
+            float SpriteRatio = SpriteWidth / (float)SpriteHeight;
+            int FinalWidth = Width;
+            int FinalHeight = Height;
+
+            if (SpriteRatio < 1)//Taller than wide
+            {
+                FinalWidth = (int)(FinalHeight * SpriteRatio);
+
+                if (FinalWidth > Width)
+                {
+                    FinalWidth = Width;
+                    SpriteRatio = SpriteHeight / (float)SpriteWidth;
+                    FinalHeight = (int)(FinalWidth * SpriteRatio);
+                }
+            }
+            else//Wider than tall
+            {
+                SpriteRatio = SpriteHeight / (float)SpriteWidth;
+                FinalHeight = (int)(FinalWidth * SpriteRatio);
+
+                if (FinalHeight > Height)
+                {
+                    FinalHeight = Height;
+                    SpriteRatio = SpriteWidth / (float)SpriteHeight;
+                    FinalWidth = (int)(FinalHeight * SpriteRatio);
+                }
+            }
+
+            g.Draw(SpriteToDraw, new Rectangle(X, Y, FinalWidth, FinalHeight), new Rectangle(0, 0, SpriteWidth, SpriteHeight), Color.White, 0f, Origin, SpriteEffects.None, 0f);
+        }
         public void DrawString(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
         {
             g.DrawString(spriteFont, Text, Position, TextColor);

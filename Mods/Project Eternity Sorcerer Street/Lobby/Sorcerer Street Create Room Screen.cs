@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override GamePreparationScreen CreateRoom()
         {
-            GamePreparationScreen NewScreen = new SorcererStreetGamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
+            GamePreparationScreen NewScreen = new SorcererStreetGamePreparationScreen(null, null, new SorcererStreetRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
             PlayerManager.ListLocalPlayer[0].OnlineClient.Roles.IsRoomHost = true;
             PushScreen(NewScreen);
             RemoveScreen(this);

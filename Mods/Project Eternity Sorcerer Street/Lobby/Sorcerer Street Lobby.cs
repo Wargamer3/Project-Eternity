@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen.Online;
+using static ProjectEternity.GameScreens.BattleMapScreen.GameOptionsSelectMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -12,6 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetLobby(bool UseOnline)
             : base(UseOnline)
         {
+            MapInfo.MapInfoTemplate = new SorcererStreetMapInfo();
             Card.Init();
             MenuHelper.Init(Content);
             CardSymbols.Load(Content);

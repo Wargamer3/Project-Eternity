@@ -4,11 +4,80 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Online;
+using static ProjectEternity.GameScreens.BattleMapScreen.GameOptionsSelectMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
+    public class SorcererStreetMapInfo : MapInfo
+    {
+        public string Forts;
+        public int MagicAtStart;
+        public int MagicGainPerLap;
+        public int TowerMagicGain;
+        public int MagicGoal;
+        public int LowestDieRoll;
+        public int HighestDieRoll;
+        public int NumberOfArenas;
+
+        public SorcererStreetMapInfo()
+            : base()
+        {
+        }
+
+        protected SorcererStreetMapInfo(string MapName, string MapModName, string MapPath)
+            : base(MapName, MapModName, MapPath)
+        {
+        }
+
+        public override void ReadInfo(BinaryReader BR, string GameMode)
+        {
+            base.ReadInfo(BR, GameMode);
+
+            int TileSizeX = BR.ReadInt32();
+            int TileSizeY = BR.ReadInt32();
+
+            string CameraType = BR.ReadString();
+
+            int Camera2DPositionStartX = BR.ReadInt32();
+            int Camera2DPositionStartY = BR.ReadInt32();
+
+            int ListBackgroundsPathCount = BR.ReadInt32();
+            for (int B = 0; B < ListBackgroundsPathCount; B++)
+            {
+                BR.ReadString();
+            }
+            int ListForegroundsPathCount = BR.ReadInt32();
+            for (int F = 0; F < ListForegroundsPathCount; F++)
+            {
+                BR.ReadString();
+            }
+
+            MagicAtStart = BR.ReadInt32();
+            MagicGainPerLap = BR.ReadInt32();
+            TowerMagicGain = BR.ReadInt32();
+            MagicGoal = BR.ReadInt32();
+            LowestDieRoll = BR.ReadByte();
+            HighestDieRoll = BR.ReadByte();
+        }
+
+        public override MapInfo Clone(string MapName, string MapModName, string MapPath)
+        {
+            return new SorcererStreetMapInfo(MapName, MapModName, MapPath);
+        }
+    }
+
     public class SorcererStreetRoomInformations : RoomInformations
     {
+        public string Forts;
+        public int MagicAtStart;
+        public int MagicGainPerLap;
+        public int TowerMagicGain;
+        public int MagicGoal;
+        public int LowestDieRoll;
+        public int HighestDieRoll;
+        public int NumberOfArenas;
+
         public int MaxKill;
         public int MaxGameLengthInMinutes;
 
@@ -17,6 +86,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
+            Forts = string.Empty;
         }
 
         public SorcererStreetRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID, ContentManager Content, byte[] RoomData)
@@ -66,6 +136,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
+        }
+
+        public override void ReadFromMapInfo(MapInfo SelectedMapInfo)
+        {
+            base.ReadFromMapInfo(SelectedMapInfo);
+
+            SorcererStreetMapInfo SelectedSorcererStreetMapInfo = (SorcererStreetMapInfo)SelectedMapInfo;
+
+            Forts = SelectedSorcererStreetMapInfo.Forts;
+            MagicAtStart = SelectedSorcererStreetMapInfo.MagicAtStart;
+            MagicGainPerLap = SelectedSorcererStreetMapInfo.MagicGainPerLap;
+            TowerMagicGain = SelectedSorcererStreetMapInfo.TowerMagicGain;
+            MagicGoal = SelectedSorcererStreetMapInfo.MagicGoal;
+            LowestDieRoll = SelectedSorcererStreetMapInfo.LowestDieRoll;
+            HighestDieRoll = SelectedSorcererStreetMapInfo.HighestDieRoll;
+            NumberOfArenas = SelectedSorcererStreetMapInfo.NumberOfArenas;
+        }
+
+        public override void WriteSelectedMap(OnlineWriter WriteBuffer)
+        {
+            base.WriteSelectedMap(WriteBuffer);
+
+            WriteBuffer.AppendString(Forts);
+        }
+
+        public override void ReadSelectedMap(OnlineReader Sender)
+        {
+            base.ReadSelectedMap(Sender);
+
+            Forts = Sender.ReadString();
         }
 
         public override byte[] GetRoomInfo()

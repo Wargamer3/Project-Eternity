@@ -13,8 +13,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int MaxKill;
         public int MaxGameLengthInMinutes;
 
-        public BattleMapRoomInformations(string RoomID, bool IsDead)
-            : base(RoomID, IsDead)
+        public BattleMapRoomInformations(string RoomID)
+            : base(RoomID)
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
@@ -79,7 +79,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxGameLengthInMinutes = 10;
         }
 
-        public BattleMapRoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort, byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
+        public BattleMapRoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
+            byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
             : base(RoomID, RoomName, MapType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead)
         {
         }

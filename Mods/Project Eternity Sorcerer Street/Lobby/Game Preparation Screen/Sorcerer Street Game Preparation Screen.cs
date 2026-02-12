@@ -27,9 +27,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int DrawY = 35;
         public static List<Player> ListAvailablePlayer;//If a player is replaced by a bot
 
+        private new SorcererStreetRoomInformations Room;
+
         public SorcererStreetGamePreparationScreen(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
             : base(OnlineGameClient, OnlineCommunicationClient, Room)
         {
+            this.Room = (SorcererStreetRoomInformations)Room;
             Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
             Projection = HalfPixelOffset * Projection;
@@ -76,6 +79,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DrawPlayers(CustomSpriteBatch g)
         {
+            float Ratio = Constants.Height / 2160f;
+            if (Room.MapName != null)
+            {
+                if (Room.MapImage != null)
+                {
+                    g.DrawUnstretched(Room.MapImage, (int)(3260 * Ratio), (int)(140 * Ratio), (int)(800 * Ratio), (int)(450 * Ratio), new Vector2(Room.MapImage.Width / 2, 0));
+                }
+
+                DrawY = (int)(2732 * Ratio);
+                g.DrawString(fntOxanimumBoldSmall, "Max Die Roll:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.HighestDieRoll.ToString(), new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+
+                DrawY += (int)(148 * Ratio);
+                g.DrawString(fntOxanimumBoldSmall, "Goal:", new Vector2(2816 * Ratio, DrawY * Ratio), TextColorDark);
+                g.DrawStringRightAligned(fntOxanimumBoldSmall, Room.MagicGoal.ToString(), new Vector2(3688 * Ratio, DrawY * Ratio), TextColorDark);
+            }
+
+            DrawY = 120;
             for (int P = 0; P < Room.ListRoomPlayer.Count; P++)
             {
                 int X = 5 + P * BoxWidth;
@@ -159,8 +180,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ListActionMenuChoice.Last().Draw(g);
             }
+
             DrawY = 120;
-            Matrix View = Matrix.Identity;
 
             g.End();
             g.Begin();
@@ -169,6 +190,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
+
+            if (!IsOnTop)
+            {
+                return;
+            }
 
             for (int P = 0; P < Room.ListRoomPlayer.Count; P++)
             {
@@ -179,35 +205,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 else if (Room.ListRoomPlayer[P].OnlinePlayerType == OnlinePlayerBase.PlayerTypeBot)
                 {
                     Player ActivePlayer = (Player)Room.ListRoomBot[P];
-                    if (ActivePlayer.Inventory.Character.Character.Unit3DModel == null)
-                    {
-                        continue;
-                    }
-
                     float X = 5 + P * BoxWidth;
-                    Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.6f) * Matrix.CreateTranslation(X + BoxWidth / 2, DrawY + 170, 0);
-
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw3D(g.GraphicsDevice, View, Projection, World);
+                    DrawCharacterPreview(g, ActivePlayer, (int)(X + BoxWidth / 2), DrawY + 170);
 
                 }
                 else if (Room.ListRoomPlayer[P].OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
                 {
                     Player ActivePlayer = (Player)Room.ListRoomPlayer[P];
-                    if (ActivePlayer.Inventory.Character.Character.Unit3DModel == null)
-                    {
-                        continue;
-                    }
-
                     float X = 5 + P * BoxWidth;
-                    Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.6f) * Matrix.CreateTranslation(X + BoxWidth / 2, DrawY + 170, 0);
-
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
-                    ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw3D(g.GraphicsDevice, View, Projection, World);
+                    DrawCharacterPreview(g, ActivePlayer, (int)(X + BoxWidth / 2), DrawY + 170);
                 }
             }
         }
+
+        private void DrawCharacterPreview(CustomSpriteBatch g, Player ActivePlayer, int X, int Y)
+        {
+            float Ratio = Constants.Height / 2160f;
+
+            if (ActivePlayer.Inventory.Character.Character.Unit3DModel != null)
+            {
+                Matrix View = Matrix.Identity;
+                Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(0.6f) * Matrix.CreateTranslation(X, Y, 0);
+
+                ActivePlayer.Inventory.Character.Character.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
+                ActivePlayer.Inventory.Character.Character.Unit3DModel.Draw3D(g.GraphicsDevice, View, Projection, World);
+            }
+            else if (ActivePlayer.Inventory.Character.Character.SpriteMap != null)
+            {
+                int SpriteWidthMax = (int)(300 * Ratio);
+                int SpriteHeightMax = (int)(500 * Ratio);
+
+                g.DrawUnstretched(ActivePlayer.Inventory.Character.Character.SpriteMap, X, Y, SpriteWidthMax, SpriteHeightMax, new Vector2(ActivePlayer.Inventory.Character.Character.SpriteMap.Width / 2, ActivePlayer.Inventory.Character.Character.SpriteMap.Height));
+            }
+        }
     }
+
     public class SorcererStreetLocalPlayerSelectionScreen : LocalPlayerSelectionScreen
     {
         public SorcererStreetLocalPlayerSelectionScreen()
