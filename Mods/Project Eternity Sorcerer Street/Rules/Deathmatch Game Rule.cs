@@ -105,6 +105,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
 
                     List<Vector3> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(ActivePlayer.TeamIndex);
+                    if (ListPossibleSpawnPoint.Count == 0)
+                    {
+                        ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(0);
+                    }
+
                     int SpawnSquadIndex = 0;
                     foreach (Vector3 ActiveSpawn in ListPossibleSpawnPoint)
                     {

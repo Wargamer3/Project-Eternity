@@ -503,7 +503,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (NewPlayer.Inventory.Character.Character.SpriteMap != null)
                 {
-                    NewPlayer.GamePiece.Unit3DSprite = new Core.Units.UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.Inventory.Character.Character.SpriteMap, 1);
+                    NewPlayer.GamePiece.Unit3DSprite = new Core.Units.UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.Inventory.Character.Character.SpriteMap, 1, 1f, 0f);
                     NewPlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(Matrix.Identity);
                     NewPlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Size"].SetValue(new Vector2(TileSize.X * 2f, TileSize.Y * 2f));
                 }

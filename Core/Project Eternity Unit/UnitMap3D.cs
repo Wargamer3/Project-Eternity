@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Units
         private EffectParameter effectViewportScaleParameter;
         private EffectParameter effectTimeParameter;
 
-        public UnitMap3D(GraphicsDevice g, Effect UnitEffect3D, Texture2D Sprite, int NumberOfImages, float currentTime = 0f)
+        public UnitMap3D(GraphicsDevice g, Effect UnitEffect3D, Texture2D Sprite, int NumberOfImages, float currentTime)
         {
             this.UnitEffect3D = UnitEffect3D.Clone();
 
@@ -47,6 +47,64 @@ namespace ProjectEternity.Core.Units
             parameters["AnimationSpeed"].SetValue(1f);
             parameters["Size"].SetValue(new Vector2((Sprite.Width / NumberOfImages) * 2f, Sprite.Height * 2f));
             parameters["t0"].SetValue(Sprite);
+
+            // Set the values of parameters that do not change.
+            parameters["NumberOfImages"].SetValue(NumberOfImages);
+
+            float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
+
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+            effectProjectionParameter.SetValue(Projection);
+
+            particles = new UnitMap3DVertex[4];
+
+            particles[0].UV = new Vector2(0, 0);
+            particles[1].UV = new Vector2(1, 0);
+            particles[2].UV = new Vector2(1, 1);
+            particles[3].UV = new Vector2(0, 1);
+
+            for (int i = 0; i < 4; ++i)
+            {
+                particles[i].Time = currentTime;
+            }
+
+            // Create a dynamic vertex buffer.
+            vertexBuffer = new DynamicVertexBuffer(g, UnitMap3DVertex.VertexDeclaration,
+                                                   4, BufferUsage.WriteOnly);
+
+            // Create and populate the index buffer.
+            ushort[] indices = new ushort[6];
+
+            indices[0] = (ushort)(0);
+            indices[1] = (ushort)(1);
+            indices[2] = (ushort)(2);
+
+            indices[3] = (ushort)(0);
+            indices[4] = (ushort)(2);
+            indices[5] = (ushort)(3);
+
+            indexBuffer = new IndexBuffer(g, typeof(ushort), indices.Length, BufferUsage.WriteOnly);
+
+            indexBuffer.SetData(indices);
+        }
+
+        public UnitMap3D(GraphicsDevice g, Effect UnitEffect3D, Texture2D Sprite, int NumberOfImages, float Scale, float currentTime)
+        {
+            this.UnitEffect3D = UnitEffect3D.Clone();
+
+            parameters = this.UnitEffect3D.Parameters;
+
+            // Look up shortcuts for parameters that change every frame.
+            effectViewParameter = parameters["View"];
+            effectProjectionParameter = parameters["Projection"];
+            effectViewportScaleParameter = parameters["ViewportScale"];
+            effectTimeParameter = parameters["CurrentTime"];
+            parameters["AnimationSpeed"].SetValue(1f);
+            parameters["Size"].SetValue(new Vector2((Sprite.Width / NumberOfImages) * 2f, Sprite.Height * 2f));
+            parameters["t0"].SetValue(Sprite);
+            parameters["Scale"].SetValue(Scale);
 
             // Set the values of parameters that do not change.
             parameters["NumberOfImages"].SetValue(NumberOfImages);

@@ -172,7 +172,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             PlatformSpawner NewProp = new PlatformSpawner(Map);
 
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), GameScreen.sprPixel, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), GameScreen.sprPixel, 1, 0f);
 
             return NewProp;
         }

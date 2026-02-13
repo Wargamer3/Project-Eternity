@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             VehicleSpawner NewProp = new VehicleSpawner(Map);
 
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), GameScreen.sprPixel, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), GameScreen.sprPixel, 1, 0f);
             NewProp.PolygonEffect = PolygonEffect;
 
             return NewProp;

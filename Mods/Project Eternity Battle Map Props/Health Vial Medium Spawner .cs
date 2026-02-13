@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (Content != null)
             {
                 sprVial = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Health Vial Medium");
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprVial, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprVial, 1, 0f);
             }
         }
 
@@ -136,7 +136,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             HealthVialMediumSpawner NewProp = new HealthVialMediumSpawner(Map);
 
             NewProp.sprVial = sprVial;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprVial, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprVial, 1, 0f);
 
             return NewProp;
         }

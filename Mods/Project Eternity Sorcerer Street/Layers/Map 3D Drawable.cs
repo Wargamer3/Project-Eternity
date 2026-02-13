@@ -41,6 +41,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
         private List<Texture2D> ListTileset;
 
+        List<Player> ListAlreadyDrawnPlayer = new List<Player>();
+        List<Player> ListNearbyPlayer = new List<Player>();
+
         public Map3DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager, GraphicsDevice g)
         {
             this.Map = Map;
@@ -1078,6 +1081,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawPlayers(CustomSpriteBatch g, Matrix View)
         {
+            float DistanceFromPlayerMax = (float)Map.TileSize.X * Map.TileSize.X + Map.TileSize.Y * Map.TileSize.Y;
+            float ScaleMin = 0.7f;
+            float OffsetMax = 0.75f;
+            ListAlreadyDrawnPlayer.Clear();
+
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 Player ActivePlayer = Map.ListPlayer[P];
@@ -1085,113 +1093,175 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (ActivePlayer.GamePiece == null)
                     continue;
 
+                if (ListAlreadyDrawnPlayer.Contains(ActivePlayer))
+                    continue;
+
+                ListAlreadyDrawnPlayer.Add(ActivePlayer);
+                FindNearbyPlayers(ActivePlayer);
+
+                DrawPlayer(g, View, ActivePlayer, Vector3.Zero, 1f);
+
+                Vector3 CurrentPosition = ActivePlayer.GamePiece.Position;
+
                 if (Map.MovementAnimation.Contains(ActivePlayer.GamePiece))
                 {
-                    Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActivePlayer.GamePiece);
+                    CurrentPosition = Map.MovementAnimation.GetPosition(ActivePlayer.GamePiece);
+                }
 
-                    if (ActivePlayer.GamePiece.ItemHeld != null)
-                    {
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.SetViewMatrix(View);
+                int NearbyPlayerIndex = 0;
+                foreach (Player NearbyPlayer in ListNearbyPlayer)
+                {
+                    ListAlreadyDrawnPlayer.Add(NearbyPlayer);
+                    float Scale = 1f;
+                    float DistanceX = NearbyPlayer.GamePiece.X - CurrentPosition.X;
+                    float DistanceY = NearbyPlayer.GamePiece.Y - CurrentPosition.Y;
+                    float DistanceFromPlayer = (float)DistanceX * DistanceX + DistanceY * DistanceY;
 
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.SetPosition(
-                            CurrentPosition.X * Map.TileSize.X,
-                            (CurrentPosition.Z + 1f) * Map.LayerHeight,
-                            (CurrentPosition.Y - 0.5f) * Map.TileSize.Y);
+                    float Ratio = DistanceFromPlayer / DistanceFromPlayerMax;
+                    float ScaleRatio = (1 - ScaleMin) * Ratio;
 
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
-                    }
+                    Scale = ScaleMin + ScaleRatio;
 
-                    if (ActivePlayer.GamePiece.Unit3DModel == null)
-                    {
-                        ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
+                    float OffsetX = NearbyPlayerIndex % 2;
+                    float OffsetY = NearbyPlayerIndex / 2;
+                    Vector3 Offset = new Vector3(OffsetX * Map.TileSize.X * OffsetMax - (Map.TileSize.X / 2) * OffsetMax, OffsetY * Map.TileSize.Y * OffsetMax - (Map.TileSize.Y / 2) * OffsetMax, 0);
 
-                        ActivePlayer.GamePiece.Unit3DSprite.SetPosition(
-                            CurrentPosition.X,
-                            CurrentPosition.Z + 0.5f * Map.LayerHeight,
-                            CurrentPosition.Y);
+                    DrawPlayer(g, View, NearbyPlayer, Offset, Scale);
 
-                        ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+                    ++NearbyPlayerIndex;
+                }
+            }
+        }
 
-                        ActivePlayer.GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                    }
-                    else
-                    {
-                        ActivePlayer.GamePiece.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
-                        Matrix RotationMatrix = Matrix.Identity;
-                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
-                        }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
-                        }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
-                        }
+        private void DrawPlayer(CustomSpriteBatch g, Matrix View, Player ActivePlayer, Vector3 Offset, float Scale)
+        {
+            if (Map.MovementAnimation.Contains(ActivePlayer.GamePiece))
+            {
+                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActivePlayer.GamePiece);
 
-                        //ActivePlayer.GamePiece.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
-                        ActivePlayer.GamePiece.Unit3DModel.Draw3D(g.GraphicsDevice, View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
-                            * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
-                    }
+                if (ActivePlayer.GamePiece.ItemHeld != null)
+                {
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.SetViewMatrix(View);
+
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.SetPosition(
+                        CurrentPosition.X * Map.TileSize.X,
+                        (CurrentPosition.Z + 1f) * Map.LayerHeight,
+                        (CurrentPosition.Y - 0.5f) * Map.TileSize.Y);
+
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
+                }
+
+                if (ActivePlayer.GamePiece.Unit3DModel == null)
+                {
+                    ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 0.5f * Map.LayerHeight,
+                        CurrentPosition.Y);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                 }
                 else
                 {
-                    Color UnitColor;
-                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        UnitColor = ActivePlayer.Color;
-                    else
-                        UnitColor = Color.White;
-
-                    Vector3 CurrentPosition = ActivePlayer.GamePiece.Position;
-
-                    if (ActivePlayer.GamePiece.ItemHeld != null)
+                    ActivePlayer.GamePiece.Unit3DModel.ModelToDraw.PlayAnimation("Walking");
+                    Matrix RotationMatrix = Matrix.Identity;
+                    if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                     {
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.SetViewMatrix(View);
-
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.SetPosition(
-                            CurrentPosition.X,
-                            CurrentPosition.Z + 1f * Map.LayerHeight,
-                            CurrentPosition.Y - 0.5f * Map.TileSize.Y);
-
-                        ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
+                    }
+                    else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
+                    {
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
+                    }
+                    else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
+                    {
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                     }
 
-                    if (ActivePlayer.GamePiece.Unit3DModel == null)
+                    //ActivePlayer.GamePiece.Unit3DModel.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+                    ActivePlayer.GamePiece.Unit3DModel.Draw3D(g.GraphicsDevice, View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
+                        * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
+                }
+            }
+            else
+            {
+                Color UnitColor;
+                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                    UnitColor = ActivePlayer.Color;
+                else
+                    UnitColor = Color.White;
+
+                Vector3 CurrentPosition = ActivePlayer.GamePiece.Position + Offset;
+
+                if (ActivePlayer.GamePiece.ItemHeld != null)
+                {
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.SetViewMatrix(View);
+
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 1f * Map.LayerHeight,
+                        CurrentPosition.Y - 0.5f * Map.TileSize.Y);
+
+                    ActivePlayer.GamePiece.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
+                }
+
+                if (ActivePlayer.GamePiece.Unit3DModel == null)
+                {
+                    ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.SetPosition(
+                        CurrentPosition.X,
+                        CurrentPosition.Z + 0.5f * Map.LayerHeight,
+                        CurrentPosition.Y);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
+                    ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Scale"].SetValue(Scale);
+
+                    ActivePlayer.GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                }
+                else
+                {
+                    ActivePlayer.GamePiece.Unit3DModel.ModelToDraw.PlayAnimation("Idle");
+                    Matrix RotationMatrix = Matrix.Identity;
+                    if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                     {
-                        ActivePlayer.GamePiece.Unit3DSprite.SetViewMatrix(View);
-
-                        ActivePlayer.GamePiece.Unit3DSprite.SetPosition(
-                            CurrentPosition.X,
-                            CurrentPosition.Z + 0.5f * Map.LayerHeight,
-                            CurrentPosition.Y);
-
-                        ActivePlayer.GamePiece.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
-
-                        ActivePlayer.GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
                     }
-                    else
+                    else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
                     {
-                        ActivePlayer.GamePiece.Unit3DModel.ModelToDraw.PlayAnimation("Idle");
-                        Matrix RotationMatrix = Matrix.Identity;
-                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
-                        }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
-                        }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
-                        {
-                            RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
-                        }
-
-                        //ActivePlayer.GamePiece.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
-                        ActivePlayer.GamePiece.Unit3DModel.Draw3D(g.GraphicsDevice, View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
-                            * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
                     }
+                    else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
+                    {
+                        RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
+                    }
+
+                    //ActivePlayer.GamePiece.SetLightDirection(new Vector3(0.8f, -0.9f, -0.8f));
+                    ActivePlayer.GamePiece.Unit3DModel.Draw3D(g.GraphicsDevice, View, PolygonEffect.Projection, Matrix.CreateScale(0.2f * Scale) * RotationMatrix
+                        * Matrix.CreateTranslation(CurrentPosition.X, CurrentPosition.Z, CurrentPosition.Y));
+                }
+            }
+        }
+
+        private void FindNearbyPlayers(Player ActivePlayer)
+        {
+            ListNearbyPlayer.Clear();
+
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                Player OtherPlayer = Map.ListPlayer[P];
+                //If it's dead, don't draw it unless it's an event unit.
+                if (OtherPlayer.GamePiece == null || OtherPlayer == ActivePlayer)
+                    continue;
+
+                if (Math.Abs(ActivePlayer.GamePiece.Position.X - OtherPlayer.GamePiece.X) < Map.TileSize.X
+                    && Math.Abs(ActivePlayer.GamePiece.Position.Y - OtherPlayer.GamePiece.Y) < Map.TileSize.Y
+                    && Math.Abs(ActivePlayer.GamePiece.Position.Z - OtherPlayer.GamePiece.Z) < Map.LayerHeight)
+                {
+                    ListNearbyPlayer.Add(OtherPlayer);
                 }
             }
         }

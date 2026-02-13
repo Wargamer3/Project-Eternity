@@ -383,7 +383,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public void SpawnUnit(int PlayerIndex, UnitMap NewUnit, Vector3 SpawnPosition, Vector3 SpawnDestination)
         {
-            NewUnit.ActiveUnit.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.ActiveUnit.SpriteMap, 1);
+            NewUnit.ActiveUnit.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.ActiveUnit.SpriteMap, 1, 1f, 0f);
             NewUnit.ActiveUnit.Init();
             ListPlayer[PlayerIndex].ListUnit.Add(NewUnit);
 
@@ -399,7 +399,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public void SpawnConstruction(int PlayerIndex, Construction NewConstruction, Vector3 SpawnPosition)
         {
-            NewConstruction.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewConstruction.SpriteMap.ActiveSprite, 1);
+            NewConstruction.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewConstruction.SpriteMap.ActiveSprite, 1, 1f, 0f);
 
             NewConstruction.SetPosition(SpawnPosition);
 

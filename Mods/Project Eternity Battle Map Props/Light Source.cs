@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsUsed = false;
 
             sprFlag = Clone.sprFlag;
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Clone.Unit3D.UnitEffect3D, Clone.sprFlag, 1);
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Clone.Unit3D.UnitEffect3D, Clone.sprFlag, 1, 0f);
 
             Light = new BattleMapLight(GameScreen.GraphicsDevice, ShadowmapSizes.Size256, new Vector3(200, 200, 0), Color.Red);
             Map.ListLight.Add(Light);
@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (Content != null)
             {
                 sprFlag = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Flag Red");
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1, 0f);
             }
         }
 

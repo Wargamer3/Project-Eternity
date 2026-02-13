@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 public override void LoadPreset(ContentManager Content)
                 {
                     sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
-                    Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprCrate, 1);
+                    Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprCrate, 1, 0f);
                 }
 
                 public override void DoLoad(BinaryReader BR)

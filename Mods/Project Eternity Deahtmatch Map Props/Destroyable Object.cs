@@ -177,7 +177,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CreateUnit3D()
         {
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1, 0f);
 
             float TerrainZ = Map.GetTerrain(Position).WorldPosition.Z;
 

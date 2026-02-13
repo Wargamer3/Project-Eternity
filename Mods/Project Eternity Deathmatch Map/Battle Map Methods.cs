@@ -211,7 +211,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if (Content != null)
             {
-                NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1, 1f, 0f);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
                 NewSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
                 NewSquad.CurrentLeader.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
@@ -559,7 +559,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Do not spawn squads as it will trigger effect that were already activated
                         if (Content != null)
                         {
-                            NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                            NewSquad.CurrentLeader.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1, 1f, 0f);
                         }
 
                         if (!string.IsNullOrEmpty(ActiveSquadSquadAI))

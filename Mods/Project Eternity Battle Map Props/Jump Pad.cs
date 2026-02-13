@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (Content != null)
             {
                 sprFlag = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Flag Red");
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1, 0f);
             }
         }
 
@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             JumpPad NewProp = new JumpPad(Map);
 
             NewProp.sprFlag = sprFlag;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1, 0f);
 
             return NewProp;
         }

@@ -72,8 +72,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (!string.IsNullOrEmpty(_SpritePath))
             {
                 sprFlag = Map.Content.Load<Texture2D>("Animations/Sprites/" + _SpritePath);
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
-                Flag3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1, 0f);
+                Flag3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1, 0f);
                 TeamFlag = new Flag(Map, this, sprFlag, Flag3D);
             }
         }
@@ -216,8 +216,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 NewProp.Team = Team;
                 NewProp.sprFlag = sprFlag;
-                NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1);
-                NewProp.Flag3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1);
+                NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1, 0f);
+                NewProp.Flag3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprFlag, 1, 0f);
             }
 
             return NewProp;

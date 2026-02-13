@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (Content != null)
             {
                 sprAdrenaline = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Adrenaline");
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprAdrenaline, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprAdrenaline, 1, 0f);
             }
         }
 
@@ -136,7 +136,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             AdrenalineSpawner NewProp = new AdrenalineSpawner(Map);
 
             NewProp.sprAdrenaline = sprAdrenaline;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprAdrenaline, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprAdrenaline, 1, 0f);
 
             return NewProp;
         }

@@ -2925,7 +2925,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             if (Content != null)
             {
-                NewUnit.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
+                NewUnit.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1, 1f, 0f);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
                 NewUnit.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
                 NewUnit.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
@@ -2960,7 +2960,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             if (Content != null)
             {
-                NewBuilding.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewBuilding.SpriteMap.ActiveSprite, 1);
+                NewBuilding.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewBuilding.SpriteMap.ActiveSprite, 1, 1f, 0f);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
                 NewBuilding.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
                 NewBuilding.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);

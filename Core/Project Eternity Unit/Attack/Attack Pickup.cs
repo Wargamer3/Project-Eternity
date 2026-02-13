@@ -28,7 +28,7 @@ namespace ProjectEternity.Core.Attacks
 
             if (!string.IsNullOrEmpty(SpritePath))
             {
-                Attack3D = new UnitMap3D(GameScreen.GraphicsDevice, Effect3D, sprWeapon, 1);
+                Attack3D = new UnitMap3D(GameScreen.GraphicsDevice, Effect3D, sprWeapon, 1, 0f);
             }
         }
     }

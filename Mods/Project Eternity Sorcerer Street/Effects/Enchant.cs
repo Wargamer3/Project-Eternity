@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.Skill = Skill;
             this.sprIcon = sprIcon;
-            Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, GameScreen.ContentFallback.Load<Effect>("Shaders/Billboard 3D"), sprIcon, 1);
+            Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, GameScreen.ContentFallback.Load<Effect>("Shaders/Billboard 3D"), sprIcon, 1, 0f);
             Unit3DSprite.SetScale(new Microsoft.Xna.Framework.Vector2(16, 16));
         }
     }
