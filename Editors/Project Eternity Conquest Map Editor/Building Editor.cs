@@ -135,7 +135,21 @@ namespace ProjectEternity.Editors.UnitHubEditor
             if (lstUnits.SelectedIndex < 0)
                 return;
 
-            lstUnits.Items.RemoveAt(lstUnits.SelectedIndex);
+            int SelectedIndex = lstUnits.SelectedIndex;
+            lstUnits.Items.RemoveAt(SelectedIndex);
+
+            if (lstUnits.Items.Count == 0)
+            {
+                lstUnits.SelectedIndex = -1;
+            }
+            else if (SelectedIndex < lstUnits.Items.Count)
+            {
+                lstUnits.SelectedIndex = SelectedIndex;
+            }
+            else
+            {
+                lstUnits.SelectedIndex = lstUnits.Items.Count - 1;
+            }
         }
 
         private void btnSelectOrginalUnit_Click(object sender, EventArgs e)
@@ -206,7 +220,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             string Name;
             for (int I = 0; I < Items.Count; I++)
             {
-                Name = Items[I].Substring(0, Items[0].Length - 4).Substring(23);
+                Name = Items[I].Substring(0, Items[I].Length - 4).Substring(23);
 
                 switch (ItemSelectionChoice)
                 {

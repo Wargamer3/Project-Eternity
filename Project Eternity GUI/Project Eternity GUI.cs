@@ -822,11 +822,17 @@ namespace ProjectEternity.GUI
                         tsmDelete.Visible = true;
                         tsmRename.Visible = true;
                         tsmProperties.Visible = true;
-                        tsmOpenInFileExplorer.Visible = true;
+
                         if (mySelectedNode.Parent != null && mySelectedNode.Parent.Tag != null && ((EditorInfo)mySelectedNode.Parent.Tag).CanCreateNewItems)
+                        {
                             tsmNew.Visible = true;
+                            tsmOpenInFileExplorer.Visible = true;
+                        }
                         else
+                        {
                             tsmNew.Visible = false;
+                            tsmOpenInFileExplorer.Visible = false;
+                        }
                     }
                     else
                     {
