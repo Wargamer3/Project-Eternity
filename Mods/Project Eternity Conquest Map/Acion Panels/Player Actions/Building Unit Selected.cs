@@ -92,6 +92,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             //Draw the action panel.
             int X = FinalMenuX;
             int Y = FinalMenuY;
+
+            if (Y + FactoruMenuHeight >= Constants.Height)
+                Y = Constants.Height - FactoruMenuHeight;
             X += 20;
             GameScreen.DrawBox(g, new Vector2(X, Y), FactoryMenuWidth + 50, FactoruMenuHeight, Color.White);
             X += 10;
@@ -105,7 +108,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Y += PannelHeight;
             }
 
-            Y = BaseMenuY;
+            Y = FinalMenuY;
             if (Y + FactoruMenuHeight >= Constants.Height)
                 Y = Constants.Height - FactoruMenuHeight;
             //Draw the menu cursor.

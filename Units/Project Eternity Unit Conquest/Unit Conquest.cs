@@ -22,14 +22,27 @@ namespace ProjectEternity.Core.Units.Conquest
 
         public UnitConquest Unit;
 
-        private readonly SpriteFont fntHPNumber;
+        private static SpriteFont fntHPNumber;
+        private static Texture2D[] sprHPNumber;
 
         public ConquestMapComponent(UnitConquest Unit, ContentManager Content)
         {
             this.Unit = Unit;
-            if (Content != null)
+            if (Content != null && fntHPNumber == null)
             {
                 fntHPNumber = Content.Load<SpriteFont>("Fonts/Accuracy Small");
+                sprHPNumber = new Texture2D[11];
+                sprHPNumber[0] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/0");
+                sprHPNumber[1] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/1");
+                sprHPNumber[2] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/2");
+                sprHPNumber[3] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/3");
+                sprHPNumber[4] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/4");
+                sprHPNumber[5] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/5");
+                sprHPNumber[6] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/6");
+                sprHPNumber[7] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/7");
+                sprHPNumber[8] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/8");
+                sprHPNumber[9] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/9");
+                sprHPNumber[10] = Content.Load<Texture2D>("Conquest/Ressources/Sprites/Digit/16px/10");
             }
         }
 
@@ -48,8 +61,8 @@ namespace ProjectEternity.Core.Units.Conquest
             if (Unit.HP < 10)
             {
                 int VisibleHP = Unit.HP;
-                g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)Position.X, (int)Position.Y, 15, 15), Color.Black);
-                g.DrawStringMiddleAligned(fntHPNumber, VisibleHP.ToString(), new Vector2(Position.X + 9, Position.Y), Color.White);
+                int Digit = VisibleHP % 10;
+                g.Draw(sprHPNumber[Digit], new Vector2(Position.X + 16, Position.Y + 16), null, Color.White, 0f, new Vector2(sprHPNumber[Digit].Width, sprHPNumber[Digit].Height), 1f, SpriteEffects.None, 0f);
             }
         }
 

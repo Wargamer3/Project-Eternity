@@ -93,6 +93,8 @@ namespace ProjectEternity.Editors.UnitHubEditor
             string FilePath = BuildingPath.Substring(0, BuildingPath.Length - 4).Substring(27);
             BuildingConquest NewBuilding = new BuildingConquest(FilePath, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
+            this.Text = NewBuilding.Name + " - Building Editor";
+
             for (int U = 0; U < NewBuilding.ListUnitToSpawn.Count; ++U)
             {
                 lstUnits.Items.Add(NewBuilding.ListUnitToSpawn[U]);
