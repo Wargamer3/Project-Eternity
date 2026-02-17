@@ -57,5 +57,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             PushScreen(new SorcererStreetInventoryScreen((Player)PlayerManager.ListLocalPlayer[0]));
             sndButtonClick.Play();
         }
+
+        public override void OpenShop()
+        {
+            PushScreen(new ShopScreen(OnlineGameClient));
+            sndButtonClick.Play();
+        }
+
+        protected override void OpenHelpMenu()
+        {
+            PushScreen(new IntroPopup(this));
+        }
     }
 }

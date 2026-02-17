@@ -120,6 +120,7 @@ namespace ProjectEternity.Core.Graphics
 
             g.Draw(SpriteToDraw, new Rectangle(X, Y, FinalWidth, FinalHeight), new Rectangle(0, 0, SpriteWidth, SpriteHeight), Color.White, 0f, Origin, SpriteEffects.None, 0f);
         }
+
         public void DrawString(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
         {
             g.DrawString(spriteFont, Text, Position, TextColor);

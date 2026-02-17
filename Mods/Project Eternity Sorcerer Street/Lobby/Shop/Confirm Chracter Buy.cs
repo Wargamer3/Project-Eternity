@@ -56,12 +56,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntOxanimumBoldBigger = Content.Load<SpriteFont>("Fonts/Oxanium Bold Bigger");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprFrameBuy = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Confirm Buy");
+            sprFrameBuy = Content.Load<Texture2D>("Menus/Lobby Menu/Shop/Frame Confirm Buy");
 
-            sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
-            sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
-            sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
-            sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
+            sprLand = Content.Load<Texture2D>("Deathmatch/Status Screen/Ground");
+            sprSea = Content.Load<Texture2D>("Deathmatch/Status Screen/Sea");
+            sprSky = Content.Load<Texture2D>("Deathmatch/Status Screen/Sky");
+            sprSpace = Content.Load<Texture2D>("Deathmatch/Status Screen/Space");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");

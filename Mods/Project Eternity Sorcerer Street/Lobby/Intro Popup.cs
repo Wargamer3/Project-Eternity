@@ -6,7 +6,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     class IntroPopup : GameScreen
     {
@@ -47,15 +47,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private double AnimationCounter;
 
-        private LobbyWhite Owner;
+        private SorcererStreetLobby Owner;
         private LobbyVisualNovel Intro;
-        private CreateRoomScreen IntroCreateRoomScreen;
-        private GamePreparationScreen PreparationScreen;
-        private GameOptionsScreen OptionScreen;
-        private GameOptionsGametypeScreen GameModeSelectionScreen;
-        private GameOptionsSelectMapScreen GameMapSelectionScreen;
+        private SorcererStreetCreateRoomScreen IntroCreateRoomScreen;
+        private SorcererStreetGamePreparationScreen PreparationScreen;
+        private SorcererStreetGameOptionsScreen OptionScreen;
+        private SorcererStreetGameOptionsGametypeScreen GameModeSelectionScreen;
+        private BattleMapScreen.GameOptionsSelectMapScreen GameMapSelectionScreen;
 
-        public IntroPopup(LobbyWhite Owner)
+        public IntroPopup(SorcererStreetLobby Owner)
         {
             this.Owner = Owner;
             RequireFocus = false;
@@ -67,8 +67,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntOxanimumBoldBigger = Content.Load<SpriteFont>("Fonts/Oxanium Bold Bigger");
             fntOxanimumLightBigger = Content.Load<SpriteFont>("Fonts/Oxanium Light Bigger");
 
-            sprPopup = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Confirm Buy");
-            sprFrameDescription = Content.Load<Texture2D>("Menus/Lobby/Room/Frame Description");
+            sprPopup = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Frame Confirm Buy");
+            sprFrameDescription = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Room/Frame Description");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
@@ -76,10 +76,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(Constants.Width / 2 - 300 * Ratio);
             int DrawY = Constants.Height / 2 - (int)(sprPopup.Height * Ratio / 2) + (int)(750 * Ratio);
-            ConfirmButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:65,70,65,255}Read}}", "Menus/Lobby/Button Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, StartIntro);
+            ConfirmButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:65,70,65,255}Read}}", "Deathmatch/Lobby Menu/Interactive/Button Color", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, StartIntro);
 
             DrawX = (int)(Constants.Width / 2 + 300 * Ratio);
-            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Skip}}", "Menus/Lobby/Button Close", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Cancel);
+            CancelButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Bigger}{Centered}{Color:243, 243, 243, 255}Skip}}", "Deathmatch/Lobby Menu/Interactive/Button Close", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, Cancel);
 
             ArrayUIElement = new IUIElement[]
             {
@@ -92,27 +92,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             switch (Intro.TimelineIndex)
             {
                 case 2:
-                    IntroCreateRoomScreen = Owner.CreateARoom();
+                    IntroCreateRoomScreen = (SorcererStreetCreateRoomScreen)Owner.CreateARoom();
                     ListGameScreen.Remove(Intro);
                     ListGameScreen.Insert(0, Intro);
                     break;
 
                 case 3:
-                    PreparationScreen = IntroCreateRoomScreen.CreateRoom();
+                    PreparationScreen = (SorcererStreetGamePreparationScreen)IntroCreateRoomScreen.CreateRoom();
                     ListGameScreen.Remove(Intro);
                     ListGameScreen.Insert(0, Intro);
                     break;
 
                 case 7:
-                    OptionScreen = PreparationScreen.OpenRoomSettingsScreen();
-                    GameModeSelectionScreen = (GameOptionsGametypeScreen)OptionScreen.ArrayOptionTab[0];
-                    GameMapSelectionScreen = (GameOptionsSelectMapScreen)OptionScreen.ArrayOptionTab[1];
+                    OptionScreen = (SorcererStreetGameOptionsScreen)PreparationScreen.OpenRoomSettingsScreen();
+                    GameModeSelectionScreen = (SorcererStreetGameOptionsGametypeScreen)OptionScreen.ArrayOptionTab[0];
+                    GameMapSelectionScreen = (BattleMapScreen.GameOptionsSelectMapScreen)OptionScreen.ArrayOptionTab[1];
                     ListGameScreen.Remove(Intro);
                     ListGameScreen.Insert(0, Intro);
                     break;
 
                 case 9://Select Campaign
-                    GameModeSelectionScreen.SelectGametype(0, 0);
+                    GameModeSelectionScreen.SelectGametype(1, 0);
                     break;
 
                 case 10:
@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case 11:
-                    GameMapSelectionScreen.SelectMap("Multiplayer/Campaign/Tutorial");
+                    GameMapSelectionScreen.SelectMap("Deathmatch/Small");
                     break;
 
                 case 12:
@@ -148,6 +148,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 case 22:
                     Owner.OpenInventory();
+                    ListGameScreen[0].RequireDrawFocus = false;
                     ListGameScreen.Remove(Intro);
                     ListGameScreen.Insert(0, Intro);
                     break;
@@ -169,7 +170,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayUIElement = new IUIElement[0];
             sndButtonClick.Play();
 
-            Intro = new LobbyVisualNovel("MP Intro");
+            Intro = new LobbyVisualNovel("Sorcerer Street/MP Intro");
             Intro.sprFrameDescription = sprFrameDescription;
             Intro.OnVisualNovelFrameChanged += OnIntroFrameChanged;
             PushScreen(Intro);

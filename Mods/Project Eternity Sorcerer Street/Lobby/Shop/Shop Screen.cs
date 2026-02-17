@@ -87,10 +87,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             fntOxanimumBoldBig = Content.Load<SpriteFont>("Fonts/Oxanium Bold Big");
             fntOxanimumBoldTitle = Content.Load<SpriteFont>("Fonts/Oxanium Bold Title");
 
-            sprButtonSmallActive = Content.Load<Texture2D>("Menus/Lobby/Button Tab");
-            sprButtonSmallInactive = Content.Load<Texture2D>("Menus/Lobby/Shop/Button Inactive");
-            sprButtonBackToLobby = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive");
-            sprMoney = Content.Load<Texture2D>("Menus/Lobby/Shop/Frame Money");
+            sprButtonSmallActive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Tab");
+            sprButtonSmallInactive = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Button Inactive");
+            sprButtonBackToLobby = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Interactive/Button Back To Lobby");
+            sprMoney = Content.Load<Texture2D>("Deathmatch/Lobby Menu/Shop/Frame Money");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
@@ -98,17 +98,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Ratio = Constants.Height / 2160f;
             int DrawX = (int)(Constants.Width - 502 * Ratio);
             int DrawY = (int)(100 * Ratio);
-            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Deathmatch/Lobby Menu/Interactive", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
+            ReturnToLobbyButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Return To Lobby}}", "Deathmatch/Lobby Menu/Interactive/Button Back To Lobby", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, SelectBackToLobbyButton);
 
             DrawX = 280;
             DrawY = 342;
-            UnitFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Units}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectUnitFilterButton);
+            UnitFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Units}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectUnitFilterButton);
             DrawX += 500;
-            CharacterFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Characters}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectCharacterFilterButton);
+            CharacterFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Characters}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectCharacterFilterButton);
             DrawX += 500;
-            EquipmentFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Equipment}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectEquipmentFilterButton);
+            EquipmentFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Equipment}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectEquipmentFilterButton);
             DrawX += 500;
-            ConsumableFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Consumable}}", "Menus/Lobby/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectConsumableFilterButton);
+            ConsumableFilterButton = new TextButton(Content, "{{Text:{Font:Oxanium Bold Big}{Centered}{Color:65,70,65,255}Consumable}}", "Deathmatch/Lobby Menu/Interactive/Button Tab", new Vector2(DrawX * Ratio, DrawY * Ratio), 4, 1, Ratio, OnButtonOver, SelectConsumableFilterButton);
 
             UnitFilterButton.CanBeChecked = true;
             CharacterFilterButton.CanBeChecked = true;

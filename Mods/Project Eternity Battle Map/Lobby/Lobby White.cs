@@ -213,9 +213,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawX = (int)(3472 * Ratio);
             DrawY = (int)(122 * Ratio);
-            HelpButton = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, () => {
-                PushScreen(new IntroPopup(this));
-            });
+            HelpButton = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Button Help", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, OpenHelpMenu);
             DrawX += (int)(180 * Ratio);
             OptionsButton = new TextButton(Content, "", "Deathmatch/Lobby Menu/Interactive/Button Settings", new Vector2(DrawX, DrawY), 4, 1, Ratio, OnButtonOver, null);
 
@@ -255,7 +253,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (!File.Exists("User Data/Profiles/Battle Map/Last Selected Profile.txt"))
             {
-                PushScreen(new IntroPopup(this));
+                OpenHelpMenu();
             }
         }
 
@@ -601,6 +599,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShowAllPlayersFilter.Unselect();
             ShowFriendsFilter.Unselect();
             PlayerListType = PlayerListTypes.Friends;
+        }
+
+        protected virtual void OpenHelpMenu()
+        {
+            PushScreen(new IntroPopup(this));
         }
 
         #endregion

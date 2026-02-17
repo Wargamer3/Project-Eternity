@@ -144,6 +144,7 @@
     <Compile Include="Lobby\Game Preparation Screen\Configure Player Popup.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Player Preparation Default.cs" />
     <Compile Include="Lobby\Game Preparation Screen\Change Player Type Popup.cs" />
+    <Compile Include="Lobby\Intro Popup.cs" />
     <Compile Include="Lobby\Lobby Victory Screen.cs" />
     <Compile Include="Lobby\Shop\Character Screen.cs" />
     <Compile Include="Lobby\Shop\Confirm Card Buy.cs" />
