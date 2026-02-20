@@ -214,7 +214,7 @@ namespace ProjectEternity.Core.Units
 
                 if (NewValue[0].StartsWith("!"))
                 {
-                    byte MovementIndex = (byte)Parent.ListUnitMovement.IndexOf(Parent.ListUnitMovement.Find(x => x.Name == NewValue[0].Substring(1)));
+                    byte MovementIndex = (byte)Parent.ListTerrainType.IndexOf(Parent.ListTerrainType.Find(x => x.Name == NewValue[0].Substring(1)));
 
                     if (NewValue.Count == 2)
                     {
@@ -223,7 +223,7 @@ namespace ProjectEternity.Core.Units
                 }
                 else
                 {
-                    byte MovementIndex = (byte)Parent.ListUnitMovement.IndexOf(Parent.ListUnitMovement.Find(x => x.Name == NewValue[0]));
+                    byte MovementIndex = (byte)Parent.ListTerrainType.IndexOf(Parent.ListTerrainType.Find(x => x.Name == NewValue[0]));
 
                     if (NewValue.Count >= 2)
                     {
@@ -265,7 +265,7 @@ namespace ProjectEternity.Core.Units
         public override DataGridValue GetColumns()
         {
             DataGridValue GridValues = new DataGridValue();
-            List<string> ListMovementName = Parent.ListUnitMovement.Select(x => x.Name).ToList();
+            List<string> ListMovementName = Parent.ListTerrainType.Select(x => x.Name).ToList();
 
             List<RowWithSelectedValue> ListChoiceByColumn = new List<RowWithSelectedValue>();
             List<CellValue> ListRowCellValue;
@@ -273,7 +273,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<byte, List<byte>> ActiveUnitTypeIndex in DicAllowedMovementRankPositive)
             {
                 ListRowCellValue = new List<CellValue>();
-                ListRowCellValue.Add(new CellValue(Parent.ListUnitMovement[ActiveUnitTypeIndex.Key].Name, ListMovementName));
+                ListRowCellValue.Add(new CellValue(Parent.ListTerrainType[ActiveUnitTypeIndex.Key].Name, ListMovementName));
 
                 foreach (byte ActiveUnitRankIndex in ActiveUnitTypeIndex.Value)
                 {
@@ -288,7 +288,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<byte, List<byte>> ActiveUnitTypeIndex in DicAllowedMovementRankNegative)
             {
                 ListRowCellValue = new List<CellValue>();
-                ListRowCellValue.Add(new CellValue(Parent.ListUnitMovement[ActiveUnitTypeIndex.Key].Name, ListMovementName));
+                ListRowCellValue.Add(new CellValue(Parent.ListTerrainType[ActiveUnitTypeIndex.Key].Name, ListMovementName));
 
                 foreach (byte ActiveUnitRankIndex in ActiveUnitTypeIndex.Value)
                 {
@@ -302,7 +302,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<byte, List<byte>> ActiveUnitTypeIndex in DicAllowedMovementNegativeRankPositive)
             {
                 ListRowCellValue = new List<CellValue>();
-                ListRowCellValue.Add(new CellValue("!" + Parent.ListUnitMovement[ActiveUnitTypeIndex.Key].Name, ListMovementName));
+                ListRowCellValue.Add(new CellValue("!" + Parent.ListTerrainType[ActiveUnitTypeIndex.Key].Name, ListMovementName));
 
                 foreach (byte ActiveUnitRankIndex in ActiveUnitTypeIndex.Value)
                 {
@@ -314,7 +314,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<byte, List<byte>> ActiveUnitTypeIndex in DicAllowedMovementNegativeRankNegative)
             {
                 ListRowCellValue = new List<CellValue>();
-                ListRowCellValue.Add(new CellValue("!" + Parent.ListUnitMovement[ActiveUnitTypeIndex.Key].Name, ListMovementName));
+                ListRowCellValue.Add(new CellValue("!" + Parent.ListTerrainType[ActiveUnitTypeIndex.Key].Name, ListMovementName));
 
                 foreach (byte ActiveUnitRankIndex in ActiveUnitTypeIndex.Value)
                 {

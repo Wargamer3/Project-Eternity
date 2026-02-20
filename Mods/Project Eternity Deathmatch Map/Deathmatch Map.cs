@@ -155,7 +155,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMutator = new List<DeathmatchMutator>();
             DicTemporaryTerrain = new Dictionary<Vector3, DestructibleTerrain>();
 
-            TerrainRestrictions = new UnitAndTerrainValues();
+            UnitAndTerrainValues.Default = TerrainRestrictions = new UnitAndTerrainValues();
             TerrainRestrictions.Load();
         }
 

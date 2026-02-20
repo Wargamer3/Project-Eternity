@@ -171,7 +171,7 @@ namespace ProjectEternity.Core.Units
                 for (int C = ArrayUnit[U].ArrayCharacterActive.Length - 1; C >= 0; --C)
                     if (!string.IsNullOrEmpty(ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName))
                         if (!Character.DicBattleTheme.ContainsKey(ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName))
-                            Character.DicBattleTheme.Add(ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName, new FMOD.FMODSound(GameScreens.GameScreen.FMODSystem, "Content/Maps/BGM/" + ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName));
+                            Character.DicBattleTheme.Add(ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName, new FMOD.FMODSound(GameScreens.GameScreen.FMODSystem, "Content/Assets/BGM/" + ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName));
             }
         }
 

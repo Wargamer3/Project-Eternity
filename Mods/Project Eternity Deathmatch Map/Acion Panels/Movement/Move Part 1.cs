@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
             ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.Position));
-            ListMovedOverPoint.Add(ActiveSquad.Position);
+            ListMovedOverPoint.Add(LastPosition.WorldPosition);
             ActiveSquad.CurrentLeader.CurrentAttack = null;
         }
 
@@ -76,7 +76,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
             Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
 
-            if (Map.CursorControl(gameTime, ActiveInputManager))
+            bool CursorMoved = Map.CursorControl(gameTime, ActiveInputManager);
+
+            if (CursorMoved)
             {
                 foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ListTeleportPoint)
                 {
@@ -111,30 +113,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.sndDeny.Play();
                 }
             }
-            else if (Map.CursorPosition == ActiveSquad.Position)
+            else if (CursorMoved)
             {
-                ListMovedOverTerrain.Clear();
-                ListMovedOverPoint.Clear();
-                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.Position));
-                ListMovedOverPoint.Add(ActiveSquad.Position);
-                LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
-            }
-            else if (ListMVChoice.Contains(LastPosition.Owner.CursorTerrain) && LastPosition.Owner.CursorTerrain != LastCusorMVPosition)
-            {
-                if (Math.Abs(LastCusorMVPosition.GridPosition.X - LastPosition.Owner.CursorPosition.X / LastPosition.Owner.TileSize.X) + Math.Abs(LastCusorMVPosition.GridPosition.Y - LastPosition.Owner.CursorPosition.Y / LastPosition.Owner.TileSize.Y) > 1)
-                {
-                    ComputeNewHoverPath();
-                }
-                else if (ListMovedOverPoint.Contains(Map.CursorPosition))
-                {
-                    RemoveHoverChoice();
-                }
-                else
-                {
-                    AddHoverChoice();
-                }
+                Terrain CursorTerrain = Map.GetTerrain(Map.CursorPosition);
 
-                LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
+                if (Map.CursorPosition == ActiveSquad.Position)
+                {
+                    ListMovedOverTerrain.Clear();
+                    ListMovedOverPoint.Clear();
+                    ListMovedOverTerrain.Add(CursorTerrain);
+                    ListMovedOverPoint.Add(LastPosition.WorldPosition);
+                    LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
+                }
+                else if (ListMVChoice.Contains(CursorTerrain) && CursorTerrain != LastCusorMVPosition)
+                {
+                    if (Math.Abs(LastCusorMVPosition.GridPosition.X - CursorTerrain.GridPosition.X) + Math.Abs(LastCusorMVPosition.GridPosition.Y - CursorTerrain.GridPosition.Y) > 1)
+                    {
+                        ComputeNewHoverPath();
+                    }
+                    else if (ListMovedOverPoint.Contains(CursorTerrain.WorldPosition))
+                    {
+                        RemoveHoverChoice();
+                    }
+                    else
+                    {
+                        AddHoverChoice();
+                    }
+
+                    LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
+                }
             }
         }
 
@@ -162,7 +169,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (CurrentMVCost <= MaxMV)
             {
                 ListMovedOverTerrain.Add(NextTerrain);
-                ListMovedOverPoint.Add(Map.CursorPosition);
+                ListMovedOverPoint.Add(NextTerrain.WorldPosition);
             }
             else
             {
@@ -172,6 +179,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void RemoveHoverChoice()
         {
+            Terrain CursorTerrain = Map.GetTerrain(Map.CursorPosition);
             bool RemovePoint = false;
 
             for (int P = 0; P < ListMovedOverPoint.Count; ++P)
@@ -182,7 +190,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListMovedOverTerrain.RemoveAt(P);
                     --P;
                 }
-                else if (Map.CursorPosition == ListMovedOverPoint[P])
+                else if (CursorTerrain.WorldPosition == ListMovedOverPoint[P])
                 {
                     RemovePoint = true;
                 }

@@ -7,11 +7,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     partial class DeathmatchMap
     {
-        public char GetTerrainLetterAttribute(UnitStats UnitStat, byte MovementTypeIndex)
-        {
-            return Grades[UnitStat.TerrainAttributeValue(MovementTypeIndex)];
-        }
-
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 WorldPosition, Vector3 Displacement)
         {
             return CheckForSquadAtPosition(PlayerIndex, WorldPosition, Displacement) >= 0;

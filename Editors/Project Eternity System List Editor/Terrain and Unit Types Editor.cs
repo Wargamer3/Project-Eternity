@@ -33,11 +33,6 @@ namespace ProjectEternity.Editors.SystemListEditor
                 lsUnitTypes.Items.Add(ActiveUnitType);
             }
 
-            foreach (UnitMovementType ActiveMovementType in Values.ListUnitMovement)
-            {
-                lsUnitMovementTypes.Items.Add(ActiveMovementType);
-            }
-
             foreach (TerrainType ActiveTerrainType in Values.ListTerrainType)
             {
                 lsTerrainTypes.Items.Add(ActiveTerrainType);
@@ -91,47 +86,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             {
                 Values.ListUnitType.RemoveAt(lsUnitTypes.SelectedIndex);
                 lsUnitTypes.Items.RemoveAt(lsUnitTypes.SelectedIndex);
-            }
-        }
-
-        #endregion
-
-        #region Unit Movement Types
-
-        private void lsUnitMovementTypes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lsUnitMovementTypes.SelectedIndex >= 0)
-            {
-                UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
-                txtUnitMovementTypeName.Text = SelectedUnitMovementType.Name;
-            }
-        }
-
-        private void txtUnitMovementTypeName_TextChanged(object sender, EventArgs e)
-        {
-            if (lsUnitMovementTypes.SelectedIndex >= 0)
-            {
-                UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
-                SelectedUnitMovementType.Name = txtUnitMovementTypeName.Text;
-                Values.ListUnitMovement[lsUnitMovementTypes.SelectedIndex].Name = txtUnitMovementTypeName.Text;
-
-                lsUnitMovementTypes.Items[lsUnitMovementTypes.SelectedIndex] = SelectedUnitMovementType;
-            }
-        }
-
-        private void btnAddUnitMovementType_Click(object sender, EventArgs e)
-        {
-            UnitMovementType NewMovementType = new UnitMovementType();
-            lsUnitMovementTypes.Items.Add(NewMovementType);
-            Values.ListUnitMovement.Add(NewMovementType);
-        }
-
-        private void btnRemoveUnitMovementType_Click(object sender, EventArgs e)
-        {
-            if (lsUnitMovementTypes.SelectedIndex >= 0)
-            {
-                Values.ListUnitMovement.RemoveAt(lsUnitMovementTypes.SelectedIndex);
-                lsUnitMovementTypes.Items.RemoveAt(lsUnitMovementTypes.SelectedIndex);
             }
         }
 

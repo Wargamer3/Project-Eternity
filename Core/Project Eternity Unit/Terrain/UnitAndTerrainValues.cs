@@ -10,7 +10,6 @@ namespace ProjectEternity.Core.Units
         public static UnitAndTerrainValues Default = new UnitAndTerrainValues();
 
         public List<string> ListUnitType = new List<string>();
-        public List<UnitMovementType> ListUnitMovement = new List<UnitMovementType>();
         public List<TerrainType> ListTerrainType = new List<TerrainType>();
 
         public void Load()
@@ -27,12 +26,6 @@ namespace ProjectEternity.Core.Units
             for (int T = 0; T < ListUnitTypeCount; ++T)
             {
                 ListUnitType.Add(BR.ReadString());
-            }
-
-            int ListUnitMovementCount = BR.ReadInt32();
-            for (int T = 0; T < ListUnitMovementCount; ++T)
-            {
-                ListUnitMovement.Add(new UnitMovementType(BR));
             }
 
             int ListTerrainTypeCount = BR.ReadInt32();
@@ -56,12 +49,6 @@ namespace ProjectEternity.Core.Units
                 BW.Write(ListUnitType[T]);
             }
 
-            BW.Write(ListUnitMovement.Count);
-            for (int M = 0; M < ListUnitMovement.Count; ++M)
-            {
-                ListUnitMovement[M].Save(BW);
-            }
-
             BW.Write(ListTerrainType.Count);
             for (int T = 0; T < ListTerrainType.Count; ++T)
             {
@@ -77,14 +64,14 @@ namespace ProjectEternity.Core.Units
             return ListTerrainType[TerrainTypeIndex].CanMove(Unit, Stats);
         }
 
-        public float GetMVCost(UnitMapComponent Unit, UnitStats Stats, byte TerrainTypeIndex)
+        public float GetMVCost(UnitMapComponent Unit, UnitStats Stats, byte TerrainTypeIndex, byte TerrainTypeIndexNext)
         {
-            if (Unit.CurrentTerrainIndex != TerrainTypeIndex)
+            if (TerrainTypeIndex != TerrainTypeIndexNext)
             {
-                return ListTerrainType[TerrainTypeIndex].GetEntryCost(Unit, Stats);
+                return ListTerrainType[TerrainTypeIndexNext].GetEntryCost(Unit, Stats);
             }
 
-            return ListTerrainType[TerrainTypeIndex].GetMovementCost(Unit, Stats);
+            return ListTerrainType[TerrainTypeIndexNext].GetMovementCost(Unit, Stats);
         }
 
         public float GetENCost(UnitMapComponent Unit, UnitStats Stats, byte TerrainTypeIndex)

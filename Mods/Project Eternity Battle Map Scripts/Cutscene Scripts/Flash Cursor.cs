@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                     else
                     {
-                        Map.CursorPositionVisible = new Microsoft.Xna.Framework.Vector3(-10, -10, 0);
+                        Map.CursorPositionVisible = new Microsoft.Xna.Framework.Vector3(-1000, -1000, 0);
                         if (TimerValueVisible >= _TimeInvisible)
                         {
                             TimerValueVisible = 0;

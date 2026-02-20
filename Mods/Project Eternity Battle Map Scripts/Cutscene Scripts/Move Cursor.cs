@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                Map.CursorPosition = new Microsoft.Xna.Framework.Vector3(CursorPosition.X, CursorPosition.Y, Map.CursorPosition.Z);
+                Map.CursorPosition = new Microsoft.Xna.Framework.Vector3(CursorPosition.X + Map.TileSize.X / 2, CursorPosition.Y + Map.TileSize.Y / 2, Map.CursorPosition.Z);
                 Map.CursorPositionVisible = Map.CursorPosition;
                 IsEnded = true;
             }

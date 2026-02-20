@@ -261,7 +261,7 @@ namespace ProjectEternity.Editors.AttackEditor
             {
                 if (ActiveRow.Cells[1].Value != null)
                 {
-                    ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListUnitMovement.IndexOf(UnitAndTerrainValues.Default.ListUnitMovement.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
+                    ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListTerrainType.IndexOf(UnitAndTerrainValues.Default.ListTerrainType.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
                         (byte)Unit.ListRank.IndexOf(ActiveRow.Cells[1].Value.ToString()[0])));
                 }
             }
@@ -487,15 +487,15 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Terrain grades
 
-            for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
+            for (byte M = 0; M < UnitAndTerrainValues.Default.ListTerrainType.Count; M++)
             {
-                UnitMovementType ActiveMovement = UnitAndTerrainValues.Default.ListUnitMovement[M];
+                TerrainType ActiveMovement = UnitAndTerrainValues.Default.ListTerrainType[M];
                 int NewRowIndex = dgvTerrainRanks.Rows.Add();
 
                 DataGridViewComboBoxCell MovementCell = new DataGridViewComboBoxCell();
                 DataGridViewComboBoxCell RankCell = new DataGridViewComboBoxCell();
 
-                foreach (UnitMovementType ActiveMovementChoice in UnitAndTerrainValues.Default.ListUnitMovement)
+                foreach (TerrainType ActiveMovementChoice in UnitAndTerrainValues.Default.ListTerrainType)
                 {
                     MovementCell.Items.Add(ActiveMovementChoice.Name);
                 }

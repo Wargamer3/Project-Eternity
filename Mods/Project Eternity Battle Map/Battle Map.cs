@@ -102,8 +102,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Variable definition
 
-        public static char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
-
         public static float WingmanDamageModifier = 0.75f;
         public string MapName;
         public string BattleMapPath;

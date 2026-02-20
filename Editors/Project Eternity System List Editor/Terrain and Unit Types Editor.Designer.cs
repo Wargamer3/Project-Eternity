@@ -30,8 +30,12 @@ namespace ProjectEternity.Editors.SystemListEditor
         private void InitializeComponent()
         {
             this.gbTerrainTypes = new System.Windows.Forms.GroupBox();
+            this.lblUnitMovementTypeAnnulationName = new System.Windows.Forms.Label();
             this.lsTerrainTypes = new System.Windows.Forms.ListBox();
+            this.txtUnitMovementTypeAnnulationName = new System.Windows.Forms.TextBox();
+            this.lblUnitMovementTypeActivationName = new System.Windows.Forms.Label();
             this.lblTerrainTypeName = new System.Windows.Forms.Label();
+            this.txtUnitMovementTypeActivationName = new System.Windows.Forms.TextBox();
             this.txtWallHardness = new System.Windows.Forms.NumericUpDown();
             this.btnRemoveTerrainType = new System.Windows.Forms.Button();
             this.lblWallHardness = new System.Windows.Forms.Label();
@@ -63,16 +67,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.btnRemoveUnitType = new System.Windows.Forms.Button();
             this.btnAddUnitType = new System.Windows.Forms.Button();
             this.lsUnitTypes = new System.Windows.Forms.ListBox();
-            this.gbUnitMovementTypes = new System.Windows.Forms.GroupBox();
-            this.lblUnitMovementTypeAnnulationName = new System.Windows.Forms.Label();
-            this.txtUnitMovementTypeAnnulationName = new System.Windows.Forms.TextBox();
-            this.lblUnitMovementTypeActivationName = new System.Windows.Forms.Label();
-            this.txtUnitMovementTypeActivationName = new System.Windows.Forms.TextBox();
-            this.lblUnitMovementTypeName = new System.Windows.Forms.Label();
-            this.txtUnitMovementTypeName = new System.Windows.Forms.TextBox();
-            this.btnRemoveUnitMovementType = new System.Windows.Forms.Button();
-            this.btnAddUnitMovementType = new System.Windows.Forms.Button();
-            this.lsUnitMovementTypes = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbTerrainTypes.SuspendLayout();
@@ -86,7 +80,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtEntryCost)).BeginInit();
             this.gbTerrainRestrictions.SuspendLayout();
             this.gbUnitTypes.SuspendLayout();
-            this.gbUnitMovementTypes.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -110,6 +103,15 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.gbTerrainTypes.TabStop = false;
             this.gbTerrainTypes.Text = "Terrain Types";
             // 
+            // lblUnitMovementTypeAnnulationName
+            // 
+            this.lblUnitMovementTypeAnnulationName.AutoSize = true;
+            this.lblUnitMovementTypeAnnulationName.Location = new System.Drawing.Point(6, 293);
+            this.lblUnitMovementTypeAnnulationName.Name = "lblUnitMovementTypeAnnulationName";
+            this.lblUnitMovementTypeAnnulationName.Size = new System.Drawing.Size(90, 13);
+            this.lblUnitMovementTypeAnnulationName.TabIndex = 10;
+            this.lblUnitMovementTypeAnnulationName.Text = "Annulation Action";
+            // 
             // lsTerrainTypes
             // 
             this.lsTerrainTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -121,6 +123,25 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.lsTerrainTypes.TabIndex = 6;
             this.lsTerrainTypes.SelectedIndexChanged += new System.EventHandler(this.lsTerrainTypes_SelectedIndexChanged);
             // 
+            // txtUnitMovementTypeAnnulationName
+            // 
+            this.txtUnitMovementTypeAnnulationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUnitMovementTypeAnnulationName.Location = new System.Drawing.Point(6, 309);
+            this.txtUnitMovementTypeAnnulationName.Name = "txtUnitMovementTypeAnnulationName";
+            this.txtUnitMovementTypeAnnulationName.Size = new System.Drawing.Size(158, 20);
+            this.txtUnitMovementTypeAnnulationName.TabIndex = 11;
+            this.txtUnitMovementTypeAnnulationName.TextChanged += new System.EventHandler(this.txtUnitMovementTypeAnnulationName_TextChanged);
+            // 
+            // lblUnitMovementTypeActivationName
+            // 
+            this.lblUnitMovementTypeActivationName.AutoSize = true;
+            this.lblUnitMovementTypeActivationName.Location = new System.Drawing.Point(6, 254);
+            this.lblUnitMovementTypeActivationName.Name = "lblUnitMovementTypeActivationName";
+            this.lblUnitMovementTypeActivationName.Size = new System.Drawing.Size(87, 13);
+            this.lblUnitMovementTypeActivationName.TabIndex = 8;
+            this.lblUnitMovementTypeActivationName.Text = "Activation Action";
+            // 
             // lblTerrainTypeName
             // 
             this.lblTerrainTypeName.AutoSize = true;
@@ -129,6 +150,16 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.lblTerrainTypeName.Size = new System.Drawing.Size(35, 13);
             this.lblTerrainTypeName.TabIndex = 3;
             this.lblTerrainTypeName.Text = "Name";
+            // 
+            // txtUnitMovementTypeActivationName
+            // 
+            this.txtUnitMovementTypeActivationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUnitMovementTypeActivationName.Location = new System.Drawing.Point(6, 270);
+            this.txtUnitMovementTypeActivationName.Name = "txtUnitMovementTypeActivationName";
+            this.txtUnitMovementTypeActivationName.Size = new System.Drawing.Size(158, 20);
+            this.txtUnitMovementTypeActivationName.TabIndex = 9;
+            this.txtUnitMovementTypeActivationName.TextChanged += new System.EventHandler(this.txtUnitMovementTypeActivationName_TextChanged);
             // 
             // txtWallHardness
             // 
@@ -472,108 +503,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.lsUnitTypes.TabIndex = 1;
             this.lsUnitTypes.SelectedIndexChanged += new System.EventHandler(this.lsUnitTypes_SelectedIndexChanged);
             // 
-            // gbUnitMovementTypes
-            // 
-            this.gbUnitMovementTypes.Controls.Add(this.lblUnitMovementTypeName);
-            this.gbUnitMovementTypes.Controls.Add(this.txtUnitMovementTypeName);
-            this.gbUnitMovementTypes.Controls.Add(this.btnRemoveUnitMovementType);
-            this.gbUnitMovementTypes.Controls.Add(this.btnAddUnitMovementType);
-            this.gbUnitMovementTypes.Controls.Add(this.lsUnitMovementTypes);
-            this.gbUnitMovementTypes.Location = new System.Drawing.Point(188, 27);
-            this.gbUnitMovementTypes.Name = "gbUnitMovementTypes";
-            this.gbUnitMovementTypes.Size = new System.Drawing.Size(171, 411);
-            this.gbUnitMovementTypes.TabIndex = 34;
-            this.gbUnitMovementTypes.TabStop = false;
-            this.gbUnitMovementTypes.Text = "Unit Movement Types";
-            // 
-            // lblUnitMovementTypeAnnulationName
-            // 
-            this.lblUnitMovementTypeAnnulationName.AutoSize = true;
-            this.lblUnitMovementTypeAnnulationName.Location = new System.Drawing.Point(6, 293);
-            this.lblUnitMovementTypeAnnulationName.Name = "lblUnitMovementTypeAnnulationName";
-            this.lblUnitMovementTypeAnnulationName.Size = new System.Drawing.Size(90, 13);
-            this.lblUnitMovementTypeAnnulationName.TabIndex = 10;
-            this.lblUnitMovementTypeAnnulationName.Text = "Annulation Action";
-            // 
-            // txtUnitMovementTypeAnnulationName
-            // 
-            this.txtUnitMovementTypeAnnulationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUnitMovementTypeAnnulationName.Location = new System.Drawing.Point(6, 309);
-            this.txtUnitMovementTypeAnnulationName.Name = "txtUnitMovementTypeAnnulationName";
-            this.txtUnitMovementTypeAnnulationName.Size = new System.Drawing.Size(158, 20);
-            this.txtUnitMovementTypeAnnulationName.TabIndex = 11;
-            this.txtUnitMovementTypeAnnulationName.TextChanged += new System.EventHandler(this.txtUnitMovementTypeAnnulationName_TextChanged);
-            // 
-            // lblUnitMovementTypeActivationName
-            // 
-            this.lblUnitMovementTypeActivationName.AutoSize = true;
-            this.lblUnitMovementTypeActivationName.Location = new System.Drawing.Point(6, 254);
-            this.lblUnitMovementTypeActivationName.Name = "lblUnitMovementTypeActivationName";
-            this.lblUnitMovementTypeActivationName.Size = new System.Drawing.Size(87, 13);
-            this.lblUnitMovementTypeActivationName.TabIndex = 8;
-            this.lblUnitMovementTypeActivationName.Text = "Activation Action";
-            // 
-            // txtUnitMovementTypeActivationName
-            // 
-            this.txtUnitMovementTypeActivationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUnitMovementTypeActivationName.Location = new System.Drawing.Point(6, 270);
-            this.txtUnitMovementTypeActivationName.Name = "txtUnitMovementTypeActivationName";
-            this.txtUnitMovementTypeActivationName.Size = new System.Drawing.Size(158, 20);
-            this.txtUnitMovementTypeActivationName.TabIndex = 9;
-            this.txtUnitMovementTypeActivationName.TextChanged += new System.EventHandler(this.txtUnitMovementTypeActivationName_TextChanged);
-            // 
-            // lblUnitMovementTypeName
-            // 
-            this.lblUnitMovementTypeName.AutoSize = true;
-            this.lblUnitMovementTypeName.Location = new System.Drawing.Point(6, 338);
-            this.lblUnitMovementTypeName.Name = "lblUnitMovementTypeName";
-            this.lblUnitMovementTypeName.Size = new System.Drawing.Size(35, 13);
-            this.lblUnitMovementTypeName.TabIndex = 4;
-            this.lblUnitMovementTypeName.Text = "Name";
-            // 
-            // txtUnitMovementTypeName
-            // 
-            this.txtUnitMovementTypeName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUnitMovementTypeName.Location = new System.Drawing.Point(6, 354);
-            this.txtUnitMovementTypeName.Name = "txtUnitMovementTypeName";
-            this.txtUnitMovementTypeName.Size = new System.Drawing.Size(158, 20);
-            this.txtUnitMovementTypeName.TabIndex = 7;
-            this.txtUnitMovementTypeName.TextChanged += new System.EventHandler(this.txtUnitMovementTypeName_TextChanged);
-            // 
-            // btnRemoveUnitMovementType
-            // 
-            this.btnRemoveUnitMovementType.Location = new System.Drawing.Point(87, 380);
-            this.btnRemoveUnitMovementType.Name = "btnRemoveUnitMovementType";
-            this.btnRemoveUnitMovementType.Size = new System.Drawing.Size(75, 23);
-            this.btnRemoveUnitMovementType.TabIndex = 6;
-            this.btnRemoveUnitMovementType.Text = "Remove";
-            this.btnRemoveUnitMovementType.UseVisualStyleBackColor = true;
-            this.btnRemoveUnitMovementType.Click += new System.EventHandler(this.btnRemoveUnitMovementType_Click);
-            // 
-            // btnAddUnitMovementType
-            // 
-            this.btnAddUnitMovementType.Location = new System.Drawing.Point(6, 380);
-            this.btnAddUnitMovementType.Name = "btnAddUnitMovementType";
-            this.btnAddUnitMovementType.Size = new System.Drawing.Size(75, 23);
-            this.btnAddUnitMovementType.TabIndex = 4;
-            this.btnAddUnitMovementType.Text = "Add";
-            this.btnAddUnitMovementType.UseVisualStyleBackColor = true;
-            this.btnAddUnitMovementType.Click += new System.EventHandler(this.btnAddUnitMovementType_Click);
-            // 
-            // lsUnitMovementTypes
-            // 
-            this.lsUnitMovementTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lsUnitMovementTypes.FormattingEnabled = true;
-            this.lsUnitMovementTypes.Location = new System.Drawing.Point(6, 19);
-            this.lsUnitMovementTypes.Name = "lsUnitMovementTypes";
-            this.lsUnitMovementTypes.Size = new System.Drawing.Size(156, 316);
-            this.lsUnitMovementTypes.TabIndex = 5;
-            this.lsUnitMovementTypes.SelectedIndexChanged += new System.EventHandler(this.lsUnitMovementTypes_SelectedIndexChanged);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -597,7 +526,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(942, 450);
             this.Controls.Add(this.gbUnitTypes);
-            this.Controls.Add(this.gbUnitMovementTypes);
             this.Controls.Add(this.gbTerrainAttributes);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -617,8 +545,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             this.gbTerrainRestrictions.ResumeLayout(false);
             this.gbUnitTypes.ResumeLayout(false);
             this.gbUnitTypes.PerformLayout();
-            this.gbUnitMovementTypes.ResumeLayout(false);
-            this.gbUnitMovementTypes.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -655,16 +581,10 @@ namespace ProjectEternity.Editors.SystemListEditor
         private System.Windows.Forms.Button btnRemoveUnitType;
         private System.Windows.Forms.Button btnAddUnitType;
         private System.Windows.Forms.ListBox lsUnitTypes;
-        private System.Windows.Forms.GroupBox gbUnitMovementTypes;
         private System.Windows.Forms.Label lblUnitMovementTypeAnnulationName;
         private System.Windows.Forms.TextBox txtUnitMovementTypeAnnulationName;
         private System.Windows.Forms.Label lblUnitMovementTypeActivationName;
         private System.Windows.Forms.TextBox txtUnitMovementTypeActivationName;
-        private System.Windows.Forms.Label lblUnitMovementTypeName;
-        private System.Windows.Forms.TextBox txtUnitMovementTypeName;
-        private System.Windows.Forms.Button btnRemoveUnitMovementType;
-        private System.Windows.Forms.Button btnAddUnitMovementType;
-        private System.Windows.Forms.ListBox lsUnitMovementTypes;
         private System.Windows.Forms.DataGridView dgvTerrainRanks;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
         private System.Windows.Forms.DataGridViewComboBoxColumn Value;

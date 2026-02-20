@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
-            return Map.TerrainRestrictions.GetMVCost(MapComponent, UnitStat, TerrainToGo.TerrainTypeIndex);
+            return Map.TerrainRestrictions.GetMVCost(MapComponent, UnitStat, CurrentNode.TerrainTypeIndex, TerrainToGo.TerrainTypeIndex);
         }
 
         public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)

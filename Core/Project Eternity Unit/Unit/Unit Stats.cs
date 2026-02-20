@@ -12,12 +12,13 @@ namespace ProjectEternity.Core.Units
     {
         public const byte TerrainWallIndex = 0;
         public const byte TerrainVoidIndex = 1;
-        public const byte TerrainAirIndex = 2;
-        public const byte TerrainLandIndex = 3;
+        public const byte TerrainLandIndex = 2;
+        public const byte TerrainAirIndex = 3;
         public const byte TerrainSeaIndex = 4;
-        public const byte TerrainSpaceIndex = 5;
+        public const byte TerrainSpaceIndex = 99;
         public const byte TerrainUnderwaterIndex = 6;
         public const byte TerrainUndergroundIndex = 7;
+
 
         public static readonly List<string> ListUnitSize = new List<string>() { UnitSizeLLL, UnitSizeLL, UnitSizeL, UnitSizeM, UnitSizeS, UnitSizeSS };
 
@@ -134,10 +135,10 @@ namespace ProjectEternity.Core.Units
 
             DicUnitLink = new Dictionary<string, UnitLinkTypes>();
             Boosts = new StatsBoosts();
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainAirIndex, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainLandIndex, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSeaIndex, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSpaceIndex, 0);
+            for (int M = 0; M < UnitAndTerrainValues.Default.ListTerrainType.Count; M++)
+            {
+                Boosts.DicTerrainLetterAttributeModifier.Add((byte)M, 0);
+            }
 
             ArrayUnitAbility = new BaseAutomaticSkill[0];
             ListAttack = new List<Attack>();

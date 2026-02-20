@@ -90,7 +90,6 @@
     <Compile Include="Terrain\Restrictions\Unit Rank Restriction.cs" />
     <Compile Include="Terrain\Restrictions\Unit Size Restriction.cs" />
     <Compile Include="Terrain\Restrictions\Unit Type Restriction.cs" />
-    <Compile Include="Terrain\Unit Movement Type.cs" />
     <Compile Include="UnitMap3D.cs" />
     <Compile Include="Unit\Stats Boosts.cs" />
     <Compile Include="Terrain\Restrictions\Tag Restriction.cs" />

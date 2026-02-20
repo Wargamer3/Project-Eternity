@@ -57,8 +57,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (MovingSquad != null)
                     {
-                        int TargetX = (int)MovingSquad.X + _RelativeMovement.X;
-                        int TargetY = (int)MovingSquad.Y + _RelativeMovement.Y;
+                        int TargetX = (int)MovingSquad.X + _RelativeMovement.X * Map.TileSize.X;
+                        int TargetY = (int)MovingSquad.Y + _RelativeMovement.Y * Map.TileSize.Y;
                         
                         Microsoft.Xna.Framework.Vector3 FinalPosition;
 
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             HasMovementFocus = false;
 
                         Map.MovementAnimation.Add(MovingSquad, MovingSquad.Position, FinalPosition);
-                        MovingSquad.SetPosition(FinalPosition);
+                        MovingSquad.SetPosition(FinalPosition + new Microsoft.Xna.Framework.Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0));
                     }
 
                     IsActive = true;

@@ -32,30 +32,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Map.UpdateCursorVisiblePosition(gameTime);
 
+                Point FinalPosition = new Point(_CursorPosition.X * Map.TileSize.X + Map.TileSize.X / 2, _CursorPosition.Y * Map.TileSize.Y + Map.TileSize.Y / 2);
+
                 bool IsFinished = true;
-                if (Map.CursorPosition.X < _CursorPosition.X * Map.TileSize.X)
+                if (Map.CursorPosition.X < FinalPosition.X)
                 {
                     float CursorSpeed = Map.TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.CursorPosition.X += Math.Min(CursorSpeed, _CursorPosition.X * Map.TileSize.X - Map.CursorPosition.X);
+                    Map.CursorPosition.X += Math.Min(CursorSpeed, FinalPosition.X - Map.CursorPosition.X);
                     IsFinished = false;
                 }
-                else if (Map.CursorPosition.X > _CursorPosition.X * Map.TileSize.X)
+                else if (Map.CursorPosition.X > FinalPosition.X)
                 {
                     float CursorSpeed = Map.TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.CursorPosition.X -= Math.Min(CursorSpeed, Map.CursorPosition.X -_CursorPosition.X * Map.TileSize.X);
+                    Map.CursorPosition.X -= Math.Min(CursorSpeed, Map.CursorPosition.X - FinalPosition.X);
                     IsFinished = false;
                 }
 
-                if (Map.CursorPosition.Y < _CursorPosition.Y * Map.TileSize.Y)
+                if (Map.CursorPosition.Y < FinalPosition.Y)
                 {
                     float CursorSpeed = Map.TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.CursorPosition.Y += Math.Min(CursorSpeed, _CursorPosition.Y * Map.TileSize.Y - Map.CursorPosition.Y);
+                    Map.CursorPosition.Y += Math.Min(CursorSpeed, FinalPosition.Y - Map.CursorPosition.Y);
                     IsFinished = false;
                 }
-                else if (Map.CursorPosition.Y > _CursorPosition.Y * Map.TileSize.Y)
+                else if (Map.CursorPosition.Y > FinalPosition.Y)
                 {
                     float CursorSpeed = Map.TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.CursorPosition.Y -= Math.Min(CursorSpeed, Map.CursorPosition.Y -_CursorPosition.Y * Map.TileSize.Y);
+                    Map.CursorPosition.Y -= Math.Min(CursorSpeed, Map.CursorPosition.Y - FinalPosition.Y);
                     IsFinished = false;
                 }
 
@@ -63,29 +65,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int MapHeight = Map.MapSize.Y * Map.TileSize.Y;
 
                 //Update the camera if needed.
-                if (Map.CursorPosition.X - Map.Camera2DPosition.X - 3 * Map.TileSize.X < 0 && Map.Camera2DPosition.X > -3 * Map.TileSize.X)
+                if (Map.UpdateCamera(gameTime))
                 {
-                    float CursorSpeed = Map.TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.Camera2DPosition.X -= CursorSpeed;
-                    IsFinished = false;
-                }
-                else if (Map.CursorPosition.X - Map.Camera2DPosition.X + 3 * Map.TileSize.X >= Map.ScreenSize.X * Map.TileSize.X && Map.Camera2DPosition.X + Map.ScreenSize.X * Map.TileSize.X < (Map.MapSize.X + 3) * Map.TileSize.X)
-                {
-                    float CursorSpeed = Map.TileSize.X * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.Camera2DPosition.X += CursorSpeed;
-                    IsFinished = false;
-                }
-
-                if (Map.CursorPosition.Y - Map.Camera2DPosition.Y - 3 * Map.TileSize.Y * Map.TileSize.Y < 0 && Map.Camera2DPosition.Y > -3 * Map.TileSize.Y)
-                {
-                    float CursorSpeed = Map.TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.Camera2DPosition.Y -= CursorSpeed;
-                    IsFinished = false;
-                }
-                else if (CursorPosition.Y - Map.Camera2DPosition.Y + 3 * Map.TileSize.Y >= Map.ScreenSize.Y * Map.TileSize.Y && Map.Camera2DPosition.Y + Map.ScreenSize.Y * Map.TileSize.Y < (Map.MapSize.Y + 3) * Map.TileSize.Y)
-                {
-                    float CursorSpeed = Map.TileSize.Y * gameTime.ElapsedGameTime.Milliseconds * 0.01f;
-                    Map.Camera2DPosition.Y += CursorSpeed;
                     IsFinished = false;
                 }
 

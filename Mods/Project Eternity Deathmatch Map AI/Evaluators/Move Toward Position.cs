@@ -66,6 +66,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 Result = new List<object>();
                 IsCompleted = true;
             }
+
             public override void Load(BinaryReader BR)
             {
                 base.Load(BR);

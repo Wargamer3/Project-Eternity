@@ -420,9 +420,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(sprRain, ActiveRainDrop.Position, null, Color.FromNonPremultiplied(255, 255, 255, 70), ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1.4f / ActiveRainDrop.Size, SpriteEffects.None, 0);
                 }
             }
+            /*
             TextHelper.DrawText(g, "Intensity: " + IntensityManager.Intensity.ToString(), Vector2.Zero, Color.SandyBrown);
             TextHelper.DrawText(g, "Wind: " + WindSpeedManager.WindSpeed.ToString(), new Vector2(0, 20), Color.Chartreuse);
-            TextHelper.DrawText(g, "Rain Size: " + RainSizeManager.RainSizeMin.ToString(), new Vector2(0, 40), Color.Aquamarine);
+            TextHelper.DrawText(g, "Rain Size: " + RainSizeManager.RainSizeMin.ToString(), new Vector2(0, 40), Color.Aquamarine);*/
             g.End();
             g.Begin();
         }

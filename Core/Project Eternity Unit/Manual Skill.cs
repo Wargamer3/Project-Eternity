@@ -32,7 +32,7 @@ namespace ProjectEternity.Core.Skill
             _CanActivate = false;
             IsUnlocked = false;
 
-            FullName = SkillPath.Substring(0, SkillPath.Length - 4).Substring(8);
+            FullName = SkillPath.Substring(38).Substring(0, SkillPath.Length - 43);
             Name = Path.GetFileNameWithoutExtension(SkillPath);
 
             FileStream FS = new FileStream(SkillPath, FileMode.Open, FileAccess.Read);

@@ -50,24 +50,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return;
             }
 
-            MovementSpeed = (float)(MovementSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            MovementSpeed = (float)(MovementSpeed * gameTime.ElapsedGameTime.TotalSeconds * Map.TileSize.X);
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 
             foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
             {
-                Vector3 NextPosition = ActiveUnitMap.Value[0];
+                Vector3 NextPosition = ActiveUnitMap.Value[0] + new Vector3(Map.TileSize.X / 2, Map.TileSize.Y / 2, 0);
                 Vector3 UpdatedPosition = DicMovingMapUnitByPosition[ActiveUnitMap.Key];
 
-                if (UpdatedPosition.X < NextPosition.X - MovementSpeed)
+                if (UpdatedPosition.X < NextPosition.X)
                 {
                     UpdatedPosition.X += MovementSpeed;
-                    if (UpdatedPosition.X > NextPosition.X + MovementSpeed)
+                    if (UpdatedPosition.X > NextPosition.X)
                         UpdatedPosition.X = NextPosition.X;
                 }
-                else if (UpdatedPosition.X > NextPosition.X + MovementSpeed)
+                else if (UpdatedPosition.X > NextPosition.X)
                 {
                     UpdatedPosition.X -= MovementSpeed;
-                    if (UpdatedPosition.X < NextPosition.X - MovementSpeed)
+                    if (UpdatedPosition.X < NextPosition.X)
                         UpdatedPosition.X = NextPosition.X;
                 }
                 else
@@ -75,16 +75,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UpdatedPosition.X = NextPosition.X;
                 }
 
-                if (UpdatedPosition.Y < NextPosition.Y - MovementSpeed)
+                if (UpdatedPosition.Y < NextPosition.Y)
                 {
                     UpdatedPosition.Y += MovementSpeed;
-                    if (UpdatedPosition.Y > NextPosition.Y + MovementSpeed)
+                    if (UpdatedPosition.Y > NextPosition.Y)
                         UpdatedPosition.Y = NextPosition.Y;
                 }
-                else if (UpdatedPosition.Y > NextPosition.Y + MovementSpeed)
+                else if (UpdatedPosition.Y > NextPosition.Y)
                 {
                     UpdatedPosition.Y -= MovementSpeed;
-                    if (UpdatedPosition.Y < NextPosition.Y - MovementSpeed)
+                    if (UpdatedPosition.Y < NextPosition.Y)
                         UpdatedPosition.Y = NextPosition.Y;
                 }
                 else

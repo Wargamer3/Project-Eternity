@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public List<Tuple<int, int>> CanSquadAttackWeapon(Squad ActiveSquad, Vector3 Position, Attack ActiveWeapon, int MinRange, int MaxRange, bool CanMove, Unit ActiveUnit)
+        public List<Tuple<int, int>> CanSquadAttackWeapon(Squad ActiveSquad, Vector3 WorldPosition, Attack ActiveWeapon, int MinRange, int MaxRange, bool CanMove, Unit ActiveUnit)
         {
             DeathmatchMap ActiveMap = this;
             if (ActivePlatform != null)
@@ -213,6 +213,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return new List<Tuple<int, int>>();
             }
 
+            Vector3 GridPosition = ConvertToGridPosition(WorldPosition);
             //List of targets to attack.
             List<Tuple<int, int>> ListTargetUnit = new List<Tuple<int, int>>();
 
@@ -228,7 +229,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ListPlayer[P].ListSquad[TargetSelect].CurrentLeader == null)
                         continue;
 
-                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, Position, ListPlayer[ActivePlayerIndex].TeamIndex, ListPlayer[P].ListSquad[TargetSelect].Position, ListPlayer[P].TeamIndex,
+                    Vector3 TargetGridPosition = ConvertToGridPosition(ListPlayer[P].ListSquad[TargetSelect].Position);
+
+                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, GridPosition, ListPlayer[ActivePlayerIndex].TeamIndex, TargetGridPosition, ListPlayer[P].TeamIndex,
                         ListPlayer[P].ListSquad[TargetSelect].ArrayMapSize, TileSize, ListPlayer[P].ListSquad[TargetSelect].CurrentTerrainIndex, CanMove);
 
                     //Make sure you can use it.
@@ -250,7 +253,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int M = 0; M < ListRealChoice.Count; M++)
                         {//Remove every MV that would make it impossible to attack.
-                            float Distance = Math.Abs(ListRealChoice[M].WorldPosition.X - ListPlayer[P].ListSquad[TargetSelect].X) + Math.Abs(ListRealChoice[M].WorldPosition.Y - ListPlayer[P].ListSquad[TargetSelect].Y);
+                            float Distance = Math.Abs((ListRealChoice[M].WorldPosition.X - ListPlayer[P].ListSquad[TargetSelect].X) / TileSize.X) + Math.Abs((ListRealChoice[M].WorldPosition.Y - ListPlayer[P].ListSquad[TargetSelect].Y) / TileSize.Y);
                             //Check if you can attack it if you moved.
                             if (Distance < MinRange || Distance > MaxRange)
                                 ListRealChoice.RemoveAt(M--);

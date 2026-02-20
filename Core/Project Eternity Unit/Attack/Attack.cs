@@ -91,10 +91,10 @@ namespace ProjectEternity.Core.Attacks
             Animations = new List<AttackContext>();
             Animations.Add(new AttackContext());
             DicRankByMovement = new Dictionary<byte, byte>();
-            DicRankByMovement.Add(UnitStats.TerrainLandIndex, 1);
-            DicRankByMovement.Add(UnitStats.TerrainAirIndex, 1);
-            DicRankByMovement.Add(UnitStats.TerrainSeaIndex, 1);
-            DicRankByMovement.Add(UnitStats.TerrainSpaceIndex, 1);
+            for (int M = 0; M < UnitAndTerrainValues.Default.ListTerrainType.Count; M++)
+            {
+                DicRankByMovement.Add((byte)M, 1);
+            }
 
             ListChargedAttack = new List<Attack>();
             ListSecondaryAttack = new List<Attack>();
@@ -382,7 +382,7 @@ namespace ProjectEternity.Core.Attacks
                         {
                             if (ArrayTargetMapSize[X, Y])
                             {
-                                float Distance = Math.Abs(StartPosition.X - (TargetPosition.X + X * TerrainSize.X)) / TerrainSize.X + Math.Abs(StartPosition.Y - (TargetPosition.Y + Y * TerrainSize.Y)) / TerrainSize.Y;
+                                float Distance = Math.Abs(StartPosition.X - (TargetPosition.X + X)) + Math.Abs(StartPosition.Y - (TargetPosition.Y + Y * TerrainSize.Y));
                                 //If a Unit is in range.
                                 if (Distance >= MinDistance && Distance <= MaxDistance)
                                 {

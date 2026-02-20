@@ -92,13 +92,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (AITimer == AITimerBaseHalf)
                 {
                     if (Map.CursorPosition.Y < AICursorNextPosition.Y)
-                        Map.CursorPosition.Y += 1;
+                        Map.CursorPosition.Y += Map.TileSize.Y;
                     else if (Map.CursorPosition.Y > AICursorNextPosition.Y)
-                        Map.CursorPosition.Y -= 1;
+                        Map.CursorPosition.Y -= Map.TileSize.Y;
                     else if (Map.CursorPosition.X < AICursorNextPosition.X)
-                        Map.CursorPosition.X += 1;
+                        Map.CursorPosition.X += Map.TileSize.X;
                     else if (Map.CursorPosition.X > AICursorNextPosition.X)
-                        Map.CursorPosition.X -= 1;
+                        Map.CursorPosition.X -= Map.TileSize.X;
                     else
                         AITimer = -1;
                 }

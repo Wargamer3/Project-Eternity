@@ -255,7 +255,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                 {
                     if (ActiveRow.Cells[1].Value != null)
                     {
-                        ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListUnitMovement.IndexOf(UnitAndTerrainValues.Default.ListUnitMovement.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
+                        ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListTerrainType.IndexOf(UnitAndTerrainValues.Default.ListTerrainType.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
                             (byte)Character.ListGrade.IndexOf(ActiveRow.Cells[1].Value.ToString()[0])));
                     }
                 }
@@ -383,15 +383,15 @@ namespace ProjectEternity.Editors.CharacterEditor
             if (LoadedCharacter.Slave != null)
                 txtSlave.Text = LoadedCharacter.Slave.FullName;
 
-            for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
+            for (byte M = 0; M < UnitAndTerrainValues.Default.ListTerrainType.Count; M++)
             {
-                UnitMovementType ActiveMovement = UnitAndTerrainValues.Default.ListUnitMovement[M];
+                TerrainType ActiveMovement = UnitAndTerrainValues.Default.ListTerrainType[M];
                 int NewRowIndex = dgvTerrainRanks.Rows.Add();
 
                 DataGridViewComboBoxCell MovementCell = new DataGridViewComboBoxCell();
                 DataGridViewComboBoxCell RankCell = new DataGridViewComboBoxCell();
 
-                foreach (UnitMovementType ActiveMovementChoice in UnitAndTerrainValues.Default.ListUnitMovement)
+                foreach (TerrainType ActiveMovementChoice in UnitAndTerrainValues.Default.ListTerrainType)
                 {
                     MovementCell.Items.Add(ActiveMovementChoice.Name);
                 }
@@ -761,7 +761,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                         break;
 
                     case ItemSelectionChoices.SetBattleTheme:
-                        Name = Items[I].Substring(17);
+                        Name = Items[I].Substring(19);
                         txtBattleTheme.Text = Name;
                         break;
 
