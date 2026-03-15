@@ -1,6 +1,6 @@
 ﻿namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    partial class ProjectEternityConquestAutotileTilesetPresetEditor
+    partial class ProjectEternitySorcererStreetAutotileTilesetPresetEditor
     {
         /// <summary>
         /// Required designer variable.

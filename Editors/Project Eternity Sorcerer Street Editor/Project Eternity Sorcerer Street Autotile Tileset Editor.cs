@@ -9,11 +9,11 @@ using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetTile
 
 namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    public partial class ProjectEternityConquestAutotileTilesetPresetEditor : ProjectEternityAutotileTilesetPresetEditor
+    public partial class ProjectEternitySorcererStreetAutotileTilesetPresetEditor : ProjectEternityAutotileTilesetPresetEditor
     {
-        public class ConquesTilesetPresetHelper : ITilesetPresetHelper
+        public class SorcererStreetTilesetPresetHelper : ITilesetPresetHelper
         {
-            public ConquesTilesetPresetHelper()
+            public SorcererStreetTilesetPresetHelper()
             {
             }
 
@@ -60,13 +60,13 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             }
         }
 
-        public ProjectEternityConquestAutotileTilesetPresetEditor()
+        public ProjectEternitySorcererStreetAutotileTilesetPresetEditor()
             : base()
         {
             InitializeComponent();
         }
 
-        public ProjectEternityConquestAutotileTilesetPresetEditor(string FilePath, object[] Params)
+        public ProjectEternitySorcererStreetAutotileTilesetPresetEditor(string FilePath, object[] Params)
             : this()
         {
             this.FilePath = FilePath;
@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapAutotilesPresetsSorcererStreet, EditorHelper.GUIRootPathMapAutotilesPresets }, "Sorcerer Street/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternityConquestAutotileTilesetPresetEditor), true)
+                new EditorInfo(new string[] { EditorHelper.GUIRootPathMapAutotilesPresetsSorcererStreet, EditorHelper.GUIRootPathMapAutotilesPresets }, "Sorcerer Street/Autotiles Presets/", new string[] { ".peat" }, typeof(ProjectEternitySorcererStreetAutotileTilesetPresetEditor), true)
             };
 
             return Info;
@@ -92,7 +92,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
         protected override void InitHelper()
         {
-            Helper = new ConquesTilesetPresetHelper();
+            Helper = new SorcererStreetTilesetPresetHelper();
         }
     }
 }
