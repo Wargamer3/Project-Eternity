@@ -47,7 +47,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             //Create the Part file.
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);

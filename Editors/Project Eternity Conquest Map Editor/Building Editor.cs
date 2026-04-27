@@ -49,7 +49,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);

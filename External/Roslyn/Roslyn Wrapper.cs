@@ -1,13 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Reflection;
+using System.ComponentModel;
+using System.Drawing.Design;
+using System.Collections.Generic;
+using System.Windows.Forms.Design;
+using Microsoft.Xna.Framework;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
-using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel;
-using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 
@@ -37,12 +40,17 @@ namespace Roslyn
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(TypeConverter).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(CategoryAttribute).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Vector2).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(UITypeEditor).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(IWindowsFormsEditorService).Assembly.Location),
             };
             string[] Files = Directory.GetFiles(".", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
                 if (Files[F].StartsWith(".\\Content")
                     || Files[F].StartsWith(".\\Editors")
+                    || Files[F].StartsWith(".\\External")
                     || Files[F] == ".\\External\\fmodex.dll"
                     || Files[F] == ".\\External\\fmodex64.dll"
                     || Files[F] == ".\\External\\fmodexL.dll"

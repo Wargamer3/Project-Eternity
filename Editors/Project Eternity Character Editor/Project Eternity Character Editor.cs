@@ -57,7 +57,7 @@ namespace ProjectEternity.Editors.CharacterEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             this.Text = ItemName + " - Project Eternity Character Editor";
 

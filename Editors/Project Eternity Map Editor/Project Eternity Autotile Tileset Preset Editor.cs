@@ -138,7 +138,7 @@ namespace ProjectEternity.Editors.TilesetEditor
             AllowEvent = true;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             FileStream FS = new FileStream(ItemPath, FileMode.Create);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.Unicode);

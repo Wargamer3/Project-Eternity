@@ -111,7 +111,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             VisualNovelViewer.ActiveVisualNovel.Save();
         }

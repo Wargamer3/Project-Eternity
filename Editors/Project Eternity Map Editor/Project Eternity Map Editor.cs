@@ -124,7 +124,7 @@ namespace ProjectEternity.Editors.MapEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             ActiveMap.MapName = ItemName;
 

@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{117CD2A4-4309-43E0-9C99-399A25E8F38A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Editors.LifeSimMapEditor</RootNamespace>
+    <AssemblyName>Project Eternity Life Sim Map Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Life Sim\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\..\Project Eternity\Project Eternity\bin\Release\Editors\Life Sim\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Project Eternity Life Sim Autotile Tileset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Autotile Tileset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Life Sim Autotile Tileset Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim DestroyableTile Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim DestroyableTile Editor.Designer.cs">
+      <DependentUpon>Project Eternity Life Sim DestroyableTile Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Terrains Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Terrains Editor.Designer.cs">
+      <DependentUpon>Project Eternity Life Sim Terrains Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Tileset Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Tileset Editor.Designer.cs">
+      <DependentUpon>Project Eternity Life Sim Tileset Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Map Statistics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Map Statistics.Designer.cs">
+      <DependentUpon>Map Statistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Map Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Life Sim Map Editor.Designer.cs">
+      <DependentUpon>Project Eternity Life Sim Map Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tabs\Extra Tabs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tabs\Extra Tabs.Designer.cs">
+      <DependentUpon>Extra Tabs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tabs\Scenery Tab.cs" />
+    <Compile Include="Tabs\Tileset Tab.cs" />
+    <Compile Include="Tile Attributes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tile Attributes.Designer.cs">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Project Eternity Life Sim Autotile Tileset Editor.resx">
+      <DependentUpon>Project Eternity Life Sim Autotile Tileset Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Life Sim DestroyableTile Editor.resx">
+      <DependentUpon>Project Eternity Life Sim DestroyableTile Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Life Sim Terrains Editor.resx">
+      <DependentUpon>Project Eternity Life Sim Terrains Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Life Sim Tileset Editor.resx">
+      <DependentUpon>Project Eternity Life Sim Tileset Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Map Statistics.resx">
+      <DependentUpon>Map Statistics.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Life Sim Map Editor.resx">
+      <DependentUpon>Project Eternity Life Sim Map Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tabs\Extra Tabs.resx">
+      <DependentUpon>Extra Tabs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tile Attributes.resx">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Mods\Project Eternity Life Sim\Project Eternity Life Sim.csproj">
+      <Project>{B954A806-F9F2-41A0-B437-00B97DA1EA4A}</Project>
+      <Name>Project Eternity Life Sim</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
+      <Project>{CCF148C7-FEC2-4CD2-BC4F-25BC6C3A102A}</Project>
+      <Name>Project Eternity Image Viewer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Map Editor\Project Eternity Map Editor.csproj">
+      <Project>{7e9fe48e-9926-4ef4-9b6b-3241841be67b}</Project>
+      <Name>Project Eternity Map Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

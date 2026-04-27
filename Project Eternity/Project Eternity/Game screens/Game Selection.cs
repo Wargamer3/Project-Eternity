@@ -17,7 +17,8 @@ namespace ProjectEternity
     public sealed class GameSelection : GameScreen
     {
         private enum MenuChoices { Normal, SuperTreeWar, Intermission, MultiplayerClassic, MultiplayerLobby, MultiplayerLobbyOffline,
-            WorldMap, Conquest, SorcererStreet, SorcererStreetLobby, Racing, SuperTank, TripleThunderOnline, TripleThunderOffline };
+            WorldMap, Conquest, SorcererStreet, SorcererStreetLobby, Racing, SuperTank, TripleThunderOnline, TripleThunderOffline,
+            LifeSimOffline };
 
         private int SelectedChoice = 0;
 
@@ -248,6 +249,16 @@ namespace ProjectEternity
                         Constants.graphics.ApplyChanges();
                         PushScreen(new GameScreens.TripleThunderScreen.Lobby(false));
                         break;
+
+                    case MenuChoices.LifeSimOffline:
+                        Constants.Width = 800;
+                        Constants.Height = 600;
+                        Constants.ScreenSize = 0;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
+                        PushScreen(new GameScreens.LifeSimScreen.NavMapGameManager());
+                        break;
                 }
             }
             else if (InputHelper.InputCancelPressed())
@@ -277,6 +288,7 @@ namespace ProjectEternity
             TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 11), Color.White);
             TextHelper.DrawText(g, "Triple Thunder Online", new Vector2(50, 50 + LineHeight * 12), Color.White);
             TextHelper.DrawText(g, "Triple Thunder Offline", new Vector2(50, 50 + LineHeight * 13), Color.White);
+            TextHelper.DrawText(g, "Life Sim Offline", new Vector2(50, 50 + LineHeight * 14), Color.White);
 
             g.Draw(sprPixel, new Rectangle(50, 50 + SelectedChoice * LineHeight, Constants.Width - 100, LineHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
         }

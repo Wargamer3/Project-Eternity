@@ -195,6 +195,11 @@
       <Name>Project Eternity Conquest Map</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mods\Project Eternity Life Sim\Project Eternity Life Sim.csproj">
+      <Project>{b954a806-f9f2-41a0-b437-00b97da1ea4a}</Project>
+      <Name>Project Eternity Life Sim</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mods\Project Eternity Racing\Project Eternity Racing.csproj">
       <Project>{AB427185-63C7-4FAA-8622-2D960B773310}</Project>
       <Name>Project Eternity Racing</Name>

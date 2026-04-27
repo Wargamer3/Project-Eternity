@@ -51,7 +51,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             };
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             FileStream FS = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);

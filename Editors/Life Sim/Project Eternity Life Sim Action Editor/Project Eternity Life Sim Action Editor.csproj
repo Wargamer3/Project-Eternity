@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7617A723-C5BE-4979-9FD4-9AF9C8D83863}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Editors.LifeSimActionEditor</RootNamespace>
+    <AssemblyName>Project Eternity Life Sim Action Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Life Sim\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\..\Project Eternity\Project Eternity\bin\Release\Editors\Life Sim\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AI Action Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AI Action Editor.Designer.cs">
+      <DependentUpon>AI Action Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Class Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Class Editor.Designer.cs">
+      <DependentUpon>Character Class Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proficiency Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proficiency Editor.Designer.cs">
+      <DependentUpon>Proficiency Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Deity Category Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Deity Category Editor.Designer.cs">
+      <DependentUpon>Deity Category Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Domain Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Domain Editor.Designer.cs">
+      <DependentUpon>Domain Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Deity Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Deity Editor.Designer.cs">
+      <DependentUpon>Deity Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Action Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Action Editor.Designer.cs">
+      <DependentUpon>Character Action Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item Editor.Designer.cs">
+      <DependentUpon>Item Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shield Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shield Editor.Designer.cs">
+      <DependentUpon>Shield Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Armor Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Armor Editor.Designer.cs">
+      <DependentUpon>Armor Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Language Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Language Editor.Designer.cs">
+      <DependentUpon>Language Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Background Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Background Editor.Designer.cs">
+      <DependentUpon>Character Background Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Skill Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Skill Editor.Designer.cs">
+      <DependentUpon>Skill Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Condition Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Condition Editor.Designer.cs">
+      <DependentUpon>Condition Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Weapon Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Weapon Editor.Designer.cs">
+      <DependentUpon>Weapon Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Trait Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trait Editor.Designer.cs">
+      <DependentUpon>Trait Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Ancestry Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Ancestry Editor.Designer.cs">
+      <DependentUpon>Character Ancestry Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effect Chain Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Effect Chain Editor.Designer.cs">
+      <DependentUpon>Effect Chain Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AI Action Editor.resx">
+      <DependentUpon>AI Action Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Class Editor.resx">
+      <DependentUpon>Character Class Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proficiency Editor.resx">
+      <DependentUpon>Proficiency Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Deity Category Editor.resx">
+      <DependentUpon>Deity Category Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Domain Editor.resx">
+      <DependentUpon>Domain Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Deity Editor.resx">
+      <DependentUpon>Deity Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Action Editor.resx">
+      <DependentUpon>Character Action Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item Editor.resx">
+      <DependentUpon>Item Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shield Editor.resx">
+      <DependentUpon>Shield Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Armor Editor.resx">
+      <DependentUpon>Armor Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Language Editor.resx">
+      <DependentUpon>Language Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Background Editor.resx">
+      <DependentUpon>Character Background Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Skill Editor.resx">
+      <DependentUpon>Skill Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Condition Editor.resx">
+      <DependentUpon>Condition Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Weapon Editor.resx">
+      <DependentUpon>Weapon Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trait Editor.resx">
+      <DependentUpon>Trait Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Ancestry Editor.resx">
+      <DependentUpon>Character Ancestry Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effect Chain Editor.resx">
+      <DependentUpon>Effect Chain Editor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
+      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
+      <Name>Project Eternity Editor Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Mods\Project Eternity Life Sim\Project Eternity Life Sim.csproj">
+      <Project>{B954A806-F9F2-41A0-B437-00B97DA1EA4A}</Project>
+      <Name>Project Eternity Life Sim</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
+      <Project>{CCF148C7-FEC2-4CD2-BC4F-25BC6C3A102A}</Project>
+      <Name>Project Eternity Image Viewer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Project Eternity Map Editor\Project Eternity Map Editor.csproj">
+      <Project>{7e9fe48e-9926-4ef4-9b6b-3241841be67b}</Project>
+      <Name>Project Eternity Map Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

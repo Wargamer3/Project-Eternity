@@ -15,8 +15,6 @@ namespace ProjectEternity.Core.Editor
             InitializeComponent();
         }
 
-        public virtual void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false) { throw new NotImplementedException(); }
-
         public virtual void DeleteItem()
         {
             File.Delete(FilePath);

@@ -90,7 +90,7 @@ namespace ProjectEternity.Editors.AIEditor
             };
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             ActiveAI.Save(ItemPath);
         }

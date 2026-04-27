@@ -36,7 +36,7 @@ namespace ProjectEternity.Editors.RosterEditor
             return Info;
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
         }
 

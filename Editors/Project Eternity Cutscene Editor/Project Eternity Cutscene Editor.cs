@@ -45,7 +45,7 @@ namespace ProjectEternity.Editors.CutsceneEditor
             };
         }
 
-        public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
+        public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             ActiveCutscene.Save(ItemPath);
         }

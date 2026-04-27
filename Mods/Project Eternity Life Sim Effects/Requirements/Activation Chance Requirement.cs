@@ -1,0 +1,69 @@
+﻿using System;
+using System.IO;
+using System.ComponentModel;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+
+namespace ProjectEternity.GameScreens.LifeSimScreen
+{
+    public sealed class SorcererStreetAgainstActivationChanceRequirement : LifeSimRequirement
+    {
+        private byte _ActivationChance;
+
+        public SorcererStreetAgainstActivationChanceRequirement()
+            : this(null)
+        {
+        }
+
+        public SorcererStreetAgainstActivationChanceRequirement(LifeSimParams Params)
+            : base("Life Sim Activation Chance", Params)
+        {
+        }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+            BW.Write(_ActivationChance);
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+            _ActivationChance = BR.ReadByte();
+        }
+
+        public override bool CanActivatePassive()
+        {
+            return RandomHelper.Next(100) < _ActivationChance;
+        }
+
+        public override BaseSkillRequirement Copy()
+        {
+            SorcererStreetAgainstActivationChanceRequirement NewRequirement = new SorcererStreetAgainstActivationChanceRequirement(Params);
+
+            NewRequirement._ActivationChance = _ActivationChance;
+
+            return NewRequirement;
+        }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            SorcererStreetAgainstActivationChanceRequirement CopyRequirement = (SorcererStreetAgainstActivationChanceRequirement)Copy;
+
+            _ActivationChance = CopyRequirement._ActivationChance;
+        }
+
+        [CategoryAttribute("Effects"),
+        DescriptionAttribute(""),
+        DefaultValueAttribute("")]
+        public byte ActivationChance
+        {
+            get
+            {
+                return _ActivationChance;
+            }
+            set
+            {
+                _ActivationChance = value;
+            }
+        }
+    }
+}

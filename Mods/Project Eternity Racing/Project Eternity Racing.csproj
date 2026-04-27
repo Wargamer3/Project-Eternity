@@ -56,7 +56,6 @@
     <Compile Include="Acion Panels\AI Menu.cs" />
     <Compile Include="AntiGrav Propulsor.cs" />
     <Compile Include="Collision Box.cs" />
-    <Compile Include="AI Tunnel.cs" />
     <Compile Include="Vehicule 2D.cs" />
     <Compile Include="Cameras\Chase Camera.cs" />
     <Compile Include="Vehicule 3D.cs" />

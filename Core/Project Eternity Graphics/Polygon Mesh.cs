@@ -253,7 +253,69 @@ namespace ProjectEternity.Core.Graphics
 
             return new PolygonMeshCollisionResult(Vector3.Zero, -1);
         }
-        
+
+        public static PolygonMeshCollisionResult PolygonCollisionPoint(PolygonMesh PolygonA, Vector3 PolygonB, Vector3 Speed)
+        {
+            bool Intersection = true;
+            bool IntersectionNext = true;
+
+            float minA = 0, maxA = 0;
+            float minB = 0, maxB = 0;
+
+            int AxisCountA = PolygonA.ArrayAxis.Length;
+            int EdgeCountA = PolygonA.ArrayEdge.Length;
+
+            Vector3 Axis;
+            Vector3 AxisTranslation = Vector3.Zero;
+            float minIntervalDistance = float.MaxValue;
+            float intervalDistance;
+
+            for (int AxisIndex = 0; AxisIndex < AxisCountA; AxisIndex++)
+            {
+                Axis = PolygonA.ArrayAxis[AxisIndex];
+
+                ProjectPolygon(Axis, PolygonA, out minA, out maxA);
+                maxB = minB = Vector3.Dot(Axis, PolygonB);
+
+                if (IntervalDistance(minA, maxA, minB, maxB) >= 0)
+                    Intersection = false;
+
+                float AxeVitesse = Vector3.Dot(Axis, Speed);
+
+                if (AxeVitesse < 0)
+                    minA += AxeVitesse;
+                else
+                    maxA += AxeVitesse;
+
+                intervalDistance = IntervalDistance(minA, maxA, minB, maxB);
+                if (intervalDistance >= 0)
+                    IntersectionNext = false;
+
+                if (Intersection || IntersectionNext)
+                {
+                    intervalDistance = Math.Abs(intervalDistance);
+
+                    if (intervalDistance < minIntervalDistance)
+                    {
+                        minIntervalDistance = intervalDistance;
+                        AxisTranslation = Axis;
+
+                        Vector3 p = PolygonA.Center - PolygonB;
+                        if (Vector3.Dot(p, AxisTranslation) < 0)
+                            AxisTranslation = -AxisTranslation;
+                    }
+                }
+            }
+            if (IntersectionNext)
+            {
+                PolygonMeshCollisionResult CollisionResult = new PolygonMeshCollisionResult(AxisTranslation, minIntervalDistance);
+
+                return CollisionResult;
+            }
+
+            return new PolygonMeshCollisionResult(Vector3.Zero, -1);
+        }
+
         private float DistanceToEdge(Vector3 Vertex1, Vector3 Vertex2, Vector3 Axis, Vector3 Point, out bool InsideEdge)
         {
             Vector3 Edge = Vertex2 - Vertex1;

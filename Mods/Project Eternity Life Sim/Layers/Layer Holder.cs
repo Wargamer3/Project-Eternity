@@ -1,0 +1,142 @@
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen;
+
+namespace ProjectEternity.GameScreens.LifeSimScreen
+{
+    public class LayerHolderLifeSim : LayerHolder
+    {
+        public List<MapLayer> ListLayer;
+
+        private readonly LifeSimMap Map;
+
+        public LayerHolderLifeSim(LifeSimMap Map)
+        {
+            this.Map = Map;
+            ListLayer = new List<MapLayer>();
+            LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
+        }
+
+        public LayerHolderLifeSim(LifeSimMap Map, BinaryReader BR)
+        {
+            this.Map = Map;
+            int LayerCount = BR.ReadInt32();
+            ListLayer = new List<MapLayer>(LayerCount);
+
+            for (int L = 0; L < LayerCount; ++L)
+            {
+                ListLayer.Add(new MapLayer(Map, BR, L));
+            }
+
+            if (Map.CameraType == "2D")
+            {
+                LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
+            }
+            else
+            {
+                LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
+            }
+        }
+
+        public void CursorMoved()
+        {
+            LayerHolderDrawable.CursorMoved();
+        }
+
+        public void UnitMoved(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitMoved(PlayerIndex);
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitKilled(PlayerIndex);
+        }
+
+        public override BaseMapLayer this[int i]
+        {
+            get
+            {
+                return ListLayer[i];
+            }
+        }
+
+        public override void Save(BinaryWriter BW)
+        {
+            BW.Write(ListLayer.Count);
+            foreach (MapLayer ActiveLayer in ListLayer)
+            {
+                ActiveLayer.Save(BW);
+            }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            foreach (MapLayer ActiveMapLayer in ListLayer)
+            {
+                ActiveMapLayer.Update(gameTime);
+            }
+
+            LayerHolderDrawable.Update(gameTime);
+        }
+
+        public override void TogglePreview(bool UsePreview)
+        {
+            if (!UsePreview || Map.CameraType == "2D")
+            {
+                LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
+            }
+            else
+            {
+                LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
+            }
+
+            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+
+            foreach (MapLayer ActiveLayer in ListLayer)
+            {
+                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
+                {
+                    ActiveProp.Projection = Projection;
+                }
+            }
+        }
+
+        public override void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
+        {
+            LayerHolderDrawable.AddDrawablePath(ListPoint);
+        }
+
+        public override void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
+        {
+            LayerHolderDrawable.AddDrawablePoints(ListPoint, PointColor);
+        }
+
+        public override void AddDamageNumber(string Damage, Vector3 Position)
+        {
+            LayerHolderDrawable.AddDamageNumber(Damage, Position);
+        }
+
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            LayerHolderDrawable.BeginDraw(g);
+        }
+
+        public override void Draw(CustomSpriteBatch g)
+        {
+            LayerHolderDrawable.Draw(g);
+        }
+
+        public override void EndDraw(CustomSpriteBatch g)
+        {
+            LayerHolderDrawable.EndDraw(g);
+        }
+    }
+}

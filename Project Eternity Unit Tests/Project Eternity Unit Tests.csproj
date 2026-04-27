@@ -71,6 +71,16 @@
     <Compile Include="Adventure Tests\Explosion Tests.cs" />
     <Compile Include="Adventure Tests\Adventure Map Tests.cs" />
     <Compile Include="Adventure Tests\Collision Zone Tests.cs" />
+    <Compile Include="AI\Action.cs" />
+    <Compile Include="AI\Actions\Move\Open Door.cs" />
+    <Compile Include="AI\Character.cs" />
+    <Compile Include="AI\Actions\Eat\Eat Goal.cs" />
+    <Compile Include="AI\Actions\Move\Move.cs" />
+    <Compile Include="AI\InterMap Movement Algorithm.cs" />
+    <Compile Include="AI\NavMap.cs" />
+    <Compile Include="AI\Overseer.cs" />
+    <Compile Include="AI Tests.cs" />
+    <Compile Include="AI\Pathfinder.cs" />
     <Compile Include="Conquest Tests\Animation Screens Tests.cs" />
     <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\All Battle Behavior Tests.cs" />
     <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\Battle Behavior Tests Base Class.cs" />

@@ -47,62 +47,80 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Clear();
 
             Player ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
-            
-            for (int X = -1; X <= 1; X++)
+            List<Squad> ListFoundPossibleSupport = new List<Squad>();
+
+            bool OnlyCheckCloseAllies = true;
+
+            if (OnlyCheckCloseAllies)
             {
-                for (int Y = -1; Y <= 1; Y++)
+                for (int X = -1; X <= 1; X++)
                 {
-                    if ((AttackingSquad.X + X == AttackingSquad.X && AttackingSquad.Y + Y == AttackingSquad.Y) || (Math.Abs(X) + Math.Abs(Y) > 1))
-                        continue;
-
-                    int SquadIndex = Map.CheckForSquadAtPosition(ActivePlayerIndex, AttackingSquad.Position, new Microsoft.Xna.Framework.Vector3(X, Y, 0));
-
-                    //Can't support if the support can't enter the same terrain as the attacker, supporter will be visible in the battle animation.
-                    if (SquadIndex >= 0 && ActivePlayer.ListSquad[SquadIndex].CurrentLeader.Boosts.SupportAttackModifier > 0
-                        && Map.TerrainRestrictions.CanMove(ActivePlayer.ListSquad[SquadIndex], ActivePlayer.ListSquad[SquadIndex].CurrentLeader.UnitStat, AttackingSquad.CurrentTerrainIndex))
+                    for (int Y = -1; Y <= 1; Y++)
                     {
-                        if (!ActivePlayer.ListSquad[SquadIndex].CanMove || ActivePlayer.ListSquad[SquadIndex] == AttackingSquad)
+                        if ((AttackingSquad.X + X == AttackingSquad.X && AttackingSquad.Y + Y == AttackingSquad.Y) || (Math.Abs(X) + Math.Abs(Y) > 1))
                             continue;
 
-                        Squad AttackerSupportSquad = ActivePlayer.ListSquad[SquadIndex];
-                        Unit AttackerSupportUnit = AttackerSupportSquad.CurrentLeader;
-                        Unit Defender = DefendingSquad.CurrentLeader;
+                        int SquadIndex = Map.CheckForSquadAtPosition(ActivePlayerIndex, AttackingSquad.Position, new Microsoft.Xna.Framework.Vector3(X, Y, 0));
 
-                        AttackerSupportUnit.DisableAllAttacks();
-                        AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, DefendingSquad.Position, Map.ListPlayer[DefendingPlayerIndex].TeamIndex, DefendingSquad.ArrayMapSize, Map.TileSize, DefendingSquad.CurrentTerrainIndex, true);
-
-                        if (AttackerSupportUnit.CanAttack)
+                        if (SquadIndex >= 0)
                         {
-                            AttackerSupportUnit.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                            int BestDamage = 0;
-                            Attack BestAttack = null;
+                            ListFoundPossibleSupport.Add(ActivePlayer.ListSquad[SquadIndex]);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ListFoundPossibleSupport.AddRange(ActivePlayer.ListSquad);
+            }
 
-                            foreach (Attack ActiveAttack in AttackerSupportUnit.ListAttack)
+            foreach (Squad AttackerSupportSquad in ListFoundPossibleSupport)
+            {
+                //Can't support if the support can't enter the same terrain as the attacker, supporter will be visible in the battle animation.
+                if (AttackerSupportSquad.CurrentLeader.Boosts.SupportAttackModifier > 0
+                    && Map.TerrainRestrictions.CanMove(AttackerSupportSquad, AttackerSupportSquad.CurrentLeader.UnitStat, AttackingSquad.CurrentTerrainIndex))
+                {
+                    if (!AttackerSupportSquad.CanMove || AttackerSupportSquad == AttackingSquad)
+                        continue;
+
+
+                    Unit AttackerSupportUnit = AttackerSupportSquad.CurrentLeader;
+                    Unit Defender = DefendingSquad.CurrentLeader;
+
+                    AttackerSupportUnit.DisableAllAttacks();
+                    AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, Map.ListPlayer[ActivePlayerIndex].TeamIndex, DefendingSquad.Position, Map.ListPlayer[DefendingPlayerIndex].TeamIndex, DefendingSquad.ArrayMapSize, Map.TileSize, DefendingSquad.CurrentTerrainIndex, true);
+
+                    if (AttackerSupportUnit.CanAttack)
+                    {
+                        AttackerSupportUnit.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                        int BestDamage = 0;
+                        Attack BestAttack = null;
+
+                        foreach (Attack ActiveAttack in AttackerSupportUnit.ListAttack)
+                        {
+                            AttackerSupportUnit.CurrentAttack = ActiveAttack;
+                            if (!AttackerSupportUnit.CurrentAttack.CanAttack)
+                                continue;
+
+                            int Accuracy = Map.CalculateHitRate(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, AttackerSupportSquad, DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice);
+                            AttackerSupportUnit.AttackAccuracy = Accuracy + "%";
+
+                            if (Accuracy > 0)
                             {
-                                AttackerSupportUnit.CurrentAttack = ActiveAttack;
-                                if (!AttackerSupportUnit.CurrentAttack.CanAttack)
-                                    continue;
+                                BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, AttackerSupportSquad, 1, DefendingPlayerIndex, DefendingSquadIndex, 0, Defender.BattleDefenseChoice, true);
 
-                                int Accuracy = Map.CalculateHitRate(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, AttackerSupportSquad, DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice);
-                                AttackerSupportUnit.AttackAccuracy = Accuracy + "%";
-
-                                if (Accuracy > 0)
+                                if (Result.AttackDamage > BestDamage)
                                 {
-                                    BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, ActivePlayer.ListSquad[SquadIndex], 1, DefendingPlayerIndex, DefendingSquadIndex, 0, Defender.BattleDefenseChoice, true);
-
-                                    if (Result.AttackDamage > BestDamage)
-                                    {
-                                        BestDamage = Result.AttackDamage;
-                                        BestAttack = ActiveAttack;
-                                    }
+                                    BestDamage = Result.AttackDamage;
+                                    BestAttack = ActiveAttack;
                                 }
                             }
-                            if (BestAttack != null)
-                            {
-                                AttackerSupportUnit.CurrentAttack = BestAttack;
-                                AddSupportSquad(AttackerSupportSquad);
-                                ActiveSquadSupportIndex = Count - 1;
-                            }
+                        }
+                        if (BestAttack != null)
+                        {
+                            AttackerSupportUnit.CurrentAttack = BestAttack;
+                            AddSupportSquad(AttackerSupportSquad);
+                            ActiveSquadSupportIndex = Count - 1;
                         }
                     }
                 }

@@ -722,7 +722,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 if (MovementAnimation.Count > 0)
                 {
-                    MovementAnimation.MoveSquad(gameTime, this, 100);
+                    MovementAnimation.MoveSquad(gameTime, this, 2);
                 }
                 if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
                 {
