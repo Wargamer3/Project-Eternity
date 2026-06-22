@@ -14,6 +14,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class ActionPanelCardSelectionPhase : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => throw new NotImplementedException();
+
         protected enum AnimationPhases { IntroAnimation, CardSelection }
 
         protected readonly SorcererStreetMap Map;
@@ -30,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private bool CardSelected;
 
         public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map, string CardType, string EndCardText = "")
-            : base(Name, Map.ListActionMenuChoice, null, false)
+            : base(Name, Map.ListActionMenuChoice, false)
         {
             this.Map = Map;
             this.CardType = CardType;
@@ -38,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public ActionPanelCardSelectionPhase(string Name, ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, int ActivePlayerIndex, string CardType, string EndCardText = "")
-            : base(Name, ListActionMenuChoice, null, false)
+            : base(Name, ListActionMenuChoice, false)
         {
             this.Map = Map;
             this.ActivePlayerIndex = ActivePlayerIndex;

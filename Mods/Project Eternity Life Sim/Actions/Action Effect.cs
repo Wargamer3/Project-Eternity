@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     public abstract class ActionEffect
     {
         public readonly string EffectTypeName;
+        protected LifeSimCharacterParams Params;
 
         protected ActionEffect(string EffectTypeName)
         {
@@ -22,10 +23,20 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             DoWrite(BW);
         }
 
+        public void Init(LifeSimCharacterParams Params)
+        {
+            this.Params = Params;
+        }
+
         public abstract void DoWrite(BinaryWriter BW);
+
         public abstract ActionEffect LoadCopy(BinaryReader BR);
 
         public abstract void OnEquip();
+
+        public abstract void ActivateFromMenu(CharacterAction ActionToExecute);
+
+        public abstract void ActivateAutomatedAction();
 
         public override string ToString()
         {

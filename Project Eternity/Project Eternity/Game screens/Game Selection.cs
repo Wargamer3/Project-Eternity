@@ -48,14 +48,14 @@ namespace ProjectEternity
                 sndSelection.Play();
 
                 if (SelectedChoice == -1)
-                    SelectedChoice = 13;
+                    SelectedChoice = 14;
             }
             else if (InputHelper.InputDownPressed())
             {
                 SelectedChoice++;
                 sndSelection.Play();
 
-                if (SelectedChoice > 13)
+                if (SelectedChoice > 14)
                     SelectedChoice = 0;
             }
             else if (InputHelper.InputConfirmPressed())

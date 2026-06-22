@@ -4,9 +4,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public abstract class LifeSimRequirement : BaseSkillRequirement
     {
-        protected readonly LifeSimParams Params;
+        protected readonly LifeSimCharacterParams Params;
 
-        protected LifeSimRequirement(string EffectTypeName, LifeSimParams Params)
+        protected LifeSimRequirement(string EffectTypeName, LifeSimCharacterParams Params)
             : base(EffectTypeName)
         {
             this.Params = Params;

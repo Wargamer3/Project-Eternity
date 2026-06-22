@@ -62,6 +62,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return BaseMenuPosition;
         }
 
+        public Vector3 Get3DPositionFromMouse(int MouseX, int MouseY)
+        {
+            return Vector3.Zero;
+        }
+
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
         {
             DicDrawablePointPerColor.Add(PointColor, ListPoint);
@@ -90,6 +95,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         public void SetWorld(Matrix NewWorld)
+        {
+        }
+
+        public void SetCamera(Camera3D Camera)
         {
         }
 

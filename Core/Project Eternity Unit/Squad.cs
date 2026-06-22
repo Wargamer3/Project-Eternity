@@ -37,7 +37,7 @@ namespace ProjectEternity.Core.Units
         public bool IsWingmanBLocked;
         public bool IsDead;
 
-        private Matrix WorldPosition;
+        private Matrix WorldPositionMatrix;
 
         public override int Width { get { return CurrentLeader.SpriteMap.Width; } }
         public override int Height { get { return CurrentLeader.SpriteMap.Height; } }
@@ -203,7 +203,7 @@ namespace ProjectEternity.Core.Units
                     FinalPosition.Y += 0.5f * CurrentLeader.UnitStat.ArrayMapSize.GetLength(1) - 0.5f;
                 }
 
-                WorldPosition = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
+                WorldPositionMatrix = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
             }
         }
 
@@ -229,7 +229,7 @@ namespace ProjectEternity.Core.Units
             }
             else
             {
-                CurrentLeader.Unit3DModel.Draw(View, Projection, WorldPosition);
+                CurrentLeader.Unit3DModel.Draw(View, Projection, WorldPositionMatrix);
             }
         }
 

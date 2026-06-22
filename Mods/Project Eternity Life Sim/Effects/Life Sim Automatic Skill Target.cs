@@ -4,7 +4,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public abstract class LifeSimAutomaticTargetType : AutomaticSkillTargetType
     {
-        protected LifeSimParams Params;
+        protected LifeSimCharacterParams Params;
 
         public LifeSimAutomaticTargetType(string TargetType)
             : base(TargetType)

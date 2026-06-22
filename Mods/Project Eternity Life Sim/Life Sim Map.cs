@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -20,14 +22,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public MovementAlgorithm Pathfinder;
         public LayerHolderLifeSim LayerManager;
         public Dictionary<Vector3, Terrain> DicTemporaryTerrain;//Temporary obstacles
-        public LifeSimParams SorcererStreetParams;
+        public LifeSimCharacterParams SorcererStreetParams;
+
+        public List<PlayerCharacter> ListCharacter;
 
         public override MovementAlgorithmTile CursorTerrain => throw new NotImplementedException();
 
         public LifeSimMap()
         {
             RequireDrawFocus = false;
-            ListActionMenuChoice = new ActionPanelHolderLifeSim(this);
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             BattleContext = new LifeSimBattleContext();
 
@@ -35,6 +38,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             LayerManager = new LayerHolderLifeSim(this);
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             ActiveParser = new LifeSimFormulaParser(this, BattleContext);
+
+            ListCharacter = new List<PlayerCharacter>();
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
@@ -75,7 +80,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void Save(string FilePath)
         {
-            //Create the Part file.
             FileStream FS = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 
@@ -205,6 +209,45 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public override bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement)
         {
             return false;
+        }
+
+        public PlayerCharacter MoveCursorAndGetCharacterUnderMouse()
+        {
+            if (MouseHelper.MouseMoved())
+            {
+                Vector3 MenuPosition = LayerManager.LayerHolderDrawable.Get3DPositionFromMouse(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y);
+                MenuPosition = new Vector3(MenuPosition.X, MenuPosition.Z, MenuPosition.Y);
+
+                if (CursorPosition != MenuPosition)
+                {
+                    CursorPosition = MenuPosition;
+
+                    foreach (PlayerCharacter ActiveCharacter in ListCharacter)
+                    {
+                        if (Vector2.Distance(new Vector2(MenuPosition.X, MenuPosition.Y), new Vector2(ActiveCharacter.Position.X, ActiveCharacter.Position.Z)) < 32)
+                        {
+                            return ActiveCharacter;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public void SpawnCharacter(PlayerCharacter NewCharacter, uint ID, Vector3 Position)
+        {
+            if (Content != null)
+            {
+                NewCharacter.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewCharacter.SpriteMap, 1, 1f, 0f);
+                Color OutlineColor = Color.Red;
+                NewCharacter.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewCharacter.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+            }
+
+            NewCharacter.SetPosition(Position);
+            NewCharacter.Init();
+            ListCharacter.Add(NewCharacter);
         }
 
         public override void Update(GameTime gameTime)
@@ -389,14 +432,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
 
             GameRule.Draw(g);
-
-            if (IsOnTop)
-            {
-                if (ListActionMenuChoice.HasMainPanel)
-                {
-                    ListActionMenuChoice.Last().Draw(g);
-                }
-            }
 
             #region Handle screen shaking.
 

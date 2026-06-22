@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -7,6 +8,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int TilesetIndex;
         public short[] ArrayIndex;
         public VertexPositionNormalTexture[] ArrayVertex;
+        public BoundingBox CollisionBox;
 
         public int VertexCount { get { return ArrayVertex.Length; } }
 
@@ -18,6 +20,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ArrayVertex = ArrayVertex;
             this.ArrayIndex = ArrayIndex;
             TriangleCount = ArrayIndex.Length / 3;
+
+            CollisionBox = new BoundingBox(ArrayVertex[0].Position, ArrayVertex[3].Position - new Vector3(0, 32, 0));
         }
 
         public Tile3D(Tile3D Clone)

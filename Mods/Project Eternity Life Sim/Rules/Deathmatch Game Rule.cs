@@ -122,10 +122,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void Update(GameTime gameTime)
         {
-            if (!Owner.IsEditor)
-            {
-                Owner.ListActionMenuChoice.Last().Update(gameTime);
-            }
         }
 
         public void BeginDraw(CustomSpriteBatch g)

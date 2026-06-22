@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
     public class EffectActivationContext
     {
+        public CharacterAction ActivatedAction;
         public PlayerCharacter User;
         public PlayerCharacter Target;
 
@@ -27,42 +28,51 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public EffectActivationContext(EffectActivationContext Clone)
         {
+            ActivatedAction = Clone.ActivatedAction;
             User = Clone.User;
             Target = Clone.User;
         }
     }
 
-    public class LifeSimParams
+    public class LifeSimCharacterParams
     {
         public readonly PlayerCharacter Owner;
 
         public readonly LifeSimBattleContext BattleContext;
         public readonly EffectActivationContext ActivationContext;
-        public LifeSimMap ActiveMap;
 
-        public static readonly ConcurrentDictionary<string, LifeSimParams> DicParams = new ConcurrentDictionary<string, LifeSimParams>();
+        public PlayerOverseer User;
+        public LifeSimMap ActiveMap => CurrentMapInfo.MapMapContainer.ActiveMap;
+        public NavMapGameManager RootMapContainer;
+        public MapInfo CurrentMapInfo;
 
-        public static Dictionary<string, BaseEffect> DicEffect = new Dictionary<string, BaseEffect>();
-        public static Dictionary<string, BaseSkillRequirement> DicRequirement = new Dictionary<string, BaseSkillRequirement>();
-        public static Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
-        public static Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
-        public static Dictionary<string, Mutator> DicMutator = new Dictionary<string, Mutator>();
-        public static Dictionary<string, ActionEffect> DicActionEffect = new Dictionary<string, ActionEffect>();
-        public static Dictionary<string, UnlcokableItemType> DicUnlockableItemTypeByName = new Dictionary<string, UnlcokableItemType>();
-        public static Dictionary<string, UnlockRequirementEvaluator> DicRequirementByName = new Dictionary<string, UnlockRequirementEvaluator>();
+        public static readonly ConcurrentDictionary<string, LifeSimCharacterParams> DicParams = new ConcurrentDictionary<string, LifeSimCharacterParams>();
 
-        public LifeSimParams(PlayerCharacter Owner)
+        public static readonly Dictionary<string, AIAction> DicAIAction = new Dictionary<string, AIAction>();
+        public static readonly Dictionary<string, BaseEffect> DicEffect = new Dictionary<string, BaseEffect>();
+        public static readonly Dictionary<string, BaseSkillRequirement> DicRequirement = new Dictionary<string, BaseSkillRequirement>();
+        public static readonly Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
+        public static readonly Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+        public static readonly Dictionary<string, Mutator> DicMutator = new Dictionary<string, Mutator>();
+        public static readonly Dictionary<string, ActionEffect> DicActionEffect = new Dictionary<string, ActionEffect>();
+        public static readonly Dictionary<string, UnlcokableItemType> DicUnlockableItemTypeByName = new Dictionary<string, UnlcokableItemType>();
+        public static readonly Dictionary<string, UnlockRequirementEvaluator> DicRequirementByName = new Dictionary<string, UnlockRequirementEvaluator>();
+
+        public LifeSimCharacterParams(PlayerCharacter Owner, NavMapGameManager RootMapContainer, MapInfo CurrentMapInfo)
         {
             this.Owner = Owner;
+            this.RootMapContainer = RootMapContainer;
+            this.CurrentMapInfo = CurrentMapInfo;
 
             BattleContext = new LifeSimBattleContext();
             ActivationContext = new EffectActivationContext();
         }
 
-        public LifeSimParams(LifeSimParams Clone)
+        public LifeSimCharacterParams(LifeSimCharacterParams Clone)
         {
             this.Owner = Clone.Owner;
-            this.ActiveMap = Clone.ActiveMap;
+            this.RootMapContainer = Clone.RootMapContainer;
+            this.CurrentMapInfo = Clone.CurrentMapInfo;
 
             BattleContext = Clone.BattleContext;
             ActivationContext = new EffectActivationContext(Clone.ActivationContext);
@@ -72,6 +82,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             if (DicEffect.Count == 0)
             {
+                LoadAIAction();
                 LoadEffects();
                 LoadSkillRequirements();
                 LoadAutomaticSkillActivation();
@@ -80,6 +91,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 LoadActionEffect();
                 LoadUnlcokableItemTypes();
                 LoadUnlockRequirementEvaluators();
+            }
+        }
+
+        protected static void LoadAIAction()
+        {
+            foreach (KeyValuePair<string, AIAction> ActiveEffect in AIAction.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Life Sim", "*.dll"), typeof(LifeSimAIAction)))
+            {
+                DicAIAction.Add(ActiveEffect.Key, ActiveEffect.Value);
+            }
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Life Sim", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, AIAction> ActiveEffect in AIAction.LoadFromAssembly(ActiveAssembly, typeof(LifeSimAIAction)))
+                {
+                    DicAIAction.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
             }
         }
 

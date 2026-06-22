@@ -7,22 +7,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     public abstract class EatAction : LifeSimAIAction
     {
         public const string EatGoal = "Eat";
+        private const string EatActionName = "Eat";
 
-        public EatAction(PlayerCharacter Owner)
-            : base(EatGoal, Owner)
+        public EatAction()
+            : base(EatGoal, EatActionName)
         {
-            UpdatePrecondition(string.Empty, null);
         }
     }
 
     public class EatJerkyAction : LifeSimAIAction
     {
+        private const string EatJerkyActionName = "Eat Jerky";
+
         private bool CanEat;
 
-        public EatJerkyAction(PlayerCharacter Owner)
-            : base(EatAction.EatGoal, Owner)
+        public EatJerkyAction()
+            : base(EatAction.EatGoal, EatJerkyActionName)
         {
-            UpdatePrecondition(string.Empty, null);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -30,19 +31,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            CanEat = Owner.HasItemInCategory("Jerky");
+            CanEat = Params.Owner.HasItemInCategory("Jerky");
 
             if (CanEat)
             {
@@ -58,18 +59,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
     public class GoToRestaurantAction : LifeSimAIAction
     {
+        private const string GoToRestaurantActionName = "Go To Restaurant";
+
         private bool CanEat;
 
-        public GoToRestaurantAction(PlayerCharacter Owner)
-            : base(EatAction.EatGoal, Owner)
+        public GoToRestaurantAction()
+            : base(EatAction.EatGoal, GoToRestaurantActionName)
         {
-            UpdatePrecondition(string.Empty, null);
         }
 
         public void Execute()
         {
-            Owner.SetObjective(MoveAction.MoveGoal, new Vector3());
-            List<AIAction> a = Owner.GetActionForGoal(MoveAction.MoveGoal);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -77,22 +77,22 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            var a = Map.FindPath(Owner.CurrentMapName, Owner.WorldPosition, "Restaurant");
-            Owner.SetObjective(MoveAction.MoveGoal, new Vector3());
-            List<AIAction> ListMovementGoal = Owner.GetActionForGoal(MoveAction.MoveGoal);
+            var a = Map.FindPath(Params.CurrentMapInfo, Params.Owner.Position, "Restaurant");
+            Params.Owner.SetObjective(MoveAction.MoveGoal, new Vector3());
+            List<AutomatedAction> ListMovementGoal = Params.Owner.GetActionForGoal(MoveAction.MoveGoal);
             return ListMovementGoal;
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            CanEat = Owner.HasKnowledgeInCategory("Restaurant");
+            CanEat = Params.Owner.HasKnowledgeInCategory("Restaurant");
 
             if (CanEat)
             {

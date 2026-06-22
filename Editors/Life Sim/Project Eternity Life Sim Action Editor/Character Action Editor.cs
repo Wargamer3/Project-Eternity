@@ -80,7 +80,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
         private void LoadAction(string ActionPath)
         {
-            LifeSimParams.Init();
+            LifeSimCharacterParams.Init();
 
             Name = ActionPath.Substring(0, ActionPath.Length - 4).Substring(35);
 
@@ -183,7 +183,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
                 pgAction.SelectedObject = SelectedEffect;
                 tabSkills.Tag = SelectedEffect;
             };
-            foreach (ActionEffect ActiveEffect in LifeSimParams.DicActionEffect.Values)
+            foreach (ActionEffect ActiveEffect in LifeSimCharacterParams.DicActionEffect.Values)
             {
                 cbActionType.Items.Add(ActiveEffect);
             }

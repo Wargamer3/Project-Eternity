@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
         }
 
-        public SorcererStreetAgainstActivationChanceRequirement(LifeSimParams Params)
+        public SorcererStreetAgainstActivationChanceRequirement(LifeSimCharacterParams Params)
             : base("Life Sim Activation Chance", Params)
         {
         }

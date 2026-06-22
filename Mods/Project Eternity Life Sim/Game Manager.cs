@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using FMOD;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public class NavMapGameManager : GameScreen
     {
-        private List<MapContainer> ListIdleMap;//Loaded but not updated
-        private List<MapContainer> ListUpdatedMap;//Loaded and updated but invisible
+        //SFX
+        public FMODSound sndConfirm;
 
-        private List<PlayerOverseer> ListLocalPlayer;
+        public FMODSound sndSelection;
+        public FMODSound sndDeny;
+        public FMODSound sndCancel;
+
+        public SpriteFont fntMenuText;
+
+        private List<MapInfo> ListIdleMap;//Loaded but not updated
+        private List<MapInfo> ListUpdatedMap;//Loaded and updated but invisible
+
+        public List<PlayerOverseer> ListLocalPlayer;
 
         public const int MaximumMapLoadDistance = 100;
 
@@ -19,27 +31,45 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public NavMapGameManager()
         {
-            ListIdleMap = new List<MapContainer>();
-            ListUpdatedMap = new List<MapContainer>();
+            ListIdleMap = new List<MapInfo>();
+            ListUpdatedMap = new List<MapInfo>();
 
             InterMapPathfinder = new InterMapMovementAlgorithm();
-            RootMapContainer = new MapInfo(new MapContainer("Root", null), null, null);
+            LifeSimMap NewMap = new LifeSimMap("Grass Map", new GameModeInfo());
+            NewMap.Load();
+            NewMap.Init();
+            NewMap.TogglePreview(true);
+            RootMapContainer = new MapInfo(new MapContainer("Root", NewMap), null, null);
 
             ListLocalPlayer = new List<PlayerOverseer>();
 
-            ListLocalPlayer.Add(new PlayerOverseer());
-            ListLocalPlayer[0].ListControlledCharacter.Add(new PlayerCharacter(null, Vector3.Zero));
+            ListLocalPlayer.Add(new PlayerOverseer(this, RootMapContainer));
+
+            ListUpdatedMap.Add(RootMapContainer);
         }
 
         public override void Load()
         {
+            LifeSimCharacterParams.Init();
+            fntMenuText = Content.Load<SpriteFont>("Fonts/Arial15");
+            ActionLogHolder.InitTextParser(Content, fntMenuText, Color.White);
+
+            sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
+            sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
+            sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
+            sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (MapContainer ActiveMap in ListUpdatedMap)
+            foreach (MapInfo ActiveMap in ListUpdatedMap)
             {
-                ActiveMap.ActiveMap.Update(gameTime);
+                ActiveMap.MapMapContainer.ActiveMap.Update(gameTime);
+
+                foreach (PlayerCharacter ActiveCharacter in ActiveMap.MapMapContainer.ActiveMap.ListCharacter)
+                {
+                    ActiveCharacter.Update(gameTime);
+                }
             }
 
             foreach (PlayerOverseer ActivePlayer in ListLocalPlayer)

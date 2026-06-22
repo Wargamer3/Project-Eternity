@@ -29,10 +29,25 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public CharacterDeity()
         {
+            RelativePath = string.Empty;
+
             Name = string.Empty;
             Description = string.Empty;
 
-            ListPantheonMember = new List<string>();
+            DeityCategoryRelativePath = string.Empty;
+            DeityEdicts = string.Empty;
+            DeityAnathema = string.Empty;
+            AreaOfCocern = string.Empty;
+            ReligiousSymbol = string.Empty;
+            SacredAnimal = string.Empty;
+            SacredColors = string.Empty;
+
+            ParentPantheon = string.Empty;
+            ListPantheonMember = new List<string>(0);
+
+            DevoteeBenefits = new DevoteeBenefits();
+
+            DivineIntercession = new DivineIntercession();
         }
 
         public CharacterDeity(string DeityPath, ContentManager Content)
@@ -76,7 +91,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             FS.Close();
         }
 
-        public void Init(LifeSimParams Params)
+        public void Init(LifeSimCharacterParams Params)
         {
         }
     }
@@ -104,6 +119,24 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public List<CharacterAction> ListSpell;
         public List<string> ListSpellRelativePath;
+
+        public DevoteeBenefits()
+        {
+            DivineAttributeRelativePath = string.Empty;
+            DivineFontRelativePath = string.Empty;
+            DivineSanctification = string.Empty;
+            DivineSkillRelativePath = string.Empty;
+            FavoriteWeapon = string.Empty;
+
+            ListDomain = new List<Domain>(0);
+            ListDomainRelativePath = new List<string>(0);
+
+            ListAlternateDomain = new List<Domain>(0);
+            ListAlternateDomainRelativePath = new List<string>(0);
+
+            ListSpell = new List<CharacterAction>(0);
+            ListSpellRelativePath = new List<string>(0);
+        }
 
         public DevoteeBenefits(BinaryReader BR)
         {
@@ -150,6 +183,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public string MinorCurse;
         public string ModerateCurse;
         public string MajorCurse;
+
+        public DivineIntercession()
+        {
+            Description = string.Empty;
+
+            MinorBoon = string.Empty;
+            ModerateBoon = string.Empty;
+            MajorBoon = string.Empty;
+
+            MinorCurse = string.Empty;
+            ModerateCurse = string.Empty;
+            MajorCurse = string.Empty;
+        }
 
         public DivineIntercession(BinaryReader BR)
         {

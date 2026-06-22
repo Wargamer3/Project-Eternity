@@ -5,11 +5,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public class ActionPanelHolderLifeSim : ActionPanelHolder
     {
-        private readonly LifeSimMap Map;
+        private readonly NavMapGameManager MapManager;
 
-        public ActionPanelHolderLifeSim(LifeSimMap Map)
+        public ActionPanelHolderLifeSim(NavMapGameManager MapManager)
         {
-            this.Map = Map;
+            this.MapManager = MapManager;
         }
 
         public override void Add(ActionPanel NewActionPanel)

@@ -430,7 +430,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
                 Camera3D = new DefaultCamera(GraphicsDevice);
-                AttackPicker = new AttacksMenu(Params.ActiveParser);
 
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
                 sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
@@ -474,7 +473,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 #endregion
 
                 StatusMenu = new StatusMenuScreen(this);
-                AttackPicker.Load();
+                if (Params != null)
+                {
+                    AttackPicker = new AttacksMenu(Params.ActiveParser);
+                    AttackPicker.Load();
+                }
                 fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 
                 fxGrayscale = Content.Load<Effect>("Shaders/Grayscale");

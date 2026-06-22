@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public abstract class LifeSimEffect : BaseEffect
     {
-        protected LifeSimParams Params;
+        protected LifeSimCharacterParams Params;
 
         protected LifeSimEffect(string EffectTypeName, bool IsPassive)
             : base(EffectTypeName, IsPassive)
@@ -15,10 +15,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Params = null;
         }
 
-        protected LifeSimEffect(string EffectTypeName, bool IsPassive, LifeSimParams Params)
+        protected LifeSimEffect(string EffectTypeName, bool IsPassive, LifeSimCharacterParams Params)
             : base(EffectTypeName, IsPassive)
         {
-            this.Params = new LifeSimParams(Params);
+            this.Params = new LifeSimCharacterParams(Params);
         }
 
         protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         protected override void DoReload(string ParamsID)
         {
-            this.Params = LifeSimParams.DicParams[ParamsID];
+            this.Params = LifeSimCharacterParams.DicParams[ParamsID];
         }
 
         protected override void ReactivateEffect()

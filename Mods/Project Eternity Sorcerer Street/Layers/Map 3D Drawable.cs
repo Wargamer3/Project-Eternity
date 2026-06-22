@@ -380,6 +380,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X, Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
         }
 
+        public void SetCamera(Camera3D Camera)
+        {
+        }
+
         public void Update(GameTime gameTime)
         {
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
@@ -577,6 +581,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BaseMenuPosition.Y = (int)Position2D.Y;
 
             return BaseMenuPosition;
+        }
+
+        public Vector3 Get3DPositionFromMouse(int MouseX, int MouseY)
+        {
+            return Vector3.Zero;
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)

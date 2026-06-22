@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core.Item;
+using System;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
@@ -24,11 +24,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public bool IsLocked;
         public byte LockedLevel;
         public bool IsVisible;
-
-        public ActionPanel GetActionPanel()
-        {
-            return null;
-        }
 
         public CharacterAction(string FilePath, ContentManager Content)
         {
@@ -54,7 +49,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 string ActionPath = BR.ReadString();
 
-                ListActionEffect.Add(LifeSimParams.DicActionEffect[ActionPath].LoadCopy(BR));
+                ListActionEffect.Add(LifeSimCharacterParams.DicActionEffect[ActionPath].LoadCopy(BR));
             }
 
             byte ListAIActionCount = BR.ReadByte();
@@ -74,6 +69,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             BR.Close();
             FS.Close();
+        }
+
+        public void Init(LifeSimCharacterParams Params)
+        {
+            foreach (ActionEffect ActiveEffect in ListActionEffect)
+            {
+                ActiveEffect.Init(Params);
+            }
+        }
+
+        public void ActivateFromMenu()
+        {
+            ListActionEffect[0].ActivateFromMenu(this);
         }
 
         public override string ToString()

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.LifeSimScreen;
-using System.Windows.Forms;
 
 namespace ProjectEternity.Editors.LifeSimCharacterEditor
 {
@@ -84,12 +82,12 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
         private void LoadAncestry(string AncestryPath)
         {
-            LifeSimParams.Init();
-            foreach (UnlcokableItemType ActiveUnlockableType in LifeSimParams.DicUnlockableItemTypeByName.Values)
+            LifeSimCharacterParams.Init();
+            foreach (UnlcokableItemType ActiveUnlockableType in LifeSimCharacterParams.DicUnlockableItemTypeByName.Values)
             {
                 cbUnlockableType.Items.Add(ActiveUnlockableType);
             }
-            foreach (UnlockRequirementEvaluator ActiveRequirement in LifeSimParams.DicRequirementByName.Values)
+            foreach (UnlockRequirementEvaluator ActiveRequirement in LifeSimCharacterParams.DicRequirementByName.Values)
             {
                 cbRequirementType.Items.Add(ActiveRequirement);
             }

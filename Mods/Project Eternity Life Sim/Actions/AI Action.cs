@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
+using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
@@ -12,10 +12,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         public string Name;
         public string Description;
-        public List<AIAction> ListAIAction;
+        public List<LifeSimAIAction> ListAIAction;//Is a list in case you want to regroup multiple AI action in the same file
 
-        public AICharacterAction(string FilePath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        public AICharacterAction(string FilePath)
         {
             FileStream FS = new FileStream("Content/Life Sim/AI Actions/" + FilePath + ".pea", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -24,13 +23,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Description = BR.ReadString();
 
             byte ListAIActionCount = BR.ReadByte();
+            ListAIAction = new List<LifeSimAIAction>(ListAIActionCount);
             for (int A = 0; A < ListAIActionCount; ++A)
             {
                 string AIActionPath = BR.ReadString();
 
                 if (!string.IsNullOrEmpty(AIActionPath))
                 {
-                    ListAIAction.Add(AIAction.DicDefaultAction[AIActionPath].Copy());
+                    ListAIAction.Add((LifeSimAIAction)LifeSimCharacterParams.DicAIAction[AIActionPath].Copy());
                 }
             }
 
@@ -41,9 +41,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
     public abstract class AIAction
     {
-        public static readonly Dictionary<string, AIAction> DicDefaultAction = new Dictionary<string, AIAction>();//When you just need a placeholder outside of a game.
-
         public readonly string AIGoal;
+        public readonly string AIActionName;
         public int ActionCost;
         public int Urgency;
         public int TimeRequired;
@@ -52,11 +51,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public string AILogicPath;
 
-        public abstract ActionPanelLifeSim GetActionPanel();
+        public abstract ActionPanelLifeSimPlayer GetActionPanel();
 
-        public AIAction(string AIGoal)
+        public AIAction(string AIGoal, string AIActionName)
         {
             this.AIGoal = AIGoal;
+            this.AIActionName = AIActionName;
         }
 
         public virtual AIAction Copy()
@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         /// </summary>
         /// <param name="Map"></param>
         /// <returns></returns>
-        public abstract List<AIAction> GetAIExecutionPlan(NavMapGameManager Map);
+        public abstract List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map);
 
         /// <summary>
         /// //Called when something happen, could be a certain time passed or an interaction.
@@ -89,16 +89,56 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         /// <param name="Event"></param>
         /// <param name="Map"></param>
         public abstract void UpdatePrecondition(string Event, NavMapGameManager Map);
+
+
+        public static Dictionary<string, AIAction> LoadFromAssembly(Assembly ActiveAssembly, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, AIAction> DicAIAction = new Dictionary<string, AIAction>();
+
+            List<AIAction> ListAIAction = ReflectionHelper.GetObjectsFromBaseTypes<AIAction>(TypeOfRequirement, ActiveAssembly.GetTypes(), Args);
+
+            foreach (AIAction ActiveAIAction in ListAIAction)
+            {
+                DicAIAction.Add(ActiveAIAction.AIActionName, ActiveAIAction);
+            }
+
+            return DicAIAction;
+        }
+
+        public static Dictionary<string, AIAction> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, AIAction> DicAIAction = new Dictionary<string, AIAction>();
+
+            for (int F = 0; F < ArrayFilePath.Length; F++)
+            {
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                foreach (KeyValuePair<string, AIAction> ActiveAIAction in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
+                {
+                    DicAIAction.Add(ActiveAIAction.Key, ActiveAIAction.Value);
+                }
+            }
+
+            return DicAIAction;
+        }
+
+        public override string ToString()
+        {
+            return AIActionName;
+        }
     }
 
     public abstract class LifeSimAIAction : AIAction
     {
-        public PlayerCharacter Owner;
+        protected LifeSimCharacterParams Params;
 
-        protected LifeSimAIAction(string AIGoal, PlayerCharacter Owner)
-            : base(AIGoal)
+        protected LifeSimAIAction(string AIGoal, string AIActionName)
+            : base(AIGoal, AIActionName)
         {
-            this.Owner = Owner;
+        }
+
+        public void Init(LifeSimCharacterParams Params)
+        {
+            this.Params = Params;
         }
     }
 }

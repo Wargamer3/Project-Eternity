@@ -46,11 +46,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI Action Editor.cs">
+    <Compile Include="Character AI Action Editor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AI Action Editor.Designer.cs">
-      <DependentUpon>AI Action Editor.cs</DependentUpon>
+    <Compile Include="Character AI Action Editor.Designer.cs">
+      <DependentUpon>Character AI Action Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Heritage Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Heritage Editor.Designer.cs">
+      <DependentUpon>Character Heritage Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Character Class Editor.cs">
       <SubType>Form</SubType>
@@ -157,8 +163,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AI Action Editor.resx">
-      <DependentUpon>AI Action Editor.cs</DependentUpon>
+    <EmbeddedResource Include="Character AI Action Editor.resx">
+      <DependentUpon>Character AI Action Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Heritage Editor.resx">
+      <DependentUpon>Character Heritage Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Character Class Editor.resx">
       <DependentUpon>Character Class Editor.cs</DependentUpon>

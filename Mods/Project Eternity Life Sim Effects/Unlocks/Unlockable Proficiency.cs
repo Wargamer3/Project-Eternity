@@ -69,6 +69,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 Params.Owner.Class.DicProficiencyLevelByName.Add(Proficiency.LinkedProficiencyRelativePath, Proficiency);
             }
+
+            Proficiency.ComputeStatBonuses(Params.Owner);
         }
 
         public override UnlcokableItemType Copy()

@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         public readonly string RequirementTypeName;
 
-        protected LifeSimParams Params;
+        protected LifeSimCharacterParams Params;
 
         public abstract bool CanBeUnlocked();
 
@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             this.RequirementTypeName = RequirementName;
         }
 
-        public void Init(LifeSimParams Params)
+        public void Init(LifeSimCharacterParams Params)
         {
             this.Params = Params;
         }

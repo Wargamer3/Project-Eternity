@@ -2,8 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
@@ -17,7 +15,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public string Name;
         public string Description;
-
 
         public List<Trait> ListTraits;
         public List<string> ListTraitsRelativePath;
@@ -84,6 +81,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             BR.Close();
             FS.Close();
+        }
+
+        public void Init(LifeSimCharacterParams Params)
+        {
         }
     }
 }

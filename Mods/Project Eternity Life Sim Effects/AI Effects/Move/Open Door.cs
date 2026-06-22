@@ -7,15 +7,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     public class GoThroughDoorAction : LifeSimAIAction
     {
         public const string GoThroughDoorGoal = "GoThroughDoor";
+        private const string GoThroughDoorActionName = "Go Through Door";
 
         private Door DoorToUse;
 
-        public GoThroughDoorAction(PlayerCharacter Owner, Door DoorToUse)
-            : base(GoThroughDoorGoal, Owner)
+        public GoThroughDoorAction()
+            : base(GoThroughDoorGoal, GoThroughDoorActionName)
         {
-            this.DoorToUse = DoorToUse;
-
-            UpdatePrecondition(string.Empty, null);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -23,32 +21,31 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Owner.DicExtraStatByName["Speed"];
+            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
         }
     }
 
     public class BreakThroughDoorAction : LifeSimAIAction
     {
+        private const string BreakThroughDoorActionName = "Break Through Door";
+
         private Door DoorToBreakThrough;
 
-        public BreakThroughDoorAction(PlayerCharacter Owner, Door DoorToBreakThrough)
-            : base(MoveAction.MoveGoal, Owner)
+        public BreakThroughDoorAction()
+            : base(MoveAction.MoveGoal, BreakThroughDoorActionName)
         {
-            this.DoorToBreakThrough = DoorToBreakThrough;
-
-            UpdatePrecondition(string.Empty, null);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -56,32 +53,31 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Owner.DicExtraStatByName["Speed"];
+            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
         }
     }
 
     public class LockDoorAction : LifeSimAIAction
     {
+        private const string LockDoorActionName = "Lock Door";
+
         private Door DoorToLock;
 
-        public LockDoorAction(PlayerCharacter Owner, Door DoorToLock)
-            : base(MoveAction.MoveGoal, Owner)
+        public LockDoorAction()
+            : base(MoveAction.MoveGoal, LockDoorActionName)
         {
-            this.DoorToLock = DoorToLock;
-
-            UpdatePrecondition(string.Empty, null);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -89,32 +85,31 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Owner.DicExtraStatByName["Speed"];
+            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
         }
     }
 
     public class UnlockDoorAction : LifeSimAIAction
     {
+        private const string UnlockDoorActionName = "Unlock Door";
+
         private Door DoorToUnlock;
 
-        public UnlockDoorAction(PlayerCharacter Owner, Door DoorToUnlock)
-            : base(MoveAction.MoveGoal, Owner)
+        public UnlockDoorAction()
+            : base(MoveAction.MoveGoal, UnlockDoorActionName)
         {
-            this.DoorToUnlock = DoorToUnlock;
-
-            UpdatePrecondition(string.Empty, null);
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -122,19 +117,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSim GetActionPanel()
+        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
 
-        public override List<AIAction> GetAIExecutionPlan(NavMapGameManager Map)
+        public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Owner.DicExtraStatByName["Speed"];
+            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
         }
     }
 }

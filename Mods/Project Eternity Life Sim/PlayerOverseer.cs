@@ -3,47 +3,67 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public class PlayerOverseer
     {
-        private List<MapContainer> ListActiveMap;//Loaded, updated and visible
+        private readonly NavMapGameManager MapManager;
 
         public List<PlayerCharacter> ListControlledCharacter;
         private KnowledgeContainer Knowledge;
+        public Camera3D Camera;
 
-        private Vector3 CameraPosition;
-        public ActionPanel ActiveActionPanel;
+        public PlayerInput ActiveInputManager;
+        public ActionPanelHolder ActionHolder;
 
         public PlayerCharacter ActiveControlledCharacter;
+        public readonly PlayerCharacter InvisibleCharacterAsCursor;//Making the cursor is like moving a character to use the same map change code.
 
-        public PlayerOverseer()
+        public PlayerOverseer(NavMapGameManager MapManager, MapInfo CurrentMapInfo)
         {
-            ListActiveMap = new List<MapContainer>();
+            this.MapManager = MapManager;
 
             ListControlledCharacter = new List<PlayerCharacter>();
+            ActiveInputManager = new KeyboardInput();
+
+            InvisibleCharacterAsCursor = new PlayerCharacter(MapManager, CurrentMapInfo, Vector3.Zero);
 
             Knowledge = new KnowledgeContainer();
+
+            ActionHolder = new ActionPanelHolder();
+
+            ActionHolder.AddToPanelListAndSelect(new ActionPanelFreeCam(this, MapManager, ActionHolder));
         }
 
         public void ControlCharacter(PlayerCharacter CharacterToControl)
         {
             ListControlledCharacter.Add(CharacterToControl);
+            ActionHolder.AddToPanelListAndSelect(new ActionPanelControlCharacter(this, CharacterToControl, MapManager, ActionHolder));
         }
 
         public void Update(GameTime gameTime)
         {
-            ActiveActionPanel.Update(gameTime);
+            if (ActionHolder.HasSubPanels)
+            {
+                ActionHolder.Last().Update(gameTime);
+            }
+            else if (ActionHolder.HasMainPanel)
+            {
+                ActionHolder.GetMainPanel().Update(gameTime);
+            }
         }
 
         public void Draw(CustomSpriteBatch g)
         {
-            ActiveActionPanel.Draw(g);
-
-            foreach (MapContainer ActiveMap in ListActiveMap)
+            if (ActionHolder.HasMainPanel)
             {
-                ActiveMap.ActiveMap.Draw(g);
+                ActionHolder.GetMainPanel().Draw(g);
+            }
+            if (ActionHolder.HasSubPanels)
+            {
+                ActionHolder.Last().Draw(g);
             }
         }
     }

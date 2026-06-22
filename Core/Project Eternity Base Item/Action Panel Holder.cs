@@ -58,6 +58,11 @@ namespace ProjectEternity.Core.Item
             }
         }
 
+        public ActionPanel GetMainPanel()
+        {
+            return ListActionPanel[0];
+        }
+
         public ActionPanel Last()
         {
             return ListActionPanel.Last();

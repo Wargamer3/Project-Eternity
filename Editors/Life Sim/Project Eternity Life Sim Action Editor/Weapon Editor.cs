@@ -2,8 +2,6 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.LifeSimScreen;
 
@@ -87,7 +85,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
         private void LoadWeapon(string WeaponPath)
         {
-            LifeSimParams.Init();
+            LifeSimCharacterParams.Init();
             Name = WeaponPath.Substring(0, WeaponPath.Length - 4).Substring(25);
 
             Weapon LoadedWeapon = new Weapon(Name, null);
@@ -117,7 +115,6 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             {
                 lsActions.Items.Add(LoadedWeapon.ArrayCharacterActionPath[A]);
             }
-
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

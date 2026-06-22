@@ -27,6 +27,27 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public List<StatsToAsign> ListStatBoosts;
 
+        public CharacterClass()
+        {
+            RelativePath = string.Empty;
+            ListStatBoosts = new List<StatsToAsign>();
+
+            Name = string.Empty;
+            Description = string.Empty;
+            BaseHP = 0;
+
+            ListTraits = new List<Trait>(0);
+            ListTraitsRelativePath = new List<string>(0);
+
+            ListLanguage = new List<Language>(0);
+            ListLanguageRelativePath = new List<string>(0);
+
+            DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>(0);
+
+            ListUnlockable = new List<Unlockable>(0);
+            ListUnlockableRelativePath = new List<string>(0);
+        }
+
         public CharacterClass(string CharacterClassPath, ContentManager Content)
         {
             RelativePath = CharacterClassPath;
@@ -75,13 +96,18 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             FS.Close();
         }
 
-        public void Init(LifeSimParams Owner)
+        public void Init(LifeSimCharacterParams Params)
         {
             ListStatBoosts.Clear();
 
+            foreach (ProficiencyLink ActiveProficiency in DicProficiencyLevelByName.Values)
+            {
+                ActiveProficiency.ComputeStatBonuses(Params.Owner);
+            }
+
             foreach (Unlockable ActiveUnlockable in ListUnlockable)
             {
-                ActiveUnlockable.Init(Owner, this);
+                ActiveUnlockable.Init(Params, this);
                 ActiveUnlockable.CheckUnlocks();
             }
         }

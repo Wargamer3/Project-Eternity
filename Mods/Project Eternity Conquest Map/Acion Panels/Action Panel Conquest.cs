@@ -8,12 +8,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     /// </summary>
     public abstract class ActionPanelConquest : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => _ActiveInputManager;
+
         protected ConquestMap Map;
+        private readonly PlayerInput _ActiveInputManager;
 
         public ActionPanelConquest(string Name, ConquestMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, new KeyboardInput(), CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
+            _ActiveInputManager = new KeyboardInput();
 
             Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
 
@@ -24,9 +28,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         public ActionPanelConquest(string Name, ConquestMap Map, PlayerInput ActiveInputManager, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, ActiveInputManager, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
+            _ActiveInputManager = ActiveInputManager;
 
             if (!Map.IsServer && Map.IsInit)
             {

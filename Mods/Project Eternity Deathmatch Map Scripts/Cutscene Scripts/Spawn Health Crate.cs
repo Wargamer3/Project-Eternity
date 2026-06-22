@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     throw new NotImplementedException();
                 }
 
-                public class ActionPanelPickUpHealthCrate : BattleMapActionPanel
+                public class ActionPanelPickUpHealthCrate : ActionPanelDeathmatch
                 {
                     private const string PanelName = "Use Health Crate";
 
@@ -178,10 +178,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     private readonly HealthCrate Owner;
                     private readonly Squad ActiveSquad;
 
-                    public ActionPanelPickUpHealthCrate(BattleMap Map, HealthCrate Owner, Squad ActiveSquad)
-                        : base(PanelName, Map.ListActionMenuChoice, null, false)
+                    public ActionPanelPickUpHealthCrate(DeathmatchMap Map, HealthCrate Owner, Squad ActiveSquad)
+                        : base(PanelName, Map, false)
                     {
-                        this.Map = Map;
                         this.Owner = Owner;
                         this.ActiveSquad = ActiveSquad;
                     }

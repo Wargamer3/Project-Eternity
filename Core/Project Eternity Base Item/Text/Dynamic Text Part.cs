@@ -19,6 +19,7 @@ namespace ProjectEternity.Core.Item
         public Vector2 Position;
         public float MaxWidth;
         public float MaxHeight;
+        public Point TextSize;
 
         public DynamicTextPart(DynamicText Owner, string OriginalText, string Prefix)
         {

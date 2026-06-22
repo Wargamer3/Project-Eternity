@@ -239,7 +239,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
 
             Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Life Sim.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelLifeSim), this);
+            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelLifeSimPlayer), this);
             foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
             {
                 DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);

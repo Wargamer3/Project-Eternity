@@ -26,12 +26,15 @@ namespace ProjectEternity.Core.Item
         public Dictionary<string, DynamicTextPart> DicTextPartByID;
         public List<Rectangle> ListObstacle;
 
+        public Point SizeBox;
+
         public DynamicText()
         {
             ListProcessor = new List<DynamicTextProcessor>();
 
             DicTextPartByID = new Dictionary<string, DynamicTextPart>();
             ListObstacle = new List<Rectangle>();
+            SizeBox = Point.Zero;
         }
 
         public void Load(ContentManager Content)
@@ -85,6 +88,17 @@ namespace ProjectEternity.Core.Item
             Vector2 CurrentPosition = Vector2.Zero;
 
             Root.UpdatePosition();
+
+            int MaxX = 0;
+            int MaxY = 0;
+
+            foreach (DynamicTextPart ActiveText in Root.ListSubTextSection)
+            {
+                MaxX = Math.Max(MaxX, ActiveText.TextSize.X);
+                MaxY = Math.Max(MaxY, ActiveText.TextSize.Y);
+            }
+
+            SizeBox = new Point(MaxX, MaxY);
         }
 
         public DynamicText Copy()

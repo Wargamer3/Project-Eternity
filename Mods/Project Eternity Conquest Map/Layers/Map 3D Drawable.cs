@@ -396,6 +396,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
+        public void SetCamera(Camera3D Camera)
+        {
+        }
+
         private bool IsCursorHiddenByWall()
         {
             int CursorX = (int)Map.CursorPosition.X / Map.TileSize.X;
@@ -431,6 +435,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             BaseMenuPosition.Y = (int)Position2D.Y;
 
             return BaseMenuPosition;
+        }
+
+        public Vector3 Get3DPositionFromMouse(int MouseX, int MouseY)
+        {
+            return Vector3.Zero;
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)

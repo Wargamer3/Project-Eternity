@@ -128,10 +128,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<PlayerCharacter.CharacterStats> ListStatChoosen;
     }
 
-    public class PlayerCharacter
+    public class PlayerCharacter : UnitMapComponent
     {
         public enum CharacterStats { STR, DEX, CON, INT, WIS, CHA, Free }
         public enum CharacterSexes { Male, Female }
+
+        public override int Width { get { return SpriteMap.Width; } }
+        public override int Height { get { return SpriteMap.Height; } }
+        public override bool[,] ArrayMapSize { get { return new bool[1, 1] { { true } }; } }
+        public override bool IsActive { get { return true; } }
 
         private Dictionary<string, List<AIAction>> DicActionByGoal;
         private Dictionary<string, object> DicObjectiveByName;
@@ -140,16 +145,20 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<string> ListAvailableGoal;
 
         public string PrimaryGoal;//Fallback in case actions get interrupted
-        public List<AIAction> ListFollowingAIAction;
-        public ActionPanel ActiveActionPanel;
+        public ActionPanelHolderLifeSim ListActionMenuChoice;
+        public List<AutomatedAction> ListAutomatedAction;
 
         public bool CanChangeAIPrimaryGoal;
-        public bool AIPrimaryGoalReached => ListFollowingAIAction.Count == 0;
+        public bool AIControlled;
+        public bool AIPrimaryGoalReached => !AIControlled && ListAutomatedAction.Count == 0;
 
         public List<Weapon> ListWeapon { get; internal set; }
 
         private Dictionary<string, AIAction> DicActionByKey;
 
+        #region Stats
+
+        public string RelativePath;
         public string Name;
         public string Description;
 
@@ -175,6 +184,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public CharacterBackground Background;
         public CharacterClass Class;
         public CharacterDeity Deity;
+        public CharacterHeritage Heritage;
         public int Age;
         public CharacterSexes CharacterSex;
         public List<Language> ListLanguage;
@@ -187,6 +197,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public long Exp;
         public int CurrentHP;
         public int MaxHP;
+        public int BonusHP;
         public int Mana;
         public int Money;
         public int Hunger;
@@ -206,6 +217,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public Dictionary<string, int> DicExtraStatByName;
         public Dictionary<string, CharacterSkill> DicSkillByName;
 
+        #endregion
+
         public Dictionary<string, QuoteSet> DicAttackQuoteSet;
 
         public QuoteSet[] ArrayBaseQuoteSet = new QuoteSet[6];
@@ -214,44 +227,54 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         private InventoryContainer RootInventoryContainer;
         private KnowledgeContainer RootKnowledgeContainer;
-        public NavMapGameManager RootMapContainer;
+        public ActionLogHolder Logs;
 
-        public LifeSimParams SharedMapContex;//Context unique to each player
-        public MapInfo CurrentMapName;
-        public Vector3 WorldPosition;
+        public LifeSimCharacterParams SharedMapContex;//Context unique to each player
+        private Matrix WorldPositionMatrix;
+        public Camera3D Camera;
 
-        public bool AIControlled;
+        public Color Color;
 
-        public PlayerCharacter(MapInfo CurrentMapName, Vector3 WorldPosition)
+        public PlayerCharacter(NavMapGameManager MapManager, MapInfo CurrentMapInfo, Vector3 WorldPosition)
         {
-            this.CurrentMapName = CurrentMapName;
-            this.WorldPosition = WorldPosition;
+            SharedMapContex = new LifeSimCharacterParams(this, MapManager, CurrentMapInfo);
+            SetPosition(WorldPosition);
 
             DicActionByGoal = new Dictionary<string, List<AIAction>>();
             DicObjectiveByName = new Dictionary<string, object>();
             DicExtraStatByName = new Dictionary<string, int>();
-            ListFollowingAIAction = new List<AIAction>();
+            ListAutomatedAction = new List<AutomatedAction>();
+            ListActionMenuChoice = new ActionPanelHolderLifeSim(MapManager);
 
             ArrayRelationshipBonus = new BaseAutomaticSkill[0];
 
             RootInventoryContainer = new InventoryContainer("Root");
             RootKnowledgeContainer = new KnowledgeContainer("Root");
+            Logs = new ActionLogHolder();
+
+            Ancestry = new CharacterAncestry();
+            Background = new CharacterBackground();
+            Class = new CharacterClass();
+            Deity = new CharacterDeity();
         }
 
-        public PlayerCharacter(string CharacterPath, ContentManager Content)
+        public PlayerCharacter(string CharacterPath, ContentManager Content, NavMapGameManager MapManager = null, MapInfo CurrentMapInfo = null)
         {
-            Name = CharacterPath;
+            RelativePath = CharacterPath;
+            SharedMapContex = new LifeSimCharacterParams(this, MapManager, CurrentMapInfo);
 
             DicActionByGoal = new Dictionary<string, List<AIAction>>();
             DicObjectiveByName = new Dictionary<string, object>();
             DicExtraStatByName = new Dictionary<string, int>();
-            ListFollowingAIAction = new List<AIAction>();
+            ListAutomatedAction = new List<AutomatedAction>();
+            ListActionMenuChoice = new ActionPanelHolderLifeSim(MapManager);
             DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>();
 
             ArrayRelationshipBonus = new BaseAutomaticSkill[0];
 
             RootInventoryContainer = new InventoryContainer("Root");
             RootKnowledgeContainer = new KnowledgeContainer("Root");
+            Logs = new ActionLogHolder();
 
             FileStream FS = new FileStream("Content/Life Sim/Characters/" + CharacterPath + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -265,10 +288,44 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Model3DPath = BR.ReadString();
             Tags = BR.ReadString();
 
-            Ancestry = new CharacterAncestry(BR.ReadString(), Content);
-            Background = new CharacterBackground(BR.ReadString());
-            Class = new CharacterClass(BR.ReadString(), Content);
-            Deity = new CharacterDeity(BR.ReadString(), Content);
+            string AncestryPath = BR.ReadString();
+            string BackgroundPath = BR.ReadString();
+            string ClassPath = BR.ReadString();
+            string DeityPath = BR.ReadString();
+
+            if (string.IsNullOrEmpty(AncestryPath))
+            {
+                Ancestry = new CharacterAncestry();
+            }
+            else
+            {
+                Ancestry = new CharacterAncestry(AncestryPath, Content);
+            }
+            if (string.IsNullOrEmpty(AncestryPath))
+            {
+                Background = new CharacterBackground();
+            }
+            else
+            {
+                Background = new CharacterBackground(BackgroundPath);
+            }
+            if (string.IsNullOrEmpty(AncestryPath))
+            {
+                Class = new CharacterClass();
+            }
+            else
+            {
+                Class = new CharacterClass(ClassPath, Content);
+            }
+            if (string.IsNullOrEmpty(AncestryPath))
+            {
+                Deity = new CharacterDeity();
+            }
+            else
+            {
+                Deity = new CharacterDeity(DeityPath, Content);
+            }
+
             Age = BR.ReadByte();
             CharacterSex = (CharacterSexes)BR.ReadByte();
 
@@ -316,36 +373,36 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             if (Content != null)
             {
-                string FinalSpriteMapPath = "\\Map Sprite\\" + CharacterPath;
+                string FinalSpriteMapPath = "\\Map Sprites\\" + CharacterPath;
                 if (!string.IsNullOrEmpty(SpriteMapPath))
-                    FinalSpriteMapPath = "\\Map Sprite\\" + SpriteMapPath;
+                    FinalSpriteMapPath = "\\Map Sprites\\" + SpriteMapPath;
 
-                string FinalSpriteUnitPath = "\\Unit Sprite\\" + CharacterPath;
+                string FinalSpriteUnitPath = "\\Unit Sprites\\" + CharacterPath;
                 if (!string.IsNullOrEmpty(SpritPortraitPath))
-                    FinalSpriteUnitPath = "\\Unit Sprite\\" + SpritPortraitPath;
+                    FinalSpriteUnitPath = "\\Unit Sprites\\" + SpritPortraitPath;
 
-                string UnitDirectory = Path.GetDirectoryName("Content/Life Sim/Units/Normal/");
+                string UnitDirectory = Path.GetDirectoryName("Content/Life Sim/Characters/");
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + FinalSpriteMapPath + ".xnb"))
                     SpriteMap = Content.Load<Texture2D>(XNADirectory + FinalSpriteMapPath);
                 else
-                    SpriteMap = Content.Load<Texture2D>("Life Sim/Units/Default");
+                    SpriteMap = Content.Load<Texture2D>("Life Sim/Characters/Default");
 
                 if (File.Exists(UnitDirectory + FinalSpriteUnitPath + ".xnb"))
                     SpriteUnit = Content.Load<Texture2D>(XNADirectory + FinalSpriteUnitPath);
                 else
-                    SpriteUnit = Content.Load<Texture2D>("Life Sim/Units/Default");
+                    SpriteUnit = Content.Load<Texture2D>("Life Sim/Characters/Default");
 
                 if (!string.IsNullOrEmpty(Model3DPath))
                 {
                     string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     string ModelFolder = Model3DPath.Replace(ArrayModelFolder[ArrayModelFolder.Length - 1], "");
-                    Unit3DModel = new AnimatedModel("Life Sim/Units/Normal/Unit Models/" + Model3DPath);
+                    Unit3DModel = new AnimatedModel("Life Sim/Characters/Models/" + Model3DPath);
                     Unit3DModel.LoadContent(Content);
 
-                    Unit3DModel.AddAnimation("Life Sim/Units/Normal/Unit Models/" + ModelFolder + "Walking", "Walking", Content);
-                    Unit3DModel.AddAnimation("Life Sim/Units/Normal/Unit Models/" + ModelFolder + "Idle", "Idle", Content);
+                    Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Walking", "Walking", Content);
+                    Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Idle", "Idle", Content);
                 }
             }
 
@@ -355,12 +412,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void Init()
         {
-            SharedMapContex = new LifeSimParams(this);
-
             Ancestry.Init(SharedMapContex);
             Background.Init(SharedMapContex);
             Class.Init(SharedMapContex);
             Deity.Init(SharedMapContex);
+
+            RootInventoryContainer.Init(SharedMapContex);
+
+            foreach (CharacterAction ActiveAction in ArrayCharacterAction)
+            {
+                ActiveAction.Init(SharedMapContex);
+            }
 
             UpdateStats();
         }
@@ -492,28 +554,43 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
+        public int GetInitiative(string ProficiencyType)
+        {
+            int FinalInitiative = 0;
+
+            ProficiencyLink FoundProficiency;
+            if (DicProficiencyLevelByName.TryGetValue(ProficiencyType, out FoundProficiency))
+            {
+                FinalInitiative = FoundProficiency.GetValue();
+            }
+
+            return FinalInitiative;
+        }
+
         public void Update(GameTime gameTime)
         {
-            if (AIControlled)
+            if (ListAutomatedAction.Count > 0)
             {
-                if (AIPrimaryGoalReached)
-                {
-                    FindNextPrimaryGoal(RootMapContainer);
-                }
-                else
-                {
-                    bool ActionHasFinished = ListFollowingAIAction[0].Execute(gameTime, RootMapContainer);
+                ListAutomatedAction[0].Update(gameTime);
+            }
+            else if (AIPrimaryGoalReached)
+            {
+                FindNextPrimaryGoal(SharedMapContex.RootMapContainer);
+            }
+            else if (ListActionMenuChoice.HasMainPanel)
+            {
+                ListActionMenuChoice.Last().Update(gameTime);
+            }
+        }
 
-                    if (ActionHasFinished)
-                    {
-                        ListFollowingAIAction.RemoveAt(0);
-                    }
-                }
-            }
-            else
-            {
-                ActiveActionPanel.Update(gameTime);
-            }
+        public void RemoveControl()
+        {
+            SharedMapContex.User = null;
+        }
+
+        public void TakeControl(PlayerOverseer NewUser)
+        {
+            SharedMapContex.User = NewUser;
         }
 
         public void AddAction(AIAction NewAction)
@@ -530,12 +607,22 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void AddMapKnowledge(MapInfo mapInfo)
         {
-            RootMapContainer.AddMapContainer(mapInfo);
+            SharedMapContex.RootMapContainer.AddMapContainer(mapInfo);
         }
 
-        public List<AIAction> GetActionForGoal(string Goal)
+        public List<AutomatedAction> GetActionForGoal(string Goal)
         {
-            return DicActionByGoal[Goal];
+            List<AutomatedAction> ListAction = new List<AutomatedAction>();
+            foreach (AIAction ActiveAIAction in DicActionByGoal[Goal])
+            {
+                ActiveAIAction.UpdatePrecondition(null, SharedMapContex.RootMapContainer);
+                if (ActiveAIAction.AIWeight > 0)
+                {
+                    ListAction.AddRange(ActiveAIAction.GetAIExecutionPlan(SharedMapContex.RootMapContainer));
+                }
+            }
+
+            return ListAction;
         }
 
         public void SetObjective(string ObjectiveName, object ObjectiveValue)
@@ -604,7 +691,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
 
             CurrentGoal = ListAvailableAction[GoalIndex].AIGoal;
-            ListFollowingAIAction = ListAvailableAction[GoalIndex].GetAIExecutionPlan(Map);
+            ListAutomatedAction.AddRange(ListAvailableAction[GoalIndex].GetAIExecutionPlan(Map));
         }
 
         public void GoToLocation(string LocationName, NavMapGameManager Map)
@@ -612,7 +699,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             KnowledgeInfo LocationKnowledge = RootKnowledgeContainer.DicKnowledgeByName[LocationName];
             Vector3 LocationPosition = (Vector3)LocationKnowledge.KnowledgeDetail;
 
-            List<AIAction> ListMovementAction = Map.FindPath(this, WorldPosition, LocationPosition);
+            List<AIAction> ListMovementAction = Map.FindPath(this, Position, LocationPosition);
         }
 
         public void AddItem(ItemInfo ItemToAdd)
@@ -621,7 +708,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             CurrentUnitContainer.AddItem(ItemToAdd);
 
-            foreach (string ActiveTag in ItemToAdd.ArrayTags)
+            foreach (string ActiveTag in ItemToAdd.OwnedItem.ArrayTags)
             {
                 CurrentUnitContainer = RootInventoryContainer;
 
@@ -694,6 +781,64 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             return RootKnowledgeContainer.HasItemInCategory(KnowledgeCategory);
         }
+
+        public override void SetPosition(Vector3 Position)
+        {
+            base.SetPosition(Position);
+
+            if (ItemHeld != null)
+            {
+                ItemHeld.Item3D.SetPosition(
+                    Position.X,
+                    (Position.Z + 1f),
+                    (Position.Y - 0.5f));
+            }
+
+            Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(Direction));
+
+            Vector3 FinalPosition = new Vector3(Position.X, Position.Y, Position.Z);
+
+            WorldPositionMatrix = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
+        }
+
+        public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
+        {
+            g.Draw(SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(SpriteMap.Width / 2, SpriteMap.Height / 2), SpriteEffects.None, 1 / Position.Y);
+        }
+
+        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        {
+            if (ItemHeld != null)
+            {
+                ItemHeld.Item3D.SetViewMatrix(View);
+
+                ItemHeld.Item3D.Draw(GraphicsDevice);
+            }
+
+            if (Unit3DModel == null)
+            {
+                Unit3DSprite.SetViewMatrix(View);
+
+                Unit3DSprite.Draw(GraphicsDevice);
+            }
+            else
+            {
+                Unit3DModel.Draw(View, Projection, WorldPositionMatrix);
+            }
+        }
+
+        public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
+        {
+        }
+
+        public override void DrawOverlayOnMap(CustomSpriteBatch g, Vector3 Position)
+        {
+        }
+
+        public override void DrawTimeOfDayOverlayOnMap(CustomSpriteBatch g, Vector3 Position, int TimeOfDay)
+        {
+            g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)(Position.X - 1) * Width, (int)(Position.Y - 1) * Height, Width * 3, Height * 3), Color.FromNonPremultiplied(255, 255, 255, 120));
+        }
     }
 
     public struct InventoryContainer
@@ -703,6 +848,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         internal Dictionary<string, ItemInfo> DicItemByName;
 
         public string Name;
+        public ActionLogHolder Logs;
 
         public InventoryContainer(string Name)
         {
@@ -711,6 +857,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             DicFolderByName = new Dictionary<string, InventoryContainer>();
             ListFolder = new List<InventoryContainer>();
             DicItemByName = new Dictionary<string, ItemInfo>();
+            Logs = new ActionLogHolder();
+        }
+
+        public void Init(LifeSimCharacterParams SharedMapContex)
+        {
         }
 
         public bool HasItemInCategory(string Category)
@@ -725,9 +876,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void AddItem(ItemInfo ItemToAdd)
         {
-            if (!DicItemByName.ContainsKey(ItemToAdd.ItemName))
+            if (!DicItemByName.ContainsKey(ItemToAdd.OwnedItem.RelativePath))
             {
-                DicItemByName.Add(ItemToAdd.ItemName, ItemToAdd);
+                DicItemByName.Add(ItemToAdd.OwnedItem.RelativePath, ItemToAdd);
+                Logs.AddLog("Added " + ItemToAdd.OwnedItem.RelativePath);
             }
         }
 
@@ -743,11 +895,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         private void RemoveItemFromInventory(ItemInfo ItemToRemove)
         {
-            DicItemByName.Remove(ItemToRemove.ItemName);
+            DicItemByName.Remove(ItemToRemove.OwnedItem.RelativePath);
 
             foreach (InventoryContainer ActiveFolder in ListFolder)
             {
                 ActiveFolder.RemoveItemFromInventory(ItemToRemove);
+                Logs.AddLog("Removed " + ItemToRemove.OwnedItem.RelativePath);
             }
         }
     }
@@ -790,14 +943,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
     public struct ItemInfo
     {
-        public string ItemName;
-        public string[] ArrayTags;
+        public Item OwnedItem;
         public byte QuantityOwned;
 
-        public ItemInfo(string Item, string[] ArrayTags, byte QuantityOwned)
+        public ItemInfo(Item OwnedItem, byte QuantityOwned)
         {
-            this.ItemName = Item;
-            this.ArrayTags = ArrayTags;
+            this.OwnedItem = OwnedItem;
             this.QuantityOwned = QuantityOwned;
         }
     }

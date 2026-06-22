@@ -49,12 +49,13 @@ namespace ProjectEternity.Core.Item
             ReadTags();
 
             DicTextByPosition.Clear();
-            string[] ArrayWorkingString = OriginalText.Split('\n', '\r');
+            string[] ArrayWorkingString = OriginalText.Split(new string[] { "\n\r" }, StringSplitOptions.None);
             Vector2 ActivePosition = Position;
             float TextWidth = 0;
 
             for (int i = 0; i < ArrayWorkingString.Length; ++i)
             {
+                TextWidth = 0;
                 string WorkingString = ArrayWorkingString[i];
                 float RemainingSpaceOnLine = GetRemainingSpaceOnLine(ActivePosition);
                 int CurrentChar = WorkingString.Length;
@@ -166,6 +167,8 @@ namespace ProjectEternity.Core.Item
 
             ActivePosition = SubEndPosition;
 
+            TextSize = new Point((int)MaxWidth, (int)(ActivePosition.Y + Owner.LineHeight));
+
             if (IsAColumn)
             {
                 Owner.ListObstacle.Add(new Rectangle((int)Offset, (int)Position.Y, (int)MaxWidth, (int)(ActivePosition.Y - Position.Y)));
@@ -182,6 +185,10 @@ namespace ProjectEternity.Core.Item
             {
                 return SubEndPosition;
             }
+        }
+
+        public void UpdateMaxSize()
+        {
         }
 
         private void ReadTags()

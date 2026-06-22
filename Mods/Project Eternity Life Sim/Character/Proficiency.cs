@@ -8,23 +8,60 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public class DiceRoll
     {
+        public readonly string DiceText;
+
+        private int NumberOfDice;
         private int DiceValue;
+        public string LastRollText;
 
         public DiceRoll(string DiceText)
         {
-            if (DiceText.StartsWith("d"))
+            this.DiceText = DiceText;
+
+            if (DiceText.Contains("d"))
             {
-                DiceValue = int.Parse(DiceText.Substring(1));
+                int IndexOfDiceValue = DiceText.IndexOf("d");
+                DiceValue = int.Parse(DiceText.Substring(IndexOfDiceValue + 1));
+                if (IndexOfDiceValue >= 1)
+                {
+                    NumberOfDice = int.Parse(DiceText.Substring(0, IndexOfDiceValue));
+                }
             }
             else
             {
+                NumberOfDice = 1;
                 DiceValue = int.Parse(DiceText);
             }
         }
 
         public int Roll()
         {
-            return RandomHelper.Next(DiceValue);
+            int RollValue = RandomHelper.Next(DiceValue);
+            if (NumberOfDice > 1)
+            {
+                for (int D = 1; D < NumberOfDice; ++D)
+                {
+                    RollValue += RandomHelper.Next(DiceValue);
+                }
+            }
+
+            LastRollText = "{{DiceRoll:" + NumberOfDice + "d" + DiceValue + "}}";
+            return RollValue;
+        }
+
+        public int Roll(int ExtraValue)
+        {
+            int RollValue = RandomHelper.Next(DiceValue);
+            if (NumberOfDice > 1)
+            {
+                for (int D = 1; D < NumberOfDice; ++D)
+                {
+                    RollValue += RandomHelper.Next(DiceValue);
+                }
+            }
+
+            LastRollText = "{{DiceRoll:" + NumberOfDice + "d" + DiceValue + " + " + ExtraValue + "}}";
+            return RollValue + ExtraValue;
         }
     }
 
@@ -123,6 +160,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public Proficiency LinkedProficiency;
         public string LinkedProficiencyRelativePath;
         public Proficiency.ProficiencyRanks ProficiencyRank;
+
         private int StatBonus;
 
         public ProficiencyLink(string LinkedProficiencyRelativePath)
@@ -134,6 +172,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             LinkedProficiencyRelativePath = BR.ReadString();
             ProficiencyRank = (Proficiency.ProficiencyRanks)BR.ReadByte();
+            LinkedProficiency = new Proficiency(LinkedProficiencyRelativePath);
         }
 
         public void Write(BinaryWriter BW)
@@ -199,6 +238,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     }
                 }
             }
+        }
+
+        public int GetValue()
+        {
+            return LinkedProficiency.BaseValue + StatBonus;
         }
 
         public int Roll()

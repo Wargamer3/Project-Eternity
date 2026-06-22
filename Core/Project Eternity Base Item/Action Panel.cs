@@ -150,7 +150,7 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public List<ActionPanel> GetActionPanels()
+        public List<ActionPanel> GetActionPanelsCopy()
         {
             return ListActionMenuChoice.GetActionPanels();
         }

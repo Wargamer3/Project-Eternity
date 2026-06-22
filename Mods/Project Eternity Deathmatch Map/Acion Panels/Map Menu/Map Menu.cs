@@ -6,7 +6,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -70,8 +69,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
-
             ActionMenuCursor = 0;
             ListNextChoice.Clear();
             AddChoiceToCurrentPanel(new ActionPanelEndTurn(Map, sprCursorConfirmEndNo, sprCursorConfirmEndYes));

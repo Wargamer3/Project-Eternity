@@ -10,12 +10,17 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
     /// </summary>
     public abstract class ActionPanelWorldMap : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => _ActiveInputManager;
+
         protected WorldMap Map;
+        private PlayerInput _ActiveInputManager;
 
         public ActionPanelWorldMap(string Name, WorldMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, new KeyboardInput(), CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
+
+            _ActiveInputManager = new KeyboardInput();
         }
 
         protected override void OnCancelPanel()

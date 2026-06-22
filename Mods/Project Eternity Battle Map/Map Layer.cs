@@ -74,6 +74,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         Point GetVisiblePosition(Vector3 Position);
 
+        Vector3 Get3DPositionFromMouse(int MouseX, int MouseY);
+
         void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
 
         void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
@@ -81,6 +83,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void AddDamageNumber(string Damage, Vector3 Position);
 
         void SetWorld(Matrix NewWorld);
+
+        void SetCamera(Camera3D Camera);
 
         void Reset();
 

@@ -78,12 +78,12 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
         private void LoadBackground(string BackgroundPath)
         {
-            LifeSimParams.Init();
-            foreach (UnlcokableItemType ActiveUnlockableType in LifeSimParams.DicUnlockableItemTypeByName.Values)
+            LifeSimCharacterParams.Init();
+            foreach (UnlcokableItemType ActiveUnlockableType in LifeSimCharacterParams.DicUnlockableItemTypeByName.Values)
             {
                 cbUnlockableType.Items.Add(ActiveUnlockableType);
             }
-            foreach (UnlockRequirementEvaluator ActiveRequirement in LifeSimParams.DicRequirementByName.Values)
+            foreach (UnlockRequirementEvaluator ActiveRequirement in LifeSimCharacterParams.DicRequirementByName.Values)
             {
                 cbRequirementType.Items.Add(ActiveRequirement);
             }

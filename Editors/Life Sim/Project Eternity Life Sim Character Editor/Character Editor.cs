@@ -37,6 +37,8 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
+                LoadedCharacter = new PlayerCharacter(null, null, Microsoft.Xna.Framework.Vector3.Zero);
+                cbSex.SelectedIndex = 0;
                 SaveItem(FilePath, FilePath);
             }
 
@@ -164,7 +166,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
         private void LoadCharacter(string CharacterPath)
         {
-            LifeSimParams.Init();
+            LifeSimCharacterParams.Init();
             Name = CharacterPath.Substring(0, CharacterPath.Length - 4).Substring(28);
 
             LoadedCharacter = new PlayerCharacter(Name, null);

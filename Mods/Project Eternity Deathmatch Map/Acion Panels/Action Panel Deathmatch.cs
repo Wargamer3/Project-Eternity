@@ -6,16 +6,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public abstract class ActionPanelDeathmatch : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => _ActiveInputManager;
+
         protected DeathmatchMap Map;
+        private readonly PlayerInput _ActiveInputManager;
 
         public ActionPanelDeathmatch(string Name, DeathmatchMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
 
             if (Map.ListPlayer.Count > 0)
             {
-                ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+                _ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
             }
 
             if (!Map.IsServer && Map.IsInit)
@@ -30,9 +33,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public ActionPanelDeathmatch(string Name, DeathmatchMap Map, PlayerInput ActiveInputManager, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, ActiveInputManager, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
+            _ActiveInputManager = ActiveInputManager;
 
             if (!Map.IsServer && Map.IsInit)
             {

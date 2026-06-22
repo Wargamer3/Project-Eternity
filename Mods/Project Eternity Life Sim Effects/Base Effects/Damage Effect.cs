@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
         }
 
-        public AttackEffect(LifeSimParams Params)
+        public AttackEffect(LifeSimCharacterParams Params)
             : base(Name, false, Params)
         {
         }

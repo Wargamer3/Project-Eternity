@@ -78,15 +78,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PassiveSkill = null;
         }
 
-        public TimePeriod(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public TimePeriod(BinaryReader BR, BattleMap Map)
         {
             PassiveSkill = null;
 
-            Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            Load(BR, Map);
         }
 
-        public TimePeriod(TimePeriod Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public TimePeriod(TimePeriod Copy, BattleMap Map)
         {
             Name = Copy.Name;
 
@@ -96,7 +95,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PassiveSkillPath = Copy.PassiveSkillPath;
             if (PassiveSkillPath != "None")
             {
-                PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
             }
 
             WeatherType = Copy.WeatherType;
@@ -117,8 +116,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CrossfadeLength = Copy.CrossfadeLength;
         }
 
-        protected virtual void Load(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        protected virtual void Load(BinaryReader BR, BattleMap Map)
         {
             Name = BR.ReadString();
 
@@ -128,7 +126,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PassiveSkillPath = BR.ReadString();
             if (PassiveSkillPath != "None")
             {
-                PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
             }
 
             WeatherType = (WeatherTypes)BR.ReadByte();

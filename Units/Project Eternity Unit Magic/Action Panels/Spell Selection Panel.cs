@@ -10,22 +10,27 @@ namespace ProjectEternity.Units.Magic
 {
     public class ActionPanelSpellSelection : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => throw new System.NotImplementedException();
+
         private const string PanelName = "Spell Selection";
 
         private UnitMagic ActiveUnit;
         private BattleMap Map;
+        private PlayerInput _ActiveInputManager;
 
         public ActionPanelSpellSelection(BattleMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, true)
+            : base(PanelName, Map.ListActionMenuChoice, true)
         {
             this.Map = Map;
         }
 
         public ActionPanelSpellSelection(BattleMap Map, UnitMagic ActiveUnit)
-            : base(PanelName, Map.ListActionMenuChoice, new KeyboardInput(), true)
+            : base(PanelName, Map.ListActionMenuChoice, true)
         {
             this.Map = Map;
             this.ActiveUnit = ActiveUnit;
+
+            _ActiveInputManager = new KeyboardInput();
         }
 
         public override void OnSelect()

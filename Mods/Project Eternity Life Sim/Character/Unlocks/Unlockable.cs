@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public Unlockable(BinaryReader BR)
         {
             string UnlockableType = BR.ReadString();
-            ItemToUnlock = LifeSimParams.DicUnlockableItemTypeByName[UnlockableType].LoadCopy(BR);
+            ItemToUnlock = LifeSimCharacterParams.DicUnlockableItemTypeByName[UnlockableType].LoadCopy(BR);
 
             byte ListUnlockRequirementCount = BR.ReadByte();
             ListUnlockRequirement = new List<UnlockRequirementEvaluator>();
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 string RequirementName = BR.ReadString();
 
-                UnlockRequirementEvaluator NewActionUnlockRequirement = LifeSimParams.DicRequirementByName[RequirementName].LoadCopy(BR);
+                UnlockRequirementEvaluator NewActionUnlockRequirement = LifeSimCharacterParams.DicRequirementByName[RequirementName].LoadCopy(BR);
 
                 ListUnlockRequirement.Add(NewActionUnlockRequirement);
             }
@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
-        internal void Init(LifeSimParams Params, object Parent)
+        internal void Init(LifeSimCharacterParams Params, object Parent)
         {
             ItemToUnlock.Params = Params;
             ItemToUnlock.Parent = Parent;
@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     public abstract class UnlcokableItemType
     {
         public string UnlcokableTypeName;
-        public LifeSimParams Params;
+        public LifeSimCharacterParams Params;
         public object Parent;
 
         protected UnlcokableItemType(string UnlcokableTypeName)
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             DoWrite(BW);
         }
 
-        public void Init(LifeSimParams Params)
+        public void Init(LifeSimCharacterParams Params)
         {
             this.Params = Params;
         }

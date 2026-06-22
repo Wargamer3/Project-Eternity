@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.BattleMapScreen;
+using Microsoft.Xna.Framework.Input;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Vehicle;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
     public class Map3DDrawable : ILayerHolderDrawable
     {
+        protected Point MapSize { get { return Map.MapSize; } }
+
         const float CameraHeight = 200;
         const float CameraDistance = 300;
         const float CameraYaw = 0.2f;
@@ -20,10 +26,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         private Effect MapEffect;
         private Effect ColorEffect;
         private BasicEffect PolygonEffect;
-        private Camera3D Camera => Map.Camera3D;
+        private Camera3D Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
+        private List<Tile3D> ListAllTile;
 
         private Dictionary<int, Tile3DHolder> DicTileBorderPerPlayer;
         private Dictionary<int, Tile3DHolder> DicTileShadowPerPlayer;
@@ -131,6 +138,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         private void CreateMap(LifeSimMap Map, LayerHolderLifeSim LayerManager)
         {
+            ListAllTile = new List<Tile3D>();
             DicTileBorderPerPlayer = new Dictionary<int, Tile3DHolder>();
             DicTileShadowPerPlayer = new Dictionary<int, Tile3DHolder>();
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
@@ -196,7 +204,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     }
                     if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X, Y - 1].Terrain3DInfo.TerrainStyle))
                     {
-                        ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z ;
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z;
                     }
                     if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTile[X - 1, Y].Terrain3DInfo.TerrainStyle))
                     {
@@ -215,6 +223,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     {
                         foreach (Tile3D ActiveTile in ListNew3DTile)
                         {
+                            ListAllTile.Add(ActiveTile);
                             if (!DicHiddenTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                             {
                                 Tile3DHolder NewTile3DHolder = new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]);
@@ -235,6 +244,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     {
                         foreach (Tile3D ActiveTile in ListNew3DTile)
                         {
+                            ListAllTile.Add(ActiveTile);
                             if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                             {
                                 DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
@@ -306,23 +316,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 DrawableTile ActiveTerrain = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTile[X, Y];
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                 Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    X, Y, Z, Map.CursorPosition.Z + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
-            }
-
-            if (!Map.IsAPlatform && !Map.IsServer)
-            {
-                if (Map.ActivePlatform != null)
-                {
-                    SetTarget(new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
-                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z,
-                         Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y));
-                }
-                else
-                {
-                    SetTarget(new Vector3(Map.CursorPositionVisible.X, Map.CursorPosition.Z, Map.CursorPositionVisible.Y));
-                }
-
-                Camera.Update(gameTime);
+                    Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, Z, Map.CursorPosition.Z + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             DicDrawablePointPerColor.Clear();
@@ -332,18 +326,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 Create3DCursor();
             }
-        }
 
-        public void SetTarget(Vector3 Target)
-        {
-            float YawRotation = MathHelper.ToRadians(Map.Camera3DYawAngle);
-            float PitchRotation = MathHelper.ToRadians(Map.Camera3DPitchAngle);
-            float RollRotation = 0;
+            for (int P = 0; P < Map.ListCharacter.Count; P++)
+            {
+                foreach (PlayerCharacter ActiveCharacter in Map.ListCharacter)
+                {
+                    if (ActiveCharacter.Unit3DModel == null)
+                        continue;
 
-            Matrix FinalMatrix = Matrix.CreateTranslation(0, Map.Camera3DDistance, 0) * Matrix.CreateFromYawPitchRoll(YawRotation, PitchRotation, RollRotation);
-            Camera.CameraPosition3D = FinalMatrix.Translation + Target;
-
-            Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
+                    ActiveCharacter.Unit3DModel.Update(gameTime);
+                }
+            }
         }
 
         public void SetWorld(Matrix NewWorld)
@@ -366,7 +359,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 }
                 else
                 {
-                    World = NewWorld * Map.Camera3D.View;
+                    World = NewWorld * Camera.View;
                 }
 
                 worldInverse = Matrix.Invert(World);
@@ -374,6 +367,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 ActiveTileSet.Value.Effect3D.Parameters["World"].SetValue(Matrix.Transpose(NewWorld));
                 ActiveTileSet.Value.Effect3D.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
             }
+        }
+
+        public void SetCamera(Camera3D Camera)
+        {
+            this.Camera = Camera;
         }
 
         private bool IsCursorHiddenByWall()
@@ -396,9 +394,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             Point BaseMenuPosition;
 
-            Vector3 Visible3DPosition = new Vector3(Position.X * Map.TileSize.X, Position.Z * Map.LayerHeight, Position.Y * Map.TileSize.Y);
+            Vector3 Visible3DPosition = new Vector3(Position.X, Position.Y, Position.Z);
 
-            if (Map.ActivePlatform !=null)
+            if (Map.ActivePlatform != null)
             {
                 Visible3DPosition = new Vector3(Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
                     Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z,
@@ -411,6 +409,43 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             BaseMenuPosition.Y = (int)Position2D.Y;
 
             return BaseMenuPosition;
+        }
+
+        public Vector3 Get3DPositionFromMouse(int MouseX, int MouseY)
+        {
+            Vector3 NearPoint = new Vector3(MouseX, MouseY, 0);
+            Vector3 FarPoint = new Vector3(MouseX, MouseY, 1);
+
+            NearPoint = GameScreen.GraphicsDevice.Viewport.Unproject(NearPoint, Camera.Projection, Camera.View, Matrix.Identity);
+            FarPoint = GameScreen.GraphicsDevice.Viewport.Unproject(FarPoint, Camera.Projection, Camera.View, Matrix.Identity);
+
+            Vector3 Direction = FarPoint - NearPoint;
+            Direction.Normalize();
+
+            Ray MouseRay = new Ray(NearPoint, Direction);
+
+            Tile3D FoundTile = null;
+            float NearestDistance = 0f;
+            foreach (Tile3D ActiveTile in ListAllTile)
+            {
+                float? checkIntersectDistance = MouseRay.Intersects(ActiveTile.CollisionBox);
+
+                if (checkIntersectDistance != null)
+                {
+                    if (checkIntersectDistance.Value < NearestDistance || NearestDistance == 0)
+                    {
+                        NearestDistance = checkIntersectDistance.Value;
+                        FoundTile = ActiveTile;
+                    }
+                }
+            }
+
+            if (FoundTile != null)
+            {
+                return FoundTile.CollisionBox.Min;
+            }
+
+            return Vector3.Zero;
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
@@ -467,6 +502,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         private void FilterTerrainObscuringUnits()
         {
             ListIgnoredTerrain.Clear();
+
+            foreach (PlayerCharacter ActivePlayer in Map.ListCharacter)
+            {
+            }
 
             CreateMap(Map, Map.LayerManager);
         }
@@ -553,9 +592,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            Matrix View = Map.Camera3D.View;
+            Matrix View = Camera.View;
             Matrix World = PolygonEffect.World;
-            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
+            Vector3 CameraPosition = Camera.CameraPosition3D;
 
             if (Map.Camera3DOverride != null && !Map.IsEditor)
             {
@@ -570,6 +609,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             bool DrawUpperLayers = !IsCursorHiddenByWall();
 
             DrawMap(g, View, WorldViewProjection, DrawUpperLayers);
+
+            DrawVehicles(g, View);
 
             DrawDrawablePoints(g);
 
@@ -594,6 +635,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            DrawPlayers(g, View, DrawUpperLayers);
+
+            DrawDelayedAttacks(g, ViewProjection);
+
+            DrawPERAttacks(g, View);
 
             foreach (Tile3DHolder ActivePlayerBorder in DicTileBorderPerPlayer.Values)
             {
@@ -627,7 +673,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection, bool DrawUpperLayers)
         {
-            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
+            Vector3 CameraPosition = Camera.CameraPosition3D;
             if (Map.Camera3DOverride != null && !Map.IsEditor)
             {
                 CameraPosition = Map.Camera3DOverride.CameraPosition3D;
@@ -709,7 +755,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                         (TerrainZ + 0.5f) * Map.LayerHeight,
                         (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
                 }
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice,View, g);
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, View, g);
             }
 
             for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
@@ -745,6 +791,61 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
+        private void DrawPlayers(CustomSpriteBatch g, Matrix View, bool DrawUpperLayers)
+        {
+            for (int P = 0; P < Map.ListCharacter.Count; P++)
+            {
+                PlayerCharacter ActiveCharacter = Map.ListCharacter[P];
+
+                if (Map.MovementAnimation.Contains(ActiveCharacter))
+                {
+                    Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveCharacter);
+
+                    ActiveCharacter.SetPosition(CurrentPosition);
+
+                    if (ActiveCharacter.Unit3DModel == null)
+                    {
+                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+                    }
+                    else
+                    {
+                        ActiveCharacter.Unit3DModel.PlayAnimation("Walking");
+                    }
+
+                    ActiveCharacter.Draw3DOnMap(GameScreen.GraphicsDevice, View, PolygonEffect.Projection);
+                }
+                else
+                {
+                    Color UnitColor;
+                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                        UnitColor = Map.ListCharacter[P].Color;
+                    else
+                        UnitColor = Color.White;
+
+                    if (ActiveCharacter.Unit3DModel == null)
+                    {
+                        ActiveCharacter.Unit3DSprite.SetViewMatrix(View);
+
+                        ActiveCharacter.Unit3DSprite.SetPosition(
+                            ActiveCharacter.X,
+                            ActiveCharacter.Z + 0.0f * Map.LayerHeight,
+                            ActiveCharacter.Y);
+
+                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
+                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Scale"].SetValue(0.2f);
+
+                        ActiveCharacter.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                    }
+                    else
+                    {
+                        ActiveCharacter.Unit3DModel.PlayAnimation("Idle");
+                    }
+
+                    ActiveCharacter.Draw3DOnMap(GameScreen.GraphicsDevice, View, PolygonEffect.Projection);
+                }
+            }
+        }
+
         private void DrawDrawablePoints(CustomSpriteBatch g)
         {
             ColorEffect.CurrentTechnique.Passes[0].Apply();
@@ -770,6 +871,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
+        private void DrawDelayedAttacks(CustomSpriteBatch g, Matrix ViewProjection)
+        {
+        }
+
+        private void DrawPERAttacks(CustomSpriteBatch g, Matrix View)
+        {
+        }
+
         private void DrawDamageNumbers(CustomSpriteBatch g, Matrix View)
         {
             foreach (KeyValuePair<string, Vector3> ActiveAttack in DicDamageNumberByPosition)
@@ -780,6 +889,20 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
                 g.DrawString(Map.fntNonDemoDamage, ActiveAttack.Key, new Vector2(Position2D.X, Position2D.Y), Color.White);
             }
+        }
+
+        private void DrawVehicles(CustomSpriteBatch g, Matrix View)
+        {
+            foreach (Vehicle ActiveVehicle in Map.ListVehicle)
+            {
+                PolygonEffect.World = ActiveVehicle.World;
+                PolygonEffect.Texture = ActiveVehicle.sprVehicle;
+                PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+                ActiveVehicle.DrawVehicle(g.GraphicsDevice, View, PolygonEffect.Projection);
+            }
+
+            PolygonEffect.World = Map.World;
         }
 
         public void EndDraw(CustomSpriteBatch g)

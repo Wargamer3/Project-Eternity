@@ -24,6 +24,25 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<StatsToAsign> ListStatBoosts;
         public Dictionary<string, ProficiencyLink> DicProficiencyLevelByName;
 
+        public CharacterBackground()
+        {
+            RelativePath = string.Empty;
+            ListStatBoosts = new List<StatsToAsign>();
+            DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>();
+
+            Name = string.Empty;
+            Description = string.Empty;
+
+            ListTraits = new List<Trait>(0);
+            ListTraitsRelativePath = new List<string>(0);
+
+            ListLanguage = new List<Language>(0);
+            ListLanguageRelativePath = new List<string>(0);
+
+            ListUnlockable = new List<Unlockable>(0);
+            ListUnlockableRelativePath = new List<string>(0);
+        }
+
         public CharacterBackground(string BackgroundPath)
         {
             RelativePath = BackgroundPath;
@@ -64,9 +83,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             FS.Close();
         }
 
-        public void Init(LifeSimParams Params)
+        public void Init(LifeSimCharacterParams Params)
         {
             ListStatBoosts.Clear();
+
+            foreach (ProficiencyLink ActiveProficiency in DicProficiencyLevelByName.Values)
+            {
+                ActiveProficiency.ComputeStatBonuses(Params.Owner);
+            }
 
             foreach (Unlockable ActiveUnlockable in ListUnlockable)
             {

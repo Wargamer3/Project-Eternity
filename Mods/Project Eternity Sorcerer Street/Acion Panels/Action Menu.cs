@@ -5,16 +5,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class ActionPanelSorcererStreet : BattleMapActionPanel
     {
+        protected override PlayerInput ActiveInputManager => _ActiveInputManager;
+
         protected SorcererStreetMap Map;
+        protected PlayerInput _ActiveInputManager;
 
         public ActionPanelSorcererStreet(string Name, SorcererStreetMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
 
             if (Map.ListPlayer.Count > 0)
             {
-                ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+                _ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
             }
         }
 

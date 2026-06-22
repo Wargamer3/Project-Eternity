@@ -14,12 +14,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     /// </summary>
     public abstract class BattleMapActionPanel : ActionPanel
     {
-        protected PlayerInput ActiveInputManager;
+        protected abstract PlayerInput ActiveInputManager { get; }
 
-        public BattleMapActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, PlayerInput ActiveInputManager, bool CanCancel)
+        public BattleMapActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, bool CanCancel)
             : base(Name, ListActionMenuChoice, CanCancel)
         {
-            this.ActiveInputManager = ActiveInputManager;
         }
 
         public override void AddChoiceToCurrentPanel(ActionPanel Panel)

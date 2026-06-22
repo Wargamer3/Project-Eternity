@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         public OpenMenuScriptClient(ActionPanel ActivePanel)
             : base(ScriptName)
         {
-            List<ActionPanel> ListActionPanel = ActivePanel.GetActionPanels();
+            List<ActionPanel> ListActionPanel = ActivePanel.GetActionPanelsCopy();
 
             ArrayActionPanel = new ActionPanel[ListActionPanel.Count];
             for (int A = 0; A < ListActionPanel.Count; ++A)

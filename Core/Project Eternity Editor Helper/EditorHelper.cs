@@ -124,6 +124,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathLifeSimCharacterDeities = "LifeSim/Deities";
         public const string GUIRootPathLifeSimCharacterDeityCategories = "LifeSim/DeityCategories";
         public const string GUIRootPathLifeSimCharacterDomains= "LifeSim/Domains";
+        public const string GUIRootPathLifeSimCharacterHeritages = "LifeSim/Heritages";
         public const string GUIRootPathLifeSimWeapons = "LifeSim/Weapons";
         public const string GUIRootPathLifeSimArmors = "LifeSim/Armors";
         public const string GUIRootPathLifeSimShields = "LifeSim/Shields";

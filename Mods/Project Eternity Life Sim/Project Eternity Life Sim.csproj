@@ -47,20 +47,29 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acion Panels\Action Menu.cs" />
-    <Compile Include="Acion Panels\Action Panel Holder Sorcerer Street.cs" />
-    <Compile Include="Acion Panels\Player Default Phase.cs" />
+    <Compile Include="Acion Panels\Action Panel Life Sim.cs" />
+    <Compile Include="Acion Panels\Action Panel Holder Life Sim.cs" />
+    <Compile Include="Acion Panels\Admin\Edit Character\Edit Character Inventory.cs" />
+    <Compile Include="Acion Panels\Admin\Edit Character\Edit Character.cs" />
+    <Compile Include="Acion Panels\Admin\Edit Character Selection.cs" />
+    <Compile Include="Acion Panels\Admin\Spawn Character.cs" />
+    <Compile Include="Acion Panels\Admin\Admin Menu.cs" />
+    <Compile Include="Acion Panels\View Character Logs.cs" />
+    <Compile Include="Acion Panels\Inventory\View Character Actions.cs" />
+    <Compile Include="Acion Panels\Inventory\View Character.cs" />
+    <Compile Include="Acion Panels\Free Cam.cs" />
+    <Compile Include="Acion Panels\Control Character.cs" />
+    <Compile Include="Acion Panels\LifeSimFreeCamera.cs" />
+    <Compile Include="Action Log.cs" />
+    <Compile Include="Character\Automated Action.cs" />
+    <Compile Include="Character\Character Heritage.cs" />
     <Compile Include="Character\Proficiency.cs" />
     <Compile Include="Character\Unlocks\Unlockable.cs" />
-    <Compile Include="Actions\Eat\Eat Goal.cs" />
-    <Compile Include="Actions\Move\Move.cs" />
-    <Compile Include="Actions\Move\Open Door.cs" />
     <Compile Include="Actions\Action Effect.cs" />
     <Compile Include="Actions\AI Action.cs" />
     <Compile Include="Character\Unlocks\UnlockRequirementEvaluator.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Actions\Character Action.cs" />
-    <Compile Include="Actions\GenericAIAttackAction.cs" />
     <Compile Include="Character\Character Class.cs" />
     <Compile Include="Character\Deity Category.cs" />
     <Compile Include="Character\Domain.cs" />
@@ -76,7 +85,7 @@
     <Compile Include="Character\Weapon.cs" />
     <Compile Include="Character\Trait.cs" />
     <Compile Include="Layers\Map 2D Drawable.cs" />
-    <Compile Include="Character\PlayerCharacter.cs" />
+    <Compile Include="Character\Player Character.cs" />
     <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Effects\Life Sim Battle Requirement.cs" />
     <Compile Include="Effects\Life Sim Effect.cs" />
@@ -99,6 +108,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Params.cs" />
     <Compile Include="Rules\Deathmatch Game Rule.cs" />
+    <Compile Include="Text\Dice Result Processor.cs" />
+    <Compile Include="Text\Dice Roll Processor.cs" />
     <Compile Include="Terrain Holder.cs" />
   </ItemGroup>
   <ItemGroup>

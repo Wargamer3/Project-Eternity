@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(ListTimePeriodCount);
             for (int P = 0; P < ListTimePeriodCount; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(BR, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
+                ListTimePeriod.Add(new TimePeriod(BR, Map));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];
@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(Copy.ListTimePeriod.Count);
             for (int P = 0; P < Copy.ListTimePeriod.Count; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
+                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];

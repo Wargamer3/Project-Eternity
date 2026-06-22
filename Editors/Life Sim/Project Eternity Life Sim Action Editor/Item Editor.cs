@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.LifeSimScreen;
 
@@ -10,7 +9,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 {
     public partial class ItemEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { Spell, Skill, Skin,  };
+        private enum ItemSelectionChoices { Trait, Action, Skill, Skin, };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -53,6 +52,20 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             BW.Write(txtName.Text);
             BW.Write(txtDescription.Text);
 
+            BW.Write((byte)lsTraits.Items.Count);
+            for (int T = 0; T < lsTraits.Items.Count; ++T)
+            {
+                BW.Write(lsTraits.Items[T].ToString());
+            }
+
+            BW.Write(txtBulk.Text);
+            BW.Write((byte)0);
+
+            BW.Write((byte)lsActions.Items.Count);
+            foreach (string ActiveAction in lsActions.Items)
+            {
+                BW.Write(ActiveAction);
+            }
 
             FS.Close();
             BW.Close();
@@ -62,13 +75,25 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
         {
             Name = ItemPath.Substring(0, ItemPath.Length - 4).Substring(23);
 
-            Item LoadedItem = new Item(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+            Item LoadedItem = new Item(Name, null);
 
             this.Text = Name + " - Item Editor";
 
             txtName.Text = LoadedItem.Name;
             txtDescription.Text = LoadedItem.Description;
 
+            foreach (string ActiveTrait in LoadedItem.ListTraitsRelativePath)
+            {
+                lsTraits.Items.Add(ActiveTrait);
+            }
+
+            txtBulk.Text = LoadedItem.Bulk;
+            txtTags.Text = string.Join(", ", LoadedItem.ArrayTags);
+
+            for (int A = 0; A < LoadedItem.ArrayCharacterActionPath.Length; ++A)
+            {
+                lsActions.Items.Add(LoadedItem.ArrayCharacterActionPath[A]);
+            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)
@@ -76,66 +101,49 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             SaveItem(FilePath, Path.GetFileNameWithoutExtension(FilePath));
         }
 
-        private void tsmDetails_Click(object sender, EventArgs e)
+        private static void DeleteItemFromList(ListBox ActiveListBox)
         {
+            if (ActiveListBox.SelectedIndex >= 0)
+            {
+                int LastIndex = ActiveListBox.SelectedIndex;
+
+                ActiveListBox.Items.RemoveAt(LastIndex);
+
+                if (ActiveListBox.Items.Count > 0)
+                {
+                    if (ActiveListBox.Items.Count >= LastIndex)
+                    {
+                        ActiveListBox.SelectedIndex = ActiveListBox.Items.Count - 1;
+                    }
+                    else
+                    {
+                        ActiveListBox.SelectedIndex = LastIndex;
+                    }
+                }
+            }
         }
 
-        private void tsmQuotes_Click(object sender, EventArgs e)
+        private void btnAddTrait_Click(object sender, EventArgs e)
         {
+            ItemSelectionChoice = ItemSelectionChoices.Trait;
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathLifeSimTraits));
         }
 
-        private void tsmRelationships_Click(object sender, EventArgs e)
+        private void btnRemoveTrait_Click(object sender, EventArgs e)
         {
-        }
-
-        #region Skills
-
-        private void lsActions_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            DeleteItemFromList(lsTraits);
         }
 
         private void btnAddAction_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void btnSetAction_Click(object sender, EventArgs e)
-        {
-
+            ItemSelectionChoice = ItemSelectionChoices.Action;
+            ListMenuItemsSelected(EditorHelper.ShowContextMenuWithItem(EditorHelper.GUIRootPathLifeSimCharacterActions));
         }
 
         private void btnDeleteAction_Click(object sender, EventArgs e)
         {
-
+            DeleteItemFromList(lsActions);
         }
-
-        private void txtActionCost_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lsPassiveSkills_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnAddSkill_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnSetSkill_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDeleteSkill_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        #endregion
 
         protected void ListMenuItemsSelected(List<string> Items)
         {
@@ -147,7 +155,14 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             {
                 switch (ItemSelectionChoice)
                 {
-                    case ItemSelectionChoices.Spell:
+                    case ItemSelectionChoices.Trait:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(24);
+                        lsTraits.Items.Add(Name);
+                        break;
+
+                    case ItemSelectionChoices.Action:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(35);
+                        lsActions.Items.Add(Name);
                         break;
 
                     case ItemSelectionChoices.Skill:

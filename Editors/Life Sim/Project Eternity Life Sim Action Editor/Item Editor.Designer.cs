@@ -28,15 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbSpells = new System.Windows.Forms.GroupBox();
-            this.btnDeleteSpell = new System.Windows.Forms.Button();
-            this.txtSpellCost = new System.Windows.Forms.NumericUpDown();
-            this.btnSetSpell = new System.Windows.Forms.Button();
-            this.lsSpells = new System.Windows.Forms.ListBox();
-            this.lblSpell = new System.Windows.Forms.Label();
-            this.txtSpell = new System.Windows.Forms.TextBox();
-            this.lblSPCost = new System.Windows.Forms.Label();
-            this.btnAddSpell = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbItemInformation = new System.Windows.Forms.GroupBox();
@@ -44,146 +35,25 @@
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabSkills = new System.Windows.Forms.TabPage();
-            this.gbPassiveSkills = new System.Windows.Forms.GroupBox();
-            this.btnDeleteSkill = new System.Windows.Forms.Button();
-            this.lsPassiveSkills = new System.Windows.Forms.ListBox();
-            this.btnAddSkill = new System.Windows.Forms.Button();
-            this.lblPassiveSkill = new System.Windows.Forms.Label();
-            this.txtPassiveSkill = new System.Windows.Forms.TextBox();
-            this.btnSetSkill = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnRemoveTrait = new System.Windows.Forms.Button();
             this.btnAddTrait = new System.Windows.Forms.Button();
             this.lsTraits = new System.Windows.Forms.ListBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.gbSpells.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSpellCost)).BeginInit();
+            this.txtBulk = new System.Windows.Forms.TextBox();
+            this.lblBulk = new System.Windows.Forms.Label();
+            this.gbSpells = new System.Windows.Forms.GroupBox();
+            this.btnDeleteAction = new System.Windows.Forms.Button();
+            this.lsActions = new System.Windows.Forms.ListBox();
+            this.btnAddAction = new System.Windows.Forms.Button();
+            this.txtTags = new System.Windows.Forms.TextBox();
+            this.lblTags = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbItemInformation.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabSkills.SuspendLayout();
-            this.gbPassiveSkills.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.gbSpells.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // gbSpells
-            // 
-            this.gbSpells.Controls.Add(this.btnDeleteSpell);
-            this.gbSpells.Controls.Add(this.txtSpellCost);
-            this.gbSpells.Controls.Add(this.btnSetSpell);
-            this.gbSpells.Controls.Add(this.lsSpells);
-            this.gbSpells.Controls.Add(this.lblSpell);
-            this.gbSpells.Controls.Add(this.txtSpell);
-            this.gbSpells.Controls.Add(this.lblSPCost);
-            this.gbSpells.Controls.Add(this.btnAddSpell);
-            this.gbSpells.Location = new System.Drawing.Point(6, 6);
-            this.gbSpells.Name = "gbSpells";
-            this.gbSpells.Size = new System.Drawing.Size(256, 175);
-            this.gbSpells.TabIndex = 68;
-            this.gbSpells.TabStop = false;
-            this.gbSpells.Text = "Actions";
-            // 
-            // btnDeleteSpell
-            // 
-            this.btnDeleteSpell.Location = new System.Drawing.Point(163, 94);
-            this.btnDeleteSpell.Name = "btnDeleteSpell";
-            this.btnDeleteSpell.Size = new System.Drawing.Size(87, 23);
-            this.btnDeleteSpell.TabIndex = 68;
-            this.btnDeleteSpell.Text = "Delete Spell";
-            this.btnDeleteSpell.UseVisualStyleBackColor = true;
-            this.btnDeleteSpell.Click += new System.EventHandler(this.btnDeleteAction_Click);
-            // 
-            // txtSpellCost
-            // 
-            this.txtSpellCost.Location = new System.Drawing.Point(178, 141);
-            this.txtSpellCost.Name = "txtSpellCost";
-            this.txtSpellCost.Size = new System.Drawing.Size(70, 20);
-            this.txtSpellCost.TabIndex = 67;
-            this.txtSpellCost.ValueChanged += new System.EventHandler(this.txtActionCost_ValueChanged);
-            // 
-            // btnSetSpell
-            // 
-            this.btnSetSpell.Location = new System.Drawing.Point(86, 94);
-            this.btnSetSpell.Name = "btnSetSpell";
-            this.btnSetSpell.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSpell.TabIndex = 66;
-            this.btnSetSpell.Text = "Set Spell";
-            this.btnSetSpell.UseVisualStyleBackColor = true;
-            this.btnSetSpell.Click += new System.EventHandler(this.btnSetAction_Click);
-            // 
-            // lsSpells
-            // 
-            this.lsSpells.FormattingEnabled = true;
-            this.lsSpells.Location = new System.Drawing.Point(9, 19);
-            this.lsSpells.Name = "lsSpells";
-            this.lsSpells.Size = new System.Drawing.Size(239, 69);
-            this.lsSpells.TabIndex = 65;
-            this.lsSpells.SelectedIndexChanged += new System.EventHandler(this.lsActions_SelectedIndexChanged);
-            // 
-            // lblSpell
-            // 
-            this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(6, 124);
-            this.lblSpell.Name = "lblSpell";
-            this.lblSpell.Size = new System.Drawing.Size(59, 13);
-            this.lblSpell.TabIndex = 28;
-            this.lblSpell.Text = "Spell name";
-            // 
-            // txtSpell
-            // 
-            this.txtSpell.Location = new System.Drawing.Point(9, 140);
-            this.txtSpell.Name = "txtSpell";
-            this.txtSpell.ReadOnly = true;
-            this.txtSpell.Size = new System.Drawing.Size(163, 20);
-            this.txtSpell.TabIndex = 28;
-            this.txtSpell.Text = "None";
-            // 
-            // lblSPCost
-            // 
-            this.lblSPCost.AutoSize = true;
-            this.lblSPCost.Location = new System.Drawing.Point(186, 124);
-            this.lblSPCost.Name = "lblSPCost";
-            this.lblSPCost.Size = new System.Drawing.Size(44, 13);
-            this.lblSPCost.TabIndex = 27;
-            this.lblSPCost.Text = "SP cost";
-            // 
-            // btnAddSpell
-            // 
-            this.btnAddSpell.Location = new System.Drawing.Point(9, 94);
-            this.btnAddSpell.Name = "btnAddSpell";
-            this.btnAddSpell.Size = new System.Drawing.Size(71, 23);
-            this.btnAddSpell.TabIndex = 25;
-            this.btnAddSpell.Text = "Add Spell";
-            this.btnAddSpell.UseVisualStyleBackColor = true;
-            this.btnAddSpell.Click += new System.EventHandler(this.btnAddAction_Click);
             // 
             // menuStrip1
             // 
@@ -248,99 +118,6 @@
             this.txtName.Size = new System.Drawing.Size(339, 20);
             this.txtName.TabIndex = 22;
             // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabSkills);
-            this.tabControl1.Location = new System.Drawing.Point(413, 27);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(275, 383);
-            this.tabControl1.TabIndex = 71;
-            // 
-            // tabSkills
-            // 
-            this.tabSkills.Controls.Add(this.gbSpells);
-            this.tabSkills.Controls.Add(this.gbPassiveSkills);
-            this.tabSkills.Location = new System.Drawing.Point(4, 22);
-            this.tabSkills.Name = "tabSkills";
-            this.tabSkills.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSkills.Size = new System.Drawing.Size(267, 357);
-            this.tabSkills.TabIndex = 0;
-            this.tabSkills.Text = "Skills";
-            this.tabSkills.UseVisualStyleBackColor = true;
-            // 
-            // gbPassiveSkills
-            // 
-            this.gbPassiveSkills.Controls.Add(this.btnDeleteSkill);
-            this.gbPassiveSkills.Controls.Add(this.lsPassiveSkills);
-            this.gbPassiveSkills.Controls.Add(this.btnAddSkill);
-            this.gbPassiveSkills.Controls.Add(this.lblPassiveSkill);
-            this.gbPassiveSkills.Controls.Add(this.txtPassiveSkill);
-            this.gbPassiveSkills.Controls.Add(this.btnSetSkill);
-            this.gbPassiveSkills.Location = new System.Drawing.Point(6, 187);
-            this.gbPassiveSkills.Name = "gbPassiveSkills";
-            this.gbPassiveSkills.Size = new System.Drawing.Size(255, 175);
-            this.gbPassiveSkills.TabIndex = 69;
-            this.gbPassiveSkills.TabStop = false;
-            this.gbPassiveSkills.Text = "Passive Skills";
-            // 
-            // btnDeleteSkill
-            // 
-            this.btnDeleteSkill.Location = new System.Drawing.Point(160, 94);
-            this.btnDeleteSkill.Name = "btnDeleteSkill";
-            this.btnDeleteSkill.Size = new System.Drawing.Size(89, 23);
-            this.btnDeleteSkill.TabIndex = 73;
-            this.btnDeleteSkill.Text = "Delete Skill";
-            this.btnDeleteSkill.UseVisualStyleBackColor = true;
-            this.btnDeleteSkill.Click += new System.EventHandler(this.btnDeleteSkill_Click);
-            // 
-            // lsPassiveSkills
-            // 
-            this.lsPassiveSkills.FormattingEnabled = true;
-            this.lsPassiveSkills.Location = new System.Drawing.Point(6, 19);
-            this.lsPassiveSkills.Name = "lsPassiveSkills";
-            this.lsPassiveSkills.Size = new System.Drawing.Size(243, 69);
-            this.lsPassiveSkills.TabIndex = 72;
-            this.lsPassiveSkills.SelectedIndexChanged += new System.EventHandler(this.lsPassiveSkills_SelectedIndexChanged);
-            // 
-            // btnAddSkill
-            // 
-            this.btnAddSkill.Location = new System.Drawing.Point(6, 94);
-            this.btnAddSkill.Name = "btnAddSkill";
-            this.btnAddSkill.Size = new System.Drawing.Size(71, 23);
-            this.btnAddSkill.TabIndex = 71;
-            this.btnAddSkill.Text = "Add Skill";
-            this.btnAddSkill.UseVisualStyleBackColor = true;
-            this.btnAddSkill.Click += new System.EventHandler(this.btnAddSkill_Click);
-            // 
-            // lblPassiveSkill
-            // 
-            this.lblPassiveSkill.AutoSize = true;
-            this.lblPassiveSkill.Location = new System.Drawing.Point(12, 124);
-            this.lblPassiveSkill.Name = "lblPassiveSkill";
-            this.lblPassiveSkill.Size = new System.Drawing.Size(55, 13);
-            this.lblPassiveSkill.TabIndex = 28;
-            this.lblPassiveSkill.Text = "Skill name";
-            // 
-            // txtPassiveSkill
-            // 
-            this.txtPassiveSkill.Location = new System.Drawing.Point(15, 140);
-            this.txtPassiveSkill.Name = "txtPassiveSkill";
-            this.txtPassiveSkill.ReadOnly = true;
-            this.txtPassiveSkill.Size = new System.Drawing.Size(163, 20);
-            this.txtPassiveSkill.TabIndex = 28;
-            this.txtPassiveSkill.Text = "None";
-            // 
-            // btnSetSkill
-            // 
-            this.btnSetSkill.Location = new System.Drawing.Point(83, 94);
-            this.btnSetSkill.Name = "btnSetSkill";
-            this.btnSetSkill.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSkill.TabIndex = 25;
-            this.btnSetSkill.Text = "Set Skill";
-            this.btnSetSkill.UseVisualStyleBackColor = true;
-            this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnRemoveTrait);
@@ -361,6 +138,7 @@
             this.btnRemoveTrait.TabIndex = 75;
             this.btnRemoveTrait.Text = "Remove Trait";
             this.btnRemoveTrait.UseVisualStyleBackColor = true;
+            this.btnRemoveTrait.Click += new System.EventHandler(this.btnRemoveTrait_Click);
             // 
             // btnAddTrait
             // 
@@ -370,6 +148,7 @@
             this.btnAddTrait.TabIndex = 74;
             this.btnAddTrait.Text = "Add Trait";
             this.btnAddTrait.UseVisualStyleBackColor = true;
+            this.btnAddTrait.Click += new System.EventHandler(this.btnAddTrait_Click);
             // 
             // lsTraits
             // 
@@ -379,215 +158,12 @@
             this.lsTraits.Size = new System.Drawing.Size(261, 56);
             this.lsTraits.TabIndex = 73;
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.numericUpDown8);
-            this.groupBox4.Controls.Add(this.numericUpDown7);
-            this.groupBox4.Controls.Add(this.numericUpDown6);
-            this.groupBox4.Controls.Add(this.numericUpDown5);
-            this.groupBox4.Controls.Add(this.numericUpDown4);
-            this.groupBox4.Controls.Add(this.numericUpDown3);
-            this.groupBox4.Controls.Add(this.label17);
-            this.groupBox4.Controls.Add(this.label18);
-            this.groupBox4.Controls.Add(this.label15);
-            this.groupBox4.Controls.Add(this.label16);
-            this.groupBox4.Controls.Add(this.label13);
-            this.groupBox4.Controls.Add(this.label14);
-            this.groupBox4.Controls.Add(this.numericUpDown2);
-            this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Location = new System.Drawing.Point(690, 27);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(252, 375);
-            this.groupBox4.TabIndex = 77;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Bonus Stats";
-            // 
-            // numericUpDown8
-            // 
-            this.numericUpDown8.Location = new System.Drawing.Point(46, 56);
-            this.numericUpDown8.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown8.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown8.TabIndex = 80;
-            // 
-            // numericUpDown7
-            // 
-            this.numericUpDown7.Location = new System.Drawing.Point(46, 82);
-            this.numericUpDown7.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown7.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown7.TabIndex = 79;
-            // 
-            // numericUpDown6
-            // 
-            this.numericUpDown6.Location = new System.Drawing.Point(46, 108);
-            this.numericUpDown6.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown6.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown6.TabIndex = 78;
-            // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.Location = new System.Drawing.Point(176, 56);
-            this.numericUpDown5.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown5.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown5.TabIndex = 77;
-            // 
-            // numericUpDown4
-            // 
-            this.numericUpDown4.Location = new System.Drawing.Point(176, 82);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown4.TabIndex = 76;
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Location = new System.Drawing.Point(176, 108);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown3.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown3.TabIndex = 75;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(122, 110);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(32, 13);
-            this.label17.TabIndex = 74;
-            this.label17.Text = "CHA:";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 110);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(31, 13);
-            this.label18.TabIndex = 73;
-            this.label18.Text = "WIS:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(122, 84);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(28, 13);
-            this.label15.TabIndex = 72;
-            this.label15.Text = "INT:";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 84);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(33, 13);
-            this.label16.TabIndex = 71;
-            this.label16.Text = "CON:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(122, 58);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(32, 13);
-            this.label13.TabIndex = 70;
-            this.label13.Text = "DEX:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 58);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(32, 13);
-            this.label14.TabIndex = 69;
-            this.label14.Text = "STR:";
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(176, 19);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(70, 20);
-            this.numericUpDown2.TabIndex = 68;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 22);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 13);
-            this.label4.TabIndex = 23;
-            this.label4.Text = "Free Boost:";
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.txtTags);
+            this.groupBox1.Controls.Add(this.lblTags);
+            this.groupBox1.Controls.Add(this.txtBulk);
+            this.groupBox1.Controls.Add(this.lblBulk);
             this.groupBox1.Location = new System.Drawing.Point(12, 269);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(395, 133);
@@ -595,68 +171,105 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Base Stats";
             // 
-            // textBox2
+            // txtBulk
             // 
-            this.textBox2.Location = new System.Drawing.Point(62, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(105, 20);
-            this.textBox2.TabIndex = 74;
+            this.txtBulk.Location = new System.Drawing.Point(62, 19);
+            this.txtBulk.Name = "txtBulk";
+            this.txtBulk.Size = new System.Drawing.Size(105, 20);
+            this.txtBulk.TabIndex = 74;
             // 
-            // label5
+            // lblBulk
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 13);
-            this.label5.TabIndex = 73;
-            this.label5.Text = "Bulk:";
+            this.lblBulk.AutoSize = true;
+            this.lblBulk.Location = new System.Drawing.Point(9, 22);
+            this.lblBulk.Name = "lblBulk";
+            this.lblBulk.Size = new System.Drawing.Size(31, 13);
+            this.lblBulk.TabIndex = 73;
+            this.lblBulk.Text = "Bulk:";
+            // 
+            // gbSpells
+            // 
+            this.gbSpells.Controls.Add(this.btnDeleteAction);
+            this.gbSpells.Controls.Add(this.lsActions);
+            this.gbSpells.Controls.Add(this.btnAddAction);
+            this.gbSpells.Location = new System.Drawing.Point(413, 27);
+            this.gbSpells.Name = "gbSpells";
+            this.gbSpells.Size = new System.Drawing.Size(275, 175);
+            this.gbSpells.TabIndex = 80;
+            this.gbSpells.TabStop = false;
+            this.gbSpells.Text = "Actions";
+            // 
+            // btnDeleteAction
+            // 
+            this.btnDeleteAction.Location = new System.Drawing.Point(182, 146);
+            this.btnDeleteAction.Name = "btnDeleteAction";
+            this.btnDeleteAction.Size = new System.Drawing.Size(87, 23);
+            this.btnDeleteAction.TabIndex = 68;
+            this.btnDeleteAction.Text = "Delete Action";
+            this.btnDeleteAction.UseVisualStyleBackColor = true;
+            this.btnDeleteAction.Click += new System.EventHandler(this.btnDeleteAction_Click);
+            // 
+            // lsActions
+            // 
+            this.lsActions.FormattingEnabled = true;
+            this.lsActions.Location = new System.Drawing.Point(9, 19);
+            this.lsActions.Name = "lsActions";
+            this.lsActions.Size = new System.Drawing.Size(260, 108);
+            this.lsActions.TabIndex = 65;
+            // 
+            // btnAddAction
+            // 
+            this.btnAddAction.Location = new System.Drawing.Point(6, 146);
+            this.btnAddAction.Name = "btnAddAction";
+            this.btnAddAction.Size = new System.Drawing.Size(71, 23);
+            this.btnAddAction.TabIndex = 25;
+            this.btnAddAction.Text = "Add Action";
+            this.btnAddAction.UseVisualStyleBackColor = true;
+            this.btnAddAction.Click += new System.EventHandler(this.btnAddAction_Click);
+            // 
+            // txtTags
+            // 
+            this.txtTags.Location = new System.Drawing.Point(9, 58);
+            this.txtTags.Multiline = true;
+            this.txtTags.Name = "txtTags";
+            this.txtTags.Size = new System.Drawing.Size(383, 69);
+            this.txtTags.TabIndex = 76;
+            // 
+            // lblTags
+            // 
+            this.lblTags.AutoSize = true;
+            this.lblTags.Location = new System.Drawing.Point(6, 42);
+            this.lblTags.Name = "lblTags";
+            this.lblTags.Size = new System.Drawing.Size(34, 13);
+            this.lblTags.TabIndex = 75;
+            this.lblTags.Text = "Tags:";
             // 
             // ItemEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(954, 414);
+            this.Controls.Add(this.gbSpells);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbItemInformation);
             this.Name = "ItemEditor";
             this.Text = "Item Editor";
-            this.gbSpells.ResumeLayout(false);
-            this.gbSpells.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSpellCost)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.gbItemInformation.ResumeLayout(false);
             this.gbItemInformation.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabSkills.ResumeLayout(false);
-            this.gbPassiveSkills.ResumeLayout(false);
-            this.gbPassiveSkills.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.gbSpells.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox gbSpells;
-        private System.Windows.Forms.TextBox txtSpell;
-        private System.Windows.Forms.Label lblSPCost;
-        private System.Windows.Forms.Button btnAddSpell;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.GroupBox gbItemInformation;
@@ -664,41 +277,18 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
-        private System.Windows.Forms.Button btnSetSpell;
-        private System.Windows.Forms.ListBox lsSpells;
-        private System.Windows.Forms.Label lblSpell;
-        private System.Windows.Forms.NumericUpDown txtSpellCost;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabSkills;
-        private System.Windows.Forms.GroupBox gbPassiveSkills;
-        private System.Windows.Forms.ListBox lsPassiveSkills;
-        private System.Windows.Forms.Button btnAddSkill;
-        private System.Windows.Forms.Label lblPassiveSkill;
-        private System.Windows.Forms.TextBox txtPassiveSkill;
-        private System.Windows.Forms.Button btnSetSkill;
-        private System.Windows.Forms.Button btnDeleteSpell;
-        private System.Windows.Forms.Button btnDeleteSkill;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnRemoveTrait;
         private System.Windows.Forms.Button btnAddTrait;
         private System.Windows.Forms.ListBox lsTraits;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.NumericUpDown numericUpDown8;
-        private System.Windows.Forms.NumericUpDown numericUpDown7;
-        private System.Windows.Forms.NumericUpDown numericUpDown6;
-        private System.Windows.Forms.NumericUpDown numericUpDown5;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtBulk;
+        private System.Windows.Forms.Label lblBulk;
+        private System.Windows.Forms.TextBox txtTags;
+        private System.Windows.Forms.Label lblTags;
+        private System.Windows.Forms.GroupBox gbSpells;
+        private System.Windows.Forms.Button btnDeleteAction;
+        private System.Windows.Forms.ListBox lsActions;
+        private System.Windows.Forms.Button btnAddAction;
     }
 }
