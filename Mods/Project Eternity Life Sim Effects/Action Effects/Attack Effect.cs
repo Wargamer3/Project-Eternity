@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 Params.ActivationContext.User = Params.Owner;
                 Params.ActivationContext.Target = HoverCharacter;
 
-                Params.Owner.ListAutomatedAction.Add(new AutomatedActionMove(Params));
+                Params.Owner.ListAutomatedAction.Add(new AutomatedActionDumbWalk(Params));
 
                 foreach (ActionEffect ActiveAction in ActionToExecute.ListActionEffect)
                 {
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Timer = 60;
         }
 
-        public override void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
             if (Timer <= 0)
             {
@@ -172,8 +172,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 Timer = 60;
                 Params.ActivationContext.User.Logs.AddLog(DiceRollText);
                 Params.ActivationContext.Target.Logs.AddLog(DiceRollText);
-                Params.ActivationContext.User.ListAutomatedAction.Remove(this);
+
+                return false;
             }
+
+            return true;
         }
 
         public override void OnCancel()
@@ -205,18 +208,27 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         }
     }
 
-    public class AutomatedActionMove : AutomatedAction
+    public class AutomatedActionDumbWalk : AutomatedAction
     {
-        private const string PanelName = "Move";
+        private const string PanelName = "Dumb Walk";
 
         private readonly LifeSimCharacterParams Params;
 
+        private Vector3 DestinationPosition;
+
         private double Timer;
 
-        public AutomatedActionMove(LifeSimCharacterParams Params)
+        public AutomatedActionDumbWalk(LifeSimCharacterParams Params)
             : base(PanelName, Params.Owner)
         {
-            this.Params = Params;
+            this.Params = new LifeSimCharacterParams(Params);
+        }
+
+        public AutomatedActionDumbWalk(LifeSimCharacterParams Params, Vector3 DestinationPosition)
+            : base(PanelName, Params.Owner)
+        {
+            this.Params = new LifeSimCharacterParams(Params);
+            this.DestinationPosition = DestinationPosition;
         }
 
         public override void OnStarted()
@@ -224,15 +236,38 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Timer = 60;
         }
 
-        public override void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
+            Vector3 NextPosition = Params.Owner.Position;
+
+            if (Params.Owner.Position.X < DestinationPosition.X)
+            {
+                NextPosition.X += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
+            }
+            else if (Params.Owner.Position.X > DestinationPosition.X)
+            {
+                NextPosition.X -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
+            }
+            if (Params.Owner.Position.Y < DestinationPosition.Y)
+            {
+                NextPosition.Y += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
+            }
+            else if (Params.Owner.Position.Y > DestinationPosition.Y)
+            {
+                NextPosition.Y += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
+            }
+
+            Params.Owner.SetPosition(NextPosition);
+
             if (Timer <= 0)
             {
                 Timer = 60;
                 Params.ActivationContext.Target.Logs.AddLog(Params.ActivationContext.User.Name + " moved next to " + Params.ActivationContext.Target.Name);
                 Params.ActivationContext.User.Logs.AddLog(Params.ActivationContext.User.Name + " moved next to " + Params.ActivationContext.Target.Name);
-                Params.ActivationContext.User.ListAutomatedAction.Remove(this);
+                return false;
             }
+
+            return true;
         }
 
         public override void OnCancel()
@@ -249,7 +284,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         protected override AutomatedAction Copy()
         {
-            return new AutomatedActionMove(Params);
+            return new AutomatedActionDumbWalk(Params);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public void ControlCharacter(PlayerCharacter CharacterToControl)
         {
             ListControlledCharacter.Add(CharacterToControl);
-            ActionHolder.AddToPanelListAndSelect(new ActionPanelControlCharacter(this, CharacterToControl, MapManager, ActionHolder));
+            ActionHolder.AddToPanelListAndSelect(new ActionPanelTopDownControlCharacter(this, CharacterToControl, MapManager, ActionHolder));
         }
 
         public void Update(GameTime gameTime)

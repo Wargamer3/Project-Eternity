@@ -8,9 +8,9 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
-    public class ActionPanelControlCharacter : ActionPanelLifeSimPlayer
+    public class ActionPanelTopDownControlCharacter : ActionPanelLifeSimPlayer
     {
-        private const string PanelName = "ControlCharacter";
+        private const string PanelName = "TopDownControlCharacter";
 
         private readonly PlayerCharacter ControlledCharacter;
         private PlayerCharacter HoverCharacter;
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         private float Camera3DYawAngle = 11.5f;
         private float Camera3DPitchAngle = 45;
 
-        public ActionPanelControlCharacter(PlayerOverseer Owner, PlayerCharacter ControlledCharacter, NavMapGameManager MapManager, ActionPanelHolder ListActionMenuChoice)
+        public ActionPanelTopDownControlCharacter(PlayerOverseer Owner, PlayerCharacter ControlledCharacter, NavMapGameManager MapManager, ActionPanelHolder ListActionMenuChoice)
             : base(PanelName, Owner, MapManager, ListActionMenuChoice, false)
         {
             this.ControlledCharacter = ControlledCharacter;
@@ -114,7 +114,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelControlCharacter(Owner, ControlledCharacter, MapManager, ListActionMenuChoice);
+            return new ActionPanelTopDownControlCharacter(Owner, ControlledCharacter, MapManager, ListActionMenuChoice);
         }
 
         public override void Draw(CustomSpriteBatch g)

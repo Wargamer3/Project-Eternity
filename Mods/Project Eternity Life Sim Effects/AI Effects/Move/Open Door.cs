@@ -21,11 +21,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSimPlayer GetActionPanel()
-        {
-            throw new NotImplementedException();
-        }
-
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
@@ -49,11 +44,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }
@@ -85,11 +75,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             throw new NotImplementedException();
         }
 
-        public override ActionPanelLifeSimPlayer GetActionPanel()
-        {
-            throw new NotImplementedException();
-        }
-
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
             throw new NotImplementedException();
@@ -113,11 +98,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }

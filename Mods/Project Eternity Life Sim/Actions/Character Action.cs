@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
@@ -64,6 +64,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
                 if (!string.IsNullOrEmpty(AIActionPath))
                 {
+                    ListAIAction.Add(new AICharacterAction(AIActionPath));
                 }
             }
 

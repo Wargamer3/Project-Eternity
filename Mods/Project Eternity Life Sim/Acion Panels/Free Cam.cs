@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 HoverCharacter.SharedMapContex.User = Owner;
 
                 RemoveAllActionPanels();
-                AddToPanelListAndSelect(new ActionPanelControlCharacter(Owner, HoverCharacter, MapManager, ListActionMenuChoice));
+                AddToPanelListAndSelect(new ActionPanelTopDownControlCharacter(Owner, HoverCharacter, MapManager, ListActionMenuChoice));
             }
             else if (HoverCharacter != null && ActiveInputManager.InputCancelPressed())
             {
@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             foreach (MapInfo ActiveMap in ListVisisbleMap)
             {
-                ActiveMap.MapMapContainer.ActiveMap.CursorPosition = new Vector3(Owner.InvisibleCharacterAsCursor.X, Owner.InvisibleCharacterAsCursor.Z, Owner.InvisibleCharacterAsCursor.Y);
+                ActiveMap.MapMapContainer.ActiveMap.CursorPosition = new Vector3(Owner.InvisibleCharacterAsCursor.Position.X, Owner.InvisibleCharacterAsCursor.Position.Z, Owner.InvisibleCharacterAsCursor.Position.Y);
                 ActiveMap.MapMapContainer.ActiveMap.LayerManager.LayerHolderDrawable.SetCamera(Owner.Camera);
                 ActiveMap.MapMapContainer.ActiveMap.Draw(g);
             }

@@ -19,8 +19,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public override void OnSelect()
         {
             ListNextChoice.Clear();
-            AddChoiceToCurrentPanel(new ActionPanelSpawnCharacter(Owner, MapManager, ListActionMenuChoice));
-            AddChoiceToCurrentPanel(new ActionPanelEditCharacterSelection(Owner, MapManager, ListActionMenuChoice));
+            AddChoiceToCurrentPanel(new ActionPanelSelectCharacterToSpawn(Owner, MapManager, ListActionMenuChoice));
+            AddChoiceToCurrentPanel(new ActionPanelSelectCharacterToEdit(Owner, MapManager, ListActionMenuChoice));
+            AddChoiceToCurrentPanel(new ActionPanelSelectCharacterToControl(Owner, MapManager, ListActionMenuChoice));
         }
 
         public override void DoUpdate(GameTime gameTime)

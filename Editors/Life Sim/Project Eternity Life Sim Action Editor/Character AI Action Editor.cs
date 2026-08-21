@@ -54,7 +54,11 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             BW.Write(txtName.Text);
             BW.Write(txtDescription.Text);
 
-            BW.Write((byte)0);
+            BW.Write((byte)lsAIActions.Items.Count);
+            for (int A = 0; A < lsAIActions.Items.Count; ++A)
+            {
+                BW.Write(lsAIActions.Items[A].ToString());
+            }
 
             FS.Close();
             BW.Close();
@@ -77,7 +81,6 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             txtName.Text = LoadedAIAction.Name;
             txtDescription.Text = LoadedAIAction.Description;
 
-
             foreach (AIAction ActiveAIAction in LoadedAIAction.ListAIAction)
             {
                 lsAIActions.Items.Add(ActiveAIAction);
@@ -93,7 +96,6 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
         {
             SaveItem(FilePath, Path.GetFileNameWithoutExtension(FilePath));
         }
-
 
         private static void DeleteItemFromList(ListBox ActiveListBox)
         {

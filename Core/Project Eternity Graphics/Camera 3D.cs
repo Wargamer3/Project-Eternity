@@ -10,8 +10,12 @@ namespace ProjectEternity.Core.Graphics
     {
         public Matrix View;
         public Matrix Projection;
-        protected Matrix CameraRotation;
+        public Matrix CameraRotation;
         public Vector3 CameraPosition3D;
+        public Vector3 LookAtTarget;
+        public Vector3 Forward => CameraRotation.Forward;
+        public Vector3 Right => CameraRotation.Right;
+        public Vector3 Up => CameraRotation.Up;
 
         public Camera3D(GraphicsDevice g)
         {

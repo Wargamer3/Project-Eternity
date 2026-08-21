@@ -33,7 +33,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
-
         public const string UnlockableTypeName = "Proficiency";
 
         private ProficiencyLink Proficiency;

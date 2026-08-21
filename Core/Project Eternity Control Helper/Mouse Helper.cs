@@ -80,6 +80,18 @@ namespace ProjectEternity.Core.ControlHelper
             }
         }
 
+        public static int InputMouseWheelValue()
+        {
+            if (IsMouseOutOfBound())
+            {
+                return 0;
+            }
+            else
+            {
+                return MouseStateCurrent.ScrollWheelValue - MouseStateLast.ScrollWheelValue;
+            }
+        }
+
         public static bool MouseMoved()
         {
             if (IsMouseOutOfBound())

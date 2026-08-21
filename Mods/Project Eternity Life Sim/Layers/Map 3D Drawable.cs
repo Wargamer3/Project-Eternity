@@ -797,55 +797,35 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 PlayerCharacter ActiveCharacter = Map.ListCharacter[P];
 
-                if (Map.MovementAnimation.Contains(ActiveCharacter))
+                Color UnitColor;
+                if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                    UnitColor = Map.ListCharacter[P].Color;
+                else
+                    UnitColor = Color.White;
+
+                if (ActiveCharacter.Unit3DModel == null)
                 {
-                    Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveCharacter);
+                    ActiveCharacter.Unit3DSprite.SetViewMatrix(View);
 
-                    ActiveCharacter.SetPosition(CurrentPosition);
+                    ActiveCharacter.Unit3DSprite.SetPosition(
+                        ActiveCharacter.Position.X,
+                        ActiveCharacter.Position.Z + 0.0f * Map.LayerHeight,
+                        ActiveCharacter.Position.Y);
 
-                    if (ActiveCharacter.Unit3DModel == null)
-                    {
-                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
-                    }
-                    else
-                    {
-                        ActiveCharacter.Unit3DModel.PlayAnimation("Walking");
-                    }
+                    ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
+                    ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Scale"].SetValue(0.2f);
 
-                    ActiveCharacter.Draw3DOnMap(GameScreen.GraphicsDevice, View, PolygonEffect.Projection);
+                    ActiveCharacter.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                 }
                 else
                 {
-                    Color UnitColor;
-                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        UnitColor = Map.ListCharacter[P].Color;
-                    else
-                        UnitColor = Color.White;
-
-                    if (ActiveCharacter.Unit3DModel == null)
-                    {
-                        ActiveCharacter.Unit3DSprite.SetViewMatrix(View);
-
-                        ActiveCharacter.Unit3DSprite.SetPosition(
-                            ActiveCharacter.X,
-                            ActiveCharacter.Z + 0.0f * Map.LayerHeight,
-                            ActiveCharacter.Y);
-
-                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(false);
-                        ActiveCharacter.Unit3DSprite.UnitEffect3D.Parameters["Scale"].SetValue(0.2f);
-
-                        ActiveCharacter.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
-                    }
-                    else
-                    {
-                        ActiveCharacter.Unit3DModel.PlayAnimation("Idle");
-                    }
-
-                    ActiveCharacter.Draw3DOnMap(GameScreen.GraphicsDevice, View, PolygonEffect.Projection);
+                    ActiveCharacter.Unit3DModel.PlayAnimation("Idle");
                 }
+
+                ActiveCharacter.Draw3DOnMap(GameScreen.GraphicsDevice, View, PolygonEffect.Projection);
             }
         }
-
+        
         private void DrawDrawablePoints(CustomSpriteBatch g)
         {
             ColorEffect.CurrentTechnique.Passes[0].Apply();

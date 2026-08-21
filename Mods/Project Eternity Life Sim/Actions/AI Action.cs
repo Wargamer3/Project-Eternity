@@ -51,8 +51,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public string AILogicPath;
 
-        public abstract ActionPanelLifeSimPlayer GetActionPanel();
-
         public AIAction(string AIGoal, string AIActionName)
         {
             this.AIGoal = AIGoal;

@@ -98,16 +98,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public void Init(LifeSimCharacterParams Params)
         {
             ListStatBoosts.Clear();
-
-            foreach (ProficiencyLink ActiveProficiency in DicProficiencyLevelByName.Values)
-            {
-                ActiveProficiency.ComputeStatBonuses(Params.Owner);
-            }
+            DicProficiencyLevelByName.Clear();
 
             foreach (Unlockable ActiveUnlockable in ListUnlockable)
             {
                 ActiveUnlockable.Init(Params, this);
                 ActiveUnlockable.CheckUnlocks();
+            }
+
+            foreach (ProficiencyLink ActiveProficiency in DicProficiencyLevelByName.Values)
+            {
+                ActiveProficiency.ComputeStatBonuses(Params.Owner);
             }
         }
     }

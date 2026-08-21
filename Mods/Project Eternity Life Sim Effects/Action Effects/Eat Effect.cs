@@ -81,11 +81,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Timer = 60;
         }
 
-        public override void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
             if (Timer <= 0)
             {
+                return false;
             }
+
+            return true;
         }
 
         public override void OnCancel()

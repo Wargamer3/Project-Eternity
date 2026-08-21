@@ -49,16 +49,19 @@
   <ItemGroup>
     <Compile Include="Acion Panels\Action Panel Life Sim.cs" />
     <Compile Include="Acion Panels\Action Panel Holder Life Sim.cs" />
+    <Compile Include="Acion Panels\Admin\Select Character To Control.cs" />
     <Compile Include="Acion Panels\Admin\Edit Character\Edit Character Inventory.cs" />
     <Compile Include="Acion Panels\Admin\Edit Character\Edit Character.cs" />
-    <Compile Include="Acion Panels\Admin\Edit Character Selection.cs" />
+    <Compile Include="Acion Panels\Admin\Select Character To Edit.cs" />
     <Compile Include="Acion Panels\Admin\Spawn Character.cs" />
+    <Compile Include="Acion Panels\Admin\Select Character To Spawn.cs" />
     <Compile Include="Acion Panels\Admin\Admin Menu.cs" />
+    <Compile Include="Acion Panels\First Person Control Character.cs" />
     <Compile Include="Acion Panels\View Character Logs.cs" />
     <Compile Include="Acion Panels\Inventory\View Character Actions.cs" />
     <Compile Include="Acion Panels\Inventory\View Character.cs" />
     <Compile Include="Acion Panels\Free Cam.cs" />
-    <Compile Include="Acion Panels\Control Character.cs" />
+    <Compile Include="Acion Panels\Top Down Control Character.cs" />
     <Compile Include="Acion Panels\LifeSimFreeCamera.cs" />
     <Compile Include="Action Log.cs" />
     <Compile Include="Character\Automated Action.cs" />

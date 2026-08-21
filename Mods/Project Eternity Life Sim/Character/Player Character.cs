@@ -128,15 +128,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<PlayerCharacter.CharacterStats> ListStatChoosen;
     }
 
-    public class PlayerCharacter : UnitMapComponent
+    public class PlayerCharacter : Object3D
     {
         public enum CharacterStats { STR, DEX, CON, INT, WIS, CHA, Free }
         public enum CharacterSexes { Male, Female }
-
-        public override int Width { get { return SpriteMap.Width; } }
-        public override int Height { get { return SpriteMap.Height; } }
-        public override bool[,] ArrayMapSize { get { return new bool[1, 1] { { true } }; } }
-        public override bool IsActive { get { return true; } }
 
         private Dictionary<string, List<AIAction>> DicActionByGoal;
         private Dictionary<string, object> DicObjectiveByName;
@@ -151,6 +146,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public bool CanChangeAIPrimaryGoal;
         public bool AIControlled;
         public bool AIPrimaryGoalReached => !AIControlled && ListAutomatedAction.Count == 0;
+        private double AITimer;
 
         public List<Weapon> ListWeapon { get; internal set; }
 
@@ -230,7 +226,22 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public ActionLogHolder Logs;
 
         public LifeSimCharacterParams SharedMapContex;//Context unique to each player
-        private Matrix WorldPositionMatrix;
+
+        public Matrix RotationMatrix = Matrix.Identity;
+        public Matrix WorldMatrix = Matrix.Identity;
+
+        public Vector3 MovementSpeed = Vector3.Zero;
+        public Vector3 ExternalSpeed = Vector3.Zero;//Wind, etc
+
+        private float LeanAngleCurrent = 0f;
+        public float MaxLeanAngle = MathHelper.ToRadians(20f);
+        public float MinSpeedForLean = 0.3f; // Lean only when moving > 30% speed
+
+        public float BaseMoveSpeed = 10f;
+
+        public enum SurfaceType { Normal, Ice, Mud }
+        public SurfaceType CurrentSurface = SurfaceType.Normal;
+
         public Camera3D Camera;
 
         public Color Color;
@@ -412,6 +423,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void Init()
         {
+            RotationMatrix = Matrix.CreateWorld(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
+
             Ancestry.Init(SharedMapContex);
             Background.Init(SharedMapContex);
             Class.Init(SharedMapContex);
@@ -425,6 +438,29 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
 
             UpdateStats();
+
+            InitAI();
+        }
+
+        private void InitAI()
+        {
+            foreach (CharacterAction ActiveCharacterAction in ArrayCharacterAction)
+            {
+                foreach (AICharacterAction ActiveCharacterAIAction in ActiveCharacterAction.ListAIAction)
+                {
+                    foreach (LifeSimAIAction ActiveAIAction in ActiveCharacterAIAction.ListAIAction)
+                    {
+                        if (!DicActionByGoal.ContainsKey(ActiveAIAction.AIGoal))
+                        {
+                            DicActionByGoal.Add(ActiveAIAction.AIGoal, new List<AIAction>());
+                        }
+
+                        ActiveAIAction.Init(SharedMapContex);
+
+                        DicActionByGoal[ActiveAIAction.AIGoal].Add(ActiveAIAction);
+                    }
+                }
+            }
         }
 
         public void UpdateStats()
@@ -571,11 +607,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             if (ListAutomatedAction.Count > 0)
             {
-                ListAutomatedAction[0].Update(gameTime);
+                if (!ListAutomatedAction[0].Update(gameTime))
+                {
+                    ListAutomatedAction.RemoveAt(0);
+
+                    if (ListAutomatedAction.Count > 0)
+                    {
+                        ListAutomatedAction[0].OnStarted();
+                    }
+                }
             }
             else if (AIPrimaryGoalReached)
             {
-                FindNextPrimaryGoal(SharedMapContex.RootMapContainer);
+                FindNextPrimaryGoal(gameTime, SharedMapContex.RootMapContainer);
             }
             else if (ListActionMenuChoice.HasMainPanel)
             {
@@ -656,8 +700,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
-        private void FindNextPrimaryGoal(NavMapGameManager Map)
+        private void FindNextPrimaryGoal(GameTime gameTime, NavMapGameManager Map)
         {
+            if (AITimer > 0)
+            {
+                AITimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                return;
+            }
+
             List<AIAction> ListAvailableAction = new List<AIAction>();
             int MaxWeight = 1;
 
@@ -685,13 +735,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             int GoalIndex = 0;
 
-            if (ListAvailableAction.Count > 1)
+            if (ListAvailableAction.Count > 0)
             {
                 GoalIndex = RandomHelper.Next(ListAvailableAction.Count);
+
+                CurrentGoal = ListAvailableAction[GoalIndex].AIGoal;
+                ListAutomatedAction.AddRange(ListAvailableAction[GoalIndex].GetAIExecutionPlan(Map));
+
+                ListAutomatedAction[0].OnStarted();
             }
 
-            CurrentGoal = ListAvailableAction[GoalIndex].AIGoal;
-            ListAutomatedAction.AddRange(ListAvailableAction[GoalIndex].GetAIExecutionPlan(Map));
+            AITimer = 60;
         }
 
         public void GoToLocation(string LocationName, NavMapGameManager Map)
@@ -782,39 +836,101 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             return RootKnowledgeContainer.HasItemInCategory(KnowledgeCategory);
         }
 
-        public override void SetPosition(Vector3 Position)
+        public void Move(Vector3 TargetDirection, double Strength, double DeltaTime)
         {
-            base.SetPosition(Position);
+            float Acceleration = 15;
+            float StopSpeed = 18;
+            float Friction = 6;
+            float TurnSpeed = 12;
 
-            if (ItemHeld != null)
+            switch (CurrentSurface)
             {
-                ItemHeld.Item3D.SetPosition(
-                    Position.X,
-                    (Position.Z + 1f),
-                    (Position.Y - 0.5f));
+                case SurfaceType.Ice:
+                    Acceleration = 3.0f;
+                    StopSpeed = 1.2f;
+                    Friction = 1.5f;
+                    TurnSpeed = 5f;
+                    break;
+
+                case SurfaceType.Mud:
+                    Acceleration = 6.0f;
+                    StopSpeed = 20.0f;
+                    Friction = 12.0f;
+                    break;
             }
 
-            Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(Direction));
+            if (TargetDirection != Vector3.Zero)
+            {
+                TargetDirection.Z = 0f;
+            }
 
-            Vector3 FinalPosition = new Vector3(Position.X, Position.Y, Position.Z);
+            Vector3 Movement = TargetDirection * BaseMoveSpeed * (float)Strength;
+            float LeanAngleFinal = 0f;
 
-            WorldPositionMatrix = RotationMatrix * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y);
+            if (Strength > 0 && TargetDirection != Vector3.Zero)
+            {
+                Matrix RotationFinal = Matrix.CreateWorld(Vector3.Zero, TargetDirection, Vector3.UnitZ);
+                Quaternion RotationQuaternionCurrent = Quaternion.CreateFromRotationMatrix(RotationMatrix);
+                Quaternion RotationQuaternionFinal = Quaternion.CreateFromRotationMatrix(RotationFinal);
+
+                float SmoothedTurn = 1.0f - (float)Math.Exp(-TurnSpeed * DeltaTime);
+                RotationMatrix = Matrix.CreateFromQuaternion(Quaternion.Slerp(RotationQuaternionCurrent, RotationQuaternionFinal, SmoothedTurn));
+
+                //Lean
+                Vector3 turnCross = Vector3.Cross(RotationMatrix.Forward, TargetDirection);
+                float TurnDirection = Math.Sign(turnCross.Z);
+
+                float TurnAngle = Vector3.Dot(RotationMatrix.Forward, TargetDirection);
+                float TurnStrength = MathHelper.Clamp(1.0f - TurnAngle, 0.0f, 1.0f);
+
+                // Speed Gate for Lean
+                float SpeedRatio = MovementSpeed.Length() / BaseMoveSpeed;
+                float LeanStrength = MathHelper.SmoothStep(0.0f, 1.0f, (SpeedRatio - MinSpeedForLean) / (1.0f - MinSpeedForLean));
+
+                LeanAngleFinal = TurnDirection * MaxLeanAngle * TurnStrength * LeanStrength;
+            }
+
+            if (Strength > 0)
+            {
+                float SmoothedAcceleration = 1.0f - (float)Math.Exp(-Acceleration * DeltaTime);
+                MovementSpeed = Vector3.Lerp(MovementSpeed, Movement, SmoothedAcceleration);
+            }
+            else
+            {
+                float SmoothedAcceleration = 1.0f - (float)Math.Exp(-StopSpeed * DeltaTime);
+                MovementSpeed = Vector3.Lerp(MovementSpeed, Movement, SmoothedAcceleration);
+            }
+
+            MovementSpeed.Z = 0f;
+
+            float SmoothedFriction = 1.0f - (float)Math.Exp(-Friction * DeltaTime);
+            ExternalSpeed = Vector3.Lerp(ExternalSpeed, Vector3.Zero, SmoothedFriction);
+
+            float LeanSpeed = 8f;
+            float SmoothedLean = 1.0f - (float)Math.Exp(-LeanSpeed * DeltaTime);
+            LeanAngleCurrent = MathHelper.Lerp(LeanAngleCurrent, LeanAngleFinal, SmoothedLean);
+
+            Matrix LeanMatrix = Matrix.CreateRotationY(LeanAngleCurrent);
+            Matrix RotationMatrixFinal = LeanMatrix * RotationMatrix;
+
+            Vector3 MovementFinal = MovementSpeed + ExternalSpeed;
+            Position += MovementFinal * (float)DeltaTime;
+
+            WorldMatrix = RotationMatrixFinal * Matrix.CreateTranslation(Position);
         }
 
-        public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
+        public void SetPosition(Vector3 Position)
+        {
+            this.Position = Position;
+        }
+
+        public void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
             g.Draw(SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(SpriteMap.Width / 2, SpriteMap.Height / 2), SpriteEffects.None, 1 / Position.Y);
         }
 
-        public override void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        public void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
         {
-            if (ItemHeld != null)
-            {
-                ItemHeld.Item3D.SetViewMatrix(View);
-
-                ItemHeld.Item3D.Draw(GraphicsDevice);
-            }
-
             if (Unit3DModel == null)
             {
                 Unit3DSprite.SetViewMatrix(View);
@@ -827,17 +943,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
-        public override void DrawExtraOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
+        public override void Draw(CustomSpriteBatch g, Matrix View)
         {
-        }
-
-        public override void DrawOverlayOnMap(CustomSpriteBatch g, Vector3 Position)
-        {
-        }
-
-        public override void DrawTimeOfDayOverlayOnMap(CustomSpriteBatch g, Vector3 Position, int TimeOfDay)
-        {
-            g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)(Position.X - 1) * Width, (int)(Position.Y - 1) * Height, Width * 3, Height * 3), Color.FromNonPremultiplied(255, 255, 255, 120));
+            throw new NotImplementedException();
         }
     }
 

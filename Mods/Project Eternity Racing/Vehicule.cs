@@ -480,7 +480,6 @@ namespace ProjectEternity.GameScreens.RacingScreen
         protected void TeleportRelative(Vector3 Movement)
         {
             Position += Movement;
-            CollisionBox.Offset(Movement.X, Movement.Y, Movement.Z);
         }
 
         public TunnelChangePredictionResults GetTunnelChangePrediction(AITunnel NextTunnel, out bool NeedToTurnRight)

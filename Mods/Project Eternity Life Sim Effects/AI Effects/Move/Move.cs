@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
@@ -37,14 +38,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             return true;
         }
 
-        public override ActionPanelLifeSimPlayer GetActionPanel()
-        {
-            throw new NotImplementedException();
-        }
-
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            int RandomPositionX = Math.Max(0, RandomHelper.Next(Params.ActiveMap.MapSize.X * Params.ActiveMap.TileSize.X));
+            int RandomPositionY = Math.Max(0, RandomHelper.Next(Params.ActiveMap.MapSize.Y * Params.ActiveMap.TileSize.Y));
+
+            return new List<AutomatedAction>() { new AutomatedActionDumbWalk(Params, new Vector3(RandomPositionX, RandomPositionY, 0)) };
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
@@ -57,7 +56,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 object ObjectivePosition = Params.Owner.GetObjective(MoveAction.MoveGoal);
                 if (ObjectivePosition == null)
                 {
-                    AIWeight = 0;
+                    AIWeight = 1;
                     return;
                 }
 
@@ -82,11 +81,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ActionPanelLifeSimPlayer GetActionPanel()
         {
             throw new NotImplementedException();
         }

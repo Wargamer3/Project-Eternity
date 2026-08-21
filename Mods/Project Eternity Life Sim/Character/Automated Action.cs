@@ -19,7 +19,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public abstract void OnCancel();
 
-        public abstract void Update(GameTime gameTime);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <returns>Returns true if running, ruturns false if ended</returns>
+        public abstract bool Update(GameTime gameTime);
 
         public abstract void DoRead(ByteReader BR);
 

@@ -40,17 +40,16 @@ namespace ProjectEternity.Core.Graphics
         private PolygonMesh _CollisionBox;
         public PolygonMesh CollisionBox { get { return _CollisionBox; } }
 
-        private Vector3 _Forward;
-        private Vector3 _Right;
-        private Vector3 _Up;
-        public Vector3 Forward { get { return _Forward; } }
-        public Vector3 Right { get { return _Right; } }
-        public Vector3 Up { get { return _Up; } }
+        public Vector3 Forward { get { return RotationMatrix.Forward; } }
+        public Vector3 Right { get { return RotationMatrix.Right; } }
+        public Vector3 Up { get { return RotationMatrix.Up; } }
         public Matrix Rotation { get { return RotationMatrix; } }
 
         private Matrix PositionMatrix;
         private Matrix RotationMatrix;
         private Matrix ScaleMatrix;
+
+        public Matrix WorldPositionMatrix { get { return PositionMatrix; } }
 
         private Vector3 _Position;
         private float TotalYaw, TotalPitch, TotalRoll;
@@ -64,9 +63,6 @@ namespace ProjectEternity.Core.Graphics
             RotationMatrix = Matrix.Identity;
             ScaleMatrix = Matrix.Identity;
 
-            _Forward = Vector3.Forward;
-            _Right = Vector3.Right;
-            _Up = Vector3.Up;
             _Position = Vector3.Zero;
             TotalYaw = 0;
             TotalPitch = 0;
@@ -122,9 +118,6 @@ namespace ProjectEternity.Core.Graphics
 
             RotationMatrix = Matrix.CreateFromYawPitchRoll(TotalYaw, TotalPitch, TotalRoll);
             ReCreateCollisionBox();
-            _Forward = Vector3.Transform(Vector3.Forward, RotationMatrix);
-            _Right = Vector3.Transform(Vector3.Right, RotationMatrix);
-            _Up = Vector3.Transform(Vector3.Up, RotationMatrix);
 
             UpdateWorld();
         }
