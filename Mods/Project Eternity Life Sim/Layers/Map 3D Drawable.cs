@@ -376,6 +376,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         private bool IsCursorHiddenByWall()
         {
+            if (!Map.IsInsideMap(Map.CursorPosition))
+            {
+                return false;
+            }
+
             int CursorX = (int)Map.CursorPosition.X / Map.TileSize.X;
             int CursorLayer = (int)Map.CursorPosition.Z;
             for (int Y = (int)Map.CursorPosition.Y / Map.TileSize.Y; Y < Map.MapSize.Y; ++Y)

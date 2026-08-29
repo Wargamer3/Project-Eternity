@@ -89,14 +89,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     Vector3 ForwardMovement = new Vector3(-(float)Math.Sin(CameraYaw), (float)Math.Cos(CameraYaw), 0f);
                     Vector3 LateralMovement = new Vector3((float)Math.Cos(CameraYaw), (float)Math.Sin(CameraYaw), 0f);
 
-                    Vector3 Movement = (LateralMovement * PlayerInput.X) + (ForwardMovement * PlayerInput.Y);
-                    Movement.Z = 0f;
+                    Vector3 TargetDirection = (LateralMovement * PlayerInput.X) + (ForwardMovement * PlayerInput.Y);
+                    TargetDirection.Z = 0f;
 
-                    ControlledCharacter.Move(Movement, 1.0, DeltaTime);
+                    ControlledCharacter.Move(TargetDirection, 1.0, DeltaTime);
 
-                    float targetYaw = (float)Math.Atan2(-Movement.X, Movement.Y);
-                    float yawLerpFactor = 1.0f - (float)Math.Exp(-CameraRotationSpeed * DeltaTime);
-                    CameraYaw = SmoothAngle(CameraYaw, targetYaw, yawLerpFactor);
+                    float TargetYaw = (float)Math.Atan2(-TargetDirection.X, TargetDirection.Y);
+                    float YawLerpFactor = 1.0f - (float)Math.Exp(-CameraRotationSpeed * DeltaTime);
+                    CameraYaw = SmoothAngle(CameraYaw, TargetYaw, YawLerpFactor);
                 }
                 else
                 {

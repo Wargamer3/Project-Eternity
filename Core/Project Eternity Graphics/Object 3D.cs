@@ -46,10 +46,10 @@ namespace ProjectEternity.Core.Graphics
         public Matrix Rotation { get { return RotationMatrix; } }
 
         private Matrix PositionMatrix;
-        private Matrix RotationMatrix;
-        private Matrix ScaleMatrix;
+        public Matrix RotationMatrix;
+        public Matrix ScaleMatrix;
 
-        public Matrix WorldPositionMatrix { get { return PositionMatrix; } }
+        public Matrix WorldMatrix;
 
         private Vector3 _Position;
         private float TotalYaw, TotalPitch, TotalRoll;
@@ -316,9 +316,11 @@ namespace ProjectEternity.Core.Graphics
 
         protected void UpdateWorld()
         {
+            WorldMatrix = ScaleMatrix * RotationMatrix * PositionMatrix;
+
             if (ObjectEffect != null)
             {
-                ObjectEffect.World = ScaleMatrix * RotationMatrix * PositionMatrix;
+                ObjectEffect.World = WorldMatrix;
             }
         }
 
@@ -339,7 +341,7 @@ namespace ProjectEternity.Core.Graphics
                 float X = value.X - Position.X;
                 float Y = value.Y - Position.Y;
                 float Z = value.Z - Position.Z;
-                _Position += new Vector3(X, Y, Z);
+                _Position = value;
                 _CollisionBox.Offset(X, Y, Z);
                 PositionMatrix = Matrix.CreateTranslation(Position);
                 UpdateWorld();

@@ -227,17 +227,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public LifeSimCharacterParams SharedMapContex;//Context unique to each player
 
-        public Matrix RotationMatrix = Matrix.Identity;
-        public Matrix WorldMatrix = Matrix.Identity;
-
         public Vector3 MovementSpeed = Vector3.Zero;
         public Vector3 ExternalSpeed = Vector3.Zero;//Wind, etc
 
-        private float LeanAngleCurrent = 0f;
-        public float MaxLeanAngle = MathHelper.ToRadians(20f);
-        public float MinSpeedForLean = 0.3f; // Lean only when moving > 30% speed
-
-        public float BaseMoveSpeed = 10f;
+        public float BaseMoveSpeed = 30f;
 
         public enum SurfaceType { Normal, Ice, Mud }
         public SurfaceType CurrentSurface = SurfaceType.Normal;
@@ -859,38 +852,51 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     break;
             }
 
-            if (TargetDirection != Vector3.Zero)
-            {
-                TargetDirection.Z = 0f;
-            }
-
             Vector3 Movement = TargetDirection * BaseMoveSpeed * (float)Strength;
-            float LeanAngleFinal = 0f;
 
             if (Strength > 0 && TargetDirection != Vector3.Zero)
             {
-                Matrix RotationFinal = Matrix.CreateWorld(Vector3.Zero, TargetDirection, Vector3.UnitZ);
-                Quaternion RotationQuaternionCurrent = Quaternion.CreateFromRotationMatrix(RotationMatrix);
-                Quaternion RotationQuaternionFinal = Quaternion.CreateFromRotationMatrix(RotationFinal);
+                Quaternion CurrentRot = Quaternion.CreateFromRotationMatrix(RotationMatrix);
+
+                float TargetAngle = (float)Math.Atan2(TargetDirection.X, TargetDirection.Y);
+                Quaternion TargetRot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, TargetAngle);
 
                 float SmoothedTurn = 1.0f - (float)Math.Exp(-TurnSpeed * DeltaTime);
-                RotationMatrix = Matrix.CreateFromQuaternion(Quaternion.Slerp(RotationQuaternionCurrent, RotationQuaternionFinal, SmoothedTurn));
+                RotationMatrix = Matrix.CreateFromQuaternion(Quaternion.Slerp(CurrentRot, TargetRot, SmoothedTurn));
 
-                //Lean
-                Vector3 turnCross = Vector3.Cross(RotationMatrix.Forward, TargetDirection);
-                float TurnDirection = Math.Sign(turnCross.Z);
+                // Extract X, Y forward vector
+                Vector3 CharacterDirection = Vector3.Normalize(new Vector3(RotationMatrix.M31, RotationMatrix.M33, 0f));
 
-                float TurnAngle = Vector3.Dot(RotationMatrix.Forward, TargetDirection);
-                float TurnStrength = MathHelper.Clamp(1.0f - TurnAngle, 0.0f, 1.0f);
+                float TurnInPlaceThreshold = (float)Math.Cos(MathHelper.ToRadians(78.0f));
+                float StraightAheadThreshold = (float)Math.Cos(MathHelper.ToRadians(11.5f));
 
-                // Speed Gate for Lean
-                float SpeedRatio = MovementSpeed.Length() / BaseMoveSpeed;
-                float LeanStrength = MathHelper.SmoothStep(0.0f, 1.0f, (SpeedRatio - MinSpeedForLean) / (1.0f - MinSpeedForLean));
+                float ExpectedRotation = Vector3.Dot(CharacterDirection, TargetDirection);
 
-                LeanAngleFinal = TurnDirection * MaxLeanAngle * TurnStrength * LeanStrength;
+                //Turn in place, stop moving
+                if (ExpectedRotation < TurnInPlaceThreshold)
+                {
+                    Movement = Vector3.Zero;
+                    //Unit3DModel.PlayAnimation("Turn");
+                }
+                //Slow down a bit if turning too hard
+                else if (ExpectedRotation < StraightAheadThreshold)
+                {
+                    float RotationRange = StraightAheadThreshold - TurnInPlaceThreshold;
+                    float SpeedReduction = (ExpectedRotation - TurnInPlaceThreshold) / RotationRange;
+                    Movement *= SpeedReduction;
+                    Unit3DModel.PlayAnimation("Walking");
+                }
+                else
+                {
+                    Unit3DModel.PlayAnimation("Walking");
+                }
+            }
+            else
+            {
+                Unit3DModel.PlayAnimation("Idle");
             }
 
-            if (Strength > 0)
+            if (Strength > 0 && Movement != Vector3.Zero)
             {
                 float SmoothedAcceleration = 1.0f - (float)Math.Exp(-Acceleration * DeltaTime);
                 MovementSpeed = Vector3.Lerp(MovementSpeed, Movement, SmoothedAcceleration);
@@ -906,19 +912,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             float SmoothedFriction = 1.0f - (float)Math.Exp(-Friction * DeltaTime);
             ExternalSpeed = Vector3.Lerp(ExternalSpeed, Vector3.Zero, SmoothedFriction);
 
-            float LeanSpeed = 8f;
-            float SmoothedLean = 1.0f - (float)Math.Exp(-LeanSpeed * DeltaTime);
-            LeanAngleCurrent = MathHelper.Lerp(LeanAngleCurrent, LeanAngleFinal, SmoothedLean);
-
-            Matrix LeanMatrix = Matrix.CreateRotationY(LeanAngleCurrent);
-            Matrix RotationMatrixFinal = LeanMatrix * RotationMatrix;
-
             Vector3 MovementFinal = MovementSpeed + ExternalSpeed;
             Position += MovementFinal * (float)DeltaTime;
 
-            WorldMatrix = RotationMatrixFinal * Matrix.CreateTranslation(Position);
+            WorldMatrix = RotationMatrix * Matrix.CreateTranslation(Position);
         }
-
         public void SetPosition(Vector3 Position)
         {
             this.Position = Position;
@@ -931,6 +929,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
         {
+            ScaleMatrix = Matrix.CreateScale(0.2f);
+            WorldMatrix = ScaleMatrix * RotationMatrix * Matrix.CreateTranslation(new Vector3(Position.X, 5, Position.Y));
             if (Unit3DModel == null)
             {
                 Unit3DSprite.SetViewMatrix(View);
@@ -939,7 +939,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
             else
             {
-                Unit3DModel.Draw(View, Projection, WorldPositionMatrix);
+                Unit3DModel.Draw(View, Projection, WorldMatrix);
             }
         }
 

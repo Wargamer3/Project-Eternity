@@ -908,18 +908,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return new Vector3((float)Math.Floor(WorldPosition.X / TileSize.X), (float)Math.Floor(WorldPosition.Y / TileSize.Y), (float)Math.Floor(WorldPosition.Z / LayerHeight));
         }
 
-        public void GetEmptyPosition(Vector3 TargetPosition, out Vector3 FinalPosition)
+        public void GetEmptyPosition(Vector3 TargetWorldPosition, out Vector3 FinalPosition)
         {
-            if (!IsInsideMap(TargetPosition))
+            if (!IsInsideMap(TargetWorldPosition))
             {
-                FinalPosition = TargetPosition;
+                FinalPosition = TargetWorldPosition;
                 return;
             }
 
             int MaxValue = TileSize.X;
             bool ObstacleFound = true;
             int X = 0, Y = 0;
-            FinalPosition = new Vector3(0, 0, TargetPosition.Z);
+            FinalPosition = new Vector3(0, 0, TargetWorldPosition.Z);
             //Check if there isn'T a unit at spawn location and move the spawn point if needed.
             do
             {
@@ -929,53 +929,53 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     Y = 0;
                     //As long as not out of map or out of range.
-                    while (TargetPosition.Y + Y >= 0 && (X + Y) <= MaxValue && ObstacleFound)
+                    while (TargetWorldPosition.Y + Y >= 0 && (X + Y) <= MaxValue && ObstacleFound)
                     {
                         if (ObstacleFound &&
-                            IsInsideMap(new Vector3(TargetPosition.X - X, TargetPosition.Y + Y, TargetPosition.Z)))
+                            IsInsideMap(new Vector3(TargetWorldPosition.X - X, TargetWorldPosition.Y + Y, TargetWorldPosition.Z)))
                         {
-                            ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(-X, Y, 0));
+                            ObstacleFound = CheckForObstacleAtPosition(TargetWorldPosition, new Vector3(-X, Y, 0));
 
                             if (!ObstacleFound)
                             {
-                                FinalPosition.X = TargetPosition.X - X;
-                                FinalPosition.Y = TargetPosition.Y + Y;
+                                FinalPosition.X = TargetWorldPosition.X - X;
+                                FinalPosition.Y = TargetWorldPosition.Y + Y;
                             }
                         }
 
                         if (ObstacleFound &&
-                            IsInsideMap(new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z)))
+                            IsInsideMap(new Vector3(TargetWorldPosition.X + X, TargetWorldPosition.Y + Y, TargetWorldPosition.Z)))
                         {
-                            ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(X, Y, 0));
+                            ObstacleFound = CheckForObstacleAtPosition(TargetWorldPosition, new Vector3(X, Y, 0));
 
                             if (!ObstacleFound)
                             {
-                                FinalPosition.X = TargetPosition.X + X;
-                                FinalPosition.Y = TargetPosition.Y + Y;
+                                FinalPosition.X = TargetWorldPosition.X + X;
+                                FinalPosition.Y = TargetWorldPosition.Y + Y;
                             }
                         }
 
                         if (ObstacleFound &&
-                            IsInsideMap(new Vector3(TargetPosition.X - X, TargetPosition.Y - Y, TargetPosition.Z)))
+                            IsInsideMap(new Vector3(TargetWorldPosition.X - X, TargetWorldPosition.Y - Y, TargetWorldPosition.Z)))
                         {
-                            ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(-X, -Y, 0));
+                            ObstacleFound = CheckForObstacleAtPosition(TargetWorldPosition, new Vector3(-X, -Y, 0));
 
                             if (!ObstacleFound)
                             {
-                                FinalPosition.X = TargetPosition.X - X;
-                                FinalPosition.Y = TargetPosition.Y - Y;
+                                FinalPosition.X = TargetWorldPosition.X - X;
+                                FinalPosition.Y = TargetWorldPosition.Y - Y;
                             }
                         }
 
                         if (ObstacleFound &&
-                            IsInsideMap(new Vector3(TargetPosition.X + X, TargetPosition.Y - Y, TargetPosition.Z)))
+                            IsInsideMap(new Vector3(TargetWorldPosition.X + X, TargetWorldPosition.Y - Y, TargetWorldPosition.Z)))
                         {
-                            ObstacleFound = CheckForObstacleAtPosition(TargetPosition, new Vector3(X, -Y, 0));
+                            ObstacleFound = CheckForObstacleAtPosition(TargetWorldPosition, new Vector3(X, -Y, 0));
 
                             if (!ObstacleFound)
                             {
-                                FinalPosition.X = TargetPosition.X + X;
-                                FinalPosition.Y = TargetPosition.Y - Y;
+                                FinalPosition.X = TargetWorldPosition.X + X;
+                                FinalPosition.Y = TargetWorldPosition.Y - Y;
                             }
                         }
                         Y += TileSize.Y;//Proceed vertically.
