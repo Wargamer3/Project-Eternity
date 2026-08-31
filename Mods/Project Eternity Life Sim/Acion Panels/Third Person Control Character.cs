@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
@@ -102,7 +100,26 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 {
                     ControlledCharacter.Move(Vector3.Zero, 0.0, DeltaTime);
                 }
+                /*
+                if (ActiveInputManager.InputCommand1Pressed())
+                {
+                    CharacterController.StanceManager.DesiredStance = Stance.Prone;
+                }
+                else if (ActiveInputManager.InputCommand2Pressed())
+                {
+                    CharacterController.StanceManager.DesiredStance = Stance.Crouching;
+                }
+                else
+                {
+                    CharacterController.StanceManager.DesiredStance = Stance.Standing;
+                }
 
+                //Jumping
+                if (ActiveInputManager.InputSkipPressed())
+                {
+                    CharacterController.Jump();
+                }
+                */
                 CameraOffset = CalculateCameraOffset(CameraYaw, CameraPitch, CameraDistance);
             }
 

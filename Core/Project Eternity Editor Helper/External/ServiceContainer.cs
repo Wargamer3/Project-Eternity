@@ -32,7 +32,6 @@ namespace ProjectEternity.Core.Editor
             services.Add(typeof(T), service);
         }
 
-
         /// <summary>
         /// Looks up the specified service.
         /// </summary>

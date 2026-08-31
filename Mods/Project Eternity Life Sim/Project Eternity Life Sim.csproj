@@ -33,6 +33,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BEPUphysics, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\BEPUphysics.1.5.2\lib\netstandard2.0\BEPUphysics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BEPUutilities, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\BEPUutilities.1.5.1\lib\netstandard2.0\BEPUutilities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -56,7 +64,8 @@
     <Compile Include="Acion Panels\Admin\Spawn Character.cs" />
     <Compile Include="Acion Panels\Admin\Select Character To Spawn.cs" />
     <Compile Include="Acion Panels\Admin\Admin Menu.cs" />
-    <Compile Include="Acion Panels\First Person Control Character.cs" />
+    <Compile Include="Acion Panels\Third Person Control Character.cs" />
+    <Compile Include="Acion Panels\Build Menu.cs" />
     <Compile Include="Acion Panels\View Character Logs.cs" />
     <Compile Include="Acion Panels\Inventory\View Character Actions.cs" />
     <Compile Include="Acion Panels\Inventory\View Character.cs" />
@@ -64,29 +73,32 @@
     <Compile Include="Acion Panels\Top Down Control Character.cs" />
     <Compile Include="Acion Panels\LifeSimFreeCamera.cs" />
     <Compile Include="Action Log.cs" />
-    <Compile Include="Character\Automated Action.cs" />
-    <Compile Include="Character\Character Heritage.cs" />
-    <Compile Include="Character\Proficiency.cs" />
+    <Compile Include="Character\Character Components\Automated Action.cs" />
+    <Compile Include="Character\Character Components\Character Heritage.cs" />
+    <Compile Include="Character\Character Components\Proficiency.cs" />
+    <Compile Include="Character\QuoteSet.cs" />
+    <Compile Include="Character\QuoteSetMap.cs" />
+    <Compile Include="Character\QuoteSetVersus.cs" />
     <Compile Include="Character\Unlocks\Unlockable.cs" />
     <Compile Include="Actions\Action Effect.cs" />
     <Compile Include="Actions\AI Action.cs" />
     <Compile Include="Character\Unlocks\UnlockRequirementEvaluator.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Actions\Character Action.cs" />
-    <Compile Include="Character\Character Class.cs" />
-    <Compile Include="Character\Deity Category.cs" />
-    <Compile Include="Character\Domain.cs" />
-    <Compile Include="Character\Character Deity.cs" />
-    <Compile Include="Character\Shield.cs" />
-    <Compile Include="Character\Item.cs" />
-    <Compile Include="Character\Armor.cs" />
-    <Compile Include="Character\Language.cs" />
-    <Compile Include="Character\Character Background.cs" />
-    <Compile Include="Character\Skill.cs" />
-    <Compile Include="Character\Condition.cs" />
-    <Compile Include="Character\Character Ancestry.cs" />
-    <Compile Include="Character\Weapon.cs" />
-    <Compile Include="Character\Trait.cs" />
+    <Compile Include="Character\Character Components\Character Class.cs" />
+    <Compile Include="Character\Character Components\Deity Category.cs" />
+    <Compile Include="Character\Character Components\Domain.cs" />
+    <Compile Include="Character\Character Components\Character Deity.cs" />
+    <Compile Include="Character\Character Components\Shield.cs" />
+    <Compile Include="Character\Character Components\Item.cs" />
+    <Compile Include="Character\Character Components\Armor.cs" />
+    <Compile Include="Character\Character Components\Language.cs" />
+    <Compile Include="Character\Character Components\Character Background.cs" />
+    <Compile Include="Character\Character Components\Skill.cs" />
+    <Compile Include="Character\Character Components\Condition.cs" />
+    <Compile Include="Character\Character Components\Character Ancestry.cs" />
+    <Compile Include="Character\Character Components\Weapon.cs" />
+    <Compile Include="Character\Character Components\Trait.cs" />
     <Compile Include="Layers\Map 2D Drawable.cs" />
     <Compile Include="Character\Player Character.cs" />
     <Compile Include="Cutscene Script Holder.cs" />
@@ -107,6 +119,7 @@
     <Compile Include="Life Sim Map.cs" />
     <Compile Include="Movement Algorithm.cs" />
     <Compile Include="NavMap.cs" />
+    <Compile Include="Physic.cs" />
     <Compile Include="PlayerOverseer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Params.cs" />
@@ -171,6 +184,11 @@
       <Name>FMOD</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\External\Physics\Physics.csproj">
+      <Project>{74ABAB5E-D702-41C9-BC34-8534D19A3DA4}</Project>
+      <Name>Physics</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
       <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
       <Name>Roslyn</Name>
@@ -181,6 +199,9 @@
       <Name>Project Eternity Battle Map</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

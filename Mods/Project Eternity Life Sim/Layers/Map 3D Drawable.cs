@@ -153,6 +153,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
             {
                 ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+
+                var staticMesh = new BEPUphysics.BroadPhaseEntries.StaticMesh(ConversionHelper.MathConverter.Convert(ActiveTileSet.Value.ArrayTriangle), ActiveTileSet.Value.ArrayIndices, new BEPUutilities.AffineTransform(new BEPUutilities.Vector3(1f, 1f, 1f), BEPUutilities.Quaternion.Identity, new BEPUutilities.Vector3(0, 0, 0)));
+                staticMesh.Sidedness = BEPUutilities.TriangleSidedness.DoubleSided;
+
+                if (LifeSimMap.PhysicsManager.PhysicSimulation.Entities.Count == 0)
+                {
+                    //LifeSimMap.PhysicsManager.ModelDrawer.Add(staticMesh);
+                    LifeSimMap.PhysicsManager.PhysicSimulation.Add(staticMesh);
+                }
             }
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
@@ -672,6 +681,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             g.End();
             g.Begin();
+
+            LifeSimMap.PhysicsManager.Draw(View, PolygonEffect.Projection);
 
             DrawDamageNumbers(g, View);
         }

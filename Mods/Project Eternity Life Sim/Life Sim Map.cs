@@ -26,10 +26,16 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public List<PlayerCharacter> ListCharacter;
 
+        public static PhysicsManager PhysicsManager;
         public override MovementAlgorithmTile CursorTerrain => throw new NotImplementedException();
 
         public LifeSimMap()
         {
+            if (PhysicsManager == null)
+            {
+                PhysicsManager = new PhysicsManager();
+                PhysicsManager.Initialize();
+            }
             RequireDrawFocus = false;
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             BattleContext = new LifeSimBattleContext();
@@ -252,6 +258,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void Update(GameTime gameTime)
         {
+            PhysicsManager.Update();
+
             if (OnlineCommunicationClient != null)
             {
                 OnlineCommunicationClient.ExecuteDelayedScripts();

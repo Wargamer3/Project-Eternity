@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{74ABAB5E-D702-41C9-BC34-8534D19A3DA4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Physics</RootNamespace>
+    <AssemblyName>Physics</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\External\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\External\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BEPUphysics, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\BEPUphysics.1.5.2\lib\netstandard2.0\BEPUphysics.dll</HintPath>
+    </Reference>
+    <Reference Include="BEPUutilities, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\BEPUutilities.1.5.1\lib\netstandard2.0\BEPUutilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Character Controller.cs" />
+    <Compile Include="Debuging\Lines\BoundingBoxDrawer.cs" />
+    <Compile Include="Debuging\Lines\ContactDrawer.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayBallSocketJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayDistanceJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayDistanceLimit.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayEllipseSwingLimit.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayLinearAxisLimit.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayPointOnLineJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayPointOnPlaneJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayRevoluteLimit.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplaySingleEntityLinearMotor.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplaySwivelHingeAngularJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayTwistJoint.cs" />
+    <Compile Include="Debuging\Lines\Display types\DisplayTwistMotor.cs" />
+    <Compile Include="Debuging\Lines\DebugLine.cs" />
+    <Compile Include="Debuging\Lines\LineDisplayObject.cs" />
+    <Compile Include="Debuging\Lines\LineDisplayObjectBase.cs" />
+    <Compile Include="Debuging\Lines\LineDrawer.cs" />
+    <Compile Include="Debuging\Lines\SimulationIslandDrawer.cs" />
+    <Compile Include="Debuging\Lines\SolverDisplayObject.cs" />
+    <Compile Include="MathConverter.cs" />
+    <Compile Include="Debuging\Models\BatchInformation.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayEntityModel.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayFluid.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayInstancedMesh.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayModel.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayStaticMesh.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayTerrain.cs" />
+    <Compile Include="Debuging\Models\Display types\DisplayTriangleMesh.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayBox.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayCapsule.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayCompoundBody.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayCone.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayConvex.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayConvexHull.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayCylinder.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayEntityCollidable.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayMobileMesh.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplaySphere.cs" />
+    <Compile Include="Debuging\Models\Display types\Entity types\DisplayTriangle.cs" />
+    <Compile Include="Debuging\Models\Display types\ModelDisplayObject.cs" />
+    <Compile Include="Debuging\Models\Display types\ModelDisplayObjectBase.cs" />
+    <Compile Include="Debuging\Models\Display types\SelfDrawingModelDisplayObject.cs" />
+    <Compile Include="Debuging\Models\InstancedModelDrawer.cs" />
+    <Compile Include="Debuging\Models\ModelDisplayObjectBatch.cs" />
+    <Compile Include="Debuging\Models\ModelDrawer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

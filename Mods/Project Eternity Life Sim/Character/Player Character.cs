@@ -14,113 +14,6 @@ using static ProjectEternity.Core.Characters.Character;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
-    public class QuoteSet
-    {
-        public List<QuoteSetMap> ListMapQuote;
-
-        public QuoteSet()
-        {
-            ListMapQuote = new List<QuoteSetMap>();
-            ListMapQuote.Add(new QuoteSetMap());//Any Map
-        }
-
-        public QuoteSet(BinaryReader BR)
-        {
-            int ListQuoteCount = BR.ReadByte();
-            ListMapQuote = new List<QuoteSetMap>(ListQuoteCount);
-
-            for (int I = 0; I < ListQuoteCount; I++)
-            {
-                ListMapQuote.Add(new QuoteSetMap(BR));
-            }
-
-            if (ListQuoteCount == 0)
-            {
-                ListMapQuote.Add(new QuoteSetMap());//Any Map
-            }
-        }
-
-        public void Write(BinaryWriter BW)
-        {
-            BW.Write((byte)ListMapQuote.Count);
-            for (int I = 0; I < ListMapQuote.Count; I++)
-            {
-                ListMapQuote[I].Write(BW);
-            }
-        }
-    }
-
-    public class QuoteSetMap
-    {
-        public List<QuoteSetVersus> ListQuoteVersus;
-
-        public QuoteSetMap()
-        {
-            ListQuoteVersus = new List<QuoteSetVersus>();
-            ListQuoteVersus.Add(new QuoteSetVersus());//Any Map
-        }
-
-        public QuoteSetMap(BinaryReader BR)
-        {
-            int ListQuoteCount = BR.ReadByte();
-            ListQuoteVersus = new List<QuoteSetVersus>(ListQuoteCount);
-
-            for (int I = 0; I < ListQuoteCount; I++)
-            {
-                ListQuoteVersus.Add(new QuoteSetVersus(BR));
-            }
-
-            if (ListQuoteCount == 0)
-            {
-                ListQuoteVersus.Add(new QuoteSetVersus());//Any Map
-            }
-        }
-
-        internal void Write(BinaryWriter BW)
-        {
-            BW.Write((byte)ListQuoteVersus.Count);
-            for (int I = 0; I < ListQuoteVersus.Count; I++)
-            {
-                ListQuoteVersus[I].Write(BW);
-            }
-        }
-    }
-
-    public class QuoteSetVersus
-    {
-        public List<string> ListQuote;
-        public List<string> ListPortraitPath;
-
-        public QuoteSetVersus()
-        {
-            ListQuote = new List<string>();
-            ListPortraitPath = new List<string>();
-        }
-
-        public QuoteSetVersus(BinaryReader BR)
-        {
-            int ListQuoteCount = BR.ReadByte();
-            ListQuote = new List<string>(ListQuoteCount);
-            ListPortraitPath = new List<string>(ListQuoteCount);
-
-            for (int I = 0; I < ListQuoteCount; I++)
-            {
-                ListQuote.Add(BR.ReadString());
-                ListPortraitPath.Add(BR.ReadString());
-            }
-        }
-
-        internal void Write(BinaryWriter BW)
-        {
-            BW.Write((byte)ListQuote.Count);
-            for (int I = 0; I < ListQuote.Count; I++)
-            {
-                BW.Write(ListQuote[I]);
-                BW.Write(ListPortraitPath[I]);
-            }
-        }
-    }
-
     public class StatsToAsign
     {
         public int PointsRemaning;//Used if Free Boosts
@@ -398,6 +291,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 else
                     SpriteUnit = Content.Load<Texture2D>("Life Sim/Characters/Default");
 
+                Model3DPath = "Bomberman/Default";
                 if (!string.IsNullOrEmpty(Model3DPath))
                 {
                     string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
@@ -407,6 +301,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
                     Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Walking", "Walking", Content);
                     Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Idle", "Idle", Content);
+                    RotationMatrix = Matrix.CreateFromAxisAngle(Vector3.UnitY, 0);
                 }
             }
 

@@ -11,6 +11,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private DynamicVertexBuffer VertexBuffer;
         private IndexBuffer IndexBuffer;
         private VertexPositionNormalTexture[] ArrayVertex;
+        public int[] ArrayIndices;
+        public Vector3[] ArrayTriangle;
         public Effect Effect3D;
         private int PrimitivesCount => ListTile3D.Count * 2;
         private int VerticesCount => ListTile3D.Count * 4;
@@ -54,12 +56,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             VertexBuffer = new DynamicVertexBuffer(g, VertexPositionNormalTexture.VertexDeclaration,
                                                    VerticesCount, BufferUsage.WriteOnly);
-            // Create and populate the index buffer.
-            ushort[] indices = ListTempIndex.ToArray();
 
-            IndexBuffer = new IndexBuffer(g, typeof(ushort), indices.Length, BufferUsage.WriteOnly);
+            ArrayTriangle = new Vector3[ListTempVertex.Count];
+            for (int V = 0; V < ListTempVertex.Count; ++V)
+            {
+                ArrayTriangle[V] = ListTempVertex[V].Position;
+            }
+            ArrayIndices = new int[ListTempIndex.Count];
+            for (int I = 0; I < ListTempIndex.Count; ++I)
+            {
+                ArrayIndices[I] = ListTempIndex[I];
+            }
+            ushort[] ArrayIndicesShort = ListTempIndex.ToArray();
 
-            IndexBuffer.SetData(indices);
+            IndexBuffer = new IndexBuffer(g, typeof(ushort), ArrayIndicesShort.Length, BufferUsage.WriteOnly);
+
+            IndexBuffer.SetData(ArrayIndicesShort);
             VertexBuffer.SetData(ArrayVertex);
         }
 
