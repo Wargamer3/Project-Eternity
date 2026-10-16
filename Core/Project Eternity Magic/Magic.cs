@@ -260,11 +260,25 @@ namespace ProjectEternity.Core.Magic
 
         public static Dictionary<string, MagicElement> LoadAllMagicElements()
         {
-            Dictionary<string, MagicElement> DicMagicElement = LoadFromAssemblyFiles(Directory.GetFiles("Magic", "*.dll", SearchOption.AllDirectories), typeof(MagicElement));
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
+            Dictionary<string, MagicElement> DicMagicElement = LoadFromAssemblyFiles(Directory.GetFiles("Magic", "*.dll", SearchOption.AllDirectories), SeenAssemblies, typeof(MagicElement));
+
+            ReflectionHelper.ForEachUnseenAssembly(SeenAssemblies, delegate (Assembly ActiveAssembly)
+            {
+                foreach (KeyValuePair<string, MagicElement> ActiveEffect in LoadFromAssembly(ActiveAssembly, typeof(MagicElement)))
+                {
+                    DicMagicElement.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            });
 
             var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Magic", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, MagicElement> ActiveEffect in LoadFromAssembly(ActiveAssembly, typeof(MagicElement)))
                 {
                     DicMagicElement.Add(ActiveEffect.Key, ActiveEffect.Value);
@@ -293,9 +307,14 @@ namespace ProjectEternity.Core.Magic
             Dictionary<string, MagicElement> DicMagicCoreByType = new Dictionary<string, MagicElement>();
 
             string[] Files = Directory.GetFiles("Magic", "*.dll");
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 List<MagicElement> ListMagicCore = ReflectionHelper.GetObjectsFromTypes<MagicElement>(typeof(MagicCore), ActiveAssembly.GetTypes(), Params);
 
                 foreach (MagicElement Instance in ListMagicCore)
@@ -312,9 +331,14 @@ namespace ProjectEternity.Core.Magic
             Dictionary<string, MagicElement> DicMagicCoreByType = new Dictionary<string, MagicElement>();
 
             string[] Files = Directory.GetFiles("Magic", "*.dll");
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 List<MagicElement> ListMagicCore = ReflectionHelper.GetObjectsFromTypes<MagicElement>(typeof(ProjectileMagicCore), ActiveAssembly.GetTypes(), Params, AttackParams);
 
                 foreach (MagicElement Instance in ListMagicCore)
@@ -331,9 +355,14 @@ namespace ProjectEternity.Core.Magic
             Dictionary<string, MagicElement> DicMagicCoreByType = new Dictionary<string, MagicElement>();
 
             string[] Files = Directory.GetFiles("Magic", "*.dll");
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 List<MagicElement> ListMagicCore = ReflectionHelper.GetObjectsFromTypes<MagicElement>(typeof(MagicElement), ActiveAssembly.GetTypes(), Params);
 
                 foreach (MagicElement Instance in ListMagicCore)
@@ -347,11 +376,20 @@ namespace ProjectEternity.Core.Magic
 
         public static Dictionary<string, MagicElement> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
         {
+            return LoadFromAssemblyFiles(ArrayFilePath, new HashSet<Assembly>(), TypeOfRequirement, Args);
+        }
+
+        public static Dictionary<string, MagicElement> LoadFromAssemblyFiles(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, Type TypeOfRequirement, params object[] Args)
+        {
             Dictionary<string, MagicElement> DicEffect = new Dictionary<string, MagicElement>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, MagicElement> ActiveEffect in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);

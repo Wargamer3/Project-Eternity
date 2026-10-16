@@ -24,11 +24,19 @@ namespace ProjectEternity
         {
             using (StreamWriter SW = new StreamWriter("Error.txt", true))
             {
-                Exception Ex = (Exception)e.ExceptionObject;
-
-                SW.WriteLine("Message :" + Ex.Message + Environment.NewLine + "StackTrace :" + Ex.StackTrace +
-                   Environment.NewLine + "Date :" + DateTime.Now.ToString());
+                WriteException(SW, (Exception)e.ExceptionObject);
                 SW.WriteLine(Environment.NewLine + "-----------------------------------------------------------------------------" + Environment.NewLine);
+            }
+        }
+
+        private static void WriteException(StreamWriter SW, Exception Ex)
+        {
+            SW.WriteLine("Message :" + Ex.Message + Environment.NewLine + "StackTrace :" + Ex.StackTrace +
+               Environment.NewLine + "Date :" + DateTime.Now.ToString());
+            if (Ex.InnerException != null)
+            {
+                SW.WriteLine("Inner:");
+                WriteException(SW, Ex.InnerException);
             }
         }
     }

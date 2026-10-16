@@ -587,7 +587,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (!IsFrozen)
             {
-                if (ShowUnits)
+                // Preview off leaves ShowUnits false, which used to freeze weather. The editor
+                // still needs rain and the day-night clock while units stay hidden.
+                if (ShowUnits || IsEditor)
                 {
                     MapEnvironment.Update(gameTime);
                 }

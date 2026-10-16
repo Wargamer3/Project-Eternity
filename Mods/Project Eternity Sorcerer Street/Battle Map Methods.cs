@@ -438,16 +438,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
 
-            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Sorcerer Street.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelSorcererStreet), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly("Mods/Project Eternity Sorcerer Street.dll");
+            if (ActiveAssembly != null)
             {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
-            }
-            DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelCardSelectionPhase), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
-            {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelSorcererStreet), this);
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+                {
+                    DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+
+                DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelCardSelectionPhase), this);
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+                {
+                    DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
 
             return DicActionPanel;

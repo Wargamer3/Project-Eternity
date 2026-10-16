@@ -62,9 +62,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             try
             {
                 Matrix Projection = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.ScissorRectangle.Width, GraphicsDevice.ScissorRectangle.Height, 0, 0, -1f);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-                Matrix projectionMatrix = HalfPixelOffset * Projection;
+                Matrix projectionMatrix = Projection;
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (GraphicsDevice.UseHalfPixelOffset)
+                {
+                    projectionMatrix = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
                 fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
 

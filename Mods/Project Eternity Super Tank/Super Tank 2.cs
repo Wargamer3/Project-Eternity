@@ -77,9 +77,8 @@ namespace ProjectEternity.GameScreens.SuperTankScreen
             Matrix view = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, 1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
-            Projection = view * ( Projection);
+            Projection = view * Projection;
 
             FlameParticle.ParticleSystem.LoadContent(Content, GraphicsDevice, Projection);
             Propulsor.ParticleSystem.LoadContent(Content, GraphicsDevice, Projection);

@@ -2,6 +2,7 @@
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units.Normal;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
@@ -63,6 +64,7 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.DicRankByMovement.Add(1, 1);
             DummyCharacter.DicRankByMovement.Add(2, 1);
             DummyCharacter.DicRankByMovement.Add(3, 1);
+            DummyCharacter.DicRankByMovement.Add(UnitStats.TerrainSeaIndex, 1);
             DummyCharacter.PostMVLevel = 1;
             DummyCharacter.Init();
 
@@ -76,17 +78,19 @@ namespace ProjectEternity.UnitTests
 
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None,
                 WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
-                new Dictionary<byte, byte>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 } });
+                new Dictionary<byte, byte>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { UnitStats.TerrainSeaIndex, 0 } });
 
             DummyAttack.PostMovementLevel = 1;
 
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
             DummyUnit.UnitStat.ListAttack.Add(DummyAttack);
             DummyUnit.CurrentAttack = DummyAttack;
+            DummyUnit.Unit3DModel = new AnimatedModel(string.Empty);
             DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
             DummyUnit.UnitStat.DicRankByMovement.Add(1, 1);
             DummyUnit.UnitStat.DicRankByMovement.Add(2, 1);
             DummyUnit.UnitStat.DicRankByMovement.Add(3, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(UnitStats.TerrainSeaIndex, 1);
 
             return DummyUnit;
         }

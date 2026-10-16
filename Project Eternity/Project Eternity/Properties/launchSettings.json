@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Project Eternity": {
+      "commandName": "Executable",
+      "executablePath": "D:/CuldceptSaga/New Game/Project Eternity/Project Eternity/bin/Debug/Project Eternity.exe",
+      "workingDirectory": "D:/CuldceptSaga/New Game/Project Eternity/Project Eternity/bin/Debug"
+    }
+  }
+}

@@ -163,7 +163,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
         [TestMethod]
         public void TestTextRainbowPlayerName()
         {
-            string TestText = "{{Text:{Font:16}{MaxWidth:100}{Rainbow}{Wave}{{Player:Self}}{{Icon:Fire}}More super long text}}{{Player:Ally}}{{Icon:Fire}} with other icon";
+            string TestText = "{{Text:{Font:16}{MaxWidth:200}{Rainbow}{Wave}{{Player:Self}}{{Icon:Fire}}More super long text}}{{Player:Ally}}{{Icon:Fire}} with other icon";
             DynamicText DynamicTextTest = new DynamicText();
             DynamicTextTest.TextMaxWidthInPixel = 300;
             DynamicTextTest.LineHeight = 20;

@@ -34,7 +34,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string[] Files = Directory.GetFiles("Mutators/Battle Map", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<Mutator> ListMutator = ReflectionHelper.GetObjectsFromBaseTypes<Mutator>(typeof(Mutator), ActiveAssembly.GetTypes(), Args);
 
                 foreach (Mutator Instance in ListMutator)
@@ -52,7 +56,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, Mutator> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
                 {
                     DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);

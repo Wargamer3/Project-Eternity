@@ -134,7 +134,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, UnlcokableItemType> ActiveEffect in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);

@@ -154,11 +154,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// </summary>
         protected override void Draw()
         {
-            Thread.Sleep(33);
+            // Sleep(33) held this viewer at about 30 fps. Rain uses the same clock, so it looked
+            // slow next to a 60 fps game. Wait out the rest of a 1/60 s frame, then simulate.
+            if (!Timer.IsRunning)
+            {
+                Timer.Start();
+            }
+
+            double elapsed = Timer.Elapsed.TotalSeconds;
+            double target = 1.0 / 60.0;
+            if (elapsed < target)
+            {
+                int remainingMs = (int)((target - elapsed) * 1000.0);
+                if (remainingMs > 1)
+                {
+                    Thread.Sleep(remainingMs - 1);
+                }
+
+                while (Timer.Elapsed.TotalSeconds < target)
+                {
+                    Thread.SpinWait(20);
+                }
+
+                elapsed = Timer.Elapsed.TotalSeconds;
+            }
+
+            Timer.Restart();
             if (ActiveMap != null && ActiveMap.IsInit)
             {
-                double elapsed = Timer.Elapsed.TotalSeconds;
-                Timer.Restart();
 
                 ActiveMap.Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
 
@@ -189,7 +212,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ActiveMap.BeginDraw(g);
             }
 
-            GraphicsDevice.SetRenderTarget(null);
+            SetRenderTargetToControl();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             if (ActiveMap.ListTileSet.Count > 0)

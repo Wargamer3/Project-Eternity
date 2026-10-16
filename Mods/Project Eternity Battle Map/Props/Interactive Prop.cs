@@ -134,7 +134,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string[] Files = Directory.GetFiles("Props/Battle Map", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<InteractiveProp> ListInteractiveProp = ReflectionHelper.GetObjectsFromBaseTypes<InteractiveProp>(typeof(InteractiveProp), ActiveAssembly.GetTypes(), Args);
 
                 foreach (InteractiveProp Instance in ListInteractiveProp)
@@ -152,7 +156,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, InteractiveProp> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
                 {
                     DicInteractiveProp.Add(ActiveUnit.Key, ActiveUnit.Value);

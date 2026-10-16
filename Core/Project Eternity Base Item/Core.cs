@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Collections.Generic;
 
 namespace ProjectEternity.Core
@@ -106,6 +107,243 @@ namespace ProjectEternity.Core
 
     public static class ReflectionHelper
     {
+        private static readonly object ResolverGate = new object();
+        private static bool ResolverReady;
+        private static Dictionary<string, string> PluginAssemblyPaths;
+
+        /// <summary>
+        /// New system to load .net 6 plugins. This is required because .net 6 uses AssemblyLoadContext instead of AppDomain.
+        /// </summary>
+        /// <param name="AssemblyPath"></param>
+        /// <returns></returns>
+        public static Assembly LoadPluginAssembly(string AssemblyPath)
+        {
+            EnsurePluginResolver();
+            string FullPath = Path.GetFullPath(AssemblyPath);
+            try
+            {
+                // LoadFile uses a separate context, so a plugin and the game end up with two copies of the same type.
+                return AssemblyLoadContext.Default.LoadFromAssemblyPath(FullPath);
+            }
+            catch (BadImageFormatException)
+            {
+                return null;
+            }
+            catch (Exception LoadError)
+            {
+                bool AlreadyLoaded = LoadError is FileLoadException || (LoadError is InvalidOperationException
+                    && LoadError.Message.IndexOf("already loaded", StringComparison.OrdinalIgnoreCase) >= 0);
+
+                if (!AlreadyLoaded)
+                {
+                    throw;
+                }
+
+                string AssemblyFileName = Path.GetFileNameWithoutExtension(FullPath);
+                Assembly[] LoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                for (int A = 0; A < LoadedAssemblies.Length; A++)
+                {
+                    if (LoadedAssemblies[A].GetName().Name == AssemblyFileName)
+                    {
+                        return LoadedAssemblies[A];
+                    }
+                }
+
+                throw;
+            }
+        }
+
+        private static void EnsurePluginResolver()
+        {
+            if (ResolverReady)
+            {
+                return;
+            }
+
+            lock (ResolverGate)
+            {
+                if (ResolverReady)
+                {
+                    return;
+                }
+
+                AssemblyLoadContext.Default.Resolving += ResolvePluginDependency;
+                ResolverReady = true;
+            }
+        }
+
+        private static Assembly ResolvePluginDependency(AssemblyLoadContext Context, AssemblyName Name)
+        {
+            if (Name.Name == null)
+            {
+                return null;
+            }
+
+            string AssemblyPath = FindPluginAssembly(Name.Name);
+            if (AssemblyPath == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return Context.LoadFromAssemblyPath(AssemblyPath);
+            }
+            catch (FileLoadException)
+            {
+                return FindLoadedAssembly(Name.Name);
+            }
+            catch (BadImageFormatException)
+            {
+                return null;
+            }
+        }
+
+        private static Assembly FindLoadedAssembly(string AssemblyName)
+        {
+            Assembly[] LoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int A = 0; A < LoadedAssemblies.Length; A++)
+            {
+                if (LoadedAssemblies[A].GetName().Name == AssemblyName)
+                {
+                    return LoadedAssemblies[A];
+                }
+            }
+
+            return null;
+        }
+
+        private static string FindPluginAssembly(string AssemblyName)
+        {
+            Dictionary<string, string> Paths = PluginAssemblyPaths;
+            if (Paths == null)
+            {
+                Paths = IndexPluginAssemblies();
+            }
+
+            string AssemblyPath;
+            if (!Paths.TryGetValue(AssemblyName, out AssemblyPath))
+            {
+                return null;
+            }
+
+            return AssemblyPath;
+        }
+
+        private static Dictionary<string, string> IndexPluginAssemblies()
+        {
+            lock (ResolverGate)
+            {
+                if (PluginAssemblyPaths != null)
+                {
+                    return PluginAssemblyPaths;
+                }
+
+                Dictionary<string, string> Paths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                string BaseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+                string[] Files = Directory.GetFiles(BaseDir, "*.dll", SearchOption.AllDirectories);
+                for (int F = 0; F < Files.Length; F++)
+                {
+                    string Name = Path.GetFileNameWithoutExtension(Files[F]);
+                    string Existing;
+                    if (!Paths.TryGetValue(Name, out Existing))
+                    {
+                        Paths[Name] = Files[F];
+                        continue;
+                    }
+
+                    bool ExistingAtRoot = string.Equals(Path.GetDirectoryName(Existing), BaseDir, StringComparison.OrdinalIgnoreCase);
+                    bool CandidateAtRoot = string.Equals(Path.GetDirectoryName(Files[F]), BaseDir, StringComparison.OrdinalIgnoreCase);
+                    if (ExistingAtRoot && !CandidateAtRoot)
+                    {
+                        Paths[Name] = Files[F];
+                    }
+                    else if (CandidateAtRoot == ExistingAtRoot && Files[F].Length < Existing.Length)
+                    {
+                        Paths[Name] = Files[F];
+                    }
+                }
+
+                PluginAssemblyPaths = Paths;
+                return Paths;
+            }
+        }
+
+        public static bool TrackPluginAssembly(HashSet<Assembly> SeenAssemblies, Assembly ActiveAssembly)
+        {
+            if (ActiveAssembly == null)
+            {
+                return false;
+            }
+
+            return SeenAssemblies.Add(ActiveAssembly);
+        }
+
+        public static void ForEachUnseenAssembly(HashSet<Assembly> SeenAssemblies, Action<Assembly> VisitAssembly)
+        {
+            Assembly[] LoadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int A = 0; A < LoadedAssemblies.Length; A++)
+            {
+                Assembly ActiveAssembly = LoadedAssemblies[A];
+                if (ActiveAssembly == null || ActiveAssembly.IsDynamic)
+                {
+                    continue;
+                }
+
+                // Mod and External assemblies are already loaded because the game references them.
+                // Their types take constructor arguments and are created by their own factories.
+                // This pass only picks up plugins compiled into Core, such as Change Attack Speed.
+                string Location;
+                try
+                {
+                    Location = ActiveAssembly.Location;
+                }
+                catch (NotSupportedException)
+                {
+                    continue;
+                }
+
+                if (Location.IndexOf("\\Core\\", StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                if (!SeenAssemblies.Add(ActiveAssembly))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    VisitAssembly(ActiveAssembly);
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                }
+                catch (Exception)
+                {
+                    if (Location.IndexOf("\\Project Eternity\\bin\\", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private static bool TryCreateInstance<T>(Type ActiveType, object[] Args, out T Created)
+        {
+            try
+            {
+                Created = (T)Activator.CreateInstance(ActiveType, Args);
+                return true;
+            }
+            catch (MissingMethodException)
+            {
+                Created = default(T);
+                return false;
+            }
+        }
+
         public static List<T> GetObjectsFromBaseTypes<T>(Type TypeOfT, Type[] ArrayTypes, params object[] Args)
         {
             List<T> ListObject = new List<T>();
@@ -128,8 +366,11 @@ namespace ProjectEternity.Core
 
                 if (InstanceIsBaseObject)
                 {
-                    T NewObject = (T)Activator.CreateInstance(ActiveType, Args);
-                    ListObject.Add(NewObject);
+                    T NewObject;
+                    if (TryCreateInstance(ActiveType, Args, out NewObject))
+                    {
+                        ListObject.Add(NewObject);
+                    }
                 }
             }
             return ListObject;
@@ -158,8 +399,11 @@ namespace ProjectEternity.Core
 
                     if (InstanceIsBaseObject)
                     {
-                        T NewObject = (T)Activator.CreateInstance(ActiveType, Args);
-                        ListObject.Add(NewObject);
+                        T NewObject;
+                        if (TryCreateInstance(ActiveType, Args, out NewObject))
+                        {
+                            ListObject.Add(NewObject);
+                        }
                     }
                 }
             }
@@ -180,8 +424,11 @@ namespace ProjectEternity.Core
 
                 if (ObjectType == TypeOfT)
                 {
-                    T NewObject = (T)Activator.CreateInstance(ActiveType, Args);
-                    ListObject.Add(NewObject);
+                    T NewObject;
+                    if (TryCreateInstance(ActiveType, Args, out NewObject))
+                    {
+                        ListObject.Add(NewObject);
+                    }
                 }
             }
             return ListObject;
@@ -200,10 +447,15 @@ namespace ProjectEternity.Core
         public static Dictionary<string, List<T>> GetContentByName<T>(Type TypeOfHolder, string[] ArrayFilePath, params object[] Args)
         {
             Dictionary<string, List<T>> DicGetContentByName = new Dictionary<string, List<T>>();
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = LoadPluginAssembly(ArrayFilePath[F]);
+                if (!TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 List<Holder<T>> ListHolder = GetObjectsFromBaseTypes<Holder<T>>(TypeOfHolder, ActiveAssembly.GetTypes());
 
                 foreach (var NewHolder in ListHolder)

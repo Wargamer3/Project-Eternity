@@ -114,7 +114,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public virtual void DrawEditor(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight, bool IsInEditMode, bool ShowBorderBoxes, bool ShowNextPositions)
         {
-            GraphicsDevice.SetRenderTarget(null);
+            // The viewer binds the control swap chain before this. Setting the target to null
+            // draws the composite into the hidden back buffer.
             GraphicsDevice.Clear(Color.White);
 
             if (ActiveAnimationBackground != null)

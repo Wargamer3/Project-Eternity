@@ -799,7 +799,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
             string[] Files = Directory.GetFiles("Scripts", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                System.Reflection.Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
                 List<MapCondition> ListMapCondition = ReflectionHelper.GetObjectsFromBaseTypes<MapCondition>(typeof(FightingZoneCondition), ActiveAssembly.GetTypes());
 
                 foreach (MapCondition Instance in ListMapCondition)
@@ -811,7 +811,7 @@ namespace ProjectEternity.Editors.TripleThunderEditor
             Files = Directory.GetFiles("Scripts", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                System.Reflection.Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
                 List<MapTrigger> ListMapTrigger = ReflectionHelper.GetObjectsFromBaseTypes<MapTrigger>(typeof(FightingZoneTrigger), ActiveAssembly.GetTypes());
 
                 foreach (MapTrigger Instance in ListMapTrigger)

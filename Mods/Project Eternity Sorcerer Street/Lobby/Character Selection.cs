@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using FMOD;
+using ProjectEternity.GameScreens.UI;
+using SharpGLTF.Transforms;
+using System;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -132,6 +133,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             UpdateCharacterSelection();
             UpdateCharacterSkinSelection();
+
+            PlayerCharacterInfo CharacterToDraw = ActivePlayer.Inventory.Character;
+            if (CharacterToDraw.Character.FbxModel != null)
+            {
+                CharacterToDraw.Character.FbxModel.Update(gameTime);
+            }
+            else if (CharacterToDraw.Character.GLTFModel != null)
+            {
+                CharacterToDraw.Character.GLTFModel.Update(gameTime);
+            }
 
             if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape))
             {
@@ -472,13 +483,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (g.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
             g.End();
             g.Begin();
 
-            if (CharacterToDraw.Character.Unit3DModel != null)
+            if (CharacterToDraw.Character.FbxModel != null)
+            {
+                g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                // This FBX is already portrait-sized and Y-up. Scale(-1) turns it upright and reverses winding so CullCounterClockwise keeps the outside.
+                Matrix ModelView = Matrix.CreateRotationZ(MathHelper.ToRadians(0)) * Matrix.CreateRotationY(MathHelper.ToRadians(0)) * Matrix.CreateScale(-1f) * Matrix.CreateTranslation(1500, 750, 0);
+                CharacterToDraw.Character.FbxModel.Draw(ModelView, Projection, Matrix.Identity);
+            }
+            else if (CharacterToDraw.Character.GLTFModel != null)
+            {
+                g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                // The shared projection keeps the old models. Its near plane is positive Z, which put this face behind the robe.
+                Matrix ModelProjection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, -300, 300);
+                if (g.GraphicsDevice.UseHalfPixelOffset)
+                {
+                    ModelProjection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * ModelProjection;
+                }
+
+                Matrix ModelView = Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(180)) * Matrix.CreateScale(8.5f) * Matrix.CreateTranslation(1500, 750, 0);
+                CharacterToDraw.Character.GLTFModel.Draw(ModelView, ModelProjection, Matrix.Identity);
+            }
+            else if (CharacterToDraw.Character.Unit3DModel != null)
             {
                 g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;

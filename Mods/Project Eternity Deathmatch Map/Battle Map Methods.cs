@@ -743,11 +743,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
 
-            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Deathmatch Map.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelDeathmatch), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly("Mods/Project Eternity Deathmatch Map.dll");
+            if (ActiveAssembly != null)
             {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelDeathmatch), this);
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+                {
+                    DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
 
             Dictionary<string, BattleMapActionPanel> DicActionPanelUnit = BattleMapActionPanel.LoadFromAssemblyFiles(Directory.GetFiles("Units/Deathmatch Map", "*.dll"), typeof(ActionPanelDeathmatch), this);

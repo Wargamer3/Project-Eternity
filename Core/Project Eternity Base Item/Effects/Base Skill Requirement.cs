@@ -70,11 +70,25 @@ namespace ProjectEternity.Core.Item
 
         public static Dictionary<string, BaseSkillRequirement> LoadAllRequirements()
         {
-            Dictionary<string, BaseSkillRequirement> DicRequirement = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(BaseSkillRequirement));
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
+            Dictionary<string, BaseSkillRequirement> DicRequirement = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), SeenAssemblies, typeof(BaseSkillRequirement));
+
+            ReflectionHelper.ForEachUnseenAssembly(SeenAssemblies, delegate (Assembly ActiveAssembly)
+            {
+                foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in LoadFromAssembly(ActiveAssembly, typeof(BaseSkillRequirement)))
+                {
+                    DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+            });
 
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in LoadFromAssembly(ActiveAssembly, typeof(BaseSkillRequirement)))
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
@@ -99,11 +113,20 @@ namespace ProjectEternity.Core.Item
 
         public static Dictionary<string, BaseSkillRequirement> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
         {
+            return LoadFromAssemblyFiles(ArrayFilePath, new HashSet<Assembly>(), TypeOfRequirement, Args);
+        }
+
+        public static Dictionary<string, BaseSkillRequirement> LoadFromAssemblyFiles(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, Type TypeOfRequirement, params object[] Args)
+        {
             Dictionary<string, BaseSkillRequirement> DicRequirement = new Dictionary<string, BaseSkillRequirement>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 foreach(KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);

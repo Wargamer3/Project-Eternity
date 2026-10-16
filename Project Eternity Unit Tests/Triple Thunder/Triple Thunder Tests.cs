@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
@@ -18,8 +19,6 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            DummyMap.DicAutomaticSkillTarget.Clear();
-
             AttackContext = new TripleThunderAttackContext();
             RobotContext = new TripleThunderRobotContext();
             DummyMap = new FightingZone(RobotContext, AttackContext);
@@ -59,13 +58,16 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
         private RobotAnimation CreateDummyRobot()
         {
-            ComboWeapon DummyWeapon = new ComboWeapon(5, false, 1);
+            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<WeaponBase>());
 
-            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<WeaponBase>() { DummyWeapon });
+            ComboWeapon DummyWeapon = new ComboWeapon(5, false, 1);
+            typeof(WeaponBase).GetField("WeaponPath").SetValue(DummyWeapon, "Dummy Weapon");
+            NewRobotAnimation.PrimaryWeapons.AddWeaponToStash(DummyWeapon);
+            NewRobotAnimation.PrimaryWeapons.UseWeapon(DummyWeapon);
 
             NewRobotAnimation.MaxHP = 100;
             NewRobotAnimation.MaxEN = 50;
-            
+
             return NewRobotAnimation;
         }
 
@@ -86,6 +88,8 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
             AttackContext.Owner = CreateDummyRobot();
             AttackContext.OwnerProjectile = new HitscanBox(0, new ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
+            LaunchAttackEffect Launch = (LaunchAttackEffect)DummySkill.CurrentSkillLevel.ListActivation[0].ListEffect[0];
+            typeof(LaunchAttackEffect).GetField("WeaponToUse", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Launch, AttackContext.Owner.PrimaryWeapons.ActiveWeapons[0]);
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
         }
@@ -208,6 +212,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
             RobotContext.Target = CreateDummyRobot();
             RobotContext.TargetWeapon = RobotContext.Target.PrimaryWeapons.ActiveWeapons[0];
+            typeof(LaunchAttackEffect).GetField("WeaponToUse", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(DummyBulletInitSkillEffect, RobotContext.TargetWeapon);
 
             List<BaseAutomaticSkill> ListSkill = new List<BaseAutomaticSkill>() { DummyInitShootSkill1, DummyInitShootSkill2 };
             for (int i = 0; i < ListSkill.Count; i++)

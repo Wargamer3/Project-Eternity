@@ -262,6 +262,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D SpriteShop;
         public string Model3DPath;
         public AnimatedModelTransparent Unit3DModel;
+        public GltfModel GLTFModel;
+        public FbxModel FbxModel;
 
         public string Tags;//Used to categorize Characters
 
@@ -481,8 +483,50 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Unit3DModel.ModelToDraw.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Walking", "Walking", Content);
                     Unit3DModel.ModelToDraw.AddAnimation("Sorcerer Street/Models/Characters/" + ModelFolder + "Idle", "Idle", Content);
                     Unit3DModel.DisableLights();
+
+                    string FolderName = new DirectoryInfo(Path.GetDirectoryName("Sorcerer Street/Models/Characters/" + Model3DPath)).Name;
+                    string ModelDirectory = Path.Combine("Content/Sorcerer Street/Models/Characters/", ModelFolder);
+                    string RuntimeFbx = FindRuntimeFbx(ModelDirectory);
+                    if (RuntimeFbx != null)
+                    {
+                        FbxModel = new FbxModel(GameScreen.GraphicsDevice, RuntimeFbx);
+                    }
+                    else if (File.Exists(Path.Combine(ModelDirectory, FolderName) + ".glb"))
+                    {
+                        GLTFModel = new GltfModel(GameScreen.GraphicsDevice, Path.Combine(ModelDirectory, FolderName) + ".glb");
+                    }
                 }
             }
+        }
+
+        private static string FindRuntimeFbx(string ModelDirectory)
+        {
+            if (!Directory.Exists(ModelDirectory))
+            {
+                return null;
+            }
+
+            string Chosen = null;
+            DateTime ChosenTime = DateTime.MinValue;
+            foreach (string FilePath in Directory.GetFiles(ModelDirectory, "*.fbx"))
+            {
+                string FileName = Path.GetFileName(FilePath);
+                if (FileName.Equals("Default.fbx", StringComparison.OrdinalIgnoreCase)
+                    || FileName.Equals("Idle.fbx", StringComparison.OrdinalIgnoreCase)
+                    || FileName.Equals("Walking.fbx", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                DateTime Written = File.GetLastWriteTimeUtc(FilePath);
+                if (Chosen == null || Written > ChosenTime)
+                {
+                    Chosen = FilePath;
+                    ChosenTime = Written;
+                }
+            }
+
+            return Chosen;
         }
     }
 }

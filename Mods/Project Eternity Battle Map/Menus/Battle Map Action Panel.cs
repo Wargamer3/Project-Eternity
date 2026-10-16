@@ -147,7 +147,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);

@@ -80,9 +80,13 @@ namespace ProjectEternity.Editors.AdventureEditor
                 0,
                 1);
 
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
-            PolygonEffect.Projection = HalfPixelOffset * Projection;
+            PolygonEffect.Projection = Projection;
 
             OldWidth = ClientSize.Width;
             OldHeight = ClientSize.Height;

@@ -485,9 +485,12 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-            Matrix projectionMatrix = HalfPixelOffset * Projection;
+            Matrix projectionMatrix = Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (BattleMapViewer.GraphicsDevice.UseHalfPixelOffset)
+            {
+                projectionMatrix = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
             ActiveMap.fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
 

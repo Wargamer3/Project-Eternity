@@ -93,8 +93,8 @@ namespace ProjectEternity.GUI
                 bool EditorIsBaseEditor = true;
                 for (int F = 0; F < Files.Count(); F++)
                 {//Load a dll.
-                    Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
-                    if (ass.GetName().Name == "Project Eternity Base Editor")
+                    Assembly ass = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                    if (ass == null || ass.GetName().Name == "Project Eternity Base Editor")
                     {
                         continue;
                     }
@@ -175,7 +175,11 @@ namespace ProjectEternity.GUI
                 bool EditorIsBaseEditor = true;
                 for (int F = 0; F < Files.Count(); F++)
                 {//Load a dll.
-                    Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                    Assembly ass = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                    if (ass == null)
+                    {
+                        continue;
+                    }
                     Type[] types = null;
                     //Get every classes in it.
                     try

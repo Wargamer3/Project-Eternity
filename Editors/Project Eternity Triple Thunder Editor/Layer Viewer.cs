@@ -120,9 +120,13 @@ namespace ProjectEternity.Editors.AnimationEditor
                 0,
                 1);
 
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
-            PolygonEffect.Projection = HalfPixelOffset * Projection;
+            PolygonEffect.Projection = Projection;
 
             if (ActiveFightingZone.Background != null)
             {
@@ -167,7 +171,8 @@ namespace ProjectEternity.Editors.AnimationEditor
                 }
 
                 g.End();
-                GraphicsDevice.SetRenderTarget(null);
+                // Prop BeginDraw leaves a layer target bound. Null would draw the zone into the hidden back buffer.
+                SetRenderTargetToControl();
 
                 if (ActiveFightingZone.Background != null)
                 {

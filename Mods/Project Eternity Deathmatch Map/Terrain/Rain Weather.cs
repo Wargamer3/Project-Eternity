@@ -97,16 +97,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Init()
         {
-            shadowOverlay = new ShadowOverlay(Map);
             sprRain = Map.Content.Load<Texture2D>("Rain Line");
-            DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
-
             SpawnOffset = new Vector2(-100, -100);
             SpawnOffsetRandom = new Vector2(Constants.Width + 100, 50);
-
             ParticlesPerSeconds = 300;
-
             TimeBetweenEachParticle = 1 / ParticlesPerSeconds;
+
+            if (Map.IsEditor)
+            {
+                // Idle repaints this viewer continuously. Water.fx, the sky cube, ripples, and
+                // shadows are full-screen passes, so a large viewer falls to a couple of frames
+                // per second. Editor tiles use the plain sprite path. Rain streaks still draw.
+                Reset();
+                return;
+            }
+
+            shadowOverlay = new ShadowOverlay(Map);
+            DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
 
             //Wet weather
             RippleTexture = Map.Content.Load<Texture2D>("3D/Textures/RippleNormal");
@@ -127,11 +134,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Reset()
         {
+            if (Map.IsEditor)
+            {
+                DicTile2DByTileset.Clear();
+                DicTile2DByLayerByTileset.Clear();
+                for (int L = 0; L < 1; L++)
+                {
+                    CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
+                }
+
+                return;
+            }
+
             GameScreen.GraphicsDevice.SetRenderTarget(null);
             PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
 
+            // The shared editor device stays 640x480. Resizing the viewer recreates MapRenderTarget
+            // and must drive this projection, or the rain shader stretches those 640 pixels across the control.
             int width = pp.BackBufferWidth;
             int height = pp.BackBufferHeight;
+            if (Map.MapRenderTarget != null)
+            {
+                width = Map.MapRenderTarget.Width;
+                height = Map.MapRenderTarget.Height;
+            }
+
+            width = Math.Max(width, 1);
+            height = Math.Max(height, 1);
 
             SurfaceFormat format = pp.BackBufferFormat;
 
@@ -144,7 +173,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Matrix View = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, -1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
             LightningManager = new WeatherLightningManager(Map.Content, Projection);
 
@@ -153,7 +181,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
             DisplacementEffect.Parameters["TextureSize"].SetValue(new Vector2(1f / width, 1f / height));
 
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
             RippleEffect.Parameters["View"].SetValue(View);
             RippleEffect.Parameters["Projection"].SetValue(Projection);
             RippleEffect.Parameters["World"].SetValue(Matrix.Identity);
@@ -202,12 +234,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             IntensityManager.Update(gameTime);
             RainSizeManager.Update(gameTime);
             WindSpeedManager.Update(gameTime);
-            LightningManager.Intensity = IntensityManager.Intensity;
-            LightningManager.Update(gameTime);
+            if (LightningManager != null)
+            {
+                LightningManager.Intensity = IntensityManager.Intensity;
+                LightningManager.Update(gameTime);
+            }
 
-            SpawnOffset = new Vector2(-WindSpeedManager.WindSpeed * Constants.Width / 3 / WeatherWindSpeedManager.MaxWindSpeed + Constants.Width / 2,
+            float SpawnWidth = Constants.Width;
+            if (Map.IsEditor && Map.MapRenderTarget != null)
+            {
+                SpawnWidth = Math.Max(Map.MapRenderTarget.Width, 1);
+            }
+
+            SpawnOffset = new Vector2(-WindSpeedManager.WindSpeed * SpawnWidth / 3 / WeatherWindSpeedManager.MaxWindSpeed + SpawnWidth / 2,
                 -150 + 130 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed));
-            SpawnOffsetRandom = new Vector2(Constants.Width / 2 + 100 + 50 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed), 50);
+            SpawnOffsetRandom = new Vector2(SpawnWidth / 2 + 100 + 50 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed), 50);
 
 
             ParticlesPerSeconds = IntensityManager.Intensity;
@@ -334,10 +375,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void DrawRipples(CustomSpriteBatch g)
         {
-            PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
-
-            int width = pp.BackBufferWidth;
-            int height = pp.BackBufferHeight;
+            int width = RippleRenderTarget.Width;
+            int height = RippleRenderTarget.Height;
 
             RippleEffect.Parameters["Time"].SetValue((float)Time);
             g.GraphicsDevice.SetRenderTarget(RippleRenderTarget);
@@ -350,6 +389,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            if (Map.IsEditor)
+            {
+                g.End();
+                g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
+                g.GraphicsDevice.Clear(Color.White);
+
+                foreach (Tile2DHolder ActiveTileset in DicTile2DByTileset.Values)
+                {
+                    ActiveTileset.Draw(g, Map, 1f);
+                }
+
+                g.Begin();
+                return;
+            }
+
             g.End();
 
             shadowOverlay.BeginDraw(g);
@@ -396,6 +450,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            if (Map.IsEditor)
+            {
+                g.Draw(Map.MapRenderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+                return;
+            }
+
+            // Displacement replaces SpriteBatch's viewport matrix. Match the surface we are about to draw on.
+            int width = Math.Max(g.GraphicsDevice.Viewport.Width, 1);
+            int height = Math.Max(g.GraphicsDevice.Viewport.Height, 1);
+            DisplacementEffect.Parameters["Projection"].SetValue(Matrix.CreateOrthographicOffCenter(0, width, height, 0, 0, -1));
+
             g.End();
 
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, DisplacementEffect);

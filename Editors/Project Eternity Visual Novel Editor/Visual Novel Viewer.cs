@@ -132,7 +132,8 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                 ActiveVisualNovel.Update(new GameTime());
                 ActiveVisualNovel.BeginDraw(g);
 
-                GraphicsDevice.SetRenderTarget(null);
+                // BeginDraw leaves a layer target bound. Null would draw the scene into the hidden back buffer.
+                SetRenderTargetToControl();
                 g.Begin(SpriteSortMode.Deferred, null);
 
                 // Clear to the default control background color.

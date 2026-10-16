@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Database.BattleMap;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
@@ -19,7 +20,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             string[] Files = Directory.GetFiles("Mods", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ass = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ass == null)
+                {
+                    continue;
+                }
                 //Get every classes in it.
                 Type[] types = ass.GetTypes();
                 for (int t = 0; t < types.Length; t++)

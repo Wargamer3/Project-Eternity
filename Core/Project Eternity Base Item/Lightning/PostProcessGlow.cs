@@ -24,8 +24,11 @@ namespace ProjectEternity.Core.LightningSystem
             this.height = height;
             PresentationParameters pp = graphicsDevice.PresentationParameters;
 
-            downsampleRT = new RenderTarget2D(graphicsDevice, width/4, height/4, false, SurfaceFormat.Color, pp.DepthStencilFormat, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            temporaryRT = new RenderTarget2D(graphicsDevice, width / 4, height / 4, false, SurfaceFormat.Color, pp.DepthStencilFormat, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            int downsampleWidth = Math.Max(width / 4, 1);
+            int downsampleHeight = Math.Max(height / 4, 1);
+
+            downsampleRT = new RenderTarget2D(graphicsDevice, downsampleWidth, downsampleHeight, false, SurfaceFormat.Color, pp.DepthStencilFormat, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            temporaryRT = new RenderTarget2D(graphicsDevice, downsampleWidth, downsampleHeight, false, SurfaceFormat.Color, pp.DepthStencilFormat, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
             combineRT = new RenderTarget2D(graphicsDevice, width, height, false, SurfaceFormat.Color, pp.DepthStencilFormat, pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
 
             glowEffect = contentManager.Load<Effect>("Shaders/LightningGlow");

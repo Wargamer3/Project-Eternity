@@ -137,9 +137,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Matrix View = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
             basicEffect.World = Matrix.Identity;
             basicEffect.View = View;
@@ -523,8 +525,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void DrawModel(Model Model, Matrix World, Matrix View)
         {
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
             GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

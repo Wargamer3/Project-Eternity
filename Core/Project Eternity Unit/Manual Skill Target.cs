@@ -83,11 +83,25 @@ namespace ProjectEternity.Core.Skill
 
         public static Dictionary<string, ManualSkillTarget> LoadAllTargetTypes()
         {
-            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = LoadFromAssemblyFilesFromBaseType(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(ManualSkillTarget));
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = LoadFromAssemblyFilesFromBaseType(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), SeenAssemblies, typeof(ManualSkillTarget));
+
+            ReflectionHelper.ForEachUnseenAssembly(SeenAssemblies, delegate (Assembly ActiveAssembly)
+            {
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssemblyFilesFromBaseType(ActiveAssembly, typeof(ManualSkillTarget)))
+                {
+                    DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
+                }
+            });
 
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssemblyFilesFromBaseType(ActiveAssembly, typeof(ManualSkillTarget)))
                 {
                     DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
@@ -115,11 +129,20 @@ namespace ProjectEternity.Core.Skill
 
         public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
         {
+            return LoadFromAssemblyFiles(ArrayFilePath, new HashSet<Assembly>(), Args);
+        }
+
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFiles(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, params object[] Args)
+        {
             Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssembly(ActiveAssembly, Args))
                 {
                     DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
@@ -144,11 +167,20 @@ namespace ProjectEternity.Core.Skill
 
         public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFilesFromBaseType(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
         {
+            return LoadFromAssemblyFilesFromBaseType(ArrayFilePath, new HashSet<Assembly>(), TypeOfRequirement, Args);
+        }
+
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFilesFromBaseType(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, Type TypeOfRequirement, params object[] Args)
+        {
             Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssemblyFilesFromBaseType(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);

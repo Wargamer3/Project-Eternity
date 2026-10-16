@@ -48,7 +48,11 @@ namespace ProjectEternity.Core.Editor
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<string, T> ActiveExtension in LoadFromAssembly<T>(ActiveAssembly, TypeOfExtension, Args))
                 {
                     DicExtension.Add(ActiveExtension.Key, ActiveExtension.Value);

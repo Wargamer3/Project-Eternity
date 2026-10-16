@@ -365,15 +365,29 @@ namespace ProjectEternity.Core.Units
         public static Dictionary<string, Unit> LoadAllUnits()
         {
             Dictionary<string, Unit> DicUnitType = new Dictionary<string, Unit>();
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
 
-            foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssemblyFiles(Directory.GetFiles("Units", "*.dll", SearchOption.AllDirectories)))
+            foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssemblyFiles(Directory.GetFiles("Units", "*.dll", SearchOption.AllDirectories), SeenAssemblies))
             {
                 DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
             }
 
+            ReflectionHelper.ForEachUnseenAssembly(SeenAssemblies, delegate (Assembly ActiveAssembly)
+            {
+                foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssembly(ActiveAssembly))
+                {
+                    DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
+                }
+            });
+
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Units", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssembly(ActiveAssembly, typeof(Unit)))
                 {
                     DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
@@ -398,11 +412,21 @@ namespace ProjectEternity.Core.Units
 
         public static Dictionary<string, Unit> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
         {
+            return LoadFromAssemblyFiles(ArrayFilePath, new HashSet<Assembly>(), Args);
+        }
+
+        public static Dictionary<string, Unit> LoadFromAssemblyFiles(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, params object[] Args)
+        {
             Dictionary<string, Unit> DicUnitType = new Dictionary<string, Unit>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
                 {
                     DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);

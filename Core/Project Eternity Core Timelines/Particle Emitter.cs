@@ -59,9 +59,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             Matrix view = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, 800, 600, 0, 0, 1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice != null && GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
-            Projection = view * (HalfPixelOffset * Projection);
+            Projection = view * Projection;
 
             Core.ParticleSystem.ParticleSettings ParticleSettings = new Core.ParticleSystem.ParticleSettings();
             ParticleSettings.TextureName = BR.ReadString();
@@ -172,9 +176,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 Matrix view = Matrix.Identity;
 
                 Matrix Projection = Matrix.CreateOrthographicOffCenter(0, ActiveLayer.renderTarget.Width, ActiveLayer.renderTarget.Height, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (GameScreen.GraphicsDevice != null && GameScreen.GraphicsDevice.UseHalfPixelOffset)
+                {
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
-                Projection = view * (HalfPixelOffset * Projection);
+                Projection = view * Projection;
 
                 Core.ParticleSystem.ParticleSettings ParticleSettings = new Core.ParticleSystem.ParticleSettings();
                 ParticleSettings.TextureName = SpriteName;
@@ -309,9 +317,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 Matrix view = Matrix.Identity;
 
                 Projection = Matrix.CreateOrthographicOffCenter(0, RenderWidth, RenderHeight, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (g.GraphicsDevice.UseHalfPixelOffset)
+                {
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
-                Projection = view * (HalfPixelOffset * Projection);
+                Projection = view * Projection;
             }
         }
 

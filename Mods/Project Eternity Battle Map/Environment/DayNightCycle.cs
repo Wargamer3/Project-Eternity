@@ -89,7 +89,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, g.GraphicsDevice.PresentationParameters.BackBufferWidth, g.GraphicsDevice.PresentationParameters.BackBufferHeight), Owner.TimeOfDayColor);
+            // The editor device back buffer stays 640x480. The overlay is drawn on the control
+            // viewport, which grows when the viewer is resized. In game the two sizes match.
+            int width = Math.Max(g.GraphicsDevice.Viewport.Width, 1);
+            int height = Math.Max(g.GraphicsDevice.Viewport.Height, 1);
+            g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, width, height), Owner.TimeOfDayColor);
         }
 
         public void EndDraw(CustomSpriteBatch g)
@@ -119,9 +123,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PolygonEffect.World = Matrix.Identity;
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, 1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
-            PolygonEffect.Projection = HalfPixelOffset * Projection;
+            PolygonEffect.Projection = Projection;
             renderTarget = new RenderTarget2D(
                 GameScreen.GraphicsDevice,
                 GameScreen.GraphicsDevice.PresentationParameters.BackBufferWidth,

@@ -1,246 +1,73 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4E01D29C-40A8-47E3-8F62-124919EE06C6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjectEternity.Editors.AttackEditor</RootNamespace>
     <AssemblyName>Project Eternity Attack Editor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\$(Configuration)\Editors\Deathmatch\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\Deathmatch\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\Deathmatch\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Advanced Settings Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Advanced Settings Editor.Designer.cs">
-      <DependentUpon>Advanced Settings Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Attack Formula Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Attack Formula Editor.Designer.cs">
-      <DependentUpon>Attack Formula Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="All Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="All Editor.Designer.cs">
-      <DependentUpon>All Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dash Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dash Editor.Designer.cs">
-      <DependentUpon>Dash Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Destructible Tile Type Picker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Destructible Tile Type Picker.Designer.cs">
-      <DependentUpon>Destructible Tile Type Picker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Destructible Tiles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Destructible Tiles.Designer.cs">
-      <DependentUpon>Destructible Tiles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MAP Attack Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MAP Attack Editor.Designer.cs">
-      <DependentUpon>MAP Attack Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Knockback Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Knockback Editor.Designer.cs">
-      <DependentUpon>Knockback Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PER Attack Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PER Attack Editor.Designer.cs">
-      <DependentUpon>PER Attack Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Project Eternity Attack Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Project Eternity Attack Editor.Designer.cs">
-      <DependentUpon>Project Eternity Attack Editor.cs</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj" />
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj" />
+    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj" />
+    <ProjectReference Include="..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Advanced Settings Editor.cs" />
+    <Compile Include="Advanced Settings Editor.Designer.cs" DependentUpon="Advanced Settings Editor.cs" />
+    <Compile Include="Attack Formula Editor.cs" />
+    <Compile Include="Attack Formula Editor.Designer.cs" DependentUpon="Attack Formula Editor.cs" />
+    <Compile Include="All Editor.cs" />
+    <Compile Include="All Editor.Designer.cs" DependentUpon="All Editor.cs" />
+    <Compile Include="Dash Editor.cs" />
+    <Compile Include="Dash Editor.Designer.cs" DependentUpon="Dash Editor.cs" />
+    <Compile Include="Destructible Tile Type Picker.cs" />
+    <Compile Include="Destructible Tile Type Picker.Designer.cs" DependentUpon="Destructible Tile Type Picker.cs" />
+    <Compile Include="Destructible Tiles.cs" />
+    <Compile Include="Destructible Tiles.Designer.cs" DependentUpon="Destructible Tiles.cs" />
+    <Compile Include="MAP Attack Editor.cs" />
+    <Compile Include="MAP Attack Editor.Designer.cs" DependentUpon="MAP Attack Editor.cs" />
+    <Compile Include="Knockback Editor.cs" />
+    <Compile Include="Knockback Editor.Designer.cs" DependentUpon="Knockback Editor.cs" />
+    <Compile Include="PER Attack Editor.cs" />
+    <Compile Include="PER Attack Editor.Designer.cs" DependentUpon="PER Attack Editor.cs" />
+    <Compile Include="Project Eternity Attack Editor.cs" />
+    <Compile Include="Project Eternity Attack Editor.Designer.cs" DependentUpon="Project Eternity Attack Editor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quote Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Quote Editor.Designer.cs">
-      <DependentUpon>Quote Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Skill Chain Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Skill Chain Editor.Designer.cs">
-      <DependentUpon>Skill Chain Editor.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Advanced Settings Editor.resx">
-      <DependentUpon>Advanced Settings Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Attack Formula Editor.resx">
-      <DependentUpon>Attack Formula Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="All Editor.resx">
-      <DependentUpon>All Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dash Editor.resx">
-      <DependentUpon>Dash Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Destructible Tile Type Picker.resx">
-      <DependentUpon>Destructible Tile Type Picker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Destructible Tiles.resx">
-      <DependentUpon>Destructible Tiles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MAP Attack Editor.resx">
-      <DependentUpon>MAP Attack Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Knockback Editor.resx">
-      <DependentUpon>Knockback Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PER Attack Editor.resx">
-      <DependentUpon>PER Attack Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Project Eternity Attack Editor.resx">
-      <DependentUpon>Project Eternity Attack Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="Quote Editor.resx">
-      <DependentUpon>Quote Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Skill Chain Editor.resx">
-      <DependentUpon>Skill Chain Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <Compile Include="Quote Editor.cs" />
+    <Compile Include="Quote Editor.Designer.cs" DependentUpon="Quote Editor.cs" />
+    <Compile Include="Skill Chain Editor.cs" />
+    <Compile Include="Skill Chain Editor.Designer.cs" DependentUpon="Skill Chain Editor.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" DependentUpon="Resources.resx" />
+    <Compile Include="Properties\Settings.Designer.cs" DependentUpon="Settings.settings" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
-      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
-      <Name>Project Eternity Animation Screen</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
-      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
-      <Name>Project Eternity Base Item</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
-      <Project>{53A1885C-107D-49FD-BA51-50EF05D3CEFE}</Project>
-      <Name>Project Eternity Editor Helper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
-      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
-      <Name>Project Eternity Unit</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
-      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
-      <Name>Roslyn</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
-      <Project>{CCF148C7-FEC2-4CD2-BC4F-25BC6C3A102A}</Project>
-      <Name>Project Eternity Image Viewer</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <EmbeddedResource Include="Advanced Settings Editor.resx" DependentUpon="Advanced Settings Editor.cs" />
+    <EmbeddedResource Include="Attack Formula Editor.resx" DependentUpon="Attack Formula Editor.cs" />
+    <EmbeddedResource Include="All Editor.resx" DependentUpon="All Editor.cs" />
+    <EmbeddedResource Include="Dash Editor.resx" DependentUpon="Dash Editor.cs" />
+    <EmbeddedResource Include="Destructible Tile Type Picker.resx" DependentUpon="Destructible Tile Type Picker.cs" />
+    <EmbeddedResource Include="Destructible Tiles.resx" DependentUpon="Destructible Tiles.cs" />
+    <EmbeddedResource Include="MAP Attack Editor.resx" DependentUpon="MAP Attack Editor.cs" />
+    <EmbeddedResource Include="Knockback Editor.resx" DependentUpon="Knockback Editor.cs" />
+    <EmbeddedResource Include="PER Attack Editor.resx" DependentUpon="PER Attack Editor.cs" />
+    <EmbeddedResource Include="Project Eternity Attack Editor.resx" DependentUpon="Project Eternity Attack Editor.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="Quote Editor.resx" DependentUpon="Quote Editor.cs" />
+    <EmbeddedResource Include="Skill Chain Editor.resx" DependentUpon="Skill Chain Editor.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

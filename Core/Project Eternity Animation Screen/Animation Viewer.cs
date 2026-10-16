@@ -1168,6 +1168,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             g.Scale = t;
 
+            // Layer targets are ready. SetRenderTarget(null) would composite onto the hidden
+            // device back buffer and leave this control black.
+            SetRenderTargetToControl();
             ActiveAnimation.DrawEditor(g, Width, Height, IsInEditMode, ShowBorderBoxes, ShowNextPositions);
 
             Thread.Sleep(1);
@@ -1195,7 +1198,16 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             ViewportOffset.Y = (NewHeight - AnimationClassEditor.Height) / 2;
 
             Microsoft.Xna.Framework.Matrix Projection = Microsoft.Xna.Framework.Matrix.CreateOrthographicOffCenter(0, NewWidth, NewHeight, 0, 0, 1);
-            Microsoft.Xna.Framework.Matrix HalfPixelOffset = Microsoft.Xna.Framework.Matrix.CreateTranslation(-0.5f + ViewportOffset.X, -0.5f + ViewportOffset.Y, 0);
+            float OffsetX = ViewportOffset.X;
+            float OffsetY = ViewportOffset.Y;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GraphicsDevice.UseHalfPixelOffset)
+            {
+                OffsetX -= 0.5f;
+                OffsetY -= 0.5f;
+            }
+
+            Microsoft.Xna.Framework.Matrix HalfPixelOffset = Microsoft.Xna.Framework.Matrix.CreateTranslation(OffsetX, OffsetY, 0);
 
             ActiveAnimation.UpdateProjection(HalfPixelOffset * Projection);
 

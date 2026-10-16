@@ -1,0 +1,131 @@
+<Project>
+  <!--
+    Every project outputs through a relative path such as ..\..\Project Eternity\Project Eternity\bin\Debug\...
+    That resolves to one shared folder. Startup scans Effects, Mods, Units, and the other plugin folders, so a
+    referenced DLL copied beside a plugin is loaded a second time. Plugin projects publish only their own assembly.
+    Exe projects output to bin\$(Configuration)\ itself. Their project references stay where those projects were built.
+    NuGet and HintPath assemblies have no project output, so the exe build copies them to External.
+    Directory.Build.targets is imported before the SDK targets, so Private=false has to be applied again after
+    IncludeTransitiveProjectReferences adds the closure. The copy itself is _CopyFilesMarkedCopyLocal.
+  -->
+  <PropertyGroup>
+    <_EternityOutput>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(OutputPath)'))))</_EternityOutput>
+    <_EternityOutput>$(_EternityOutput.TrimEnd('\'))</_EternityOutput>
+    <_EternityBinRoot>$(_EternityOutput)</_EternityBinRoot>
+    <_EternityBinRoot Condition="$(_EternityOutput.IndexOf('\bin\Debug\')) &gt;= 0">$(_EternityOutput.Substring(0, $([MSBuild]::Add($(_EternityOutput.IndexOf('\bin\Debug\')), 10))))</_EternityBinRoot>
+    <_EternityBinRoot Condition="$(_EternityOutput.IndexOf('\bin\Release\')) &gt;= 0">$(_EternityOutput.Substring(0, $([MSBuild]::Add($(_EternityOutput.IndexOf('\bin\Release\')), 12))))</_EternityBinRoot>
+    <_EternityPluginScan>false</_EternityPluginScan>
+    <_EternityPluginScan Condition="$(_EternityOutput.Contains('\Effects\')) or $(_EternityOutput.EndsWith('\Effects')) or $(_EternityOutput.Contains('\Units\')) or $(_EternityOutput.EndsWith('\Units')) or $(_EternityOutput.Contains('\AI\')) or $(_EternityOutput.EndsWith('\AI')) or $(_EternityOutput.Contains('\Scripts\')) or $(_EternityOutput.EndsWith('\Scripts')) or $(_EternityOutput.Contains('\Timelines\')) or $(_EternityOutput.EndsWith('\Timelines')) or $(_EternityOutput.Contains('\Scenes\')) or $(_EternityOutput.EndsWith('\Scenes')) or $(_EternityOutput.Contains('\Magic\')) or $(_EternityOutput.EndsWith('\Magic')) or $(_EternityOutput.Contains('\Online\')) or $(_EternityOutput.EndsWith('\Online')) or $(_EternityOutput.Contains('\Props\')) or $(_EternityOutput.EndsWith('\Props')) or $(_EternityOutput.Contains('\Mutators\')) or $(_EternityOutput.EndsWith('\Mutators')) or $(_EternityOutput.Contains('\Editors\')) or $(_EternityOutput.EndsWith('\Editors')) or $(_EternityOutput.Contains('\Editors Extensions\')) or $(_EternityOutput.EndsWith('\Editors Extensions')) or $(_EternityOutput.Contains('\Editors Standalone\')) or $(_EternityOutput.EndsWith('\Editors Standalone')) or $(_EternityOutput.Contains('\Mods\')) or $(_EternityOutput.EndsWith('\Mods')) or $(_EternityOutput.Contains('\Core\')) or $(_EternityOutput.EndsWith('\Core')) or $(_EternityOutput.Contains('\External\')) or $(_EternityOutput.EndsWith('\External'))">true</_EternityPluginScan>
+    <!-- OutputPath is already the shared bin. Tell MSBuild not to copy project references on top of it. -->
+    <UseCommonOutputDirectory Condition="$(_EternityOutput.Contains('\Project Eternity\Project Eternity\bin\'))">true</UseCommonOutputDirectory>
+  </PropertyGroup>
+
+  <!-- Direct references exist at evaluation. Visual Studio's copy uses this metadata. -->
+  <ItemGroup Condition="'$(_EternityPluginScan)' == 'true'">
+    <ProjectReference Update="@(ProjectReference)">
+      <Private>false</Private>
+    </ProjectReference>
+    <Reference Update="@(Reference)">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="KeepPluginOutputToOwnAssembly" AfterTargets="IncludeTransitiveProjectReferences" BeforeTargets="ResolveProjectReferences">
+    <ItemGroup Condition="'$(_EternityPluginScan)' == 'true'">
+      <ProjectReference Update="@(ProjectReference)">
+        <Private>false</Private>
+      </ProjectReference>
+      <Reference Update="@(Reference)">
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+  </Target>
+
+  <!--
+    Clearing the copy list stops a new spill. It does not remove a DLL already written into this
+    folder by an earlier build. Delete only a referenced project assembly whose real output is a
+    different file under the shared bin. NuGet files live outside that bin and stay put.
+  -->
+  <!--
+    OutputPath is already the shared bin folder. These targets only stop Copy Local from dropping
+    referenced DLLs beside that output. Visual Studio Rebuild reads ReferenceCopyLocalPathsOutputGroup
+    on its own, so the same trim has to run before that list is handed back.
+    Recompute the folder from TargetDir. A solution build can leave the evaluation-time path stale.
+  -->
+  <Target Name="EternityResolveOutput">
+    <PropertyGroup>
+      <_EternityLive>$([System.IO.Path]::GetFullPath('$(TargetDir)'))</_EternityLive>
+      <_EternityLive>$(_EternityLive.TrimEnd('\'))</_EternityLive>
+      <_EternityOutput>$(_EternityLive)</_EternityOutput>
+      <_EternityBinRoot>$(_EternityLive)</_EternityBinRoot>
+      <_EternityBinRoot Condition="$(_EternityLive.IndexOf('\bin\Debug\')) &gt;= 0">$(_EternityLive.Substring(0, $([MSBuild]::Add($(_EternityLive.IndexOf('\bin\Debug\')), 10))))</_EternityBinRoot>
+      <_EternityBinRoot Condition="$(_EternityLive.IndexOf('\bin\Release\')) &gt;= 0">$(_EternityLive.Substring(0, $([MSBuild]::Add($(_EternityLive.IndexOf('\bin\Release\')), 12))))</_EternityBinRoot>
+      <_EternityPluginScan>false</_EternityPluginScan>
+      <_EternityPluginScan Condition="$(_EternityLive.Contains('\Effects\')) or $(_EternityLive.EndsWith('\Effects')) or $(_EternityLive.Contains('\Units\')) or $(_EternityLive.EndsWith('\Units')) or $(_EternityLive.Contains('\AI\')) or $(_EternityLive.EndsWith('\AI')) or $(_EternityLive.Contains('\Scripts\')) or $(_EternityLive.EndsWith('\Scripts')) or $(_EternityLive.Contains('\Timelines\')) or $(_EternityLive.EndsWith('\Timelines')) or $(_EternityLive.Contains('\Scenes\')) or $(_EternityLive.EndsWith('\Scenes')) or $(_EternityLive.Contains('\Magic\')) or $(_EternityLive.EndsWith('\Magic')) or $(_EternityLive.Contains('\Online\')) or $(_EternityLive.EndsWith('\Online')) or $(_EternityLive.Contains('\Props\')) or $(_EternityLive.EndsWith('\Props')) or $(_EternityLive.Contains('\Mutators\')) or $(_EternityLive.EndsWith('\Mutators')) or $(_EternityLive.Contains('\Editors\')) or $(_EternityLive.EndsWith('\Editors')) or $(_EternityLive.Contains('\Editors Extensions\')) or $(_EternityLive.EndsWith('\Editors Extensions')) or $(_EternityLive.Contains('\Editors Standalone\')) or $(_EternityLive.EndsWith('\Editors Standalone')) or $(_EternityLive.Contains('\Mods\')) or $(_EternityLive.EndsWith('\Mods')) or $(_EternityLive.Contains('\Core\')) or $(_EternityLive.EndsWith('\Core')) or $(_EternityLive.Contains('\External\')) or $(_EternityLive.EndsWith('\External'))">true</_EternityPluginScan>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="RemovePluginCopyLocalReferences" DependsOnTargets="EternityResolveOutput" BeforeTargets="_CopyFilesMarkedCopyLocal;ReferenceCopyLocalPathsOutputGroup;CollectCopyToOutputDirectoryItemDesignTime">
+    <ItemGroup Condition="'$(_EternityPluginScan)' == 'true'">
+      <_StalePluginCopy Include="@(ReferenceCopyLocalPaths)"
+        Condition="$([System.String]::Copy('%(FullPath)').StartsWith('$(_EternityBinRoot)\', System.StringComparison.OrdinalIgnoreCase)) and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))" />
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+    <Delete Files="@(_StalePluginCopy->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
+    <Delete Files="@(_StalePluginCopy->'$(OutDir)%(DestinationSubDirectory)%(Filename).pdb')" TreatErrorsAsWarnings="true" />
+  </Target>
+
+  <!--
+    Exe projects output to the shared bin\$(Configuration)\ directory, not a plugin subfolder.
+    Project-reference assemblies already live under that bin. Copy only assemblies that were built somewhere else.
+  -->
+  <Target Name="RedirectHostCopyLocal" DependsOnTargets="EternityResolveOutput" BeforeTargets="_CopyFilesMarkedCopyLocal;ReferenceCopyLocalPathsOutputGroup;CollectCopyToOutputDirectoryItemDesignTime">
+    <PropertyGroup>
+      <_HostOutput>false</_HostOutput>
+      <_HostOutput Condition="'$(_EternityPluginScan)' != 'true' and ($(_EternityOutput.EndsWith('\bin\Debug')) or $(_EternityOutput.EndsWith('\bin\Release')))">true</_HostOutput>
+      <_BinRoot>$(_EternityOutput)\</_BinRoot>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(_HostOutput)' == 'true'">
+      <_HostExternalCopy Include="@(ReferenceCopyLocalPaths)"
+        Condition="'%(ReferenceCopyLocalPaths.MSBuildSourceProjectFile)' == '' and !$([System.String]::Copy('%(FullPath)').StartsWith('$(_BinRoot)', System.StringComparison.OrdinalIgnoreCase))" />
+      <_HostExternalCopy Remove="@(_HostExternalCopy)" Condition="$([System.String]::Copy('%(Filename)').EndsWith('.resources'))" />
+      <_HostExternalCopy Remove="@(_HostExternalCopy)" Condition="$([System.String]::Copy('%(Filename)').StartsWith('System.')) and '%(Filename)' != 'System.Collections.Immutable' and '%(Filename)' != 'System.Reflection.Metadata'" />
+      <!--
+        Native runtime assets share a file name across RIDs. Flattening them onto External\name.dll
+        keeps whichever copy runs last, and the win-x86 assimp.dll was replacing the 64-bit one.
+        The process is 64-bit. Drop every other native RID here.
+      -->
+      <_HostExternalCopy Remove="@(_HostExternalCopy)" Condition="$([System.String]::Copy('%(FullPath)').Contains('\native\')) and !$([System.String]::Copy('%(FullPath)').Contains('\win-x64\native\')) and !$([System.String]::Copy('%(FullPath)').Contains('\win7-x64\native\'))" />
+      <_HostStaleProjectCopy Include="@(ReferenceCopyLocalPaths)"
+        Condition="'%(ReferenceCopyLocalPaths.MSBuildSourceProjectFile)' != '' and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(_BinRoot)%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))" />
+      <_HostStaleExternalCopy Include="@(ReferenceCopyLocalPaths)"
+        Condition="'%(ReferenceCopyLocalPaths.MSBuildSourceProjectFile)' != '' and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(_BinRoot)External\%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))" />
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+    <Delete Files="@(_HostStaleProjectCopy->'$(_BinRoot)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
+    <Delete Files="@(_HostStaleProjectCopy->'$(_BinRoot)%(Filename).pdb')" TreatErrorsAsWarnings="true" />
+    <Delete Files="@(_HostStaleExternalCopy->'$(_BinRoot)External\%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
+    <Delete Files="@(_HostStaleExternalCopy->'$(_BinRoot)External\%(Filename).pdb')" TreatErrorsAsWarnings="true" />
+    <Copy Condition="'$(_HostOutput)' == 'true'"
+          SourceFiles="@(_HostExternalCopy)"
+          DestinationFiles="@(_HostExternalCopy->'$(_BinRoot)External\%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+    <!--
+      The two assimp.dll builds share the NuGet extract time, so SkipUnchangedFiles treats the
+      32-bit file as current. Always write the 64-bit library after that copy.
+    -->
+    <Copy Condition="'$(_HostOutput)' == 'true' and Exists('$(NuGetPackageRoot)assimpnet\4.1.0\runtimes\win-x64\native\assimp.dll')"
+          SourceFiles="$(NuGetPackageRoot)assimpnet\4.1.0\runtimes\win-x64\native\assimp.dll"
+          DestinationFiles="$(_BinRoot)External\assimp.dll"
+          SkipUnchangedFiles="false" />
+  </Target>
+
+  <Target Name="RewriteHostDepsFile" AfterTargets="CopyFilesToOutputDirectory">
+    <PropertyGroup>
+      <_HostOutput>false</_HostOutput>
+      <_HostOutput Condition="'$(_EternityPluginScan)' != 'true' and ($(_EternityOutput.EndsWith('\bin\Debug')) or $(_EternityOutput.EndsWith('\bin\Release')))">true</_HostOutput>
+    </PropertyGroup>
+    <Exec Condition="'$(_HostOutput)' == 'true' and Exists('$(TargetDir)$(AssemblyName).deps.json')"
+          Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)rewrite-host-deps.ps1&quot; &quot;$(TargetDir)$(AssemblyName).deps.json&quot; &quot;$(TargetDir.TrimEnd('\'))&quot;" />
+  </Target>
+</Project>

@@ -664,9 +664,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 PolygonEffect.World = Matrix.Identity;
                 Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (GraphicsDevice.UseHalfPixelOffset)
+                {
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
-                PolygonEffect.Projection = HalfPixelOffset * Projection;
+                PolygonEffect.Projection = Projection;
 
                 AlphaEffect = new AlphaTestEffect(GraphicsDevice);
                 AlphaEffect.AlphaFunction = CompareFunction.NotEqual;
@@ -674,7 +678,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 AlphaEffect.ReferenceAlpha = 255;
                 AlphaEffect.View = Matrix.Identity;
                 AlphaEffect.World = Matrix.Identity;
-                AlphaEffect.Projection = HalfPixelOffset * Projection;
+                AlphaEffect.Projection = Projection;
             }
 
             if (!DicTimeline.ContainsKey("Marker"))
@@ -723,7 +727,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             string[] Files = Directory.GetFiles("Timelines", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<Timeline> ListTimeline = ReflectionHelper.GetObjectsFromTypes<Timeline>(TypeOfTimeline, ActiveAssembly.GetTypes(), Args);
 
                 foreach (Timeline Instance in ListTimeline)
@@ -742,7 +750,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             string[] Files = Directory.GetFiles("Timelines/" + RootPath, "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<Timeline> ListTimeline = ReflectionHelper.GetObjectsFromBaseTypes<Timeline>(typeof(Timeline), ActiveAssembly.GetTypes(), Args);
 
                 foreach (Timeline Instance in ListTimeline)
@@ -761,7 +773,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             string[] Files = Directory.GetFiles("Timelines", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<Timeline> ListTimeline = ReflectionHelper.GetObjectsFromBaseTypes<Timeline>(typeof(Timeline), ActiveAssembly.GetTypes());
 
                 foreach (Timeline Instance in ListTimeline)

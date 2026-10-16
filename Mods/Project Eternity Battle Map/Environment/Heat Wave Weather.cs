@@ -43,9 +43,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Matrix View = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, 800, 600, 0, 0, 1);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
-            Projection = View * (HalfPixelOffset * Projection);
+            Projection = View * Projection;
 
             Core.ParticleSystem.ParticleSettingsNoTexture ParticleSettings = new Core.ParticleSystem.ParticleSettingsNoTexture();
             ParticleSettings.MaxParticles = 20000;
@@ -111,9 +115,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Matrix view = Matrix.Identity;
 
                 Matrix Projection = Matrix.CreateOrthographicOffCenter(0, RenderWidth, RenderHeight, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (g.GraphicsDevice.UseHalfPixelOffset)
+                {
+                    Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
-                Projection = view * (HalfPixelOffset * Projection);
+                Projection = view * Projection;
                 ParticleSystem.parameters["ViewProjection"].SetValue(Projection);
             }
 

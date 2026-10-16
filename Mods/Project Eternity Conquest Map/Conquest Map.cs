@@ -3017,11 +3017,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
 
-            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Conquest Map.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelConquest), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly("Mods/Project Eternity Conquest Map.dll");
+            if (ActiveAssembly != null)
             {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelConquest), this);
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+                {
+                    DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
 
             return DicActionPanel;

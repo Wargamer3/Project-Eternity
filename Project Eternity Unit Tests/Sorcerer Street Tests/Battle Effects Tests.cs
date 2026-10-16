@@ -25,6 +25,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
+            SorcererStreetTestHelper.PrepareCreature(DummyInvaderCard);
+            SorcererStreetTestHelper.PrepareCreature(DummyDefenderCard);
 
             SorcererStreetBattleContext GlobalSorcererStreetBattleContext = new SorcererStreetBattleContext();
 
@@ -40,7 +42,10 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             GlobalSorcererStreetBattleContext.OpponentCreature.BonusST = 0;
 
             SorcererStreetBattleParams BattleParams = new SorcererStreetBattleParams(GlobalSorcererStreetBattleContext);
-            BaseEffect SkillEffect = new ChangeStatsEffect(BattleParams);
+            BattleParams.ActiveParser = new SorcererStreetFormulaParser(BattleParams);
+            ChangeStatsEffect SkillEffect = new ChangeStatsEffect(BattleParams);
+            SkillEffect.Stat = ChangeStatsEffect.Stats.FinalHP;
+            SkillEffect.Value = "30";
             BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(BattleParams);
             AutomaticSkillTargetType Target = new SorcererStreetSelfTargetType(BattleParams);
 
@@ -68,10 +73,14 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
+            SorcererStreetTestHelper.PrepareCreature(DummyInvaderCard);
+            SorcererStreetTestHelper.PrepareCreature(DummyDefenderCard);
             Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyInvaderCard });
             Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer1);
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer2);
             DummyMap.AddPlayer(DummyPlayer1);
             DummyMap.AddPlayer(DummyPlayer2);
 
@@ -144,6 +153,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 2;
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 2;
 
+            SorcererStreetTestHelper.UseDeathmatchRule(DummyMap);
             DummyMap.Init();
 
             return DummyMap;

@@ -1,52 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1A6E23C4-0FFD-4C13-9FC5-3675F82F9251}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjectEternity.GameScreens.SorcererStreetScreen</RootNamespace>
     <AssemblyName>Project Eternity Sorcerer Street</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <UseWindowsForms>true</UseWindowsForms>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\$(Configuration)\Mods\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Mods\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Mods\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj" />
+    <ProjectReference Include="..\..\External\FMOD\FMOD.csproj" />
+    <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj" />
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj" />
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
     <Compile Include="Acion Panels\Action Panel Holder Sorcerer Street.cs" />
@@ -232,83 +217,5 @@
     <Compile Include="Environment\Map Zone.cs" />
     <Compile Include="Layers\Sub Map Layer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
-      <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
-      <Name>Project Eternity AI</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
-      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
-      <Name>Project Eternity Animation Screen</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
-      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
-      <Name>Project Eternity Base Item</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
-      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
-      <Name>Project Eternity Constants</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
-      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
-      <Name>Project Eternity Control Helper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
-      <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
-      <Name>Project Eternity Cutscene</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
-      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
-      <Name>Project Eternity Game Screen</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
-      <Project>{6F5B12C0-09A2-43F8-B564-8786ADE58E59}</Project>
-      <Name>Project Eternity Graphics</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
-      <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
-      <Name>Project Eternity Online</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
-      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
-      <Name>Project Eternity Unit</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj">
-      <Project>{B6E9FDCE-3C8D-40E6-BB12-F3D0822FDC58}</Project>
-      <Name>Project Eternity Visual Novel</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
-      <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
-      <Name>FMOD</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
-      <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
-      <Name>Microsoft Content Builder</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
-      <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
-      <Name>Roslyn</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
-      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
-      <Name>Project Eternity Battle Map</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

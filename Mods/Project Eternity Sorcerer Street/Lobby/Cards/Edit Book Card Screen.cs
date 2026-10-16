@@ -203,8 +203,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 * Matrix.CreateScale(2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2 + 140, 0);
             float aspectRatio = GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height;
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 600, -700);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
             GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

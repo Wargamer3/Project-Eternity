@@ -150,18 +150,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 CreateMap(Map, LayerManager.ListLayer[L], L);
             }
 
+            LifeSimMap.PhysicsManager.ClearMapMeshes();
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
             {
                 ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
-
-                var staticMesh = new BEPUphysics.BroadPhaseEntries.StaticMesh(ConversionHelper.MathConverter.Convert(ActiveTileSet.Value.ArrayTriangle), ActiveTileSet.Value.ArrayIndices, new BEPUutilities.AffineTransform(new BEPUutilities.Vector3(1f, 1f, 1f), BEPUutilities.Quaternion.Identity, new BEPUutilities.Vector3(0, 0, 0)));
-                staticMesh.Sidedness = BEPUutilities.TriangleSidedness.DoubleSided;
-
-                if (LifeSimMap.PhysicsManager.PhysicSimulation.Entities.Count == 0)
-                {
-                    //LifeSimMap.PhysicsManager.ModelDrawer.Add(staticMesh);
-                    LifeSimMap.PhysicsManager.PhysicSimulation.Add(staticMesh);
-                }
+                LifeSimMap.PhysicsManager.AddMapMesh(ActiveTileSet.Value.ArrayTriangle, ActiveTileSet.Value.ArrayIndices);
             }
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)

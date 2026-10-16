@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -331,11 +332,14 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
 
-            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity World Map.dll"));
-            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelWorldMap), this);
-            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly("Mods/Project Eternity World Map.dll");
+            if (ActiveAssembly != null)
             {
-                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelWorldMap), this);
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+                {
+                    DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
 
             return DicActionPanel;

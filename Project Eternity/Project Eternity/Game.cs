@@ -29,6 +29,8 @@ namespace ProjectEternity
             Content.RootDirectory = "Content";
             ListGameScreen = new List<GameScreen>();
 
+            // Water.fx is ps_4_0 because it samples a cubemap with texCUBElod. Reach is feature level 9.3 and rejects that shader.
+            Constants.graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Constants.graphics.PreferredBackBufferWidth = Constants.Width;
             Constants.graphics.PreferredBackBufferHeight = Constants.Height;
             Constants.graphics.ApplyChanges();

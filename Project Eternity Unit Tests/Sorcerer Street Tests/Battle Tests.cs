@@ -24,10 +24,14 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
+            SorcererStreetTestHelper.PrepareCreature(DummyInvaderCard);
+            SorcererStreetTestHelper.PrepareCreature(DummyDefenderCard);
             Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyInvaderCard });
             Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer1);
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer2);
             DummyMap.AddPlayer(DummyPlayer1);
             DummyMap.AddPlayer(DummyPlayer2);
 
@@ -38,8 +42,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.OnSelect();
 
-            Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature);
-            Assert.AreEqual(DummyDefenderCard, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature);
+            Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.Creature);
+            Assert.AreEqual(DummyDefenderCard, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature.Creature);
 
             Assert.AreEqual(DummyInvaderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.SelfCreature.FinalHP);
             Assert.AreEqual(DummyDefenderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.OpponentCreature.FinalHP);
@@ -53,10 +57,14 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
+            SorcererStreetTestHelper.PrepareCreature(DummyInvaderCard);
+            SorcererStreetTestHelper.PrepareCreature(DummyDefenderCard);
             Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyInvaderCard });
             Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer1);
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer2);
             DummyMap.AddPlayer(DummyPlayer1);
             DummyMap.AddPlayer(DummyPlayer2);
 
@@ -70,8 +78,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelBattleAttackPhase BattleAttackPhase = new ActionPanelBattleAttackPhase(DummyMap, null);
             BattleAttackPhase.OnSelect();
 
-            Assert.AreEqual(DummyInvaderCard, BattleAttackPhase.FirstAttacker);
-            Assert.AreEqual(DummyDefenderCard, BattleAttackPhase.SecondAttacker);
+            Assert.AreEqual(DummyInvaderCard, BattleAttackPhase.FirstAttacker.Creature);
+            Assert.AreEqual(DummyDefenderCard, BattleAttackPhase.SecondAttacker.Creature);
 
 
             Assert.AreEqual(40, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
@@ -116,6 +124,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 2;
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 2;
 
+            SorcererStreetTestHelper.UseDeathmatchRule(DummyMap);
             DummyMap.Init();
 
             return DummyMap;

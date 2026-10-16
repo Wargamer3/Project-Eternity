@@ -86,7 +86,11 @@ namespace ProjectEternity.Core.Scene
             string[] Files = Directory.GetFiles("Timelines", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<SceneEvent> Scenes = ReflectionHelper.GetObjectsFromBaseTypes<SceneEvent>(TypeOfTimeline, ActiveAssembly.GetTypes());
 
                 foreach (SceneEvent Instance in Scenes)
@@ -107,7 +111,11 @@ namespace ProjectEternity.Core.Scene
             string[] Files = Directory.GetFiles("Scenes", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<SceneEvent> Scenes = ReflectionHelper.GetObjectsFromBaseTypes<SceneEvent>(TypeOfScene, ActiveAssembly.GetTypes());
 
                 foreach (SceneEvent Instance in Scenes)

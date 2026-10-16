@@ -2,151 +2,72 @@
 //-----------------------------------------------------------------------------
 // ContentBuilder.cs
 //
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
+// Editors compile a PNG into an XNB through Add, Build, and CopyBuildOutput.
+// mgcb writes the MonoGame XNB. Content.Load reads that file, not the PNG.
 //-----------------------------------------------------------------------------
 #endregion
 
-#region Using Statements
 using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
-#endregion
 
 namespace Microsoft.Xna.Framework.Content.Builder
 {
     /// <summary>
-    /// This class wraps the MSBuild functionality needed to build XNA Framework
-    /// content dynamically at runtime. It creates a temporary MSBuild project
-    /// in memory, and adds whatever content files you choose to this project.
-    /// It then builds the project, which will create compiled .xnb content files
-    /// in a temporary directory. After the build finishes, you can use a regular
-    /// ContentManager to load these temporary .xnb files in the usual way.
+    /// Builds content files into temporary .xnb files for the editors.
     /// </summary>
     public class ContentBuilder : IDisposable
     {
-        // What importers or processors should we load?
-        const string xnaVersion = ", Version=4.0.0.0, PublicKeyToken=842cf8be1de50553";
-
-        static string[] pipelineAssemblies =
+        class PendingContent
         {
-            //"Microsoft.Xna.Framework.Content.Pipeline.TextureImporter" + xnaVersion
-            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll",
-            Directory.GetCurrentDirectory() + "\\External\\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll",
-            Directory.GetCurrentDirectory() + "\\Core\\Project Eternity Content Processors.dll",
-            // If you want to use custom importers or processors from
-            // a Content Pipeline Extension Library, add them here.
-            //
-            // If your extension DLL is installed in the GAC, you should refer to it by assembly
-            // name, eg. "MyPipelineExtension, Version=1.0.0.0, PublicKeyToken=1234567812345678".
-            //
-            // If the extension DLL is not in the GAC, you should refer to it by
-            // file path, eg. "c:/MyProject/bin/MyPipelineExtension.dll".
-        };
-
-
-        // MSBuild objects used to dynamically build content.
-        Project buildProject;
-        ProjectRootElement projectRootElement;
-        BuildParameters buildParameters;
-        List<ProjectItem> projectItems = new List<ProjectItem>();
-        ErrorLogger errorLogger;
-
-
-        // Temporary directories used by the content build.
-        string buildDirectory;
-        string processDirectory;
-        string baseDirectory;
-
-        // Generate unique directory names if there is more than one ContentBuilder.
-        static int directorySalt;
-
-        // Have we been disposed?
-        bool isDisposed;
-
-        /// <summary>
-        /// Creates a new content builder.
-        /// </summary>
-        public ContentBuilder()
-        {
-            CreateTempDirectory();
-            CreateBuildProject();
+            public string Filename;
+            public string Name;
+            public string Importer;
+            public string Processor;
         }
 
-        /// <summary>
-        /// Finalizes the content builder.
-        /// </summary>
+        readonly List<PendingContent> Items = new List<PendingContent>();
+        readonly string OutputDirectory;
+        readonly string BuildDirectory;
+        readonly string ProcessDirectory;
+        readonly string BaseDirectory;
+
+        static int DirectorySalt;
+        bool IsDisposed;
+
+        public ContentBuilder()
+        {
+            BaseDirectory = Path.Combine(Path.GetTempPath(), GetType().FullName);
+            int ProcessId = Process.GetCurrentProcess().Id;
+            ProcessDirectory = Path.Combine(BaseDirectory, ProcessId.ToString());
+            DirectorySalt++;
+            BuildDirectory = Path.Combine(ProcessDirectory, DirectorySalt.ToString());
+            OutputDirectory = Path.Combine(BuildDirectory, "Content");
+            Directory.CreateDirectory(OutputDirectory);
+            PurgeStaleTempDirectories();
+        }
+
         ~ContentBuilder()
         {
             Dispose(false);
         }
 
-        /// <summary>
-        /// Disposes the content builder when it is no longer required.
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
-            
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Implements the standard .NET IDisposable pattern.
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool Disposing)
         {
-            if (!isDisposed)
+            if (IsDisposed)
             {
-                isDisposed = true;
-
-                DeleteTempDirectory();
+                return;
             }
-        }
 
-        /// <summary>
-        /// Creates a temporary MSBuild content project in memory.
-        /// </summary>
-        void CreateBuildProject()
-        {
-            string projectPath = Path.Combine(buildDirectory, "content.contentproj");
-            //string outputPath = Path.Combine(buildDirectory, "bin");
-            string CurrentDirectory = Directory.GetCurrentDirectory();
-            string outputPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-            // Create the build project.
-            projectRootElement = ProjectRootElement.Create(buildDirectory + "\\Content");
-
-            // Include the standard targets file that defines how to build XNA Framework content.
-            /*projectRootElement.AddImport("$(MSBuildExtensionsPath)\\Microsoft\\XNA Game Studio\\" +
-                                         "v4.0\\Microsoft.Xna.GameStudio.ContentPipeline.targets");*/
-            projectRootElement.AddImport(CurrentDirectory + "\\External\\Microsoft.Xna.GameStudio.ContentPipeline.targets");
-
-            buildProject = new Project(projectRootElement);
-
-            buildProject.SetProperty("XnaPlatform", "Windows");
-            buildProject.SetProperty("XnaProfile", "HiDef");
-            buildProject.SetProperty("XnaFrameworkVersion", "v4.0");
-            buildProject.SetProperty("TargetFrameworkVersion", "v4.6.1");
-            buildProject.SetProperty("Configuration", "Release");
-            buildProject.SetProperty("OutputPath", buildDirectory);
-
-            // Hook up our custom error logger.
-            errorLogger = new ErrorLogger();
-
-            buildParameters = new BuildParameters(ProjectCollection.GlobalProjectCollection);
-            buildParameters.Loggers = new ILogger[] { errorLogger };
-
-            // Register any custom importers or processors.
-            foreach (string pipelineAssembly in pipelineAssemblies)
-            {
-                buildProject.AddItem("Reference", pipelineAssembly);
-            }
+            IsDisposed = true;
+            DeleteTempDirectory();
         }
 
         public void CopyBuildOutput(string FolderToCopyTo)
@@ -156,201 +77,204 @@ namespace Microsoft.Xna.Framework.Content.Builder
                 Directory.CreateDirectory(FolderToCopyTo);
             }
 
-            foreach (string OriginalPath in Directory.GetFiles(projectRootElement.FullPath))
+            string[] BuiltFiles = Directory.GetFiles(OutputDirectory);
+            for (int F = 0; F < BuiltFiles.Length; F++)
             {
-                string FileName = Path.GetFileName(OriginalPath);
-                string CompleteFilePathOutput = FolderToCopyTo + "/" + FileName;
-
-                if (File.Exists(CompleteFilePathOutput))
+                string FileName = Path.GetFileName(BuiltFiles[F]);
+                string Destination = Path.Combine(FolderToCopyTo, FileName);
+                if (File.Exists(Destination))
                 {
-                    File.Delete(CompleteFilePathOutput);
+                    File.Delete(Destination);
                 }
 
-                File.Move(OriginalPath, CompleteFilePathOutput);
+                File.Move(BuiltFiles[F], Destination);
             }
         }
 
         public void CopyBuildOutput(string OriginalSpriteFileName, string SpriteFileName, string FolderToCopyTo)
         {
-            string CompleteFilePath = projectRootElement.FullPath + "/" + OriginalSpriteFileName + ".xnb";
-            string CompleteFilePathOutput = FolderToCopyTo + "/" + SpriteFileName + ".xnb";
-
-            if (File.Exists(CompleteFilePathOutput))
-            {
-                File.Delete(CompleteFilePathOutput);
-            }
+            string Source = Path.Combine(OutputDirectory, OriginalSpriteFileName + ".xnb");
             if (!Directory.Exists(FolderToCopyTo))
             {
                 Directory.CreateDirectory(FolderToCopyTo);
             }
-            File.Move(CompleteFilePath, FolderToCopyTo + "/" + SpriteFileName + ".xnb");
+
+            string Destination = Path.Combine(FolderToCopyTo, SpriteFileName + ".xnb");
+            if (File.Exists(Destination))
+            {
+                File.Delete(Destination);
+            }
+
+            File.Move(Source, Destination);
         }
 
-        /// <summary>
-        /// Adds a new content file to the MSBuild project. The importer and
-        /// processor are optional: if you leave the importer null, it will
-        /// be autodetected based on the file extension, and if you leave the
-        /// processor null, data will be passed through without any processing.
-        /// </summary>
         public void Add(string filename, string name, string importer, string processor)
         {
-            ProjectItem item = buildProject.AddItem("Compile", filename)[0];
-
-            item.SetMetadataValue("Link", Path.GetFileName(filename));
-            item.SetMetadataValue("Name", name);
-
-            if (!string.IsNullOrEmpty(importer))
-                item.SetMetadataValue("Importer", importer);
-
-            if (!string.IsNullOrEmpty(processor))
-                item.SetMetadataValue("Processor", processor);
-
-            projectItems.Add(item);
+            PendingContent Item = new PendingContent();
+            Item.Filename = filename;
+            Item.Name = name;
+            Item.Importer = importer;
+            Item.Processor = processor;
+            Items.Add(Item);
         }
 
-
-        /// <summary>
-        /// Removes all content files from the MSBuild project.
-        /// </summary>
         public void Clear()
         {
-            buildProject.RemoveItems(projectItems);
-
-            projectItems.Clear();
+            Items.Clear();
         }
 
-
         /// <summary>
-        /// Builds all the content files which have been added to the project,
-        /// dynamically creating .xnb files in the OutputDirectory.
-        /// Returns an error message if the build fails.
+        /// Builds every added file. Returns an error message, or null when the build succeeds.
         /// </summary>
         public string Build()
         {
-            // Clear any previous errors.
-            errorLogger.Errors.Clear();
-
-            // Create and submit a new asynchronous build request.
-            BuildManager.DefaultBuildManager.BeginBuild(buildParameters);
-            
-            BuildRequestData request = new BuildRequestData(buildProject.CreateProjectInstance(), new string[0]);
-            BuildSubmission submission = BuildManager.DefaultBuildManager.PendBuildRequest(request);
-
-            submission.ExecuteAsync(null, null);
-
-            // Wait for the build to finish.
-            submission.WaitHandle.WaitOne();
-
-            BuildManager.DefaultBuildManager.EndBuild();
-
-            // If the build failed, return an error string.
-            if (submission.BuildResult.OverallResult == BuildResultCode.Failure)
+            string MgcbDirectory = Path.Combine(Path.GetDirectoryName(typeof(ContentBuilder).Assembly.Location), "mgcb");
+            string MgcbExecutable = Path.Combine(MgcbDirectory, "mgcb.exe");
+            string MgcbAssembly = Path.Combine(MgcbDirectory, "mgcb.dll");
+            if (!File.Exists(MgcbExecutable) && !File.Exists(MgcbAssembly))
             {
-                return string.Join("\n", errorLogger.Errors.ToArray());
+                return "mgcb was not found beside Microsoft Content Builder.";
             }
 
-            return null;
+            string IntermediateDirectory = Path.Combine(BuildDirectory, "obj");
+            Directory.CreateDirectory(IntermediateDirectory);
+            Directory.CreateDirectory(OutputDirectory);
+
+            List<string> Lines = new List<string>();
+            Lines.Add("/platform:Windows");
+            Lines.Add("/profile:HiDef");
+            Lines.Add("/outputDir:" + OutputDirectory);
+            Lines.Add("/intermediateDir:" + IntermediateDirectory);
+            Lines.Add("/quiet");
+            string ProcessorPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(ContentBuilder).Assembly.Location), "..", "Core", "Project Eternity Content Processors.dll"));
+            bool NeedsAnimationProcessor = false;
+            for (int I = 0; I < Items.Count; I++)
+            {
+                if (Items[I].Processor == "AnimationProcessor")
+                {
+                    NeedsAnimationProcessor = true;
+                    break;
+                }
+            }
+
+            if (NeedsAnimationProcessor && !File.Exists(ProcessorPath))
+            {
+                return "Project Eternity Content Processors.dll was not found in Core.";
+            }
+
+            if (NeedsAnimationProcessor)
+            {
+                Lines.Add("/reference:" + ProcessorPath);
+            }
+
+            for (int I = 0; I < Items.Count; I++)
+            {
+                PendingContent Item = Items[I];
+                if (!string.IsNullOrEmpty(Item.Importer))
+                {
+                    Lines.Add("/importer:" + Item.Importer);
+                }
+
+                if (!string.IsNullOrEmpty(Item.Processor))
+                {
+                    Lines.Add("/processor:" + Item.Processor);
+                }
+
+                Lines.Add("/build:" + Item.Filename + ";" + Item.Name);
+            }
+
+            string ResponseFile = Path.Combine(BuildDirectory, "content.mgcb");
+            File.WriteAllLines(ResponseFile, Lines.ToArray());
+
+            ProcessStartInfo Start = new ProcessStartInfo();
+            if (File.Exists(MgcbExecutable))
+            {
+                Start.FileName = MgcbExecutable;
+                Start.Arguments = "/@:content.mgcb";
+            }
+            else
+            {
+                Start.FileName = "dotnet";
+                Start.Arguments = "exec \"" + MgcbAssembly + "\" /@:content.mgcb";
+            }
+
+            Start.WorkingDirectory = BuildDirectory;
+            Start.UseShellExecute = false;
+            Start.CreateNoWindow = true;
+            Start.RedirectStandardOutput = true;
+            Start.RedirectStandardError = true;
+
+            Process Compiler = Process.Start(Start);
+            string Output = Compiler.StandardOutput.ReadToEnd();
+            string Error = Compiler.StandardError.ReadToEnd();
+            Compiler.WaitForExit();
+            if (Compiler.ExitCode == 0)
+            {
+                return null;
+            }
+
+            string Message = (Output + "\n" + Error).Trim();
+            if (Message.Length == 0)
+            {
+                Message = "mgcb failed with exit code " + Compiler.ExitCode + ".";
+            }
+
+            return Message;
         }
 
-
-        #region Temp Directories
-
-
-        /// <summary>
-        /// Creates a temporary directory in which to build content.
-        /// </summary>
-        void CreateTempDirectory()
-        {
-            // Start with a standard base name:
-            //
-            //  %temp%\WinFormsContentLoading.ContentBuilder
-
-            baseDirectory = Path.Combine(Path.GetTempPath(), GetType().FullName);
-
-            // Include our process ID, in case there is more than
-            // one copy of the program running at the same time:
-            //
-            //  %temp%\WinFormsContentLoading.ContentBuilder\<ProcessId>
-
-            int processId = Process.GetCurrentProcess().Id;
-
-            processDirectory = Path.Combine(baseDirectory, processId.ToString());
-
-            // Include a salt value, in case the program
-            // creates more than one ContentBuilder instance:
-            //
-            //  %temp%\WinFormsContentLoading.ContentBuilder\<ProcessId>\<Salt>
-
-            directorySalt++;
-
-            buildDirectory = Path.Combine(processDirectory, directorySalt.ToString());
-
-            // Create our temporary directory.
-            Directory.CreateDirectory(buildDirectory);
-
-            PurgeStaleTempDirectories();
-        }
-
-
-        /// <summary>
-        /// Deletes our temporary directory when we are finished with it.
-        /// </summary>
         void DeleteTempDirectory()
         {
-            Directory.Delete(buildDirectory, true);
-
-            // If there are no other instances of ContentBuilder still using their
-            // own temp directories, we can delete the process directory as well.
-            if (Directory.GetDirectories(processDirectory).Length == 0)
+            if (Directory.Exists(BuildDirectory))
             {
-                Directory.Delete(processDirectory);
+                Directory.Delete(BuildDirectory, true);
+            }
 
-                // If there are no other copies of the program still using their
-                // own temp directories, we can delete the base directory as well.
-                if (Directory.GetDirectories(baseDirectory).Length == 0)
-                {
-                    Directory.Delete(baseDirectory);
-                }
+            if (!Directory.Exists(ProcessDirectory))
+            {
+                return;
+            }
+
+            if (Directory.GetDirectories(ProcessDirectory).Length == 0)
+            {
+                Directory.Delete(ProcessDirectory);
+            }
+
+            if (Directory.Exists(BaseDirectory) && Directory.GetDirectories(BaseDirectory).Length == 0)
+            {
+                Directory.Delete(BaseDirectory);
             }
         }
 
-
-        /// <summary>
-        /// Ideally, we want to delete our temp directory when we are finished using
-        /// it. The DeleteTempDirectory method (called by whichever happens first out
-        /// of Dispose or our finalizer) does exactly that. Trouble is, sometimes
-        /// these cleanup methods may never execute. For instance if the program
-        /// crashes, or is halted using the debugger, we never get a chance to do
-        /// our deleting. The next time we start up, this method checks for any temp
-        /// directories that were left over by previous runs which failed to shut
-        /// down cleanly. This makes sure these orphaned directories will not just
-        /// be left lying around forever.
-        /// </summary>
         void PurgeStaleTempDirectories()
         {
-            // Check all subdirectories of our base location.
-            foreach (string directory in Directory.GetDirectories(baseDirectory))
+            if (!Directory.Exists(BaseDirectory))
             {
-                // The subdirectory name is the ID of the process which created it.
-                int processId;
+                return;
+            }
 
-                if (int.TryParse(Path.GetFileName(directory), out processId))
+            string[] Directories = Directory.GetDirectories(BaseDirectory);
+            for (int D = 0; D < Directories.Length; D++)
+            {
+                int ProcessId;
+                if (!int.TryParse(Path.GetFileName(Directories[D]), out ProcessId))
                 {
-                    try
-                    {
-                        // Is the creator process still running?
-                        Process.GetProcessById(processId);
-                    }
-                    catch (ArgumentException)
-                    {
-                        // If the process is gone, we can delete its temp directory.
-                        Directory.Delete(directory, true);
-                    }
+                    continue;
+                }
+
+                if (ProcessId == Process.GetCurrentProcess().Id)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    Process.GetProcessById(ProcessId);
+                }
+                catch (ArgumentException)
+                {
+                    Directory.Delete(Directories[D], true);
                 }
             }
         }
-
-        
-        #endregion
     }
 }

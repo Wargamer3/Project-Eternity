@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.GUI;
 using ProjectEternity.Editors.UnitNormalEditor;
 
 namespace ProjectEternity.UnitTests
@@ -31,7 +32,7 @@ namespace ProjectEternity.UnitTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            RessourcePath = "Units/Normal/";
+            RessourcePath = "Deathmatch/Units/Normal/";
             ItemExtention = ".peu";
 
             NewFolderName = "New Folder";
@@ -51,6 +52,7 @@ namespace ProjectEternity.UnitTests
         [TestInitialize()]
         public void Initialize()
         {
+            SplashScreen.ShowSplashScreen();
             TestGui = new GUI.GUI(false);
             TestGui.tvItems.Nodes.Clear();
 
@@ -85,11 +87,43 @@ namespace ProjectEternity.UnitTests
             TestGui.InitGUI();
         }
 
+        [TestCleanup()]
+        public void Cleanup()
+        {
+            SplashScreen.CloseForm();
+            if (File.Exists(NewItemFilePath))
+            {
+                File.Delete(NewItemFilePath);
+            }
+            if (File.Exists(RenamedItemPath))
+            {
+                File.Delete(RenamedItemPath);
+            }
+            if (File.Exists(NewItemInFolderFilePath))
+            {
+                File.Delete(NewItemInFolderFilePath);
+            }
+            if (File.Exists(RenamedItemInFolderFilePath))
+            {
+                File.Delete(RenamedItemInFolderFilePath);
+            }
+            if (Directory.Exists(NewFolderFilePath))
+            {
+                Directory.Delete(NewFolderFilePath);
+            }
+        }
+
+        private static TreeNode NormalUnitNode()
+        {
+            TreeNode DeathmatchNode = TestGui.tvItems.Nodes.Find("Deathmatch", false)[0];
+            TreeNode UnitsNode = DeathmatchNode.Nodes.Find("Units", false)[0];
+            return UnitsNode.Nodes.Find("Normal", false)[0];
+        }
+
         [TestMethod]
         public void TestGUICreateItemFromRoot()
         {
-            TreeNode UnitsNode = TestGui.tvItems.Nodes.Find("Units", false)[0];
-            TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
+            TreeNode NormalNode = NormalUnitNode();
             TreeNode NewNode = TestGui.CreateNewItem(NormalNode); // Create New Item
             Assert.IsTrue(File.Exists(NewItemFilePath));
 
@@ -117,8 +151,7 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void TestGUIRenameFromRoot()
         {
-            TreeNode UnitsNode = TestGui.tvItems.Nodes.Find("Units", false)[0];
-            TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
+            TreeNode NormalNode = NormalUnitNode();
             TreeNode NewItemNode = TestGui.CreateNewItem(NormalNode); // Create New Item
 
             ItemContainer ContainerUnits = EditorHelper.GetItemsByRoot(EditorHelper.GUIRootPathUnits).First();
@@ -138,8 +171,7 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void TestGUICreateFolderFromRoot()
         {
-            TreeNode UnitsNode = TestGui.tvItems.Nodes.Find("Units", false)[0];
-            TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
+            TreeNode NormalNode = NormalUnitNode();
             TreeNode NewNode = TestGui.CreateNewFolder(NormalNode); // Create New Folder
             Assert.IsTrue(Directory.Exists(NewFolderFilePath));
 
@@ -152,8 +184,7 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void TestGUICreateNewItemFromFolder()
         {
-            TreeNode UnitsNode = TestGui.tvItems.Nodes.Find("Units", false)[0];
-            TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
+            TreeNode NormalNode = NormalUnitNode();
             TreeNode NewFolderNode = TestGui.CreateNewFolder(NormalNode); // Create New Folder
 
             TreeNode NewNode = TestGui.CreateNewItem(NewFolderNode); // Create New Item
@@ -183,8 +214,7 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void TestGUIRenameFromFolder()
         {
-            TreeNode UnitsNode = TestGui.tvItems.Nodes.Find("Units", false)[0];
-            TreeNode NormalNode = UnitsNode.Nodes.Find("Normal", false)[0];
+            TreeNode NormalNode = NormalUnitNode();
             TreeNode NewFolderNode = TestGui.CreateNewFolder(NormalNode); // Create New Folder
 
             TreeNode NewNode = TestGui.CreateNewItem(NewFolderNode); // Create New Item

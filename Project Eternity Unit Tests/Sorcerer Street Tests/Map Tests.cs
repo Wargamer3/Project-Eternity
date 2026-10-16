@@ -98,6 +98,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>());
             SorcererStreetMap DummyMap = CreateDummyMap();
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer);
             DummyMap.AddPlayer(DummyPlayer);
             ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, 0);
 
@@ -141,6 +142,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>());
             SorcererStreetMap DummyMap = CreateDummyMap();
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer);
             DummyMap.AddPlayer(DummyPlayer);
             ActionPanelDiscardCardPhase DiscardCardPhase = new ActionPanelDiscardCardPhase(DummyMap, 0, 6);
             
@@ -233,9 +235,16 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 1;
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 1;
 
-            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { new CreatureCard(20, 20), new CreatureCard(20, 20), new CreatureCard(20, 20) });
+            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>()
+            {
+                SorcererStreetTestHelper.CreateCreature("Dummy A", 20, 20),
+                SorcererStreetTestHelper.CreateCreature("Dummy B", 20, 20),
+                SorcererStreetTestHelper.CreateCreature("Dummy C", 20, 20)
+            });
+            SorcererStreetTestHelper.GiveCharacter(DummyPlayer);
             DummyMap.AddPlayer(DummyPlayer);
 
+            SorcererStreetTestHelper.UseDeathmatchRule(DummyMap);
             DummyMap.Init();
             DummyMap.ListActionMenuChoice.Add(new ActionPanelPlayerDefault(DummyMap));
 

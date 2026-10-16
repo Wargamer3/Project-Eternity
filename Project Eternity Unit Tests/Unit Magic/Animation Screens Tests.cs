@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Units.Magic;
@@ -135,8 +136,10 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.Init();
 
             List<MagicSpell> ListMagicSpell = new List<MagicSpell>();
-            UnitMagic DummyUnit = new UnitMagic("Dummy Unit", ListMagicSpell);
-            ListMagicSpell.Add(CreateFireball(DummyUnit, DummyUnit.MagicProjectileParams));
+            UnitMagic DummyUnit = new UnitMagic();
+            DummyUnit.ListMagicSpell = ListMagicSpell;
+            MagicSpell FireballSpell = CreateFireball(DummyUnit, DummyUnit.MagicProjectileParams);
+            ListMagicSpell.Add(FireballSpell);
 
             DummyUnit.MaxHP = 10000;
             DummyUnit.MaxEN = 200;
@@ -150,7 +153,8 @@ namespace ProjectEternity.UnitTests
 
             DummyAttack.PostMovementLevel = 1;
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
-            DummyUnit.ListAttack.Add(DummyAttack);
+            DummyUnit.UnitStat.ListAttack.Add(DummyAttack);
+            AddSpellAttack(DummyUnit, FireballSpell);
             DummyUnit.CurrentAttack = DummyAttack;
             DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
             DummyUnit.UnitStat.DicRankByMovement.Add(1, 1);
@@ -158,6 +162,25 @@ namespace ProjectEternity.UnitTests
             DummyUnit.UnitStat.DicRankByMovement.Add(3, 1);
 
             return DummyUnit;
+        }
+
+        private static void AddSpellAttack(UnitMagic DummyUnit, MagicSpell FireballSpell)
+        {
+            Attack SpellAttack = new Attack(FireballSpell.Name);
+            SpellAttack.ItemName = FireballSpell.Name;
+            SpellAttack.PowerFormula = "30";
+            SpellAttack.RangeMinimum = 1;
+            SpellAttack.RangeMaximum = 10;
+            SpellAttack.SetMaxAmmo(10);
+            SpellAttack.RefillAmmo();
+            SpellAttack.ArrayAttackAttributes = new BaseAutomaticSkill[0];
+            SpellAttack.Animations[0].Animations[0] = new MagicAttackAnimationStartInfo("Default Animations/Idle", FireballSpell, DummyUnit.GlobalProjectileContext, DummyUnit.MagicProjectileParams.SharedParams);
+            for (int AnimationIndex = 1; AnimationIndex < SpellAttack.Animations[0].Animations.Count; ++AnimationIndex)
+            {
+                SpellAttack.Animations[0].Animations[AnimationIndex] = new MagicAttackAnimationInfo("Default Animations/Attack", FireballSpell, DummyUnit.GlobalProjectileContext, DummyUnit.MagicProjectileParams.SharedParams);
+            }
+
+            DummyUnit.UnitStat.ListAttack.Add(SpellAttack);
         }
 
         private Squad CreateDummySquad()

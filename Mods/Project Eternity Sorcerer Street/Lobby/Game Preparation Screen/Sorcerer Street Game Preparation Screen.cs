@@ -34,8 +34,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.Room = (SorcererStreetRoomInformations)Room;
             Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-            Projection = HalfPixelOffset * Projection;
+            // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+            if (GameScreen.GraphicsDevice != null && GameScreen.GraphicsDevice.UseHalfPixelOffset)
+            {
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+            }
 
             ListAvailablePlayer = new List<Player>();
             ListActionMenuChoice = new ActionPanelHolder();

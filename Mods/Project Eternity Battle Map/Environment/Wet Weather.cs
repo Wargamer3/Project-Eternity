@@ -25,9 +25,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 			Matrix View = Matrix.Identity;
 
 			Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Width, 0, 0, 1);
-			Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+			// DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+			if (GameScreen.GraphicsDevice != null && GameScreen.GraphicsDevice.UseHalfPixelOffset)
+			{
+				Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+			}
 
-			Projection = View * (HalfPixelOffset * Projection);
+			Projection = View * Projection;
 
 			WetEffect.Parameters["NormalMap"].SetValue(BumpMap);
 			WetEffect.Parameters["View"].SetValue(View);

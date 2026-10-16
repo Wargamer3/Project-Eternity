@@ -440,9 +440,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 fxOutline = Content.Load<Effect>("Shaders/Outline");
                 Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1f);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-                Matrix projectionMatrix = HalfPixelOffset * Projection;
+                Matrix projectionMatrix = Projection;
+                // DirectX 11 leaves UseHalfPixelOffset off. The XNA -0.5 shift samples each tile on a texel edge.
+                if (GraphicsDevice.UseHalfPixelOffset)
+                {
+                    projectionMatrix = Matrix.CreateTranslation(-0.5f, -0.5f, 0) * Projection;
+                }
 
                 fxOutline.Parameters["World"].SetValue(Matrix.Identity);
                 fxOutline.Parameters["View"].SetValue(Matrix.Identity);
@@ -787,7 +790,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Files = Directory.GetFiles("Mods", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ass = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ass == null)
+                {
+                    continue;
+                }
+
                 //Get every classes in it.
                 Type[] types = ass.GetTypes();
                 for (int t = 0; t < types.Length; t++)

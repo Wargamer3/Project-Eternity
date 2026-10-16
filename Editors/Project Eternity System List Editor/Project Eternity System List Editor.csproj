@@ -1,104 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8CD134E1-2C2F-4A5D-AF05-9B89A04F9B41}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjectEternity.Editors.SystemListEditor</RootNamespace>
     <AssemblyName>Project Eternity System List Editor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\$(Configuration)\Editors Standalone\Deathmatch\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors Standalone\Deathmatch\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors Standalone\Deathmatch\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj" />
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj" />
+    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System List Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="System List Editor.Designer.cs">
-      <DependentUpon>System List Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Terrain and Unit Types Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Terrain and Unit Types Editor.Designer.cs">
-      <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Variables List Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Variables List Editor.Designer.cs">
-      <DependentUpon>Variables List Editor.cs</DependentUpon>
-    </Compile>
+    <Compile Include="System List Editor.cs" />
+    <Compile Include="System List Editor.Designer.cs" DependentUpon="System List Editor.cs" />
+    <Compile Include="Terrain and Unit Types Editor.cs" />
+    <Compile Include="Terrain and Unit Types Editor.Designer.cs" DependentUpon="Terrain and Unit Types Editor.cs" />
+    <Compile Include="Variables List Editor.cs" />
+    <Compile Include="Variables List Editor.Designer.cs" DependentUpon="Variables List Editor.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="System List Editor.resx">
-      <DependentUpon>System List Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Terrain and Unit Types Editor.resx">
-      <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Variables List Editor.resx">
-      <DependentUpon>Variables List Editor.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="System List Editor.resx" DependentUpon="System List Editor.cs" />
+    <EmbeddedResource Include="Terrain and Unit Types Editor.resx" DependentUpon="Terrain and Unit Types Editor.cs" />
+    <EmbeddedResource Include="Variables List Editor.resx" DependentUpon="Variables List Editor.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Project Eternity Editor Helper\Project Eternity Editor Helper.csproj">
-      <Project>{53a1885c-107d-49fd-ba51-50ef05d3cefe}</Project>
-      <Name>Project Eternity Editor Helper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
-      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
-      <Name>Project Eternity Unit</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
-      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
-      <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

@@ -194,11 +194,25 @@ namespace ProjectEternity.Core.Item
 
         public static Dictionary<string, BaseEffect> LoadAllEffects()
         {
-            Dictionary<string, BaseEffect> DicEffect = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(BaseEffect));
+            HashSet<Assembly> SeenAssemblies = new HashSet<Assembly>();
+            Dictionary<string, BaseEffect> DicEffect = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), SeenAssemblies, typeof(BaseEffect));
+
+            ReflectionHelper.ForEachUnseenAssembly(SeenAssemblies, delegate (Assembly ActiveAssembly)
+            {
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in LoadFromAssembly(ActiveAssembly, typeof(BaseEffect)))
+                {
+                    DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            });
 
             var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach(KeyValuePair<string, BaseEffect> ActiveEffect in LoadFromAssembly(ActiveAssembly, typeof(BaseEffect)))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
@@ -224,17 +238,27 @@ namespace ProjectEternity.Core.Item
 
         public static Dictionary<string, BaseEffect> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
         {
+            return LoadFromAssemblyFiles(ArrayFilePath, new HashSet<Assembly>(), TypeOfRequirement, Args);
+        }
+
+        public static Dictionary<string, BaseEffect> LoadFromAssemblyFiles(string[] ArrayFilePath, HashSet<Assembly> SeenAssemblies, Type TypeOfRequirement, params object[] Args)
+        {
             Dictionary<string, BaseEffect> DicEffect = new Dictionary<string, BaseEffect>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
-                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(ArrayFilePath[F]);
+                if (!ReflectionHelper.TrackPluginAssembly(SeenAssemblies, ActiveAssembly))
+                {
+                    continue;
+                }
+
                 foreach (KeyValuePair<string, BaseEffect> ActiveEffect in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
             }
-            
+
             return DicEffect;
         }
 

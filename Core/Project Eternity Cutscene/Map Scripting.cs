@@ -55,7 +55,11 @@ namespace ProjectEternity.Core.Scripts
             string[] Files = Directory.GetFiles("Scripts", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                System.Reflection.Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<T> ListBattleCondition = ReflectionHelper.GetObjectsFromBaseTypes<T>(typeof(T), ActiveAssembly.GetTypes(), Args);
 
                 foreach (MapCondition Instance in ListBattleCondition)
@@ -73,7 +77,11 @@ namespace ProjectEternity.Core.Scripts
             string[] Files = Directory.GetFiles("Scripts", "*.dll");
             for (int F = 0; F < Files.Length; F++)
             {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                System.Reflection.Assembly ActiveAssembly = ReflectionHelper.LoadPluginAssembly(Files[F]);
+                if (ActiveAssembly == null)
+                {
+                    continue;
+                }
                 List<T> ListBattleTrigger = ReflectionHelper.GetObjectsFromBaseTypes<T>(typeof(T), ActiveAssembly.GetTypes(), Args);
 
                 foreach (MapTrigger Instance in ListBattleTrigger)
