@@ -40,8 +40,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            BattleMapPlayerShopUnlockInventory.DicUnitDatabase[Path].ListLockedSkin.Remove(this);
-            BattleMapPlayerShopUnlockInventory.DicUnitDatabase[Path].ListUnlockedSkin.Add(this);
+            UnlockableUnit PlayerUnit = ConditionsOwner.UnlockInventory.FindPlayerUnit(Path);
+            PlayerUnit.ListLockedSkin.Remove(this);
+            if (!PlayerUnit.ListUnlockedSkin.Contains(this))
+            {
+                PlayerUnit.ListUnlockedSkin.Add(this);
+            }
 
             Unit NewUnit = Unit.FromFullName(SkinTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
             NewUnit.ID = NewUnit.ItemName;

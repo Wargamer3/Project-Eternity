@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -421,14 +422,9 @@ namespace Database.BattleMap
             string Name = FoundPlayerDocument.GetValue("Name").AsString;
             FoundPlayer.Name = Name;
 
-            ByteWriter BW = new ByteWriter();
-            BW.AppendInt32(FoundPlayerDocument.GetValue("Level").AsInt32);
-            BW.AppendInt32(FoundPlayerDocument.GetValue("EXP").AsInt32);
-            GetUnlocksBytes(BW, FoundPlayerDocument);
-            GetRecordsBytes(BW, FoundPlayerDocument);
-            GetInventoryBytes(BW, FoundPlayerDocument);
-            FoundPlayer.Info = BW.GetBytes();
-            BW.ClearWriteBuffer();
+            byte[] Profile = FoundPlayerDocument.GetValue("Profile").AsBsonBinaryData.Bytes;
+            byte[] Unlocks = FoundPlayerDocument.GetValue("UnlocksBlob").AsBsonBinaryData.Bytes;
+            FoundPlayer.Info = GameLocalDataManager.CreatePlayerInfo(Profile, Unlocks);
 
             return FoundPlayer;
         }
@@ -699,6 +695,12 @@ namespace Database.BattleMap
         public void SavePlayerInventory(string ID, object PlayerToSave)
         {
             BattleMapPlayer Player = (BattleMapPlayer)PlayerToSave;
+            byte[] ProfileBytes = Player.SaveToBytes();
+            MemoryStream UnlockStream = new MemoryStream();
+            BinaryWriter UnlockWriter = new BinaryWriter(UnlockStream, System.Text.Encoding.UTF8, true);
+            Player.UnlockInventory.WriteUnlocks(UnlockWriter);
+            UnlockWriter.Flush();
+            byte[] UnlockBytes = UnlockStream.ToArray();
             BsonDocument PlayerDocument = new BsonDocument
             {
                 { "Name", Player.Name },
@@ -861,26 +863,6 @@ namespace Database.BattleMap
             BsonArray OwnedCharacters = Inventory.GetValue("OwnedCharacters").AsBsonArray;
             BsonArray SquadLoadouts = Inventory.GetValue("SquadLoadouts").AsBsonArray;
 
-            foreach (Tuple<string, string> ActiveUnitAndPilot in ListDefaultUnit)
-            {
-                BsonDocument NewSquad = new BsonDocument();
-                NewSquad.Add("RelativePath", ActiveUnitAndPilot.Item1);
-                OwnedUnits.Add(NewSquad);
-
-                if (!string.IsNullOrEmpty(ActiveUnitAndPilot.Item2))
-                {
-                    OwnedCharacters.Add(ActiveUnitAndPilot.Item2);
-                }
-            }
-
-            BsonDocument NewSquadLoadout = new BsonDocument();
-            NewSquadLoadout.Add("RelativePath", ListDefaultUnit[0].Item1);
-            NewSquadLoadout.Add("PilotFullName", ListDefaultUnit[0].Item2);
-
-            BsonArray temp = new BsonArray();
-            temp.Add(NewSquadLoadout);
-            SquadLoadouts.Add(temp);
-
             BsonDocument Unlocks = PlayerDocument.GetValue("Unlocks").AsBsonDocument;
             BsonDocument Records = PlayerDocument.GetValue("Records").AsBsonDocument;
             BsonArray Friends = PlayerDocument.GetValue("Friends").AsBsonArray;
@@ -893,15 +875,17 @@ namespace Database.BattleMap
             UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update
                 .Set("Name", Player.Name)
                 .Set("Level", Player.Level)
-                .Set("EXP", 0)
+                .Set("EXP", Player.EXP)
                 .Set("Ranking", 1)
                 .Set("License", 1)
                 .Set("Guild", "")
                 .Set("Inventory", Inventory)
                 .Set("Unlocks", Unlocks)
                 .Set("Records", Records)
-                .Set("Friends", Friends);
-            PlayersCollection.UpdateOneAsync(filter, update);
+                .Set("Friends", Friends)
+                .Set("Profile", new BsonBinaryData(ProfileBytes))
+                .Set("UnlocksBlob", new BsonBinaryData(UnlockBytes));
+            PlayersCollection.UpdateOne(filter, update);
         }
 
         private void SetInventoryInformation(BsonDocument FoundPlayerDocument, BattleMapPlayer Player)
@@ -912,8 +896,7 @@ namespace Database.BattleMap
             
             foreach (UnitInfo ActiveSquad in Player.Inventory.DicOwnedUnit.Values)
             {
-                OwnedUnitsArray.Add(ActiveSquad.Leader.RelativePath);
-                OwnedUnitsArray.Add(ActiveSquad.QuantityOwned);
+                OwnedUnitsArray.Add(ActiveSquad.Leader.UnitTypeName + "/" + ActiveSquad.Leader.RelativePath);
             }
 
             BsonArray OwnedCharactersArray = Inventory.GetValue("OwnedCharacters").AsBsonArray;
@@ -921,14 +904,12 @@ namespace Database.BattleMap
             foreach (CharacterInfo ActiveCharacter in Player.Inventory.DicOwnedCharacter.Values)
             {
                 OwnedCharactersArray.Add(ActiveCharacter.Pilot.FullName);
-                OwnedCharactersArray.Add(ActiveCharacter.QuantityOwned);
             }
 
             BsonArray OwnedMissionsArray = Inventory.GetValue("OwnedMissions").AsBsonArray;
             foreach (MissionInfo ActiveMission in Player.Inventory.DicOwnedMission.Values)
             {
                 OwnedMissionsArray.Add(ActiveMission.MapPath);
-                OwnedMissionsArray.Add(ActiveMission.QuantityOwned);
             }
 
             BsonArray SquadLoadoutsArray = Inventory.GetValue("SquadLoadouts").AsBsonArray;

@@ -137,6 +137,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerManager.DicEffect = BaseEffect.LoadAllEffects();
             PlayerManager.DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
             PlayerManager.DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
+            BattleMapPlayerShopUnlockInventory.EnsureUnlockFileReadingStarted();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntButton = Content.Load<SpriteFont>("Fonts/Arial16");
@@ -318,6 +319,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            BattleMapPlayerShopUnlockInventory.LoadInventoryAssetsThisFrame();
+
             if (OnlineGameClient != null)
             {
                 OnlineGameClient.ExecuteDelayedScripts();

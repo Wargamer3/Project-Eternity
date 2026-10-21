@@ -31,14 +31,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             PlayerPOCO PlayerInfo = Owner.Database.GetPlayerInventory(ID);
 
             BattleMapPlayer NewRoomPlayer = new BattleMapPlayer(PlayerInfo.ID, PlayerInfo.Name, true);
-            ByteReader BR = new ByteReader(PlayerInfo.Info);
-            NewRoomPlayer.Level = BR.ReadInt32();
-            NewRoomPlayer.EXP = BR.ReadInt32();
-            NewRoomPlayer.InitRecords(BR);
-            BR.Clear();
+            NewRoomPlayer.LoadOnlineInventory(PlayerInfo.Info, null, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Sender.ExtraInformation = NewRoomPlayer;
             NewRoomPlayer.OnlineClient = Sender;
-            NewRoomPlayer.GameplayType = GameplayTypes.None;
 
             Sender.Send(new PlayerInventoryScriptServer(PlayerInfo));
         }

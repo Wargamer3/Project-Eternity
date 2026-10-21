@@ -73,6 +73,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private SorcererStreetInventory Inventory;
 
         private SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer CurrentContainer;
+        private SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer LastPrioritizedContainer;
         private List<SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer> ListLastContainer;
 
         public ShopCharacterWhiteScreen(ShopScreen Owner, SorcererStreetPlayerUnlockInventory UnlockInventory, SorcererStreetInventory Inventory)
@@ -223,6 +224,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
+
+            if (CurrentContainer != LastPrioritizedContainer)
+            {
+                SorcererStreetPlayerUnlockInventory.ClearPriority();
+                LastPrioritizedContainer = CurrentContainer;
+            }
+
+            SorcererStreetPlayerUnlockInventory.PrioritizeCharacters(CurrentContainer.ListUnlockedCharacter);
+            SorcererStreetPlayerUnlockInventory.PrioritizeCharacters(CurrentContainer.ListLockedCharacter);
         }
 
         private void OnSquadScrollbarChange(float ScrollbarValue)

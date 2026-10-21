@@ -40,8 +40,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            SorcererStreetPlayerUnlockInventory.DicBookDatabase[Path].ListLockedAlt.Remove(this);
-            SorcererStreetPlayerUnlockInventory.DicBookDatabase[Path].ListUnlockedAlt.Add(this);
+            UnlockableBook PlayerBook = ConditionsOwner.UnlockInventory.FindPlayerBook(Path);
+            PlayerBook.ListLockedAlt.Remove(this);
+            PlayerBook.ListUnlockedAlt.Add(this);
 
             BookToBuy = CardBook.GetCardBook(Path, ConditionsOwner.Inventory.GlobalBook, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 

@@ -197,7 +197,14 @@ namespace Database.TripleThunder
 
         public PlayerPOCO GetPlayerInventory(string ID)
         {
-            throw new NotImplementedException();
+            FilterDefinition<BsonDocument> Filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            BsonDocument FoundPlayerDocument = PlayersCollection.Find(Filter).FirstOrDefault();
+
+            PlayerPOCO FoundPlayer = new PlayerPOCO();
+            FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
+            FoundPlayer.Name = FoundPlayerDocument.GetValue("Name").AsString;
+            FoundPlayer.Info = FoundPlayerDocument.GetValue("Profile").AsBsonBinaryData.Bytes;
+            return FoundPlayer;
         }
 
         private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)
@@ -214,7 +221,13 @@ namespace Database.TripleThunder
 
         public void SavePlayerInventory(string ID, object PlayerToSave)
         {
-            throw new NotImplementedException();
+            Player Player = (Player)PlayerToSave;
+            byte[] ProfileBytes = Player.SaveToBytes();
+            FilterDefinition<BsonDocument> Filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            UpdateDefinition<BsonDocument> Update = Builders<BsonDocument>.Update
+                .Set("Name", Player.Name)
+                .Set("Profile", new BsonBinaryData(ProfileBytes));
+            PlayersCollection.UpdateOne(Filter, Update);
         }
     }
 }

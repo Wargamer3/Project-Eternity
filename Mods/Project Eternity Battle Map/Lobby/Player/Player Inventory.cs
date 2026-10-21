@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
@@ -10,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public struct UnitInventoryContainer
+    public class UnitInventoryContainer
     {
         public Dictionary<string, UnitInventoryContainer> DicFolder;
         public List<UnitInventoryContainer> ListFolder;//Share the same folders as the dictionnary
@@ -43,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
     }
 
-    public struct CharacterInventoryContainer
+    public class CharacterInventoryContainer
     {
         public Dictionary<string, CharacterInventoryContainer> DicFolder;
         public List<CharacterInventoryContainer> ListFolder;//Share the same folders as the dictionnary
@@ -177,9 +178,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListSquadLoadout.Add(ActiveLoadout);
         }
 
+        public void AddPathCharacter(string FullName, byte QuantityOwned)
+        {
+            if (DicOwnedCharacter.ContainsKey(FullName))
+            {
+                return;
+            }
+
+            Character Pilot = new Character();
+            Pilot.FullName = FullName;
+            DicOwnedCharacter.Add(FullName, new CharacterInfo(Pilot, QuantityOwned));
+        }
+
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
+            RootUnitContainer = new UnitInventoryContainer("ALL");
+            RootCharacterContainer = new CharacterInventoryContainer("ALL");
+
             int DicOwnedUnitCount = BR.ReadInt32();
             DicOwnedUnit = new Dictionary<string, UnitInfo>(DicOwnedUnitCount);
             for (int U = 0; U < DicOwnedUnitCount; ++U)
@@ -187,11 +203,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
-
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
                 UnitInfo LoadedUnitInfo = new UnitInfo(LoadedUnit, QuantityOwned);
-
                 DicOwnedUnit.Add(UnitTypeName + "/" + RelativePath, LoadedUnitInfo);
                 AddUnit(LoadedUnitInfo);
             }
@@ -202,13 +216,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string CharacterFullName = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
-
                 Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
                 LoadedCharacter.ID = LoadedCharacter.Name;
-
                 CharacterInfo LoadedCharacterInfo = new CharacterInfo(LoadedCharacter, QuantityOwned);
-
                 DicOwnedCharacter.Add(CharacterFullName, LoadedCharacterInfo);
                 AddCharacter(LoadedCharacterInfo);
             }
@@ -219,10 +230,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string MissionPath = BR.ReadString();
                 byte QuantityOwned = BR.ReadByte();
-
-                MissionInfo LoadedMission = new MissionInfo(MissionPath, QuantityOwned);
-
-                DicOwnedMission.Add(MissionPath, LoadedMission);
+                DicOwnedMission.Add(MissionPath, new MissionInfo(MissionPath, QuantityOwned));
             }
 
             int ListSquadLoadoutCount = BR.ReadInt32();
@@ -231,7 +239,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 PlayerLoadout NewSquadLoadout = new PlayerLoadout();
                 ListSquadLoadout.Add(NewSquadLoadout);
-
                 NewSquadLoadout.Name = BR.ReadString();
 
                 int NewSquadLoadoutSquadCount = BR.ReadInt32();
@@ -239,7 +246,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 for (int S = 0; S < NewSquadLoadoutSquadCount; ++S)
                 {
                     string RelativePath = BR.ReadString();
-
                     if (string.IsNullOrEmpty(RelativePath))
                     {
                         NewSquadLoadout.ListSpawnSquad.Add(null);
@@ -248,39 +254,36 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     string UnitTypeName = BR.ReadString();
                     string CharacterFullName = BR.ReadString();
-
                     Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedUnit.ID = LoadedUnit.ItemName;
-
                     if (!string.IsNullOrEmpty(CharacterFullName))
                     {
                         Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                         LoadedCharacter.Level = 1;
                         LoadedCharacter.ID = LoadedCharacter.Name;
-
                         LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
                     }
 
                     Squad NewSquad = new Squad("Squad", LoadedUnit);
                     NewSquad.IsPlayerControlled = true;
-
                     NewSquadLoadout.ListSpawnSquad.Add(NewSquad);
                 }
             }
 
-            byte SkinsQuantityOwned = BR.ReadByte();
-            byte AltsQuantityOwned = BR.ReadByte();
+            DicOwnedUnitSkin = new Dictionary<string, UnitSkinInfo>();
+            DicOwnedUnitAlt = new Dictionary<string, UnitSkinInfo>();
 
-            for (int S = SkinsQuantityOwned - 1; S >= 0; --S)
+            int SkinsQuantityOwned = BR.ReadInt32();
+            for (int S = 0; S < SkinsQuantityOwned; ++S)
             {
                 string OwnerUnitTypeAndRelativePath = BR.ReadString();
                 string SkinTypeAndRelativePath = BR.ReadString();
-
-                if (DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
+                UnitInfo Owner;
+                if (DicOwnedUnit.TryGetValue(OwnerUnitTypeAndRelativePath, out Owner))
                 {
                     Unit LoadedSkin = Unit.FromFullName(SkinTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedSkin.ID = LoadedSkin.ItemName;
-                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitSkin.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, SkinTypeAndRelativePath, LoadedSkin));
+                    Owner.ListOwnedUnitSkin.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, SkinTypeAndRelativePath, LoadedSkin));
                 }
                 else
                 {
@@ -288,16 +291,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
+            int AltsQuantityOwned = BR.ReadInt32();
             for (int A = 0; A < AltsQuantityOwned; ++A)
             {
                 string OwnerUnitTypeAndRelativePath = BR.ReadString();
                 string AltTypeAndRelativePath = BR.ReadString();
-
-                if (DicOwnedUnit.ContainsKey(OwnerUnitTypeAndRelativePath))
+                UnitInfo Owner;
+                if (DicOwnedUnit.TryGetValue(OwnerUnitTypeAndRelativePath, out Owner))
                 {
                     Unit LoadedAlt = Unit.FromFullName(AltTypeAndRelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     LoadedAlt.ID = LoadedAlt.ItemName;
-                    DicOwnedUnit[OwnerUnitTypeAndRelativePath].ListOwnedUnitAlt.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, LoadedAlt));
+                    Owner.ListOwnedUnitAlt.Add(new UnitSkinInfo(OwnerUnitTypeAndRelativePath, AltTypeAndRelativePath, LoadedAlt));
                 }
                 else
                 {
@@ -493,17 +497,42 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            BW.Write(DicOwnedUnitSkin.Count);
+            int SkinsQuantityOwned = DicOwnedUnitSkin.Count;
+            int AltsQuantityOwned = DicOwnedUnitAlt.Count;
+            foreach (UnitInfo ActiveUnit in DicOwnedUnit.Values)
+            {
+                SkinsQuantityOwned += ActiveUnit.ListOwnedUnitSkin.Count;
+                AltsQuantityOwned += ActiveUnit.ListOwnedUnitAlt.Count;
+            }
+
+            BW.Write(SkinsQuantityOwned);
+            foreach (UnitInfo ActiveUnit in DicOwnedUnit.Values)
+            {
+                foreach (UnitSkinInfo ActiveSkin in ActiveUnit.ListOwnedUnitSkin)
+                {
+                    BW.Write(ActiveSkin.OwnerTypeAndRelativePath);
+                    BW.Write(ActiveSkin.SkinTypeAndRelativePath);
+                }
+            }
             foreach (UnitSkinInfo ActiveSkin in DicOwnedUnitSkin.Values)
             {
                 BW.Write(ActiveSkin.OwnerTypeAndRelativePath);
                 BW.Write(ActiveSkin.SkinTypeAndRelativePath);
             }
-            BW.Write(DicOwnedUnitAlt.Count);
-            foreach (UnitSkinInfo ActiveSkin in DicOwnedUnitAlt.Values)
+
+            BW.Write(AltsQuantityOwned);
+            foreach (UnitInfo ActiveUnit in DicOwnedUnit.Values)
             {
-                BW.Write(ActiveSkin.OwnerTypeAndRelativePath);
-                BW.Write(ActiveSkin.SkinTypeAndRelativePath);
+                foreach (UnitSkinInfo ActiveAlt in ActiveUnit.ListOwnedUnitAlt)
+                {
+                    BW.Write(ActiveAlt.OwnerTypeAndRelativePath);
+                    BW.Write(ActiveAlt.SkinTypeAndRelativePath);
+                }
+            }
+            foreach (UnitSkinInfo ActiveAlt in DicOwnedUnitAlt.Values)
+            {
+                BW.Write(ActiveAlt.OwnerTypeAndRelativePath);
+                BW.Write(ActiveAlt.SkinTypeAndRelativePath);
             }
         }
 

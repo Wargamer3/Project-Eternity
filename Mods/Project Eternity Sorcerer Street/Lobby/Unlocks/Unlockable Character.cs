@@ -7,7 +7,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public const string CharacterType = "Character";
 
-        public PlayerCharacter CharacterToBuy;
+        private PlayerCharacter _CharacterToBuy;
+        public PlayerCharacter CharacterToBuy
+        {
+            get
+            {
+                UnlockablePlayerCharacter ShopCharacter;
+                if (SorcererStreetPlayerUnlockInventory.CharacterLoader.Database.TryGetValue(Path, out ShopCharacter) && !object.ReferenceEquals(ShopCharacter, this))
+                {
+                    return ShopCharacter.CharacterToBuy;
+                }
+
+                return _CharacterToBuy;
+            }
+            set
+            {
+                UnlockablePlayerCharacter ShopCharacter;
+                if (SorcererStreetPlayerUnlockInventory.CharacterLoader.Database.TryGetValue(Path, out ShopCharacter) && !object.ReferenceEquals(ShopCharacter, this))
+                {
+                    ShopCharacter.CharacterToBuy = value;
+                }
+                else
+                {
+                    _CharacterToBuy = value;
+                }
+            }
+        }
         public List<UnlockableCharacterSkin> ListUnlockedSkin = new List<UnlockableCharacterSkin>();
         public List<UnlockableCharacterSkin> ListLockedSkin = new List<UnlockableCharacterSkin>();
         public List<UnlockableCharacterAlt> ListUnlockedAlt = new List<UnlockableCharacterAlt>();
@@ -58,6 +83,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return ListUnlockMessage;
+        }
+
+        public UnlockablePlayerCharacter Copy()
+        {
+            UnlockablePlayerCharacter Copy = new UnlockablePlayerCharacter(Path);
+            Copy.UnlockQuantity = UnlockQuantity;
+            Copy.IsInShop = IsInShop;
+            Copy.ShopOrder = ShopOrder;
+            Copy.HiddenUntilUnlocked = HiddenUntilUnlocked;
+            Copy.ShowSkin = ShowSkin;
+            if (UnlockConditions != null)
+            {
+                Copy.UnlockConditions = UnlockConditions.Copy();
+            }
+
+            return Copy;
         }
     }
 }

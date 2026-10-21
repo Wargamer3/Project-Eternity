@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
@@ -267,7 +268,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
             Inventory.Load(BR, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            if (SorcererStreetPlayerUnlockInventory.GlobalBook == null)
+            {
+                SorcererStreetPlayerUnlockInventory.GlobalBook = Inventory.GlobalBook;
+            }
+
             UnlockInventory.LoadPlayerUnlocks(Name);
+        }
+
+        public void LoadOnlineInventory(byte[] Packed, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
+            BinaryReader ProfileReader;
+            BinaryReader UnlockReader;
+            OpenPackedInventory(Packed, out ProfileReader, out UnlockReader);
+            Inventory.Load(ProfileReader, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            UnlockInventory.ReadUnlocks(UnlockReader);
+            UnlockInventory.HasFinishedReadingPlayerShopItems = true;
+            ProfileReader.Close();
+            UnlockReader.Close();
         }
 
         public override void InitFirstTimeInventory()
@@ -322,7 +340,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             InitFirstTimeBot();
 
-            UnlockInventory.LoadPlayerUnlocks(Name);
+            if (SorcererStreetPlayerUnlockInventory.GlobalBook == null)
+            {
+                SorcererStreetPlayerUnlockInventory.GlobalBook = Inventory.GlobalBook;
+            }
         }
 
         private void InitFirstTimeBot()
@@ -370,7 +391,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void DoSaveLocally(BinaryWriter BW)
         {
             Inventory.Save(BW);
-            UnlockInventory.LoadPlayerUnlocks(Name);
+            UnlockInventory.SaveLocally(Name);
         }
 
         public void FillDeck(SorcererStreetBattleParams Params)

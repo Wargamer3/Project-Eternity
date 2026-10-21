@@ -87,37 +87,65 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void LoadLocally(ContentManager Content)
         {
-            if (!File.Exists("Triple Thunder Save File.bin"))
+            string ProfileFile = ProfileFilePath();
+            if (!File.Exists(ProfileFile))
             {
                 SaveLocally();
             }
 
-            FileStream FS = new FileStream("Triple Thunder Save File.bin", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream(ProfileFile, FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
-
-            Name = BR.ReadString();
-            Enum.TryParse(BR.ReadString(), out GameplayType);
-            Money = BR.ReadUInt32();
-
-            Equipment.Load(BR, Content);
-
+            ReadProfile(BR, Content);
             BR.Close();
             FS.Close();
         }
 
         public void SaveLocally()
         {
-            FileStream FS = new FileStream("Triple Thunder Save File.bin", FileMode.OpenOrCreate, FileAccess.Write);
+            string ProfileFile = ProfileFilePath();
+            Directory.CreateDirectory(Path.GetDirectoryName(ProfileFile));
+            FileStream FS = new FileStream(ProfileFile, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
+            WriteProfile(BW);
+            BW.Close();
+            FS.Close();
+        }
 
+        public byte[] SaveToBytes()
+        {
+            MemoryStream Stream = new MemoryStream();
+            BinaryWriter Writer = new BinaryWriter(Stream, Encoding.UTF8, true);
+            WriteProfile(Writer);
+            Writer.Flush();
+            return Stream.ToArray();
+        }
+
+        public void Load(byte[] Bytes, ContentManager Content)
+        {
+            BinaryReader Reader = new BinaryReader(new MemoryStream(Bytes), Encoding.UTF8);
+            ReadProfile(Reader, Content);
+            Reader.Close();
+        }
+
+        private void WriteProfile(BinaryWriter BW)
+        {
             BW.Write(Name);
             BW.Write(GameplayType.ToString());
             BW.Write(Money);
-
             Equipment.SaveLocally(BW);
+        }
 
-            BW.Close();
-            FS.Close();
+        private void ReadProfile(BinaryReader BR, ContentManager Content)
+        {
+            Name = BR.ReadString();
+            Enum.TryParse(BR.ReadString(), out GameplayType);
+            Money = BR.ReadUInt32();
+            Equipment.Load(BR, Content);
+        }
+
+        private string ProfileFilePath()
+        {
+            return Path.Combine("User data", "Profiles", "Triple Thunder", Name + ".bin");
         }
 
         public bool IsHost()

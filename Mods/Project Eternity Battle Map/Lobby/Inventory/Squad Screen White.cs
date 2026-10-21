@@ -558,12 +558,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         UnitSkinInfo CurrentUnitSkinInfo = CurrentUnit as UnitSkinInfo;
                         if (CurrentUnitInfo != null)
                         {
+                            BattleMapPlayerShopUnlockInventory.PrioritizeUnit(CurrentUnitInfo.Leader.UnitTypeName + "/" + CurrentUnitInfo.Leader.RelativePath);
                             g.Draw(CurrentUnitInfo.Leader.SpriteMap, new Rectangle(FinalX + SpriteOffset, DrawY + SpriteOffset, SpriteSizeFinal, SpriteSizeFinal), Color.White);
 
                             g.DrawString(fntOxanimumBoldSmall, "x" + CurrentUnitInfo.QuantityOwned, new Vector2(FinalX + BoxWidthFinal - 40, DrawY + BoxHeight - 30), TextColor);
                         }
                         else if (CurrentUnitSkinInfo != null)
                         {
+                            string FullPath = CurrentUnitSkinInfo.OwnerTypeAndRelativePath + CurrentUnitSkinInfo.SkinTypeAndRelativePath;
+                            BattleMapPlayerShopUnlockInventory.PrioritizeUnitSkin(FullPath);
+                            BattleMapPlayerShopUnlockInventory.PrioritizeUnitAlt(FullPath);
                             g.Draw(CurrentUnitSkinInfo.Leader.SpriteMap, new Rectangle(FinalX + SpriteOffset, DrawY + SpriteOffset, SpriteSizeFinal, SpriteSizeFinal), Color.White);
                         }
                     }

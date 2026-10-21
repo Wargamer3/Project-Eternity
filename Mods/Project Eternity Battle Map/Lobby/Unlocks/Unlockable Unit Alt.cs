@@ -40,8 +40,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            BattleMapPlayerShopUnlockInventory.DicUnitDatabase[Path].ListLockedAlt.Remove(this);
-            BattleMapPlayerShopUnlockInventory.DicUnitDatabase[Path].ListUnlockedAlt.Add(this);
+            UnlockableUnit PlayerUnit = ConditionsOwner.UnlockInventory.FindPlayerUnit(Path);
+            PlayerUnit.ListLockedAlt.Remove(this);
+            if (!PlayerUnit.ListUnlockedAlt.Contains(this))
+            {
+                PlayerUnit.ListUnlockedAlt.Add(this);
+            }
 
             Unit NewUnit = Unit.FromFullName(AltTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
             NewUnit.ID = NewUnit.ItemName;

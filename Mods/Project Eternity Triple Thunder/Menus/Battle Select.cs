@@ -171,7 +171,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
             {
-                ActivePlayer.CharacterPreview = new RobotAnimation("Characters/" + ActivePlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerInventory(), new MuteSFXGenerator(), new List<WeaponBase>());
+                ActivePlayer.CharacterPreview = new RobotAnimation("Characters/" + ActivePlayer.Equipment.CharacterType, null, Vector2.Zero, 0, ActivePlayer.Equipment, new MuteSFXGenerator(), new List<WeaponBase>());
             }
         }
 
@@ -220,27 +220,31 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
-                Room.AddLocalPlayer(NewPlayer);
+                Player NewPlayer = new Player("", "Player 1", Player.PlayerTypes.Player, 0);
                 NewPlayer.GameplayType = GameplayTypes.Controller1;
+                NewPlayer.LoadLocally(Content);
+                Room.AddLocalPlayer(NewPlayer);
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F2))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
-                Room.AddLocalPlayer(NewPlayer);
+                Player NewPlayer = new Player("", "Player 2", Player.PlayerTypes.Player, 0);
                 NewPlayer.GameplayType = GameplayTypes.Controller2;
+                NewPlayer.LoadLocally(Content);
+                Room.AddLocalPlayer(NewPlayer);
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F3))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
-                Room.AddLocalPlayer(NewPlayer);
+                Player NewPlayer = new Player("", "Player 3", Player.PlayerTypes.Player, 0);
                 NewPlayer.GameplayType = GameplayTypes.Controller3;
+                NewPlayer.LoadLocally(Content);
+                Room.AddLocalPlayer(NewPlayer);
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
-                Room.AddLocalPlayer(NewPlayer);
+                Player NewPlayer = new Player("", "Player 4", Player.PlayerTypes.Player, 0);
                 NewPlayer.GameplayType = GameplayTypes.Controller4;
+                NewPlayer.LoadLocally(Content);
+                Room.AddLocalPlayer(NewPlayer);
             }
         }
 
@@ -280,7 +284,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void AddPlayer(Player NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
-            NewPlayer.CharacterPreview = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerInventory(), new MuteSFXGenerator(), new List<WeaponBase>());
+            NewPlayer.CharacterPreview = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, null, Vector2.Zero, 0, NewPlayer.Equipment, new MuteSFXGenerator(), new List<WeaponBase>());
 
             UpdateReadyOrHost();
         }
@@ -301,7 +305,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sprActivePlayerIcon = DicCharacterIconByName[PlayerToUpdate.Equipment.CharacterType];
             }
 
-            PlayerToUpdate.CharacterPreview = new RobotAnimation("Characters/" + PlayerToUpdate.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerInventory(), new MuteSFXGenerator(), new List<WeaponBase>());
+            PlayerToUpdate.CharacterPreview = new RobotAnimation("Characters/" + PlayerToUpdate.Equipment.CharacterType, null, Vector2.Zero, 0, PlayerToUpdate.Equipment, new MuteSFXGenerator(), new List<WeaponBase>());
         }
 
         public void UpdateRoomSubtype(string RoomSubtype)

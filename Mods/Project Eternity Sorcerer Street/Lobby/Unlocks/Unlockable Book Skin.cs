@@ -40,8 +40,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            SorcererStreetPlayerUnlockInventory.DicBookDatabase[Path].ListLockedSkin.Remove(this);
-            SorcererStreetPlayerUnlockInventory.DicBookDatabase[Path].ListUnlockedSkin.Add(this);
+            UnlockableBook PlayerBook = ConditionsOwner.UnlockInventory.FindPlayerBook(Path);
+            PlayerBook.ListLockedSkin.Remove(this);
+            PlayerBook.ListUnlockedSkin.Add(this);
 
             BookToBuy = CardBook.GetCardBook(Path, ConditionsOwner.Inventory.GlobalBook, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 

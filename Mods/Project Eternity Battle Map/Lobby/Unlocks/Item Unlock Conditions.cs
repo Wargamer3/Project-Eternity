@@ -44,6 +44,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             IsUnlocked = ListUnlockConditions.Count == 0;
         }
+
+        public ItemUnlockConditions Copy()
+        {
+            ItemUnlockConditions Copied = (ItemUnlockConditions)MemberwiseClone();
+            Copied.IsUnlocked = IsUnlocked;
+            return Copied;
+        }
     }
 
     public interface ItemUnlockConditionsEvaluator
@@ -69,7 +76,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             List<GameScreen> ListPendingUnlocks = new List<GameScreen>();
             bool NewUnlocks = false;
 
-            if (BattleMapPlayerShopUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
+            if (BattleMapPlayerShopUnlockInventory.AreAssetsAllLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
                 if (!UpdateAvailableItemsIfNeeded())
                 {
@@ -111,7 +118,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
 
-                foreach (UnlockableUnit ActiveUnit in BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values)
+                List<UnlockableUnit> PlayerUnits = new List<UnlockableUnit>();
+                PlayerUnits.AddRange(ConditionsOwner.UnlockInventory.RootUnitContainer.ListUnlockedUnit);
+                PlayerUnits.AddRange(ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit);
+                foreach (UnlockableUnit ActiveUnit in PlayerUnits)
                 {
                     for (int S = ActiveUnit.ListLockedSkin.Count - 1; S >= 0; --S)
                     {
@@ -178,102 +188,108 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool UpdateAvailableItemsIfNeeded()
         {
-            bool IsFinished = false;
-            lock (PopulatePlayerItemsTaskLockObject)
+            if (!IsInit)
             {
-                if (PopulatePlayerItemsTask == null)
-                {
-                    PopulatePlayerItemsTask = Task.Run(() => { UpdateAvailableItemsTask(); });
-                }
-
-                IsFinished = IsInit;
+                UpdateAvailableItemsTask();
             }
 
-            return IsFinished;
+            return IsInit;
+        }
+
+        private void UpdateCharacterUnlockStatus(UnlockableCharacter ShopCharacter)
+        {
+            bool Valid = IsValid(ShopCharacter.UnlockConditions, ConditionsOwner);
+            if (Valid)
+            {
+                if (!ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Contains(ShopCharacter))
+                {
+                    ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Add(ShopCharacter);
+                }
+
+                ConditionsOwner.UnlockInventory.ListLockedCharacter.Remove(ShopCharacter);
+            }
+            else
+            {
+                if (!ConditionsOwner.UnlockInventory.ListLockedCharacter.Contains(ShopCharacter))
+                {
+                    ConditionsOwner.UnlockInventory.ListLockedCharacter.Add(ShopCharacter);
+                }
+
+                ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Remove(ShopCharacter);
+            }
+        }
+
+        private void UpdateMissionUnlockStatus(UnlockableMission ShopMission)
+        {
+            bool Valid = IsValid(ShopMission.UnlockConditions, ConditionsOwner);
+            if (Valid)
+            {
+                if (!ConditionsOwner.UnlockInventory.ListUnlockedMission.Contains(ShopMission))
+                {
+                    ConditionsOwner.UnlockInventory.ListUnlockedMission.Add(ShopMission);
+                }
+
+                ConditionsOwner.UnlockInventory.ListLockedMission.Remove(ShopMission);
+            }
+            else
+            {
+                if (!ConditionsOwner.UnlockInventory.ListLockedMission.Contains(ShopMission))
+                {
+                    ConditionsOwner.UnlockInventory.ListLockedMission.Add(ShopMission);
+                }
+
+                ConditionsOwner.UnlockInventory.ListUnlockedMission.Remove(ShopMission);
+            }
         }
 
         private void UpdateAvailableItemsTask()
         {
-            ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit = new List<UnlockableUnit>(BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values);
-
-            foreach (UnlockableUnit NewUnit in BattleMapPlayerShopUnlockInventory.DicUnitDatabase.Values)
+            foreach (UnlockableCharacter ActiveCharacter in BattleMapPlayerShopUnlockInventory.CharacterLoader.Database.Values)
             {
-                BattleMapPlayerShopUnlockInventory.UnitUnlockContainer CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
-                bool IsUnitValid = IsValid(NewUnit.UnlockConditions, ConditionsOwner);
+                UpdateCharacterUnlockStatus(ActiveCharacter);
+            }
 
-                if (IsUnitValid)
+            foreach (UnlockableMission ActiveMission in BattleMapPlayerShopUnlockInventory.MissionLoader.Database.Values)
+            {
+                UpdateMissionUnlockStatus(ActiveMission);
+            }
+
+            foreach (UnlockableUnit ActiveUnit in BattleMapPlayerShopUnlockInventory.UnitLoader.Database.Values)
+            {
+                UnlockableUnit PlayerUnit = ConditionsOwner.UnlockInventory.FindPlayerUnit(ActiveUnit.Path);
+                if (PlayerUnit == null)
                 {
-                    if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
-                    {
-                        CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
-                    }
+                    PlayerUnit = ActiveUnit.Copy();
+                }
 
-                    CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
+                bool IsUnlocked = IsValid(PlayerUnit.UnlockConditions, ConditionsOwner);
+                BattleMapPlayerShopUnlockInventory.UnitUnlockContainer Root = ConditionsOwner.UnlockInventory.RootUnitContainer;
+                if (IsUnlocked)
+                {
+                    Root.AddToUnlocked(PlayerUnit);
                 }
                 else
                 {
-                    if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
-                    {
-                        CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
-                    }
-
-                    CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
+                    Root.AddToLocked(PlayerUnit);
                 }
 
-                UpdateAvailableUnitSkinsTask(NewUnit);
+                UpdateAvailableUnitSkinsTask(PlayerUnit);
 
-                string[] Tags = NewUnit.UnitToBuy.UnitTags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] Tags = PlayerUnit.UnitToBuy.UnitTags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ActiveTag in Tags)
                 {
-                    CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
-
-                    if (IsUnitValid)
-                    {
-                        if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
-                        {
-                            CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
-                        }
-
-                        CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
-                    }
-                    else
-                    {
-                        if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
-                        {
-                            CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
-                        }
-
-                        CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
-                    }
-
+                    BattleMapPlayerShopUnlockInventory.UnitUnlockContainer CurrentFolder = Root;
                     string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string ActiveFolder in SubFolders)
                     {
-                        BattleMapPlayerShopUnlockInventory.UnitUnlockContainer NewContainer;
-                        if (!CurrentUnitContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        CurrentFolder = CurrentFolder.GetOrAddFolder(ActiveFolder);
+                        if (IsUnlocked)
                         {
-                            NewContainer = new BattleMapPlayerShopUnlockInventory.UnitUnlockContainer(ActiveFolder);
-                            CurrentUnitContainer.DicFolder.Add(ActiveFolder, NewContainer);
-                            CurrentUnitContainer.ListFolder.Add(NewContainer);
-                        }
-
-                        CurrentUnitContainer = NewContainer;
-
-                        if (IsUnitValid)
-                        {
-                            if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
-                            {
-                                CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
-                                CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
-                            }
+                            CurrentFolder.AddToUnlocked(PlayerUnit);
                         }
                         else
                         {
-                            if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
-                            {
-                                CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
-                                CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
-                            }
+                            CurrentFolder.AddToLocked(PlayerUnit);
                         }
                     }
                 }
@@ -287,7 +303,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdateAvailableUnitSkinsTask(UnlockableUnit NewUnit)
         {
-            foreach (UnlockableUnitSkin NewSkin in BattleMapPlayerShopUnlockInventory.DicUnitSkinDatabase.Values)
+            foreach (UnlockableUnitSkin NewSkin in BattleMapPlayerShopUnlockInventory.UnitSkinLoader.Database.Values)
             {
                 if (NewUnit.Path != NewSkin.Path)
                     continue;
@@ -314,7 +330,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            foreach (UnlockableUnitAlt NewAlt in BattleMapPlayerShopUnlockInventory.DicUnitAltDatabase.Values)
+            foreach (UnlockableUnitAlt NewAlt in BattleMapPlayerShopUnlockInventory.UnitAltLoader.Database.Values)
             {
                 if (NewUnit.Path != NewAlt.Path)
                     continue;

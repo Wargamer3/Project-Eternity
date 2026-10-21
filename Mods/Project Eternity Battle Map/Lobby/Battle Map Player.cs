@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
 
@@ -73,6 +74,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UnlockInventory.LoadUnlockedPlayerItems(Name);
         }
 
+        public void LoadOnlineInventory(byte[] Packed, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
+            BinaryReader ProfileReader;
+            BinaryReader UnlockReader;
+            OpenPackedInventory(Packed, out ProfileReader, out UnlockReader);
+            Inventory.Load(ProfileReader, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            UnlockInventory.ReadUnlocks(UnlockReader);
+            UnlockInventory.HasFinishedReadingPlayerShopItems = true;
+            ProfileReader.Close();
+            UnlockReader.Close();
+        }
+
         public override void InitFirstTimeInventory()
         {
             IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
@@ -116,8 +129,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string MissionPath = IniDefaultMissions.ReadField(ActiveKey, "Path");
                 Inventory.DicOwnedMission.Add(MissionPath, new MissionInfo(MissionPath, 0));
             }
-
-            UnlockInventory.LoadUnlockedPlayerItems(Name);
         }
 
         public void FillLoadout(int UnitsInLoadout)

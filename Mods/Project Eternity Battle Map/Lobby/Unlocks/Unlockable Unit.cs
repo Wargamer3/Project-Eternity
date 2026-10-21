@@ -7,7 +7,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public const string UnitType = "Unit";
 
-        public Unit UnitToBuy;
+        private Unit _UnitToBuy;
+        public Unit UnitToBuy
+        {
+            get
+            {
+                UnlockableUnit ShopUnit;
+                if (BattleMapPlayerShopUnlockInventory.UnitLoader.Database.TryGetValue(Path, out ShopUnit) && !object.ReferenceEquals(ShopUnit, this))
+                {
+                    return ShopUnit.UnitToBuy;
+                }
+
+                return _UnitToBuy;
+            }
+            set
+            {
+                _UnitToBuy = value;
+            }
+        }
         public List<UnlockableUnitSkin> ListUnlockedSkin = new List<UnlockableUnitSkin>();
         public List<UnlockableUnitSkin> ListLockedSkin = new List<UnlockableUnitSkin>();
         public List<UnlockableUnitAlt> ListUnlockedAlt = new List<UnlockableUnitAlt>();
@@ -59,6 +76,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return ListUnlockMessage;
+        }
+
+        public UnlockableUnit Copy()
+        {
+            UnlockableUnit Copy = new UnlockableUnit(Path);
+            Copy.UnlockQuantity = UnlockQuantity;
+            Copy.IsInShop = IsInShop;
+            Copy.ShopOrder = ShopOrder;
+            Copy.HiddenUntilUnlocked = HiddenUntilUnlocked;
+            Copy.ShowSkin = ShowSkin;
+            if (UnlockConditions != null)
+            {
+                Copy.UnlockConditions = UnlockConditions.Copy();
+            }
+
+            return Copy;
         }
 
         public override string ToString()

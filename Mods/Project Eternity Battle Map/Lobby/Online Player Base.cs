@@ -160,11 +160,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FileStream FS = new FileStream("User data/Profiles/" + SaveFileFolder + Name + ".bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            Enum.TryParse(BR.ReadString(), out GameplayType);
-            Level = BR.ReadInt32();
-            EXP = BR.ReadInt32();
-
-            Records.Load(BR);
+            ReadProfileAndRecords(BR);
 
             DoLoadLocally(Content, BR);
 
@@ -174,9 +170,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected abstract void DoLoadLocally(ContentManager Content, BinaryReader BR);
 
+        private void ReadProfileAndRecords(BinaryReader BR)
+        {
+            Enum.TryParse(BR.ReadString(), out GameplayType);
+            Level = BR.ReadInt32();
+            EXP = BR.ReadInt32();
+            Records.Load(BR);
+        }
+
+        protected void OpenPackedInventory(byte[] Packed, out BinaryReader ProfileReader, out BinaryReader UnlockReader)
+        {
+            BinaryReader Reader = new BinaryReader(new MemoryStream(Packed), Encoding.UTF8);
+            byte[] ProfileBytes = Reader.ReadBytes(Reader.ReadInt32());
+            byte[] UnlockBytes = Reader.ReadBytes(Reader.ReadInt32());
+            ProfileReader = new BinaryReader(new MemoryStream(ProfileBytes), Encoding.UTF8);
+            UnlockReader = new BinaryReader(new MemoryStream(UnlockBytes), Encoding.UTF8);
+            ReadProfileAndRecords(ProfileReader);
+        }
+
         public void SaveLocally()
         {
-            FileStream FS = new FileStream("User data/Profiles/" + SaveFileFolder + Name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            Directory.CreateDirectory("User data/Profiles/" + SaveFileFolder);
+            FileStream FS = new FileStream("User data/Profiles/" + SaveFileFolder + Name + ".bin", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(GameplayType.ToString());
@@ -189,6 +204,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Close();
             FS.Close();
+        }
+
+        public byte[] SaveToBytes()
+        {
+            MemoryStream Stream = new MemoryStream();
+            BinaryWriter Writer = new BinaryWriter(Stream, Encoding.UTF8, true);
+            Writer.Write(GameplayType.ToString());
+            Writer.Write(Level);
+            Writer.Write(EXP);
+            Records.Save(Writer);
+            DoSaveLocally(Writer);
+            Writer.Flush();
+            return Stream.ToArray();
         }
 
         protected abstract void DoSaveLocally(BinaryWriter BW);

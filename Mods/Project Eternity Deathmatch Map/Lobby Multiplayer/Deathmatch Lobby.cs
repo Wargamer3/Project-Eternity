@@ -14,6 +14,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public override void Load()
+        {
+            base.Load();
+            BattleMapPlayerShopUnlockInventory.EnsureUnlockFileReadingStarted();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            BattleMapPlayerShopUnlockInventory.LoadInventoryAssetsThisFrame();
+
+            base.Update(gameTime);
+        }
+
         protected override void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)
         {
             base.PopulateGameClientScripts(DicOnlineGameClientScripts);

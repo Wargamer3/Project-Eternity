@@ -41,8 +41,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            SorcererStreetPlayerUnlockInventory.DicCharacterDatabase[Path].ListLockedAlt.Remove(this);
-            SorcererStreetPlayerUnlockInventory.DicCharacterDatabase[Path].ListUnlockedAlt.Add(this);
+            UnlockablePlayerCharacter PlayerCharacter = ConditionsOwner.UnlockInventory.FindPlayerCharacter(Path);
+            PlayerCharacter.ListLockedAlt.Remove(this);
+            PlayerCharacter.ListUnlockedAlt.Add(this);
 
             PlayerCharacter NewCharacter = new PlayerCharacter(AltTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 

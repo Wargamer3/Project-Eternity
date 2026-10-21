@@ -42,8 +42,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            SorcererStreetPlayerUnlockInventory.DicCardDatabase[Path].ListLockedSkin.Remove(this);
-            SorcererStreetPlayerUnlockInventory.DicCardDatabase[Path].ListUnlockedSkin.Add(this);
+            UnlockableCard PlayerCard = ConditionsOwner.UnlockInventory.FindPlayerCard(Path);
+            PlayerCard.ListLockedSkin.Remove(this);
+            PlayerCard.ListUnlockedSkin.Add(this);
 
             CardToBuy = Card.LoadCard(Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 

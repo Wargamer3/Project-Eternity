@@ -154,6 +154,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             ActiveSubScreen.Update(gameTime);
+            SorcererStreetPlayerUnlockInventory.LoadInventoryAssetsThisFrame();
         }
 
         private void OnButtonOver()
@@ -172,6 +173,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SelectUnitFilterButton()
         {
             sndButtonClick.Play();
+            SorcererStreetPlayerUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[0];
 
             CharacterFilterButton.Unselect();
@@ -182,6 +184,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SelectCharacterFilterButton()
         {
             sndButtonClick.Play();
+            SorcererStreetPlayerUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[1];
 
             UnitFilterButton.Unselect();
@@ -192,6 +195,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SelectEquipmentFilterButton()
         {
             sndButtonClick.Play();
+            SorcererStreetPlayerUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[2];
 
             UnitFilterButton.Unselect();
@@ -202,6 +206,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SelectConsumableFilterButton()
         {
             sndButtonClick.Play();
+            SorcererStreetPlayerUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[3];
 
             UnitFilterButton.Unselect();

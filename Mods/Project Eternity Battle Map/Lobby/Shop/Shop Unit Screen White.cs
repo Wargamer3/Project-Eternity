@@ -77,6 +77,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BattleMapPlayerInventory Inventory;
 
         private BattleMapPlayerShopUnlockInventory.UnitUnlockContainer CurrentContainer;
+        private BattleMapPlayerShopUnlockInventory.UnitUnlockContainer LastPrioritizedContainer;
         private List<BattleMapPlayerShopUnlockInventory.UnitUnlockContainer> ListLastContainer;
 
         public ShopUnitWhiteScreen(ShopScreen Owner, BattleMapPlayerShopUnlockInventory UnlockInventory, BattleMapPlayerInventory Inventory)
@@ -231,6 +232,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
+
+            if (CurrentContainer != LastPrioritizedContainer)
+            {
+                BattleMapPlayerShopUnlockInventory.ClearPriority();
+                LastPrioritizedContainer = CurrentContainer;
+            }
+
+            BattleMapPlayerShopUnlockInventory.PrioritizeUnits(CurrentContainer.ListUnlockedUnit);
+            BattleMapPlayerShopUnlockInventory.PrioritizeUnits(CurrentContainer.ListLockedUnit);
         }
 
         private void OnSquadScrollbarChange(float ScrollbarValue)

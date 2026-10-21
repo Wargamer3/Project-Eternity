@@ -8,7 +8,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public const string UnitType = "Card";
 
-        public Card CardToBuy;
+        private Card _CardToBuy;
+        public Card CardToBuy
+        {
+            get
+            {
+                UnlockableCard ShopCard;
+                if (SorcererStreetPlayerUnlockInventory.CardLoader.Database.TryGetValue(Path, out ShopCard) && !object.ReferenceEquals(ShopCard, this))
+                {
+                    return ShopCard.CardToBuy;
+                }
+
+                return _CardToBuy;
+            }
+            set
+            {
+                UnlockableCard ShopCard;
+                if (SorcererStreetPlayerUnlockInventory.CardLoader.Database.TryGetValue(Path, out ShopCard) && !object.ReferenceEquals(ShopCard, this))
+                {
+                    ShopCard.CardToBuy = value;
+                }
+                else
+                {
+                    _CardToBuy = value;
+                }
+            }
+        }
         public List<UnlockableCardSkin> ListUnlockedSkin = new List<UnlockableCardSkin>();
         public List<UnlockableCardSkin> ListLockedSkin = new List<UnlockableCardSkin>();
         public List<UnlockableCardAlt> ListUnlockedAlt = new List<UnlockableCardAlt>();
@@ -58,6 +83,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return ListUnlockMessage;
+        }
+
+        public UnlockableCard Copy()
+        {
+            UnlockableCard Copy = new UnlockableCard(Path);
+            Copy.UnlockQuantity = UnlockQuantity;
+            Copy.IsInShop = IsInShop;
+            Copy.ShopOrder = ShopOrder;
+            Copy.HiddenUntilUnlocked = HiddenUntilUnlocked;
+            if (UnlockConditions != null)
+            {
+                Copy.UnlockConditions = UnlockConditions.Copy();
+            }
+
+            return Copy;
         }
     }
 }

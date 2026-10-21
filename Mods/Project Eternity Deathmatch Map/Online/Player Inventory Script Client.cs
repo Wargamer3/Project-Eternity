@@ -32,15 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
         {
             Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypePlayer, true, false, 0, Color.Blue);
             NewPlayer.OnlineClient = Host;
-            ByteReader BR = new ByteReader(PlayerInfo);
-
-            NewPlayer.Level = BR.ReadInt32();
-            NewPlayer.EXP = BR.ReadInt32();
-
-            NewPlayer.InitRecords(BR);
-            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, DeathmatchParams.DicParams[""].DicUnitType, DeathmatchParams.DicParams[""].DicRequirement, DeathmatchParams.DicParams[""].DicEffect, DeathmatchParams.DicParams[""].DicAutomaticSkillTarget, DeathmatchParams.DicParams[""].DicManualSkillTarget);
-
-            BR.Clear();
+            NewPlayer.LoadOnlineInventory(PlayerInfo, GameScreen.ContentFallback, DeathmatchParams.DicParams[""].DicUnitType, DeathmatchParams.DicParams[""].DicRequirement, DeathmatchParams.DicParams[""].DicEffect, DeathmatchParams.DicParams[""].DicAutomaticSkillTarget, DeathmatchParams.DicParams[""].DicManualSkillTarget);
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
 

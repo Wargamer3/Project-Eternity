@@ -9,12 +9,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private DateTimeOffset LastTimeChecked;
         private int RoomIDCount;
         private SortedList<DateTimeOffset, List<IRoomInformations>> ListRoom;
+        private readonly Dictionary<string, byte[]> DicPlayerProfile;
 
         public DataManager()
         {
             LastTimeChecked = DateTimeOffset.MinValue;
             RoomIDCount = 1;
             ListRoom = new SortedList<DateTimeOffset, List<IRoomInformations>>();
+            DicPlayerProfile = new Dictionary<string, byte[]>();
         }
 
         //If there are server with multiple version running, ensure you won't show incompatible rooms.
@@ -94,7 +96,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public PlayerPOCO GetPlayerInventory(string ID)
         {
-            throw new NotImplementedException();
+            byte[] Profile;
+            if (!DicPlayerProfile.TryGetValue(ID, out Profile))
+            {
+                throw new InvalidOperationException("No local player matches " + ID);
+            }
+
+            PlayerPOCO FoundPlayer = new PlayerPOCO();
+            FoundPlayer.ID = ID;
+            FoundPlayer.Info = Profile;
+            return FoundPlayer;
         }
 
         public void RemovePlayer(IOnlineConnection onlineConnection)
@@ -104,7 +115,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void SavePlayerInventory(string ID, object PlayerToSave)
         {
-            throw new NotImplementedException();
+            Player Player = (Player)PlayerToSave;
+            DicPlayerProfile[ID] = Player.SaveToBytes();
         }
     }
 }

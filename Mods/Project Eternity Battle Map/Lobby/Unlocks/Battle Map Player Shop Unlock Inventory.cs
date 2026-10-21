@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BattleMapPlayerShopUnlockInventory
+    public partial class BattleMapPlayerShopUnlockInventory
     {
-        public struct UnitUnlockContainer
+        public class UnitUnlockContainer
         {
             public Dictionary<string, UnitUnlockContainer> DicFolder;
-            public List<UnitUnlockContainer> ListFolder;//Share the same folders as the dictionnary
+            public List<UnitUnlockContainer> ListFolder;
             public List<UnlockableUnit> ListUnlockedUnit;
             public List<UnlockableUnit> ListLockedUnit;
             public UnlockableUnit IconUnit { get { if (ListUnlockedUnit.Count > 0) return ListUnlockedUnit[0]; else return ListLockedUnit[0]; } }
@@ -40,34 +38,48 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListUnlockedUnit = new List<UnlockableUnit>();
                 ListLockedUnit = new List<UnlockableUnit>();
             }
+
+            public UnitUnlockContainer GetOrAddFolder(string FolderName)
+            {
+                UnitUnlockContainer Folder;
+                if (!DicFolder.TryGetValue(FolderName, out Folder))
+                {
+                    Folder = new UnitUnlockContainer(FolderName);
+                    DicFolder.Add(FolderName, Folder);
+                    ListFolder.Add(Folder);
+                }
+
+                return Folder;
+            }
+
+            public void AddToUnlocked(UnlockableUnit PlayerUnit)
+            {
+                if (!ListUnlockedUnit.Contains(PlayerUnit))
+                {
+                    ListUnlockedUnit.Add(PlayerUnit);
+                }
+
+                ListLockedUnit.Remove(PlayerUnit);
+            }
+
+            public void AddToLocked(UnlockableUnit PlayerUnit)
+            {
+                if (!ListLockedUnit.Contains(PlayerUnit))
+                {
+                    ListLockedUnit.Add(PlayerUnit);
+                }
+
+                ListUnlockedUnit.Remove(PlayerUnit);
+            }
         }
 
-        //Used to keep track of what is already unlocked to not unlock it again
-        public static Dictionary<string, UnlockableCharacter> DicCharacterDatabase = new Dictionary<string, UnlockableCharacter>();
-        public static Dictionary<string, UnlockableUnit> DicUnitDatabase = new Dictionary<string, UnlockableUnit>();//UnitTypeAndPath
-        public static Dictionary<string, UnlockableUnitSkin> DicUnitSkinDatabase = new Dictionary<string, UnlockableUnitSkin>();//UnitTypeAndPath + SkinTypeAndPath
-        public static Dictionary<string, UnlockableUnitAlt> DicUnitAltDatabase = new Dictionary<string, UnlockableUnitAlt>();//UnitTypeAndPath + SkinTypeAndPath
-        public static Dictionary<string, UnlockableMission> DicMissionDatabase = new Dictionary<string, UnlockableMission>();
-
-        public static Dictionary<string, UnlockableCharacter>.Enumerator DicCharacterDatabaseEnumeretor;
-        public static Dictionary<string, UnlockableUnit>.Enumerator DicUnitDatabaseEnumerator;
-        public static Dictionary<string, UnlockableUnitSkin>.Enumerator DicUnitSkinDatabaseEnumerator;
-        public static Dictionary<string, UnlockableUnitAlt>.Enumerator DicUnitAltDatabaseEnumerator;
-        public static Dictionary<string, UnlockableMission>.Enumerator DicMissionDatabaseEnumerator;
-
-        private static IniFileReader GlobalUnlockIniAsync;
-
-        public static bool DatabaseLoaded;
+        public static bool IsContentFileRead;
+        public static bool AreAssetsAllLoaded;
         public static Task LoadTask;
-        private static object LockObject = new object();
+        private static readonly object LockObject = new object();
 
-        private static List<string> ListCharacterToPrioritiseLoadPath;//Path of characters to load in background;
-        private static List<string> ListUnitToPrioritiseLoadPath;//Path of units to load in background;
-        private static List<string> ListUnitSkinToPrioritiseLoadPath;//Path of units to load in background;
-        private static List<string> ListUnitAltToPrioritiseLoadPath;//Path of units to load in background;
-        private static List<string> ListMissionToPrioritiseLoadPath;//Path of missions to load in background;
+        public const string UnlockFolder = "User data/Player Unlocks/Battle Map/";
 
-        //List of items to display in the shop
         public List<UnlockableCharacter> ListUnlockedCharacter;
         public UnitUnlockContainer RootUnitContainer;
         public List<UnlockableMission> ListUnlockedMission;
@@ -75,11 +87,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<UnlockableCharacter> ListLockedCharacter;
         public List<UnlockableMission> ListLockedMission;
 
-        private FileStream PlayerUnlocksFS;
-        private BinaryReader PlayerUnlocksBR;
-        private int RemainingNumberOfCharactersToLoad;
-        private int RemainingNumberOfUnitsToLoad;
-        private int RemainingNumberOfMissionsToLoad;
         public bool HasFinishedReadingPlayerShopItems;
 
         public BattleMapPlayerShopUnlockInventory()
@@ -90,82 +97,299 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListLockedCharacter = new List<UnlockableCharacter>();
             ListLockedMission = new List<UnlockableMission>();
-
-            ListCharacterToPrioritiseLoadPath = new List<string>();
-            ListUnitToPrioritiseLoadPath = new List<string>();
-            ListUnitSkinToPrioritiseLoadPath = new List<string>();
-            ListUnitAltToPrioritiseLoadPath = new List<string>();
-            ListMissionToPrioritiseLoadPath = new List<string>();
         }
 
-        public void LoadOnlineData(ByteReader BR)
+        public static void EnsureUnlockFileReadingStarted()
         {
-            RemainingNumberOfCharactersToLoad = BR.ReadInt32();
-            RemainingNumberOfUnitsToLoad = BR.ReadInt32();
-            RemainingNumberOfMissionsToLoad = BR.ReadInt32();
+            lock (LockObject)
+            {
+                if (LoadTask != null)
+                {
+                    return;
+                }
+
+                LoadTask = Task.Run(() => { ReadUnlockFileTask(); });
+            }
+        }
+
+        public static void PopulateShopItemsServerTask()
+        {
+            ReadUnlockFile();
+            lock (LockObject)
+            {
+                IsContentFileRead = true;
+            }
+        }
+
+        public static void LoadInventoryAssetsThisFrame()
+        {
+            if (!IsContentFileRead || AreAssetsAllLoaded)
+            {
+                return;
+            }
+
+            if (CharacterLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (UnitLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (UnitSkinLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (UnitAltLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (MissionLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (CharacterLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (UnitLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (UnitSkinLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (UnitAltLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (MissionLoader.LoadNext())
+            {
+                return;
+            }
+
+            ConfirmInventoryIsLoaded();
+            return;
+        }
+
+        public static void ClearPriority()
+        {
+            CharacterLoader.ClearPriority();
+            UnitLoader.ClearPriority();
+            UnitSkinLoader.ClearPriority();
+            UnitAltLoader.ClearPriority();
+            MissionLoader.ClearPriority();
+        }
+
+        public static void PrioritizeCharacters(List<UnlockableCharacter> ListCharacter)
+        {
+            CharacterLoader.Prioritize(ListCharacter);
+        }
+
+        public static void PrioritizeUnits(List<UnlockableUnit> ListUnit)
+        {
+            for (int UnitIndex = 0; UnitIndex < ListUnit.Count; ++UnitIndex)
+            {
+                UnlockableUnit ActiveUnit = ListUnit[UnitIndex];
+                UnitLoader.Prioritize(ActiveUnit.Path);
+                UnitSkinLoader.Prioritize(ActiveUnit.ListUnlockedSkin);
+                UnitSkinLoader.Prioritize(ActiveUnit.ListLockedSkin);
+                UnitAltLoader.Prioritize(ActiveUnit.ListUnlockedAlt);
+                UnitAltLoader.Prioritize(ActiveUnit.ListLockedAlt);
+            }
+        }
+
+        public static void PrioritizeCharacter(string Path)
+        {
+            CharacterLoader.Prioritize(Path);
+        }
+
+        public static void PrioritizeUnit(string Path)
+        {
+            UnitLoader.Prioritize(Path);
+        }
+
+        public static void PrioritizeUnitSkin(string Path)
+        {
+            UnitSkinLoader.Prioritize(Path);
+        }
+
+        public static void PrioritizeUnitAlt(string Path)
+        {
+            UnitAltLoader.Prioritize(Path);
+        }
+
+        public void LoadUnlockedPlayerItems(string PlayerName)
+        {
+            Directory.CreateDirectory(UnlockFolder);
+            string FilePath = UnlockFolder + PlayerName + ".bin";
+            if (!File.Exists(FilePath))
+            {
+                SaveLocally(PlayerName);
+            }
+
+            FileStream PlayerUnlocksFS = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
+            BinaryReader PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
+            ReadUnlocks(PlayerUnlocksBR);
+            PlayerUnlocksBR.Close();
+            PlayerUnlocksFS.Close();
+            HasFinishedReadingPlayerShopItems = true;
+        }
+
+        public void ReadUnlocks(BinaryReader BR)
+        {
+            int RemainingNumberOfCharactersToLoad = BR.ReadInt32();
+            int RemainingNumberOfUnitsToLoad = BR.ReadInt32();
+            int RemainingNumberOfMissionsToLoad = BR.ReadInt32();
 
             while (RemainingNumberOfCharactersToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableCharacter FillerItem;
-
-                if (!DicCharacterDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockableCharacter FillerItem = GetOrAddCharacter(ItemPath);
+                if (!ListUnlockedCharacter.Contains(FillerItem))
                 {
-                    FillerItem = new UnlockableCharacter(ItemPath);
-                    DicCharacterDatabase.Add(ItemPath, FillerItem);
+                    ListUnlockedCharacter.Add(FillerItem);
                 }
-
-                ListUnlockedCharacter.Add(FillerItem);
 
                 --RemainingNumberOfCharactersToLoad;
             }
+
             while (RemainingNumberOfUnitsToLoad > 0)
             {
-                string ItemPath = BR.ReadString();
-                UnlockableUnit FillerItem;
-
-                if (!DicUnitDatabase.TryGetValue(ItemPath, out FillerItem))
+                string UnitTypeAndPath = BR.ReadString();
+                UnlockableUnit PlayerUnit = FindPlayerUnit(UnitTypeAndPath);
+                if (PlayerUnit == null)
                 {
-                    FillerItem = new UnlockableUnit(ItemPath);
-                    DicUnitDatabase.Add(ItemPath, FillerItem);
+                    PlayerUnit = GetOrAddUnit(UnitTypeAndPath).Copy();
+                    RootUnitContainer.ListUnlockedUnit.Add(PlayerUnit);
                 }
 
-                RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
                 int ListUnlockedUnitSkinCount = BR.ReadByte();
                 for (int S = ListUnlockedUnitSkinCount - 1; S >= 0; --S)
                 {
-                    FillerItem.ListUnlockedSkin.Add(new UnlockableUnitSkin(ItemPath, BR.ReadString()));
+                    string SkinTypeAndPath = BR.ReadString();
+                    UnlockableUnitSkin FillerItem = GetOrAddSkin(UnitTypeAndPath, SkinTypeAndPath);
+                    if (!PlayerUnit.ListUnlockedSkin.Contains(FillerItem))
+                    {
+                        PlayerUnit.ListUnlockedSkin.Add(FillerItem);
+                    }
                 }
 
                 int ListUnlockedUnitAltCount = BR.ReadByte();
                 for (int S = ListUnlockedUnitAltCount - 1; S >= 0; --S)
                 {
-                    FillerItem.ListUnlockedAlt.Add(new UnlockableUnitAlt(ItemPath, BR.ReadString()));
+                    string AltPath = BR.ReadString();
+                    UnlockableUnitAlt FillerItem = GetOrAddAlt(UnitTypeAndPath, AltPath);
+                    if (!PlayerUnit.ListUnlockedAlt.Contains(FillerItem))
+                    {
+                        PlayerUnit.ListUnlockedAlt.Add(FillerItem);
+                    }
                 }
 
                 --RemainingNumberOfUnitsToLoad;
             }
+
             while (RemainingNumberOfMissionsToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableMission FillerItem;
-
-                if (!DicMissionDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockableMission FillerItem = GetOrAddMission(ItemPath);
+                if (!ListUnlockedMission.Contains(FillerItem))
                 {
-                    FillerItem = new UnlockableMission(ItemPath);
-                    DicMissionDatabase.Add(ItemPath, FillerItem);
+                    ListUnlockedMission.Add(FillerItem);
                 }
 
-                ListUnlockedMission.Add(FillerItem);
                 --RemainingNumberOfMissionsToLoad;
             }
         }
 
+        public void LoadOnlineData(ByteReader BR)
+        {
+            int RemainingNumberOfCharactersToLoad = BR.ReadInt32();
+            int RemainingNumberOfUnitsToLoad = BR.ReadInt32();
+            int RemainingNumberOfMissionsToLoad = BR.ReadInt32();
+
+            while (RemainingNumberOfCharactersToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableCharacter FillerItem = GetOrAddCharacter(ItemPath);
+                if (!ListUnlockedCharacter.Contains(FillerItem))
+                {
+                    ListUnlockedCharacter.Add(FillerItem);
+                }
+
+                --RemainingNumberOfCharactersToLoad;
+            }
+
+            while (RemainingNumberOfUnitsToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableUnit PlayerUnit = FindPlayerUnit(ItemPath);
+                if (PlayerUnit == null)
+                {
+                    PlayerUnit = GetOrAddUnit(ItemPath).Copy();
+                    RootUnitContainer.ListUnlockedUnit.Add(PlayerUnit);
+                }
+
+                int ListUnlockedUnitSkinCount = BR.ReadByte();
+                for (int S = ListUnlockedUnitSkinCount - 1; S >= 0; --S)
+                {
+                    UnlockableUnitSkin Skin = GetOrAddSkin(ItemPath, BR.ReadString());
+                    if (!PlayerUnit.ListUnlockedSkin.Contains(Skin))
+                    {
+                        PlayerUnit.ListUnlockedSkin.Add(Skin);
+                    }
+                }
+
+                int ListUnlockedUnitAltCount = BR.ReadByte();
+                for (int S = ListUnlockedUnitAltCount - 1; S >= 0; --S)
+                {
+                    UnlockableUnitAlt Alt = GetOrAddAlt(ItemPath, BR.ReadString());
+                    if (!PlayerUnit.ListUnlockedAlt.Contains(Alt))
+                    {
+                        PlayerUnit.ListUnlockedAlt.Add(Alt);
+                    }
+                }
+
+                --RemainingNumberOfUnitsToLoad;
+            }
+
+            while (RemainingNumberOfMissionsToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableMission FillerItem = GetOrAddMission(ItemPath);
+                if (!ListUnlockedMission.Contains(FillerItem))
+                {
+                    ListUnlockedMission.Add(FillerItem);
+                }
+
+                --RemainingNumberOfMissionsToLoad;
+            }
+
+            HasFinishedReadingPlayerShopItems = true;
+        }
+
         public void SaveLocally(string PlayerName)
         {
-            FileStream FS = new FileStream("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            Directory.CreateDirectory(UnlockFolder);
+            FileStream FS = new FileStream(UnlockFolder + PlayerName + ".bin", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
+            WriteUnlocks(BW);
+            BW.Close();
+            FS.Close();
+        }
 
+        public void WriteUnlocks(BinaryWriter BW)
+        {
             BW.Write(ListUnlockedCharacter.Count);
             BW.Write(RootUnitContainer.ListUnlockedUnit.Count);
             BW.Write(ListUnlockedMission.Count);
@@ -197,327 +421,137 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(ActiveMission.Path);
             }
-
-            BW.Close();
-            FS.Close();
         }
 
-        public static void PopulateShopItemsServerTask()
+        public UnlockableUnit FindPlayerUnit(string UnitPath)
         {
-            GlobalUnlockIniAsync = new IniFileReader("Content/Battle Lobby Unlocks.ini");
-
-            while (GlobalUnlockIniAsync.CanRead)
+            foreach (UnlockableUnit ActiveUnit in RootUnitContainer.ListUnlockedUnit)
             {
-                PopulateUnlockDictionariesAsync();
-            }
-        }
-
-        public void LoadShopCharacter(int StartIndex, int EndIndex, List<UnlockableCharacter> ListShopPlayerCharacter)
-        {
-            lock (ListCharacterToPrioritiseLoadPath)
-            {
-                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                if (ActiveUnit.Path == UnitPath)
                 {
-                    ListCharacterToPrioritiseLoadPath.Add(ListShopPlayerCharacter[ActiveIndex].Path);
+                    return ActiveUnit;
                 }
             }
-        }
 
-        public void LoadShopUnit(int StartIndex, int EndIndex, List<UnlockableUnit> ListShopPlayerUnit)
-        {
-            lock (ListUnitToPrioritiseLoadPath)
+            foreach (UnlockableUnit ActiveUnit in RootUnitContainer.ListLockedUnit)
             {
-                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                if (ActiveUnit.Path == UnitPath)
                 {
-                    ListUnitToPrioritiseLoadPath.Add(ListShopPlayerUnit[ActiveIndex].Path);
+                    return ActiveUnit;
                 }
             }
+
+            return null;
         }
 
-        public void LoadUnlockedPlayerItems(string PlayerName)
+        public static UnlockableCharacter GetOrAddCharacter(string ItemPath)
         {
-            if (!File.Exists("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin"))
-            {
-                SaveLocally(PlayerName);
-            }
-
-            //Load unlocks first, then the shop items.
-            PlayerUnlocksFS = new FileStream("User data/Player Unlocks/Battle Map/" + PlayerName + ".bin", FileMode.Open, FileAccess.Read);
-            PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
-
-            RemainingNumberOfCharactersToLoad = PlayerUnlocksBR.ReadInt32();
-            RemainingNumberOfUnitsToLoad = PlayerUnlocksBR.ReadInt32();
-            RemainingNumberOfMissionsToLoad = PlayerUnlocksBR.ReadInt32();
-
-            Task.Run(() => { LoadUnlockedPlayerItemsAsyncTask(); });
+            return CharacterLoader.GetOrAdd(ItemPath);
         }
 
-        private void LoadUnlockedPlayerItemsAsyncTask()
+        public static UnlockableUnit GetOrAddUnit(string ItemPath)
         {
-            while (!HasFinishedReadingPlayerShopItems)
-            {
-                LoadNextUnlockedPlayerItems();
-            }
+            return UnitLoader.GetOrAdd(ItemPath);
+        }
 
-            PlayerUnlocksBR.Close();
-            PlayerUnlocksFS.Close();
+        public static UnlockableUnitSkin GetOrAddSkin(string UnitPath, string SkinPath)
+        {
+            return UnitSkinLoader.GetOrAdd(UnitPath, SkinPath);
+        }
+
+        public static UnlockableUnitAlt GetOrAddAlt(string UnitPath, string AltPath)
+        {
+            return UnitAltLoader.GetOrAdd(UnitPath, AltPath);
+        }
+
+        public static UnlockableMission GetOrAddMission(string ItemPath)
+        {
+            return MissionLoader.GetOrAdd(ItemPath);
+        }
+
+        private static void ReadUnlockFileTask()
+        {
+            ReadUnlockFile();
+            lock (LockObject)
+            {
+                EnqueueMissingContent();
+                IsContentFileRead = true;
+            }
+        }
+
+        private static void ReadUnlockFile()
+        {
+            IniFileReader Reader = new IniFileReader("Content/Battle Lobby Unlocks.ini");
+            List<Dictionary<string, string>> ListHeaderValues = new List<Dictionary<string, string>>();
+            while (Reader.CanRead)
+            {
+                Dictionary<string, string> Header = Reader.ReadAllValues();
+                if (Header.Count > 0)
+                {
+                    ListHeaderValues.Add(Header);
+                }
+            }
 
             lock (LockObject)
             {
-                if (LoadTask == null)
+                foreach (Dictionary<string, string> DicHeaderValues in ListHeaderValues)
                 {
-                    LoadTask = Task.Run(() => { PopulatUnlocksAsyncTask(); });
+                    string ItemType = DicHeaderValues["Type"];
+                    string ItemPath = DicHeaderValues["Path"];
+                    switch (ItemType)
+                    {
+                        case "Character":
+                            CharacterLoader.ReadUnlockHeader(ItemPath, DicHeaderValues);
+                            break;
+
+                        case "Unit":
+                            UnitLoader.ReadUnlockHeader(ItemPath, DicHeaderValues);
+                            break;
+
+                        case "UnitSkin":
+                            UnitSkinLoader.ReadUnlockHeader(ItemPath, DicHeaderValues);
+                            break;
+
+                        case "UnitAlt":
+                            UnitAltLoader.ReadUnlockHeader(ItemPath, DicHeaderValues);
+                            break;
+
+                        case "Mission":
+                            MissionLoader.ReadUnlockHeader(ItemPath, DicHeaderValues);
+                            break;
+
+                        case "Consumable":
+                            break;
+                    }
                 }
             }
         }
 
-        private void LoadNextUnlockedPlayerItems()
+        private static void EnqueueMissingContent()
         {
-            if (RemainingNumberOfCharactersToLoad > 0)
-            {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableCharacter FillerItem = new UnlockableCharacter(ItemPath);
+            CharacterLoader.EnqueueAll();
+            UnitLoader.EnqueueAll();
+            UnitSkinLoader.EnqueueAll();
+            UnitAltLoader.EnqueueAll();
+            MissionLoader.EnqueueAll();
+        }
 
-                DicCharacterDatabase.Add(ItemPath, FillerItem);
-                ListUnlockedCharacter.Add(FillerItem);
-                --RemainingNumberOfCharactersToLoad;
-            }
-            else if (RemainingNumberOfUnitsToLoad > 0)
+        private static void ConfirmInventoryIsLoaded()
+        {
+            lock (LockObject)
             {
-                string UnitTypeAndPath = PlayerUnlocksBR.ReadString();
-
-                if (!DicUnitDatabase.ContainsKey(UnitTypeAndPath))
+                if (!IsContentFileRead || HasUnloadedAssets())
                 {
-                    UnlockableUnit FillerItem = new UnlockableUnit(UnitTypeAndPath);
-                    DicUnitDatabase.Add(UnitTypeAndPath, FillerItem);
-                    RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
+                    return;
                 }
 
-                int ListUnlockedUnitSkinCount = PlayerUnlocksBR.ReadByte();
-                for (int S = ListUnlockedUnitSkinCount - 1; S >= 0; --S)
-                {
-                    string SkinTypeAndPath = PlayerUnlocksBR.ReadString();
-
-                    UnlockableUnitSkin FillerItem = new UnlockableUnitSkin(UnitTypeAndPath, SkinTypeAndPath);
-                    DicUnitSkinDatabase.Add(UnitTypeAndPath + SkinTypeAndPath, FillerItem);
-                    DicUnitDatabase[UnitTypeAndPath].ListUnlockedSkin.Add(FillerItem);
-                }
-
-                int ListUnlockedUnitAltCount = PlayerUnlocksBR.ReadByte();
-                for (int S = ListUnlockedUnitAltCount - 1; S >= 0; --S)
-                {
-                    string AltPath = PlayerUnlocksBR.ReadString();
-
-                    UnlockableUnitAlt FillerItem = new UnlockableUnitAlt(UnitTypeAndPath, AltPath);
-                    DicUnitAltDatabase.Add(UnitTypeAndPath + AltPath, FillerItem);
-                    DicUnitDatabase[UnitTypeAndPath].ListUnlockedAlt.Add(FillerItem);
-                }
-
-                --RemainingNumberOfUnitsToLoad;
-            }
-            else if (RemainingNumberOfMissionsToLoad > 0)
-            {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableMission FillerItem = new UnlockableMission(ItemPath);
-
-                DicMissionDatabase.Add(ItemPath, FillerItem);
-                ListUnlockedMission.Add(FillerItem);
-                --RemainingNumberOfMissionsToLoad;
-            }
-            else
-            {
-                HasFinishedReadingPlayerShopItems = true;
+                AreAssetsAllLoaded = true;
             }
         }
 
-        private static void PopulatUnlocksAsyncTask()
+        private static bool HasUnloadedAssets()
         {
-            GlobalUnlockIniAsync = new IniFileReader("Content/Battle Lobby Unlocks.ini");
-
-            while (GlobalUnlockIniAsync.CanRead)
-            {
-                PopulateUnlockDictionariesAsync();
-            }
-
-            DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
-            DicUnitDatabaseEnumerator = DicUnitDatabase.GetEnumerator();
-            DicUnitSkinDatabaseEnumerator = DicUnitSkinDatabase.GetEnumerator();
-            DicUnitAltDatabaseEnumerator = DicUnitAltDatabase.GetEnumerator();
-            DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
-
-            while (!DatabaseLoaded)
-            {
-                LoadUnlocksDictionariesContentAsyncTask();
-            }
-        }
-
-        private static void PopulateUnlockDictionariesAsync()
-        {
-            Dictionary<string, string> ActiveHeaderValues = GlobalUnlockIniAsync.ReadAllValues();
-
-            if (ActiveHeaderValues.Count > 0)
-            {
-                string ItemType = ActiveHeaderValues["Type"];
-                string ItemPath = ActiveHeaderValues["Path"];
-                switch (ItemType)
-                {
-                    case "Character":
-                        if (!DicCharacterDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableCharacter NewCharacterUnlock = new UnlockableCharacter(ItemPath, ActiveHeaderValues);
-                            DicCharacterDatabase.Add(ItemPath, NewCharacterUnlock);
-                        }
-                        else
-                        {
-                            DicCharacterDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Unit":
-                        if (!DicUnitDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableUnit NewUnitUnlock = new UnlockableUnit(ItemPath, ActiveHeaderValues);
-                            DicUnitDatabase.Add(ItemPath, NewUnitUnlock);
-                        }
-                        else
-                        {
-                            DicUnitDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "UnitSkin":
-                        string FullSkinPath = ItemPath + ActiveHeaderValues["SkinPath"];
-                        if (!DicUnitSkinDatabase.ContainsKey(FullSkinPath))
-                        {
-                            UnlockableUnitSkin NewUnitUnlock = new UnlockableUnitSkin(ItemPath, ActiveHeaderValues);
-                            DicUnitSkinDatabase.Add(FullSkinPath, NewUnitUnlock);
-                        }
-                        else
-                        {
-                            DicUnitSkinDatabase[FullSkinPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "UnitAlt":
-                        string FullAltPath = ItemPath + ActiveHeaderValues["AltPath"];
-                        if (!DicUnitAltDatabase.ContainsKey(FullAltPath))
-                        {
-                            UnlockableUnitAlt NewUnitUnlock = new UnlockableUnitAlt(ItemPath, ActiveHeaderValues);
-                            DicUnitAltDatabase.Add(FullAltPath, NewUnitUnlock);
-                        }
-                        else
-                        {
-                            DicUnitAltDatabase[FullAltPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Mission":
-                        if (!DicMissionDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableMission NewMissionUnlock = new UnlockableMission(ItemPath, ActiveHeaderValues);
-                            DicMissionDatabase.Add(ItemPath, NewMissionUnlock);
-                        }
-                        else
-                        {
-                            DicMissionDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Consumable":
-                        break;
-                }
-            }
-        }
-
-        private static void LoadUnlocksDictionariesContentAsyncTask()
-        {
-            UnlockableCharacter CharacterToLoadInfo = null;
-            UnlockableUnit UnitToLoadInfo = null;
-            UnlockableUnitSkin UnitSkinToLoadInfo = null;
-            UnlockableUnitAlt UnitAltToLoadInfo = null;
-            UnlockableMission MissionToLoadInfo = null;
-
-            if (ListCharacterToPrioritiseLoadPath.Count > 0)
-            {
-                CharacterToLoadInfo = DicCharacterDatabase[ListCharacterToPrioritiseLoadPath[0]];
-
-                ListCharacterToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicCharacterDatabaseEnumeretor.MoveNext())
-            {
-                CharacterToLoadInfo = DicCharacterDatabaseEnumeretor.Current.Value;
-            }
-            else if (ListUnitToPrioritiseLoadPath.Count > 0)
-            {
-                UnitToLoadInfo = DicUnitDatabase[ListUnitToPrioritiseLoadPath[0]];
-
-                ListUnitToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicUnitDatabaseEnumerator.MoveNext())
-            {
-                UnitToLoadInfo = DicUnitDatabaseEnumerator.Current.Value;
-            }
-            else if (ListUnitSkinToPrioritiseLoadPath.Count > 0)
-            {
-                UnitSkinToLoadInfo = DicUnitSkinDatabase[ListUnitSkinToPrioritiseLoadPath[0]];
-
-                ListUnitSkinToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicUnitSkinDatabaseEnumerator.MoveNext())
-            {
-                UnitSkinToLoadInfo = DicUnitSkinDatabaseEnumerator.Current.Value;
-            }
-            else if (ListUnitAltToPrioritiseLoadPath.Count > 0)
-            {
-                UnitAltToLoadInfo = DicUnitAltDatabase[ListUnitAltToPrioritiseLoadPath[0]];
-
-                ListUnitAltToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicUnitAltDatabaseEnumerator.MoveNext())
-            {
-                UnitAltToLoadInfo = DicUnitAltDatabaseEnumerator.Current.Value;
-            }
-            else if (ListMissionToPrioritiseLoadPath.Count > 0)
-            {
-                MissionToLoadInfo = DicMissionDatabase[ListMissionToPrioritiseLoadPath[0]];
-
-                ListMissionToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicMissionDatabaseEnumerator.MoveNext())
-            {
-                MissionToLoadInfo = DicMissionDatabaseEnumerator.Current.Value;
-            }
-
-            if (CharacterToLoadInfo != null)
-            {
-                Character NewCharacter = new Character(CharacterToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-
-                CharacterToLoadInfo.CharacterToBuy = NewCharacter;
-            }
-            else if (UnitToLoadInfo != null)
-            {
-                Unit NewUnit = Unit.FromFullName(UnitToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                UnitToLoadInfo.UnitToBuy = NewUnit;
-            }
-            else if (UnitSkinToLoadInfo != null)
-            {
-                Unit NewUnit = Unit.FromFullName(UnitSkinToLoadInfo.SkinTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                UnitSkinToLoadInfo.UnitSkinToBuy = NewUnit;
-            }
-            else if (UnitAltToLoadInfo != null)
-            {
-                Unit NewUnit = Unit.FromFullName(UnitAltToLoadInfo.AltTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                UnitAltToLoadInfo.UnitAltToBuy = NewUnit;
-            }
-            else if (MissionToLoadInfo != null)
-            {
-                MissionToLoadInfo.MissionToBuy = new MissionInfo(MissionToLoadInfo.Path, 0);
-            }
-            else
-            {
-                DatabaseLoaded = true;
-            }
+            return CharacterLoader.HasPending || UnitLoader.HasPending || UnitSkinLoader.HasPending || UnitAltLoader.HasPending || MissionLoader.HasPending;
         }
     }
 }

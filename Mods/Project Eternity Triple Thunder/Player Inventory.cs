@@ -126,16 +126,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CharacterType = BR.ReadString();
             GrenadeType = BR.ReadString();
             LoadPrimaryWeapons(BR, Content);
-            string SecondaryWeaponType = BR.ReadString();
+            EquipSecondary(BR.ReadString(), Content);
 
-            string EquipedEtc = BR.ReadString();
-            string EquipedHead = BR.ReadString();
-            string EquipedArmor = BR.ReadString();
-            string EquipedWeaponOption = BR.ReadString();
-            string EquipedBooster = BR.ReadString();
-            string EquipedShoes = BR.ReadString();
-
-            InitArmor(EquipedArmor);
+            EquipedEtc = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Etc, Content);
+            EquipedHead = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Head, Content);
+            EquipedArmor = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Armor, Content);
+            EquipedWeaponOption = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.WeaponOption, Content);
+            EquipedBooster = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Booster, Content);
+            EquipedShoes = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Shoes, Content);
         }
 
         private void LoadCharacters(BinaryReader BR, ContentManager Content)
@@ -144,11 +142,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int C = 0; C < ListCharacterCount; ++C)
             {
                 string CharacterName = BR.ReadString();
-                switch (CharacterName)
+                if (CharacterName != "")
                 {
-                    case "Soul":
-                        ListCharacter.Add(new CharacterMenuEquipment("Soul", 100, null, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Player Soul Portrait")));
-                        break;
+                    ListCharacter.Add(LoadCharacter(CharacterName, Content));
                 }
             }
         }
@@ -158,12 +154,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             int ListEquipmentCount = BR.ReadInt32();
             for (int C = 0; C < ListEquipmentCount; ++C)
             {
-                string EquipmentName = BR.ReadString();
-                switch (EquipmentName)
+                MenuEquipment LoadedEquipment = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Etc, Content);
+                if (LoadedEquipment != null)
                 {
-                    case "Armor 1":
-                        ListEquipment.Add(new MenuEquipment("Armor 1", EquipmentTypes.Armor, 150, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Icon"), Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Full")));
-                        break;
+                    ListEquipment.Add(LoadedEquipment);
                 }
             }
         }
@@ -173,9 +167,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             int ListItemCount = BR.ReadInt32();
             for (int C = 0; C < ListItemCount; ++C)
             {
-                string ItemName = BR.ReadString();
-                switch (ItemName)
+                MenuEquipment LoadedItem = LoadNamedEquipment(BR.ReadString(), EquipmentTypes.Etc, Content);
+                if (LoadedItem != null)
                 {
+                    ListItem.Add(LoadedItem);
                 }
             }
         }
@@ -188,11 +183,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 string WeaponName = BR.ReadString();
                 string WeaponCategory = BR.ReadString();
                 int WeaponLevel = BR.ReadInt32();
-
-                ListWeapon.Add(new WeaponMenuEquipment(WeaponName, WeaponCategory, WeaponLevel, 150,
-                    Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Text"),
-                    Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Icon"),
-                    Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Full")));
+                ListWeapon.Add(LoadWeapon(WeaponName, WeaponCategory, WeaponLevel, Content));
             }
         }
 
@@ -205,26 +196,64 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 string WeaponCategory = BR.ReadString();
                 int WeaponLevel = BR.ReadInt32();
 
-                if (!string.IsNullOrEmpty(WeaponName))
+                if (WeaponName != "")
                 {
-                    ArrayEquipedPrimaryWeapon[C] = new WeaponMenuEquipment(WeaponName, WeaponCategory, WeaponLevel, 150,
-                        Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Text"),
-                        Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Icon"),
-                        Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Full"));
+                    ArrayEquipedPrimaryWeapon[C] = LoadWeapon(WeaponName, WeaponCategory, WeaponLevel, Content);
                 }
             }
         }
 
-        private void InitArmor(string ArmorToEquip)
+        private void EquipSecondary(string SecondaryWeaponName, ContentManager Content)
         {
-            for (int E = 0; E < ListEquipment.Count; E++)
+            if (SecondaryWeaponName == "")
             {
-                MenuEquipment ActiveEquipment = ListEquipment[E];
-                if (ActiveEquipment.Name == ArmorToEquip)
+                return;
+            }
+
+            for (int W = 0; W < ListWeapon.Count; W++)
+            {
+                if (ListWeapon[W].Name == SecondaryWeaponName)
                 {
-                    SetArmor(ActiveEquipment);
+                    EquipedSecondaryWeapon = ListWeapon[W];
+                    ListWeapon.RemoveAt(W);
+                    return;
                 }
             }
+
+            EquipedSecondaryWeapon = LoadWeapon(SecondaryWeaponName, string.Empty, 0, Content);
+        }
+
+        private CharacterMenuEquipment LoadCharacter(string CharacterName, ContentManager Content)
+        {
+            if (CharacterName == "Soul")
+            {
+                return new CharacterMenuEquipment("Soul", 100, null, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Player Soul Portrait"));
+            }
+
+            return new CharacterMenuEquipment(CharacterName, 100, null, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/" + CharacterName + " Portrait"));
+        }
+
+        private MenuEquipment LoadNamedEquipment(string EquipmentName, EquipmentTypes SlotType, ContentManager Content)
+        {
+            if (EquipmentName == "")
+            {
+                return null;
+            }
+
+            if (EquipmentName == "Armor 1")
+            {
+                return new MenuEquipment("Armor 1", EquipmentTypes.Armor, 150, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Icon"), Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Full"));
+            }
+
+            return new MenuEquipment(EquipmentName, SlotType, 150, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/" + EquipmentName + " Icon"), Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/" + EquipmentName + " Full"));
+        }
+
+        private WeaponMenuEquipment LoadWeapon(string WeaponName, string WeaponCategory, int WeaponLevel, ContentManager Content)
+        {
+            return new WeaponMenuEquipment(WeaponName, WeaponCategory, WeaponLevel, 150,
+                Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Text"),
+                Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Icon"),
+                Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Weapons/" + WeaponName + " Full"));
         }
 
         public void SaveLocally(BinaryWriter BW)

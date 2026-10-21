@@ -30,12 +30,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
         protected override void Execute(IOnlineConnection Host)
         {
             Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
-
-            ByteReader BR = new ByteReader(PlayerInfo);
-
-            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
-
-            BR.Clear();
+            NewPlayer.LoadOnlineInventory(PlayerInfo, GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
+            if (SorcererStreetPlayerUnlockInventory.GlobalBook == null)
+            {
+                SorcererStreetPlayerUnlockInventory.GlobalBook = NewPlayer.Inventory.GlobalBook;
+            }
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
         }

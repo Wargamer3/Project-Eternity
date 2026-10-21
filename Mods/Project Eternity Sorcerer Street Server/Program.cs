@@ -47,6 +47,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
             int PublicPort = int.Parse(ConnectionInfo.ReadField("Game Server Info", "Public Port"));
             Trace.Listeners.Add(new TextWriterTraceListener("Game Server Error.log", "myListener"));
 
+            SorcererStreetScreen.SorcererStreetPlayerUnlockInventory.PopulateShopItemsServerTask();
+
             OnlineServer.StartListening(PublicIP, PublicPort);
             Console.ReadKey();
             OnlineServer.StopListening();

@@ -8,7 +8,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public const string UnitType = "Book";
 
-        public CardBook BookToBuy;
+        private CardBook _BookToBuy;
+        public CardBook BookToBuy
+        {
+            get
+            {
+                UnlockableBook ShopBook;
+                if (SorcererStreetPlayerUnlockInventory.BookLoader.Database.TryGetValue(Path, out ShopBook) && !object.ReferenceEquals(ShopBook, this))
+                {
+                    return ShopBook.BookToBuy;
+                }
+
+                return _BookToBuy;
+            }
+            set
+            {
+                UnlockableBook ShopBook;
+                if (SorcererStreetPlayerUnlockInventory.BookLoader.Database.TryGetValue(Path, out ShopBook) && !object.ReferenceEquals(ShopBook, this))
+                {
+                    ShopBook.BookToBuy = value;
+                }
+                else
+                {
+                    _BookToBuy = value;
+                }
+            }
+        }
         public List<UnlockableBookSkin> ListUnlockedSkin = new List<UnlockableBookSkin>();
         public List<UnlockableBookSkin> ListLockedSkin = new List<UnlockableBookSkin>();
         public List<UnlockableBookAlt> ListUnlockedAlt = new List<UnlockableBookAlt>();
@@ -59,6 +84,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return ListUnlockMessage;
+        }
+
+        public UnlockableBook Copy()
+        {
+            UnlockableBook Copy = new UnlockableBook(Path);
+            Copy.UnlockQuantity = UnlockQuantity;
+            Copy.IsInShop = IsInShop;
+            Copy.ShopOrder = ShopOrder;
+            Copy.HiddenUntilUnlocked = HiddenUntilUnlocked;
+            Copy.ShowSkin = ShowSkin;
+            if (UnlockConditions != null)
+            {
+                Copy.UnlockConditions = UnlockConditions.Copy();
+            }
+
+            return Copy;
         }
     }
 }

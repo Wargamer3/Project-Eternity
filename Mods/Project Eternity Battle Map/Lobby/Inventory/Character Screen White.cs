@@ -416,6 +416,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     if (CurrentIndex < CurrentContainer.ListCharacter.Count)
                     {
+                        BattleMapPlayerShopUnlockInventory.PrioritizeCharacter(CurrentContainer.ListCharacter[CurrentIndex].Pilot.FullName);
                         g.Draw(CurrentContainer.ListCharacter[CurrentIndex].Pilot.sprPortrait, new Rectangle(FinalX + InventorySquadWhiteScreen.SpriteOffset, DrawY + InventorySquadWhiteScreen.SpriteOffset, InventorySquadWhiteScreen.SpriteSizeFinal, InventorySquadWhiteScreen.SpriteSizeFinal), Color.White);
 
                         g.DrawString(fntOxanimumBoldSmall, "x" + CurrentContainer.ListCharacter[CurrentIndex].QuantityOwned, new Vector2(FinalX + InventorySquadWhiteScreen.BoxWidthFinal - 40, DrawY + InventorySquadWhiteScreen.BoxHeight - 30), TextColor);

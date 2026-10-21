@@ -1,5 +1,6 @@
 ﻿using System;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
 {
@@ -31,10 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
             PlayerPOCO PlayerInfo = Owner.Database.GetPlayerInventory(ID);
 
             Player NewRoomPlayer = new Player(PlayerInfo.ID, PlayerInfo.Name, true);
-            ByteReader BR = new ByteReader(PlayerInfo.Info);
-            NewRoomPlayer.Level = BR.ReadInt32();
-            NewRoomPlayer.EXP = BR.ReadInt32();
-            BR.Clear();
+            NewRoomPlayer.LoadOnlineInventory(PlayerInfo.Info, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Sender.ExtraInformation = NewRoomPlayer;
             NewRoomPlayer.OnlineClient = Sender;
 

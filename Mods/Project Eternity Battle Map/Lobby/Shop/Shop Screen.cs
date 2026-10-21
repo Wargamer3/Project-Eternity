@@ -153,6 +153,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             ActiveSubScreen.Update(gameTime);
+            BattleMapPlayerShopUnlockInventory.LoadInventoryAssetsThisFrame();
         }
 
         private void OnButtonOver()
@@ -171,6 +172,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectUnitFilterButton()
         {
             sndButtonClick.Play();
+            BattleMapPlayerShopUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[0];
 
             CharacterFilterButton.Unselect();
@@ -181,6 +183,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectCharacterFilterButton()
         {
             sndButtonClick.Play();
+            BattleMapPlayerShopUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[1];
 
             UnitFilterButton.Unselect();
@@ -191,6 +194,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectEquipmentFilterButton()
         {
             sndButtonClick.Play();
+            BattleMapPlayerShopUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[2];
 
             UnitFilterButton.Unselect();
@@ -201,6 +205,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectConsumableFilterButton()
         {
             sndButtonClick.Play();
+            BattleMapPlayerShopUnlockInventory.ClearPriority();
             ActiveSubScreen = ArraySubScreen[3];
 
             UnitFilterButton.Unselect();

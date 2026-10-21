@@ -151,6 +151,10 @@
     <Compile Include="Sorcerer Street Text Processor.cs" />
     <Compile Include="Lobby\Bot.cs" />
     <Compile Include="Lobby\Unlocks\Sorcerer Street Unlock Inventory.cs" />
+    <Compile Include="Lobby\Unlocks\Sorcerer Street Book Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Sorcerer Street Card Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Sorcerer Street Character Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Sorcerer Street Mission Loader.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Character.cs" />

@@ -40,8 +40,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            SorcererStreetPlayerUnlockInventory.DicCharacterDatabase[Path].ListLockedSkin.Remove(this);
-            SorcererStreetPlayerUnlockInventory.DicCharacterDatabase[Path].ListUnlockedSkin.Add(this);
+            UnlockablePlayerCharacter PlayerCharacter = ConditionsOwner.UnlockInventory.FindPlayerCharacter(Path);
+            PlayerCharacter.ListLockedSkin.Remove(this);
+            PlayerCharacter.ListUnlockedSkin.Add(this);
 
             PlayerCharacter NewCharacter = new PlayerCharacter(SkinTypeAndPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
 

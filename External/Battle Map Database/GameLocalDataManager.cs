@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -158,7 +158,12 @@ namespace Database.BattleMap
 
         public PlayerPOCO GetPlayerInventory(string ID)
         {
-            throw new NotImplementedException();
+            LocalPlayer FoundPlayer = FindPlayerByID(ID);
+            PlayerPOCO Result = new PlayerPOCO();
+            Result.ID = FoundPlayer.ID;
+            Result.Name = FoundPlayer.Name;
+            Result.Info = CreatePlayerInfo(FoundPlayer.Profile, FoundPlayer.UnlockBytes);
+            return Result;
         }
 
         private LocalPlayer FindPlayer(string Login, string Password)
@@ -201,7 +206,29 @@ namespace Database.BattleMap
 
         public void SavePlayerInventory(string ID, object PlayerToSave)
         {
-            throw new NotImplementedException();
+            BattleMapPlayer Player = (BattleMapPlayer)PlayerToSave;
+            LocalPlayer FoundPlayer = FindPlayerByID(ID);
+            FoundPlayer.Name = Player.Name;
+            FoundPlayer.Level = Player.Level;
+            FoundPlayer.Profile = Player.SaveToBytes();
+            MemoryStream UnlockStream = new MemoryStream();
+            BinaryWriter UnlockWriter = new BinaryWriter(UnlockStream, System.Text.Encoding.UTF8, true);
+            Player.UnlockInventory.WriteUnlocks(UnlockWriter);
+            UnlockWriter.Flush();
+            FoundPlayer.UnlockBytes = UnlockStream.ToArray();
+        }
+
+        private LocalPlayer FindPlayerByID(string ID)
+        {
+            foreach (LocalPlayer ActivePlayer in ListPlayer)
+            {
+                if (ActivePlayer.ID == ID)
+                {
+                    return ActivePlayer;
+                }
+            }
+
+            throw new InvalidOperationException("No local player matches " + ID);
         }
 
         private class LocalPlayer : PlayerPOCO
@@ -212,6 +239,20 @@ namespace Database.BattleMap
             public string Password;
             public bool LoggedIn;
             public int Level;
+            public byte[] Profile;
+            public byte[] UnlockBytes;
+        }
+
+        public static byte[] CreatePlayerInfo(byte[] Profile, byte[] Unlocks)
+        {
+            MemoryStream Stream = new MemoryStream();
+            BinaryWriter Writer = new BinaryWriter(Stream, Encoding.UTF8, true);
+            Writer.Write(Profile.Length);
+            Writer.Write(Profile);
+            Writer.Write(Unlocks.Length);
+            Writer.Write(Unlocks);
+            Writer.Flush();
+            return Stream.ToArray();
         }
     }
 }

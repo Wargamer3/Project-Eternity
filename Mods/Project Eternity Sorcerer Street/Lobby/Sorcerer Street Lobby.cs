@@ -28,6 +28,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicOnlineGameClientScripts[JoinRoomLocalScriptClient.ScriptName] = new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false);
         }
 
+        public override void Load()
+        {
+            base.Load();
+            if (PlayerManager.ListLocalPlayer.Count > 0)
+            {
+                Player LobbyPlayer = (Player)PlayerManager.ListLocalPlayer[0];
+                SorcererStreetPlayerUnlockInventory.GlobalBook = LobbyPlayer.Inventory.GlobalBook;
+            }
+
+            SorcererStreetPlayerUnlockInventory.EnsureUnlockFileReadingStarted();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            SorcererStreetPlayerUnlockInventory.LoadInventoryAssetsThisFrame();
+
+            base.Update(gameTime);
+        }
+
         protected override void InitOfflinePlayer()
         {
             Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);

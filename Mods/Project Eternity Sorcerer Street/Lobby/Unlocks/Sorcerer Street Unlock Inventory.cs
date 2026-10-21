@@ -1,24 +1,34 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class SorcererStreetPlayerUnlockInventory
+    public partial class SorcererStreetPlayerUnlockInventory
     {
-        public struct BookUnlockContainer
+        public class BookUnlockContainer
         {
             public Dictionary<string, BookUnlockContainer> DicFolder;
             public List<BookUnlockContainer> ListFolder;//Share the same folders as the dictionnary
             public List<UnlockableBook> ListUnlockedBook;
             public List<UnlockableBook> ListLockedBook;
-            public UnlockableBook IconUnit { get { if (ListUnlockedBook.Count > 0) return ListUnlockedBook[0]; else return ListLockedBook[0]; } }
+            public UnlockableBook IconUnit
+            {
+                get
+                {
+                    if (ListUnlockedBook.Count > 0)
+                    {
+                        return ListUnlockedBook[0];
+                    }
+
+                    return ListLockedBook[0];
+                }
+            }
 
             public string Name;
 
@@ -40,15 +50,59 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListUnlockedBook = new List<UnlockableBook>();
                 ListLockedBook = new List<UnlockableBook>();
             }
+
+            public BookUnlockContainer GetOrAddFolder(string FolderName)
+            {
+                BookUnlockContainer Folder;
+                if (!DicFolder.TryGetValue(FolderName, out Folder))
+                {
+                    Folder = new BookUnlockContainer(FolderName);
+                    DicFolder.Add(FolderName, Folder);
+                    ListFolder.Add(Folder);
+                }
+
+                return Folder;
+            }
+
+            public void AddToUnlocked(UnlockableBook PlayerBook)
+            {
+                if (!ListUnlockedBook.Contains(PlayerBook))
+                {
+                    ListUnlockedBook.Add(PlayerBook);
+                }
+
+                ListLockedBook.Remove(PlayerBook);
+            }
+
+            public void AddToLocked(UnlockableBook PlayerBook)
+            {
+                if (!ListLockedBook.Contains(PlayerBook))
+                {
+                    ListLockedBook.Add(PlayerBook);
+                }
+
+                ListUnlockedBook.Remove(PlayerBook);
+            }
         }
 
-        public struct CardUnlockContainer
+        public class CardUnlockContainer
         {
             public Dictionary<string, CardUnlockContainer> DicFolder;
             public List<CardUnlockContainer> ListFolder;//Share the same folders as the dictionnary
             public List<UnlockableCard> ListUnlockedCard;
             public List<UnlockableCard> ListLockedCard;
-            public UnlockableCard IconUnit { get { if (ListUnlockedCard.Count > 0) return ListUnlockedCard[0]; else return ListLockedCard[0]; } }
+            public UnlockableCard IconUnit
+            {
+                get
+                {
+                    if (ListUnlockedCard.Count > 0)
+                    {
+                        return ListUnlockedCard[0];
+                    }
+
+                    return ListLockedCard[0];
+                }
+            }
 
             public string Name;
 
@@ -70,15 +124,59 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListUnlockedCard = new List<UnlockableCard>();
                 ListLockedCard = new List<UnlockableCard>();
             }
+
+            public CardUnlockContainer GetOrAddFolder(string FolderName)
+            {
+                CardUnlockContainer Folder;
+                if (!DicFolder.TryGetValue(FolderName, out Folder))
+                {
+                    Folder = new CardUnlockContainer(FolderName);
+                    DicFolder.Add(FolderName, Folder);
+                    ListFolder.Add(Folder);
+                }
+
+                return Folder;
+            }
+
+            public void AddToUnlocked(UnlockableCard PlayerCard)
+            {
+                if (!ListUnlockedCard.Contains(PlayerCard))
+                {
+                    ListUnlockedCard.Add(PlayerCard);
+                }
+
+                ListLockedCard.Remove(PlayerCard);
+            }
+
+            public void AddToLocked(UnlockableCard PlayerCard)
+            {
+                if (!ListLockedCard.Contains(PlayerCard))
+                {
+                    ListLockedCard.Add(PlayerCard);
+                }
+
+                ListUnlockedCard.Remove(PlayerCard);
+            }
         }
 
-        public struct CharacterUnlockContainer
+        public class CharacterUnlockContainer
         {
             public Dictionary<string, CharacterUnlockContainer> DicFolder;
             public List<CharacterUnlockContainer> ListFolder;//Share the same folders as the dictionnary
             public List<UnlockablePlayerCharacter> ListUnlockedCharacter;
             public List<UnlockablePlayerCharacter> ListLockedCharacter;
-            public UnlockablePlayerCharacter IconUnit { get { if (ListUnlockedCharacter.Count > 0) return ListUnlockedCharacter[0]; else return ListLockedCharacter[0]; } }
+            public UnlockablePlayerCharacter IconUnit
+            {
+                get
+                {
+                    if (ListUnlockedCharacter.Count > 0)
+                    {
+                        return ListUnlockedCharacter[0];
+                    }
+
+                    return ListLockedCharacter[0];
+                }
+            }
 
             public string Name;
 
@@ -100,34 +198,55 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListUnlockedCharacter = new List<UnlockablePlayerCharacter>();
                 ListLockedCharacter = new List<UnlockablePlayerCharacter>();
             }
+
+            public CharacterUnlockContainer GetOrAddFolder(string FolderName)
+            {
+                CharacterUnlockContainer Folder;
+                if (!DicFolder.TryGetValue(FolderName, out Folder))
+                {
+                    Folder = new CharacterUnlockContainer(FolderName);
+                    DicFolder.Add(FolderName, Folder);
+                    ListFolder.Add(Folder);
+                }
+
+                return Folder;
+            }
+
+            public void AddToUnlocked(UnlockablePlayerCharacter PlayerCharacter)
+            {
+                if (!ListUnlockedCharacter.Contains(PlayerCharacter))
+                {
+                    ListUnlockedCharacter.Add(PlayerCharacter);
+                }
+
+                ListLockedCharacter.Remove(PlayerCharacter);
+            }
+
+            public void AddToLocked(UnlockablePlayerCharacter PlayerCharacter)
+            {
+                if (!ListLockedCharacter.Contains(PlayerCharacter))
+                {
+                    ListLockedCharacter.Add(PlayerCharacter);
+                }
+
+                ListUnlockedCharacter.Remove(PlayerCharacter);
+            }
         }
 
-        public static Dictionary<string, UnlockableBook> DicBookDatabase = new Dictionary<string, UnlockableBook>();
         public Dictionary<string, CardBookSkinInfo> DicOwnedBookSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public Dictionary<string, CardBookSkinInfo> DicOwnedBookAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
-        public static Dictionary<string, UnlockableCard> DicCardDatabase = new Dictionary<string, UnlockableCard>();
         public Dictionary<string, UnlockableCardSkin> DicOwnedCardSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public Dictionary<string, UnlockableCardSkin> DicOwnedCardAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
-        public static Dictionary<string, UnlockablePlayerCharacter> DicCharacterDatabase = new Dictionary<string, UnlockablePlayerCharacter>();
         public Dictionary<string, UnlockableCharacterSkin> DicOwnedCharacterSkin;//Skins for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
         public Dictionary<string, UnlockableCharacterSkin> DicOwnedCharacterAlt;//Alts for Unit the player doesn't have yet. UnitTypeAndPath + SkinTypeAndPath
-        public static Dictionary<string, UnlockableMission> DicMissionDatabase = new Dictionary<string, UnlockableMission>();
 
-        public static Dictionary<string, UnlockableBook>.Enumerator DicBookDatabaseEnumerator;
-        public static Dictionary<string, UnlockableCard>.Enumerator DicCardDatabaseEnumerator;
-        public static Dictionary<string, UnlockablePlayerCharacter>.Enumerator DicCharacterDatabaseEnumeretor;
-        public static Dictionary<string, UnlockableMission>.Enumerator DicMissionDatabaseEnumerator;
-
-        private static IniFileReader GlobalUnlockIniAsync;
-
-        public static bool DatabaseLoaded;
+        public static CardBook GlobalBook;
+        public static bool IsContentFileRead;
+        public static bool AreAssetsAllLoaded;
         public static Task LoadTask;
-        private static object LockObject = new object();
+        private static readonly object LockObject = new object();
 
-        private static List<string> ListBookToPrioritiseLoadPath;//Path of units to load in background;
-        private static List<string> ListCardToPrioritiseLoadPath;//Path of units to load in background;
-        private static List<string> ListCharacterToPrioritiseLoadPath;//Path of characters to load in background;
-        private static List<string> ListMissionToPrioritiseLoadPath;//Path of missions to load in background;
+        public const string UnlockFolder = "User data/Player Unlocks/Sorcerer Street/";
 
         public BookUnlockContainer RootBookContainer;
         public CardUnlockContainer RootCardContainer;
@@ -136,12 +255,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<UnlockableMission> ListUnlockedMission;
         public List<UnlockableMission> ListLockedMission;
 
-        private FileStream PlayerUnlocksFS;
-        private BinaryReader PlayerUnlocksBR;
-        private int RemainingNumberOfBooksToLoad;
-        private int RemainingNumberOfCardsToLoad;
-        private int RemainingNumberOfCharactersToLoad;
-        private int RemainingNumberOfMissionsToLoad;
         public bool HasFinishedReadingPlayerShopItems;
 
         public SorcererStreetPlayerUnlockInventory()
@@ -153,85 +266,274 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListUnlockedMission = new List<UnlockableMission>();
             ListLockedMission = new List<UnlockableMission>();
 
-            ListBookToPrioritiseLoadPath = new List<string>();
-            ListCardToPrioritiseLoadPath = new List<string>();
-            ListCharacterToPrioritiseLoadPath = new List<string>();
-            ListMissionToPrioritiseLoadPath = new List<string>();
+            DicOwnedBookSkin = new Dictionary<string, CardBookSkinInfo>();
+            DicOwnedBookAlt = new Dictionary<string, CardBookSkinInfo>();
+            DicOwnedCardSkin = new Dictionary<string, UnlockableCardSkin>();
+            DicOwnedCardAlt = new Dictionary<string, UnlockableCardSkin>();
+            DicOwnedCharacterSkin = new Dictionary<string, UnlockableCharacterSkin>();
+            DicOwnedCharacterAlt = new Dictionary<string, UnlockableCharacterSkin>();
         }
 
-        public void LoadOnlineData(ByteReader BR)
+        public static void EnsureUnlockFileReadingStarted()
         {
-            RemainingNumberOfBooksToLoad = BR.ReadInt32();
-            RemainingNumberOfCardsToLoad = BR.ReadInt32();
-            RemainingNumberOfCharactersToLoad = BR.ReadInt32();
-            RemainingNumberOfMissionsToLoad = BR.ReadInt32();
+            lock (LockObject)
+            {
+                if (LoadTask != null)
+                {
+                    return;
+                }
+
+                LoadTask = Task.Run(() => { ReadUnlockFileTask(); });
+            }
+        }
+
+        public static void PopulateShopItemsServerTask()
+        {
+            ReadUnlockFile();
+            lock (LockObject)
+            {
+                IsContentFileRead = true;
+            }
+        }
+
+        public static void LoadInventoryAssetsThisFrame()
+        {
+            if (!IsContentFileRead || AreAssetsAllLoaded)
+            {
+                return;
+            }
+
+            if (BookLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (CardLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (CharacterLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (MissionLoader.LoadNextPriority())
+            {
+                return;
+            }
+
+            if (BookLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (CardLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (CharacterLoader.LoadNext())
+            {
+                return;
+            }
+
+            if (MissionLoader.LoadNext())
+            {
+                return;
+            }
+
+            ConfirmInventoryIsLoaded();
+            return;
+        }
+
+        public static void ClearPriority()
+        {
+            BookLoader.ClearPriority();
+            CardLoader.ClearPriority();
+            CharacterLoader.ClearPriority();
+            MissionLoader.ClearPriority();
+        }
+
+        public static void PrioritizeBooks(List<UnlockableBook> ListBook)
+        {
+            BookLoader.Prioritize(ListBook);
+        }
+
+        public static void PrioritizeCards(List<UnlockableCard> ListCard)
+        {
+            CardLoader.Prioritize(ListCard);
+        }
+
+        public static void PrioritizeCharacters(List<UnlockablePlayerCharacter> ListCharacter)
+        {
+            CharacterLoader.Prioritize(ListCharacter);
+        }
+
+        public static void PrioritizeBook(string Path)
+        {
+            BookLoader.Prioritize(Path);
+        }
+
+        public static void PrioritizeCard(string Path)
+        {
+            CardLoader.Prioritize(Path);
+        }
+
+        public static void PrioritizeCharacter(string Path)
+        {
+            CharacterLoader.Prioritize(Path);
+        }
+
+        public void LoadPlayerUnlocks(string PlayerName)
+        {
+            Directory.CreateDirectory(UnlockFolder);
+            string FilePath = UnlockFolder + PlayerName + ".bin";
+            if (!File.Exists(FilePath))
+            {
+                SaveLocally(PlayerName);
+            }
+
+            FileStream PlayerUnlocksFS = new FileStream(FilePath, FileMode.Open, FileAccess.Read);
+            BinaryReader PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
+            ReadUnlocks(PlayerUnlocksBR);
+            PlayerUnlocksBR.Close();
+            PlayerUnlocksFS.Close();
+            HasFinishedReadingPlayerShopItems = true;
+        }
+
+        public void ReadUnlocks(BinaryReader BR)
+        {
+            int RemainingNumberOfBooksToLoad = BR.ReadInt32();
+            int RemainingNumberOfCardsToLoad = BR.ReadInt32();
+            int RemainingNumberOfCharactersToLoad = BR.ReadInt32();
+            int RemainingNumberOfMissionsToLoad = BR.ReadInt32();
 
             while (RemainingNumberOfBooksToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableBook FillerItem;
-
-                if (!DicBookDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockableBook PlayerBook = FindPlayerBook(ItemPath);
+                if (PlayerBook == null)
                 {
-                    FillerItem = new UnlockableBook(ItemPath);
-                    DicBookDatabase.Add(ItemPath, FillerItem);
+                    PlayerBook = GetOrAddBook(ItemPath).Copy();
+                    RootBookContainer.ListUnlockedBook.Add(PlayerBook);
                 }
-
-                RootBookContainer.ListUnlockedBook.Add(FillerItem);
 
                 --RemainingNumberOfBooksToLoad;
             }
+
             while (RemainingNumberOfCardsToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableCard FillerItem;
-
-                if (!DicCardDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockableCard PlayerCard = FindPlayerCard(ItemPath);
+                if (PlayerCard == null)
                 {
-                    FillerItem = new UnlockableCard(ItemPath);
-                    DicCardDatabase.Add(ItemPath, FillerItem);
+                    PlayerCard = GetOrAddCard(ItemPath).Copy();
+                    RootCardContainer.ListUnlockedCard.Add(PlayerCard);
                 }
-
-                RootCardContainer.ListUnlockedCard.Add(FillerItem);
 
                 --RemainingNumberOfCardsToLoad;
             }
+
             while (RemainingNumberOfCharactersToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockablePlayerCharacter FillerItem;
-
-                if (!DicCharacterDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockablePlayerCharacter PlayerCharacter = FindPlayerCharacter(ItemPath);
+                if (PlayerCharacter == null)
                 {
-                    FillerItem = new UnlockablePlayerCharacter(ItemPath);
-                    DicCharacterDatabase.Add(ItemPath, FillerItem);
+                    PlayerCharacter = GetOrAddCharacter(ItemPath).Copy();
+                    RootCharacterContainer.ListUnlockedCharacter.Add(PlayerCharacter);
                 }
-
-                RootCharacterContainer.ListUnlockedCharacter.Add(FillerItem);
 
                 --RemainingNumberOfCharactersToLoad;
             }
+
             while (RemainingNumberOfMissionsToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableMission FillerItem;
-
-                if (!DicMissionDatabase.TryGetValue(ItemPath, out FillerItem))
+                UnlockableMission FillerItem = GetOrAddMission(ItemPath);
+                if (!ListUnlockedMission.Contains(FillerItem))
                 {
-                    FillerItem = new UnlockableMission(ItemPath);
-                    DicMissionDatabase.Add(ItemPath, FillerItem);
+                    ListUnlockedMission.Add(FillerItem);
                 }
 
-                ListUnlockedMission.Add(FillerItem);
                 --RemainingNumberOfMissionsToLoad;
             }
         }
 
+        public void LoadOnlineData(ByteReader BR)
+        {
+            int RemainingNumberOfBooksToLoad = BR.ReadInt32();
+            int RemainingNumberOfCardsToLoad = BR.ReadInt32();
+            int RemainingNumberOfCharactersToLoad = BR.ReadInt32();
+            int RemainingNumberOfMissionsToLoad = BR.ReadInt32();
+
+            while (RemainingNumberOfBooksToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableBook PlayerBook = FindPlayerBook(ItemPath);
+                if (PlayerBook == null)
+                {
+                    PlayerBook = GetOrAddBook(ItemPath).Copy();
+                    RootBookContainer.ListUnlockedBook.Add(PlayerBook);
+                }
+
+                --RemainingNumberOfBooksToLoad;
+            }
+
+            while (RemainingNumberOfCardsToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableCard PlayerCard = FindPlayerCard(ItemPath);
+                if (PlayerCard == null)
+                {
+                    PlayerCard = GetOrAddCard(ItemPath).Copy();
+                    RootCardContainer.ListUnlockedCard.Add(PlayerCard);
+                }
+
+                --RemainingNumberOfCardsToLoad;
+            }
+
+            while (RemainingNumberOfCharactersToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockablePlayerCharacter PlayerCharacter = FindPlayerCharacter(ItemPath);
+                if (PlayerCharacter == null)
+                {
+                    PlayerCharacter = GetOrAddCharacter(ItemPath).Copy();
+                    RootCharacterContainer.ListUnlockedCharacter.Add(PlayerCharacter);
+                }
+
+                --RemainingNumberOfCharactersToLoad;
+            }
+
+            while (RemainingNumberOfMissionsToLoad > 0)
+            {
+                string ItemPath = BR.ReadString();
+                UnlockableMission FillerItem = GetOrAddMission(ItemPath);
+                if (!ListUnlockedMission.Contains(FillerItem))
+                {
+                    ListUnlockedMission.Add(FillerItem);
+                }
+
+                --RemainingNumberOfMissionsToLoad;
+            }
+
+            HasFinishedReadingPlayerShopItems = true;
+        }
+
         public void SaveLocally(string PlayerName)
         {
-            FileStream FS = new FileStream("User data/Player Unlocks/Sorcerer Street/" + PlayerName + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            Directory.CreateDirectory(UnlockFolder);
+            FileStream FS = new FileStream(UnlockFolder + PlayerName + ".bin", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
+            WriteUnlocks(BW);
+            BW.Close();
+            FS.Close();
+        }
 
+        public void WriteUnlocks(BinaryWriter BW)
+        {
             BW.Write(RootBookContainer.ListUnlockedBook.Count);
             BW.Write(RootCardContainer.ListUnlockedCard.Count);
             BW.Write(RootCharacterContainer.ListUnlockedCharacter.Count);
@@ -256,299 +558,174 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 BW.Write(ActiveMission.Path);
             }
-
-            BW.Close();
-            FS.Close();
         }
 
-        public static void PopulateShopItemsServerTask()
+        public UnlockableBook FindPlayerBook(string BookPath)
         {
-            GlobalUnlockIniAsync = new IniFileReader("Content/Battle Lobby Unlocks.ini");
-
-            while (GlobalUnlockIniAsync.CanRead)
+            foreach (UnlockableBook ActiveBook in RootBookContainer.ListUnlockedBook)
             {
-                PopulateUnlockItems();
-            }
-        }
-
-        public void LoadShopBook(int StartIndex, int EndIndex, List<UnlockableBook> ListShopPlayerBook)
-        {
-            lock (ListBookToPrioritiseLoadPath)
-            {
-                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                if (ActiveBook.Path == BookPath)
                 {
-                    ListBookToPrioritiseLoadPath.Add(ListShopPlayerBook[ActiveIndex].Path);
+                    return ActiveBook;
                 }
             }
-        }
 
-        public void LoadShopCard(int StartIndex, int EndIndex, List<UnlockableCard> ListShopPlayerCard)
-        {
-            lock (ListCardToPrioritiseLoadPath)
+            foreach (UnlockableBook ActiveBook in RootBookContainer.ListLockedBook)
             {
-                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                if (ActiveBook.Path == BookPath)
                 {
-                    ListCardToPrioritiseLoadPath.Add(ListShopPlayerCard[ActiveIndex].Path);
+                    return ActiveBook;
                 }
             }
+
+            return null;
         }
 
-        public void LoadShopCharacter(int StartIndex, int EndIndex, List<UnlockablePlayerCharacter> ListShopPlayerCharacter)
+        public UnlockableCard FindPlayerCard(string CardPath)
         {
-            lock (ListCharacterToPrioritiseLoadPath)
+            foreach (UnlockableCard ActiveCard in RootCardContainer.ListUnlockedCard)
             {
-                for (int ActiveIndex = StartIndex; ActiveIndex < EndIndex; --ActiveIndex)
+                if (ActiveCard.Path == CardPath)
                 {
-                    ListCharacterToPrioritiseLoadPath.Add(ListShopPlayerCharacter[ActiveIndex].Path);
+                    return ActiveCard;
                 }
             }
-        }
 
-        public void LoadPlayerUnlocks(string PlayerName)
-        {
-            if (!File.Exists("User data/Player Unlocks/Sorcerer Street/" + PlayerName + ".bin"))
+            foreach (UnlockableCard ActiveCard in RootCardContainer.ListLockedCard)
             {
-                SaveLocally(PlayerName);
+                if (ActiveCard.Path == CardPath)
+                {
+                    return ActiveCard;
+                }
             }
 
-            //Load unlocks first, then the shop items.
-            PlayerUnlocksFS = new FileStream("User data/Player Unlocks/Sorcerer Street/" + PlayerName + ".bin", FileMode.Open, FileAccess.Read);
-            PlayerUnlocksBR = new BinaryReader(PlayerUnlocksFS, Encoding.UTF8);
-
-            RemainingNumberOfBooksToLoad = PlayerUnlocksBR.ReadInt32();
-            RemainingNumberOfCardsToLoad = PlayerUnlocksBR.ReadInt32();
-            RemainingNumberOfCharactersToLoad = PlayerUnlocksBR.ReadInt32();
-            RemainingNumberOfMissionsToLoad = PlayerUnlocksBR.ReadInt32();
-
-            Task.Run(() => { LoadPlayerUnlocksAsyncTask(); });
+            return null;
         }
 
-        private void LoadPlayerUnlocksAsyncTask()
+        public UnlockablePlayerCharacter FindPlayerCharacter(string CharacterPath)
         {
-            while (!HasFinishedReadingPlayerShopItems)
+            foreach (UnlockablePlayerCharacter ActiveCharacter in RootCharacterContainer.ListUnlockedCharacter)
             {
-                LoadNextPlayerUnlock();
+                if (ActiveCharacter.Path == CharacterPath)
+                {
+                    return ActiveCharacter;
+                }
             }
 
-            PlayerUnlocksBR.Close();
-            PlayerUnlocksFS.Close();
+            foreach (UnlockablePlayerCharacter ActiveCharacter in RootCharacterContainer.ListLockedCharacter)
+            {
+                if (ActiveCharacter.Path == CharacterPath)
+                {
+                    return ActiveCharacter;
+                }
+            }
+
+            return null;
+        }
+
+        public static UnlockableBook GetOrAddBook(string ItemPath)
+        {
+            return BookLoader.GetOrAdd(ItemPath);
+        }
+
+        public static UnlockableCard GetOrAddCard(string ItemPath)
+        {
+            return CardLoader.GetOrAdd(ItemPath);
+        }
+
+        public static UnlockablePlayerCharacter GetOrAddCharacter(string ItemPath)
+        {
+            return CharacterLoader.GetOrAdd(ItemPath);
+        }
+
+        public static UnlockableMission GetOrAddMission(string ItemPath)
+        {
+            return MissionLoader.GetOrAdd(ItemPath);
+        }
+
+        private static void ReadUnlockFileTask()
+        {
+            ReadUnlockFile();
+            lock (LockObject)
+            {
+                EnqueueMissingContent();
+                IsContentFileRead = true;
+            }
+        }
+
+        private static void ReadUnlockFile()
+        {
+            IniFileReader Reader = new IniFileReader("Content/Sorcerer Street Lobby Unlocks.ini");
+            List<Dictionary<string, string>> Headers = new List<Dictionary<string, string>>();
+            while (Reader.CanRead)
+            {
+                Dictionary<string, string> Header = Reader.ReadAllValues();
+                if (Header.Count > 0)
+                {
+                    Headers.Add(Header);
+                }
+            }
 
             lock (LockObject)
             {
-                if (LoadTask == null)
+                foreach (Dictionary<string, string> Header in Headers)
                 {
-                    LoadTask = Task.Run(() => { PopulatUnlocksAsyncTask(); });
+                    ApplyHeader(Header);
                 }
             }
         }
 
-        private void LoadNextPlayerUnlock()
+        private static void ApplyHeader(Dictionary<string, string> ActiveHeaderValues)
         {
-            if (RemainingNumberOfBooksToLoad > 0)
+            string ItemType = ActiveHeaderValues["Type"];
+            string ItemPath = ActiveHeaderValues["Path"];
+            switch (ItemType)
             {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableBook FillerItem = new UnlockableBook(ItemPath);
+                case "Book":
+                    BookLoader.ReadUnlockHeader(ItemPath, ActiveHeaderValues);
+                    break;
 
-                DicBookDatabase.Add(ItemPath, FillerItem);
-                RootBookContainer.ListUnlockedBook.Add(FillerItem);
-                --RemainingNumberOfBooksToLoad;
-            }
-            else if (RemainingNumberOfCardsToLoad > 0)
-            {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableCard FillerItem = new UnlockableCard(ItemPath);
+                case "Card":
+                    CardLoader.ReadUnlockHeader(ItemPath, ActiveHeaderValues);
+                    break;
 
-                if (!DicCardDatabase.ContainsKey(ItemPath))
-                {
-                    DicCardDatabase.Add(ItemPath, FillerItem);
-                    RootCardContainer.ListUnlockedCard.Add(FillerItem);
-                }
-                --RemainingNumberOfCardsToLoad;
-            }
-            else if (RemainingNumberOfCharactersToLoad > 0)
-            {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockablePlayerCharacter FillerItem = new UnlockablePlayerCharacter(ItemPath);
+                case "Character":
+                    CharacterLoader.ReadUnlockHeader(ItemPath, ActiveHeaderValues);
+                    break;
 
-                if (!DicCharacterDatabase.ContainsKey(ItemPath))
-                {
-                    DicCharacterDatabase.Add(ItemPath, FillerItem);
-                    RootCharacterContainer.ListUnlockedCharacter.Add(FillerItem);
-                }
-                --RemainingNumberOfCharactersToLoad;
-            }
-            else if (RemainingNumberOfMissionsToLoad > 0)
-            {
-                string ItemPath = PlayerUnlocksBR.ReadString();
-                UnlockableMission FillerItem = new UnlockableMission(ItemPath);
+                case "Mission":
+                    MissionLoader.ReadUnlockHeader(ItemPath, ActiveHeaderValues);
+                    break;
 
-                DicMissionDatabase.Add(ItemPath, FillerItem);
-                ListUnlockedMission.Add(FillerItem);
-                --RemainingNumberOfMissionsToLoad;
-            }
-            else
-            {
-                HasFinishedReadingPlayerShopItems = true;
+                case "Consumable":
+                    break;
             }
         }
 
-        private static void PopulatUnlocksAsyncTask()
+        private static void EnqueueMissingContent()
         {
-            GlobalUnlockIniAsync = new IniFileReader("Content/Sorcerer Street Lobby Unlocks.ini");
-
-            while (GlobalUnlockIniAsync.CanRead)
-            {
-                PopulateUnlockItems();
-            }
-
-            DicBookDatabaseEnumerator = DicBookDatabase.GetEnumerator();
-            DicCardDatabaseEnumerator = DicCardDatabase.GetEnumerator();
-            DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
-            DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
-
-            while (!DatabaseLoaded)
-            {
-                LoadUnlocksContentAsyncTask();
-            }
+            BookLoader.EnqueueAll();
+            CardLoader.EnqueueAll();
+            CharacterLoader.EnqueueAll();
+            MissionLoader.EnqueueAll();
         }
 
-        private static void PopulateUnlockItems()
+        private static void ConfirmInventoryIsLoaded()
         {
-            Dictionary<string, string> ActiveHeaderValues = GlobalUnlockIniAsync.ReadAllValues();
-
-            if (ActiveHeaderValues.Count > 0)
+            lock (LockObject)
             {
-                string ItemType = ActiveHeaderValues["Type"];
-                string ItemPath = ActiveHeaderValues["Path"];
-                switch (ItemType)
+                if (!IsContentFileRead || HasUnloadedAssets())
                 {
-                    case "Book":
-                        if (!DicBookDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableBook NewUnitUnlock = new UnlockableBook(ItemPath, ActiveHeaderValues);
-                            DicBookDatabase.Add(ItemPath, NewUnitUnlock);
-                        }
-                        else
-                        {
-                            DicBookDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Card":
-                        if (!DicCardDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableCard NewUnitUnlock = new UnlockableCard(ItemPath, ActiveHeaderValues);
-                            DicCardDatabase.Add(ItemPath, NewUnitUnlock);
-                        }
-                        else
-                        {
-                            DicCardDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Character":
-                        if (!DicCharacterDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockablePlayerCharacter NewCharacterUnlock = new UnlockablePlayerCharacter(ItemPath, ActiveHeaderValues);
-                            DicCharacterDatabase.Add(ItemPath, NewCharacterUnlock);
-                        }
-                        else
-                        {
-                            DicCharacterDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Mission":
-                        if (!DicMissionDatabase.ContainsKey(ItemPath))
-                        {
-                            UnlockableMission NewMissionUnlock = new UnlockableMission(ItemPath, ActiveHeaderValues);
-                            DicMissionDatabase.Add(ItemPath, NewMissionUnlock);
-                        }
-                        else
-                        {
-                            DicMissionDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
-                        }
-                        break;
-
-                    case "Consumable":
-                        break;
+                    return;
                 }
+
+                AreAssetsAllLoaded = true;
             }
         }
 
-        private static void LoadUnlocksContentAsyncTask()
+        private static bool HasUnloadedAssets()
         {
-            UnlockableBook BookToLoadInfo = null;
-            UnlockableCard CardToLoadInfo = null;
-            UnlockablePlayerCharacter CharacterToLoadInfo = null;
-            UnlockableMission MissionToLoadInfo = null;
-
-            if (ListBookToPrioritiseLoadPath.Count > 0)
-            {
-                BookToLoadInfo = DicBookDatabase[ListBookToPrioritiseLoadPath[0]];
-
-                ListBookToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicBookDatabaseEnumerator.MoveNext())
-            {
-                BookToLoadInfo = DicBookDatabaseEnumerator.Current.Value;
-            }
-            if (ListCardToPrioritiseLoadPath.Count > 0)
-            {
-                CardToLoadInfo = DicCardDatabase[ListCardToPrioritiseLoadPath[0]];
-
-                ListCardToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicCardDatabaseEnumerator.MoveNext())
-            {
-                CardToLoadInfo = DicCardDatabaseEnumerator.Current.Value;
-            }
-            else if (ListCharacterToPrioritiseLoadPath.Count > 0)
-            {
-                CharacterToLoadInfo = DicCharacterDatabase[ListCharacterToPrioritiseLoadPath[0]];
-
-                ListCharacterToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicCharacterDatabaseEnumeretor.MoveNext())
-            {
-                CharacterToLoadInfo = DicCharacterDatabaseEnumeretor.Current.Value;
-            }
-            else if (ListMissionToPrioritiseLoadPath.Count > 0)
-            {
-                MissionToLoadInfo = DicMissionDatabase[ListMissionToPrioritiseLoadPath[0]];
-
-                ListMissionToPrioritiseLoadPath.RemoveAt(0);
-            }
-            else if (DicMissionDatabaseEnumerator.MoveNext())
-            {
-                MissionToLoadInfo = DicMissionDatabaseEnumerator.Current.Value;
-            }
-
-            if (BookToLoadInfo != null)
-            {
-                CardBook NewBook = CardBook.GetCardBook(BookToLoadInfo.Path, ((Player)PlayerManager.ListLocalPlayer[0]).Inventory.GlobalBook, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                BookToLoadInfo.BookToBuy = NewBook;
-            }
-            else if (CardToLoadInfo != null)
-            {
-                Card NewCard = Card.LoadCard(CardToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-
-                CardToLoadInfo.CardToBuy = NewCard;
-            }
-            else if (CharacterToLoadInfo != null)
-            {
-                PlayerCharacter NewCharacter = new PlayerCharacter(CharacterToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-
-                CharacterToLoadInfo.CharacterToBuy = NewCharacter;
-            }
-            else if (MissionToLoadInfo != null)
-            {
-                MissionToLoadInfo.MissionToBuy = new MissionInfo(MissionToLoadInfo.Path, 0);
-            }
-            else
-            {
-                DatabaseLoaded = true;
-            }
+            return BookLoader.HasPending || CardLoader.HasPending || CharacterLoader.HasPending || MissionLoader.HasPending;
         }
     }
 }

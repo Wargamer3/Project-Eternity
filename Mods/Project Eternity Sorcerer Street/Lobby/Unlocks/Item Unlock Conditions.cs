@@ -12,7 +12,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public bool IsInit;
         public Task PopulatePlayerItemsTask;
-        private object PopulatePlayerItemsTaskLockObject = new object();
 
         public SorcererStreetUnlockConditionsEvaluator(Player ConditionsOwner)
         {
@@ -24,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<GameScreen> ListPendingUnlocks = new List<GameScreen>();
             bool NewUnlocks = false;
 
-            if (SorcererStreetPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
+            if (SorcererStreetPlayerUnlockInventory.AreAssetsAllLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
                 if (!UpdateAvailableItemsIfNeeded())
                 {
@@ -41,6 +40,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         foreach (string UnlockMessage in ActiveBook.Unlock(ConditionsOwner))
                         {
                             if (ActiveBook.UnlockConditions.ListUnlockConditions.Count > 0)
+                            {
+                                ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            }
+                        }
+                    }
+                }
+
+                for (int U = ConditionsOwner.UnlockInventory.RootCardContainer.ListLockedCard.Count - 1; U >= 0; U--)
+                {
+                    UnlockableCard ActiveCard = ConditionsOwner.UnlockInventory.RootCardContainer.ListLockedCard[U];
+                    if (IsValid(ActiveCard.UnlockConditions, ConditionsOwner))
+                    {
+                        NewUnlocks = true;
+
+                        foreach (string UnlockMessage in ActiveCard.Unlock(ConditionsOwner))
+                        {
+                            if (ActiveCard.UnlockConditions.ListUnlockConditions.Count > 0)
                             {
                                 ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
                             }
@@ -93,18 +109,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public bool UpdateAvailableItemsIfNeeded()
         {
-            bool IsFinished = false;
-            lock (PopulatePlayerItemsTaskLockObject)
+            if (!IsInit)
             {
-                if (PopulatePlayerItemsTask == null)
-                {
-                    PopulatePlayerItemsTask = Task.Run(() => { UpdateAvailableItemsTask(); });
-                }
-
-                IsFinished = IsInit;
+                UpdateAvailableItemsTask();
             }
 
-            return IsFinished;
+            return IsInit;
         }
 
         private void UpdateAvailableItemsTask()
@@ -112,93 +122,48 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UpdateAvailableBooksTask();
             UpdateAvailableCardsTask();
             UpdateAvailableCharactersTask();
+            UpdateAvailableMissionsTask();
 
-            lock (PopulatePlayerItemsTaskLockObject)
-            {
-                IsInit = true;
-            }
+            PopulatePlayerItemsTask = Task.CompletedTask;
+            IsInit = true;
         }
 
         private void UpdateAvailableBooksTask()
         {
-            ConditionsOwner.UnlockInventory.RootBookContainer.ListLockedBook = new List<UnlockableBook>(SorcererStreetPlayerUnlockInventory.DicBookDatabase.Values);
-
-            foreach (UnlockableBook NewBook in SorcererStreetPlayerUnlockInventory.DicBookDatabase.Values)
+            foreach (UnlockableBook ActiveBookUnlock in SorcererStreetPlayerUnlockInventory.BookLoader.Database.Values)
             {
-                SorcererStreetPlayerUnlockInventory.BookUnlockContainer CurrentBookContainer = ConditionsOwner.UnlockInventory.RootBookContainer;
-                bool IsBookValid = IsValid(NewBook.UnlockConditions, ConditionsOwner);
-
-                if (IsBookValid)
+                UnlockableBook PlayerBook = ConditionsOwner.UnlockInventory.FindPlayerBook(ActiveBookUnlock.Path);
+                if (PlayerBook == null)
                 {
-                    if (!CurrentBookContainer.ListUnlockedBook.Contains(NewBook))
-                    {
-                        CurrentBookContainer.ListUnlockedBook.Add(NewBook);
-                    }
+                    PlayerBook = ActiveBookUnlock.Copy();
+                }
 
-                    CurrentBookContainer.ListLockedBook.Remove(NewBook);
+                bool IsUnlocked = IsValid(PlayerBook.UnlockConditions, ConditionsOwner);
+                SorcererStreetPlayerUnlockInventory.BookUnlockContainer Root = ConditionsOwner.UnlockInventory.RootBookContainer;
+                if (IsUnlocked)
+                {
+                    Root.AddToUnlocked(PlayerBook);
                 }
                 else
                 {
-                    if (!CurrentBookContainer.ListLockedBook.Contains(NewBook))
-                    {
-                        CurrentBookContainer.ListLockedBook.Add(NewBook);
-                    }
-
-                    CurrentBookContainer.ListUnlockedBook.Remove(NewBook);
+                    Root.AddToLocked(PlayerBook);
                 }
 
-                string[] Tags = NewBook.BookToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] Tags = PlayerBook.BookToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ActiveTag in Tags)
                 {
-                    CurrentBookContainer = ConditionsOwner.UnlockInventory.RootBookContainer;
-
-                    if (IsBookValid)
-                    {
-                        if (!CurrentBookContainer.ListUnlockedBook.Contains(NewBook))
-                        {
-                            CurrentBookContainer.ListUnlockedBook.Add(NewBook);
-                        }
-
-                        CurrentBookContainer.ListLockedBook.Remove(NewBook);
-                    }
-                    else
-                    {
-                        if (!CurrentBookContainer.ListLockedBook.Contains(NewBook))
-                        {
-                            CurrentBookContainer.ListLockedBook.Add(NewBook);
-                        }
-
-                        CurrentBookContainer.ListUnlockedBook.Remove(NewBook);
-                    }
-
+                    SorcererStreetPlayerUnlockInventory.BookUnlockContainer CurrentFolder = Root;
                     string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string ActiveFolder in SubFolders)
                     {
-                        SorcererStreetPlayerUnlockInventory.BookUnlockContainer NewContainer;
-                        if (!CurrentBookContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        CurrentFolder = CurrentFolder.GetOrAddFolder(ActiveFolder);
+                        if (IsUnlocked)
                         {
-                            NewContainer = new SorcererStreetPlayerUnlockInventory.BookUnlockContainer(ActiveFolder);
-                            CurrentBookContainer.DicFolder.Add(ActiveFolder, NewContainer);
-                            CurrentBookContainer.ListFolder.Add(NewContainer);
-                        }
-
-                        CurrentBookContainer = NewContainer;
-
-                        if (IsBookValid)
-                        {
-                            if (!CurrentBookContainer.ListUnlockedBook.Contains(NewBook))
-                            {
-                                CurrentBookContainer.ListUnlockedBook.Add(NewBook);
-                                CurrentBookContainer.ListLockedBook.Remove(NewBook);
-                            }
+                            CurrentFolder.AddToUnlocked(PlayerBook);
                         }
                         else
                         {
-                            if (!CurrentBookContainer.ListLockedBook.Contains(NewBook))
-                            {
-                                CurrentBookContainer.ListLockedBook.Add(NewBook);
-                                CurrentBookContainer.ListUnlockedBook.Remove(NewBook);
-                            }
+                            CurrentFolder.AddToLocked(PlayerBook);
                         }
                     }
                 }
@@ -207,84 +172,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void UpdateAvailableCardsTask()
         {
-            ConditionsOwner.UnlockInventory.RootCardContainer.ListLockedCard = new List<UnlockableCard>(SorcererStreetPlayerUnlockInventory.DicCardDatabase.Values);
-
-            foreach (UnlockableCard NewCard in SorcererStreetPlayerUnlockInventory.DicCardDatabase.Values)
+            foreach (UnlockableCard ActiveCardUnlock in SorcererStreetPlayerUnlockInventory.CardLoader.Database.Values)
             {
-                SorcererStreetPlayerUnlockInventory.CardUnlockContainer CurrentCardContainer = ConditionsOwner.UnlockInventory.RootCardContainer;
-                bool IsCardValid = IsValid(NewCard.UnlockConditions, ConditionsOwner);
-
-                if (IsCardValid)
+                UnlockableCard PlayerCard = ConditionsOwner.UnlockInventory.FindPlayerCard(ActiveCardUnlock.Path);
+                if (PlayerCard == null)
                 {
-                    if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
-                    {
-                        CurrentCardContainer.ListUnlockedCard.Add(NewCard);
-                    }
+                    PlayerCard = ActiveCardUnlock.Copy();
+                }
 
-                    CurrentCardContainer.ListLockedCard.Remove(NewCard);
+                bool IsUnlocked = IsValid(PlayerCard.UnlockConditions, ConditionsOwner);
+                SorcererStreetPlayerUnlockInventory.CardUnlockContainer Root = ConditionsOwner.UnlockInventory.RootCardContainer;
+                if (IsUnlocked)
+                {
+                    Root.AddToUnlocked(PlayerCard);
                 }
                 else
                 {
-                    if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
-                    {
-                        CurrentCardContainer.ListLockedCard.Add(NewCard);
-                    }
-
-                    CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
+                    Root.AddToLocked(PlayerCard);
                 }
 
-                string[] Tags = NewCard.CardToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] Tags = PlayerCard.CardToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ActiveTag in Tags)
                 {
-                    CurrentCardContainer = ConditionsOwner.UnlockInventory.RootCardContainer;
-
-                    if (IsCardValid)
-                    {
-                        if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
-                        {
-                            CurrentCardContainer.ListUnlockedCard.Add(NewCard);
-                        }
-
-                        CurrentCardContainer.ListLockedCard.Remove(NewCard);
-                    }
-                    else
-                    {
-                        if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
-                        {
-                            CurrentCardContainer.ListLockedCard.Add(NewCard);
-                        }
-
-                        CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
-                    }
-
+                    SorcererStreetPlayerUnlockInventory.CardUnlockContainer CurrentFolder = Root;
                     string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string ActiveFolder in SubFolders)
                     {
-                        SorcererStreetPlayerUnlockInventory.CardUnlockContainer NewContainer;
-                        if (!CurrentCardContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        CurrentFolder = CurrentFolder.GetOrAddFolder(ActiveFolder);
+                        if (IsUnlocked)
                         {
-                            NewContainer = new SorcererStreetPlayerUnlockInventory.CardUnlockContainer(ActiveFolder);
-                            CurrentCardContainer.DicFolder.Add(ActiveFolder, NewContainer);
-                            CurrentCardContainer.ListFolder.Add(NewContainer);
-                        }
-
-                        CurrentCardContainer = NewContainer;
-
-                        if (IsCardValid)
-                        {
-                            if (!CurrentCardContainer.ListUnlockedCard.Contains(NewCard))
-                            {
-                                CurrentCardContainer.ListUnlockedCard.Add(NewCard);
-                                CurrentCardContainer.ListLockedCard.Remove(NewCard);
-                            }
+                            CurrentFolder.AddToUnlocked(PlayerCard);
                         }
                         else
                         {
-                            if (!CurrentCardContainer.ListLockedCard.Contains(NewCard))
-                            {
-                                CurrentCardContainer.ListLockedCard.Add(NewCard);
-                                CurrentCardContainer.ListUnlockedCard.Remove(NewCard);
-                            }
+                            CurrentFolder.AddToLocked(PlayerCard);
                         }
                     }
                 }
@@ -293,86 +214,68 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void UpdateAvailableCharactersTask()
         {
-            ConditionsOwner.UnlockInventory.RootCharacterContainer.ListLockedCharacter = new List<UnlockablePlayerCharacter>(SorcererStreetPlayerUnlockInventory.DicCharacterDatabase.Values);
-
-            foreach (UnlockablePlayerCharacter NewCharacter in SorcererStreetPlayerUnlockInventory.DicCharacterDatabase.Values)
+            foreach (UnlockablePlayerCharacter ActiveCharacterUnlock in SorcererStreetPlayerUnlockInventory.CharacterLoader.Database.Values)
             {
-                SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer CurrentCharacterContainer = ConditionsOwner.UnlockInventory.RootCharacterContainer;
-                bool IsCharacterValid = IsValid(NewCharacter.UnlockConditions, ConditionsOwner);
-
-                if (IsCharacterValid)
+                UnlockablePlayerCharacter PlayerCharacter = ConditionsOwner.UnlockInventory.FindPlayerCharacter(ActiveCharacterUnlock.Path);
+                if (PlayerCharacter == null)
                 {
-                    if (!CurrentCharacterContainer.ListUnlockedCharacter.Contains(NewCharacter))
-                    {
-                        CurrentCharacterContainer.ListUnlockedCharacter.Add(NewCharacter);
-                    }
+                    PlayerCharacter = ActiveCharacterUnlock.Copy();
+                }
 
-                    CurrentCharacterContainer.ListLockedCharacter.Remove(NewCharacter);
+                bool IsUnlocked = IsValid(PlayerCharacter.UnlockConditions, ConditionsOwner);
+                SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer Root = ConditionsOwner.UnlockInventory.RootCharacterContainer;
+                if (IsUnlocked)
+                {
+                    Root.AddToUnlocked(PlayerCharacter);
                 }
                 else
                 {
-                    if (!CurrentCharacterContainer.ListLockedCharacter.Contains(NewCharacter))
-                    {
-                        CurrentCharacterContainer.ListLockedCharacter.Add(NewCharacter);
-                    }
-
-                    CurrentCharacterContainer.ListUnlockedCharacter.Remove(NewCharacter);
+                    Root.AddToLocked(PlayerCharacter);
                 }
 
-                string[] Tags = NewCharacter.CharacterToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] Tags = PlayerCharacter.CharacterToBuy.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ActiveTag in Tags)
                 {
-                    CurrentCharacterContainer = ConditionsOwner.UnlockInventory.RootCharacterContainer;
-
-                    if (IsCharacterValid)
-                    {
-                        if (!CurrentCharacterContainer.ListUnlockedCharacter.Contains(NewCharacter))
-                        {
-                            CurrentCharacterContainer.ListUnlockedCharacter.Add(NewCharacter);
-                        }
-
-                        CurrentCharacterContainer.ListLockedCharacter.Remove(NewCharacter);
-                    }
-                    else
-                    {
-                        if (!CurrentCharacterContainer.ListLockedCharacter.Contains(NewCharacter))
-                        {
-                            CurrentCharacterContainer.ListLockedCharacter.Add(NewCharacter);
-                        }
-
-                        CurrentCharacterContainer.ListUnlockedCharacter.Remove(NewCharacter);
-                    }
-
+                    SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer CurrentFolder = Root;
                     string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string ActiveFolder in SubFolders)
                     {
-                        SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer NewContainer;
-                        if (!CurrentCharacterContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        CurrentFolder = CurrentFolder.GetOrAddFolder(ActiveFolder);
+                        if (IsUnlocked)
                         {
-                            NewContainer = new SorcererStreetPlayerUnlockInventory.CharacterUnlockContainer(ActiveFolder);
-                            CurrentCharacterContainer.DicFolder.Add(ActiveFolder, NewContainer);
-                            CurrentCharacterContainer.ListFolder.Add(NewContainer);
-                        }
-
-                        CurrentCharacterContainer = NewContainer;
-
-                        if (IsCharacterValid)
-                        {
-                            if (!CurrentCharacterContainer.ListUnlockedCharacter.Contains(NewCharacter))
-                            {
-                                CurrentCharacterContainer.ListUnlockedCharacter.Add(NewCharacter);
-                                CurrentCharacterContainer.ListLockedCharacter.Remove(NewCharacter);
-                            }
+                            CurrentFolder.AddToUnlocked(PlayerCharacter);
                         }
                         else
                         {
-                            if (!CurrentCharacterContainer.ListLockedCharacter.Contains(NewCharacter))
-                            {
-                                CurrentCharacterContainer.ListLockedCharacter.Add(NewCharacter);
-                                CurrentCharacterContainer.ListUnlockedCharacter.Remove(NewCharacter);
-                            }
+                            CurrentFolder.AddToLocked(PlayerCharacter);
                         }
                     }
+                }
+            }
+        }
+
+        private void UpdateAvailableMissionsTask()
+        {
+            foreach (UnlockableMission ActiveMissionUnlock in SorcererStreetPlayerUnlockInventory.MissionLoader.Database.Values)
+            {
+                bool Valid = IsValid(ActiveMissionUnlock.UnlockConditions, ConditionsOwner);
+                if (Valid)
+                {
+                    if (!ConditionsOwner.UnlockInventory.ListUnlockedMission.Contains(ActiveMissionUnlock))
+                    {
+                        ConditionsOwner.UnlockInventory.ListUnlockedMission.Add(ActiveMissionUnlock);
+                    }
+
+                    ConditionsOwner.UnlockInventory.ListLockedMission.Remove(ActiveMissionUnlock);
+                }
+                else
+                {
+                    if (!ConditionsOwner.UnlockInventory.ListLockedMission.Contains(ActiveMissionUnlock))
+                    {
+                        ConditionsOwner.UnlockInventory.ListLockedMission.Add(ActiveMissionUnlock);
+                    }
+
+                    ConditionsOwner.UnlockInventory.ListUnlockedMission.Remove(ActiveMissionUnlock);
                 }
             }
         }

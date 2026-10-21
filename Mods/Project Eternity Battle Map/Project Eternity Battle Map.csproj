@@ -129,6 +129,11 @@
     <Compile Include="Lobby\UI\Empty Box Drop Down Button.cs" />
     <Compile Include="Lobby\UI\Empty Box Button.cs" />
     <Compile Include="Lobby\Unlocks\Battle Map Player Shop Unlock Inventory.cs" />
+    <Compile Include="Lobby\Unlocks\Battle Map Character Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Battle Map Inventory Unit Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Battle Map Unit Skin Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Battle Map Player Unit Alt Loader.cs" />
+    <Compile Include="Lobby\Unlocks\Battle Map Player Mission Loader.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Type Screen.cs" />

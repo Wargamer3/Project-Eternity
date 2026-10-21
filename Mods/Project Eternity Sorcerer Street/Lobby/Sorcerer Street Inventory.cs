@@ -9,7 +9,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public struct BookInventoryContainer
+    public class BookInventoryContainer
     {
         public Dictionary<string, BookInventoryContainer> DicFolder;
         public List<BookInventoryContainer> ListFolder;//Share the same folders as the dictionnary
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
-    public struct CharacterInventoryContainer
+    public class CharacterInventoryContainer
     {
         public Dictionary<string, CharacterInventoryContainer> DicFolder;
         public List<CharacterInventoryContainer> ListFolder;//Share the same folders as the dictionnary
@@ -191,11 +191,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 DicOwnedBot.Add(BotName, LoadedBot);
             }
-        }
-
-        public void Load(ByteReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
-        {
         }
 
         public void Save(BinaryWriter BW)

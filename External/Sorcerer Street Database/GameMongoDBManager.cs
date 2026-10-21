@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -254,10 +255,9 @@ namespace Database.SorcererStreet
             string Name = FoundPlayerDocument.GetValue("Name").AsString;
             FoundPlayer.Name = Name;
 
-            ByteWriter BW = new ByteWriter();
-            GetInventoryBytes(BW, FoundPlayerDocument);
-            FoundPlayer.Info = BW.GetBytes();
-            BW.ClearWriteBuffer();
+            byte[] Profile = FoundPlayerDocument.GetValue("Profile").AsBsonBinaryData.Bytes;
+            byte[] Unlocks = FoundPlayerDocument.GetValue("UnlocksBlob").AsBsonBinaryData.Bytes;
+            FoundPlayer.Info = GameLocalDataManager.CreatePlayerInfo(Profile, Unlocks);
 
             return FoundPlayer;
         }
@@ -312,7 +312,71 @@ namespace Database.SorcererStreet
 
         public void SavePlayerInventory(string ID, object PlayerToSave)
         {
-            throw new NotImplementedException();
+            Player Player = (Player)PlayerToSave;
+            byte[] ProfileBytes = Player.SaveToBytes();
+            MemoryStream UnlockStream = new MemoryStream();
+            BinaryWriter UnlockWriter = new BinaryWriter(UnlockStream, System.Text.Encoding.UTF8, true);
+            Player.UnlockInventory.WriteUnlocks(UnlockWriter);
+            UnlockWriter.Flush();
+            byte[] UnlockBytes = UnlockStream.ToArray();
+
+            BsonArray BookPaths = new BsonArray();
+            foreach (string BookName in Player.Inventory.DicOwnedBook.Keys)
+            {
+                BookPaths.Add(BookName);
+            }
+
+            BsonArray CharacterPaths = new BsonArray();
+            foreach (string CharacterPath in Player.Inventory.DicOwnedCharacter.Keys)
+            {
+                CharacterPaths.Add(CharacterPath);
+            }
+
+            BsonArray MissionPaths = new BsonArray();
+            foreach (MissionInfo ActiveMission in Player.Inventory.DicOwnedMission.Values)
+            {
+                MissionPaths.Add(ActiveMission.MapPath);
+            }
+
+            BsonArray UnlockBooks = new BsonArray();
+            foreach (UnlockableBook ActiveBook in Player.UnlockInventory.RootBookContainer.ListUnlockedBook)
+            {
+                UnlockBooks.Add(ActiveBook.Path);
+            }
+
+            BsonArray UnlockCards = new BsonArray();
+            foreach (UnlockableCard ActiveCard in Player.UnlockInventory.RootCardContainer.ListUnlockedCard)
+            {
+                UnlockCards.Add(ActiveCard.Path);
+            }
+
+            BsonArray UnlockCharacters = new BsonArray();
+            foreach (UnlockablePlayerCharacter ActiveCharacter in Player.UnlockInventory.RootCharacterContainer.ListUnlockedCharacter)
+            {
+                UnlockCharacters.Add(ActiveCharacter.Path);
+            }
+
+            BsonArray UnlockMissions = new BsonArray();
+            foreach (ProjectEternity.GameScreens.SorcererStreetScreen.UnlockableMission ActiveMission in Player.UnlockInventory.ListUnlockedMission)
+            {
+                UnlockMissions.Add(ActiveMission.Path);
+            }
+
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update
+                .Set("Name", Player.Name)
+                .Set("Level", Player.Level)
+                .Set("EXP", Player.EXP)
+                .Set("Profile", new BsonBinaryData(ProfileBytes))
+                .Set("UnlocksBlob", new BsonBinaryData(UnlockBytes))
+                .Set("Inventory.Books", BookPaths)
+                .Set("Inventory.Characters", CharacterPaths)
+                .Set("Inventory.Missions", MissionPaths)
+                .Set("Unlocks.Books", UnlockBooks)
+                .Set("Unlocks.Cards", UnlockCards)
+                .Set("Unlocks.Characters", UnlockCharacters)
+                .Set("Unlocks.Missions", UnlockMissions);
+            PlayersCollection.UpdateOne(filter, update);
         }
     }
 }

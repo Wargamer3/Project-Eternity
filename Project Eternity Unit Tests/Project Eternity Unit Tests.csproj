@@ -124,6 +124,7 @@
     <Compile Include="Cutscene Unit Tests.cs" />
     <Compile Include="Skills Unit Tests.cs" />
     <Compile Include="GUI Unit Tests.cs" />
+    <Compile Include="Inventory Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test Directory.cs" />
     <Compile Include="Triple Thunder\Triple Thunder Magic Tests.cs" />
