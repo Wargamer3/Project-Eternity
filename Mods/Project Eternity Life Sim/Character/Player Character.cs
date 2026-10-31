@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<PlayerCharacter.CharacterStats> ListStatChoosen;
     }
 
-    public class PlayerCharacter : Object3D
+    public partial class PlayerCharacter : Object3D
     {
         public enum CharacterStats { STR, DEX, CON, INT, WIS, CHA, Free }
         public enum CharacterSexes { Male, Female }
@@ -34,12 +34,33 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public string PrimaryGoal;//Fallback in case actions get interrupted
         public ActionPanelHolderLifeSim ListActionMenuChoice;
-        public List<AutomatedAction> ListAutomatedAction;
+        public List<AutomatedAction> ListCurrentAIObjectiveStep;
 
         public bool CanChangeAIPrimaryGoal;
         public bool AIControlled;
-        public bool AIPrimaryGoalReached => !AIControlled && ListAutomatedAction.Count == 0;
+        public bool HiddenFromBattle;
+        public bool AIPrimaryGoalReached => ListAIObjective.Count == 0 && ListCurrentAIObjectiveStep.Count == 0;
         private double AITimer;
+
+        public List<AIObjective> ListAIObjective;
+        public List<Personality> ListPersonality;
+        public List<AIAction> ListGrantedAutonomousAction;
+        public CharacterBelief Belief;
+        public bool CopyLinksFromWorld;
+        public float PerceptionRadius;
+        public List<ChunkHop> ListPlannedHop;
+        public int PlannedHopIndex;
+        public bool PassageAttemptFailed;
+        public bool TurnBased;
+        public int ActionPointsRemaining;
+        public bool HasAffordableWindow;
+        public double AffordableSeconds;
+
+        public const double IdleRetrySeconds = 60;
+        public const int ShortTermUrgencyMargin = 10;
+        public const int HighPrecisionUrgencyMargin = 20;
+        public const int CriticalHunger = 80;
+        public const int CriticalSleep = 80;
 
         public List<Weapon> ListWeapon { get; internal set; }
 
@@ -59,6 +80,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public UnitMap3D Unit3DSprite;
         public string Model3DPath;
         public AnimatedModel Unit3DModel;
+        public GltfModel BodyModel;
+        public BodySprings BodySprings;
+        public float BodyScale = 1f;
 
         public CharacterAction[] ArrayCharacterAction;
         public string[] ArrayCharacterActionPath;
@@ -74,12 +98,14 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public CharacterClass Class;
         public CharacterDeity Deity;
         public CharacterHeritage Heritage;
+        public Armor WornArmor;
         public int Age;
         public CharacterSexes CharacterSex;
         public List<Language> ListLanguage;
 
         public string ID;
         public bool IsInCombat;
+        public bool InPractice;
         public string CurrentGoal;
         public string NextGoal;//Wait until Current Goal ends
         public int Level;
@@ -90,7 +116,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public int Mana;
         public int Money;
         public int Hunger;
+        public int Hygiene;
         public int Sleep;
+        public int Social;
+        public int Comfort;
+        public int Bladder;
+        public int Fun;
+        public float NeedRemainder;
         public int Intelligence;//used for AI
 
         public int AC;
@@ -124,6 +156,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public Vector3 ExternalSpeed = Vector3.Zero;//Wind, etc
 
         public float BaseMoveSpeed = 30f;
+        public float MovePace = 1f;
+        public bool IgnoreTownSolids;
+        public bool DungeonPose;
+        public float SwimPace = 1f;
+        public float WetLine;
+        public float WetAmount;
+        public bool WasInWater;
+        public float WallRunPace = 1f;
+        public TraversalCapabilities Body;
+        public Pose CurrentPose;
+        public NoisePrint Noise;
 
         public enum SurfaceType { Normal, Ice, Mud }
         public SurfaceType CurrentSurface = SurfaceType.Normal;
@@ -140,8 +183,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             DicActionByGoal = new Dictionary<string, List<AIAction>>();
             DicObjectiveByName = new Dictionary<string, object>();
             DicExtraStatByName = new Dictionary<string, int>();
-            ListAutomatedAction = new List<AutomatedAction>();
+            ListCurrentAIObjectiveStep = new List<AutomatedAction>();
+            ListAIObjective = new List<AIObjective>();
+            ListPersonality = new List<Personality>();
+            ListGrantedAutonomousAction = new List<AIAction>();
+            Belief = new CharacterBelief();
+            PerceptionRadius = 64;
+            ListPlannedHop = new List<ChunkHop>();
+            Body = new TraversalCapabilities();
+            CurrentPose = Pose.Stand;
             ListActionMenuChoice = new ActionPanelHolderLifeSim(MapManager);
+            DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>();
 
             ArrayRelationshipBonus = new BaseAutomaticSkill[0];
 
@@ -163,7 +215,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             DicActionByGoal = new Dictionary<string, List<AIAction>>();
             DicObjectiveByName = new Dictionary<string, object>();
             DicExtraStatByName = new Dictionary<string, int>();
-            ListAutomatedAction = new List<AutomatedAction>();
+            ListCurrentAIObjectiveStep = new List<AutomatedAction>();
+            ListAIObjective = new List<AIObjective>();
+            ListPersonality = new List<Personality>();
+            ListGrantedAutonomousAction = new List<AIAction>();
+            Belief = new CharacterBelief();
+            PerceptionRadius = 64;
+            ListPlannedHop = new List<ChunkHop>();
+            Body = new TraversalCapabilities();
+            CurrentPose = Pose.Stand;
             ListActionMenuChoice = new ActionPanelHolderLifeSim(MapManager);
             DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>();
 
@@ -291,16 +351,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 else
                     SpriteUnit = Content.Load<Texture2D>("Life Sim/Characters/Default");
 
-                Model3DPath = "Bomberman/Default";
-                if (!string.IsNullOrEmpty(Model3DPath))
+                string Models = Path.Combine("Content", "Life Sim", "Characters", "Models");
+                string Forest = Path.Combine(Models, "Forest Girl.glb");
+                string Racoon = Path.Combine(Models, "Racoon Girl.glb");
+                Model3DPath = File.Exists(Racoon) ? Forest : File.Exists(Forest) ? Forest : null;
+                if (Model3DPath != null && GameScreen.GraphicsDevice != null)
                 {
-                    string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-                    string ModelFolder = Model3DPath.Replace(ArrayModelFolder[ArrayModelFolder.Length - 1], "");
-                    Unit3DModel = new AnimatedModel("Life Sim/Characters/Models/" + Model3DPath);
-                    Unit3DModel.LoadContent(Content);
-
-                    Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Walking", "Walking", Content);
-                    Unit3DModel.AddAnimation("Life Sim/Characters/Models/" + ModelFolder + "Idle", "Idle", Content);
+                    WearBody(GameScreen.GraphicsDevice, Model3DPath);
                     RotationMatrix = Matrix.CreateFromAxisAngle(Vector3.UnitY, 0);
                 }
             }
@@ -309,9 +366,28 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             FS.Close();
         }
 
+        public void WearBody(GraphicsDevice Device, string ModelPath)
+        {
+            if (BodyModel != null)
+            {
+                BodyModel.Dispose();
+                BodyModel = null;
+            }
+
+            BodySprings = null;
+            string Folder = Path.Combine("Content", "Life Sim", "Characters", "Animations");
+            string[] Clips = Directory.Exists(Folder) ? Directory.GetFiles(Folder, "*.fbx") : Array.Empty<string>();
+            Array.Sort(Clips, StringComparer.OrdinalIgnoreCase);
+            BodyModel = new GltfModel(Device, ModelPath, false, Clips);
+            BodyModel.CharacterDraw = true;
+            BodyModel.Light = ModelLight.CharacterSelection;
+            BodySprings = new BodySprings();
+            BodySprings.SourcePath = ModelPath;
+        }
+
         public void Init()
         {
-            RotationMatrix = Matrix.CreateWorld(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
+            RotationMatrix = Matrix.CreateFromAxisAngle(Vector3.UnitY, 0f);
 
             Ancestry.Init(SharedMapContex);
             Background.Init(SharedMapContex);
@@ -320,12 +396,21 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             RootInventoryContainer.Init(SharedMapContex);
 
+            if (ArrayCharacterAction == null)
+            {
+                ArrayCharacterAction = new CharacterAction[0];
+            }
+
             foreach (CharacterAction ActiveAction in ArrayCharacterAction)
             {
                 ActiveAction.Init(SharedMapContex);
             }
 
             UpdateStats();
+            if (CurrentHP == 0 && MaxHP > 0)
+            {
+                CurrentHP = MaxHP;
+            }
 
             InitAI();
         }
@@ -336,8 +421,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 foreach (AICharacterAction ActiveCharacterAIAction in ActiveCharacterAction.ListAIAction)
                 {
-                    foreach (LifeSimAIAction ActiveAIAction in ActiveCharacterAIAction.ListAIAction)
+                    foreach (LifeSimAIAction LoadedAIAction in ActiveCharacterAIAction.ListAIAction)
                     {
+                        LifeSimAIAction ActiveAIAction = (LifeSimAIAction)LoadedAIAction.Copy();
+
                         if (!DicActionByGoal.ContainsKey(ActiveAIAction.AIGoal))
                         {
                             DicActionByGoal.Add(ActiveAIAction.AIGoal, new List<AIAction>());
@@ -349,13 +436,18 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     }
                 }
             }
+
+            DefaultAI.ApplyIfEmpty(this);
         }
 
         public void UpdateStats()
         {
+            if (DicProficiencyLevelByName == null)
+            {
+                DicProficiencyLevelByName = new Dictionary<string, ProficiencyLink>();
+            }
+
             DicProficiencyLevelByName.Clear();
-            MaxHP = Ancestry.BaseHP + Class.BaseHP + CON;
-            AC = 10 + DEX;
             STR = 0;
             DEX = 0;
             CON = 0;
@@ -462,6 +554,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 }
             }
 
+            MaxHP = Ancestry.BaseHP + Class.BaseHP + CON;
+            AC = 10 + DEX;
+
             foreach (KeyValuePair<string, ProficiencyLink> ActiveProficiency in Ancestry.DicProficiencyLevelByName)
             {
                 DicProficiencyLevelByName.Add(ActiveProficiency.Key, ActiveProficiency.Value);
@@ -475,6 +570,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             foreach (KeyValuePair<string, ProficiencyLink> ActiveProficiency in Class.DicProficiencyLevelByName)
             {
                 DicProficiencyLevelByName.Add(ActiveProficiency.Key, ActiveProficiency.Value);
+            }
+
+            foreach (ProficiencyLink ActiveProficiency in DicProficiencyLevelByName.Values)
+            {
+                ActiveProficiency.ComputeStatBonuses(this);
             }
         }
 
@@ -491,38 +591,165 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             return FinalInitiative;
         }
 
+        public void PoseBody(GameTime gameTime)
+        {
+            if (gameTime == null || DungeonPose || SharedMapContex == null)
+            {
+                return;
+            }
+
+            Vector3 Shift = ChunkOrigin.Shift(SharedMapContex.CurrentMapInfo);
+            if (BodyModel != null)
+            {
+                if (BodySprings != null)
+                {
+                    BodySprings.World = BodyDrawWorld(Shift);
+                    BodySprings.Seconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+
+                BodyModel.Update(gameTime);
+                FootPlant.Apply(this, Shift);
+                if (BodySprings != null)
+                {
+                    BodySprings.Pose(BodyModel);
+                }
+            }
+
+            if (Unit3DModel != null)
+            {
+                Unit3DModel.Update(gameTime);
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
-            if (ListAutomatedAction.Count > 0)
+            if (gameTime != null)
             {
-                if (!ListAutomatedAction[0].Update(gameTime))
-                {
-                    ListAutomatedAction.RemoveAt(0);
+                DungeonCombat.Tick(this, gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
-                    if (ListAutomatedAction.Count > 0)
+            if (Life.Away.Busy)
+            {
+                return;
+            }
+
+            if (ListActionMenuChoice.HasMainPanel)
+            {
+                ListActionMenuChoice.Last().Update(gameTime);
+                return;
+            }
+
+            if (!AIControlled)
+            {
+                return;
+            }
+
+            WatchCommittedPlan();
+            DoorYield.Consider(this);
+            AdvanceNeeds(gameTime);
+
+            AIObjective Top = TopObjective();
+            if (Top != null && Top.ListRemainingStep.Count > 0)
+            {
+                ListCurrentAIObjectiveStep = Top.ListRemainingStep;
+                int Guard = 0;
+                while (Guard < 8 && Top.ListRemainingStep.Count > 0)
+                {
+                    Guard++;
+                    ListCurrentAIObjectiveStep = Top.ListRemainingStep;
+                    if (ListCurrentAIObjectiveStep[0].Update(gameTime))
                     {
-                        ListAutomatedAction[0].OnStarted();
+                        break;
+                    }
+
+                    if (PassageAttemptFailed)
+                    {
+                        PassageAttemptFailed = false;
+                        RefillSteps(Top);
+                        if (Top.ListRemainingStep.Count == 0)
+                        {
+                            WaitAction Pause = new WaitAction(this, 1);
+                            Top.ListRemainingStep.Add(Pause);
+                            ListCurrentAIObjectiveStep = Top.ListRemainingStep;
+                            Pause.OnStarted();
+                        }
+
+                        break;
+                    }
+
+                    ListCurrentAIObjectiveStep.RemoveAt(0);
+                    if (ListCurrentAIObjectiveStep.Count == 0)
+                    {
+                        break;
+                    }
+
+                    ListCurrentAIObjectiveStep[0].OnStarted();
+                    if (ListCurrentAIObjectiveStep[0] is FollowPath || ListCurrentAIObjectiveStep[0] is DriveLegAction)
+                    {
+                        break;
                     }
                 }
             }
-            else if (AIPrimaryGoalReached)
+            else if (Top != null)
             {
-                FindNextPrimaryGoal(gameTime, SharedMapContex.RootMapContainer);
+                if (Top.IsStandingOrder && ListAIObjective.Count == 1)
+                {
+                    RefillStandingOrder(Top);
+                }
+                else
+                {
+                    PopTopObjective();
+                }
             }
-            else if (ListActionMenuChoice.HasMainPanel)
+
+            if (ListAIObjective.Count == 0)
             {
-                ListActionMenuChoice.Last().Update(gameTime);
+                TryPickIdleGoal(gameTime);
             }
+
+            Top = TopObjective();
+            if (!DungeonPose && (Top == null || !IsLocomoting(Top.ListRemainingStep)))
+            {
+                PlayClip("Idle");
+            }
+        }
+
+        static bool IsLocomoting(List<AutomatedAction> Steps)
+        {
+            if (Steps == null || Steps.Count == 0)
+            {
+                return false;
+            }
+
+            return Steps[0] is FollowPath || Steps[0] is DriveLegAction;
         }
 
         public void RemoveControl()
         {
+            if (LifeSimMap.PhysicsManager != null)
+            {
+                LifeSimMap.PhysicsManager.Release(this);
+            }
+
             SharedMapContex.User = null;
+            AIControlled = true;
+
+            AIObjective Top = TopObjective();
+            if (Top != null)
+            {
+                ListCurrentAIObjectiveStep = Top.ListRemainingStep;
+            }
         }
 
         public void TakeControl(PlayerOverseer NewUser)
         {
             SharedMapContex.User = NewUser;
+            AIControlled = false;
+            ListCurrentAIObjectiveStep = new List<AutomatedAction>();
+            if (LifeSimMap.PhysicsManager != null)
+            {
+                LifeSimMap.PhysicsManager.Adopt(this);
+            }
         }
 
         public void AddAction(AIAction NewAction)
@@ -537,9 +764,149 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             ListAction.Add(NewAction);
         }
 
+        public void Equip(Weapon Weapon)
+        {
+            if (ListWeapon == null)
+            {
+                ListWeapon = new List<Weapon>();
+            }
+
+            ListWeapon.Clear();
+            if (Weapon != null)
+            {
+                ListWeapon.Add(Weapon);
+            }
+        }
+
+        public void Hold(Weapon Weapon)
+        {
+            if (ListWeapon == null)
+            {
+                ListWeapon = new List<Weapon>();
+            }
+
+            if (Weapon != null)
+            {
+                ListWeapon.Add(Weapon);
+            }
+        }
+
+        public Weapon EquippedWeapon()
+        {
+            if (ListWeapon == null || ListWeapon.Count == 0)
+            {
+                return null;
+            }
+
+            return ListWeapon[0];
+        }
+
+        public bool HasAnyScript()
+        {
+            foreach (List<AIAction> ListAction in DicActionByGoal.Values)
+            {
+                if (ListAction.Count > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasScript(string ActionName)
+        {
+            return ScriptCount(ActionName) > 0;
+        }
+
+        public int ScriptCount(string ActionName)
+        {
+            int Count = 0;
+            foreach (List<AIAction> ListAction in DicActionByGoal.Values)
+            {
+                foreach (AIAction Action in ListAction)
+                {
+                    if (Action.AIActionName == ActionName)
+                    {
+                        Count++;
+                    }
+                }
+            }
+
+            return Count;
+        }
+
         public void AddMapKnowledge(MapInfo mapInfo)
         {
-            SharedMapContex.RootMapContainer.AddMapContainer(mapInfo);
+            Belief.LearnArea(mapInfo);
+            foreach (ChunkHop Link in mapInfo.ListLink)
+            {
+                Belief.LearnLink(Link);
+            }
+        }
+
+        public void SeedBelief()
+        {
+            MapInfo Here = SharedMapContex.CurrentMapInfo;
+            if (Here == null)
+            {
+                return;
+            }
+
+            Belief.LearnArea(Here);
+            if (!CopyLinksFromWorld)
+            {
+                return;
+            }
+
+            foreach (ChunkHop Link in Here.ListLink)
+            {
+                Belief.LearnLink(Link);
+            }
+        }
+
+        public void Perceive()
+        {
+            MapInfo Here = SharedMapContex.CurrentMapInfo;
+            if (Here == null)
+            {
+                return;
+            }
+
+            Belief.Perceive(Here, Position, PerceptionRadius);
+            AccountForWhatWasSeen();
+        }
+
+        public bool IsCarrying(string Name)
+        {
+            return RootInventoryContainer.ContainsTagged(Name);
+        }
+
+        public void ConsumeCarried(string Name)
+        {
+            ItemInfo Found;
+            if (RootInventoryContainer.TryFindTagged(Name, out Found))
+            {
+                RootInventoryContainer.ConsumeItem(Found);
+            }
+        }
+
+        public List<ChunkHop> GoToLocation(string LocationName)
+        {
+            MapInfo Start = SharedMapContex.CurrentMapInfo;
+            if (Start == null || Belief == null)
+            {
+                return new List<ChunkHop>();
+            }
+
+            string DestinationName = LocationName;
+            BelievedObject KnownObject = Belief.FindObject(LocationName);
+            if (KnownObject != null && KnownObject.Chunk != null && KnownObject.Chunk.MapMapContainer != null)
+            {
+                DestinationName = KnownObject.Chunk.MapMapContainer.AreaName;
+            }
+
+            return new InterMapMovementAlgorithm().FindHops(Start, DestinationName, Belief);
         }
 
         public List<AutomatedAction> GetActionForGoal(string Goal)
@@ -588,60 +955,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             }
         }
 
-        private void FindNextPrimaryGoal(GameTime gameTime, NavMapGameManager Map)
-        {
-            if (AITimer > 0)
-            {
-                AITimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                return;
-            }
-
-            List<AIAction> ListAvailableAction = new List<AIAction>();
-            int MaxWeight = 1;
-
-            foreach (KeyValuePair<string, List<AIAction>> ActiveGoal in DicActionByGoal)
-            {
-                foreach (AIAction ActiveGoalAction in ActiveGoal.Value)
-                {
-                    ActiveGoalAction.UpdatePrecondition(string.Empty, null);
-
-                    if (ActiveGoalAction.AIWeight >= MaxWeight)
-                    {
-                        ListAvailableAction.Add(ActiveGoalAction);
-                        MaxWeight = ActiveGoalAction.AIWeight;
-                    }
-                }
-            }
-
-            for (int G = ListAvailableAction.Count - 1; G >= 0; G--)
-            {
-                if (ListAvailableAction[G].AIWeight < MaxWeight)
-                {
-                    ListAvailableAction.RemoveAt(G);
-                }
-            }
-
-            int GoalIndex = 0;
-
-            if (ListAvailableAction.Count > 0)
-            {
-                GoalIndex = RandomHelper.Next(ListAvailableAction.Count);
-
-                CurrentGoal = ListAvailableAction[GoalIndex].AIGoal;
-                ListAutomatedAction.AddRange(ListAvailableAction[GoalIndex].GetAIExecutionPlan(Map));
-
-                ListAutomatedAction[0].OnStarted();
-            }
-
-            AITimer = 60;
-        }
-
         public void GoToLocation(string LocationName, NavMapGameManager Map)
         {
-            KnowledgeInfo LocationKnowledge = RootKnowledgeContainer.DicKnowledgeByName[LocationName];
-            Vector3 LocationPosition = (Vector3)LocationKnowledge.KnowledgeDetail;
-
-            List<AIAction> ListMovementAction = Map.FindPath(this, Position, LocationPosition);
+            GoToLocation(LocationName);
         }
 
         public void AddItem(ItemInfo ItemToAdd)
@@ -721,10 +1037,20 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public bool HasKnowledgeInCategory(string KnowledgeCategory)
         {
-            return RootKnowledgeContainer.HasItemInCategory(KnowledgeCategory);
+            if (Belief != null && Belief.HasCategory(KnowledgeCategory))
+            {
+                return true;
+            }
+
+            return RootKnowledgeContainer.ContainsCategory(KnowledgeCategory);
         }
 
         public void Move(Vector3 TargetDirection, double Strength, double DeltaTime)
+        {
+            Move(TargetDirection, Strength, DeltaTime, null);
+        }
+
+        public void Move(Vector3 TargetDirection, double Strength, double DeltaTime, float? FaceYaw)
         {
             float Acceleration = 15;
             float StopSpeed = 18;
@@ -747,51 +1073,41 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                     break;
             }
 
-            Vector3 Movement = TargetDirection * BaseMoveSpeed * (float)Strength;
+            Vector3 Movement = new Vector3(TargetDirection.X, TargetDirection.Y, 0f) * BaseMoveSpeed * (float)Strength * MovePace * SpeedStripBoost();
+            bool Stepping = Strength > 0 && Movement != Vector3.Zero;
 
-            if (Strength > 0 && TargetDirection != Vector3.Zero)
+            float? Aim = FaceYaw;
+            if (!Aim.HasValue && Stepping)
             {
-                Quaternion CurrentRot = Quaternion.CreateFromRotationMatrix(RotationMatrix);
-
-                float TargetAngle = (float)Math.Atan2(TargetDirection.X, TargetDirection.Y);
-                Quaternion TargetRot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, TargetAngle);
-
-                float SmoothedTurn = 1.0f - (float)Math.Exp(-TurnSpeed * DeltaTime);
-                RotationMatrix = Matrix.CreateFromQuaternion(Quaternion.Slerp(CurrentRot, TargetRot, SmoothedTurn));
-
-                // Extract X, Y forward vector
-                Vector3 CharacterDirection = Vector3.Normalize(new Vector3(RotationMatrix.M31, RotationMatrix.M33, 0f));
-
-                float TurnInPlaceThreshold = (float)Math.Cos(MathHelper.ToRadians(78.0f));
-                float StraightAheadThreshold = (float)Math.Cos(MathHelper.ToRadians(11.5f));
-
-                float ExpectedRotation = Vector3.Dot(CharacterDirection, TargetDirection);
-
-                //Turn in place, stop moving
-                if (ExpectedRotation < TurnInPlaceThreshold)
-                {
-                    Movement = Vector3.Zero;
-                    //Unit3DModel.PlayAnimation("Turn");
-                }
-                //Slow down a bit if turning too hard
-                else if (ExpectedRotation < StraightAheadThreshold)
-                {
-                    float RotationRange = StraightAheadThreshold - TurnInPlaceThreshold;
-                    float SpeedReduction = (ExpectedRotation - TurnInPlaceThreshold) / RotationRange;
-                    Movement *= SpeedReduction;
-                    Unit3DModel.PlayAnimation("Walking");
-                }
-                else
-                {
-                    Unit3DModel.PlayAnimation("Walking");
-                }
-            }
-            else
-            {
-                Unit3DModel.PlayAnimation("Idle");
+                Aim = (float)Math.Atan2(Movement.X, Movement.Y);
             }
 
-            if (Strength > 0 && Movement != Vector3.Zero)
+            if (Aim.HasValue)
+            {
+                float CurrentAngle = ThirdPersonRig.YawOf(RotationMatrix);
+                float Delta = MathHelper.WrapAngle(Aim.Value - CurrentAngle);
+                float SmoothedTurn = 1.0f - (float)Math.Exp(-TurnSpeed * (float)DeltaTime);
+                RotationMatrix = Matrix.CreateFromAxisAngle(Vector3.UnitY, CurrentAngle + Delta * SmoothedTurn);
+            }
+
+            if (!IgnoreTownSolids && LifeSimMap.PhysicsManager != null && LifeSimMap.PhysicsManager.Drives(this))
+            {
+                float Speed = Movement.Length();
+                Vector3 Direction = Speed > 0.001f ? Movement / Speed : Vector3.Zero;
+                LifeSimMap.PhysicsManager.Steer(this, Direction, Speed);
+                PlayClip(Stepping ? "Walking" : "Idle");
+                float Sliding = LifeSimMap.PhysicsManager.HorizontalSpeed(this);
+                if (Sliding > Speed)
+                {
+                    Speed = Sliding;
+                }
+
+                ProjectEternity.GameScreens.LifeSimScreen.Noise.Stamp(this, Speed);
+                return;
+            }
+
+            Vector3 Before = Position;
+            if (Stepping)
             {
                 float SmoothedAcceleration = 1.0f - (float)Math.Exp(-Acceleration * DeltaTime);
                 MovementSpeed = Vector3.Lerp(MovementSpeed, Movement, SmoothedAcceleration);
@@ -805,16 +1121,309 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             MovementSpeed.Z = 0f;
 
             float SmoothedFriction = 1.0f - (float)Math.Exp(-Friction * DeltaTime);
-            ExternalSpeed = Vector3.Lerp(ExternalSpeed, Vector3.Zero, SmoothedFriction);
+            Vector2 Gust = Climate.Roof(this) ? Vector2.Zero : Climate.Now.Wind * 0.12f;
+            ExternalSpeed = Vector3.Lerp(ExternalSpeed, new Vector3(Gust.X, Gust.Y, 0f), SmoothedFriction);
 
             Vector3 MovementFinal = MovementSpeed + ExternalSpeed;
-            Position += MovementFinal * (float)DeltaTime;
+            StepBody(MovementFinal * (float)DeltaTime);
+            Vector3 Advanced = Position - Before;
+            Advanced.Z = 0f;
+            bool Travelled = Stepping && Advanced.LengthSquared() > 0.0001f;
+            PlayClip(Travelled ? "Walking" : "Idle");
+            float FlatSpeed = (float)Math.Sqrt(MovementFinal.X * MovementFinal.X + MovementFinal.Y * MovementFinal.Y);
+            ProjectEternity.GameScreens.LifeSimScreen.Noise.Stamp(this, FlatSpeed);
+        }
 
+        float SpeedStripBoost()
+        {
+            if (Belief == null)
+            {
+                return 1f;
+            }
+
+            foreach (BelievedObject Object in Belief.ListObject)
+            {
+                if (Object.Tag != "Speed Strip")
+                {
+                    continue;
+                }
+
+                float DX = Position.X - Object.LocalPosition.X;
+                float DY = Position.Y - Object.LocalPosition.Y;
+                if (DX * DX + DY * DY <= 16f * 16f)
+                {
+                    return 1.5f;
+                }
+            }
+
+            return 1f;
+        }
+
+        public bool TryJump()
+        {
+            if (Body == null || !Body.CanJump)
+            {
+                return false;
+            }
+
+            if (LifeSimMap.PhysicsManager != null && LifeSimMap.PhysicsManager.Drives(this))
+            {
+                if (!LifeSimMap.PhysicsManager.Jump(this))
+                {
+                    return false;
+                }
+
+                CurrentPose = Pose.MidAir;
+                return true;
+            }
+
+            Position = new Vector3(Position.X, Position.Y, Position.Z + 8f);
+            CurrentPose = Pose.MidAir;
+            return true;
+        }
+
+        public void StepBody(Vector3 Displacement)
+        {
+            Vector3 Next = Position + Displacement;
+            bool FlatMove = Displacement.X * Displacement.X + Displacement.Y * Displacement.Y > 0.0000001f;
+            if (BoxBlocks(Position, Next))
+            {
+                if (FlatMove)
+                {
+                    SolidStoppedMove = true;
+                }
+
+                Next = new Vector3(Position.X, Position.Y, Position.Z + Displacement.Z);
+                if (BoxBlocks(Position, Next))
+                {
+                    return;
+                }
+            }
+
+            Next = new Vector3(Next.X, Next.Y, StairHeight(Next));
+            Position = Next;
             WorldMatrix = RotationMatrix * Matrix.CreateTranslation(Position);
         }
+
+        bool BoxBlocks(Vector3 From, Vector3 To)
+        {
+            if (IgnoreTownSolids)
+            {
+                return false;
+            }
+
+            MapInfo Here = SharedMapContex == null ? null : SharedMapContex.CurrentMapInfo;
+            if (Here == null || Here.Furniture == null || Here.Buildings == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Here.Furniture.Count; i++)
+            {
+                if (Here.Furniture[i] != null && Here.Furniture[i].HitsMove(From, To))
+                {
+                    return true;
+                }
+            }
+
+            for (int i = 0; i < Here.Buildings.Count; i++)
+            {
+                BuildingItem Box = Here.Buildings[i];
+                if (Box == null)
+                {
+                    continue;
+                }
+
+                if (Box.HitsMove(From, To))
+                {
+                    return true;
+                }
+
+                BoxVolume Hull;
+                if (Box.TryHull(out Hull) && Hull.Hits(From, To))
+                {
+                    return true;
+                }
+            }
+
+            return ForestScatter.Hits(Here, From, To);
+        }
+
+        public GroundContact TownGround(float MapX, float MapY)
+        {
+            float Height = Position.Z;
+            float SlopeX = 0f;
+            float SlopeY = 0f;
+            MapInfo Here = SharedMapContex == null ? null : SharedMapContex.CurrentMapInfo;
+            if (Here != null && Here.Heights != null)
+            {
+                float Ground;
+                float GradeX;
+                float GradeY;
+                if (Here.Heights.Sample(MapX, MapY, out Ground, out GradeX, out GradeY))
+                {
+                    Height = Ground;
+                    SlopeX = GradeX;
+                    SlopeY = GradeY;
+                }
+            }
+
+            if (Here == null || Here.Buildings == null)
+            {
+                return new GroundContact(Height, SlopeX, SlopeY);
+            }
+
+            for (int i = 0; i < Here.Buildings.Count; i++)
+            {
+                BuildingItem Box = Here.Buildings[i];
+                if (Box == null || Box.Kind != BuildingKind.Stairs || !Box.FootprintContains(MapX, MapY))
+                {
+                    continue;
+                }
+
+                if (Position.Z < Box.Position.Z - 2f || Position.Z > Box.Position.Z + Box.Height + 2f)
+                {
+                    continue;
+                }
+
+                Height = Box.Tread(new Vector3(MapX, MapY, Position.Z));
+                bool AlongX = Box.Width >= Box.Length;
+                float Span = AlongX ? Box.Width : Box.Length;
+                float Grade = Span > 0.01f ? Box.Height / Span : 0f;
+                SlopeX = AlongX ? Grade : 0f;
+                SlopeY = AlongX ? 0f : Grade;
+                return new GroundContact(Height, SlopeX, SlopeY);
+            }
+
+            return new GroundContact(Height, SlopeX, SlopeY);
+        }
+
+        float StairHeight(Vector3 Point)
+        {
+            if (IgnoreTownSolids)
+            {
+                return Point.Z;
+            }
+
+            MapInfo Here = SharedMapContex == null ? null : SharedMapContex.CurrentMapInfo;
+            if (Here == null || Here.Buildings == null)
+            {
+                return Point.Z;
+            }
+
+            for (int i = 0; i < Here.Buildings.Count; i++)
+            {
+                BuildingItem Box = Here.Buildings[i];
+                if (Box == null || Box.Kind != BuildingKind.Stairs || !Box.FootprintContains(Point.X, Point.Y))
+                {
+                    continue;
+                }
+
+                if (Point.Z < Box.Position.Z - 2f || Point.Z > Box.Position.Z + Box.Height + 2f)
+                {
+                    continue;
+                }
+
+                return Box.Tread(Point);
+            }
+
+            return Point.Z;
+        }
+
+        static string ClipNamed(GltfModel Model, string ClipName)
+        {
+            if (Model == null || string.IsNullOrEmpty(ClipName))
+            {
+                return null;
+            }
+
+            string Loose = null;
+            for (int Index = 0; Index < Model.AnimationNames.Count; Index++)
+            {
+                string Name = Model.AnimationNames[Index];
+                if (string.Equals(Name, ClipName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Name;
+                }
+
+                if (Loose == null && SameMotion(ClipName, Name))
+                {
+                    Loose = Name;
+                }
+            }
+
+            return Loose;
+        }
+
+        static bool SameMotion(string Wanted, string Name)
+        {
+            if (string.IsNullOrEmpty(Wanted) || string.IsNullOrEmpty(Name))
+            {
+                return false;
+            }
+
+            if (Wanted.Equals("Idle", StringComparison.OrdinalIgnoreCase))
+            {
+                return Name.Contains("Idle", StringComparison.OrdinalIgnoreCase) && !Name.Contains("Walk", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (Wanted.Equals("Walking", StringComparison.OrdinalIgnoreCase) || Wanted.Equals("Walk", StringComparison.OrdinalIgnoreCase))
+            {
+                return Name.Contains("Walk", StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
+        }
+
+        public void PlayClip(string ClipName)
+        {
+            if (BodyModel != null)
+            {
+                string Clip = ClipNamed(BodyModel, ClipName);
+                if (Clip == null)
+                {
+                    int Index = MovementClips.IndexFor(ClipName, BodyModel.AnimationNames.Count);
+                    if (Index < 0)
+                    {
+                        return;
+                    }
+
+                    Clip = BodyModel.AnimationNames[Index];
+                }
+
+                if (BodyModel.ActiveAnimationName != Clip)
+                {
+                    BodyModel.PlayAnimation(Clip);
+                }
+
+                return;
+            }
+
+            if (Unit3DModel == null || string.IsNullOrEmpty(ClipName))
+            {
+                return;
+            }
+
+            if (!Unit3DModel.HasAnimation(ClipName))
+            {
+                ClipName = "Idle";
+            }
+
+            if (!Unit3DModel.HasAnimation(ClipName))
+            {
+                return;
+            }
+
+            Unit3DModel.PlayAnimation(ClipName);
+        }
+
         public void SetPosition(Vector3 Position)
         {
             this.Position = Position;
+            if (LifeSimMap.PhysicsManager != null)
+            {
+                LifeSimMap.PhysicsManager.Teleport(this);
+            }
         }
 
         public void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
@@ -822,20 +1431,65 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             g.Draw(SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, SizeX, SizeY), null, UnitColor, 0f, new Vector2(SpriteMap.Width / 2, SpriteMap.Height / 2), SpriteEffects.None, 1 / Position.Y);
         }
 
-        public void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection)
+        public Matrix BodyDrawWorld(Vector3 ChunkShift)
         {
-            ScaleMatrix = Matrix.CreateScale(0.2f);
-            WorldMatrix = ScaleMatrix * RotationMatrix * Matrix.CreateTranslation(new Vector3(Position.X, 5, Position.Y));
-            if (Unit3DModel == null)
+            float DrawnScale = BodyScale > 0.01f ? BodyScale : 1f;
+            ScaleMatrix = Matrix.CreateScale(DrawnScale);
+            Vector3 Place = ChunkOrigin.ModelWorld(Position, ChunkShift);
+            // Physics keeps the cylinder StandClearance above the mesh so it does not snag.
+            // The skeleton is already at full length, so the feet cannot reach down across that gap.
+            Place.Y -= GroundSkin();
+            return ScaleMatrix * RotationMatrix * Matrix.CreateTranslation(Place);
+        }
+
+        // How far the posed body is being held above the ground it is standing on.
+        // A jump stays airborne: only the standing skin is removed, and never more than that skin.
+        float GroundSkin()
+        {
+            if (WasInWater || CurrentPose == Pose.MidAir)
+            {
+                return 0f;
+            }
+
+            float Above = Position.Z - TownGround(Position.X, Position.Y).Height;
+            if (Above <= 0f)
+            {
+                return 0f;
+            }
+
+            return Above < HeightField.StandClearance ? Above : HeightField.StandClearance;
+        }
+
+        public void Draw3DOnMap(GraphicsDevice GraphicsDevice, Matrix View, Matrix Projection, Vector3 ChunkShift)
+        {
+            if (Life.Away.Busy)
+            {
+                return;
+            }
+
+            if (BodyModel == null && Unit3DSprite == null && Unit3DModel == null)
+            {
+                return;
+            }
+
+            WorldMatrix = BodyDrawWorld(ChunkShift);
+            float WetWorld = WorldMatrix.Translation.Y + WetLine;
+            if (BodyModel != null)
+            {
+                BodyModel.Light = SkyDraw.CharacterLight(WorldMatrix);
+                BodyModel.SetWet(WetWorld, WetAmount);
+                BodyModel.Draw(View, Projection, WorldMatrix);
+                return;
+            }
+
+            if (Unit3DSprite != null)
             {
                 Unit3DSprite.SetViewMatrix(View);
-
                 Unit3DSprite.Draw(GraphicsDevice);
+                return;
             }
-            else
-            {
-                Unit3DModel.Draw(View, Projection, WorldMatrix);
-            }
+
+            Unit3DModel.Draw(View, Projection, WorldMatrix);
         }
 
         public override void Draw(CustomSpriteBatch g, Matrix View)
@@ -875,6 +1529,63 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public bool HasItem(string ItemName)
         {
             return DicItemByName.ContainsKey(ItemName);
+        }
+
+        public bool ContainsTagged(string Name)
+        {
+            ItemInfo Found;
+            return TryFindTagged(Name, out Found);
+        }
+
+        public bool TryFindTagged(string Name, out ItemInfo Found)
+        {
+            foreach (ItemInfo Info in DicItemByName.Values)
+            {
+                if (ItemMatches(Info, Name))
+                {
+                    Found = Info;
+                    return true;
+                }
+            }
+
+            foreach (InventoryContainer Folder in ListFolder)
+            {
+                if (Folder.TryFindTagged(Name, out Found))
+                {
+                    return true;
+                }
+            }
+
+            Found = new ItemInfo();
+            return false;
+        }
+
+        private static bool ItemMatches(ItemInfo Info, string Name)
+        {
+            if (Info.OwnedItem == null)
+            {
+                return false;
+            }
+
+            if (Info.OwnedItem.Name == Name)
+            {
+                return true;
+            }
+
+            if (Info.OwnedItem.ArrayTags == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Info.OwnedItem.ArrayTags.Length; i++)
+            {
+                if (Info.OwnedItem.ArrayTags[i] == Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void AddItem(ItemInfo ItemToAdd)
@@ -928,6 +1639,40 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public bool HasItemInCategory(string Category)
         {
             return DicFolderByName.ContainsKey(Category);
+        }
+
+        public bool ContainsCategory(string Category)
+        {
+            if (Name == Category)
+            {
+                return true;
+            }
+
+            foreach (KnowledgeInfo Info in DicKnowledgeByName.Values)
+            {
+                if (Info.ArrayTags == null)
+                {
+                    continue;
+                }
+
+                foreach (string Tag in Info.ArrayTags)
+                {
+                    if (Tag == Category)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            foreach (KnowledgeContainer Child in ListFolder)
+            {
+                if (Child.ContainsCategory(Category))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool HasItem(string ItemName)

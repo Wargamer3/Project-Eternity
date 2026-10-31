@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
@@ -25,6 +25,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public LifeSimCharacterParams SorcererStreetParams;
 
         public List<PlayerCharacter> ListCharacter;
+        public List<FurnitureItem> Furniture;
+        public List<BuildingItem> Buildings;
+        public List<WaterVolume> Water;
+        public MapInfo Chunk;
+        public int ShownFloor;
+        public bool HideFloorsAbove;
+        public bool BuildPlacing;
+        public bool ClearOnDraw = true;
+        public bool ShowCursor = true;
 
         public static PhysicsManager PhysicsManager;
         public override MovementAlgorithmTile CursorTerrain => throw new NotImplementedException();
@@ -42,10 +51,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             ListTilesetPreset = new List<TilesetPreset>();
             LayerManager = new LayerHolderLifeSim(this);
-            MapEnvironment = new EnvironmentManagerSorcererStreet(this);
+            MapEnvironment = new EnvironmentManagerLifeSim(this);
             ActiveParser = new LifeSimFormulaParser(this, BattleContext);
 
             ListCharacter = new List<PlayerCharacter>();
+            Furniture = new List<FurnitureItem>();
+            Buildings = new List<BuildingItem>();
+            Water = new List<WaterVolume>();
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
@@ -148,7 +160,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             LayerManager = new LayerHolderLifeSim(this, BR);
 
-            MapEnvironment = new EnvironmentManagerSorcererStreet(BR, this);
+            MapEnvironment = new EnvironmentManagerLifeSim(BR, this);
 
             BR.Close();
             FS.Close();
@@ -244,22 +256,27 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public void SpawnCharacter(PlayerCharacter NewCharacter, uint ID, Vector3 Position)
         {
             if (Content != null)
-            {
+            {/*
                 NewCharacter.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewCharacter.SpriteMap, 1, 1f, 0f);
                 Color OutlineColor = Color.Red;
                 NewCharacter.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
-                NewCharacter.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
+                NewCharacter.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);*/
             }
 
             NewCharacter.SetPosition(Position);
+            NewCharacter.AIControlled = true;
+            NewCharacter.Body.CanJump = true;
+            NewCharacter.SeedBelief();
             NewCharacter.Init();
             ListCharacter.Add(NewCharacter);
+            if (Chunk != null)
+            {
+                Chunk.Adopt(NewCharacter);
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
-            PhysicsManager.Update();
-
             if (OnlineCommunicationClient != null)
             {
                 OnlineCommunicationClient.ExecuteDelayedScripts();
@@ -364,6 +381,11 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            if (!IsInit)
+            {
+                return;
+            }
+
             g.GraphicsDevice.SetRenderTarget(null);
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
@@ -371,14 +393,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             LayerManager.BeginDraw(g);
 
             g.End();
-
-            if (IsOnTop)
-            {
-                if (ListActionMenuChoice.HasMainPanel)
-                {
-                    ListActionMenuChoice.Last().BeginDraw(g);
-                }
-            }
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
@@ -393,7 +407,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 return;
             }
 
-            if (!IsAPlatform)
+            if (!IsAPlatform && ClearOnDraw)
             {
                 g.GraphicsDevice.Clear(Color.Black);
             }

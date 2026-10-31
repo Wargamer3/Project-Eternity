@@ -12,6 +12,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         public string Name;
         public string Description;
+        public int RaisedBonus = 2;
+        public int Hardness = 5;
 
         public List<string> ListSpecialEffect;
 

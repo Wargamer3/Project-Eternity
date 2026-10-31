@@ -26,6 +26,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
         }
 
+        public override AIAction Copy()
+        {
+            EatJerkyAction Clone = new EatJerkyAction();
+            CopyTo(Clone);
+            return Clone;
+        }
+
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
         {
             throw new NotImplementedException();
@@ -33,17 +40,22 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            if (Params == null)
+            {
+                return new List<AutomatedAction>();
+            }
+
+            return LifePlan.EatJerky(Params.Owner);
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            CanEat = Params.Owner.HasItemInCategory("Jerky");
+            CanEat = Params.Owner.IsCarrying("Jerky") || Params.Owner.Belief.FindTagged("Jerky") != null;
 
             if (CanEat)
             {
                 AIWeight = 40;
-                TimeRequired = 1;
+                TimeRequired = Params.Owner.IsCarrying("Jerky") ? 1 : 8;
             }
             else
             {
@@ -63,6 +75,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
         }
 
+        public override AIAction Copy()
+        {
+            GoToRestaurantAction Clone = new GoToRestaurantAction();
+            CopyTo(Clone);
+            return Clone;
+        }
+
         public void Execute()
         {
         }
@@ -74,15 +93,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            var a = Map.FindPath(Params.CurrentMapInfo, Params.Owner.Position, "Restaurant");
-            Params.Owner.SetObjective(MoveAction.MoveGoal, new Vector3());
-            List<AutomatedAction> ListMovementGoal = Params.Owner.GetActionForGoal(MoveAction.MoveGoal);
-            return ListMovementGoal;
+            if (Params == null)
+            {
+                return new List<AutomatedAction>();
+            }
+
+            return LifePlan.Restaurant(Params.Owner);
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            CanEat = Params.Owner.HasKnowledgeInCategory("Restaurant");
+            MapInfo Chunk;
+            Vector3 Place;
+            CanEat = LifePlan.KnowsRestaurant(Params.Owner, out Chunk, out Place);
 
             if (CanEat)
             {

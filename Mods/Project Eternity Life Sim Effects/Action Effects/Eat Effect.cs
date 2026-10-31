@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void ActivateAutomatedAction()
         {
-            Params.Owner.ListAutomatedAction.Add(new AutomatedActionEat(Params));
+            Params.Owner.ListCurrentAIObjectiveStep.Add(new AutomatedActionEat(Params));
         }
 
         public override ActionEffect LoadCopy(BinaryReader BR)

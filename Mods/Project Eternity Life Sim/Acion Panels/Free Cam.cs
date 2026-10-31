@@ -37,31 +37,30 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 HoverCharacter = FoundCharacter;
             }
-
-            if (HoverCharacter != null && ActiveInputManager.InputConfirmPressed())
+            
+            if (Owner.KeyPressed(Microsoft.Xna.Framework.Input.Keys.O))
             {
-                HoverCharacter.SharedMapContex.User = Owner;
-
-                RemoveAllActionPanels();
-                AddToPanelListAndSelect(new ActionPanelTopDownControlCharacter(Owner, HoverCharacter, MapManager, ListActionMenuChoice));
+                MapManager.PushScreen(new OptionMenu());
             }
-            else if (HoverCharacter != null && ActiveInputManager.InputCancelPressed())
+            else if (Owner.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
             {
-                AddToPanelListAndSelect(new ActionPanelViewCharacterLogs(Owner, HoverCharacter, MapManager, ListActionMenuChoice));
-                HoverCharacter = null;
+                Owner.Session.ApplyKey(Microsoft.Xna.Framework.Input.Keys.F1);
+                if (Owner.Session.AdminOpen)
+                {
+                    AddToPanelListAndSelect(new ActionPanelAdminMenu(Owner, MapManager, ListActionMenuChoice));
+                }
             }
-            else if (ActiveInputManager.InputLButtonPressed())//switch to next character
+            else if (Owner.BuildPressed())
             {
-                PlayerCharacter CharacterToSelect = Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.ListCharacter[0];
-                Owner.ActiveControlledCharacter.RemoveControl();
-                CharacterToSelect.TakeControl(Owner);
-            }
-            else if (ActiveInputManager.InputConfirmPressed())
-            {
-                AddToPanelListAndSelect(new ActionPanelAdminMenu(Owner, MapManager, ListActionMenuChoice));
+                Owner.Session.ApplyKey(Microsoft.Xna.Framework.Input.Keys.Escape);
+                if (Owner.Session.BuildOpen)
+                {
+                    AddToPanelListAndSelect(new ActionPanelBuildMenu(Owner, MapManager, ListActionMenuChoice));
+                }
             }
 
             Camera.Update(gameTime);
+            Owner.EndKeys();
         }
 
         protected override void OnCancelPanel()
@@ -83,12 +82,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            foreach (MapInfo ActiveMap in ListVisisbleMap)
+            PlayerCharacter Cursor = Owner.InvisibleCharacterAsCursor;
+            MapInfo Here = Cursor != null && Cursor.SharedMapContex != null ? Cursor.SharedMapContex.CurrentMapInfo : null;
+            MapManager.DrawChunks(g, Owner.Camera, delegate (LifeSimMap Map)
             {
-                ActiveMap.MapMapContainer.ActiveMap.CursorPosition = new Vector3(Owner.InvisibleCharacterAsCursor.Position.X, Owner.InvisibleCharacterAsCursor.Position.Z, Owner.InvisibleCharacterAsCursor.Position.Y);
-                ActiveMap.MapMapContainer.ActiveMap.LayerManager.LayerHolderDrawable.SetCamera(Owner.Camera);
-                ActiveMap.MapMapContainer.ActiveMap.Draw(g);
-            }
+                bool Owns = Here != null && (object.ReferenceEquals(Map.Chunk, Here) || (Here.MapMapContainer != null && object.ReferenceEquals(Here.MapMapContainer.ActiveMap, Map)));
+                Map.ShowCursor = Owns && !Map.BuildPlacing;
+                if (Owns && !Map.BuildPlacing)
+                {
+                    Map.HideFloorsAbove = false;
+                    Map.CursorPosition = new Vector3(Cursor.Position.X, Cursor.Position.Z, Cursor.Position.Y);
+                    Map.CursorPositionVisible = Map.CursorPosition;
+                }
+            });
         }
     }
 }

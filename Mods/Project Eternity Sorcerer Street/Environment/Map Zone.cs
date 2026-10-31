@@ -9,13 +9,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly SorcererStreetMap Map;
 
         public MapZoneSorcererStreet(SorcererStreetMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
-            : base(Map, ZoneShapeType)
+            : base(ZoneShapeType)
         {
             this.Map = Map;
         }
 
         public MapZoneSorcererStreet(BinaryReader BR, SorcererStreetMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             this.Map = Map;
 

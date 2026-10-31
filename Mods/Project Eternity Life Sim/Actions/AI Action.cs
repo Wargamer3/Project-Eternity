@@ -48,6 +48,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public int TimeRequired;
 
         public int AIWeight;
+        public int Precision;
 
         public string AILogicPath;
 
@@ -57,9 +58,16 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             this.AIActionName = AIActionName;
         }
 
-        public virtual AIAction Copy()
+        public abstract AIAction Copy();
+
+        protected void CopyTo(AIAction Clone)
         {
-            return this;
+            Clone.ActionCost = ActionCost;
+            Clone.Urgency = Urgency;
+            Clone.TimeRequired = TimeRequired;
+            Clone.AIWeight = AIWeight;
+            Clone.Precision = Precision;
+            Clone.AILogicPath = AILogicPath;
         }
 
         /// <summary>
@@ -141,6 +149,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public void Init(LifeSimCharacterParams Params)
         {
             this.Params = Params;
+        }
+
+        public virtual bool Tracks(out Vector3 Point)
+        {
+            Point = Vector3.Zero;
+            return false;
         }
     }
 }

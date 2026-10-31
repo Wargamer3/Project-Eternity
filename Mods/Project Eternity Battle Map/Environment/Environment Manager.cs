@@ -11,8 +11,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public enum TimePeriods { Turns, RealTime }
         public enum TimeLoopTypes { FirstDay, LastDay, Stop }
 
-        private BattleMap Map;
-
         public float TimeStart;
         public float HoursInDay;
         public double CurrentHour { get; private set; }
@@ -26,10 +24,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public MapZone GlobalZone;
         public List<MapZone> ListMapZone;
 
-        public EnvironmentManager(BattleMap Map)
+        public EnvironmentManager()
         {
-            this.Map = Map;
-
             TimeLoopType = TimeLoopTypes.FirstDay;
             TimeStart = 12;
             HoursInDay = 24;
@@ -41,10 +37,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListVolatileSubstance = new List<VolatileSubstance>();
         }
 
-        public EnvironmentManager(BinaryReader BR, BattleMap Map)
+        public EnvironmentManager(BinaryReader BR)
         {
-            this.Map = Map;
-
             ListVolatileSubstance = new List<VolatileSubstance>();
 
             CurrentHour = TimeStart = BR.ReadSingle();
@@ -85,15 +79,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Update(GameTime gameTime)
         {
-            double EllapsedMinute = gameTime.ElapsedGameTime.TotalHours * 5d;
-            CurrentHour += EllapsedMinute;
+            AdvanceClock(gameTime);
 
-            GlobalZone.Update(gameTime);
+            GlobalZone.Update(gameTime, CurrentHour);
 
             foreach (MapZone ActiveZone in ListMapZone)
             {
-                ActiveZone.Update(gameTime);
+                ActiveZone.Update(gameTime, CurrentHour);
             }
+        }
+
+        protected virtual void AdvanceClock(GameTime gameTime)
+        {
+            double EllapsedMinute = gameTime.ElapsedGameTime.TotalHours * 5d;
+            CurrentHour += EllapsedMinute;
         }
 
         public void OnNewPlayerPhase()

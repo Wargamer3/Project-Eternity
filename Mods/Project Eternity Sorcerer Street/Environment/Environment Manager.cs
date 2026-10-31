@@ -8,13 +8,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     class EnvironmentManagerSorcererStreet : EnvironmentManager
     {
         public EnvironmentManagerSorcererStreet(SorcererStreetMap Map)
-            : base(Map)
+            : base()
         {
             GlobalZone = new MapZoneSorcererStreet(Map, ZoneShape.ZoneShapeTypes.Full);
         }
 
         public EnvironmentManagerSorcererStreet(BinaryReader BR, SorcererStreetMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             GlobalZone = new MapZoneSorcererStreet(BR, Map);
 

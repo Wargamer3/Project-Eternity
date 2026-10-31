@@ -9,13 +9,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         private readonly LifeSimMap Map;
 
         public MapZoneLifeSim(LifeSimMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
-            : base(Map, ZoneShapeType)
+            : base(ZoneShapeType)
         {
             this.Map = Map;
         }
 
         public MapZoneLifeSim(BinaryReader BR, LifeSimMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             this.Map = Map;
 

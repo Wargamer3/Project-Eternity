@@ -11,8 +11,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public abstract class MapZone
     {
-        private BattleMap Map;
-
         public string _Name;
         public ZoneShape Shape;
 
@@ -29,16 +27,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected BattleMapOverlay OverlayTypeOfSky;
         protected BattleMapOverlay OverlayVisibility;
 
-        private BattleMapOverlay CrossfadeOverlayWeather;
-        private BattleMapOverlay CrossfadeOverlayTypeOfSky;
-        private BattleMapOverlay CrossfadeOverlayVisibility;
         private string _AIPath;
         public AIContainer ZoneAI;
 
-        public MapZone(BattleMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
+        public MapZone(ZoneShape.ZoneShapeTypes ZoneShapeType)
         {
-            this.Map = Map;
-
             _Name = string.Empty;
             _AIPath = string.Empty;
 
@@ -50,10 +43,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CurrentTimePeriod = ListTimePeriod[0];
         }
 
-        public MapZone(BinaryReader BR, BattleMap Map)
+        public MapZone(BinaryReader BR)
         {
-            this.Map = Map;
-
             _Name = BR.ReadString();
             Shape = new ZoneShape(BR);
             _AIPath = BR.ReadString();
@@ -62,7 +53,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(ListTimePeriodCount);
             for (int P = 0; P < ListTimePeriodCount; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(BR, Map));
+                ListTimePeriod.Add(new TimePeriod(BR));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];
@@ -76,8 +67,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public MapZone(MapZone Copy)
         {
-            Map = Copy.Map;
-
             _Name = Copy._Name;
             Shape = new ZoneShape(Copy.Shape.ZoneShapeType, Copy.Shape.Position, Copy.Shape.Size, Copy.Shape.Radius);
             _AIPath = Copy.AIPath;
@@ -85,7 +74,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(Copy.ListTimePeriod.Count);
             for (int P = 0; P < Copy.ListTimePeriod.Count; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map));
+                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P]));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];
@@ -126,7 +115,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, double CurrentHour)
         {
             if (OverlayWeather != null)
             {
@@ -141,20 +130,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 OverlayVisibility.Update(gameTime);
             }
 
-            if (CrossfadeOverlayTypeOfSky != null)
-            {
-                CrossfadeOverlayTypeOfSky.Update(gameTime);
-            }
-            if (CrossfadeOverlayWeather != null)
-            {
-                CrossfadeOverlayWeather.Update(gameTime);
-            }
-            if (CrossfadeOverlayVisibility != null)
-            {
-                CrossfadeOverlayVisibility.Update(gameTime);
-            }
-
-            UpdateNextTimePeriod();
+            UpdateNextTimePeriod(CurrentHour);
         }
 
         public abstract void OnNewPlayerPhase();
@@ -167,19 +143,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract MapZone Copy();
 
-        private void UpdateNextTimePeriod()
+        private void UpdateNextTimePeriod(double CurrentHour)
         {
             if (NextTimePeriod != null)
             {
-                if (Map.MapEnvironment.CurrentHour >= NextTimePeriod.TimeStart)
+                if (CurrentHour >= NextTimePeriod.TimeStart)
                 {
-                    if (CurrentTimePeriod.CrossfadeLength > 0 && NextTimePeriod.TimeStart + CurrentTimePeriod.CrossfadeLength < Map.MapEnvironment.CurrentHour)
-                    {
-                        CrossfadeOverlayWeather = OverlayWeather;
-                        CrossfadeOverlayTypeOfSky = OverlayTypeOfSky;
-                        CrossfadeOverlayVisibility = OverlayVisibility;
-                    }
-
                     CurrentTimePeriod = NextTimePeriod;
 
                     if (++NextTimePeriodIndex < ListTimePeriod.Count)
@@ -212,19 +181,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 OverlayVisibility.BeginDraw(g);
             }
-
-            if (CrossfadeOverlayTypeOfSky != null)
-            {
-                CrossfadeOverlayTypeOfSky.BeginDraw(g);
-            }
-            if (CrossfadeOverlayWeather != null)
-            {
-                CrossfadeOverlayWeather.BeginDraw(g);
-            }
-            if (CrossfadeOverlayVisibility != null)
-            {
-                CrossfadeOverlayVisibility.BeginDraw(g);
-            }
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -241,19 +197,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 OverlayVisibility.Draw(g);
             }
-
-            if (CrossfadeOverlayTypeOfSky != null)
-            {
-                CrossfadeOverlayTypeOfSky.Draw(g);
-            }
-            if (CrossfadeOverlayWeather != null)
-            {
-                CrossfadeOverlayWeather.Draw(g);
-            }
-            if (CrossfadeOverlayVisibility != null)
-            {
-                CrossfadeOverlayVisibility.Draw(g);
-            }
         }
 
         public void EndDraw(CustomSpriteBatch g)
@@ -269,19 +212,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (OverlayVisibility != null)
             {
                 OverlayVisibility.EndDraw(g);
-            }
-
-            if (CrossfadeOverlayTypeOfSky != null)
-            {
-                CrossfadeOverlayTypeOfSky.EndDraw(g);
-            }
-            if (CrossfadeOverlayWeather != null)
-            {
-                CrossfadeOverlayWeather.EndDraw(g);
-            }
-            if (CrossfadeOverlayVisibility != null)
-            {
-                CrossfadeOverlayVisibility.EndDraw(g);
             }
         }
 

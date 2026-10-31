@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.IsEditor)
             {
-                // Idle repaints this viewer continuously. Water.fx, the sky cube, ripples, and
+                // Idle repaints this viewer continuously. Wet Surface.fx, the sky cube, ripples, and
                 // shadows are full-screen passes, so a large viewer falls to a couple of frames
                 // per second. Editor tiles use the plain sprite path. Rain streaks still draw.
                 Reset();
@@ -125,7 +125,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SkyBones = new Matrix[this.SkyModel.Bones.Count];
             SkyModel.CopyAbsoluteBoneTransformsTo(SkyBones);
 
-            WetEffect = Map.Content.Load<Effect>("Shaders/Water");
+            WetEffect = Map.Content.Load<Effect>("Shaders/Wet Surface");
             RippleEffect = Map.Content.Load<Effect>("Shaders/Ripple");
 
             Reset();

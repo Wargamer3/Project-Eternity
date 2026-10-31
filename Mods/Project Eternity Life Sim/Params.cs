@@ -89,6 +89,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 LoadManualSkillActivation();
                 LoadMutators();
                 LoadActionEffect();
+                LoadTraitEffect();
                 LoadUnlcokableItemTypes();
                 LoadUnlockRequirementEvaluators();
             }
@@ -211,6 +212,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 foreach (KeyValuePair<string, ActionEffect> ActiveEffect in ActionEffect.LoadFromAssembly(ActiveAssembly, typeof(ActionEffect)))
                 {
                     DicActionEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            }
+        }
+
+        protected static void LoadTraitEffect()
+        {
+            foreach (KeyValuePair<string, TraitEffect> ActiveEffect in TraitEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Life Sim", "*.dll"), typeof(TraitEffect)))
+            {
+                TraitEffect.Register(ActiveEffect.Value);
+            }
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Life Sim", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, TraitEffect> ActiveEffect in TraitEffect.LoadFromAssembly(ActiveAssembly, typeof(TraitEffect)))
+                {
+                    TraitEffect.Register(ActiveEffect.Value);
                 }
             }
         }

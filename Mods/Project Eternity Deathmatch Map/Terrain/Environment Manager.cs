@@ -8,13 +8,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     class EnvironmentManagerDeathmatch : EnvironmentManager
     {
         public EnvironmentManagerDeathmatch(DeathmatchMap Map)
-            : base(Map)
+            : base()
         {
             GlobalZone = new MapZoneDeathmatch(Map, ZoneShape.ZoneShapeTypes.Full);
         }
 
         public EnvironmentManagerDeathmatch(BinaryReader BR, DeathmatchMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             GlobalZone = new MapZoneDeathmatch(BR, Map);
 

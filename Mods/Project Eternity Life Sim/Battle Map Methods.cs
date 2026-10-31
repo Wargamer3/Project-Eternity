@@ -129,12 +129,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override byte[] GetSnapshotData()
         {
-            ByteWriter BW = new ByteWriter();
-
-
-            byte[] Data = BW.GetBytes();
-            BW.ClearWriteBuffer();
-            return Data;
+            return LifeSync.Capture();
         }
 
         public void AddProjectile(Projectile3D NewProjectile)

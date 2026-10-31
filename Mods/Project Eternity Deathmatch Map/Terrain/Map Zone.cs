@@ -10,13 +10,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly DeathmatchMap Map;
 
         public MapZoneDeathmatch(DeathmatchMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
-            : base(Map, ZoneShapeType)
+            : base(ZoneShapeType)
         {
             this.Map = Map;
         }
 
         public MapZoneDeathmatch(BinaryReader BR, DeathmatchMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             this.Map = Map;
 

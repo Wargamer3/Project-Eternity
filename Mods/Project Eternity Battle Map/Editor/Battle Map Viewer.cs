@@ -182,7 +182,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Timer.Restart();
             if (ActiveMap != null && ActiveMap.IsInit)
             {
-
                 ActiveMap.Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
 
                 for (int S = ActiveMap.ListGameScreen.Count - 1; S >= 0; --S)

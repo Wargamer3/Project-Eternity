@@ -9,6 +9,12 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public readonly string ActionName;
         public readonly PlayerCharacter Owner;
 
+        public virtual Pose PoseNeeded => Pose.Stand;
+
+        public virtual Pose PoseLeft => Pose.Stand;
+
+        public virtual bool HitStaysInPose => false;
+
         protected AutomatedAction(string ActionName, PlayerCharacter Owner)
         {
             this.ActionName = ActionName;

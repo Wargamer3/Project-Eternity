@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Collections.Generic;
 using FMOD;
 using Microsoft.Xna.Framework;
@@ -251,12 +251,16 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.LifeSimOffline:
-                        Constants.Width = 800;
-                        Constants.Height = 600;
+                        Constants.Width = 1920;
+                        Constants.Height = 1080;
                         Constants.ScreenSize = 0;
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.PreferMultiSampling = PictureOptions.Msaa;
+                        Constants.graphics.PreparingDeviceSettings -= Smooth;
+                        Constants.graphics.PreparingDeviceSettings += Smooth;
                         Constants.graphics.ApplyChanges();
+                        OptionMenu.UpdateScreenSettings(null);
                         PushScreen(new GameScreens.LifeSimScreen.NavMapGameManager());
                         break;
                 }
@@ -265,6 +269,11 @@ namespace ProjectEternity
             {
                 RemoveScreen(this);
             }
+        }
+
+        static void Smooth(object Sender, PreparingDeviceSettingsEventArgs Ready)
+        {
+            Ready.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = PictureOptions.Msaa ? 4 : 0;
         }
 
         public override void Draw(CustomSpriteBatch g)

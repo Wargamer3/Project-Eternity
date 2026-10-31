@@ -20,15 +20,21 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public List<string> ListTraitsRelativePath;
 
         public string Damage;
+        public string DamageType = "Slashing";
         public string Bulk;
 
         public HandTypes HandType;
         public WeaponTypes WeaponType;
         public WeaponCategories WeaponCategory;
         public WeaponGroups WeaponGroup;
+        public string GroupName;
 
         public string Range;
+        public float NearRange = 2f;
+        public float FarRange = 2f;
+        public int DamageAmount;
         public byte Reload;
+        bool TraitsReady;
 
         public CharacterAction[] ArrayCharacterAction;
         public string[] ArrayCharacterActionPath;
@@ -68,6 +74,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             Range = BR.ReadString();
             Reload = BR.ReadByte();
 
+            float ParsedRange;
+            if (float.TryParse(Range, out ParsedRange) && ParsedRange > 0f)
+            {
+                NearRange = ParsedRange;
+                FarRange = ParsedRange;
+            }
+
             byte CharacterActionCount = BR.ReadByte();
             ArrayCharacterAction = new CharacterAction[CharacterActionCount];
             ArrayCharacterActionPath = new string[CharacterActionCount];
@@ -81,6 +94,35 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             BR.Close();
             FS.Close();
+        }
+
+        public void EnsureTraits()
+        {
+            if (TraitsReady)
+            {
+                return;
+            }
+
+            if (ListTraits != null && ListTraits.Count > 0)
+            {
+                TraitsReady = true;
+                return;
+            }
+
+            if (ListTraitsRelativePath == null || ListTraitsRelativePath.Count == 0)
+            {
+                TraitsReady = true;
+                return;
+            }
+
+            List<Trait> Loaded = new List<Trait>(ListTraitsRelativePath.Count);
+            for (int i = 0; i < ListTraitsRelativePath.Count; i++)
+            {
+                Loaded.Add(new Trait(ListTraitsRelativePath[i]));
+            }
+
+            ListTraits = Loaded;
+            TraitsReady = true;
         }
 
         public void Init(LifeSimCharacterParams Params)

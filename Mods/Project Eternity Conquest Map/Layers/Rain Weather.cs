@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             RippleRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, Constants.Width, Constants.Height, false, SurfaceFormat.Color, DepthFormat.None);
 
-            WetEffect = Map.Content.Load<Effect>("Shaders/Water");
+            WetEffect = Map.Content.Load<Effect>("Shaders/Wet Surface");
             RippleEffect = Map.Content.Load<Effect>("Shaders/Ripple");
 
             RippleEffect.Parameters["View"].SetValue(View);

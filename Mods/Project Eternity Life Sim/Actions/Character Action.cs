@@ -25,6 +25,17 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public byte LockedLevel;
         public bool IsVisible;
 
+        public CharacterAction()
+        {
+            Name = string.Empty;
+            Description = string.Empty;
+            ListTraits = new List<Trait>();
+            ListTraitsRelativePath = new List<string>();
+            ListActionEffect = new List<ActionEffect>();
+            ListAIAction = new List<AICharacterAction>();
+            ListAIActionPath = new List<string>();
+        }
+
         public CharacterAction(string FilePath, ContentManager Content)
         {
             FileStream FS = new FileStream("Content/Life Sim/Character Actions/" + FilePath + ".pea", FileMode.Open, FileAccess.Read);

@@ -20,12 +20,34 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void OnSelect()
         {
-            Vector3 SpawnPosition = new Vector3(Owner.InvisibleCharacterAsCursor.Position.X, Owner.InvisibleCharacterAsCursor.Position.Z, Owner.InvisibleCharacterAsCursor.Position.Y);
-            SpawnPosition.X += Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.TileSize.X / 2;
-            SpawnPosition.Y += Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.TileSize.Y / 2;
-            SpawnPosition.Z += CharacterToSpawn.SpriteMap.Height * 0.1f;
+            Vector3 SpawnPosition = CursorGround.From(Owner.InvisibleCharacterAsCursor.Position);
+            MapInfo Here = Owner.InvisibleCharacterAsCursor.SharedMapContex.CurrentMapInfo;
+            if (Here != null && Here.Heights != null)
+            {
+                SpawnPosition.Z = HeightField.Stand(Here, SpawnPosition.X, SpawnPosition.Y);
+            }
+            else
+            {
+                SpawnPosition.Z += 1f;
+            }
 
-            Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.SpawnCharacter(new PlayerCharacter(CharacterToSpawn.RelativePath, MapManager.Content, MapManager, Owner.InvisibleCharacterAsCursor.SharedMapContex.CurrentMapInfo), 0, SpawnPosition);
+            PlayerCharacter Spawned = new PlayerCharacter(CharacterToSpawn.RelativePath, MapManager.Content, MapManager, Here);
+            LifeSimMap Map = Here == null || Here.MapMapContainer == null ? null : Here.MapMapContainer.ActiveMap as LifeSimMap;
+            if (Map != null)
+            {
+                Map.SpawnCharacter(Spawned, 0, SpawnPosition);
+            }
+            else if (Here != null)
+            {
+                Spawned.SetPosition(SpawnPosition);
+                Spawned.AIControlled = true;
+                Spawned.Body.CanJump = true;
+                Spawned.SeedBelief();
+                Spawned.Init();
+                Here.Adopt(Spawned);
+            }
+
+            TownLife.FileStanding(Spawned);
 
             RemoveAllSubActionPanels();
         }

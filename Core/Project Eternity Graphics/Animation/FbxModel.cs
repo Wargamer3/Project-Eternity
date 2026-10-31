@@ -23,6 +23,14 @@ namespace ProjectEternity.Core.Graphics
         private readonly List<PoseNode> Roots = new List<PoseNode>();
         private readonly List<Clip> Clips = new List<Clip>();
         private readonly List<Part> Parts = new List<Part>();
+        float WetLine;
+        float WetAmount;
+
+        public void SetWet(float Line, float Amount)
+        {
+            WetLine = Line;
+            WetAmount = Amount;
+        }
         private readonly Matrix InverseRoot;
         private readonly Matrix SkinFix;
         private readonly List<Texture2D> OwnedTextures = new List<Texture2D>();
@@ -147,6 +155,33 @@ namespace ProjectEternity.Core.Graphics
             }
         }
 
+        public void CollectTriangles(List<Vector3> Vertices, List<int> Indices)
+        {
+            if (Vertices == null || Indices == null)
+            {
+                return;
+            }
+
+            foreach (Part Active in Parts)
+            {
+                if (Active.BindPositions == null || Active.BindIndices == null)
+                {
+                    continue;
+                }
+
+                int Base = Vertices.Count;
+                for (int i = 0; i < Active.BindPositions.Length; i++)
+                {
+                    Vertices.Add(Active.BindPositions[i]);
+                }
+
+                for (int i = 0; i < Active.BindIndices.Length; i++)
+                {
+                    Indices.Add(Base + Active.BindIndices[i]);
+                }
+            }
+        }
+
         public void Draw(Matrix View, Matrix Projection, Matrix World)
         {
             if (IsDisposed || Parts.Count == 0)
@@ -171,7 +206,8 @@ namespace ProjectEternity.Core.Graphics
                     ApplyRigidUv(ActivePart, UvOffset);
                 }
 
-                Device.RasterizerState = RasterizerState.CullCounterClockwise;
+                // These meshes are wound counterclockwise, the same as the glTF props. That cull keeps the outside.
+                Device.RasterizerState = RasterizerState.CullClockwise;
                 Device.BlendState = BlendState.Opaque;
                 Device.DepthStencilState = DepthStencilState.Default;
                 if (ActivePart.Skinned)
@@ -187,11 +223,13 @@ namespace ProjectEternity.Core.Graphics
                         ActivePart.Bones[Bone] = ActivePart.Offsets[Bone] * Global * SkinFix;
                     }
 
+                    ActivePart.BoneEffect.SetWet(WetLine, WetAmount);
                     ActivePart.BoneEffect.Prepare(World, View, Projection, ActivePart.Bones);
                     ActivePart.BoneEffect.SetUvOffset(UvOffset);
                 }
                 else
                 {
+                    ApplySun(ActivePart.BasicEffect);
                     ActivePart.BasicEffect.View = View;
                     ActivePart.BasicEffect.Projection = Projection;
                     ActivePart.BasicEffect.World = World;
@@ -206,6 +244,102 @@ namespace ProjectEternity.Core.Graphics
                     Device.DrawIndexedPrimitives(Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList, 0, 0, ActivePart.PrimitiveCount);
                 }
             }
+        }
+
+        public void DrawDepth(Effect Depth, Matrix View, Matrix Projection, Matrix World)
+        {
+            if (IsDisposed || Depth == null || Parts.Count == 0)
+            {
+                return;
+            }
+
+            Dictionary<string, Matrix> Globals = new Dictionary<string, Matrix>();
+            Clip Active = ActiveClipIndex >= 0 ? Clips[ActiveClipIndex] : null;
+            foreach (PoseNode Root in Roots)
+            {
+                Evaluate(Root, Matrix.Identity, Active, AnimationTime, Globals);
+            }
+
+            GraphicsDevice Device = Depth.GraphicsDevice;
+            Matrix ViewProj = View * Projection;
+            foreach (Part ActivePart in Parts)
+            {
+                if (ActivePart.BindPositions == null || ActivePart.BindIndices == null || ActivePart.BindIndices.Length < 3)
+                {
+                    continue;
+                }
+
+                Matrix[] Palette = null;
+                if (ActivePart.Skinned)
+                {
+                    for (int Bone = 0; Bone < ActivePart.BoneNames.Length; Bone++)
+                    {
+                        Matrix Global;
+                        if (!Globals.TryGetValue(ActivePart.BoneNames[Bone], out Global))
+                        {
+                            Global = Matrix.Identity;
+                        }
+
+                        ActivePart.Bones[Bone] = ActivePart.Offsets[Bone] * Global * SkinFix;
+                    }
+
+                    Palette = ActivePart.Bones;
+                }
+
+                if (ActivePart.ShadowScratch == null || ActivePart.ShadowScratch.Length != ActivePart.BindPositions.Length)
+                {
+                    ActivePart.ShadowScratch = new VertexPosition[ActivePart.BindPositions.Length];
+                }
+
+                for (int Vertex = 0; Vertex < ActivePart.BindPositions.Length; Vertex++)
+                {
+                    Vector3 Position = ActivePart.BindPositions[Vertex];
+                    if (Palette != null && ActivePart.BindJoints != null)
+                    {
+                        Vector4 Joint = ActivePart.BindJoints[Vertex].ToVector4();
+                        Vector4 Weight = ActivePart.BindWeights[Vertex];
+                        Vector3 Skinned = Vector3.Zero;
+                        Skinned += SkinPoint(Position, Palette, (int)Joint.X, Weight.X);
+                        Skinned += SkinPoint(Position, Palette, (int)Joint.Y, Weight.Y);
+                        Skinned += SkinPoint(Position, Palette, (int)Joint.Z, Weight.Z);
+                        Skinned += SkinPoint(Position, Palette, (int)Joint.W, Weight.W);
+                        if (Weight.X + Weight.Y + Weight.Z + Weight.W > 0f)
+                        {
+                            Position = Skinned;
+                        }
+                    }
+
+                    ActivePart.ShadowScratch[Vertex].Position = Position;
+                }
+
+                Depth.Parameters["WorldViewProj"].SetValue(World * ViewProj);
+                foreach (EffectPass Pass in Depth.CurrentTechnique.Passes)
+                {
+                    Pass.Apply();
+                    Device.RasterizerState = RasterizerState.CullNone;
+                    Device.BlendState = BlendState.Opaque;
+                    Device.DepthStencilState = DepthStencilState.Default;
+                    Device.DrawUserIndexedPrimitives(
+                        Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList,
+                        ActivePart.ShadowScratch,
+                        0,
+                        ActivePart.ShadowScratch.Length,
+                        ActivePart.BindIndices,
+                        0,
+                        ActivePart.BindIndices.Length / 3,
+                        VertexPosition.VertexDeclaration);
+                }
+            }
+        }
+
+        static Vector3 SkinPoint(Vector3 Position, Matrix[] Palette, int Joint, float Weight)
+        {
+            if (Weight <= 0f || (uint)Joint >= (uint)Palette.Length)
+            {
+                return Vector3.Zero;
+            }
+
+            return Vector3.Transform(Position, Palette[Joint]) * Weight;
         }
 
         public void Dispose()
@@ -234,7 +368,7 @@ namespace ProjectEternity.Core.Graphics
             WhiteTexture = null;
         }
 
-        private static void EnsureNative()
+        internal static void EnsureNative()
         {
             if (NativeLoaded)
             {
@@ -349,11 +483,17 @@ namespace ProjectEternity.Core.Graphics
                 }
             }
 
+            if (Texture == WhiteTexture)
+            {
+                Diffuse = Lift(Diffuse);
+            }
+
             Part Loaded = new Part();
             Loaded.UvPerSecond = UvPerSecond;
             Loaded.PrimitiveCount = IndexList.Count / 3;
             Loaded.Indices = new IndexBuffer(Device, IndexElementSize.ThirtyTwoBits, IndexList.Count, BufferUsage.WriteOnly);
-            Loaded.Indices.SetData(IndexList.ToArray());
+            Loaded.BindIndices = IndexList.ToArray();
+            Loaded.Indices.SetData(Loaded.BindIndices);
             if (Active.BoneCount > 0)
             {
                 Loaded.Skinned = true;
@@ -408,6 +548,16 @@ namespace ProjectEternity.Core.Graphics
 
                 Loaded.Vertices = new VertexBuffer(Device, SkinnedVertex.Declaration, Vertices.Length, BufferUsage.WriteOnly);
                 Loaded.Vertices.SetData(Vertices);
+                Loaded.BindPositions = new Vector3[Vertices.Length];
+                Loaded.BindJoints = new Byte4[Vertices.Length];
+                Loaded.BindWeights = new Vector4[Vertices.Length];
+                for (int Vertex = 0; Vertex < Vertices.Length; Vertex++)
+                {
+                    Loaded.BindPositions[Vertex] = Vertices[Vertex].Position;
+                    Loaded.BindJoints[Vertex] = Vertices[Vertex].BlendIndices;
+                    Loaded.BindWeights[Vertex] = Vertices[Vertex].BlendWeights;
+                }
+
                 Loaded.BoneEffect = new SkinnedBoneEffect(Device, Texture, Diffuse, 1f);
             }
             else
@@ -439,16 +589,91 @@ namespace ProjectEternity.Core.Graphics
                     Loaded.Vertices.SetData(Vertices);
                 }
 
+                Loaded.BindPositions = new Vector3[Vertices.Length];
+                for (int Vertex = 0; Vertex < Vertices.Length; Vertex++)
+                {
+                    Loaded.BindPositions[Vertex] = Vertices[Vertex].Position;
+                }
+
                 Loaded.BasicEffect = new BasicEffect(Device);
-                Loaded.BasicEffect.LightingEnabled = true;
                 Loaded.BasicEffect.TextureEnabled = true;
-                Loaded.BasicEffect.PreferPerPixelLighting = true;
-                Loaded.BasicEffect.EnableDefaultLighting();
                 Loaded.BasicEffect.Texture = Texture;
                 Loaded.BasicEffect.DiffuseColor = Diffuse;
+                Light(Loaded.BasicEffect);
             }
 
             return Loaded;
+        }
+
+        // Furniture files ship flat colors with no texture, and those colors are too dark to read under a normal light.
+        static Vector3 Lift(Vector3 Diffuse)
+        {
+            float Max = Math.Max(Diffuse.X, Math.Max(Diffuse.Y, Diffuse.Z));
+            if (Max < 0.02f)
+            {
+                return new Vector3(0.72f);
+            }
+
+            if (Max < 0.72f)
+            {
+                return Diffuse * (0.72f / Max);
+            }
+
+            return Diffuse;
+        }
+
+        static bool HasSun;
+        static Vector3 SunToward = new Vector3(0.35f, 0.86f, 0.25f);
+        static Vector3 SunColor = new Vector3(0.62f, 0.58f, 0.50f);
+        static Vector3 SunAmbient = new Vector3(0.32f, 0.34f, 0.38f);
+        static Vector3 SunFillFrom = new Vector3(-0.2f, 0.92f, -0.15f);
+        static Vector3 SunFill = new Vector3(0.14f, 0.15f, 0.17f);
+
+        // TowardSun points at the sun. The effect stores the direction the rays travel.
+        public static void UseSun(Vector3 TowardSun, Vector3 Color, Vector3 Ambient, Vector3 FillFrom, Vector3 Fill)
+        {
+            HasSun = true;
+            SunToward = TowardSun;
+            SunColor = Color;
+            SunAmbient = Ambient;
+            SunFillFrom = FillFrom;
+            SunFill = Fill;
+        }
+
+        static void Light(BasicEffect Effect)
+        {
+            Effect.LightingEnabled = true;
+            Effect.PreferPerPixelLighting = false;
+            Effect.AmbientLightColor = new Vector3(0.45f, 0.47f, 0.5f);
+            Effect.EmissiveColor = new Vector3(0.06f);
+            Effect.SpecularColor = Vector3.Zero;
+            Effect.DirectionalLight0.Enabled = true;
+            Effect.DirectionalLight0.Direction = new Vector3(-0.3f, -0.9f, -0.3f);
+            Effect.DirectionalLight0.DiffuseColor = new Vector3(1.05f, 1.02f, 0.94f);
+            Effect.DirectionalLight0.SpecularColor = Vector3.Zero;
+            Effect.DirectionalLight1.Enabled = true;
+            Effect.DirectionalLight1.Direction = new Vector3(0.7f, -0.15f, 0.55f);
+            Effect.DirectionalLight1.DiffuseColor = new Vector3(0.38f, 0.4f, 0.45f);
+            Effect.DirectionalLight1.SpecularColor = Vector3.Zero;
+            Effect.DirectionalLight2.Enabled = false;
+        }
+
+        public static void ApplySun(BasicEffect Effect)
+        {
+            if (!HasSun || Effect == null)
+            {
+                return;
+            }
+
+            Effect.AmbientLightColor = SunAmbient;
+            Effect.DirectionalLight0.Enabled = true;
+            Effect.DirectionalLight0.Direction = -SunToward;
+            Effect.DirectionalLight0.DiffuseColor = SunColor;
+            Effect.DirectionalLight0.SpecularColor = Vector3.Zero;
+            Effect.DirectionalLight1.Enabled = true;
+            Effect.DirectionalLight1.Direction = -SunFillFrom;
+            Effect.DirectionalLight1.DiffuseColor = SunFill;
+            Effect.DirectionalLight1.SpecularColor = Vector3.Zero;
         }
 
         // RSM stores UV units per frame. The glTF exporter turns that into a per-second rate at 60 fps.
@@ -759,6 +984,10 @@ namespace ProjectEternity.Core.Graphics
         {
             public VertexBuffer Vertices;
             public IndexBuffer Indices;
+            public Vector3[] BindPositions;
+            public Byte4[] BindJoints;
+            public Vector4[] BindWeights;
+            public int[] BindIndices;
             public bool Skinned;
             public string[] BoneNames;
             public Matrix[] Offsets;
@@ -769,6 +998,7 @@ namespace ProjectEternity.Core.Graphics
             public Vector2 UvPerSecond;
             public RigidVertex[] RigidSource;
             public RigidVertex[] RigidScratch;
+            public VertexPosition[] ShadowScratch;
         }
 
         private struct RigidVertex : IVertexType

@@ -22,11 +22,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             this.MapManager = MapManager;
             this.Owner = Owner;
 
-            Point MenuPosition = Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.LayerManager.LayerHolderDrawable.GetVisiblePosition(Owner.InvisibleCharacterAsCursor.Position);
-
-            BaseMenuX = MenuPosition.X;
-            BaseMenuY = MenuPosition.Y;
-
+            BaseMenuX = 40;
+            BaseMenuY = 120;
             UpdateFinalMenuPosition();
         }
 

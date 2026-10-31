@@ -37,6 +37,16 @@ namespace ProjectEternity.Core.ControlHelper
             return CurrentGamePadState.IsButtonDown(ButtonToCheck);
         }
 
+        public bool IsConnected
+        {
+            get { return CurrentGamePadState.IsConnected; }
+        }
+
+        public Vector2 LeftStickPosition()
+        {
+            return CurrentGamePadState.ThumbSticks.Left;
+        }
+
         public Vector2 RightStickPosition()
         {
             return CurrentGamePadState.ThumbSticks.Right;

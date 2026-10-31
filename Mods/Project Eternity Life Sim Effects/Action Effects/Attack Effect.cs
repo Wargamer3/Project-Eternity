@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void ActivateAutomatedAction()
         {
-            Params.Owner.ListAutomatedAction.Add(new AutomatedActionAttack(Params));
+            Params.Owner.ListCurrentAIObjectiveStep.Add(new AutomatedActionAttack(Params));
         }
 
         public override ActionEffect LoadCopy(BinaryReader BR)
@@ -86,7 +86,8 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            PlayerCharacter FoundCharacter = Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.MoveCursorAndGetCharacterUnderMouse();
+            LifeSimMap Grid = Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap;
+            PlayerCharacter FoundCharacter = Grid == null ? null : Grid.MoveCursorAndGetCharacterUnderMouse();
 
             if (FoundCharacter != null)
             {
@@ -99,7 +100,7 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                 Params.ActivationContext.User = Params.Owner;
                 Params.ActivationContext.Target = HoverCharacter;
 
-                Params.Owner.ListAutomatedAction.Add(new AutomatedActionDumbWalk(Params));
+                Params.Owner.ListCurrentAIObjectiveStep.Add(Params.Owner.PlanPath(Params.CurrentMapInfo, HoverCharacter.Position, true));
 
                 foreach (ActionEffect ActiveAction in ActionToExecute.ListActionEffect)
                 {
@@ -205,97 +206,6 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             GameScreen.DrawBox(g, new Vector2(Position.X, Position.Y), 30, 30, Color.White);
 
             TextHelper.DrawText(g, "A", new Vector2(Position.X + 5, Position.Y + 5), Color.White);
-        }
-    }
-
-    public class AutomatedActionDumbWalk : AutomatedAction
-    {
-        private const string PanelName = "Dumb Walk";
-
-        private readonly LifeSimCharacterParams Params;
-
-        private Vector3 DestinationPosition;
-
-        private double Timer;
-
-        public AutomatedActionDumbWalk(LifeSimCharacterParams Params)
-            : base(PanelName, Params.Owner)
-        {
-            this.Params = new LifeSimCharacterParams(Params);
-        }
-
-        public AutomatedActionDumbWalk(LifeSimCharacterParams Params, Vector3 DestinationPosition)
-            : base(PanelName, Params.Owner)
-        {
-            this.Params = new LifeSimCharacterParams(Params);
-            this.DestinationPosition = DestinationPosition;
-        }
-
-        public override void OnStarted()
-        {
-            Timer = 60;
-        }
-
-        public override bool Update(GameTime gameTime)
-        {
-            Vector3 NextPosition = Params.Owner.Position;
-
-            if (Params.Owner.Position.X < DestinationPosition.X)
-            {
-                NextPosition.X += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
-            }
-            else if (Params.Owner.Position.X > DestinationPosition.X)
-            {
-                NextPosition.X -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
-            }
-            if (Params.Owner.Position.Y < DestinationPosition.Y)
-            {
-                NextPosition.Y += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
-            }
-            else if (Params.Owner.Position.Y > DestinationPosition.Y)
-            {
-                NextPosition.Y += (float)(gameTime.ElapsedGameTime.TotalSeconds * 5);
-            }
-
-            Params.Owner.SetPosition(NextPosition);
-
-            if (Timer <= 0)
-            {
-                Timer = 60;
-                Params.ActivationContext.Target.Logs.AddLog(Params.ActivationContext.User.Name + " moved next to " + Params.ActivationContext.Target.Name);
-                Params.ActivationContext.User.Logs.AddLog(Params.ActivationContext.User.Name + " moved next to " + Params.ActivationContext.Target.Name);
-                return false;
-            }
-
-            return true;
-        }
-
-        public override void OnCancel()
-        {
-        }
-
-        public override void DoRead(ByteReader BR)
-        {
-        }
-
-        public override void DoWrite(ByteWriter BW)
-        {
-        }
-
-        protected override AutomatedAction Copy()
-        {
-            return new AutomatedActionDumbWalk(Params);
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
-        }
-
-        public override void DrawIcon(CustomSpriteBatch g, Vector2 Position)
-        {
-            GameScreen.DrawBox(g, new Vector2(Position.X, Position.Y), 30, 30, Color.White);
-
-            TextHelper.DrawText(g, "M", new Vector2(Position.X + 5, Position.Y + 5), Color.White);
         }
     }
 }

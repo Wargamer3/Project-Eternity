@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
@@ -12,6 +13,8 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 {
     public partial class TraitEditor : BaseEditor
     {
+        readonly List<TraitEffect> ListEffect = new List<TraitEffect>();
+
         public TraitEditor()
         {
             InitializeComponent();
@@ -20,6 +23,15 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
         public TraitEditor(string FilePath, object[] Params)
             : this()
         {
+            LifeSimCharacterParams.Init();
+            List<string> Names = new List<string>(TraitEffect.DicEffect.Keys);
+            Names.Sort(StringComparer.Ordinal);
+            cboEffect.Items.AddRange(Names.ToArray());
+            if (cboEffect.Items.Count > 0)
+            {
+                cboEffect.SelectedIndex = 0;
+            }
+
             this.FilePath = FilePath;
             if (!File.Exists(FilePath))
             {
@@ -48,9 +60,11 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 
-            BW.Write(txtName.Text);
-            BW.Write(txtDescription.Text);
-
+            Trait Saving = new Trait();
+            Saving.Name = txtName.Text;
+            Saving.Description = txtDescription.Text;
+            Saving.ListEffect = ListEffect;
+            Saving.Write(BW);
 
             FS.Close();
             BW.Close();
@@ -66,7 +80,58 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
 
             txtName.Text = LoadedTrait.Name;
             txtDescription.Text = LoadedTrait.Description;
+            ListEffect.Clear();
+            lstEffects.Items.Clear();
+            if (LoadedTrait.ListEffect != null)
+            {
+                for (int i = 0; i < LoadedTrait.ListEffect.Count; i++)
+                {
+                    ListEffect.Add(LoadedTrait.ListEffect[i]);
+                    lstEffects.Items.Add(LoadedTrait.ListEffect[i].Label);
+                }
+            }
+        }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (cboEffect.SelectedItem == null)
+            {
+                return;
+            }
+
+            TraitEffect Effect = TraitEffect.Create(cboEffect.SelectedItem.ToString());
+            if (Effect == null)
+            {
+                return;
+            }
+
+            ListEffect.Add(Effect);
+            lstEffects.Items.Add(Effect.Label);
+            lstEffects.SelectedIndex = ListEffect.Count - 1;
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            int Index = lstEffects.SelectedIndex;
+            if (Index < 0 || Index >= ListEffect.Count)
+            {
+                return;
+            }
+
+            ListEffect.RemoveAt(Index);
+            lstEffects.Items.RemoveAt(Index);
+        }
+
+        private void lstEffects_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int Index = lstEffects.SelectedIndex;
+            if (Index < 0 || Index >= ListEffect.Count)
+            {
+                pgEffect.SelectedObject = null;
+                return;
+            }
+
+            pgEffect.SelectedObject = ListEffect[Index];
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

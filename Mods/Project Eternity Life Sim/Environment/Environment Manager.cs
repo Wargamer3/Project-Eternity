@@ -1,20 +1,21 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.LifeSimScreen
 {
-    class EnvironmentManagerSorcererStreet : EnvironmentManager
+    public class EnvironmentManagerLifeSim : EnvironmentManager
     {
-        public EnvironmentManagerSorcererStreet(LifeSimMap Map)
-            : base(Map)
+        public EnvironmentManagerLifeSim(LifeSimMap Map)
+            : base()
         {
             GlobalZone = new MapZoneLifeSim(Map, ZoneShape.ZoneShapeTypes.Full);
         }
 
-        public EnvironmentManagerSorcererStreet(BinaryReader BR, LifeSimMap Map)
-            : base(BR, Map)
+        public EnvironmentManagerLifeSim(BinaryReader BR, LifeSimMap Map)
+            : base(BR)
         {
             GlobalZone = new MapZoneLifeSim(BR, Map);
 
@@ -24,6 +25,10 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
             {
                 ListMapZone.Add(new MapZoneLifeSim(BR, Map));
             }
+        }
+
+        protected override void AdvanceClock(GameTime gameTime)
+        {
         }
     }
 }

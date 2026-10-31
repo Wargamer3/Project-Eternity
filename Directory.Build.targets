@@ -68,7 +68,9 @@
   <Target Name="RemovePluginCopyLocalReferences" DependsOnTargets="EternityResolveOutput" BeforeTargets="_CopyFilesMarkedCopyLocal;ReferenceCopyLocalPathsOutputGroup;CollectCopyToOutputDirectoryItemDesignTime">
     <ItemGroup Condition="'$(_EternityPluginScan)' == 'true'">
       <_StalePluginCopy Include="@(ReferenceCopyLocalPaths)"
-        Condition="$([System.String]::Copy('%(FullPath)').StartsWith('$(_EternityBinRoot)\', System.StringComparison.OrdinalIgnoreCase)) and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))" />
+        Condition="$([System.String]::Copy('%(FullPath)').StartsWith('$(_EternityBinRoot)\', System.StringComparison.OrdinalIgnoreCase)) and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(OutDir)%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))">
+        <DestinationSubDirectory>%(ReferenceCopyLocalPaths.DestinationSubDirectory)</DestinationSubDirectory>
+      </_StalePluginCopy>
       <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
     </ItemGroup>
     <Delete Files="@(_StalePluginCopy->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" TreatErrorsAsWarnings="true" />
@@ -96,6 +98,13 @@
         The process is 64-bit. Drop every other native RID here.
       -->
       <_HostExternalCopy Remove="@(_HostExternalCopy)" Condition="$([System.String]::Copy('%(FullPath)').Contains('\native\')) and !$([System.String]::Copy('%(FullPath)').Contains('\win-x64\native\')) and !$([System.String]::Copy('%(FullPath)').Contains('\win7-x64\native\'))" />
+      <!--
+        Explorer projects build outside this bin. Other project references already publish into it.
+        Copy the outside ones next to the NuGet assemblies so the host manifest can find them.
+      -->
+      <_HostOutsideProjectCopy Include="@(ReferenceCopyLocalPaths)"
+        Condition="'%(ReferenceCopyLocalPaths.MSBuildSourceProjectFile)' != '' and !$([System.String]::Copy('%(FullPath)').StartsWith('$(_BinRoot)', System.StringComparison.OrdinalIgnoreCase))" />
+      <_HostOutsideProjectCopy Remove="@(_HostOutsideProjectCopy)" Condition="$([System.String]::Copy('%(Filename)').EndsWith('.resources'))" />
       <_HostStaleProjectCopy Include="@(ReferenceCopyLocalPaths)"
         Condition="'%(ReferenceCopyLocalPaths.MSBuildSourceProjectFile)' != '' and !$([System.String]::Equals('%(FullPath)', $([System.IO.Path]::GetFullPath('$(_BinRoot)%(Filename)%(Extension)')), System.StringComparison.OrdinalIgnoreCase))" />
       <_HostStaleExternalCopy Include="@(ReferenceCopyLocalPaths)"
@@ -109,6 +118,10 @@
     <Copy Condition="'$(_HostOutput)' == 'true'"
           SourceFiles="@(_HostExternalCopy)"
           DestinationFiles="@(_HostExternalCopy->'$(_BinRoot)External\%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+    <Copy Condition="'$(_HostOutput)' == 'true'"
+          SourceFiles="@(_HostOutsideProjectCopy)"
+          DestinationFiles="@(_HostOutsideProjectCopy->'$(_BinRoot)External\%(Filename)%(Extension)')"
           SkipUnchangedFiles="true" />
     <!--
       The two assimp.dll builds share the NuGet extract time, so SkipUnchangedFiles treats the

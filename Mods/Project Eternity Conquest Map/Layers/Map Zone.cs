@@ -10,13 +10,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private readonly ConquestMap Map;
 
         public MapZoneConquest(ConquestMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
-            : base(Map, ZoneShapeType)
+            : base(ZoneShapeType)
         {
             this.Map = Map;
         }
 
         public MapZoneConquest(BinaryReader BR, ConquestMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             this.Map = Map;
 

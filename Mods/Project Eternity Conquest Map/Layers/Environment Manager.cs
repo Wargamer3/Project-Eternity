@@ -8,13 +8,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     class EnvironmentManagerConquest : EnvironmentManager
     {
         public EnvironmentManagerConquest(ConquestMap Map)
-            : base(Map)
+            : base()
         {
             GlobalZone = new MapZoneConquest(Map, ZoneShape.ZoneShapeTypes.Full);
         }
 
         public EnvironmentManagerConquest(BinaryReader BR, ConquestMap Map)
-            : base(BR, Map)
+            : base(BR)
         {
             GlobalZone = new MapZoneConquest(BR, Map);
 

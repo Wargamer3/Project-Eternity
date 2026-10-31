@@ -29,6 +29,7 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
+                cbSize.SelectedIndex = 0;
                 SaveItem(FilePath, FilePath);
             }
 
@@ -48,7 +49,6 @@ namespace ProjectEternity.Editors.LifeSimCharacterEditor
         public void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
             this.Text = ItemName + " - Ancestry Editor";
-
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 

@@ -18,6 +18,10 @@
   <ItemGroup>
     <!-- The BEPUphysics 1 controller and drawers remain in this folder. They do not compile against BepuPhysics 2. -->
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <!-- BepuPhysics 2.4.0 character demo: capsule body, support detection, and the motion constraint. -->
+    <Compile Include="BepuCharacter\CharacterControllers.cs" />
+    <Compile Include="BepuCharacter\CharacterMotionConstraint.cs" />
+    <Compile Include="BepuCharacter\CharacterNarrowphaseCallbacks.cs" />
   </ItemGroup>
 
 </Project>

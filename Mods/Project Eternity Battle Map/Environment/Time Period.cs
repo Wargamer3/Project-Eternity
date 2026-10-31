@@ -36,8 +36,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string Name;
 
-        public float TimeStart;
-        public float DayStart;
+        public double TimeStart;
+        public double DayStart;
 
         public WeatherTypes WeatherType;
         public ZoneUsages WeatherUsage;
@@ -78,14 +78,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PassiveSkill = null;
         }
 
-        public TimePeriod(BinaryReader BR, BattleMap Map)
+        public TimePeriod(BinaryReader BR)
         {
             PassiveSkill = null;
 
-            Load(BR, Map);
+            Load(BR);
         }
 
-        public TimePeriod(TimePeriod Copy, BattleMap Map)
+        public TimePeriod(TimePeriod Copy)
         {
             Name = Copy.Name;
 
@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CrossfadeLength = Copy.CrossfadeLength;
         }
 
-        protected virtual void Load(BinaryReader BR, BattleMap Map)
+        protected virtual void Load(BinaryReader BR)
         {
             Name = BR.ReadString();
 
@@ -151,8 +151,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             BW.Write(Name);
 
-            BW.Write(TimeStart);
-            BW.Write(DayStart);
+            BW.Write((float)TimeStart);
+            BW.Write((float)DayStart);
 
             BW.Write(PassiveSkillPath);
 

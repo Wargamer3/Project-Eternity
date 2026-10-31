@@ -17,7 +17,13 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void OnSelect()
         {
-            foreach (PlayerCharacter ActiveCharacter in Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.ListCharacter)
+            MapInfo Here = Owner.InvisibleCharacterAsCursor.SharedMapContex.CurrentMapInfo;
+            if (Here == null || Here.People == null)
+            {
+                return;
+            }
+
+            foreach (PlayerCharacter ActiveCharacter in Here.People)
             {
                 AddToPanelListAndSelect(new ActionPanelEditCharacter(Owner, ActiveCharacter, MapManager, ListActionMenuChoice));
             }

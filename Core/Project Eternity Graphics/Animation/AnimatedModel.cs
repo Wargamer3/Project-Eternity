@@ -73,6 +73,11 @@ namespace ProjectEternity.Core.Graphics
             ListAnimationModel.Add(AnimationName, NewAnimation);
         }
 
+        public bool HasAnimation(string AnimationName)
+        {
+            return ListAnimation.ContainsKey(AnimationName);
+        }
+
         public void PlayAnimation(string AnimationName)
         {
             if (ActiveAnimation != ListAnimation[AnimationName])

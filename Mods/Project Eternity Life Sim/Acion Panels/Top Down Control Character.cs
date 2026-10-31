@@ -40,52 +40,15 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         {
             HoverCharacter = Owner.InvisibleCharacterAsCursor.SharedMapContex.ActiveMap.MoveCursorAndGetCharacterUnderMouse();
 
-            if (ControlledCharacter.ListAutomatedAction.Count == 0)
+            if (ControlledCharacter.ListCurrentAIObjectiveStep.Count == 0)
             {
-                Vector3 NextPosition = ControlledCharacter.Position;
-                if (ActiveInputManager.InputLeftHold())
+                if (Owner.Session != null)
                 {
-                    NextPosition.X -= 1;
-                }
-                else if (ActiveInputManager.InputRightHold())
-                {
-                    NextPosition.X += 1;
-                }
-                if (ActiveInputManager.InputUpHold())
-                {
-                    NextPosition.Y -= 1;
-                }
-                else if (ActiveInputManager.InputDownHold())
-                {
-                    NextPosition.Y += 1;
-                }
-
-                ControlledCharacter.SetPosition(NextPosition);
-
-                if (HoverCharacter != null && ActiveInputManager.InputConfirmPressed())
-                {
-                    HoverCharacter.SharedMapContex.User = Owner;
-                    AddToPanelListAndSelect(new ActionPanelViewCharacter(Owner, HoverCharacter, MapManager, ListActionMenuChoice));
-                    HoverCharacter = null;
-                }
-                else if (ActiveInputManager.InputConfirmPressed())
-                {
-                    AddToPanelListAndSelect(new ActionPanelAdminMenu(Owner, MapManager, ListActionMenuChoice));
-                }
-                else if (ActiveInputManager.InputCancelPressed())
-                {
-                    AddToPanelListAndSelect(new ActionPanelViewCharacterLogs(Owner, ControlledCharacter, MapManager, ListActionMenuChoice));
-                    HoverCharacter = null;
-                }
-                else if (ActiveInputManager.InputLButtonPressed())//switch to next character
-                {/*
-                    PlayerCharacter CharacterToSelect = ControlledCharacter.SharedMapContex.ActiveMap.ListCharacter[0];
-                    Owner.ActiveControlledCharacter.RemoveControl();
-                    CharacterToSelect.TakeControl(Owner);*/
+                    Owner.Session.WatchFight(ControlledCharacter);
                 }
             }
 
-            SetTarget(new Vector3(ControlledCharacter.Position.X, ControlledCharacter.Position.Z, ControlledCharacter.Position.Y));
+            SetTarget(ChunkOrigin.Camera(ControlledCharacter.SharedMapContex == null ? null : ControlledCharacter.SharedMapContex.CurrentMapInfo, new Vector3(ControlledCharacter.Position.X, ControlledCharacter.Position.Z, ControlledCharacter.Position.Y)));
         }
 
         private void SetTarget(Vector3 Target)
@@ -119,12 +82,22 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            foreach (MapInfo ActiveMap in ListVisisbleMap)
+            PlayerCharacter Cursor = Owner.InvisibleCharacterAsCursor;
+            MapInfo Here = Cursor != null && Cursor.SharedMapContex != null ? Cursor.SharedMapContex.CurrentMapInfo : null;
+            MapManager.DrawChunks(g, Owner.Camera, delegate (LifeSimMap Map)
             {
-                ActiveMap.MapMapContainer.ActiveMap.LayerManager.LayerHolderDrawable.SetCamera(Owner.Camera);
-                ActiveMap.MapMapContainer.ActiveMap.Draw(g);
-            }
+                Map.ShowCursor = false;
+                if (Map.BuildPlacing)
+                {
+                    return;
+                }
 
+                Map.HideFloorsAbove = true;
+                Map.ShownFloor = ControlledCharacter == null ? 0 : BuildFloor.Index(ControlledCharacter.Position.Z);
+                Map.ShowCursor = Here != null && (object.ReferenceEquals(Map.Chunk, Here) || (Here.MapMapContainer != null && object.ReferenceEquals(Here.MapMapContainer.ActiveMap, Map)));
+            });
+
+            MapManager.BeginOverlay(g);
             if (HoverCharacter != null)
             {
                 ActionPanelViewCharacter.DrawPreview(g, HoverCharacter);
@@ -132,9 +105,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
             if (ControlledCharacter != null)
             {
-                for (int A = 0; A < ControlledCharacter.ListAutomatedAction.Count; A++)
+                for (int A = 0; A < ControlledCharacter.ListCurrentAIObjectiveStep.Count; A++)
                 {
-                    ControlledCharacter.ListAutomatedAction[A].DrawIcon(g, new Vector2(A * 40, 10));
+                    ControlledCharacter.ListCurrentAIObjectiveStep[A].DrawIcon(g, new Vector2(A * 40, 10));
                 }
             }
         }

@@ -9,11 +9,21 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public const string GoThroughDoorGoal = "GoThroughDoor";
         private const string GoThroughDoorActionName = "Go Through Door";
 
-        private Door DoorToUse;
+        public string TargetName;
+        public DoorOpenManner Manner = DoorOpenManner.Normally;
 
         public GoThroughDoorAction()
             : base(GoThroughDoorGoal, GoThroughDoorActionName)
         {
+        }
+
+        public override AIAction Copy()
+        {
+            GoThroughDoorAction Clone = new GoThroughDoorAction();
+            CopyTo(Clone);
+            Clone.TargetName = TargetName;
+            Clone.Manner = Manner;
+            return Clone;
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -23,12 +33,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            return LifePlan.UseDoor(Params.Owner, DoorName(), "Open Door", Manner);
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
+            AIWeight = LifePlan.CanOpen(Params.Owner, DoorName()) ? 1 : 0;
+        }
+
+        string DoorName()
+        {
+            if (!string.IsNullOrEmpty(TargetName))
+            {
+                return TargetName;
+            }
+
+            object Stored = Params.Owner.GetObjective("Door");
+            return Stored as string;
         }
     }
 
@@ -36,11 +57,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         private const string BreakThroughDoorActionName = "Break Through Door";
 
-        private Door DoorToBreakThrough;
+        public string TargetName;
 
         public BreakThroughDoorAction()
             : base(MoveAction.MoveGoal, BreakThroughDoorActionName)
         {
+        }
+
+        public override AIAction Copy()
+        {
+            BreakThroughDoorAction Clone = new BreakThroughDoorAction();
+            CopyTo(Clone);
+            Clone.TargetName = TargetName;
+            return Clone;
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -50,12 +79,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            return LifePlan.UseDoor(Params.Owner, DoorName(), "Break Door");
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
+            AIWeight = LifePlan.CanBreak(Params.Owner, DoorName()) ? 1 : 0;
+        }
+
+        string DoorName()
+        {
+            if (!string.IsNullOrEmpty(TargetName))
+            {
+                return TargetName;
+            }
+
+            object Stored = Params.Owner.GetObjective("Door");
+            return Stored as string;
         }
     }
 
@@ -63,11 +103,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         private const string LockDoorActionName = "Lock Door";
 
-        private Door DoorToLock;
+        public string TargetName;
 
         public LockDoorAction()
             : base(MoveAction.MoveGoal, LockDoorActionName)
         {
+        }
+
+        public override AIAction Copy()
+        {
+            LockDoorAction Clone = new LockDoorAction();
+            CopyTo(Clone);
+            Clone.TargetName = TargetName;
+            return Clone;
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -77,12 +125,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            return LifePlan.UseDoor(Params.Owner, DoorName(), "Lock Door");
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
+            AIWeight = LifePlan.CanLock(Params.Owner, DoorName()) ? 1 : 0;
+        }
+
+        string DoorName()
+        {
+            if (!string.IsNullOrEmpty(TargetName))
+            {
+                return TargetName;
+            }
+
+            object Stored = Params.Owner.GetObjective("Door");
+            return Stored as string;
         }
     }
 
@@ -90,11 +149,19 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         private const string UnlockDoorActionName = "Unlock Door";
 
-        private Door DoorToUnlock;
+        public string TargetName;
 
         public UnlockDoorAction()
             : base(MoveAction.MoveGoal, UnlockDoorActionName)
         {
+        }
+
+        public override AIAction Copy()
+        {
+            UnlockDoorAction Clone = new UnlockDoorAction();
+            CopyTo(Clone);
+            Clone.TargetName = TargetName;
+            return Clone;
         }
 
         public override bool Execute(GameTime gameTime, NavMapGameManager Map)
@@ -104,12 +171,23 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override List<AutomatedAction> GetAIExecutionPlan(NavMapGameManager Map)
         {
-            throw new NotImplementedException();
+            return LifePlan.UseDoor(Params.Owner, DoorName(), "Unlock Door");
         }
 
         public override void UpdatePrecondition(string Event, NavMapGameManager Map)
         {
-            int CharacterSpeed = Params.Owner.DicExtraStatByName["Speed"];
+            AIWeight = LifePlan.CanUnlock(Params.Owner, DoorName()) ? 1 : 0;
+        }
+
+        string DoorName()
+        {
+            if (!string.IsNullOrEmpty(TargetName))
+            {
+                return TargetName;
+            }
+
+            object Stored = Params.Owner.GetObjective("Door");
+            return Stored as string;
         }
     }
 }

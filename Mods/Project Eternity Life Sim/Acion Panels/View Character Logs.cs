@@ -46,21 +46,32 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (ControlledCharacter.Logs.ListLog.Count == 0)
+            TextHelper.DrawText(g, "Cancel returns", new Vector2(40, 48), Color.LightGray);
+            if (ControlledCharacter == null || ControlledCharacter.Logs == null || ControlledCharacter.Logs.ListLog.Count == 0)
             {
-                GameScreen.DrawBox(g, new Vector2(), 300, 300, Color.White);
+                TextHelper.DrawText(g, "No entries.", new Vector2(10, 76), Color.Gray);
+                return;
             }
 
-            Vector2 TextPosition = new Vector2(10, 10);
-
-            foreach (ActionLogHolder.ActionLog ActiveLog in ControlledCharacter.Logs.ListLog)
+            Vector2 TextPosition = new Vector2(10, 76);
+            for (int i = ControlledCharacter.Logs.ListLog.Count - 1; i >= 0; i--)
             {
-                GameScreen.DrawBox(g, new Vector2(0, TextPosition.Y - 5), 300, ActiveLog.DescriptionText.SizeBox.Y + 50, Color.White);
+                ActionLogHolder.ActionLog ActiveLog = ControlledCharacter.Logs.ListLog[i];
+                int Body = ActiveLog.DescriptionText == null ? TextHelper.fntShadowFont.LineSpacing : (int)ActiveLog.DescriptionText.SizeBox.Y;
+                GameScreen.DrawBox(g, new Vector2(0, TextPosition.Y - 5), 320, Body + 50, Color.White);
                 TextHelper.DrawText(g, ControlledCharacter.Name, TextPosition, Color.White);
-                TextHelper.DrawTextRightAligned(g, ActiveLog.TimeLogged.ToShortTimeString(), new Vector2(TextPosition.X + 280, TextPosition.Y), Color.White);
+                TextHelper.DrawTextRightAligned(g, ActiveLog.TimeLogged.ToShortTimeString(), new Vector2(TextPosition.X + 300, TextPosition.Y), Color.White);
                 TextPosition.Y += TextHelper.fntShadowFont.LineSpacing;
-                ActiveLog.DescriptionText.Draw(g, TextPosition);
-                TextPosition.Y += ActiveLog.DescriptionText.SizeBox.Y + 30;
+                if (ActiveLog.DescriptionText != null)
+                {
+                    ActiveLog.DescriptionText.Draw(g, TextPosition);
+                }
+                else
+                {
+                    TextHelper.DrawText(g, ActiveLog.TextLogged, TextPosition, Color.White);
+                }
+
+                TextPosition.Y += Body + 30;
             }
         }
     }

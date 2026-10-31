@@ -12,6 +12,9 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
     {
         public string Name;
         public string Description;
+        public int ItemBonus;
+        public int DexCap = -1;
+        public string Category = "";
 
         public List<string> ListSpecialEffect;
 

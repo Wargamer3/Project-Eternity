@@ -1,4 +1,4 @@
-﻿using FMOD;
+using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -9,19 +9,18 @@ namespace ProjectEternity.GameScreens
 {
     public sealed class OptionMenu : GameScreen
     {
-        private enum MenuChoices { UnitRepresentation, HealthBar, WindowType, Fullscreen, ScreenSize };
+        const int RowCount = 14;
+        const int RowHeight = 22;
 
         private SpriteFont fntArial12;
         private FMODSound sndSelection;
         private FMODSound sndCancel;
-
-        private MenuChoices MenuChoice;
+        private int Cursor;
         private CustomSpriteBatch SpriteBatch;
 
         public OptionMenu()
             : base()
         {
-            MenuChoice = 0;
         }
 
         public override void Load()
@@ -33,150 +32,34 @@ namespace ProjectEternity.GameScreens
 
         public override void Update(GameTime gameTime)
         {
-            if (InputHelper.InputLeftPressed())
+            if (InputHelper.InputUpPressed())
             {
-                switch (MenuChoice)
+                Cursor--;
+                if (Cursor < 0)
                 {
-                    case MenuChoices.UnitRepresentation:
-                        Constants.UnitRepresentationState--;
-                        if (Constants.UnitRepresentationState < 0)
-                            Constants.UnitRepresentationState = Constants.UnitRepresentationStates.Colored;
-                        break;
-
-                    case MenuChoices.HealthBar:
-                        Constants.ShowHealthBar = !Constants.ShowHealthBar;
-                        break;
-
-                    #region Window Type
-
-                    case MenuChoices.WindowType:
-                        Constants.WindowType--;
-                        if (Constants.WindowType < 0)
-                            Constants.WindowType = Constants.WindowTypes.Extend;
-
-                        UpdateScreenSettings(SpriteBatch);
-                        break;
-
-                    #endregion
-
-                    case MenuChoices.Fullscreen:
-                        if (Constants.WindowType == Constants.WindowTypes.Original)
-                            break;
-
-                        Constants.graphics.IsFullScreen = !Constants.graphics.IsFullScreen;
-                        Constants.graphics.ApplyChanges();
-                        break;
-
-                    case MenuChoices.ScreenSize:
-
-                        if (Constants.WindowType == Constants.WindowTypes.Original)
-                            break;
-
-                        Constants.ScreenSize--;
-
-                        if (Constants.ScreenSize < 0)
-                            Constants.ScreenSize = Constants.ScreenSizes.Length - 1;
-
-                        bool WasFullScreen = Constants.graphics.IsFullScreen;
-
-                        if (Constants.graphics.IsFullScreen)
-                        {
-                            Constants.graphics.IsFullScreen = false;
-                            Constants.graphics.ApplyChanges();
-                        }
-
-                        switch (Constants.ScreenSizes[Constants.ScreenSize])
-                        {
-                            case "640 x 480":
-                                Constants.graphics.PreferredBackBufferWidth = 640;
-                                Constants.graphics.PreferredBackBufferHeight = 480;
-                                break;
-
-                            case "1920 x 1080":
-                                Constants.graphics.PreferredBackBufferWidth = 1920;
-                                Constants.graphics.PreferredBackBufferHeight = 1080;
-                                break;
-                        }
-                        Constants.graphics.ApplyChanges();
-
-                        if (WasFullScreen)
-                        {
-                            Constants.graphics.IsFullScreen = true;
-                            Constants.graphics.ApplyChanges();
-                        }
-
-                        UpdateScreenSettings(SpriteBatch);
-                        break;
+                    Cursor = RowCount - 1;
                 }
-                sndSelection.Play();
-            }
-            else if (InputHelper.InputRightPressed() || InputHelper.InputConfirmPressed())
-            {
-                switch (MenuChoice)
-                {
-                    case MenuChoices.UnitRepresentation:
-                        Constants.UnitRepresentationState++;
-                        if ((int)Constants.UnitRepresentationState > 2)
-                            Constants.UnitRepresentationState = Constants.UnitRepresentationStates.NonColoredWithBorder;
-                        break;
 
-                    case MenuChoices.HealthBar:
-                        Constants.ShowHealthBar = !Constants.ShowHealthBar;
-                        break;
-
-                    #region Window Type
-
-                    case MenuChoices.WindowType:
-                        Constants.WindowType++;
-                        if (Constants.WindowType > Constants.WindowTypes.Extend)
-                            Constants.WindowType = Constants.WindowTypes.Original;
-
-                        UpdateScreenSettings(SpriteBatch);
-                        break;
-
-                    #endregion
-
-                    case MenuChoices.Fullscreen:
-                        if (Constants.WindowType == Constants.WindowTypes.Original)
-                            break;
-                        Constants.graphics.IsFullScreen = !Constants.graphics.IsFullScreen;
-                        Constants.graphics.ApplyChanges();
-                        break;
-
-                    case MenuChoices.ScreenSize:
-                        if (Constants.WindowType == Constants.WindowTypes.Original)
-                            break;
-                        Constants.ScreenSize++;
-                        if (Constants.ScreenSize >= Constants.ScreenSizes.Length)
-                            Constants.ScreenSize = 0;
-
-                        switch (Constants.ScreenSizes[Constants.ScreenSize])
-                        {
-                            case "640 x 480":
-                                Constants.graphics.PreferredBackBufferWidth = 640;
-                                Constants.graphics.PreferredBackBufferHeight = 480;
-                                break;
-
-                            case "1920 x 1080":
-                                Constants.graphics.PreferredBackBufferWidth = 1920;
-                                Constants.graphics.PreferredBackBufferHeight = 1080;
-                                break;
-                        }
-                        Constants.graphics.ApplyChanges();
-
-                        UpdateScreenSettings(SpriteBatch);
-                        break;
-                }
-                sndSelection.Play();
-            }
-            else if (InputHelper.InputUpPressed())
-            {
-                MenuChoice--;
                 sndSelection.Play();
             }
             else if (InputHelper.InputDownPressed())
             {
-                MenuChoice++;
+                Cursor++;
+                if (Cursor >= RowCount)
+                {
+                    Cursor = 0;
+                }
+
+                sndSelection.Play();
+            }
+            else if (InputHelper.InputLeftPressed())
+            {
+                Nudge(-1);
+                sndSelection.Play();
+            }
+            else if (InputHelper.InputRightPressed() || InputHelper.InputConfirmPressed())
+            {
+                Nudge(1);
                 sndSelection.Play();
             }
             else if (InputHelper.InputCancelPressed())
@@ -186,125 +69,283 @@ namespace ProjectEternity.GameScreens
             }
         }
 
+        void Nudge(int Direction)
+        {
+            switch (Cursor)
+            {
+                case 0:
+                    CycleUnit(Direction);
+                    break;
+                case 1:
+                    Constants.ShowHealthBar = !Constants.ShowHealthBar;
+                    break;
+                case 2:
+                    CycleWindow(Direction);
+                    break;
+                case 3:
+                    ToggleFullscreen();
+                    break;
+                case 4:
+                    CycleScreen(Direction);
+                    break;
+                case 5:
+                    PictureOptions.CycleShadows(Direction);
+                    break;
+                case 6:
+                    PictureOptions.Shade = !PictureOptions.Shade;
+                    break;
+                case 7:
+                    PictureOptions.Shafts = !PictureOptions.Shafts;
+                    break;
+                case 8:
+                    PictureOptions.CycleGrass(Direction);
+                    break;
+                case 9:
+                    PictureOptions.CycleTrees(Direction);
+                    break;
+                case 10:
+                    PictureOptions.Lamps = !PictureOptions.Lamps;
+                    break;
+                case 11:
+                    PictureOptions.CycleDistance(Direction);
+                    break;
+                case 12:
+                    PictureOptions.FastTime = !PictureOptions.FastTime;
+                    break;
+                case 13:
+                    PictureOptions.Msaa = !PictureOptions.Msaa;
+                    ApplyMsaa();
+                    break;
+            }
+        }
+
+        static void ApplyMsaa()
+        {
+            if (Constants.graphics == null)
+            {
+                return;
+            }
+
+            Constants.graphics.PreferMultiSampling = PictureOptions.Msaa;
+            Constants.graphics.ApplyChanges();
+        }
+
+        static void CycleUnit(int Direction)
+        {
+            int Next = (int)Constants.UnitRepresentationState + Direction;
+            if (Next < 0)
+            {
+                Next = 2;
+            }
+            else if (Next > 2)
+            {
+                Next = 0;
+            }
+
+            Constants.UnitRepresentationState = (Constants.UnitRepresentationStates)Next;
+        }
+
+        void CycleWindow(int Direction)
+        {
+            int Next = (int)Constants.WindowType + Direction;
+            if (Next < 0)
+            {
+                Next = (int)Constants.WindowTypes.Extend;
+            }
+            else if (Next > (int)Constants.WindowTypes.Extend)
+            {
+                Next = 0;
+            }
+
+            Constants.WindowType = (Constants.WindowTypes)Next;
+            UpdateScreenSettings(SpriteBatch);
+        }
+
+        static void ToggleFullscreen()
+        {
+            if (Constants.WindowType == Constants.WindowTypes.Original || Constants.graphics == null)
+            {
+                return;
+            }
+
+            Constants.graphics.IsFullScreen = !Constants.graphics.IsFullScreen;
+            Constants.graphics.ApplyChanges();
+        }
+
+        void CycleScreen(int Direction)
+        {
+            if (Constants.WindowType == Constants.WindowTypes.Original || Constants.graphics == null)
+            {
+                return;
+            }
+
+            Constants.ScreenSize += Direction;
+            if (Constants.ScreenSize < 0)
+            {
+                Constants.ScreenSize = Constants.ScreenSizes.Length - 1;
+            }
+            else if (Constants.ScreenSize >= Constants.ScreenSizes.Length)
+            {
+                Constants.ScreenSize = 0;
+            }
+
+            ApplySize(Constants.ScreenSizes[Constants.ScreenSize]);
+            UpdateScreenSettings(SpriteBatch);
+        }
+
+        static void ApplySize(string Label)
+        {
+            string[] Parts = Label.Split('x');
+            int Width;
+            int Height;
+            if (Parts.Length != 2 || !int.TryParse(Parts[0].Trim(), out Width) || !int.TryParse(Parts[1].Trim(), out Height))
+            {
+                return;
+            }
+
+            bool WasFull = Constants.graphics.IsFullScreen;
+            if (WasFull)
+            {
+                Constants.graphics.IsFullScreen = false;
+                Constants.graphics.ApplyChanges();
+            }
+
+            Constants.graphics.PreferredBackBufferWidth = Width;
+            Constants.graphics.PreferredBackBufferHeight = Height;
+            Constants.graphics.ApplyChanges();
+            if (WasFull)
+            {
+                Constants.graphics.IsFullScreen = true;
+                Constants.graphics.ApplyChanges();
+            }
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             SpriteBatch = g;
-            int Y = 50;
             g.Draw(sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.FromNonPremultiplied(0, 0, 0, 160));
+            g.DrawString(fntArial12, "Options", new Vector2(10, 8), Color.White);
+            g.Draw(sprPixel, new Rectangle(0, 36 + Cursor * RowHeight, Constants.Width, RowHeight), Color.FromNonPremultiplied(255, 255, 255, 100));
 
-            #region Unit representation
+            int Y = 36;
+            Row(g, "Unit representation", UnitLabel(), Y, true);
+            Y += RowHeight;
+            Row(g, "Show health bar", Constants.ShowHealthBar ? "On" : "Off", Y, true);
+            Y += RowHeight;
+            Row(g, "Window type", WindowLabel(), Y, true);
+            Y += RowHeight;
+            bool Display = Constants.WindowType != Constants.WindowTypes.Original;
+            Row(g, "Fullscreen", Display && Constants.graphics != null && Constants.graphics.IsFullScreen ? "On" : "Off", Y, Display);
+            Y += RowHeight;
+            Row(g, "Screen size", Constants.ScreenSizes[Constants.ScreenSize], Y, Display);
+            Y += RowHeight;
+            Row(g, "Shadows", PictureOptions.ShadowLabel, Y, true);
+            Y += RowHeight;
+            Row(g, "Soft shade", PictureOptions.Shade ? "On" : "Off", Y, true);
+            Y += RowHeight;
+            Row(g, "Light shafts", PictureOptions.Shafts ? "On" : "Off", Y, PictureOptions.Shade);
+            Y += RowHeight;
+            Row(g, "Grass", PictureOptions.GrassLabel, Y, true);
+            Y += RowHeight;
+            Row(g, "Tree detail", PictureOptions.TreeLabel, Y, true);
+            Y += RowHeight;
+            Row(g, "Lamps", PictureOptions.Lamps ? "On" : "Off", Y, true);
+            Y += RowHeight;
+            Row(g, "View distance", PictureOptions.DistanceLabel, Y, true);
+            Y += RowHeight;
+            Row(g, "Fast time", PictureOptions.FastTime ? "On" : "Off", Y, true);
+            Y += RowHeight;
+            Row(g, "MSAA", PictureOptions.Msaa ? "On" : "Off", Y, true);
+            g.DrawString(fntArial12, "Left and right change a setting. Cancel closes.", new Vector2(10, Y + 36), Color.LightGray);
+        }
 
-            g.Draw(sprPixel, new Rectangle(0, 50 + (int)MenuChoice * 20, Constants.Width, 20), Color.FromNonPremultiplied(255, 255, 255, 100));
+        void Row(CustomSpriteBatch g, string Name, string Value, int Y, bool Enabled)
+        {
+            Color Ink = Enabled ? Color.White : Color.Gray;
+            Color Pick = Enabled ? Color.Red : Color.Gray;
+            g.DrawString(fntArial12, Name, new Vector2(10, Y), Ink);
+            g.DrawStringRightAligned(fntArial12, Value, new Vector2(Constants.Width - 10, Y), Pick);
+        }
 
-            g.DrawString(fntArial12, "Unit representation", new Vector2(10, Y), Color.White);
-
+        static string UnitLabel()
+        {
             if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                g.DrawStringRightAligned(fntArial12, "Colored", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColored)
-                g.DrawStringRightAligned(fntArial12, "Non colored", new Vector2(Constants.Width - 10, Y), Color.White);
-            else if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColoredWithBorder)
             {
-                g.DrawStringRightAligned(fntArial12, "Non colored with border", new Vector2(Constants.Width - 10 - 1, Y), Color.Red);
-                g.DrawStringRightAligned(fntArial12, "Non colored with border", new Vector2(Constants.Width - 10 + 1, Y), Color.Red);
-                g.DrawStringRightAligned(fntArial12, "Non colored with border", new Vector2(Constants.Width - 10, Y - 1), Color.Red);
-                g.DrawStringRightAligned(fntArial12, "Non colored with border", new Vector2(Constants.Width - 10, Y + 1), Color.Red);
-
-                g.DrawStringRightAligned(fntArial12, "Non colored with border", new Vector2(Constants.Width - 10, Y), Color.White);
+                return "Colored";
             }
 
-            #endregion
+            if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.NonColored)
+            {
+                return "Non colored";
+            }
 
-            Y += 20;
+            return "Bordered";
+        }
 
-            #region Health bar
-
-            g.DrawString(fntArial12, "Show health bar", new Vector2(10, Y), Color.White);
-
-            if (Constants.ShowHealthBar)
-                g.DrawString(fntArial12, "On", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else
-                g.DrawString(fntArial12, "Off", new Vector2(Constants.Width - 10, Y), Color.Red);
-
-            #endregion
-
-            Y += 20;
-
-            #region Window type
-
-            g.DrawString(fntArial12, "Window type", new Vector2(10, Y), Color.White);
-
+        static string WindowLabel()
+        {
             if (Constants.WindowType == Constants.WindowTypes.Original)
-                g.DrawString(fntArial12, "Original", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else if (Constants.WindowType == Constants.WindowTypes.Streched)
-                g.DrawString(fntArial12, "Streched", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else if (Constants.WindowType == Constants.WindowTypes.KeeptAspectRatio)
-                g.DrawString(fntArial12, "Keept aspect ratio", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else if (Constants.WindowType == Constants.WindowTypes.Extend)
-                g.DrawString(fntArial12, "Extend", new Vector2(Constants.Width - 10, Y), Color.Red);
+            {
+                return "Original";
+            }
 
-            #endregion
+            if (Constants.WindowType == Constants.WindowTypes.Streched)
+            {
+                return "Stretched";
+            }
 
-            Y += 20;
+            if (Constants.WindowType == Constants.WindowTypes.KeeptAspectRatio)
+            {
+                return "Keep aspect";
+            }
 
-            #region Fullscreen
-
-            g.DrawString(fntArial12, "Fullscreen", new Vector2(10, Y), Color.White);
-
-            if (Constants.WindowType == Constants.WindowTypes.Original)
-                g.DrawStringRightAligned(fntArial12, "Off", new Vector2(Constants.Width - 10, Y), Color.Gray);
-            else if (Constants.graphics.IsFullScreen)
-                g.DrawStringRightAligned(fntArial12, "On", new Vector2(Constants.Width - 10, Y), Color.Red);
-            else
-                g.DrawStringRightAligned(fntArial12, "Off", new Vector2(Constants.Width - 10, Y), Color.Red);
-
-            #endregion
-
-            Y += 20;
-
-            #region Screen Size
-
-            g.DrawString(fntArial12, "Screen Size", new Vector2(10, Y), Color.White);
-
-            if (Constants.WindowType == Constants.WindowTypes.Original)
-                g.DrawStringRightAligned(fntArial12, Constants.ScreenSizes[Constants.ScreenSize], new Vector2(Constants.Width - 10, Y), Color.Gray);
-            else
-                g.DrawStringRightAligned(fntArial12, Constants.ScreenSizes[Constants.ScreenSize], new Vector2(Constants.Width - 10, Y), Color.Red);
-
-            #endregion
+            return "Extend";
         }
 
         public static void UpdateScreenSettings(CustomSpriteBatch g)
         {
+            if (Constants.graphics == null)
+            {
+                return;
+            }
+
             if (Constants.WindowType == Constants.WindowTypes.Original)
             {
                 Constants.graphics.IsFullScreen = false;
-                Constants.Width = 640;
-                Constants.Height = 480;
                 Constants.ScreenSize = 0;
                 Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                 Constants.graphics.PreferredBackBufferHeight = Constants.Height;
-                Constants.graphics.GraphicsDevice.Viewport = new Viewport(0, 0, 640, 480);
-                g.Scale = Matrix.CreateScale(1);
+                Constants.graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Constants.graphics.PreferredBackBufferWidth, Constants.graphics.PreferredBackBufferHeight);
+                if (g != null)
+                {
+                    g.Scale = Matrix.CreateScale(1);
+                }
+
                 Constants.graphics.ApplyChanges();
             }
             else if (Constants.WindowType == Constants.WindowTypes.Streched)
             {
                 Constants.Width = 640;
                 Constants.Height = 480;
-
                 float HeightScale = Constants.graphics.PreferredBackBufferHeight / (float)480;
                 float WidthScale = Constants.graphics.PreferredBackBufferWidth / (float)640;
-                g.Scale = Matrix.CreateScale(WidthScale, HeightScale, 1);
+                if (g != null)
+                {
+                    g.Scale = Matrix.CreateScale(WidthScale, HeightScale, 1);
+                }
+
                 Constants.graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Constants.graphics.PreferredBackBufferWidth, Constants.graphics.PreferredBackBufferHeight);
             }
             else if (Constants.WindowType == Constants.WindowTypes.KeeptAspectRatio)
             {
                 Constants.Width = 640;
                 Constants.Height = 480;
-
                 float HeightScale = Constants.graphics.PreferredBackBufferHeight / (float)480;
                 int ScreenWidth = (int)(Constants.graphics.PreferredBackBufferWidth - Constants.Width * HeightScale) / 2;
-                g.Scale = Matrix.CreateScale(HeightScale, HeightScale, 1);
+                if (g != null)
+                {
+                    g.Scale = Matrix.CreateScale(HeightScale, HeightScale, 1);
+                }
 
                 Constants.graphics.GraphicsDevice.Viewport = new Viewport(ScreenWidth, 0, Constants.graphics.PreferredBackBufferWidth - ScreenWidth, Constants.graphics.PreferredBackBufferHeight);
             }
@@ -312,7 +353,10 @@ namespace ProjectEternity.GameScreens
             {
                 Constants.Width = Constants.graphics.PreferredBackBufferWidth;
                 Constants.Height = Constants.graphics.PreferredBackBufferHeight;
-                g.Scale = Matrix.CreateScale(1);
+                if (g != null)
+                {
+                    g.Scale = Matrix.CreateScale(1);
+                }
 
                 Constants.graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Constants.Width, Constants.Height);
             }

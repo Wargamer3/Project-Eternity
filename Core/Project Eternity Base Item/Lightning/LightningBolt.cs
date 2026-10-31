@@ -214,6 +214,34 @@ namespace ProjectEternity.Core.LightningSystem
             }
         }
 
+        public void DrawInPlace(GraphicsDevice device)
+        {
+            if (device == null || lightningDrawEffect == null || UsableParticles <= 0)
+            {
+                return;
+            }
+
+            BlendState Blend = device.BlendState;
+            DepthStencilState Depth = device.DepthStencilState;
+            RasterizerState Raster = device.RasterizerState;
+            device.BlendState = LightningBlendState;
+            device.DepthStencilState = DepthStencilState.DepthRead;
+            device.RasterizerState = RasterizerState.CullNone;
+            if (VertexBuffer.IsContentLost)
+            {
+                VertexBuffer.SetData(ArrayVertex);
+            }
+
+            VertexBuffer.SetData(ArrayVertex);
+            device.SetVertexBuffer(VertexBuffer);
+            device.Indices = IndexBuffer;
+            lightningDrawEffect.CurrentTechnique.Passes[0].Apply();
+            device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, UsableParticles * 4, 0, UsableParticles * 2);
+            device.BlendState = Blend;
+            device.DepthStencilState = Depth;
+            device.RasterizerState = Raster;
+        }
+
         public void Draw(CustomSpriteBatch g)
         {
             g.Draw(LightningTexture, Vector2.Zero, Color.White);

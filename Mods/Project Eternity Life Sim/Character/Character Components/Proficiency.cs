@@ -36,32 +36,33 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
 
         public int Roll()
         {
-            int RollValue = RandomHelper.Next(DiceValue);
-            if (NumberOfDice > 1)
-            {
-                for (int D = 1; D < NumberOfDice; ++D)
-                {
-                    RollValue += RandomHelper.Next(DiceValue);
-                }
-            }
-
+            int RollValue = RollDice();
             LastRollText = "{{DiceRoll:" + NumberOfDice + "d" + DiceValue + "}}";
             return RollValue;
         }
 
         public int Roll(int ExtraValue)
         {
-            int RollValue = RandomHelper.Next(DiceValue);
-            if (NumberOfDice > 1)
-            {
-                for (int D = 1; D < NumberOfDice; ++D)
-                {
-                    RollValue += RandomHelper.Next(DiceValue);
-                }
-            }
-
+            int RollValue = RollDice();
             LastRollText = "{{DiceRoll:" + NumberOfDice + "d" + DiceValue + " + " + ExtraValue + "}}";
             return RollValue + ExtraValue;
+        }
+
+        int RollDice()
+        {
+            if (DiceValue < 1)
+            {
+                return 0;
+            }
+
+            int Count = NumberOfDice < 1 ? 1 : NumberOfDice;
+            int RollValue = RandomHelper.Next(DiceValue) + 1;
+            for (int D = 1; D < Count; ++D)
+            {
+                RollValue += RandomHelper.Next(DiceValue) + 1;
+            }
+
+            return RollValue;
         }
     }
 
@@ -72,6 +73,24 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
         public string Name;
         public string Description;
         public byte BaseValue;
+
+        public Proficiency()
+        {
+            Name = string.Empty;
+            Description = string.Empty;
+            DiceText = string.Empty;
+            ListStatModifier = new List<PlayerCharacter.CharacterStats>();
+            ListBaseAction = new List<CharacterAction>();
+            ListBaseActionRelativePath = new List<string>();
+            ListTrainedAction = new List<CharacterAction>();
+            ListTrainedActionRelativePath = new List<string>();
+            ListExpertAction = new List<CharacterAction>();
+            ListExpertActionRelativePath = new List<string>();
+            ListMasterAction = new List<CharacterAction>();
+            ListMasterActionRelativePath = new List<string>();
+            ListLegendaryAction = new List<CharacterAction>();
+            ListLegendaryActionRelativePath = new List<string>();
+        }
         public string DiceText;
         public DiceRoll DiceRoll;
 
@@ -208,33 +227,36 @@ namespace ProjectEternity.GameScreens.LifeSimScreen
                         break;
                 }
 
-                foreach (PlayerCharacter.CharacterStats ActiveStat in LinkedProficiency.ListStatModifier)
+                if (LinkedProficiency != null && LinkedProficiency.ListStatModifier != null)
                 {
-                    switch (ActiveStat)
+                    foreach (PlayerCharacter.CharacterStats ActiveStat in LinkedProficiency.ListStatModifier)
                     {
-                        case PlayerCharacter.CharacterStats.STR:
-                            StatBonus += Owner.STR;
-                            break;
+                        switch (ActiveStat)
+                        {
+                            case PlayerCharacter.CharacterStats.STR:
+                                StatBonus += Owner.STR;
+                                break;
 
-                        case PlayerCharacter.CharacterStats.DEX:
-                            StatBonus += Owner.DEX;
-                            break;
+                            case PlayerCharacter.CharacterStats.DEX:
+                                StatBonus += Owner.DEX;
+                                break;
 
-                        case PlayerCharacter.CharacterStats.CON:
-                            StatBonus += Owner.CON;
-                            break;
+                            case PlayerCharacter.CharacterStats.CON:
+                                StatBonus += Owner.CON;
+                                break;
 
-                        case PlayerCharacter.CharacterStats.INT:
-                            StatBonus += Owner.INT;
-                            break;
+                            case PlayerCharacter.CharacterStats.INT:
+                                StatBonus += Owner.INT;
+                                break;
 
-                        case PlayerCharacter.CharacterStats.WIS:
-                            StatBonus += Owner.WIS;
-                            break;
+                            case PlayerCharacter.CharacterStats.WIS:
+                                StatBonus += Owner.WIS;
+                                break;
 
-                        case PlayerCharacter.CharacterStats.CHA:
-                            StatBonus += Owner.CHA;
-                            break;
+                            case PlayerCharacter.CharacterStats.CHA:
+                                StatBonus += Owner.CHA;
+                                break;
+                        }
                     }
                 }
             }
